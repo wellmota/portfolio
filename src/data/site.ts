@@ -9,7 +9,7 @@ export const profile = {
   firstName: 'Wellington',
   role: 'Product Engineer — Design + Front-end',
   tagline:
-    'A maioria das empresas contrata um designer e um engenheiro. Eu sou os dois.',
+    'Product Engineer que faz as duas pontas: pesquiso e desenho no Figma e entrego em React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy.',
   location: 'Brasília, BR',
   timezone: 'America/Sao_Paulo',
   email: 'wellingtonmota42@gmail.com',
@@ -35,7 +35,7 @@ export const socials = [
 export const heroStats = {
   headline: '15+',
   label: 'anos criando produtos digitais',
-  sub: 'do research de UX ao código em produção',
+  sub: 'React · Next.js · TypeScript · Design Systems · IA em produção',
 };
 
 export const stats = [
