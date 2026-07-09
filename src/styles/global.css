@@ -1,0 +1,448 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ *
+ *  Design tokens — editorial / brutalist
+ * ------------------------------------------------------------------ */
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Surfaces — near-black, minimal steps */
+  --color-ink: #0a0a0a;
+  --color-ink-soft: #0d0d0d;
+  --color-surface: #101010;
+  --color-surface-2: #151515;
+
+  /* Hairlines */
+  --color-line: #232323;
+  --color-line-strong: #3a3a3a;
+
+  /* Text */
+  --color-cream: #ededed;
+  --color-mist: #8c8c92;
+  --color-faint: #5a5a60;
+
+  /* Single accent — used sparingly */
+  --color-lime: #cff24a;
+
+  /* Editorial rhythm */
+  --gutter: 1.75rem;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Base
+ * ------------------------------------------------------------------ */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-lime);
+  color: #0a0a0a;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ink);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Layout utilities
+ * ------------------------------------------------------------------ */
+@utility container-page {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 3rem;
+  }
+}
+
+/* Faint exposed column grid (brutalist structure) */
+@utility grid-guides {
+  background-image: linear-gradient(
+    to right,
+    var(--color-line) 1px,
+    transparent 1px
+  );
+  background-size: 25% 100%;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Editorial type
+ * ------------------------------------------------------------------ */
+.display {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Small uppercase monospace meta label */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+/* Label with a leading index/marker */
+.label-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.label-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--color-lime);
+  flex: none;
+}
+
+/* Two-tone editorial heading: muted trailing part */
+.muted {
+  color: var(--color-faint);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Buttons — rectangular, mono, editorial (no pills)
+ * ------------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+.btn svg {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn:hover svg {
+  transform: translate(3px, -3px);
+}
+.btn-solid {
+  background: var(--color-cream);
+  color: var(--color-ink);
+}
+.btn-solid:hover {
+  background: var(--color-lime);
+}
+.btn-outline {
+  border-color: var(--color-line-strong);
+  color: var(--color-cream);
+}
+.btn-outline:hover {
+  border-color: var(--color-cream);
+  background: var(--color-surface);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Crosshair marker (brutalist grid accent)
+ * ------------------------------------------------------------------ */
+.crosshair {
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+.crosshair::before,
+.crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--color-line-strong);
+}
+.crosshair::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+.crosshair::after {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+/* Link underline reveal */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Scroll reveal (progressive enhancement)
+ * ------------------------------------------------------------------ */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero wordmark: CSS load animation — robust, no observer dependency */
+@keyframes heroRise {
+  from {
+    clip-path: inset(0 0 108% 0);
+  }
+  to {
+    clip-path: inset(0 0 -25% 0);
+  }
+}
+.js .hero-rise {
+  animation: heroRise 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .js .hero-rise {
+    animation: none !important;
+    clip-path: none !important;
+  }
+  .marquee__track {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Marquee
+ * ------------------------------------------------------------------ */
+.marquee {
+  overflow: hidden;
+}
+.marquee__track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Accordion (services list)
+ * ------------------------------------------------------------------ */
+.acc {
+  border-top: 1px solid var(--color-line);
+}
+.acc summary {
+  list-style: none;
+  cursor: pointer;
+}
+.acc summary::-webkit-details-marker {
+  display: none;
+}
+.acc[open] .acc-sign {
+  transform: rotate(45deg);
+}
+.acc-sign {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.acc-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.acc[open] .acc-body {
+  grid-template-rows: 1fr;
+}
+.acc-body > div {
+  overflow: hidden;
+}
+.acc summary .acc-title {
+  transition: color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.acc:hover summary .acc-title {
+  color: var(--color-cream);
+}
+@media (min-width: 768px) {
+  .acc:hover summary .acc-title {
+    transform: translateX(10px);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Gothic monogram (logo)
+ * ------------------------------------------------------------------ */
+.gothic {
+  font-family: 'UnifrakturCook', 'Grenze Gotisch', serif;
+  line-height: 1;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Rotating seal (footer badge)
+ * ------------------------------------------------------------------ */
+@keyframes spin360 {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin360 22s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin-slow {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Carousel (Especialidades)
+ * ------------------------------------------------------------------ */
+.carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 0.25rem;
+}
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+.carousel > * {
+  scroll-snap-align: center;
+}
+.carousel-card {
+  transition:
+    border-color 0.4s ease,
+    background-color 0.4s ease,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.carousel-card.is-active {
+  border-color: var(--color-line-strong);
+  background: var(--color-surface);
+}
+.carousel-dot {
+  height: 6px;
+  width: 6px;
+  border-radius: 999px;
+  background: var(--color-line-strong);
+  transition:
+    width 0.35s ease,
+    background-color 0.35s ease;
+}
+.carousel-dot.is-active {
+  width: 26px;
+  background: var(--color-lime);
+}
+
+/* ------------------------------------------------------------------ *
+ *  FAQ — boxed cards, inverted when open
+ * ------------------------------------------------------------------ */
+.faq-box {
+  border: 1px solid var(--color-line);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+.faq-box summary {
+  list-style: none;
+  cursor: pointer;
+}
+.faq-box summary::-webkit-details-marker {
+  display: none;
+}
+.faq-box-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.faq-box[open] .faq-box-body {
+  grid-template-rows: 1fr;
+}
+.faq-box-body > div {
+  overflow: hidden;
+}
+.faq-box[open] {
+  background: var(--color-cream);
+  border-color: var(--color-cream);
+}
+.faq-box[open] .faq-q {
+  color: var(--color-ink);
+}
+.faq-box[open] .faq-a {
+  color: #33332f;
+}
+.faq-box[open] .faq-sign {
+  border-color: rgba(0, 0, 0, 0.18);
+  color: var(--color-ink);
+}
+.faq-sign-plus {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.faq-box[open] .faq-sign-plus {
+  transform: rotate(45deg);
+}

@@ -1,0 +1,38 @@
+---
+import { testimonials } from '../data/site';
+import SectionHeader from './SectionHeader.astro';
+---
+
+<section class="container-page py-20 md:py-32">
+  <SectionHeader
+    index="05"
+    label="Depoimentos"
+    title="O que dizem"
+    titleMuted="sobre o trabalho."
+    caption="Feedback real de founders, CEOs e heads de produto do Brasil, Reino Unido e EUA."
+  />
+
+  <div class="mt-16 gap-4 [column-gap:1rem] sm:columns-2 lg:columns-3" data-reveal>
+    {
+      testimonials.map((t) => (
+        <figure class="mb-4 break-inside-avoid border border-line bg-surface p-7">
+          <div class="mono flex items-center gap-1 text-xs text-lime">
+            {'★★★★★'}
+          </div>
+          <blockquote class="mt-5 text-[17px] leading-snug text-cream">
+            {t.quote}
+          </blockquote>
+          <figcaption class="mt-6 flex items-center gap-3 border-t border-line pt-5">
+            <span class="grid h-9 w-9 shrink-0 place-items-center border border-line font-mono text-xs text-mist">
+              {t.author.replace(/[^A-Za-z]/g, '').charAt(0)}
+            </span>
+            <div class="min-w-0">
+              <p class="text-sm font-semibold text-cream">{t.author}</p>
+              <p class="mono truncate text-[11px] text-faint">{t.company}</p>
+            </div>
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</section>

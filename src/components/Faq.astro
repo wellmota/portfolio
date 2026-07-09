@@ -1,0 +1,62 @@
+---
+import { faqs, faqAside } from '../data/site';
+---
+
+<section class="border-t border-line py-20 md:py-32">
+  <div class="container-page">
+    <div class="grid gap-12 md:grid-cols-12 md:gap-16">
+      <!-- Left column -->
+      <div class="flex flex-col md:col-span-5" data-reveal>
+        <span class="label label-dot">
+          <span class="mr-1 text-mist">06</span>Dúvidas comuns
+        </span>
+        <h2 class="display mt-8 text-[clamp(3.5rem,10vw,8rem)] leading-[0.9]">
+          FAQ
+        </h2>
+
+        <!-- Contact card -->
+        <div class="mt-auto border border-line bg-ink-soft p-7 md:mt-14">
+          <p class="text-[15px] leading-relaxed text-mist">
+            “{faqAside.quote}”
+          </p>
+          <div class="mt-8 border-t border-line pt-5">
+            <span class="label">{faqAside.metaLabel}</span>
+            <p class="display mt-2 text-2xl">{faqAside.metaValue}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: boxed accordion -->
+      <div class="flex flex-col gap-3 md:col-span-7" data-reveal>
+        {
+          faqs.map((faq, i) => (
+            <details class="faq-box group" open={i === 0}>
+              <summary class="flex items-center justify-between gap-6 p-6 md:p-7">
+                <span class="faq-q text-lg font-medium text-cream md:text-xl">
+                  {faq.q}
+                </span>
+                <span class="faq-sign grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line text-mist">
+                  <svg class="faq-sign-plus" width="13" height="13" viewBox="0 0 14 14" fill="none">
+                    <path
+                      d="M7 1v12M1 7h12"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+              </summary>
+              <div class="faq-box-body">
+                <div>
+                  <p class="faq-a max-w-xl px-6 pb-7 text-[15px] leading-relaxed text-mist md:px-7">
+                    {faq.a}
+                  </p>
+                </div>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

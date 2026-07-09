@@ -1,0 +1,63 @@
+---
+import { contact, profile } from '../data/site';
+
+const details = [
+  { label: 'E-mail', value: profile.email, href: `mailto:${profile.email}` },
+  {
+    label: 'Telefone',
+    value: profile.phone,
+    href: `tel:${profile.phone.replace(/[^+\d]/g, '')}`,
+  },
+  { label: 'Localização', value: profile.location, href: null },
+  { label: 'Status', value: profile.availableText, href: null },
+];
+---
+
+<section id="contato" class="relative overflow-hidden py-20 md:py-32">
+  <div class="container-page">
+    <div class="border-t border-line pt-6" data-reveal>
+      <span class="label label-dot"><span class="mr-1 text-mist">07</span>{contact.eyebrow}</span>
+
+      <h2 class="display mt-10 max-w-6xl text-[clamp(2.5rem,9vw,8rem)] leading-[0.92]">
+        Bora construir <br class="hidden md:block" />
+        <span class="text-faint">algo memorável?</span>
+      </h2>
+
+      <div class="mt-12 flex flex-col items-start gap-6 md:flex-row md:items-center">
+        <a href={`mailto:${profile.email}`} class="btn btn-solid text-sm">
+          {contact.cta}
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M4 12L12 4M12 4H5M12 4V11"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a>
+        <p class="max-w-sm text-[15px] text-mist">{contact.sub}</p>
+      </div>
+    </div>
+
+    <!-- Contact detail table -->
+    <div class="mt-16 grid grid-cols-1 border-t border-line sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+      {
+        details.map((d) => (
+          <div class="border-b border-line py-6 sm:border-b-0 lg:border-l lg:pl-6 lg:first:border-l-0 lg:first:pl-0">
+            <span class="label">{d.label}</span>
+            {d.href ? (
+              <a
+                href={d.href}
+                class="link-underline mt-3 block text-[15px] text-cream"
+              >
+                {d.value}
+              </a>
+            ) : (
+              <p class="mt-3 text-[15px] text-cream">{d.value}</p>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

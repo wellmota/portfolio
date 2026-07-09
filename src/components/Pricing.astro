@@ -1,0 +1,82 @@
+---
+import { pricing } from '../data/site';
+---
+
+<section class="border-y border-line bg-ink-soft py-20 md:py-32">
+  <div class="container-page">
+    <div class="mx-auto max-w-2xl text-center" data-reveal>
+      <span class="eyebrow justify-center">Planos</span>
+      <h2
+        class="mt-5 font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl"
+      >
+        Escolha o formato que combina com o seu momento.
+      </h2>
+      <p class="mt-4 text-[15px] text-mist">
+        Preços transparentes. Sem surpresas no meio do caminho.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-5 lg:grid-cols-3">
+      {
+        pricing.map((plan) => (
+          <div
+            class:list={[
+              'relative flex flex-col rounded-xl2 border p-8',
+              plan.featured
+                ? 'border-lime/50 bg-surface'
+                : 'border-line bg-surface',
+            ]}
+            data-reveal
+            data-reveal-group
+          >
+            {plan.featured && (
+              <span class="absolute right-6 top-8 rounded-full bg-lime px-3 py-1 text-[11.5px] font-medium text-ink">
+                Mais escolhido
+              </span>
+            )}
+            <h3 class="font-display text-lg font-semibold">{plan.name}</h3>
+            <p class="mt-2 text-[14px] text-mist">{plan.description}</p>
+
+            <div class="mt-6 flex items-baseline gap-1">
+              <span class="font-display text-4xl font-semibold tracking-tight">
+                {plan.price}
+              </span>
+              <span class="text-sm text-faint">{plan.period}</span>
+            </div>
+
+            <ul class="mt-8 flex flex-1 flex-col gap-3.5">
+              {plan.features.map((feature) => (
+                <li class="flex items-start gap-3 text-[14.5px] text-mist">
+                  <span class="mt-0.5 grid h-4.5 w-4.5 shrink-0 place-items-center rounded-full bg-lime/15 text-lime">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                      <path
+                        d="M2.5 6.5L5 9l4.5-6"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href="#contato"
+              class:list={[
+                'mt-8 rounded-full px-6 py-3.5 text-center text-sm font-medium transition-transform hover:scale-[1.02]',
+                plan.featured
+                  ? 'bg-lime text-ink'
+                  : 'border border-line text-cream hover:bg-surface-2',
+              ]}
+            >
+              Começar
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

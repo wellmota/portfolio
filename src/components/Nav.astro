@@ -1,0 +1,138 @@
+---
+import { profile, nav } from '../data/site';
+---
+
+<header
+  data-nav
+  class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-colors duration-300"
+>
+  <div class="container-page">
+    <nav class="flex items-center justify-between gap-4 py-4">
+      <!-- Brand + meta -->
+      <div class="flex items-center gap-5">
+        <a href="#home" class="flex items-center gap-2.5 shrink-0">
+          <span
+            class="gothic grid h-8 w-8 place-items-center bg-lime pb-0.5 text-[19px] text-ink"
+            >{profile.firstName.charAt(0)}</span
+          >
+          <span class="text-[14px] font-semibold tracking-tight"
+            >{profile.name}</span
+          >
+        </a>
+        <span
+          class="mono hidden items-center gap-2 text-[11px] text-faint lg:flex"
+        >
+          <span class="text-line-strong">/</span>
+          <span class="tabular-nums text-mist" data-clock>--:--:--</span>
+          <span>{profile.location}</span>
+        </span>
+      </div>
+
+      <!-- Desktop links -->
+      <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="mono text-[11px] uppercase tracking-widest text-mist transition-colors hover:text-cream"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- CTA + burger -->
+      <div class="flex items-center gap-3">
+        <a href="#contato" class="btn btn-solid hidden sm:inline-flex">
+          Começar projeto
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M4 12L12 4M12 4H5M12 4V11"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a>
+        <button
+          data-burger
+          aria-label="Abrir menu"
+          class="burger grid h-11 w-11 place-items-center border border-line md:hidden"
+        >
+          <span class="burger__lines"></span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    data-mobile-menu
+    class="mobile-menu fixed inset-0 z-40 flex flex-col justify-center gap-1 bg-ink px-[var(--gutter)] md:hidden"
+  >
+    {
+      nav.map((item, i) => (
+        <a
+          href={item.href}
+          class="flex items-baseline gap-4 border-b border-line py-5 display text-4xl"
+        >
+          <span class="mono text-xs text-faint">0{i + 1}</span>
+          {item.label}
+        </a>
+      ))
+    }
+    <a href="#contato" class="btn btn-solid mt-8 justify-center py-4">
+      Começar projeto
+    </a>
+  </div>
+</header>
+
+<style>
+  [data-nav].is-scrolled {
+    background: color-mix(in srgb, var(--color-ink) 82%, transparent);
+    border-color: var(--color-line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .burger__lines,
+  .burger__lines::before,
+  .burger__lines::after {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 1.5px;
+    background: var(--color-cream);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  .burger__lines::before {
+    transform: translateY(-5px);
+  }
+  .burger__lines::after {
+    transform: translateY(3.5px);
+  }
+  .burger.is-open .burger__lines {
+    background: transparent;
+  }
+  .burger.is-open .burger__lines::before {
+    transform: rotate(45deg);
+  }
+  .burger.is-open .burger__lines::after {
+    transform: rotate(-45deg) translateY(-1px);
+  }
+
+  .mobile-menu {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+  }
+  .mobile-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+</style>

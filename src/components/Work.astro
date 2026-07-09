@@ -1,0 +1,89 @@
+---
+import { projects } from '../data/site';
+import SectionHeader from './SectionHeader.astro';
+---
+
+<section id="projetos" class="container-page py-20 md:py-32">
+  <SectionHeader
+    index="04"
+    label="Projetos em destaque"
+    title="Onde deixei"
+    titleMuted="minha marca."
+    caption="Projetos para grandes empresas e instituições — do Brasil ao Reino Unido e EUA."
+  />
+
+  <div class="mt-16 grid gap-5 md:grid-cols-2">
+    {
+      projects.map((project) => (
+        <a
+          href="#contato"
+          class="group flex flex-col border border-line bg-ink-soft p-4 transition-colors duration-300 hover:border-line-strong"
+          data-reveal
+          data-reveal-group
+        >
+          {/* Tags */}
+          <div class="mb-4 flex flex-wrap items-center gap-2 px-1 pt-1">
+            {project.categories.map((cat) => (
+              <span class="mono border border-line px-3 py-1 text-[10.5px] uppercase tracking-widest text-mist">
+                {cat}
+              </span>
+            ))}
+            <span class="mono ml-auto text-[11px] text-faint">{project.meta}</span>
+          </div>
+
+          {/* Image */}
+          <div class="relative aspect-[16/10] overflow-hidden">
+            <img
+              src={project.image}
+              alt={project.title}
+              loading="lazy"
+              class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-[1.04] group-hover:grayscale-0"
+            />
+            <span
+              class="absolute left-0 top-0 h-1 w-full origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+              style={`background:${project.accent}`}
+            />
+          </div>
+
+          {/* Footer */}
+          <div class="flex items-start justify-between gap-4 px-1 pb-1 pt-5">
+            <div>
+              <h3 class="display text-2xl leading-tight md:text-[1.7rem]">
+                {project.title}
+              </h3>
+              <p class="mt-2 max-w-md text-[14px] leading-relaxed text-mist">
+                {project.description}
+              </p>
+            </div>
+            <span class="mt-1 grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line text-mist transition-all duration-300 group-hover:border-cream group-hover:text-cream">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M4 12L12 4M12 4H5M12 4V11"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                ></path>
+              </svg>
+            </span>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="mt-10" data-reveal>
+    <a href="/cv.docx" class="btn btn-outline">
+      Ver CV completo
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+        <path
+          d="M4 12L12 4M12 4H5M12 4V11"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </a>
+  </div>
+</section>

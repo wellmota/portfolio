@@ -1,0 +1,19 @@
+---
+import { marquee } from '../data/site';
+const items = [...marquee, ...marquee];
+---
+
+<section class="border-y border-line py-5" aria-hidden="true">
+  <div class="marquee">
+    <div class="marquee__track">
+      {
+        items.map((item) => (
+          <span class="mono flex items-center whitespace-nowrap text-[13px] uppercase tracking-widest text-mist">
+            <span class="px-8">{item}</span>
+            <span class="text-line-strong">/</span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>

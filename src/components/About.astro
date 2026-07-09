@@ -1,0 +1,90 @@
+---
+import { about, profile } from '../data/site';
+const [headWhite, headMuted] = about.heading.split(':');
+---
+
+<section id="sobre" class="relative overflow-hidden py-20 md:py-32">
+  <!-- Ghost gothic monogram -->
+  <span
+    class="gothic pointer-events-none absolute -right-4 top-1/2 hidden -translate-y-1/2 select-none text-[24rem] leading-none text-cream/[0.03] lg:block"
+    aria-hidden="true">{profile.firstName.charAt(0)}</span
+  >
+
+  <div class="container-page relative">
+    <div class="border-t border-line pt-6" data-reveal>
+      <span class="label label-dot"><span class="mr-1 text-mist">01</span>Sobre</span>
+    </div>
+
+    <div class="mt-12 grid gap-10 md:grid-cols-12 md:gap-12">
+      <!-- Photo -->
+      <div class="md:col-span-4" data-reveal>
+        <div class="relative aspect-[4/5] w-full overflow-hidden border border-line bg-surface">
+          <img
+            src={about.image}
+            alt={profile.name}
+            loading="lazy"
+            class="h-full w-full object-cover grayscale"
+          />
+          <span class="crosshair absolute right-3 top-3 opacity-60"></span>
+          <div class="absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-ink/90 to-transparent p-5">
+            <div>
+              <p class="display text-xl text-cream">{profile.name}</p>
+              <p class="mono text-[11px] text-mist">{about.signatureRole}</p>
+            </div>
+            <span class="label">{profile.location}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statement -->
+      <div class="md:col-span-8 md:pl-4" data-reveal>
+        <!-- globe icon -->
+        <span class="grid h-11 w-11 place-items-center border border-line text-mist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4" />
+            <path
+              d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"
+              stroke="currentColor"
+              stroke-width="1.4"
+            />
+          </svg>
+        </span>
+
+        <h2 class="display mt-7 text-[clamp(2rem,5vw,4.25rem)] leading-[1.02]">
+          {headWhite}{headMuted && ':'}
+          {headMuted && <span class="text-faint">{headMuted}</span>}
+        </h2>
+
+        <div class="mt-8 grid gap-5 md:max-w-3xl md:grid-cols-2">
+          {
+            about.body.map((p, i) => (
+              <p
+                class:list={[
+                  'text-[15px] leading-relaxed',
+                  i === 0 ? 'text-mist' : 'text-faint',
+                ]}
+              >
+                {p}
+              </p>
+            ))
+          }
+        </div>
+
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href="#contato" class="btn btn-solid">
+            Trabalhe comigo
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M4 12L12 4M12 4H5M12 4V11"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </a>
+          <a href="/cv.docx" class="btn btn-outline">Baixar CV</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

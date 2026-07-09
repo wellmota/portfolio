@@ -1,0 +1,33 @@
+---
+interface Props {
+  index?: string;
+  label: string;
+  title: string;
+  titleMuted?: string;
+  caption?: string;
+}
+const { index, label, title, titleMuted, caption } = Astro.props;
+---
+
+<div
+  class="flex flex-col justify-between gap-8 border-t border-line pt-6 md:flex-row md:items-end"
+  data-reveal
+>
+  <div class="max-w-3xl">
+    <span class="label label-dot">
+      {index && <span class="mr-1 text-mist">{index}</span>}
+      {label}
+    </span>
+    <h2 class="display mt-6 text-[clamp(2.5rem,7vw,5.5rem)]">
+      {title}
+      {titleMuted && <span class="text-faint"> {titleMuted}</span>}
+    </h2>
+  </div>
+  {
+    caption && (
+      <p class="mono max-w-[30ch] text-[13px] leading-relaxed text-mist md:pb-3 md:text-right">
+        {caption}
+      </p>
+    )
+  }
+</div>

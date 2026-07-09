@@ -1,0 +1,63 @@
+---
+import { clients } from '../data/site';
+
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '') // strip accents
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+
+const items = [...clients, ...clients];
+const mask =
+  'linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)';
+---
+
+<section class="border-y border-line py-12 md:py-16">
+  <div class="container-page mb-9 flex items-baseline justify-between gap-4">
+    <span class="label label-dot">Clientes & projetos</span>
+    <span class="mono hidden text-[11px] text-faint sm:block">
+      Marcas com que já trabalhei
+    </span>
+  </div>
+
+  <div class="marquee" style={`mask-image:${mask};-webkit-mask-image:${mask}`}>
+    <div class="marquee__track" style="animation-duration:70s">
+      {
+        items.map((c) => (
+          <span class="logo-cell flex shrink-0 items-center justify-center px-8 md:px-12">
+            {/* Real logo if present in /public/logos, else wordmark fallback */}
+            <img
+              src={`/logos/${slug(c)}.svg`}
+              alt={c}
+              loading="lazy"
+              class="logo-img hidden h-7 w-auto md:h-9"
+              onload="this.classList.remove('hidden');this.nextElementSibling.classList.add('hidden')"
+              onerror="this.src=this.src.replace('.svg','.png');this.onerror=function(){this.remove()}"
+            />
+            <span class="logo-word display whitespace-nowrap text-xl font-semibold text-faint transition-colors duration-300 md:text-3xl">
+              {c}
+            </span>
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .logo-img {
+    /* Normalize any logo to a consistent monochrome tone on dark bg */
+    filter: brightness(0) invert(1);
+    opacity: 0.5;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+  }
+  .logo-cell:hover .logo-img {
+    opacity: 1;
+  }
+  .logo-cell:hover .logo-word {
+    color: var(--color-cream);
+  }
+</style>

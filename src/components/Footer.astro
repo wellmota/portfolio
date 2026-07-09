@@ -1,0 +1,160 @@
+---
+import { footer, profile, socials, nav } from '../data/site';
+
+const abbr: Record<string, string> = {
+  GitHub: 'GH',
+  Behance: 'Bē',
+  LinkedIn: 'in',
+  Dribbble: 'Dr',
+};
+---
+
+<footer class="border-t border-line bg-ink-soft">
+  <div class="container-page py-16 md:py-20">
+    <div class="grid gap-12 md:grid-cols-12">
+      <!-- Location + rotating seal -->
+      <div class="md:col-span-4">
+        <span class="label">Localização</span>
+        <p class="mt-4 text-lg leading-snug text-cream">
+          {profile.location}<br />
+          <span class="text-mist">Aberto a trabalho remoto</span>
+        </p>
+
+        <!-- Rotating seal -->
+        <div class="relative mt-14 h-40 w-40">
+          <svg
+            viewBox="0 0 200 200"
+            class="spin-slow h-full w-full text-mist"
+            aria-hidden="true"
+          >
+            <defs>
+              <path
+                id="sealPath"
+                d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"
+                fill="none"></path>
+            </defs>
+            <text
+              class="mono"
+              font-size="10.5"
+              letter-spacing="2.5"
+              fill="currentColor"
+            >
+              <textPath href="#sealPath" startOffset="0"
+                >{footer.badgeText}{footer.badgeText}</textPath
+              >
+            </text>
+          </svg>
+          <span
+            class="gothic absolute inset-0 grid place-items-center pb-2 text-6xl text-cream"
+            >{profile.firstName.charAt(0)}</span
+          >
+        </div>
+      </div>
+
+      <!-- Inquiry + Links -->
+      <div class="md:col-span-3">
+        <span class="label">Contato</span>
+        <a
+          href={`mailto:${profile.email}`}
+          class="link-underline mono mt-4 block text-[15px] text-cream"
+          >{profile.email}</a
+        >
+        <p class="mono mt-2 text-[15px] text-mist">{profile.phone}</p>
+
+        <span class="label mt-12 block">Navegação</span>
+        <ul class="mt-4 space-y-2.5">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="text-[15px] text-mist transition-colors hover:text-cream"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Brand + socials + newsletter -->
+      <div class="md:col-span-5 md:pl-6">
+        <div class="flex items-center gap-2.5">
+          <span
+            class="gothic grid h-8 w-8 place-items-center bg-lime pb-0.5 text-[19px] text-ink"
+            >{profile.firstName.charAt(0)}</span
+          >
+          <span class="text-[15px] font-semibold tracking-tight"
+            >{profile.name}</span
+          >
+        </div>
+        <p class="mt-5 max-w-sm text-[15px] leading-relaxed text-mist">
+          {footer.mission}
+        </p>
+
+        <!-- Socials -->
+        <div class="mt-7 flex items-center gap-2.5">
+          {
+            socials.map((s) => (
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={s.label}
+                class="mono grid h-11 w-11 place-items-center rounded-full border border-line text-[12px] text-mist transition-colors hover:border-cream hover:text-cream"
+              >
+                {abbr[s.label] ?? s.label.slice(0, 2)}
+              </a>
+            ))
+          }
+        </div>
+
+        <!-- Newsletter -->
+        <form
+          action={`mailto:${profile.email}`}
+          method="post"
+          enctype="text/plain"
+          class="mt-10 max-w-md"
+        >
+          <span class="label">Vamos conversar</span>
+          <div class="mt-4 flex items-center border border-line focus-within:border-line-strong">
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="seu@email.com"
+              class="w-full bg-transparent px-4 py-3.5 text-[14px] text-cream outline-none placeholder:text-faint"
+            />
+            <button
+              type="submit"
+              aria-label="Enviar"
+              class="grid h-[3.25rem] w-14 shrink-0 place-items-center bg-cream text-ink transition-colors hover:bg-lime"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div
+      class="mono mt-16 flex flex-col items-start justify-between gap-4 border-t border-line pt-8 text-[12px] text-faint md:flex-row md:items-center"
+    >
+      <p>{footer.legal}</p>
+      <p class="flex items-center gap-2">
+        <span class="h-1.5 w-1.5 bg-lime"></span>
+        <span class="tabular-nums text-mist" data-clock>--:--:--</span>
+        — {profile.location}
+      </p>
+    </div>
+  </div>
+</footer>
