@@ -16,18 +16,15 @@ const icons: Record<string, string> = {
     index="02"
     label="Especialidades"
     title="Do conceito ao"
-    titleMuted="código — em produção."
+    titleMuted="produto, ponta a ponta."
     caption="Um profissional só para desenhar e construir sua experiência digital, sem handoff."
   />
 
-  <div class="mt-16" data-carousel>
-    <!-- Track -->
-    <div class="carousel" data-track>
+  <div class="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {
         services.map((s) => (
           <article
-            data-card
-            class="carousel-card flex min-h-[24rem] w-[85%] shrink-0 flex-col justify-between border border-line bg-ink-soft p-8 sm:w-[52%] lg:w-[31.6%]"
+            class="flex min-h-[24rem] flex-col justify-between border border-line bg-ink-soft p-8 transition-colors hover:border-line-strong"
           >
             <div class="flex items-start justify-between">
               <span class="grid h-12 w-12 place-items-center border border-line text-cream">
@@ -63,87 +60,5 @@ const icons: Record<string, string> = {
           </article>
         ))
       }
-    </div>
-
-    <!-- Controls -->
-    <div class="mt-8 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        {services.map((_, i) => (
-          <button
-            data-dot
-            aria-label={`Ir para card ${i + 1}`}
-            class:list={['carousel-dot', i === 0 && 'is-active']}
-          />
-        ))}
-      </div>
-
-      <div class="flex items-center gap-2">
-        <button
-          data-prev
-          aria-label="Anterior"
-          class="grid h-11 w-11 place-items-center border border-line text-mist transition-colors hover:border-line-strong hover:text-cream"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
-        </button>
-        <button
-          data-next
-          aria-label="Próximo"
-          class="grid h-11 w-11 place-items-center border border-line text-mist transition-colors hover:border-line-strong hover:text-cream"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
   </div>
 </section>
-
-<script>
-  document.querySelectorAll('[data-carousel]').forEach((root) => {
-    const track = root.querySelector('[data-track]') as HTMLElement;
-    const cards = [...root.querySelectorAll('[data-card]')] as HTMLElement[];
-    const dots = [...root.querySelectorAll('[data-dot]')] as HTMLElement[];
-    const prev = root.querySelector('[data-prev]');
-    const next = root.querySelector('[data-next]');
-    if (!track || !cards.length) return;
-
-    const update = () => {
-      const center = track.scrollLeft + track.clientWidth / 2;
-      let best = 0,
-        bestDist = Infinity;
-      cards.forEach((c, i) => {
-        const cc = c.offsetLeft + c.offsetWidth / 2;
-        const d = Math.abs(cc - center);
-        if (d < bestDist) {
-          bestDist = d;
-          best = i;
-        }
-      });
-      cards.forEach((c, i) => c.classList.toggle('is-active', i === best));
-      dots.forEach((d, i) => d.classList.toggle('is-active', i === best));
-    };
-
-    const goTo = (i: number) => {
-      const c = cards[i];
-      if (!c) return;
-      track.scrollTo({
-        left: c.offsetLeft - (track.clientWidth - c.offsetWidth) / 2,
-        behavior: 'smooth',
-      });
-    };
-    const current = () => dots.findIndex((d) => d.classList.contains('is-active'));
-
-    track.addEventListener('scroll', () => requestAnimationFrame(update), {
-      passive: true,
-    });
-    dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
-    prev?.addEventListener('click', () => goTo(Math.max(0, current() - 1)));
-    next?.addEventListener('click', () =>
-      goTo(Math.min(cards.length - 1, current() + 1))
-    );
-    update();
-  });
-</script>

@@ -44,10 +44,21 @@ const abbr: Record<string, string> = {
               >
             </text>
           </svg>
-          <span
-            class="gothic absolute inset-0 grid place-items-center pb-2 text-6xl text-cream"
-            >{profile.firstName.charAt(0)}</span
+          <svg
+            viewBox="0 0 200 200"
+            class="absolute inset-0 h-full w-full"
+            aria-hidden="true"
           >
+            <text
+              x="100"
+              y="101"
+              text-anchor="middle"
+              dominant-baseline="central"
+              style="font-family:'UnifrakturCook',serif;font-size:70px"
+              fill="var(--color-cream)"
+              >{profile.firstName.charAt(0)}</text
+            >
+          </svg>
         </div>
       </div>
 
@@ -152,8 +163,7 @@ const abbr: Record<string, string> = {
       <p>{footer.legal}</p>
       <p class="flex items-center gap-2">
         <span class="h-1.5 w-1.5 bg-lime"></span>
-        <span class="tabular-nums text-mist" data-clock>--:--:--</span>
-        — {profile.location}
+        {profile.location}
       </p>
     </div>
   </div>

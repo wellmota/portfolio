@@ -8,6 +8,7 @@ export const profile = {
   name: 'Wellington Mota',
   firstName: 'Wellington',
   role: 'Product Engineer — Design + Front-end',
+  roleAi: 'AI Specialist',
   tagline:
     'Product Engineer que faz as duas pontas: pesquiso e desenho no Figma e entrego em React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy.',
   location: 'Brasília, BR',
@@ -23,6 +24,7 @@ export const nav = [
   { label: 'Sobre', href: '#sobre' },
   { label: 'O que faço', href: '#servicos' },
   { label: 'Experiência', href: '#projetos' },
+  { label: 'Escrita', href: '#escrita' },
   { label: 'Contato', href: '#contato' },
 ];
 
@@ -48,7 +50,7 @@ export const stats = [
 export const about = {
   eyebrow: 'Sobre mim',
   // Troque por sua foto: coloque em /public e use '/sua-foto.jpg'
-  image: 'https://picsum.photos/seed/wm-about/900/1100',
+  image: '/well-portrait-2.jpg',
   heading:
     'Fecho a distância entre design e código: pesquiso, desenho e coloco no ar.',
   body: [
@@ -177,57 +179,63 @@ export const process = [
    do projeto colocando o arquivo em /public e apontando o caminho aqui. */
 export const projects = [
   {
-    title: 'Mitsubishi Motors',
-    meta: 'Automotivo · BR',
-    categories: ['Product', 'Prototipagem'],
+    title: 'Kia Telluride LX',
+    meta: 'Automotivo · Landing Page',
+    categories: ['Web', 'UI Design'],
     description:
-      'Protótipos de alta fidelidade e dashboards para o time de inovação e tecnologia.',
-    image: 'https://picsum.photos/seed/mitsubishi-wm/1200/800',
-    accent: '#cff24a',
-  },
-  {
-    title: 'ServiceNow',
-    meta: 'Enterprise · Global',
-    categories: ['Design System', 'UX'],
-    description:
-      'Modernização de interface e design system na migração da plataforma — navegação e acessibilidade.',
-    image: 'https://picsum.photos/seed/servicenow-wm/1200/800',
+      'Landing page do Kia Telluride LX — layout, UI e experiência de configuração do veículo.',
+    image:
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/d71f1e232305417.6899fba2b8c0a.jpg',
     accent: '#7dd3fc',
   },
   {
-    title: 'Mindtools',
-    meta: 'EdTech · UK',
-    categories: ['Product', 'UX Research'],
+    title: 'Autódromo Velocitta',
+    meta: 'Esporte · Web',
+    categories: ['Branding', 'Web'],
     description:
-      'Redesign de fluxos de aprendizado e do processo de retenção, com impacto direto em receita.',
-    image: 'https://picsum.photos/seed/mindtools-wm/1200/800',
+      'Identidade e presença digital para o autódromo — direção visual e experiência do site.',
+    image:
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/a21511192194261.65d7923added2.jpg',
+    accent: '#cff24a',
+  },
+  {
+    title: 'Wevr Virtual Studio',
+    meta: 'Produto · US',
+    categories: ['Product', 'UX'],
+    description:
+      'Interface e experiência para a plataforma de produção em VR da Wevr (WVS).',
+    image:
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/564b87162267413.63d2af8b23687.jpg',
     accent: '#c4b5fd',
   },
   {
-    title: 'Tutory',
-    meta: 'EdTech · BR',
-    categories: ['Rebranding', 'Web'],
+    title: 'The Blu · Wevr',
+    meta: 'VR · US',
+    categories: ['Design', 'Campanha'],
     description:
-      'Nova identidade visual, site e manual de marca para a plataforma de educação.',
-    image: 'https://picsum.photos/seed/tutory-wm/1200/800',
-    accent: '#fca5a5',
+      'Peças de campanha para o aniversário de 10 anos da série de VR The Blu, da Wevr.',
+    image:
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/94765a162329377.63d3bfe0bb3fe.jpg',
+    accent: '#38bdf8',
   },
   {
-    title: 'CAIXA · Banco do Brasil',
-    meta: 'Bancário · BR',
-    categories: ['Product Design', 'UI'],
+    title: 'ArtCaffé',
+    meta: 'F&B · Kenya',
+    categories: ['Branding', 'Digital'],
     description:
-      'Design de produto e interfaces para grandes instituições financeiras.',
-    image: 'https://picsum.photos/seed/caixa-wm/1200/800',
+      'Direção visual e peças digitais para a rede de cafés ArtCaffé, no Quênia.',
+    image:
+      'https://mir-s3-cdn-cf.behance.net/project_modules/1400/e9ff1b174188663.649d7e96c07e6.png',
     accent: '#6ee7b7',
   },
   {
-    title: 'Simple Snuff · Odens',
+    title: 'Odens',
     meta: 'Branding · UK',
     categories: ['Branding', 'Packaging'],
     description:
       'Identidade de marca e design de embalagens elogiados pelos fundadores.',
-    image: 'https://picsum.photos/seed/snuff-wm/1200/800',
+    image:
+      'https://mir-s3-cdn-cf.behance.net/projects/max_808/d07788191695833.Y3JvcCwzMTc1LDI0ODMsNDAwLDExNw.jpg',
     accent: '#fdba74',
   },
 ];
@@ -255,11 +263,13 @@ export const clients = [
   'Animalle',
   'Grupo SOMA',
   'Wevr',
-  'Resilience Engine',
   'Resilience Dynamic',
   'Soluti',
   'Sankhya',
   'Cogmo Tecnologia',
+  'Your Digital Media',
+  'Chris Corsini',
+  'Nomoo',
 ];
 
 /* Depoimentos REAIS — 10 clientes, 5 empresas, 3 países. */
@@ -344,6 +354,33 @@ export const faqs = [
   {
     q: 'Como você usa IA no seu trabalho?',
     a: 'Muito além de autocompletar código. Orquestro agentes e fluxos multi-etapa (com MCP), versiono e testo prompts como código, otimizo custo/tokens (caching e roteamento de modelos) e uso evals com LLM-as-judge para garantir qualidade antes do deploy — integrando features de IA direto na interface do produto.',
+  },
+  {
+    q: 'Você é um "vibe coder"? Só joga prompt e aceita o que vier?',
+    a: 'Não. "Vibe coding" é pedir código e torcer pra funcionar. Eu faço Design Engineering: desenho a experiência e a implemento com disciplina de produção — prompts versionados e testados como código, evals com gates no CI antes do deploy, controle de custo e tokens, design system como fonte única da verdade, acessibilidade e performance. IA é ferramenta sob engenharia, não muleta: eu entendo, reviso e respondo pelo que vai para produção.',
+  },
+];
+
+/* Artigos publicados no Medium. Descrições são resumos próprios (não cópia). */
+export const articles = [
+  {
+    title:
+      'From UX/UI Design to Front-End Development: Embracing a New Chapter',
+    excerpt:
+      'Minha transição depois de 15+ anos em UX/UI design para o front-end — e por que fechar a distância entre design e código virou meu foco.',
+    date: 'Abr 2024',
+    source: 'Medium',
+    tag: 'Carreira',
+    href: 'https://medium.com/@wellingtonmota/from-ux-ui-design-to-front-end-development-embracing-a-new-chapter-756f55de93df',
+  },
+  {
+    title: 'Why you should try Hands-off UX/UI documentation like this…',
+    excerpt:
+      'Um método prático de documentação hands-off: user stories, critérios de aceite e cenários Given-When-Then para eliminar ruído no handoff com o dev.',
+    date: 'Abr 2024',
+    source: 'Bootcamp · Medium',
+    tag: 'Processo',
+    href: 'https://medium.com/design-bootcamp/level-up-your-ux-ui-game-why-you-should-do-hands-off-documentation-like-this-6233def429ae',
   },
 ];
 

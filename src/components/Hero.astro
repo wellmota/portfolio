@@ -21,27 +21,85 @@ const last = rest.join(' ');
       <span class="label label-dot">
         {profile.availableText}
       </span>
-      <span class="label hidden text-right leading-relaxed sm:block">
-        Portfólio — Ed. 2026<br />
-        <span class="text-mist">{profile.role}</span>
-      </span>
     </div>
 
     <!-- Giant wordmark -->
     <h1 class="display mt-10 select-none">
-      <span class="block overflow-hidden">
+      <span class="block">
         <span
           class="hero-rise block text-[clamp(3.5rem,15vw,15rem)]"
           style="--reveal-delay:120ms">{first}</span
         >
       </span>
-      <span class="block overflow-hidden">
+      <span class="block">
         <span
           class="hero-rise block text-[clamp(3.5rem,15vw,15rem)] text-mist"
           style="--reveal-delay:260ms">{last}</span
         >
       </span>
     </h1>
+
+    <!-- AI Specialist seal — editorial oversized, overlaps the wordmark -->
+    <div
+      class="pointer-events-none absolute right-[4%] top-[66%] z-20 flex -translate-y-1/2 flex-row-reverse items-center gap-6 sm:right-[5%] md:right-[6%]"
+      data-reveal
+    >
+      <div class="ai-seal-lg">
+        <svg viewBox="0 0 120 120" fill="none" role="img" aria-label="Design Engineering · AI Specialist">
+          <defs>
+            <path
+              id="ai-seal-path"
+              d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"
+            ></path>
+            <linearGradient
+              id="ai-seal-grad"
+              gradientUnits="userSpaceOnUse"
+              x1="14"
+              y1="14"
+              x2="106"
+              y2="106"
+            >
+              <stop offset="0" stop-color="var(--color-ai-1)"></stop>
+              <stop offset="0.5" stop-color="var(--color-ai-2)"></stop>
+              <stop offset="1" stop-color="var(--color-ai-3)"></stop>
+            </linearGradient>
+          </defs>
+
+          <circle cx="60" cy="60" r="56" stroke="var(--color-line-strong)" stroke-width="1"></circle>
+
+          <g class="ai-seal-rotate">
+            <text class="ai-seal-text" fill="url(#ai-seal-grad)">
+              <textPath
+                href="#ai-seal-path"
+                startOffset="0"
+                textLength="276"
+                lengthAdjust="spacingAndGlyphs"
+              >
+                DESIGN ENGINEERING · AI SPECIALIST ·
+              </textPath>
+            </text>
+          </g>
+
+          <!-- center gothic monogram (outline) -->
+          <text
+            x="60"
+            y="61"
+            text-anchor="middle"
+            dominant-baseline="central"
+            style="font-family:'UnifrakturCook',serif;font-size:46px"
+            fill="none"
+            stroke="url(#ai-seal-grad)"
+            stroke-width="0.9"
+            stroke-linejoin="round"
+          >{profile.firstName.charAt(0)}</text>
+        </svg>
+      </div>
+      <div class="label pointer-events-auto whitespace-nowrap text-right leading-loose">
+        Portfólio — Ed. 2026<br />
+        <span class="text-mist">{profile.role}</span><br />
+        <span class="ai-text font-semibold">{profile.roleAi}</span>
+      </div>
+    </div>
 
     <!-- Bottom editorial band -->
     <div class="mt-14 border-t border-line pt-8">

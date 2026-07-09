@@ -9,6 +9,56 @@ const slug = (s: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
 
+/* Logos hospedados externamente (quando não há arquivo local em /public/logos).
+   Chave = nome exato do cliente. */
+const logoUrl: Record<string, string> = {
+  'Resilience Dynamic':
+    'https://dx754dye122u3.cloudfront.net/wp-content/uploads/2022/08/resilience-dynamic-logo.png',
+  BRB: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/BRB_Logo.png',
+  'Grupo SOMA':
+    'https://cdn-sites-assets.mziq.com/wp-content/themes/mziq_grupo-soma_ri/img/logo.png',
+  Tutory: 'https://www.tutory.com.br/tutory-logo-v2.svg',
+  'Autódromo Velocitta':
+    'https://www.autodromovelocitta.com.br/admin/files/site/CiJEK2QGbSRYPLyiWFjcZCWvr7dy61/logo-letra-branca.svg',
+  'Butterfly IO':
+    'https://cdn.prod.website-files.com/5a0cbe08f1138d000147a9d4/5a38f5d9bbfcfd00017bd5f3_primary-logo-blue-blk-large.png',
+  Action247:
+    'https://cdn-dihbm.nitrocdn.com/bbwYZrbioxdUlzavhAoQidDXXMgaiYGf/assets/images/optimized/rev-6bb6852/www.action247.com/wp-content/uploads/2025/01/ACTION-logo-transparent-1536x312.png',
+  Soluti:
+    'https://soluti.com.br/wp-content/uploads/2023/01/Logo_horizontal_2_3x.webp',
+  CareCloud:
+    'https://carecloud.com/wp-content/uploads/2025/03/carecloudlogoBlue-01.svg',
+  Sankhya:
+    'https://www.lacoscorporativos.com.br/wp-content/uploads/logo-sankhya-1.png',
+  HyperGestor:
+    'https://www.hypergestor.com.br/templates/hypergestor/images/hypergestor-light-mode-CdjvtdrG.svg',
+  Mitsubishi:
+    'https://upload.wikimedia.org/wikipedia/commons/9/9a/Mitsubishi_motors_new_logo.svg',
+  Mindtools:
+    'https://outboundpartners.com/wp-content/uploads/2025/09/MindTools-Logo.png',
+  'Your Digital Media':
+    'https://cdn.prod.website-files.com/63f0a2d4854fb42bf951e7c5/63f0a2d4854fb4a66851e912_Group%20229%20(1).png',
+  'Chris Corsini':
+    'https://chriscorsini.com/cdn/shop/files/CHRIS_CORSINI.svg?v=1695408855',
+  Nomoo: 'https://nomoo.de/cdn/shop/files/Logo_181x_1.svg?v=1691750150&width=165',
+};
+
+const logoSrc = (c: string) => logoUrl[c] ?? `/logos/${slug(c)}.svg`;
+
+/* Normalização de tamanho — logos com lockup (ícone+texto) ou emblema
+   parecem menores que wordmarks cheios; damos um ganho de altura pra igualar
+   o peso visual. Padrão = h-7 md:h-9. */
+const logoScale: Record<string, string> = {
+  Mitsubishi: 'h-10 md:h-14',
+  'Butterfly IO': 'h-8 md:h-11',
+  BRB: 'h-9 md:h-12',
+  'Resilience Dynamic': 'h-9 md:h-12',
+  Soluti: 'h-8 md:h-11',
+  'Grupo SOMA': 'h-8 md:h-11',
+  HyperGestor: 'h-8 md:h-11',
+};
+const logoSizeClass = (c: string) => logoScale[c] ?? 'h-7 md:h-9';
+
 const items = [...clients, ...clients];
 const mask =
   'linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent)';
@@ -29,10 +79,9 @@ const mask =
           <span class="logo-cell flex shrink-0 items-center justify-center px-8 md:px-12">
             {/* Real logo if present in /public/logos, else wordmark fallback */}
             <img
-              src={`/logos/${slug(c)}.svg`}
+              src={logoSrc(c)}
               alt={c}
-              loading="lazy"
-              class="logo-img hidden h-7 w-auto md:h-9"
+              class={`logo-img hidden w-auto ${logoSizeClass(c)}`}
               onload="this.classList.remove('hidden');this.nextElementSibling.classList.add('hidden')"
               onerror="this.src=this.src.replace('.svg','.png');this.onerror=function(){this.remove()}"
             />
