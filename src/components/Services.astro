@@ -11,7 +11,7 @@ const icons: Record<string, string> = {
 };
 ---
 
-<section id="servicos" class="container-page py-20 md:py-32">
+<section id="servicos" class="container-page py-14 sm:py-20 md:py-32">
   <SectionHeader
     index="02"
     label="Especialidades"
@@ -20,11 +20,11 @@ const icons: Record<string, string> = {
     caption="Um profissional só para desenhar e construir sua experiência digital, sem handoff."
   />
 
-  <div class="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="mt-10 grid grid-cols-1 gap-4 sm:mt-16 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
       {
         services.map((s) => (
           <article
-            class="flex min-h-[24rem] flex-col justify-between border border-line bg-ink-soft p-8 transition-colors hover:border-line-strong"
+            class="flex flex-col justify-between border border-line bg-ink-soft p-6 transition-colors hover:border-line-strong sm:min-h-[24rem] sm:p-8"
           >
             <div class="flex items-start justify-between">
               <span class="grid h-12 w-12 place-items-center border border-line text-cream">

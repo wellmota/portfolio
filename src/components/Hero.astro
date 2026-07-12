@@ -41,7 +41,7 @@ const last = rest.join(' ');
 
     <!-- AI Specialist seal — editorial oversized, overlaps the wordmark -->
     <div
-      class="pointer-events-none absolute right-[4%] top-[66%] z-20 flex -translate-y-1/2 flex-row-reverse items-center gap-6 sm:right-[5%] md:right-[6%]"
+      class="pointer-events-none absolute right-[4%] top-[58%] z-20 hidden -translate-y-1/2 flex-row-reverse items-center gap-6 sm:flex sm:right-[5%] sm:top-[66%] md:right-[6%]"
       data-reveal
     >
       <div class="ai-seal-lg">
@@ -101,9 +101,36 @@ const last = rest.join(' ');
       </div>
     </div>
 
+    <!-- Mobile AI tag (below wordmark) -->
+    <div class="mt-6 flex items-center gap-3 sm:hidden" data-reveal>
+      <div class="ai-seal" style="width:3.5rem;height:3.5rem">
+        <svg viewBox="0 0 120 120" fill="none" role="img" aria-label="AI Specialist">
+          <defs>
+            <path id="ai-seal-path-m" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"></path>
+            <linearGradient id="ai-seal-grad-m" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="106" y2="106">
+              <stop offset="0" stop-color="var(--color-ai-1)"></stop>
+              <stop offset="0.5" stop-color="var(--color-ai-2)"></stop>
+              <stop offset="1" stop-color="var(--color-ai-3)"></stop>
+            </linearGradient>
+          </defs>
+          <circle cx="60" cy="60" r="56" stroke="var(--color-line-strong)" stroke-width="1"></circle>
+          <g class="ai-seal-rotate">
+            <text class="ai-seal-text" fill="url(#ai-seal-grad-m)">
+              <textPath href="#ai-seal-path-m" startOffset="0" textLength="276" lengthAdjust="spacingAndGlyphs">DESIGN ENGINEERING · AI SPECIALIST ·</textPath>
+            </text>
+          </g>
+          <text x="60" y="61" text-anchor="middle" dominant-baseline="central" style="font-family:'UnifrakturCook',serif;font-size:46px" fill="none" stroke="url(#ai-seal-grad-m)" stroke-width="0.9" stroke-linejoin="round">{profile.firstName.charAt(0)}</text>
+        </svg>
+      </div>
+      <div class="label leading-loose">
+        <span class="text-mist">{profile.role}</span><br />
+        <span class="ai-text font-semibold">{profile.roleAi}</span>
+      </div>
+    </div>
+
     <!-- Bottom editorial band -->
-    <div class="mt-14 border-t border-line pt-8">
-      <div class="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-12">
+    <div class="mt-10 border-t border-line pt-6 sm:mt-14 sm:pt-8">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-8 sm:gap-y-10 md:grid-cols-12">
         <!-- Stat -->
         <div class="md:col-span-3" data-reveal>
           <p class="display text-5xl">{heroStats.headline}</p>

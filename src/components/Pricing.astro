@@ -2,10 +2,10 @@
 import { pricing } from '../data/site';
 ---
 
-<section class="border-y border-line bg-ink-soft py-20 md:py-32">
+<section class="border-y border-line bg-ink-soft py-14 sm:py-20 md:py-32">
   <div class="container-page">
     <div class="mx-auto max-w-2xl text-center" data-reveal>
-      <span class="eyebrow justify-center">Planos</span>
+      <span class="label label-dot justify-center">Planos</span>
       <h2
         class="mt-5 font-display text-3xl font-semibold leading-tight tracking-tight md:text-5xl"
       >
@@ -21,7 +21,7 @@ import { pricing } from '../data/site';
         pricing.map((plan) => (
           <div
             class:list={[
-              'relative flex flex-col rounded-xl2 border p-8',
+              'relative flex flex-col rounded-2xl border p-6 sm:p-8',
               plan.featured
                 ? 'border-lime/50 bg-surface'
                 : 'border-line bg-surface',

@@ -18,7 +18,7 @@ const { index, label, title, titleMuted, caption } = Astro.props;
       {index && <span class="mr-1 text-mist">{index}</span>}
       {label}
     </span>
-    <h2 class="display mt-6 text-[clamp(2.5rem,7vw,5.5rem)]">
+    <h2 class="display mt-4 text-[clamp(2rem,7vw,5.5rem)] sm:mt-6">
       {title}
       {titleMuted && <span class="text-faint"> {titleMuted}</span>}
     </h2>
