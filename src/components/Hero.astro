@@ -102,8 +102,8 @@ const last = rest.join(' ');
     </div>
 
     <!-- Mobile AI tag (below wordmark) -->
-    <div class="mt-6 flex items-center gap-3 sm:hidden" data-reveal>
-      <div class="ai-seal" style="width:3.5rem;height:3.5rem">
+    <div class="mt-6 flex items-start gap-3 sm:hidden" data-reveal>
+      <div class="ai-seal shrink-0" style="width:3rem;height:3rem">
         <svg viewBox="0 0 120 120" fill="none" role="img" aria-label="AI Specialist">
           <defs>
             <path id="ai-seal-path-m" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"></path>
@@ -122,9 +122,9 @@ const last = rest.join(' ');
           <text x="60" y="61" text-anchor="middle" dominant-baseline="central" style="font-family:'UnifrakturCook',serif;font-size:46px" fill="none" stroke="url(#ai-seal-grad-m)" stroke-width="0.9" stroke-linejoin="round">{profile.firstName.charAt(0)}</text>
         </svg>
       </div>
-      <div class="label leading-loose">
-        <span class="text-mist">{profile.role}</span><br />
-        <span class="ai-text font-semibold">{profile.roleAi}</span>
+      <div class="min-w-0">
+        <p class="mono text-[10px] leading-snug text-mist">{profile.role}</p>
+        <p class="ai-text mono mt-1 text-[10px] font-semibold">{profile.roleAi}</p>
       </div>
     </div>
 
@@ -133,7 +133,7 @@ const last = rest.join(' ');
       <div class="grid grid-cols-1 gap-x-8 gap-y-8 sm:gap-y-10 md:grid-cols-12">
         <!-- Stat -->
         <div class="md:col-span-3" data-reveal>
-          <p class="display text-5xl">{heroStats.headline}</p>
+          <p class="display text-4xl sm:text-5xl">{heroStats.headline}</p>
           <p class="mt-2 max-w-[14ch] text-sm text-mist">
             {heroStats.label}
           </p>
