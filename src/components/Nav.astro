@@ -15,7 +15,7 @@ import { profile, nav } from '../data/site';
             class="gothic grid h-8 w-8 place-items-center bg-lime pb-0.5 text-[19px] text-ink"
             >{profile.firstName.charAt(0)}</span
           >
-          <span class="text-[14px] font-semibold tracking-tight"
+          <span class="hidden text-[14px] font-semibold tracking-tight sm:inline"
             >{profile.name}</span
           >
         </a>
@@ -28,7 +28,7 @@ import { profile, nav } from '../data/site';
       </div>
 
       <!-- Desktop links -->
-      <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
+      <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
         {
           nav.map((item) => (
             <li>
@@ -45,7 +45,7 @@ import { profile, nav } from '../data/site';
 
       <!-- CTA + burger -->
       <div class="flex items-center gap-3">
-        <a href="#contato" class="btn btn-solid hidden md:inline-flex">
+        <a href="#contato" class="btn btn-solid hidden lg:inline-flex">
           Começar projeto
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path
@@ -59,7 +59,7 @@ import { profile, nav } from '../data/site';
         <button
           data-burger
           aria-label="Abrir menu"
-          class="burger grid h-11 w-11 place-items-center border border-line md:hidden"
+          class="burger grid h-11 w-11 place-items-center border border-line lg:hidden"
         >
           <span class="burger__lines"></span>
         </button>
@@ -70,7 +70,7 @@ import { profile, nav } from '../data/site';
   <!-- Mobile menu -->
   <div
     data-mobile-menu
-    class="mobile-menu fixed inset-0 z-40 flex flex-col justify-center gap-1 bg-ink px-[var(--gutter)] md:hidden"
+    class="mobile-menu fixed inset-0 z-40 flex flex-col justify-center gap-1 bg-ink px-[var(--gutter)] lg:hidden"
   >
     {
       nav.map((item, i) => (
