@@ -50,7 +50,7 @@ export const stats = [
 export const about = {
   eyebrow: 'Sobre mim',
   // Troque por sua foto: coloque em /public e use '/sua-foto.jpg'
-  image: '/well-portrait-2.jpg',
+  image: '/well-portrait-6.png',
   heading:
     'Fecho a distância entre design e código: pesquiso, desenho e coloco no ar.',
   body: [
