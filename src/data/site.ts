@@ -279,58 +279,68 @@ export const testimonials = [
       'Muito legal! Inclusive, o texto ficou ótimo. Você tem um toque mágico… vai em frente!',
     author: 'J. C. Nery',
     company: 'Diretor de Inovação e Tecnologia · Mitsubishi',
+    logo: '/logos/mitsubishi.svg',
   },
   {
     quote:
       '…here we are now with you doing visionary prototyping and all kind of other really great stuff. I’ve really enjoyed working with you and the whole team. Keep up the good work!',
     author: 'Michaela Heigl, PhD',
     company: 'Director · Mindtools',
+    logo: '/logos/mindtools.svg',
   },
   {
     quote:
       'Cara, essa nova versão tá maravilhosa. Parabéns — mandou muito bem!',
     author: 'Fernando Cardoso',
     company: 'CEO HyperGestor · Head de Inovação, Mitsubishi Motors',
+    logo: '/logos/hypergestor.svg',
   },
   {
     quote:
       'Well done! For me they capture the meaning of the brand in a playful, non-threatening way that just kind of pulls you in and makes you want to learn. It’s a big improvement on our first efforts.',
     author: 'Jonny',
     company: 'CEO · Odens, UK',
+    logo: '/logos/odens.svg',
   },
   {
     quote:
       'Você mandou bem demais na criação do site, nas ideias e aprimoramentos. Você realmente é um cara diferenciado e estou muito feliz que você esteja no time. Parabéns!',
     author: 'Cadu',
     company: 'Head of Marketing · Tutory',
+    logo: '/logos/tutory.svg',
   },
   {
     quote:
       "You've really made a difference! It's fantastic to see the work you guys are doing start to make an impact on actual revenue.",
     author: 'Kirsten',
     company: 'Head of Product · Mindtools',
+    logo: '/logos/mindtools.svg',
   },
   {
     quote: 'Boa, meu mano! Caraca, arrepiei.',
     author: 'Marlom Andrade',
     company: 'CEO & Founder · Tutory',
+    logo: '/logos/tutory.svg',
   },
   {
     quote:
       'I really love these designs — very beautiful and I think the branding is on point! Everything feels cohesive to gently nudge the user on their learning journey.',
     author: 'Nial',
     company: 'QA Head · Mindtools',
+    logo: '/logos/mindtools.svg',
   },
   {
     quote:
       'The labels look spot on! I am really pleased with the whole package and I think that they will sell like crazy. Thanks to everyone — I really appreciate it.',
     author: 'Simon',
     company: 'Founder · Simple Snuff',
+    logo: '/logos/simple-snuff.svg',
   },
   {
     quote: 'Meu Deus, meu Deus, meu Deus. Sinistro, Well!',
     author: 'Letícia Sousa',
     company: 'Marketing · Tutory',
+    logo: '/logos/tutory.svg',
   },
 ];
 

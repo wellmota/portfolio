@@ -23,8 +23,12 @@ import SectionHeader from './SectionHeader.astro';
             {t.quote}
           </blockquote>
           <figcaption class="mt-6 flex items-center gap-3 border-t border-line pt-5">
-            <span class="grid h-9 w-9 shrink-0 place-items-center border border-line font-mono text-xs text-mist">
-              {t.author.replace(/[^A-Za-z]/g, '').charAt(0)}
+            <span class="grid h-9 w-9 shrink-0 place-items-center border border-line">
+              {t.logo ? (
+                <img src={t.logo} alt="" class="h-5 w-5 object-contain brightness-0 invert" />
+              ) : (
+                <span class="font-mono text-xs text-mist">{t.author.replace(/[^A-Za-z]/g, '').charAt(0)}</span>
+              )}
             </span>
             <div class="min-w-0">
               <p class="text-sm font-semibold text-cream">{t.author}</p>
