@@ -53,7 +53,14 @@ const icons: Record<string, string> = {
               </ul>
             </div>
 
-            <div class="mono mt-8 flex items-center justify-between border-t border-line pt-5 text-[11px] uppercase tracking-widest">
+            {s.ai && (
+              <div class="mt-6 flex items-start gap-2.5 border-t border-line pt-5">
+                <span class="ai-text mono mt-px shrink-0 text-[10px] font-semibold">AI</span>
+                <p class="text-[13px] leading-snug text-mist">{s.ai}</p>
+              </div>
+            )}
+
+            <div class="mono mt-6 flex items-center justify-between border-t border-line pt-5 text-[11px] uppercase tracking-widest">
               <span class="text-mist">{s.metaLeft}</span>
               <span class="text-cream">{s.badge}</span>
             </div>

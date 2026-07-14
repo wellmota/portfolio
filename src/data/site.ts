@@ -90,6 +90,7 @@ export const services = [
       'Wireframes, fluxos e IA',
       'Protótipos de alta fidelidade',
     ],
+    ai: 'Gero variações de layout e copy com LLMs, sintetizo dados de pesquisa com análise automatizada e acelero testes A/B com evals.',
   },
   {
     index: '02',
@@ -102,6 +103,7 @@ export const services = [
       'Bibliotecas de componentes',
       'Documentação viva',
     ],
+    ai: 'Automatizo geração de tokens, documentação de componentes e checklists de acessibilidade com agentes de código.',
   },
   {
     index: '03',
@@ -114,6 +116,7 @@ export const services = [
       'Integração REST / GraphQL',
       'Performance & acessibilidade',
     ],
+    ai: 'Code review com agentes, refactoring assistido, geração de testes e detecção de regressão visual automática.',
   },
   {
     index: '04',
@@ -127,6 +130,7 @@ export const services = [
       'Otimização de token & custo',
       'RAG na interface do produto',
     ],
+    ai: 'Pipelines multi-agente, prompts versionados como código, caching inteligente e evals LLM-as-judge no CI.',
   },
   {
     index: '05',
@@ -139,6 +143,7 @@ export const services = [
       'Do conceito ao clicável',
       'Validação com usuários reais',
     ],
+    ai: 'Scaffolding de projetos inteiros com agentes, prototipagem de fluxos completos em horas e iteração em tempo real.',
   },
 ];
 
@@ -149,6 +154,7 @@ export const process = [
     progress: 25,
     description:
       'Entendo negócio, público e objetivos. Pesquisa com usuários, benchmark e definição da direção de produto.',
+    ai: 'Síntese de entrevistas e análise de concorrência com LLMs',
   },
   {
     step: '02',
@@ -156,6 +162,7 @@ export const process = [
     progress: 65,
     description:
       'Arquitetura de informação, design system e telas de alta fidelidade. Iteração rápida com testes de usabilidade.',
+    ai: 'Variações de layout e copy geradas por IA em minutos',
   },
   {
     step: '03',
@@ -163,6 +170,7 @@ export const process = [
     progress: 90,
     description:
       'Transformo o design em código React/TypeScript responsivo e performático, integrado às APIs — sem handoff.',
+    ai: 'Agentes de código para scaffolding, testes e code review',
   },
   {
     step: '04',
@@ -170,6 +178,7 @@ export const process = [
     progress: 100,
     description:
       'Testes, ajustes finais e acompanhamento com analytics e A/B testing para validar impacto no produto.',
+    ai: 'Evals automatizados e monitoramento contínuo com agentes',
   },
 ];
 
