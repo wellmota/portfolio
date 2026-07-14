@@ -10,7 +10,7 @@ export const profile = {
   role: 'Product Engineer — Design + Front-end',
   roleAi: 'AI Specialist',
   tagline:
-    'Product Engineer que faz as duas pontas: pesquiso e desenho no Figma e entrego em React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy.',
+    'Product Engineer que faz as duas pontas: pesquiso e crio protótipos de alta fidelidade e entrego em React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy.',
   location: 'Brasília, BR',
   timezone: 'America/Sao_Paulo',
   email: 'wellingtonmota42@gmail.com',
@@ -54,7 +54,7 @@ export const about = {
   heading:
     'Fecho a distância entre design e código: pesquiso, desenho e coloco no ar.',
   body: [
-    'Sou Product Engineer no cruzamento entre design systems, arquitetura de componentes e pensamento de produto centrado no usuário. Vou da pesquisa de UX e protótipos no Figma até o código React/TypeScript em produção, integrado a APIs REST e GraphQL.',
+    'Sou Product Engineer no cruzamento entre design systems, arquitetura de componentes e pensamento de produto centrado no usuário. Vou da pesquisa de UX e protótipos de alta fidelidade até o código React/TypeScript em produção, integrado a APIs REST e GraphQL.',
     '15+ anos em design de produto e 3+ anos entregando front-end em stacks modernas (React, Next.js, Node.js). Graduação em Análise e Desenvolvimento de Sistemas e MBA em Fullstack (em andamento). Brilho em times enxutos onde uma pessoa consegue ser dona da experiência inteira — cortando tempo de entrega e ruído no handoff.',
   ],
   signatureRole: 'Design + Código',
@@ -347,7 +347,7 @@ export const testimonials = [
 export const faqs = [
   {
     q: 'Você faz design e desenvolvimento de verdade?',
-    a: 'Sim. Sou dono das duas pontas: pesquisa de UX e design no Figma, e implementação em React/TypeScript em produção. Isso elimina o handoff e reduz muito o tempo de entrega.',
+    a: 'Sim. Sou dono das duas pontas: pesquisa de UX e design de alta fidelidade, e implementação em React/TypeScript em produção. Isso elimina o handoff e reduz muito o tempo de entrega.',
   },
   {
     q: 'Trabalha remoto?',
