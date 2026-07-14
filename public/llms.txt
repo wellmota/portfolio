@@ -1,0 +1,50 @@
+# Wellington Mota — Product Engineer, Design + Front-end & AI Specialist
+
+> Product Engineer with 15+ years in digital product design and 3+ years shipping front-end in modern stacks. Specializes in closing the gap between design and code — from UX research and high-fidelity prototypes to production React/TypeScript, with no handoff. AI Specialist focused on agent orchestration, prompt engineering, evals, and RAG integration.
+
+Based in Brasília, Brazil. Open to remote opportunities worldwide. Fluent in English and Portuguese.
+
+## Core Skills
+- React, Next.js, TypeScript, Node.js, Tailwind CSS
+- Design Systems, UX Research, High-fidelity Prototyping (Figma)
+- AI Engineering: Agent Orchestration (MCP), Prompt Engineering, Evals, RAG, Token Optimization
+- REST/GraphQL API integration
+- Performance optimization & accessibility (WCAG)
+
+## Experience Highlights
+- 15+ years in product design across Brazil, UK, and US
+- 40% reduction in handoff time by owning both design and code
+- 28% increase in feature adoption through data-driven iteration
+- Delivered projects for Mitsubishi, ServiceNow, Mindtools, KIA Motors, Banco do Brasil, CAIXA, Wevr, and 20+ other brands
+
+## Services
+- [Product Design & UX](https://userexperience.com.br/#servicos): User research, wireframes, high-fidelity prototypes, usability testing
+- [Design Systems](https://userexperience.com.br/#servicos): Tokens, component libraries, living documentation
+- [Front-end Engineering](https://userexperience.com.br/#servicos): React/Next.js/TypeScript, REST/GraphQL integration, performance & accessibility
+- [AI Engineering & Orchestration](https://userexperience.com.br/#servicos): Multi-agent pipelines (MCP), evals, RAG, token optimization
+- [Rapid Prototyping (0→1)](https://userexperience.com.br/#servicos): MVP in days, concept to clickable, user validation
+
+## Projects
+- [Kia Telluride LX](https://userexperience.com.br/#projetos): Landing page — layout, UI, vehicle configuration experience
+- [Wevr Virtual Studio](https://userexperience.com.br/#projetos): Interface and UX for VR production platform (US)
+- [Autódromo Velocitta](https://userexperience.com.br/#projetos): Identity and digital presence for Brazilian racetrack
+- [ArtCaffé](https://userexperience.com.br/#projetos): Visual direction and digital assets for Kenyan café chain
+- [Odens](https://userexperience.com.br/#projetos): Brand identity and packaging design (UK)
+
+## Writing
+- [From UX/UI Design to Front-End Development](https://medium.com/@wellingtonmota/from-ux-ui-design-to-front-end-development-embracing-a-new-chapter-756f55de93df): Career transition after 15+ years in design
+- [Hands-off UX/UI Documentation](https://medium.com/design-bootcamp/level-up-your-ux-ui-game-why-you-should-do-hands-off-documentation-like-this-6233def429ae): User stories, acceptance criteria, Given-When-Then scenarios
+
+## Links
+- [Portfolio](https://userexperience.com.br): Full portfolio with projects, services, and testimonials
+- [Portfolio (Português)](https://userexperience.com.br/pt/): Versão em português
+- [GitHub](https://github.com/wellmota): Open-source contributions and projects
+- [LinkedIn](https://www.linkedin.com/in/wellingtonmota13/): Professional profile and career history
+- [Behance](https://www.behance.net/wellingtonmota): Visual design portfolio
+- [Email](mailto:wellingtonmota42@gmail.com): Direct contact
+
+## Optional
+- [CV](https://userexperience.com.br/cv.docx): Full CV document
+- Education: Systems Analysis & Development (degree), Fullstack MBA (in progress)
+- Languages: Portuguese (native), English (fluent)
+- Timezone: America/Sao_Paulo (UTC-3)

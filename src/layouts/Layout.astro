@@ -16,6 +16,59 @@ const {
   title = `${data.profile.name} — ${data.profile.role}`,
   description = data.profile.tagline,
 } = Astro.props;
+
+const siteUrl = 'https://userexperience.com.br';
+const canonicalUrl = lang === 'pt' ? `${siteUrl}/pt/` : `${siteUrl}/`;
+const ogImage = `${siteUrl}/og-image.jpg`;
+
+const jsonLdPerson = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Wellington Mota',
+  url: siteUrl,
+  image: ogImage,
+  email: 'mailto:wellingtonmota42@gmail.com',
+  telephone: '+55-61-98104-3296',
+  jobTitle: 'Product Engineer',
+  description: 'Product Engineer with 15+ years in digital product design and 3+ years shipping front-end in modern stacks. Specializes in closing the gap between design and code.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Brasília',
+    addressCountry: 'BR',
+  },
+  knowsAbout: [
+    'React', 'Next.js', 'TypeScript', 'Node.js', 'Tailwind CSS',
+    'Design Systems', 'UX Research', 'UI Design', 'Figma',
+    'AI Engineering', 'Agent Orchestration', 'MCP', 'Prompt Engineering',
+    'RAG', 'LLM Evals', 'REST API', 'GraphQL',
+    'Front-end Development', 'Product Design', 'Accessibility', 'WCAG',
+  ],
+  knowsLanguage: ['en', 'pt-BR'],
+  sameAs: [
+    'https://github.com/wellmota',
+    'https://www.linkedin.com/in/wellingtonmota13/',
+    'https://www.behance.net/wellingtonmota',
+    'https://medium.com/@wellingtonmota',
+  ],
+};
+
+const jsonLdWebSite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: `${data.profile.name} — Portfolio`,
+  url: siteUrl,
+  inLanguage: ['en', 'pt-BR'],
+  author: { '@type': 'Person', name: 'Wellington Mota' },
+};
+
+const jsonLdProfilePage = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: { '@id': siteUrl },
+  name: title,
+  url: canonicalUrl,
+  inLanguage: htmlLang,
+};
 ---
 
 <!doctype html>
@@ -31,13 +84,34 @@ const {
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="Wellington Mota" />
+    <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:locale" content={htmlLang} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Wellington Mota — Portfolio" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={htmlLang === 'pt-BR' ? 'pt_BR' : 'en_US'} />
+    {lang === 'en' && <meta property="og:locale:alternate" content="pt_BR" />}
+    {lang === 'pt' && <meta property="og:locale:alternate" content="en_US" />}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <meta name="theme-color" content="#08080a" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdPerson)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdWebSite)} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLdProfilePage)} />
 
     <!-- Alternate language -->
     <link rel="alternate" hreflang="en" href="https://userexperience.com.br/" />

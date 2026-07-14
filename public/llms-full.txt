@@ -1,0 +1,166 @@
+# Wellington Mota — Product Engineer, Design + Front-end & AI Specialist
+
+> Product Engineer with 15+ years in digital product design and 3+ years shipping front-end in modern stacks. Specializes in closing the gap between design and code — from UX research and high-fidelity prototypes to production React/TypeScript, with no handoff. AI Specialist focused on agent orchestration, prompt engineering, evals, and RAG integration.
+
+Based in Brasília, Brazil. Open to remote opportunities worldwide. Fluent in English and Portuguese.
+
+---
+
+## Professional Summary
+
+Wellington Mota is a Product Engineer at the intersection of design systems, component architecture, and user-centered product thinking. He goes from UX research and high-fidelity prototypes to production React/TypeScript code, integrated with REST and GraphQL APIs.
+
+With 15+ years in product design and 3+ years shipping front-end on modern stacks (React, Next.js, Node.js), he holds a degree in Systems Analysis and Development with an MBA in Fullstack in progress. He thrives on lean teams where one person can own the entire experience — cutting delivery time and handoff noise.
+
+He uses AI beyond autocomplete: orchestrated agents, version-controlled prompts as code, and evals ensuring quality before deploy.
+
+## Technical Skills
+
+### Design
+- User Research & Usability Testing
+- Information Architecture
+- Wireframes, User Flows, Interaction Design
+- High-fidelity Prototyping (Figma)
+- Design Systems: Tokens, Foundations, Component Libraries, Living Documentation
+- Accessibility (WCAG 2.1 AA)
+
+### Front-end Engineering
+- React, Next.js, TypeScript
+- Node.js, Express
+- Tailwind CSS, CSS-in-JS, CSS Modules
+- REST API & GraphQL Integration
+- Performance Optimization (Core Web Vitals)
+- Responsive Design, Cross-browser Compatibility
+
+### AI Engineering
+- Agent Orchestration (MCP — Model Context Protocol)
+- Prompt Engineering: Version-controlled, Tested Prompts
+- Evals: LLM-as-judge, CI Quality Gates
+- RAG (Retrieval-Augmented Generation) in Product UI
+- Token & Cost Optimization (Caching, Model Routing)
+- Multi-agent Pipelines
+
+### Tools & Platforms
+- Figma, Storybook
+- Git, GitHub, CI/CD
+- Vercel, AWS
+- Analytics, A/B Testing
+
+## Services Offered
+
+### 1. Product Design & UX (Strategic)
+User research and usability testing, wireframes, user flows, information architecture, and high-fidelity prototypes. AI-enhanced: generates layout and copy variations with LLMs, synthesizes research data with automated analysis, accelerates A/B tests with evals.
+
+### 2. Design Systems (Scalable)
+Tokens and foundations, component libraries, living documentation. Used by 3+ teams. AI-enhanced: automates token generation, component documentation, and accessibility checklists with code agents.
+
+### 3. Front-end Engineering (Reliable)
+React, Next.js, TypeScript development. REST/GraphQL integration. Performance and accessibility optimization. AI-enhanced: agent-powered code review, assisted refactoring, test generation, automated visual regression detection.
+
+### 4. AI Engineering & Orchestration (Advanced)
+Agent orchestration via MCP, evals and CI quality gates, token and cost optimization, RAG in product UI. Multi-agent pipelines, version-controlled prompts, smart caching, LLM-as-judge evals in CI.
+
+### 5. Rapid Prototyping — 0 to 1 (Fast)
+MVP in days not months, from concept to clickable, validation with real users. AI-enhanced: full project scaffolding with agents, complete flow prototyping in hours, real-time iteration.
+
+## Work Process
+
+1. **Discovery** (25%): Understand business, audience, goals. User research, benchmarking, product direction. AI: Interview synthesis and competitive analysis with LLMs.
+
+2. **Design** (65%): Information architecture, design system, high-fidelity screens. Rapid iteration with usability testing. AI: Layout and copy variations generated in minutes.
+
+3. **Development** (90%): Design to responsive, performant React/TypeScript code integrated with APIs — no handoff. AI: Code agents for scaffolding, testing, and code review.
+
+4. **Delivery & Metrics** (100%): Testing, final adjustments, monitoring with analytics and A/B testing. AI: Automated evals and continuous monitoring with agents.
+
+## Featured Projects
+
+### Kia Telluride LX
+- Category: Automotive, Landing Page, Web, UI Design
+- Landing page for the Kia Telluride LX — layout, UI, and vehicle configuration experience.
+
+### Autódromo Velocitta
+- Category: Sports, Web, Branding
+- Identity and digital presence for the Brazilian racetrack — visual direction and site experience.
+
+### Wevr Virtual Studio
+- Category: Product, UX, US Market
+- Interface and experience for Wevr's VR production platform (WVS).
+
+### The Blu · Wevr
+- Category: VR, Design, Campaign, US Market
+- Campaign pieces for the 10th anniversary of The Blu VR series by Wevr.
+
+### ArtCaffé
+- Category: F&B, Branding, Digital, Kenya
+- Visual direction and digital assets for the ArtCaffé café chain in Kenya.
+
+### Odens
+- Category: Branding, Packaging, UK
+- Brand identity and packaging design praised by the founders.
+
+## Clients
+
+Mindtools, Mitsubishi, ServiceNow, Kineo, Tutory, HyperGestor, Tako, Butterfly IO, Action247, CareCloud, Monumenta, BRB, CAIXA, Banco do Brasil, KIA Motors, Solomon, Autódromo Velocitta, Animalle, Grupo SOMA, Wevr, Resilience Dynamic, Soluti, Sankhya, Cogmo Tecnologia, Your Digital Media, Chris Corsini, Nomoo.
+
+## Testimonials
+
+"…here we are now with you doing visionary prototyping and all kind of other really great stuff. I've really enjoyed working with you and the whole team. Keep up the good work!" — Michaela Heigl, PhD, Director, Mindtools
+
+"Well done! For me they capture the meaning of the brand in a playful, non-threatening way that just kind of pulls you in and makes you want to learn. It's a big improvement on our first efforts." — Jonny, CEO, Odens (UK)
+
+"You've really made a difference! It's fantastic to see the work you guys are doing start to make an impact on actual revenue." — Kirsten, Head of Product, Mindtools
+
+"I really love these designs — very beautiful and I think the branding is on point! Everything feels cohesive to gently nudge the user on their learning journey." — Nial, QA Head, Mindtools
+
+"The labels look spot on! I am really pleased with the whole package and I think that they will sell like crazy." — Simon, Founder, Simple Snuff
+
+## Published Articles
+
+### From UX/UI Design to Front-End Development: Embracing a New Chapter
+- Published: April 2024, Medium
+- Topic: Career transition after 15+ years in UX/UI design to front-end development — and why closing the gap between design and code became the focus.
+- URL: https://medium.com/@wellingtonmota/from-ux-ui-design-to-front-end-development-embracing-a-new-chapter-756f55de93df
+
+### Why you should try Hands-off UX/UI documentation like this…
+- Published: April 2024, Bootcamp (Medium)
+- Topic: A practical hands-off documentation method using user stories, acceptance criteria, and Given-When-Then scenarios to eliminate handoff noise.
+- URL: https://medium.com/design-bootcamp/level-up-your-ux-ui-game-why-you-should-do-hands-off-documentation-like-this-6233def429ae
+
+## FAQ
+
+**Do you really do both design and development?**
+Yes. I own both sides: UX research and high-fidelity design, plus React/TypeScript implementation in production. This eliminates the handoff and drastically reduces delivery time.
+
+**Do you work remotely?**
+Yes. Based in Brasília, Brazil, and open to fully remote opportunities, including international — fluent English, with experience serving clients in the UK and US.
+
+**What does your workflow look like?**
+Discovery → Design → Development → Delivery. With feedback checkpoints at each stage and metrics (analytics, A/B testing) to validate product impact.
+
+**What technologies do you work with?**
+React, Next.js, TypeScript, Node.js, Tailwind, and REST/GraphQL integration on the dev side; Figma, design systems, and usability research on the design side.
+
+**How do you use AI in your work?**
+Far beyond code autocomplete. I orchestrate agents and multi-step flows (with MCP), version and test prompts as code, optimize cost/tokens (caching and model routing), and use LLM-as-judge evals to ensure quality before deploy — integrating AI features directly into the product UI.
+
+**Are you a "vibe coder"?**
+No. "Vibe coding" means requesting code and hoping it works. I do Design Engineering: I design the experience and implement it with production discipline — version-controlled and tested prompts, evals with CI gates before deploy, cost and token control, design system as single source of truth, accessibility and performance. AI is a tool under engineering, not a crutch.
+
+## Contact
+
+- Email: wellingtonmota42@gmail.com
+- Phone: +55 61 98104-3296
+- Location: Brasília, Brazil
+- Timezone: America/Sao_Paulo (UTC-3)
+- Response time: Within 24 hours
+- Status: Open to remote opportunities and projects
+
+## Links
+
+- Portfolio: https://userexperience.com.br
+- Portfolio (PT): https://userexperience.com.br/pt/
+- GitHub: https://github.com/wellmota
+- LinkedIn: https://www.linkedin.com/in/wellingtonmota13/
+- Behance: https://www.behance.net/wellingtonmota
+- Medium: https://medium.com/@wellingtonmota
