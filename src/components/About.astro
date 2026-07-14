@@ -1,5 +1,10 @@
 ---
-import { about, profile } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { about, profile } = data;
 const [headWhite, headMuted] = about.heading.split(':');
 ---
 
@@ -12,7 +17,7 @@ const [headWhite, headMuted] = about.heading.split(':');
 
   <div class="container-page relative">
     <div class="border-t border-line pt-6" data-reveal>
-      <span class="label label-dot"><span class="mr-1 text-mist">01</span>Sobre</span>
+      <span class="label label-dot"><span class="mr-1 text-mist">{data.ui.sectionAbout.index}</span>{data.ui.sectionAbout.label}</span>
     </div>
 
     <div class="mt-12 grid gap-10 md:grid-cols-12 md:gap-12">
@@ -65,7 +70,7 @@ const [headWhite, headMuted] = about.heading.split(':');
 
         <div class="mt-10 flex flex-wrap gap-3">
           <a href="#contato" class="btn btn-solid">
-            Trabalhe comigo
+            {data.ui.talkToMe}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M4 12L12 4M12 4H5M12 4V11"
@@ -75,7 +80,7 @@ const [headWhite, headMuted] = about.heading.split(':');
                 stroke-linejoin="round"></path>
             </svg>
           </a>
-          <a href="/cv.docx" class="btn btn-outline">Baixar CV</a>
+          <a href="/cv.docx" class="btn btn-outline">{data.ui.viewFullCv}</a>
         </div>
       </div>
     </div>

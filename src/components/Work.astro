@@ -1,15 +1,20 @@
 ---
-import { projects } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
 import SectionHeader from './SectionHeader.astro';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { projects } = data;
 ---
 
 <section id="projetos" class="container-page py-14 sm:py-20 md:py-32">
   <SectionHeader
-    index="04"
-    label="Projetos em destaque"
-    title="Onde deixei"
-    titleMuted="minha marca."
-    caption="Projetos para grandes empresas e instituições — do Brasil ao Reino Unido e EUA."
+    index={data.ui.sectionWork.index}
+    label={data.ui.sectionWork.label}
+    title={data.ui.sectionWork.title}
+    titleMuted={data.ui.sectionWork.titleMuted}
+    caption={data.ui.sectionWork.caption}
   />
 
   <div class="mt-16 grid gap-5 md:grid-cols-2">
@@ -75,7 +80,7 @@ import SectionHeader from './SectionHeader.astro';
 
   <div class="mt-10" data-reveal>
     <a href="/cv.docx" class="btn btn-outline">
-      Ver CV completo
+      {data.ui.viewFullCv}
       <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
         <path
           d="M4 12L12 4M12 4H5M12 4V11"

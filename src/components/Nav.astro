@@ -1,5 +1,10 @@
 ---
-import { profile, nav } from '../data/site';
+import { getSiteData, languages, getLocalePath, type Locale } from '../i18n';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { profile, nav } = data;
 ---
 
 <header
@@ -43,10 +48,10 @@ import { profile, nav } from '../data/site';
         }
       </ul>
 
-      <!-- CTA + burger -->
+      <!-- CTA + lang + burger -->
       <div class="flex items-center gap-3">
         <a href="#contato" class="btn btn-solid hidden lg:inline-flex">
-          Começar projeto
+          {data.ui.startProject}
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path
               d="M4 12L12 4M12 4H5M12 4V11"
@@ -56,9 +61,15 @@ import { profile, nav } from '../data/site';
               stroke-linejoin="round"></path>
           </svg>
         </a>
+        <a
+          href={lang === 'en' ? getLocalePath('pt') : getLocalePath('en')}
+          class="mono text-[11px] uppercase tracking-widest text-mist hover:text-cream transition-colors"
+        >
+          {lang === 'en' ? 'PT' : 'EN'}
+        </a>
         <button
           data-burger
-          aria-label="Abrir menu"
+          aria-label={data.ui.openMenu}
           class="burger grid h-11 w-11 place-items-center border border-line lg:hidden"
         >
           <span class="burger__lines"></span>
@@ -84,7 +95,7 @@ import { profile, nav } from '../data/site';
       ))
     }
     <a href="#contato" class="btn btn-solid mt-8 justify-center py-4">
-      Começar projeto
+      {data.ui.startProject}
     </a>
   </div>
 </header>

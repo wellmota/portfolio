@@ -1,5 +1,10 @@
 ---
-import { profile, heroStats, socials } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { profile, heroStats, socials } = data;
 const [first, ...rest] = profile.name.split(' ');
 const last = rest.join(' ');
 ---
@@ -95,7 +100,7 @@ const last = rest.join(' ');
         </svg>
       </div>
       <div class="label pointer-events-auto whitespace-nowrap text-right leading-loose">
-        Portfólio — Ed. 2026<br />
+        {data.ui.portfolioEdition}<br />
         <span class="text-mist">{profile.role}</span><br />
         <span class="ai-text font-semibold">{profile.roleAi}</span>
       </div>
@@ -152,7 +157,7 @@ const last = rest.join(' ');
           class="flex flex-col gap-2 md:col-span-2 md:border-l md:border-line md:pl-8"
           data-reveal
         >
-          <span class="label mb-1">Redes</span>
+          <span class="label mb-1">{data.ui.socialLabel}</span>
           {
             socials.map((s) => (
               <a
@@ -173,7 +178,7 @@ const last = rest.join(' ');
           data-reveal
         >
           <a href="#projetos" class="btn btn-solid w-full justify-between sm:w-auto">
-            Ver experiência
+            {data.ui.viewExperience}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M4 12L12 4M12 4H5M12 4V11"
@@ -184,7 +189,7 @@ const last = rest.join(' ');
             </svg>
           </a>
           <a href="#contato" class="btn btn-outline w-full justify-between sm:w-auto">
-            Fale comigo
+            {data.ui.talkToMe}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M4 12L12 4M12 4H5M12 4V11"

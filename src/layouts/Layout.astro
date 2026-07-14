@@ -1,23 +1,27 @@
 ---
 import '../styles/global.css';
-import { profile } from '../data/site';
+import { getSiteData, type Locale, defaultLocale } from '../i18n';
 
 interface Props {
+  lang?: Locale;
   title?: string;
   description?: string;
 }
 
+const lang = Astro.props.lang ?? defaultLocale;
+const data = getSiteData(lang);
+const htmlLang = lang === 'pt' ? 'pt-BR' : 'en';
+
 const {
-  title = `${profile.name} — ${profile.role}`,
-  description = profile.tagline,
+  title = `${data.profile.name} — ${data.profile.role}`,
+  description = data.profile.tagline,
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="pt-BR" data-tz={profile.timezone}>
+<html lang={htmlLang} data-tz={data.profile.timezone} data-locale={lang}>
   <head>
     <script is:inline>
-      // Set before paint so no-JS users still see content (avoids reveal flash)
       document.documentElement.classList.add('js');
     </script>
     <meta charset="UTF-8" />
@@ -32,7 +36,13 @@ const {
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:locale" content={htmlLang} />
     <meta name="theme-color" content="#08080a" />
+
+    <!-- Alternate language -->
+    <link rel="alternate" hreflang="en" href="https://userexperience.com.br/" />
+    <link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/" />
+    <link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -46,6 +56,9 @@ const {
     <slot />
 
     <script>
+      const locale = document.documentElement.dataset.locale || 'en';
+      const dateLocale = locale === 'pt' ? 'pt-BR' : 'en-US';
+
       // ---- Reveal on scroll --------------------------------------------
       const revealEls = document.querySelectorAll('[data-reveal], [data-reveal-line]');
       const io = new IntersectionObserver(
@@ -60,7 +73,6 @@ const {
         { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
       );
       revealEls.forEach((el, i) => {
-        // stagger siblings a touch
         if (!el.getAttribute('style')?.includes('--reveal-delay')) {
           const group = el.getAttribute('data-reveal-group');
           if (group) el.style.setProperty('--reveal-delay', `${(i % 6) * 70}ms`);
@@ -72,7 +84,7 @@ const {
       const tz = document.documentElement.dataset.tz || 'America/Sao_Paulo';
       const clocks = document.querySelectorAll('[data-clock]');
       function tick() {
-        const time = new Intl.DateTimeFormat('pt-BR', {
+        const time = new Intl.DateTimeFormat(dateLocale, {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',

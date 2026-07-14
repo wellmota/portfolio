@@ -1,5 +1,10 @@
 ---
-import { clients } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { clients } = data;
 
 const slug = (s: string) =>
   s
@@ -66,9 +71,9 @@ const mask =
 
 <section class="border-y border-line py-12 md:py-16">
   <div class="container-page mb-9 flex items-baseline justify-between gap-4">
-    <span class="label label-dot">Clientes & projetos</span>
+    <span class="label label-dot">{data.ui.sectionClients.label}</span>
     <span class="mono hidden text-[11px] text-faint sm:block">
-      Marcas com que já trabalhei
+      {data.ui.sectionClients.title} {data.ui.sectionClients.titleMuted}
     </span>
   </div>
 

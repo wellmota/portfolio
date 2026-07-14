@@ -1,6 +1,11 @@
 ---
-import { process } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
 import SectionHeader from './SectionHeader.astro';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { process } = data;
 
 const icons = [
   'M6 14a5 5 0 1 0 6-8M4 20l4-4', // discovery / pen-ish
@@ -14,11 +19,11 @@ const offsets = ['lg:mt-0', 'lg:mt-14', 'lg:mt-28', 'lg:mt-40'];
 <section class="border-y border-line bg-ink-soft py-14 sm:py-20 md:py-32">
   <div class="container-page">
     <SectionHeader
-      index="03"
-      label="Como eu trabalho"
-      title="Um processo"
-      titleMuted="claro."
-      caption="Do primeiro brief à entrega — com feedback e métricas em cada etapa."
+      index={data.ui.sectionProcess.index}
+      label={data.ui.sectionProcess.label}
+      title={data.ui.sectionProcess.title}
+      titleMuted={data.ui.sectionProcess.titleMuted}
+      caption={data.ui.sectionProcess.caption}
     />
 
     <div class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">

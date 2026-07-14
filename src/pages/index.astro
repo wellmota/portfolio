@@ -11,27 +11,28 @@ import Work from '../components/Work.astro';
 import Writing from '../components/Writing.astro';
 import Clients from '../components/Clients.astro';
 import Testimonials from '../components/Testimonials.astro';
-// import Pricing from '../components/Pricing.astro'; // opcional — reative se for freelancer
 import Faq from '../components/Faq.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+
+const lang = 'en' as const;
 ---
 
-<Layout>
-  <Nav />
+<Layout lang={lang}>
+  <Nav lang={lang} />
   <main>
-    <Hero />
-    <Clients />
-    <About />
-    <Marquee />
-    <Stats />
-    <Services />
-    <Process />
-    <Work />
-    <Testimonials />
-    <Faq />
-    <Writing />
-    <Contact />
+    <Hero lang={lang} />
+    <Clients lang={lang} />
+    <About lang={lang} />
+    <Marquee lang={lang} />
+    <Stats lang={lang} />
+    <Services lang={lang} />
+    <Process lang={lang} />
+    <Work lang={lang} />
+    <Testimonials lang={lang} />
+    <Faq lang={lang} />
+    <Writing lang={lang} />
+    <Contact lang={lang} />
   </main>
-  <Footer />
+  <Footer lang={lang} />
 </Layout>

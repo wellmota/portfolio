@@ -1,15 +1,20 @@
 ---
-import { testimonials } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
 import SectionHeader from './SectionHeader.astro';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { testimonials } = data;
 ---
 
 <section class="container-page py-14 sm:py-20 md:py-32">
   <SectionHeader
-    index="05"
-    label="Depoimentos"
-    title="O que dizem"
-    titleMuted="sobre o trabalho."
-    caption="Feedback real de founders, CEOs e heads de produto do Brasil, Reino Unido e EUA."
+    index={data.ui.sectionTestimonials.index}
+    label={data.ui.sectionTestimonials.label}
+    title={data.ui.sectionTestimonials.title}
+    titleMuted={data.ui.sectionTestimonials.titleMuted}
+    caption={data.ui.sectionTestimonials.caption}
   />
 
   <div class="mt-16 gap-4 [column-gap:1rem] sm:columns-2 lg:columns-3" data-reveal>

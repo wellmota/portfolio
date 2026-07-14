@@ -1,15 +1,20 @@
 ---
-import { articles } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
 import SectionHeader from './SectionHeader.astro';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { articles } = data;
 ---
 
 <section id="escrita" class="container-page py-14 sm:py-20 md:py-32">
   <SectionHeader
-    index="06"
-    label="Escrita"
-    title="Ideias sobre"
-    titleMuted="design + código."
-    caption="Artigos que publiquei sobre a interseção entre UX, front-end e processo de produto."
+    index={data.ui.sectionWriting.index}
+    label={data.ui.sectionWriting.label}
+    title={data.ui.sectionWriting.title}
+    titleMuted={data.ui.sectionWriting.titleMuted}
+    caption={data.ui.sectionWriting.caption}
   />
 
   <div class="mt-16 border-t border-line" data-reveal>

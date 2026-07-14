@@ -1,6 +1,11 @@
 ---
-import { services } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
 import SectionHeader from './SectionHeader.astro';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { services } = data;
 
 const icons: Record<string, string> = {
   ux: 'M4 20l4-1 9.5-9.5a2.1 2.1 0 00-3-3L5 16l-1 4z',
@@ -13,11 +18,11 @@ const icons: Record<string, string> = {
 
 <section id="servicos" class="container-page py-14 sm:py-20 md:py-32">
   <SectionHeader
-    index="02"
-    label="Especialidades"
-    title="Do conceito ao"
-    titleMuted="produto, ponta a ponta."
-    caption="Um profissional só para desenhar e construir sua experiência digital, sem handoff."
+    index={data.ui.sectionServices.index}
+    label={data.ui.sectionServices.label}
+    title={data.ui.sectionServices.title}
+    titleMuted={data.ui.sectionServices.titleMuted}
+    caption={data.ui.sectionServices.caption}
   />
 
   <div class="mt-10 grid grid-cols-1 gap-4 sm:mt-16 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">

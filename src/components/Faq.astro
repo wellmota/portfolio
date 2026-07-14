@@ -1,5 +1,11 @@
 ---
-import { faqs, faqAside } from '../data/site';
+import { getSiteData, type Locale } from '../i18n';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const { faqs, faqAside } = data;
+const sec = data.ui.sectionFaq;
 ---
 
 <section class="border-t border-line py-14 sm:py-20 md:py-32">
@@ -8,10 +14,10 @@ import { faqs, faqAside } from '../data/site';
       <!-- Left column -->
       <div class="flex flex-col md:col-span-5" data-reveal>
         <span class="label label-dot">
-          <span class="mr-1 text-mist">06</span>Dúvidas comuns
+          <span class="mr-1 text-mist">{sec.index}</span>{sec.label}
         </span>
         <h2 class="display mt-8 text-[clamp(3.5rem,10vw,8rem)] leading-[0.9]">
-          FAQ
+          {sec.title}
         </h2>
 
         <!-- Contact card -->

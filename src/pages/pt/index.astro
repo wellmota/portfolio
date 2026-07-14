@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Hero from '../../components/Hero.astro';
+import Marquee from '../../components/Marquee.astro';
+import Stats from '../../components/Stats.astro';
+import About from '../../components/About.astro';
+import Services from '../../components/Services.astro';
+import Process from '../../components/Process.astro';
+import Work from '../../components/Work.astro';
+import Writing from '../../components/Writing.astro';
+import Clients from '../../components/Clients.astro';
+import Testimonials from '../../components/Testimonials.astro';
+import Faq from '../../components/Faq.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+
+const lang = 'pt' as const;
+---
+
+<Layout lang={lang}>
+  <Nav lang={lang} />
+  <main>
+    <Hero lang={lang} />
+    <Clients lang={lang} />
+    <About lang={lang} />
+    <Marquee lang={lang} />
+    <Stats lang={lang} />
+    <Services lang={lang} />
+    <Process lang={lang} />
+    <Work lang={lang} />
+    <Testimonials lang={lang} />
+    <Faq lang={lang} />
+    <Writing lang={lang} />
+    <Contact lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
