@@ -7,6 +7,7 @@ const data = getSiteData(lang);
 const { profile, heroStats, socials } = data;
 const [first, ...rest] = profile.name.split(' ');
 const last = rest.join(' ');
+const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
 ---
 
 <section
@@ -46,7 +47,7 @@ const last = rest.join(' ');
 
     <!-- AI Specialist seal — editorial oversized, overlaps the wordmark -->
     <div
-      class="pointer-events-none absolute right-[4%] top-[58%] z-20 hidden -translate-y-1/2 flex-row-reverse items-center gap-6 sm:flex sm:right-[5%] sm:top-[66%] md:right-[6%]"
+      class="pointer-events-none absolute right-[4%] top-2 z-20 hidden flex-row-reverse items-start gap-6 sm:flex sm:right-[5%] sm:top-4 md:right-[6%]"
       data-reveal
     >
       <div class="ai-seal-lg">
@@ -188,7 +189,7 @@ const last = rest.join(' ');
                 stroke-linejoin="round"></path>
             </svg>
           </a>
-          <a href="#contato" class="btn btn-outline w-full justify-between sm:w-auto">
+          <a href={whatsappUrl} target="_blank" rel="noreferrer" class="btn btn-outline w-full justify-between sm:w-auto">
             {data.ui.talkToMe}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path

@@ -53,7 +53,8 @@ export interface SiteData {
     quote: string;
     author: string;
     company: string;
-    logo: string;
+    logo?: string;
+    tag: string;
   }[];
   faqs: { q: string; a: string }[];
   articles: {

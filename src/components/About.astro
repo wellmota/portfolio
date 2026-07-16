@@ -6,6 +6,7 @@ const { lang } = Astro.props;
 const data = getSiteData(lang);
 const { about, profile } = data;
 const [headWhite, headMuted] = about.heading.split(':');
+const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
 ---
 
 <section id="sobre" class="relative overflow-hidden py-14 sm:py-20 md:py-32">
@@ -69,7 +70,7 @@ const [headWhite, headMuted] = about.heading.split(':');
         </div>
 
         <div class="mt-10 flex flex-wrap gap-3">
-          <a href="#contato" class="btn btn-solid">
+          <a href={whatsappUrl} target="_blank" rel="noreferrer" class="btn btn-solid">
             {data.ui.talkToMe}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path

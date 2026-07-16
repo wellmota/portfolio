@@ -21,16 +21,21 @@ const { testimonials } = data;
     {
       testimonials.map((t) => (
         <figure class="mb-4 break-inside-avoid border border-line bg-surface p-7">
-          <div class="mono flex items-center gap-1 text-xs text-lime">
-            {'★★★★★'}
+          <div class="flex items-center justify-between gap-3">
+            <div class="mono flex items-center gap-1 text-xs text-lime">
+              {'★★★★★'}
+            </div>
+            <span class="mono border border-line px-2 py-0.5 text-[9.5px] uppercase tracking-widest text-mist">
+              {t.tag}
+            </span>
           </div>
           <blockquote class="mt-5 text-[17px] leading-snug text-cream">
             {t.quote}
           </blockquote>
           <figcaption class="mt-6 flex items-center gap-3 border-t border-line pt-5">
-            <span class="grid h-9 w-9 shrink-0 place-items-center border border-line">
+            <span class={`grid h-9 shrink-0 place-items-center border border-line ${t.logo ? 'min-w-9 px-2' : 'w-9'}`}>
               {t.logo ? (
-                <img src={t.logo} alt="" class="h-5 w-5 object-contain brightness-0 invert" />
+                <img src={t.logo} alt="" class="h-4 w-auto max-w-20 object-contain brightness-0 invert opacity-80" />
               ) : (
                 <span class="font-mono text-xs text-mist">{t.author.replace(/[^A-Za-z]/g, '').charAt(0)}</span>
               )}

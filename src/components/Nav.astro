@@ -5,6 +5,7 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const data = getSiteData(lang);
 const { profile, nav } = data;
+const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
 ---
 
 <header
@@ -50,7 +51,7 @@ const { profile, nav } = data;
 
       <!-- CTA + lang + burger -->
       <div class="flex items-center gap-3">
-        <a href="#contato" class="btn btn-solid hidden lg:inline-flex">
+        <a href={whatsappUrl} target="_blank" rel="noreferrer" class="btn btn-solid hidden lg:inline-flex">
           {data.ui.startProject}
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path
@@ -94,7 +95,7 @@ const { profile, nav } = data;
         </a>
       ))
     }
-    <a href="#contato" class="btn btn-solid mt-8 justify-center py-4">
+    <a href={whatsappUrl} target="_blank" rel="noreferrer" class="btn btn-solid mt-8 justify-center py-4">
       {data.ui.startProject}
     </a>
   </div>

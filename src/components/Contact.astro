@@ -9,9 +9,9 @@ const { contact, profile } = data;
 const details = [
   { label: 'E-mail', value: profile.email, href: `mailto:${profile.email}` },
   {
-    label: 'Telefone',
-    value: profile.phone,
-    href: `tel:${profile.phone.replace(/[^+\d]/g, '')}`,
+    label: 'WhatsApp',
+    value: data.ui.talkToMe,
+    href: `https://wa.me/${profile.phone.replace(/\D/g, '')}`,
   },
   { label: 'Localização', value: profile.location, href: null },
   { label: 'Status', value: profile.availableText, href: null },
@@ -58,6 +58,8 @@ const details = [
             {d.href ? (
               <a
                 href={d.href}
+                target={d.href.startsWith('http') ? '_blank' : undefined}
+                rel={d.href.startsWith('http') ? 'noreferrer' : undefined}
                 class="link-underline mt-3 block text-[15px] text-cream"
               >
                 {d.value}
