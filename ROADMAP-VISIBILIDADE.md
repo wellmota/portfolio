@@ -151,11 +151,33 @@ Onde vaga remota internacional realmente circula:
 
 ## Checklist de execução
 
-- [ ] Fase 1 — SEO técnico (canonical, OG, Twitter, JSON-LD)
-- [ ] Fase 2 — og-image.png 1200×630
-- [ ] Fase 3 — sitemap.xml, robots.txt, llms.txt
-- [ ] Fase 4 — build + deploy + validação
-- [ ] Fase 5 — LinkedIn (headline, sobre, skills, open-to-work, featured)
+- [x] Fase 1 — SEO técnico (canonical, OG, Twitter, JSON-LD)
+- [x] Fase 2 — og-image.png 1200×630
+- [x] Fase 3 — sitemap.xml, robots.txt, llms.txt
+- [x] Fase 4 — build + deploy + validação
+- [~] Fase 5 — LinkedIn (headline, sobre, skills, open-to-work, featured)
 - [ ] Fase 6 — GitHub profile
 - [ ] Fase 7 — cadastro nas plataformas
 - [ ] Fase 8 — Search Console + acompanhamento mensal
+
+---
+
+## Progresso da Fase 5 — LinkedIn (20/07/2026)
+
+| Item | Status |
+|---|---|
+| Headline (AI Engineering, TypeScript, Next.js) | ✅ aplicada |
+| Sobre reescrito (estava "Specialties: UX, UI Design...") | ✅ aplicado |
+| Skills: TypeScript, Design Systems, Prompt Engineering, LLM, Tailwind CSS | ✅ 5 adicionadas |
+| Featured: portfólio com og:image | ✅ fixado |
+| Featured: Behance / Medium | ❌ bloqueiam o crawler do LinkedIn |
+| Open to Work | ⏭️ pulado a pedido |
+
+### Baseline (antes das mudanças)
+Perfil (7d): 11 views · Posts (7d): 11 impressões · Buscas (7d): 4 aparições · 748 seguidores
+
+### Próximos passos
+- [ ] Fase 6 — GitHub: README de perfil, repos fixados, bio + link
+- [ ] Fase 7 — Wellfound, Arc.dev, Toptal, Braintrust
+- [ ] Fase 8 — Google Search Console: submeter sitemap.xml
+- [ ] Cadência: 1 post/semana reaproveitando os artigos do Medium
