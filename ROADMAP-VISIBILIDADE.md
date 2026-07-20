@@ -156,7 +156,7 @@ Onde vaga remota internacional realmente circula:
 - [x] Fase 3 — sitemap.xml, robots.txt, llms.txt
 - [x] Fase 4 — build + deploy + validação
 - [~] Fase 5 — LinkedIn (headline, sobre, skills, open-to-work, featured)
-- [ ] Fase 6 — GitHub profile
+- [x] Fase 6 — GitHub profile
 - [ ] Fase 7 — cadastro nas plataformas
 - [ ] Fase 8 — Search Console + acompanhamento mensal
 
@@ -181,3 +181,23 @@ Perfil (7d): 11 views · Posts (7d): 11 impressões · Buscas (7d): 4 apariçõe
 - [ ] Fase 7 — Wellfound, Arc.dev, Toptal, Braintrust
 - [ ] Fase 8 — Google Search Console: submeter sitemap.xml
 - [ ] Cadência: 1 post/semana reaproveitando os artigos do Medium
+
+---
+
+## Progresso da Fase 6 — GitHub (20/07/2026)
+
+| Item | Antes | Agora |
+|---|---|---|
+| Bio | "Aspiring Front-End Developer / Degree / MBA" | Product Engineer & Design Engineer + stack + IA |
+| Website | `http://behance.com/...` (sem SSL) | `https://userexperience.com.br` |
+| README de perfil | não existia | criado em `wellmota/wellmota` e publicado |
+| Repo `portfolio` | privado | **público**, com descrição e 6 tópicos |
+| Repos fixados | 4 projetos de estudo (challenges) | `portfolio` |
+
+**Aprendizados:**
+- O README de perfil exige clicar em **"Share to Profile"** no repositório especial —
+  criar o arquivo não basta.
+- O token do `gh` CLI não tem escopo `user`; editar bio/site precisa da interface web
+  ou de `gh auth refresh -h github.com -s user`.
+- Dos 117 repositórios, quase todos são privados. Só o `portfolio` (agora público)
+  serve de vitrine. Considerar abrir mais 1–2 projetos próprios no futuro.
