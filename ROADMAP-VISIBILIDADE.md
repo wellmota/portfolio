@@ -129,11 +129,14 @@ Onde vaga remota internacional realmente circula:
 | Plataforma | Foco |
 |---|---|
 | Wellfound (AngelList) | Startups, remoto internacional |
+| Welcome to the Jungle | Tech EU + EUA (absorveu o Otta) |
 | Arc.dev | Devs remotos, curadoria |
 | Toptal | Alto padrão, processo seletivo |
 | Braintrust | Freelance/contrato sem taxa |
-| Read.cv | Comunidade design+eng |
 | Behance | ✅ Já ativo com projetos reais |
+| ~~Read.cv~~ | ❌ Encerrou em 16/05/2025 (time foi para a Perplexity) |
+
+**Textos prontos para colar:** ver `FASE7-PLATAFORMAS.md`.
 
 ---
 
@@ -157,8 +160,8 @@ Onde vaga remota internacional realmente circula:
 - [x] Fase 4 — build + deploy + validação
 - [~] Fase 5 — LinkedIn (headline, sobre, skills, open-to-work, featured)
 - [x] Fase 6 — GitHub profile
-- [ ] Fase 7 — cadastro nas plataformas
-- [ ] Fase 8 — Search Console + acompanhamento mensal
+- [~] Fase 7 — textos prontos (`FASE7-PLATAFORMAS.md`); cadastro é manual
+- [x] Fase 8 — Search Console verificado + sitemap enviado
 
 ---
 
@@ -199,5 +202,50 @@ Perfil (7d): 11 views · Posts (7d): 11 impressões · Buscas (7d): 4 apariçõe
   criar o arquivo não basta.
 - O token do `gh` CLI não tem escopo `user`; editar bio/site precisa da interface web
   ou de `gh auth refresh -h github.com -s user`.
-- Dos 117 repositórios, quase todos são privados. Só o `portfolio` (agora público)
-  serve de vitrine. Considerar abrir mais 1–2 projetos próprios no futuro.
+- Dos 117 repositórios, quase todos eram privados. 10 foram abertos a seu pedido.
+
+**Pins finais (4, com descrição escrita a partir do README real de cada um):**
+`portfolio` · `stay-classic-storefront` · `pizzashop-web` · `desafiofinal-backend-mba`
+
+Optei por 4 pins fortes em vez de 6 preenchidos com desafios de curso.
+Pin de projeto de estudo dilui o perfil para quem está avaliando senioridade.
+
+---
+
+## Progresso da Fase 8 — Google Search Console (20/07/2026)
+
+| Item | Status |
+|---|---|
+| Propriedade `userexperience.com.br` (tipo **Domínio**) | ✅ verificada |
+| Método | TXT no DNS, via "Qualquer provedor de DNS" |
+| `sitemap.xml` enviado | ✅ **Processado**, 2 páginas encontradas |
+| Indexação solicitada: `/` (EN) | ✅ enviada para a fila prioritária |
+| Indexação solicitada: `/pt/` | ✅ enviada para a fila prioritária |
+
+**Decisão consciente:** o Search Console oferece verificação automática via login
+no GoDaddy. Isso concede ao Google acesso permanente à sua conta de DNS. Usei o
+registro TXT manual: mesmo resultado, sem dar essa permissão.
+
+**Estado da indexação no momento da configuração:**
+- `/` (EN): "Rastreada, mas não indexada". O Googlebot já tinha passado no mesmo
+  dia (10:32). Rastrear e não indexar é normal em site novo, não é erro.
+- `/pt/`: "O Google não reconhece o URL". Nunca tinha sido rastreada. O sitemap
+  resolve isso.
+
+**Detalhe curioso:** as únicas páginas apontando para o site eram diretórios
+automáticos de spam (`findit.co.in`, `mega-remont.pro`). Inofensivo, mas mostra
+que até agora nenhum link legítimo apontava para o domínio. Backlink real
+(LinkedIn, GitHub, Medium) é o que muda esse quadro.
+
+**Voltar a olhar em:** 27/07/2026 (indexação) e 20/08/2026 (primeiros dados de
+Desempenho: consultas, impressões, posição média).
+
+### Métricas para acompanhar mensalmente
+
+| Métrica | Onde | Meta 90 dias |
+|---|---|---|
+| Páginas indexadas | Search Console → Páginas | 2 de 2 |
+| Posição para "Wellington Mota" | Search Console → Desempenho | Top 1 |
+| Impressões orgânicas | Search Console → Desempenho | Crescimento constante |
+| Visualizações do perfil | LinkedIn | +200% sobre a baseline de 11/7d |
+| InMails de recrutador | LinkedIn | ≥ 2/mês |
