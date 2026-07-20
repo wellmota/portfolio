@@ -1,0 +1,77 @@
+# Wellington Mota — Product Engineer (Design + Front-end) & AI Specialist
+
+> Product Engineer based in Brasília, Brazil, open to remote work worldwide.
+> Owns both ends of the product: UX research and design in Figma through to
+> React/TypeScript running in production — no handoff. 15+ years in product
+> design, 3+ years shipping front-end. Also ships AI features in production
+> (agent orchestration, evals, versioned prompts), not "vibe coding".
+
+## Positioning
+
+Wellington is a **Design Engineer**: one person who researches, designs and
+implements the full digital experience. This removes the design→development
+handoff, which typically cuts delivery time and rework.
+
+He is explicit that he is **not a "vibe coder"**: AI is used under engineering
+discipline — prompts versioned and tested like code, evals with CI gates before
+deploy, token/cost control, design system as single source of truth,
+accessibility and performance.
+
+## Core skills
+
+- **Front-end:** React, Next.js, TypeScript, Node.js, Tailwind CSS, REST & GraphQL
+- **Design:** Product Design, UX Research, Usability Testing, Design Systems,
+  Information Architecture, Prototyping, Figma
+- **AI Engineering:** Agent orchestration (MCP), RAG, prompt engineering,
+  LLM evaluation (LLM-as-judge, golden datasets), token/cost optimization,
+  semantic & prompt caching, model routing
+
+## Experience highlights
+
+- 15+ years in product design; 3+ years delivering production front-end
+- Built a design system used by 3 cross-functional teams
+- ~40% reduction in handoff time; ~28% increase in feature adoption
+- Technical leadership role; works with stakeholders across the globe
+- Education: Analysis & Systems Development; MBA in Fullstack (in progress)
+- Languages: Portuguese (native), English (advanced — has served UK and US clients)
+
+## Selected clients & brands
+
+Mitsubishi Motors, ServiceNow, Mindtools, KIA, CAIXA, Banco do Brasil, BRB,
+Tutory, HyperGestor, Sankhya, Soluti, CareCloud, Wevr, Butterfly IO, Action247,
+Grupo SOMA, Animalle, Autódromo Velocitta, Odens (UK), ArtCaffé (Kenya),
+Resilience Dynamic, Nomoo, Chris Corsini, Your Digital Media, Monumenta,
+Kineo, Tako, Solomon, Cogmo Tecnologia.
+
+## Selected projects
+
+- **Kia Telluride LX** — automotive landing page: layout, UI and vehicle configurator experience
+- **Autódromo Velocitta** — brand identity and digital presence for the racetrack
+- **Wevr Virtual Studio (WVS)** — interface and experience for a VR production platform (US)
+- **The Blu · Wevr** — campaign work for the 10-year anniversary of the VR series (US)
+- **ArtCaffé** — visual direction and digital assets for the café chain (Kenya)
+- **Odens** — brand identity and packaging design (UK)
+
+## Writing
+
+- [From UX/UI Design to Front-End Development: Embracing a New Chapter](https://medium.com/@wellingtonmota/from-ux-ui-design-to-front-end-development-embracing-a-new-chapter-756f55de93df) — the transition from 15+ years of design into front-end, and closing the design/dev gap
+- [Why you should try Hands-off UX/UI documentation like this…](https://medium.com/design-bootcamp/level-up-your-ux-ui-game-why-you-should-do-hands-off-documentation-like-this-6233def429ae) — practical hands-off documentation: user stories, acceptance criteria and Given-When-Then scenarios
+
+## Availability
+
+**Open to remote opportunities**, including international roles. Based in
+Brasília, Brazil (America/Sao_Paulo timezone). Responds within 24 hours.
+
+## Links
+
+- [Portfolio (English)](https://userexperience.com.br/)
+- [Portfólio (Português)](https://userexperience.com.br/pt/)
+- [LinkedIn](https://www.linkedin.com/in/wellingtonmota13/)
+- [GitHub](https://github.com/wellmota)
+- [Behance](https://www.behance.net/wellingtonmota)
+- [Medium](https://medium.com/@wellingtonmota)
+
+## Contact
+
+- Email: wellingtonmota42@gmail.com
+- Location: Brasília, DF, Brazil

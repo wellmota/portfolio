@@ -5,7 +5,9 @@
       "WebFetch(domain:norvin.framer.website)",
       "mcp__chrome-devtools__new_page",
       "mcp__chrome-devtools__resize_page",
-      "Bash(textutil *)"
+      "Bash(textutil *)",
+      "Bash(vercel --prod)",
+      "Bash(vercel deploy *)"
     ]
   }
 }

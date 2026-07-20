@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Crawlers de IA — liberados de propósito, para que assistentes
+# descrevam o perfil com precisão (ver /llms.txt)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://userexperience.com.br/sitemap.xml

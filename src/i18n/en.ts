@@ -285,7 +285,7 @@ const en: SiteData = {
       author: 'Marlom Andrade',
       company: 'CEO & Founder · Tutory',
       logo: 'https://www.tutory.com.br/tutory-logo-v2.svg',
-      tag: 'Dashboard',
+      tag: 'Rebranding',
     },
     {
       quote: 'I really love these designs — very beautiful and I think the branding is on point! Everything feels cohesive to gently nudge the user on their learning journey.',

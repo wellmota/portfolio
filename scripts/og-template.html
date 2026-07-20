@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=UnifrakturCook:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        width: 1200px;
+        height: 630px;
+        background: #0a0a0a;
+        font-family: Inter, sans-serif;
+        color: #ededed;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 70px 76px;
+      }
+      /* hairline grid accents */
+      .line { position: absolute; background: #232323; }
+      .line-v { width: 1px; top: 0; bottom: 0; left: 76px; }
+      .line-h { height: 1px; left: 0; right: 0; bottom: 150px; }
+
+      .top { display: flex; align-items: center; justify-content: space-between; }
+      .label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 15px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #8c8c92;
+        display: flex; align-items: center; gap: 12px;
+      }
+      .dot { width: 9px; height: 9px; background: #cff24a; display: inline-block; }
+
+      .name {
+        font-size: 132px;
+        font-weight: 800;
+        letter-spacing: -0.045em;
+        line-height: 0.88;
+      }
+      .name .muted { color: #8c8c92; }
+
+      .role {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 19px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #8c8c92;
+        margin-top: 26px;
+      }
+      .ai {
+        background: linear-gradient(100deg, #a78bfa, #f472b6, #38bdf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: 600;
+      }
+
+      .bottom { display: flex; align-items: flex-end; justify-content: space-between; }
+      .url {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 17px;
+        letter-spacing: 0.1em;
+        color: #ededed;
+      }
+      .seal { position: absolute; right: 70px; bottom: 120px; width: 210px; height: 210px; }
+    </style>
+  </head>
+  <body>
+    <span class="line line-v"></span>
+    <span class="line line-h"></span>
+
+    <div class="top">
+      <span class="label"><span class="dot"></span> Portfólio — Ed. 2026</span>
+      <span class="label">Brasília, BR · Remote</span>
+    </div>
+
+    <div>
+      <div class="name">Wellington<br /><span class="muted">Mota</span></div>
+      <div class="role">
+        Product Engineer — Design + Front-end &nbsp;·&nbsp;
+        <span class="ai">AI Specialist</span>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <span class="url">userexperience.com.br</span>
+      <span class="label">React · TypeScript · Design Systems · IA</span>
+    </div>
+
+    <svg class="seal" viewBox="0 0 120 120" fill="none">
+      <defs>
+        <path id="p" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
+        <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="14" y1="14" x2="106" y2="106">
+          <stop offset="0" stop-color="#a78bfa" />
+          <stop offset="0.5" stop-color="#f472b6" />
+          <stop offset="1" stop-color="#38bdf8" />
+        </linearGradient>
+      </defs>
+      <circle cx="60" cy="60" r="56" stroke="#3a3a3a" stroke-width="1" />
+      <text
+        style="font-family:'JetBrains Mono',monospace;font-size:8.4px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase"
+        fill="url(#g)"
+      >
+        <textPath href="#p" startOffset="0" textLength="276" lengthAdjust="spacingAndGlyphs">
+          DESIGN ENGINEERING · AI SPECIALIST ·
+        </textPath>
+      </text>
+      <text
+        x="60" y="61" text-anchor="middle" dominant-baseline="central"
+        style="font-family:'UnifrakturCook',serif;font-size:46px"
+        fill="none" stroke="url(#g)" stroke-width="0.9" stroke-linejoin="round"
+      >W</text>
+    </svg>
+  </body>
+</html>

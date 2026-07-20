@@ -16,6 +16,50 @@ const {
   title = `${data.profile.name} — ${data.profile.role}`,
   description = data.profile.tagline,
 } = Astro.props;
+
+/* ---------------- SEO ---------------- */
+const siteUrl = 'https://userexperience.com.br';
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = `${siteUrl}/og-image.png`;
+
+const sameAs = data.socials
+  .map((s) => s.href)
+  .filter((h) => h && h !== '#' && h.startsWith('http'));
+
+/* Structured data — ajuda Google/LLMs a entenderem quem é a pessoa */
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: data.profile.name,
+  jobTitle: data.profile.role,
+  description: data.profile.tagline,
+  url: siteUrl,
+  image: `${siteUrl}${data.about.image}`,
+  email: `mailto:${data.profile.email}`,
+  telephone: data.profile.phone,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Brasília',
+    addressRegion: 'DF',
+    addressCountry: 'BR',
+  },
+  sameAs,
+  knowsAbout: [
+    'Product Engineering',
+    'Design Engineering',
+    'Front-End Development',
+    'React',
+    'TypeScript',
+    'Next.js',
+    'Design Systems',
+    'UX Research',
+    'AI Engineering',
+    'Agent Orchestration',
+    'RAG',
+    'Prompt Engineering',
+    'LLM Evaluation',
+  ],
+};
 ---
 
 <!doctype html>
@@ -31,13 +75,36 @@ const {
 
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="author" content={data.profile.name} />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="profile" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content={htmlLang} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={data.profile.name} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${data.profile.name} — ${data.profile.role}`} />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <meta name="theme-color" content="#08080a" />
+
+    <!-- Structured data -->
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(personSchema)}
+    />
 
     <!-- Alternate language -->
     <link rel="alternate" hreflang="en" href="https://userexperience.com.br/" />
