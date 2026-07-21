@@ -160,7 +160,7 @@ Onde vaga remota internacional realmente circula:
 - [x] Fase 4 — build + deploy + validação
 - [~] Fase 5 — LinkedIn (headline, sobre, skills, open-to-work, featured)
 - [x] Fase 6 — GitHub profile
-- [~] Fase 7 — textos prontos (`FASE7-PLATAFORMAS.md`); cadastro é manual
+- [x] Fase 7 — 5 contas criadas e perfis preenchidos (ver progresso abaixo)
 - [x] Fase 8 — Search Console verificado + sitemap enviado
 
 ---
@@ -239,6 +239,54 @@ que até agora nenhum link legítimo apontava para o domínio. Backlink real
 
 **Voltar a olhar em:** 27/07/2026 (indexação) e 20/08/2026 (primeiros dados de
 Desempenho: consultas, impressões, posição média).
+
+---
+
+## Progresso da Fase 7 — Plataformas (21/07/2026)
+
+**Descoberta que destravou tudo:** as quatro plataformas restantes exigem **CV em PDF**.
+Não dá para preencher no braço. Gerei `Wellington-Mota-CV.pdf` a partir de
+`scripts/cv.html` (render via Chrome headless), com o histórico datado puxado do
+LinkedIn e as métricas do `llms.txt`. As três plataformas com parser de currículo
+montaram o perfil sozinhas a partir dele.
+
+| Plataforma | Status | Como ficou |
+|---|---|---|
+| Wellfound | ✅ perfil público no ar | `wellfound.com/u/wellingtonmota13` · Frontend Engineer · 10+ anos · Remote only · Open to offers · USD 84K |
+| Welcome to the Jungle | ✅ onboarding completo | IA classificou como **Product Engineer · Expert & leadership (10+ anos)** · setores Tech/Software/IT/AI |
+| Braintrust | ✅ **100% completo** | Field Engineering · headline "Product Engineer specializing in UI/React and AI" |
+| Toptal | ✅ formulário enviado | Frontend Development (Web UI) · React/TypeScript/Next.js/Design Systems |
+| Arc.dev | ✅ **profile review passou** | próxima etapa é teste de comunicação em vídeo |
+
+### Erros das IAs de parsing que precisaram de correção manual
+
+- **Braintrust inventou a skill "Astrophysics".** Removida. Lição: sempre revisar
+  o que o parser gera antes de publicar em rede com curadoria.
+- **Braintrust arredondou todas as 5 datas para janeiro.** Corrigidas uma a uma
+  para bater com o LinkedIn: DevSquad mai/2021, Integritas nov/2018–mar/2021,
+  App Theory nov/2016–set/2018, Onawa jan/2014–nov/2016, 954 fev/2012–jan/2014.
+- **Welcome to the Jungle sugeriu 105.000 EUR** de salário mínimo por padrão.
+  Trocado para USD 84.000, o valor real definido no Wellfound. O default teria
+  filtrado vagas boas para fora silenciosamente.
+- **Wellfound tinha o emprego atual errado há anos:** "UI/UX Designer na Grupo 954,
+  jan/2009 até hoje". Encerrado em 01/2014 e DevSquad adicionado como atual.
+
+### Campos deixados em branco de propósito
+
+Autorização de trabalho nos EUA (declaração legal), taxa/hora do Toptal,
+telefone e dados demográficos. Nenhum desses eu deveria responder pelo Wellington.
+
+**Visto:** B1/B2 é de visitante e não autoriza trabalho. O par correto nos
+formulários é sponsorship **Yes** / legally authorized **No**. Isso não afeta
+vaga remota, que é contrato internacional e não passa por visto.
+
+### Pendências com o Wellington
+
+- [ ] Toptal: taxa/hora em USD + entrevista técnica ao vivo (React/TypeScript)
+- [ ] Arc: gravar os clipes de vídeo do teste de comunicação
+- [ ] Braintrust: candidatar-se a 1 vaga para destravar o screening de 10 min
+- [ ] **LinkedIn: cargo na DevSquad ainda é "Product Designer"** enquanto CV, site,
+      GitHub e as 4 plataformas dizem "Product Engineer"
 
 ### Métricas para acompanhar mensalmente
 

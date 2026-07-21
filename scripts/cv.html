@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @page { size: A4; margin: 0; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: Inter, sans-serif;
+        color: #14141a;
+        font-size: 9.6pt;
+        line-height: 1.5;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page { width: 210mm; min-height: 297mm; padding: 14mm 16mm; }
+      .page + .page { page-break-before: always; }
+
+      /* header */
+      header { border-bottom: 2px solid #14141a; padding-bottom: 7mm; margin-bottom: 7mm; }
+      h1 { font-size: 25pt; font-weight: 800; letter-spacing: -0.035em; line-height: 1; }
+      .role {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 8.4pt; letter-spacing: 0.12em; text-transform: uppercase;
+        color: #4a4a55; margin-top: 3mm;
+      }
+      .contact {
+        display: flex; flex-wrap: wrap; gap: 0 5mm;
+        font-size: 8.6pt; color: #4a4a55; margin-top: 4mm;
+      }
+      .contact b { color: #14141a; font-weight: 600; }
+
+      /* sections */
+      section { margin-bottom: 6.5mm; }
+      h2 {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 7.8pt; font-weight: 500; letter-spacing: 0.18em;
+        text-transform: uppercase; color: #6b6b78;
+        padding-bottom: 1.6mm; margin-bottom: 3.4mm;
+        border-bottom: 1px solid #dcdce2;
+      }
+      .lede { font-size: 10pt; line-height: 1.55; }
+      .lede strong { font-weight: 600; }
+
+      /* experience */
+      .job { margin-bottom: 4.6mm; }
+      .job:last-child { margin-bottom: 0; }
+      .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6mm; }
+      .job-title { font-size: 10.4pt; font-weight: 700; letter-spacing: -0.01em; }
+      .job-co { font-weight: 500; color: #14141a; }
+      .job-meta {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 7.8pt; color: #6b6b78; white-space: nowrap;
+      }
+      .job p { margin-top: 1.4mm; color: #3a3a45; }
+      .job ul { margin-top: 1.6mm; padding-left: 4mm; }
+      .job li { margin-bottom: 0.9mm; color: #3a3a45; }
+
+      /* skills grid */
+      .grid { display: grid; grid-template-columns: 30mm 1fr; gap: 2.4mm 5mm; }
+      .grid dt {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 7.8pt; letter-spacing: 0.06em; text-transform: uppercase; color: #6b6b78;
+        padding-top: 0.4mm;
+      }
+      .grid dd { color: #23232c; }
+
+      .clients { color: #3a3a45; }
+      .two { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+      .accent { display: inline-block; width: 9px; height: 9px; background: #b8e02a; margin-right: 2mm; vertical-align: 1px; }
+      .foot {
+        margin-top: 7mm; padding-top: 3.4mm; border-top: 1px solid #dcdce2;
+        font-family: 'JetBrains Mono', monospace; font-size: 7.6pt; color: #8a8a96;
+        display: flex; justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <h1>Wellington Mota</h1>
+        <div class="role">
+          <span class="accent"></span>Product Engineer · Design + Front-end · AI Specialist
+        </div>
+        <div class="contact">
+          <span><b>Brasília, Brazil</b> · Remote worldwide</span>
+          <span>wellingtonmota42@gmail.com</span>
+          <span>userexperience.com.br</span>
+          <span>linkedin.com/in/wellingtonmota13</span>
+          <span>github.com/wellmota</span>
+        </div>
+      </header>
+
+      <section>
+        <h2>Profile</h2>
+        <p class="lede">
+          I own both ends of the product. I run the research, design the experience in Figma,
+          then build and ship it in React and TypeScript. There is no handoff, no spec thrown
+          over a wall, no meeting about why the build does not match the design.
+          <strong>15+ years in product design, 3+ years delivering production front-end.</strong>
+          I also ship AI features in production under engineering discipline: prompts versioned
+          and tested like code, evals gating the deploy, token spend measured. Engineering
+          applied to a probabilistic system, not vibe coding.
+        </p>
+      </section>
+
+      <section>
+        <h2>Selected impact</h2>
+        <div class="two">
+          <div>
+            <p><strong>Design system adopted by 3 cross-functional teams</strong>, used as the single source of truth across product, engineering and brand.</p>
+          </div>
+          <div>
+            <p><strong>~40% less design-to-development handoff time</strong> and <strong>~28% higher feature adoption</strong> after the system rollout.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Experience</h2>
+
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">Product Engineer <span class="job-co">· DevSquad</span></div>
+            <div class="job-meta">May 2021 — Present</div>
+          </div>
+          <ul>
+            <li>Own product work end to end: research and interface design in Figma through to React and TypeScript in production.</li>
+            <li>Built and maintain a design system used by 3 cross-functional teams; cut handoff time by around 40%.</li>
+            <li>Ship AI features in production with versioned prompts, evals gating deploys and measured token cost.</li>
+            <li>Work directly with stakeholders across Brazil, the US and Europe, in English.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">UX/UI Designer &amp; Business Analyst <span class="job-co">· Integritas Solutions, Inc</span></div>
+            <div class="job-meta">Nov 2018 — Mar 2021</div>
+          </div>
+          <ul>
+            <li>Ran discovery, information architecture and interface design for enterprise web products.</li>
+            <li>Translated business requirements into user stories, acceptance criteria and Given-When-Then scenarios.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">UI/UX Designer <span class="job-co">· App Theory</span></div>
+            <div class="job-meta">Nov 2016 — Sep 2018</div>
+          </div>
+          <ul>
+            <li>Product and interface design for US clients, Miami–Fort Lauderdale area.</li>
+            <li>Interaction design, prototyping and usability testing across web and mobile.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">UI/UX Designer · Technology and Development <span class="job-co">· Onawa S/A</span></div>
+            <div class="job-meta">Jan 2014 — Nov 2016</div>
+          </div>
+          <ul>
+            <li>User-centred design for desktop and web applications in the technology division.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">Designer <span class="job-co">· 954 Business Consulting</span></div>
+            <div class="job-meta">Feb 2012 — Jan 2014</div>
+          </div>
+          <ul>
+            <li>Interaction design and interface creation for desktop and web applications; art direction for campaigns.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="foot">
+        <span>Wellington Mota · Product Engineer</span>
+        <span>userexperience.com.br</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <section>
+        <h2>Skills</h2>
+        <dl class="grid">
+          <dt>Front-end</dt>
+          <dd>React · Next.js · TypeScript · JavaScript · Node.js · Tailwind CSS · HTML · CSS · REST &amp; GraphQL · Astro</dd>
+          <dt>Design</dt>
+          <dd>Product Design · UX Research · Usability Testing · Design Systems · Information Architecture · Prototyping · Figma · Accessibility</dd>
+          <dt>AI engineering</dt>
+          <dd>Agent orchestration (MCP) · RAG · Prompt engineering · LLM evaluation (LLM-as-judge, golden datasets) · Token and cost optimisation · Semantic and prompt caching · Model routing</dd>
+          <dt>Ways of working</dt>
+          <dd>End-to-end product ownership · Hands-off documentation (user stories, acceptance criteria, Given-When-Then) · Cross-functional collaboration · Remote-first, distributed teams</dd>
+        </dl>
+      </section>
+
+      <section>
+        <h2>Selected clients &amp; brands</h2>
+        <p class="clients">
+          Mitsubishi Motors · ServiceNow · Mindtools · KIA · CAIXA · Banco do Brasil · BRB ·
+          Sankhya · Soluti · Tutory · HyperGestor · CareCloud · Wevr · Butterfly IO · Action247 ·
+          Grupo SOMA · Animalle · Autódromo Velocitta · Resilience Dynamic · Nomoo ·
+          Chris Corsini · Your Digital Media · Monumenta · Kineo · Tako · Odens (UK) ·
+          ArtCaffé (Kenya) · Cogmo Tecnologia
+        </p>
+      </section>
+
+      <section>
+        <h2>Selected projects</h2>
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">Kia Telluride LX</div>
+            <div class="job-meta">Automotive</div>
+          </div>
+          <p>Landing page and vehicle configurator experience: layout, interface and interaction design.</p>
+        </div>
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">Wevr Virtual Studio (WVS) · The Blu</div>
+            <div class="job-meta">VR · United States</div>
+          </div>
+          <p>Interface and experience for a VR production platform, plus campaign work for the 10-year anniversary of the VR series.</p>
+        </div>
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">Autódromo Velocitta</div>
+            <div class="job-meta">Brand · Digital</div>
+          </div>
+          <p>Brand identity and digital presence for the racetrack.</p>
+        </div>
+        <div class="job">
+          <div class="job-head">
+            <div class="job-title">Odens · ArtCaffé</div>
+            <div class="job-meta">United Kingdom · Kenya</div>
+          </div>
+          <p>Brand identity and packaging design (Odens); visual direction and digital assets for the café chain (ArtCaffé).</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Writing</h2>
+        <div class="job">
+          <p><strong>From UX/UI Design to Front-End Development: Embracing a New Chapter</strong> — Medium.
+          The move from 15+ years of design into front-end, and how it closes the design/dev gap.</p>
+          <p style="margin-top:2mm"><strong>Why you should try hands-off UX/UI documentation like this…</strong> — Medium, Bootcamp.
+          Practical documentation: user stories, acceptance criteria and Given-When-Then scenarios.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Education &amp; languages</h2>
+        <dl class="grid">
+          <dt>Education</dt>
+          <dd>
+            MBA in Fullstack Development — in progress<br />
+            Analysis and Systems Development<br />
+            Universidade Paulista — Design, 2007
+          </dd>
+          <dt>Languages</dt>
+          <dd>Portuguese — native · English — advanced (served UK and US clients)</dd>
+          <dt>Availability</dt>
+          <dd>Open to remote roles worldwide. Based in Brasília, Brazil (America/Sao_Paulo). Holds a US B1/B2 visa for onsite visits and conferences.</dd>
+        </dl>
+      </section>
+
+      <div class="foot">
+        <span>Wellington Mota · Product Engineer</span>
+        <span>userexperience.com.br</span>
+      </div>
+    </div>
+  </body>
+</html>
