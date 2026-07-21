@@ -285,8 +285,16 @@ vaga remota, que é contrato internacional e não passa por visto.
 - [ ] Toptal: taxa/hora em USD + entrevista técnica ao vivo (React/TypeScript)
 - [ ] Arc: gravar os clipes de vídeo do teste de comunicação
 - [ ] Braintrust: candidatar-se a 1 vaga para destravar o screening de 10 min
-- [ ] **LinkedIn: cargo na DevSquad ainda é "Product Designer"** enquanto CV, site,
-      GitHub e as 4 plataformas dizem "Product Engineer"
+- [x] ~~LinkedIn: cargo na DevSquad~~ → trocado para **Product Engineer** em 21/07,
+      com Location type **Remote** e descrição do escopo ponta a ponta
+
+### Consistência final: as 6 superfícies contam a mesma história
+
+Site · LinkedIn · GitHub · CV em PDF · Wellfound · Braintrust/WTTJ/Toptal/Arc
+→ todas dizem **Product Engineer na DevSquad, desde mai/2021, remoto**.
+
+Isso importa porque recrutador cruza as fontes. Antes desta rodada, o LinkedIn
+dizia "Product Designer" e o Wellfound dizia "UI/UX Designer na Grupo 954 até hoje".
 
 ### Métricas para acompanhar mensalmente
 
