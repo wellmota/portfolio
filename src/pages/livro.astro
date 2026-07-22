@@ -4,15 +4,13 @@ import SectionHeader from '../components/SectionHeader.astro';
 
 const lang = 'pt' as const;
 
-/* TODO: trocar pelo link do checkout (Kiwify) quando o produto estiver no ar */
-const BUY_URL = `https://wa.me/5561981043296?text=${encodeURIComponent(
-  'Quero garantir meu exemplar do livro "Do Design ao Digital"!'
-)}`;
+/* Checkout do produto na Kiwify — R$ 37 (de R$ 57) */
+const BUY_URL = 'https://pay.kiwify.com.br/iDcoBhO';
 const SAMPLE_URL = '/amostra-do-design-ao-digital.pdf';
 const WHATSAPP_URL = 'https://wa.me/5561981043296';
 
-const PRICE_FULL = 'R$ 39,00';
-const PRICE_LAUNCH = 'R$ 27,00';
+const PRICE_FULL = 'R$ 57,00';
+const PRICE_LAUNCH = 'R$ 37,00';
 
 const title =
   'Do Design ao Digital — o livro | Guia da transição para UX/UI (com IA)';
@@ -139,12 +137,12 @@ const bookSchema = {
   },
   inLanguage: 'pt-BR',
   bookFormat: 'https://schema.org/EBook',
-  numberOfPages: 120,
+  numberOfPages: 66,
   image: 'https://userexperience.com.br/capa-livro-light.jpg',
   description,
   offers: {
     '@type': 'Offer',
-    price: '27.00',
+    price: '37.00',
     priceCurrency: 'BRL',
     availability: 'https://schema.org/InStock',
     url: 'https://userexperience.com.br/livro',
