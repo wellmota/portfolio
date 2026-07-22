@@ -1,0 +1,632 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+
+const lang = 'pt' as const;
+
+/* TODO: trocar pelo link do checkout (Kiwify) quando o produto estiver no ar */
+const BUY_URL = `https://wa.me/5561981043296?text=${encodeURIComponent(
+  'Quero garantir meu exemplar do livro "Do Design ao Digital"!'
+)}`;
+const SAMPLE_URL = '/amostra-do-design-ao-digital.pdf';
+const WHATSAPP_URL = 'https://wa.me/5561981043296';
+
+const PRICE_FULL = 'R$ 39,00';
+const PRICE_LAUNCH = 'R$ 27,00';
+
+const title =
+  'Do Design ao Digital — o livro | Guia da transição para UX/UI (com IA)';
+const description =
+  'Como migrar do design gráfico para o UX/UI, usar a IA a seu favor e multiplicar seu valor no mercado digital. O guia honesto de quem fez o caminho — por Wellington Mota.';
+
+const heroPoints = [
+  '12 capítulos · 4 partes · PDF',
+  'Entrega imediata por e-mail',
+  'Bônus de lançamento: Checklist da Transição para UX/UI',
+];
+
+const pillars = [
+  {
+    n: '01',
+    title: 'Multiplique seu potencial financeiro',
+    body: 'Descubra como migrar para o mercado digital e aumentar seu valor profissional em até 5×. Um guia prático para sair do design tradicional e conquistar oportunidades de alto valor no mundo do UX/UI.',
+  },
+  {
+    n: '02',
+    title: 'Reaproveite 100% das suas habilidades',
+    body: 'Não comece do zero: como designer, você já possui um arsenal de habilidades valiosas. O livro mostra como transformar essas competências em diferenciais no digital e usá-las como alicerce para dominar o UX/UI.',
+  },
+  {
+    n: '03',
+    title: 'Domine as habilidades do futuro',
+    body: 'Do design de aplicativos às plataformas empresariais: aprenda as ferramentas e técnicas que importam agora — incluindo a IA em cada etapa do processo — para se destacar como especialista em experiência do usuário.',
+  },
+];
+
+const market = [
+  {
+    value: 'US$ 1,08 tri',
+    text: 'O mercado global de UI/UX cresce cerca de 15,7% ao ano e deve atingir US$ 1.083 bilhões até 2027.',
+  },
+  {
+    value: '400%',
+    text: 'Melhorias no design de UX podem aumentar as taxas de conversão de um site em até 400%.',
+  },
+  {
+    value: '450 mi+',
+    text: 'Mais de 450 milhões de usuários no mundo utilizam ferramentas de design e software voltados para UX/UI.',
+  },
+];
+
+const bookParts = [
+  {
+    part: 'Parte I',
+    theme: 'A virada',
+    chapters: [
+      { n: '01', title: 'O convite que eu quase recusei' },
+      { n: '02', title: 'Por que agora — não aos 20, não aos 50' },
+    ],
+  },
+  {
+    part: 'Parte II',
+    theme: 'A ponte',
+    chapters: [
+      { n: '03', title: 'O que muda de verdade' },
+      { n: '04', title: 'O que você já sabe e nem percebe' },
+      { n: '05', title: 'Ferramentas que importam (e as que já não importam)' },
+      { n: '06', title: 'A inteligência artificial a seu favor' },
+      { n: '07', title: 'A IA em cada etapa do processo', ai: true },
+    ],
+  },
+  {
+    part: 'Parte III',
+    theme: 'Entrar no jogo',
+    chapters: [
+      { n: '08', title: 'Um portfólio que conta história' },
+      { n: '09', title: 'Conexões que abrem portas' },
+      { n: '10', title: 'O primeiro trabalho no digital' },
+    ],
+  },
+  {
+    part: 'Parte IV',
+    theme: 'Multiplicar',
+    chapters: [
+      { n: '11', title: 'Como eu multipliquei meu salário' },
+      { n: '12', title: 'Nunca parar de aprender' },
+    ],
+  },
+];
+
+const bio = [
+  'Meu nome é Wellington Mota. Aos 27 anos, eu dividia um quarto de apartamento e emendava dois empregos para fechar o mês. Comecei no design tradicional, em agências e empresas de comunicação — até perceber que o meu caminho estava no digital e decidir migrar para o UX/UI.',
+  'Hoje trabalho remoto para empresas de fora do Brasil, recebendo em dólar e em euro, em projetos para marcas como Mitsubishi, KIA e ServiceNow. Atuo como Product Engineer: pesquiso, desenho e entrego produto em código, com IA em cada etapa do processo.',
+  'Este livro é parte memória, parte manual de campo — o mapa que eu gostaria de ter recebido quando estava do outro lado da ponte.',
+];
+
+const faqs = [
+  {
+    q: 'Eu não tenho experiência em tecnologia. Este livro é para mim?',
+    a: 'Sim — ele foi escrito exatamente para quem vem do design tradicional (gráfico, publicidade, editorial) e nunca trabalhou com produto digital. A Parte II mostra o que muda de verdade e o que você já sabe e nem percebe: boa parte do seu repertório é reaproveitável desde o primeiro dia.',
+  },
+  {
+    q: 'Vou precisar de certificações para conseguir vagas em UX/UI?',
+    a: 'Não. O mercado contrata por portfólio e repertório, não por diploma. Cursos ajudam a organizar o estudo, mas o que abre portas é prova de trabalho — e o Capítulo 8 mostra como montar um portfólio que conta história mesmo sem clientes digitais.',
+  },
+  {
+    q: 'Quais resultados posso esperar após ler este livro?',
+    a: 'Clareza sobre o caminho e um plano concreto: quais habilidades levar, quais ferramentas aprender (incluindo IA), como montar portfólio, onde encontrar o primeiro trabalho e como negociar salário. Sem promessa de emprego em 30 dias — com o método que usei na prática, salto a salto.',
+  },
+  {
+    q: 'Preciso de um software específico para seguir o que é ensinado?',
+    a: 'Não. O livro aponta as ferramentas que importam hoje — Figma e as principais ferramentas de IA — e quase todas têm versão gratuita suficiente para estudar. Nenhuma compra extra é obrigatória.',
+  },
+  {
+    q: 'Este livro é útil mesmo se eu já tiver alguma experiência com UI/UX?',
+    a: 'Sim. As Partes III e IV (portfólio, conexões, primeiro trabalho e negociação de salário) e os dois capítulos de IA valem também para quem já está no digital e quer acelerar — especialmente se a IA ainda não entrou no seu processo.',
+  },
+];
+
+const bookSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  name: 'Do Design ao Digital',
+  alternateName:
+    'Do Design ao Digital — Como migrei do design gráfico para o UX/UI e multipliquei meu salário',
+  author: {
+    '@type': 'Person',
+    name: 'Wellington Mota',
+    url: 'https://userexperience.com.br',
+  },
+  inLanguage: 'pt-BR',
+  bookFormat: 'https://schema.org/EBook',
+  numberOfPages: 120,
+  image: 'https://userexperience.com.br/capa-livro-dark.jpg',
+  description,
+  offers: {
+    '@type': 'Offer',
+    price: '27.00',
+    priceCurrency: 'BRL',
+    availability: 'https://schema.org/InStock',
+    url: 'https://userexperience.com.br/livro',
+  },
+};
+---
+
+<Layout
+  lang={lang}
+  title={title}
+  description={description}
+  ogImage="/capa-livro-dark.jpg"
+  ogImageAlt="Capa do livro Do Design ao Digital, de Wellington Mota"
+  ogImageWidth={720}
+  ogImageHeight={1073}
+  alternates={false}
+>
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(bookSchema)}
+  />
+
+  <!-- Nav enxuta da página de vendas -->
+  <header
+    data-nav
+    class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-colors duration-300"
+  >
+    <div class="container-page">
+      <nav class="flex items-center justify-between gap-4 py-4">
+        <a href="/pt/" class="flex items-center gap-2.5 shrink-0">
+          <span
+            class="gothic grid h-8 w-8 place-items-center bg-lime pb-0.5 text-[19px] text-ink"
+            >W</span
+          >
+          <span class="hidden text-[14px] font-semibold tracking-tight sm:inline"
+            >Wellington Mota</span
+          >
+          <span class="mono hidden items-center gap-2 text-[11px] text-faint lg:flex">
+            <span class="text-line-strong">/</span>
+            <span>livro</span>
+          </span>
+        </a>
+
+        <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
+          {
+            [
+              { label: 'Capítulos', href: '#capitulos' },
+              { label: 'Autor', href: '#autor' },
+              { label: 'FAQ', href: '#faq' },
+            ].map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="mono text-[11px] uppercase tracking-widest text-mist transition-colors hover:text-cream"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <a href={BUY_URL} target="_blank" rel="noreferrer" class="btn btn-solid">
+          Comprar · {PRICE_LAUNCH}
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1 · Hero + card de preço -->
+    <section class="pt-28 pb-14 sm:pt-32 sm:pb-20 md:pt-44 md:pb-28">
+      <div class="container-page">
+        <div class="grid gap-12 md:grid-cols-12 md:gap-10 lg:gap-16">
+          <div class="md:col-span-7" data-reveal>
+            <span class="label label-dot"
+              >E-book · Guia prático de transição de carreira</span
+            >
+            <h1 class="display mt-6 text-[clamp(2.5rem,7vw,5.75rem)]">
+              Migre do design tradicional para o mundo
+              <span class="text-faint">altamente valorizado do UX/UI.</span>
+            </h1>
+            <p
+              class="mt-8 max-w-xl text-[15px] leading-relaxed text-mist sm:text-base"
+            >
+              Desde os aplicativos que usamos para pedir comida até plataformas
+              bancárias e sistemas complexos, o designer de usabilidade está no
+              centro da revolução digital que impacta milhões de pessoas todos os
+              dias. <span class="text-cream"
+                >Este livro é o mapa para você entrar nesse jogo — reaproveitando o
+                que já sabe e usando a IA como acelerador.</span
+              >
+            </p>
+            <ul class="mt-10 space-y-2.5">
+              {
+                heroPoints.map((point) => (
+                  <li class="mono flex items-center gap-3 text-[12px] text-mist">
+                    <span class="h-1.5 w-1.5 shrink-0 bg-lime" />
+                    {point}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <!-- Card de preço -->
+          <div class="md:col-span-5" id="comprar" data-reveal>
+            <div class="border border-line bg-surface">
+              <div class="border-b border-line bg-ink-soft p-6 sm:p-8">
+                <img
+                  src="/capa-livro-dark.jpg"
+                  alt="Capa do livro Do Design ao Digital, de Wellington Mota"
+                  width="720"
+                  height="1073"
+                  loading="eager"
+                  class="mx-auto w-44 border border-line sm:w-52"
+                />
+              </div>
+              <div class="p-6 sm:p-8">
+                <div class="flex items-baseline justify-between">
+                  <span class="label">Preço</span>
+                  <span class="mono text-sm text-faint line-through"
+                    >{PRICE_FULL}</span
+                  >
+                </div>
+                <p class="display mt-2 text-4xl sm:text-5xl">{PRICE_LAUNCH}</p>
+                <a
+                  href={BUY_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="btn btn-solid mt-6 w-full justify-center py-4"
+                >
+                  Comprar agora
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M4 12L12 4M12 4H5M12 4V11"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </a>
+                <p
+                  class="mono mt-4 text-center text-[11px] uppercase tracking-widest text-lime"
+                >
+                  Preço de lançamento por tempo limitado
+                </p>
+                <a
+                  href={SAMPLE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="link-underline mono mx-auto mt-5 block w-fit text-[12px] text-mist"
+                  >Ou baixe a amostra grátis (PDF)</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · Três pilares -->
+    <section class="container-page pb-14 sm:pb-20 md:pb-28">
+      <SectionHeader
+        index="01"
+        label="Por que este livro"
+        title="Três coisas que você leva"
+        titleMuted="para o outro lado."
+      />
+      <div class="mt-12 grid gap-px border border-line bg-line md:grid-cols-3">
+        {
+          pillars.map((pillar) => (
+            <div class="bg-ink p-7 sm:p-9" data-reveal data-reveal-group>
+              <span class="mono text-[11px] text-faint">{pillar.n}</span>
+              <h3 class="mt-5 text-xl font-semibold tracking-tight text-cream">
+                {pillar.title}
+              </h3>
+              <p class="mt-4 text-[14.5px] leading-relaxed text-mist">
+                {pillar.body}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- 3 · Bloco mental + capa -->
+    <section class="border-y border-line bg-ink-soft py-14 sm:py-20 md:py-28">
+      <div class="container-page">
+        <div class="grid items-center gap-12 md:grid-cols-12 md:gap-10">
+          <div class="order-2 md:order-1 md:col-span-4" data-reveal>
+            <img
+              src="/capa-livro-light.jpg"
+              alt="Livro Do Design ao Digital"
+              width="720"
+              height="1073"
+              loading="lazy"
+              class="mx-auto w-52 -rotate-3 border border-line shadow-2xl sm:w-60 md:w-full md:max-w-[17rem]"
+            />
+          </div>
+          <div class="order-1 md:order-2 md:col-span-8" data-reveal>
+            <span class="label label-dot"
+              >Deixe para trás crenças limitantes e bloqueios</span
+            >
+            <h2 class="display mt-6 text-[clamp(2rem,5.5vw,4.25rem)]">
+              Quebre barreiras mentais, aumente a confiança e
+              <span class="text-faint">supere o medo de falhar.</span>
+            </h2>
+            <p class="mt-7 max-w-2xl text-[15px] leading-relaxed text-mist">
+              Você pode estar com 30, 35, 40 — e a idade é o detalhe menos
+              importante desta história. O que trava a maioria dos designers não é
+              técnica: é a voz que insiste que talvez seja tarde. O livro começa
+              desmontando exatamente essa voz, com a história real de quem fez a
+              travessia.
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3">
+              <a href={BUY_URL} target="_blank" rel="noreferrer" class="btn btn-solid">
+                Comprar agora · {PRICE_LAUNCH}
+              </a>
+              <a
+                href={SAMPLE_URL}
+                target="_blank"
+                rel="noreferrer"
+                class="btn btn-outline">Ler amostra grátis</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · Dados de mercado -->
+    <section class="container-page py-14 sm:py-20 md:py-28">
+      <SectionHeader
+        index="02"
+        label="O mundo do User Experience"
+        title="Entenda o que te espera"
+        titleMuted="nesse novo mercado."
+        caption="O tamanho do jogo para onde você está migrando — e por que ele segue crescendo."
+      />
+      <div class="mt-12 grid border-t border-line md:grid-cols-3">
+        {
+          market.map((stat, i) => (
+            <div
+              class="border-b border-line px-1 py-7 md:border-b-0 md:border-l md:px-8 md:py-10 md:first:border-l-0"
+              data-reveal
+              data-reveal-group
+            >
+              <span class="mono text-[11px] text-faint">0{i + 1}</span>
+              <p class="display mt-4 text-4xl sm:text-5xl md:text-[3.4rem]">
+                {stat.value}
+              </p>
+              <p class="mt-3 max-w-xs text-[13.5px] leading-relaxed text-mist">
+                {stat.text}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- 5 · O que há no livro -->
+    <section id="capitulos" class="border-t border-line py-14 sm:py-20 md:py-28">
+      <div class="container-page">
+        <SectionHeader
+          index="03"
+          label="O que há no livro"
+          title="12 capítulos,"
+          titleMuted="quatro partes."
+          caption="Prefere provar antes? A amostra grátis traz a abertura do livro para você ler agora."
+        />
+        <div class="mt-12 grid gap-x-16 gap-y-12 md:grid-cols-2">
+          {
+            bookParts.map((part) => (
+              <div class="border-t border-line pt-6" data-reveal>
+                <div class="flex items-baseline justify-between">
+                  <span class="label label-dot">{part.part}</span>
+                  <h3 class="display text-2xl">{part.theme}</h3>
+                </div>
+                <ul class="mt-6 space-y-3.5">
+                  {part.chapters.map((chapter) => (
+                    <li class="flex items-baseline gap-4">
+                      <span class="mono text-[11px] text-faint">{chapter.n}</span>
+                      <span
+                        class:list={[
+                          'text-[15px] leading-snug',
+                          chapter.ai ? 'ai-text font-semibold' : 'text-cream',
+                        ]}
+                      >
+                        {chapter.title}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+        <div class="mt-14 flex flex-wrap gap-3" data-reveal>
+          <a
+            href={SAMPLE_URL}
+            target="_blank"
+            rel="noreferrer"
+            class="btn btn-outline">Baixar amostra grátis (PDF)</a
+          >
+          <a href={BUY_URL} target="_blank" rel="noreferrer" class="btn btn-solid">
+            Quero o livro completo
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 · História real de carreira -->
+    <section id="autor" class="border-t border-line bg-ink-soft py-14 sm:py-20 md:py-28">
+      <div class="container-page">
+        <SectionHeader
+          index="04"
+          label="História real de carreira"
+          title="Quem escreve"
+          titleMuted="fez o caminho."
+        />
+        <div class="mt-12 grid gap-12 md:grid-cols-12 md:gap-16">
+          <div class="md:col-span-5" data-reveal>
+            <img
+              src="/well-portrait-6.png"
+              alt="Wellington Mota, autor do livro Do Design ao Digital"
+              loading="lazy"
+              class="w-full border border-line grayscale"
+            />
+          </div>
+          <div class="flex flex-col md:col-span-7" data-reveal>
+            <div class="space-y-5 text-[15px] leading-relaxed text-mist sm:text-base">
+              {bio.map((paragraph) => <p>{paragraph}</p>)}
+            </div>
+            <div class="mt-10 border-t border-line pt-6 md:mt-auto">
+              <p class="display text-2xl">Wellington Mota</p>
+              <p class="label mt-2">
+                Product Engineer — Design + Front-end · <span class="ai-text">AI Specialist</span>
+              </p>
+              <a
+                href="/pt/"
+                class="link-underline mono mt-5 inline-block text-[13px] text-mist"
+                >Conheça o portfólio completo →</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · FAQ -->
+    <section id="faq" class="border-t border-line py-14 sm:py-20 md:py-28">
+      <div class="container-page">
+        <div class="grid gap-12 md:grid-cols-12 md:gap-16">
+          <div class="flex flex-col md:col-span-5" data-reveal>
+            <span class="label label-dot">
+              <span class="mr-1 text-mist">05</span>FAQ
+            </span>
+            <h2
+              class="display mt-8 text-[clamp(3rem,9vw,7rem)] leading-[0.9] md:text-[clamp(2.75rem,5vw,5rem)]"
+            >
+              Ainda com dúvidas?
+            </h2>
+
+            <div class="mt-10 border border-line bg-ink-soft p-7 md:mt-auto">
+              <p class="text-[15px] leading-relaxed text-mist">
+                “A distância entre aqueles dois parágrafos tem um nome: UX/UI. É
+                ela que este livro conta.”
+              </p>
+              <div class="mt-8 border-t border-line pt-5">
+                <span class="label">Fale direto comigo</span>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="link-underline display mt-2 block w-fit text-2xl"
+                  >WhatsApp</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-3 md:col-span-7" data-reveal>
+            {
+              faqs.map((faq, i) => (
+                <details class="faq-box group" open={i === 0}>
+                  <summary class="flex items-center justify-between gap-6 p-6 md:p-7">
+                    <span class="faq-q text-lg font-medium text-cream md:text-xl">
+                      {faq.q}
+                    </span>
+                    <span class="faq-sign grid h-8 w-8 shrink-0 place-items-center rounded-full border border-line text-mist">
+                      <svg
+                        class="faq-sign-plus"
+                        width="13"
+                        height="13"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                      >
+                        <path
+                          d="M7 1v12M1 7h12"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                  </summary>
+                  <div class="faq-box-body">
+                    <div>
+                      <p class="faq-a max-w-xl px-6 pb-7 text-[15px] leading-relaxed text-mist md:px-7">
+                        {faq.a}
+                      </p>
+                    </div>
+                  </div>
+                </details>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 · CTA final -->
+    <section class="border-t border-line bg-ink-soft py-16 sm:py-24 md:py-32">
+      <div class="container-page text-center">
+        <span class="label label-dot justify-center">Do Design ao Digital</span>
+        <h2
+          class="display mx-auto mt-6 max-w-4xl text-[clamp(2.4rem,7vw,5.5rem)]"
+          data-reveal
+        >
+          Não espere pelo reconhecimento.
+          <span class="text-faint">Vá atrás dele.</span>
+        </h2>
+        <p class="mono mt-8 text-sm text-faint" data-reveal>
+          <span class="line-through">{PRICE_FULL}</span>
+          <span class="ml-3 text-lg text-cream">{PRICE_LAUNCH}</span>
+        </p>
+        <div class="mt-7 flex flex-wrap justify-center gap-3" data-reveal>
+          <a href={BUY_URL} target="_blank" rel="noreferrer" class="btn btn-solid py-4">
+            Comprar agora
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M4 12L12 4M12 4H5M12 4V11"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+          </a>
+          <a
+            href={SAMPLE_URL}
+            target="_blank"
+            rel="noreferrer"
+            class="btn btn-outline py-4">Baixar amostra grátis</a
+          >
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé enxuto -->
+  <footer class="border-t border-line">
+    <div
+      class="container-page mono flex flex-col items-start justify-between gap-4 py-8 text-[12px] text-faint md:flex-row md:items-center"
+    >
+      <p>© 2026 Wellington Mota — Todos os direitos reservados.</p>
+      <p class="flex items-center gap-2">
+        <span class="h-1.5 w-1.5 bg-lime"></span>
+        <a href="/pt/" class="transition-colors hover:text-cream"
+          >userexperience.com.br</a
+        >
+      </p>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  [data-nav].is-scrolled {
+    background: color-mix(in srgb, var(--color-ink) 82%, transparent);
+    border-color: var(--color-line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+</style>

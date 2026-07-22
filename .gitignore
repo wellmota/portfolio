@@ -20,3 +20,6 @@ yarn-error.log*
 # macOS
 .DS_Store
 .vercel
+
+# materiais privados do livro (PDF comercial, planos de venda) — repo é publico
+/livro/

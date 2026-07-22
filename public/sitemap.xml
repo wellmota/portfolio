@@ -21,4 +21,10 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/" />
   </url>
+  <url>
+    <loc>https://userexperience.com.br/livro</loc>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
