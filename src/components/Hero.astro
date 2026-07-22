@@ -74,14 +74,21 @@ const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
           <circle cx="60" cy="60" r="56" stroke="var(--color-line-strong)" stroke-width="1"></circle>
 
           <g class="ai-seal-rotate">
-            <text class="ai-seal-text" fill="url(#ai-seal-grad)">
-              <textPath
-                href="#ai-seal-path"
-                startOffset="0"
-                textLength="276"
-                lengthAdjust="spacingAndGlyphs"
-                xml:space="preserve"
-              >· DESIGN ENGINEERING ·   AI SPECIALIST    </textPath>
+            <text class="ai-seal-text" text-anchor="middle" fill="url(#ai-seal-grad)">
+              <textPath href="#ai-seal-path" startOffset="75%" textLength="116" lengthAdjust="spacing"
+                >DESIGN ENGINEERING</textPath
+              >
+            </text>
+            <text class="ai-seal-text" text-anchor="middle" fill="url(#ai-seal-grad)">
+              <textPath href="#ai-seal-path" startOffset="25%" textLength="116" lengthAdjust="spacing"
+                >AI SPECIALIST</textPath
+              >
+            </text>
+            <text class="ai-seal-text" text-anchor="middle" fill="url(#ai-seal-grad)">
+              <textPath href="#ai-seal-path" startOffset="0%">·</textPath>
+            </text>
+            <text class="ai-seal-text" text-anchor="middle" fill="url(#ai-seal-grad)">
+              <textPath href="#ai-seal-path" startOffset="50%">·</textPath>
             </text>
           </g>
 
@@ -120,8 +127,17 @@ const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
           </defs>
           <circle cx="60" cy="60" r="56" stroke="var(--color-line-strong)" stroke-width="1"></circle>
           <g class="ai-seal-rotate">
-            <text class="ai-seal-text" fill="url(#ai-seal-grad-m)">
-              <textPath href="#ai-seal-path-m" startOffset="0" textLength="276" lengthAdjust="spacingAndGlyphs" xml:space="preserve">· DESIGN ENGINEERING ·   AI SPECIALIST    </textPath>
+            <text class="ai-seal-text" text-anchor="middle" fill="url(#ai-seal-grad-m)">
+              <textPath href="#ai-seal-path-m" startOffset="75%" textLength="116" lengthAdjust="spacing">DESIGN ENGINEERING</textPath>
+            </text>
+            <text class="ai-seal-text" text-anchor="middle" fill="url(#ai-seal-grad-m)">
+              <textPath href="#ai-seal-path-m" startOffset="25%" textLength="116" lengthAdjust="spacing">AI SPECIALIST</textPath>
+            </text>
+            <text class="ai-seal-text" text-anchor="middle" fill="url(#ai-seal-grad-m)">
+              <textPath href="#ai-seal-path-m" startOffset="0%">·</textPath>
+            </text>
+            <text class="ai-seal-text" text-anchor="middle" fill="url(#ai-seal-grad-m)">
+              <textPath href="#ai-seal-path-m" startOffset="50%">·</textPath>
             </text>
           </g>
           <text x="60" y="61" text-anchor="middle" dominant-baseline="central" style="font-family:'UnifrakturCook',serif;font-size:46px" fill="none" stroke="url(#ai-seal-grad-m)" stroke-width="0.9" stroke-linejoin="round">{profile.firstName.charAt(0)}</text>
