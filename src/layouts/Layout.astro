@@ -136,9 +136,151 @@ const personSchema = {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=UnifrakturCook:wght@700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Google Analytics 4 (gtag) + Consent Mode (LGPD) -->
+    <!-- O GA só é carregado depois do consentimento; padrão = negado -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+
+      // Consent Mode v2 — nada de armazenamento até o usuário aceitar
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+      gtag('js', new Date());
+
+      window.__GA_ID = 'G-N7HJ2X28SX';
+      window.loadGA = function () {
+        if (window.__gaLoaded) return;
+        window.__gaLoaded = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.__GA_ID;
+        document.head.appendChild(s);
+        gtag('config', window.__GA_ID);
+      };
+
+      // Dispara eventos com segurança (no-op enquanto o GA não estiver carregado)
+      window.trackEvent = function (name, params) {
+        try { window.gtag('event', name, params || {}); } catch (e) {}
+      };
+
+      // Se já consentiu numa visita anterior, ativa e carrega agora
+      try {
+        if (localStorage.getItem('ux_consent') === 'granted') {
+          gtag('consent', 'update', { analytics_storage: 'granted' });
+          window.loadGA();
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <slot />
+
+    <!-- Banner de consentimento (LGPD) -->
+    <div id="cookie-consent" class="consent" hidden>
+      <p class="consent__txt">
+        Usamos cookies do Google Analytics apenas para entender o tráfego do site.
+        Você escolhe.
+      </p>
+      <div class="consent__actions">
+        <button type="button" data-consent="deny" class="consent__btn consent__btn--ghost">
+          Recusar
+        </button>
+        <button type="button" data-consent="grant" class="consent__btn consent__btn--solid">
+          Aceitar
+        </button>
+      </div>
+    </div>
+
+    <style>
+      .consent {
+        position: fixed;
+        z-index: 120;
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        max-width: 640px;
+        margin-inline: auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.85rem 1.25rem;
+        padding: 1rem 1.15rem;
+        background: #101010;
+        border: 1px solid #232323;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
+      .consent__txt {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        line-height: 1.55;
+        color: #b6b6bb;
+        margin: 0;
+        flex: 1 1 240px;
+      }
+      .consent__actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-left: auto;
+      }
+      .consent__btn {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 0.6rem 0.95rem;
+        border: 1px solid #3a3a3a;
+        background: transparent;
+        color: #ededed;
+        cursor: pointer;
+        transition: border-color 0.2s, background 0.2s;
+      }
+      .consent__btn--ghost:hover {
+        border-color: #ededed;
+      }
+      .consent__btn--solid {
+        background: #cff24a;
+        color: #0a0a0a;
+        border-color: #cff24a;
+        font-weight: 600;
+      }
+      .consent__btn--solid:hover {
+        filter: brightness(1.05);
+      }
+    </style>
+
+    <script>
+      (function () {
+        const el = document.getElementById('cookie-consent');
+        if (!el) return;
+        let choice = null;
+        try {
+          choice = localStorage.getItem('ux_consent');
+        } catch (e) {}
+        if (!choice) el.hidden = false;
+
+        el.querySelectorAll('[data-consent]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const grant = btn.getAttribute('data-consent') === 'grant';
+            try {
+              localStorage.setItem('ux_consent', grant ? 'granted' : 'denied');
+            } catch (e) {}
+            const w = window as any;
+            if (grant && typeof w.gtag === 'function') {
+              w.gtag('consent', 'update', { analytics_storage: 'granted' });
+              if (typeof w.loadGA === 'function') w.loadGA();
+            }
+            el.hidden = true;
+          });
+        });
+      })();
+    </script>
 
     <script>
       const locale = document.documentElement.dataset.locale || 'en';

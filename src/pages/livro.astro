@@ -620,6 +620,42 @@ const bookSchema = {
   </footer>
 </Layout>
 
+<script>
+  // GA4 — eventos de conversão da página do livro
+  (function () {
+    const w = window as any;
+    const track = (name: string, params?: Record<string, unknown>) => {
+      if (typeof w.trackEvent === 'function') w.trackEvent(name, params || {});
+    };
+    const on = (sel: string, handler: () => void) => {
+      document
+        .querySelectorAll(sel)
+        .forEach((el) => el.addEventListener('click', handler));
+    };
+
+    // Clique em qualquer botão "Comprar" → begin_checkout (R$37)
+    on('a[href*="pay.kiwify"]', () =>
+      track('begin_checkout', {
+        currency: 'BRL',
+        value: 37,
+        items: [
+          { item_name: 'Do Design ao Digital', price: 37, quantity: 1 },
+        ],
+      })
+    );
+
+    // Download da amostra grátis
+    on('a[href*="amostra"]', () =>
+      track('amostra_download', {
+        file_name: 'amostra-do-design-ao-digital.pdf',
+      })
+    );
+
+    // Clique no WhatsApp
+    on('a[href*="wa.me"]', () => track('whatsapp_click', {}));
+  })();
+</script>
+
 <style>
   [data-nav].is-scrolled {
     background: color-mix(in srgb, var(--color-ink) 82%, transparent);
