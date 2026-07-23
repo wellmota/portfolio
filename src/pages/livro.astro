@@ -12,7 +12,7 @@ const SAMPLE_URL = '/amostra-do-design-ao-digital.pdf';
    Preencha LEAD_ENDPOINT com o "action" do formulario da sua ferramenta de e-mail
    (MailerLite / Brevo / etc.) e ajuste os nomes dos campos abaixo.
    Enquanto LEAD_ENDPOINT estiver vazio, o download continua direto (sem captura). */
-const LEAD_ENDPOINT = '';
+const LEAD_ENDPOINT = 'https://assets.mailerlite.com/jsonp/2529914/forms/193825651798574154/subscribe';
 const LEAD_FIELD_NAME = 'fields[name]';
 const LEAD_FIELD_EMAIL = 'fields[email]';
 const WHATSAPP_URL = 'https://wa.me/5561981043296';
@@ -879,6 +879,8 @@ const breadcrumbSchema = {
           const params = new URLSearchParams();
           params.set(gFEmail, emailVal);
           if (nameVal) params.set(gFName, nameVal);
+          params.set('ml-submit', '1');
+          params.set('anticsrf', 'true');
           const done = () => {
             fireLeadEvents();
             if (status) status.textContent = 'Pronto! Abrindo a amostra...';
