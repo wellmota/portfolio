@@ -122,6 +122,22 @@ const faqs = [
     q: 'Este livro é útil mesmo se eu já tiver alguma experiência com UI/UX?',
     a: 'Sim. As Partes III e IV (portfólio, conexões, primeiro trabalho e negociação de salário) e os dois capítulos de IA valem também para quem já está no digital e quer acelerar — especialmente se a IA ainda não entrou no seu processo.',
   },
+  {
+    q: 'Venho da publicidade (ou de outra área, não do design). Este livro serve para mim?',
+    a: 'Serve. Publicitários, profissionais de marketing, arquitetos, jornalistas, professores e gente de áreas totalmente diferentes já migraram para UX/UI. O que conta é senso de comunicação, empatia com o usuário e vontade de aprender — e o livro mostra como usar a bagagem que você já tem como ponto de partida, com a IA acelerando o aprendizado.',
+  },
+  {
+    q: 'Tenho mais de 30, 40 anos. Não é tarde demais para migrar para UX/UI?',
+    a: 'Não. A maturidade profissional pesa a favor: repertório, visão de negócio e trato com clientes são exatamente o que falta a muitos iniciantes. O Capítulo 2 (\'Por que agora — não aos 20, não aos 50\') trata disso de frente. Idade não é barreira; a voz que diz \'é tarde\' é o que trava — e o livro começa desmontando ela.',
+  },
+  {
+    q: 'Quanto ganha um UX/UI designer — e dá para trabalhar remoto recebendo em dólar?',
+    a: 'No Brasil, salários de UX/UI costumam superar os do design gráfico tradicional, e o teto sobe muito ao atender clientes de fora do país. O autor migrou e passou a trabalhar remoto recebendo em dólar e euro para marcas como Mitsubishi, KIA e ServiceNow. A Parte IV mostra como multiplicar o valor cobrado e negociar salário, salto a salto.',
+  },
+  {
+    q: 'Quanto tempo leva para fazer a transição para UX/UI?',
+    a: 'Depende da sua base e dedicação, mas o livro encurta o caminho ao mostrar exatamente o que estudar, o que ignorar e em que ordem — sem promessa de vaga em 30 dias. Com o método (portfólio que conta história, primeiras conexões e a IA em cada etapa), você avança em semanas o que levaria meses tateando sozinho.',
+  },
 ];
 
 const bookSchema = {
@@ -134,12 +150,33 @@ const bookSchema = {
     '@type': 'Person',
     name: 'Wellington Mota',
     url: 'https://userexperience.com.br',
+    sameAs: [
+      'https://www.linkedin.com/in/wellingtonmota13/',
+      'https://www.behance.net/wellingtonmota',
+      'https://medium.com/@wellingtonmota',
+    ],
   },
+  publisher: { '@type': 'Person', name: 'Wellington Mota' },
   inLanguage: 'pt-BR',
   bookFormat: 'https://schema.org/EBook',
   numberOfPages: 66,
+  datePublished: '2026',
   image: 'https://userexperience.com.br/capa-livro-light.jpg',
+  url: 'https://userexperience.com.br/livro',
   description,
+  keywords:
+    'transição de carreira, UX design, UI design, design gráfico, migrar para UX/UI, carreira em UX, portfólio UX, Figma, inteligência artificial no design, trabalho remoto, receber em dólar',
+  about: [
+    { '@type': 'Thing', name: 'UX/UI Design' },
+    { '@type': 'Thing', name: 'Transição de carreira' },
+    { '@type': 'Thing', name: 'Design gráfico' },
+    { '@type': 'Thing', name: 'Inteligência artificial no design' },
+  ],
+  audience: {
+    '@type': 'Audience',
+    audienceType:
+      'Designers gráficos, publicitários, editoriais e profissionais de outras áreas em transição de carreira para UX/UI, especialmente acima dos 27 anos',
+  },
   offers: {
     '@type': 'Offer',
     price: '37.00',
@@ -147,6 +184,37 @@ const bookSchema = {
     availability: 'https://schema.org/InStock',
     url: 'https://userexperience.com.br/livro',
   },
+};
+
+/* FAQ estruturado — elegível a rich results no Google e citável por IA */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+/* Breadcrumb — situa a página para buscadores e IA */
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Wellington Mota',
+      item: 'https://userexperience.com.br/pt/',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Do Design ao Digital — o livro',
+      item: 'https://userexperience.com.br/livro',
+    },
+  ],
 };
 ---
 
@@ -164,6 +232,16 @@ const bookSchema = {
     type="application/ld+json"
     is:inline
     set:html={JSON.stringify(bookSchema)}
+  />
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(faqSchema)}
+  />
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(breadcrumbSchema)}
   />
 
   <!-- Nav enxuta da página de vendas -->
@@ -327,6 +405,32 @@ const bookSchema = {
             </div>
           ))
         }
+      </div>
+    </section>
+
+    <!-- 2b · Para quem é este livro (personas) -->
+    <section class="container-page pb-14 sm:pb-20 md:pb-28">
+      <SectionHeader
+        index="00"
+        label="Para quem é este livro"
+        title="Feito para quem está"
+        titleMuted="pronto para a virada."
+        caption="Se você se reconhece em algum destes perfis, este guia foi escrito para você."
+      />
+      <div class="mt-12 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+        {[
+          { t: 'Designers gráficos', d: 'Quem vem de agência, branding, editorial ou impresso e sente a carreira travar enquanto tudo migra para o digital.' },
+          { t: 'Publicitários e marketing', d: 'Profissionais de comunicação que querem entrar em produto digital reaproveitando repertório de campanha, texto e estratégia.' },
+          { t: 'Transição de carreira (27+)', d: 'Quem já tem estrada em outra área, passou dos 27, 30, 40 — e quer uma profissão digital, remota e mais bem paga.' },
+          { t: 'Vindos de outras áreas', d: 'Arquitetos, jornalistas, professores e afins buscando aprender UX/UI do zero, com método e com a IA a favor.' },
+          { t: 'Freelancers e autônomos', d: 'Quem cria por conta própria e quer subir de patamar entrando no mercado de produto, com clientes de maior valor.' },
+          { t: 'Quem quer receber em dólar', d: 'Designers que miram trabalho remoto para fora do Brasil e querem multiplicar o valor cobrado pelo próprio trabalho.' },
+        ].map((persona) => (
+          <div class="bg-ink p-7 sm:p-9" data-reveal data-reveal-group>
+            <h3 class="text-lg font-semibold tracking-tight text-cream">{persona.t}</h3>
+            <p class="mt-3 text-[14px] leading-relaxed text-mist">{persona.d}</p>
+          </div>
+        ))}
       </div>
     </section>
 
