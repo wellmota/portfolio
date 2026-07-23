@@ -165,9 +165,29 @@ const personSchema = {
         gtag('config', window.__GA_ID);
       };
 
-      // Dispara eventos com segurança (no-op enquanto o GA não estiver carregado)
+      // Meta Pixel — também só carrega depois do consentimento
+      window.__FB_ID = '37784116091377';
+      window.loadFB = function () {
+        if (window.__fbLoaded) return;
+        window.__fbLoaded = true;
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return; n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+          n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+          s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+        })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        window.fbq('init', window.__FB_ID);
+        window.fbq('track', 'PageView');
+      };
+
+      // Dispara eventos com segurança (no-op enquanto GA/Pixel não estiverem carregados)
       window.trackEvent = function (name, params) {
         try { window.gtag('event', name, params || {}); } catch (e) {}
+      };
+      window.trackFB = function (name, params) {
+        try { if (window.fbq) window.fbq('track', name, params || {}); } catch (e) {}
       };
 
       // Se já consentiu numa visita anterior, ativa e carrega agora
@@ -175,6 +195,7 @@ const personSchema = {
         if (localStorage.getItem('ux_consent') === 'granted') {
           gtag('consent', 'update', { analytics_storage: 'granted' });
           window.loadGA();
+          window.loadFB();
         }
       } catch (e) {}
     </script>
@@ -185,8 +206,8 @@ const personSchema = {
     <!-- Banner de consentimento (LGPD) -->
     <div id="cookie-consent" class="consent" hidden>
       <p class="consent__txt">
-        Usamos cookies do Google Analytics apenas para entender o tráfego do site.
-        Você escolhe.
+        Usamos cookies de análise (Google Analytics e Meta) para entender o tráfego
+        e medir nossos anúncios. Você escolhe.
       </p>
       <div class="consent__actions">
         <button type="button" data-consent="deny" class="consent__btn consent__btn--ghost">
@@ -272,9 +293,12 @@ const personSchema = {
               localStorage.setItem('ux_consent', grant ? 'granted' : 'denied');
             } catch (e) {}
             const w = window as any;
-            if (grant && typeof w.gtag === 'function') {
-              w.gtag('consent', 'update', { analytics_storage: 'granted' });
+            if (grant) {
+              if (typeof w.gtag === 'function') {
+                w.gtag('consent', 'update', { analytics_storage: 'granted' });
+              }
               if (typeof w.loadGA === 'function') w.loadGA();
+              if (typeof w.loadFB === 'function') w.loadFB();
             }
             el.hidden = true;
           });

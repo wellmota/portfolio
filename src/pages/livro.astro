@@ -627,29 +627,34 @@ const bookSchema = {
     const track = (name: string, params?: Record<string, unknown>) => {
       if (typeof w.trackEvent === 'function') w.trackEvent(name, params || {});
     };
+    const trackFB = (name: string, params?: Record<string, unknown>) => {
+      if (typeof w.trackFB === 'function') w.trackFB(name, params || {});
+    };
     const on = (sel: string, handler: () => void) => {
       document
         .querySelectorAll(sel)
         .forEach((el) => el.addEventListener('click', handler));
     };
 
-    // Clique em qualquer botão "Comprar" → begin_checkout (R$37)
-    on('a[href*="pay.kiwify"]', () =>
+    // Clique em qualquer botão "Comprar" → GA begin_checkout + Meta InitiateCheckout (R$37)
+    on('a[href*="pay.kiwify"]', () => {
       track('begin_checkout', {
         currency: 'BRL',
         value: 37,
         items: [
           { item_name: 'Do Design ao Digital', price: 37, quantity: 1 },
         ],
-      })
-    );
+      });
+      trackFB('InitiateCheckout', { currency: 'BRL', value: 37 });
+    });
 
-    // Download da amostra grátis
-    on('a[href*="amostra"]', () =>
+    // Download da amostra grátis → GA + Meta Lead
+    on('a[href*="amostra"]', () => {
       track('amostra_download', {
         file_name: 'amostra-do-design-ao-digital.pdf',
-      })
-    );
+      });
+      trackFB('Lead', { content_name: 'amostra Do Design ao Digital' });
+    });
 
     // Clique no WhatsApp
     on('a[href*="wa.me"]', () => track('whatsapp_click', {}));
