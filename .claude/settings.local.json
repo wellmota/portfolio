@@ -7,7 +7,25 @@
       "mcp__chrome-devtools__resize_page",
       "Bash(textutil *)",
       "Bash(vercel --prod)",
-      "Bash(vercel deploy *)"
+      "Bash(vercel deploy *)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/wellingtonmota/Desktop/projects/Portfolio/public/capa-livro.jpg /Users/wellingtonmota/Desktop/projects/Portfolio/public/capa-livro.png)",
+      "Bash(pdftotext -f 1 -l 6 livro/Do-design-ao-digital_miolo.pdf -)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:4321/livro)",
+      "Bash(grep -o -E '<title>[^<]+</title>|og:image\" content=\"[^\"]+|Comprar agora|R\\\\$ 27,00|R\\\\$ 39,00|amostra-do-design-ao-digital|A IA em cada etapa do processo|Quebre barreiras|450 mi|Wellington Mota')",
+      "Bash(lsof -ti:4321)",
+      "Bash(xargs kill)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=848,1264 --virtual-time-budget=15000 --screenshot=/private/tmp/claude-501/-Users-wellingtonmota-Desktop-projects-Portfolio/319b6b7f-8558-4015-a1e7-5fd775fd1226/scratchpad/capa/capa-dark.png file:///private/tmp/claude-501/-Users-wellingtonmota-Desktop-projects-Portfolio/319b6b7f-8558-4015-a1e7-5fd775fd1226/scratchpad/capa/cover.html?theme=dark)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=848,1264 --virtual-time-budget=15000 --screenshot=/private/tmp/claude-501/-Users-wellingtonmota-Desktop-projects-Portfolio/319b6b7f-8558-4015-a1e7-5fd775fd1226/scratchpad/capa/capa-light.png file:///private/tmp/claude-501/-Users-wellingtonmota-Desktop-projects-Portfolio/319b6b7f-8558-4015-a1e7-5fd775fd1226/scratchpad/capa/cover.html?theme=light)",
+      "Bash(cp /private/tmp/claude-501/-Users-wellingtonmota-Desktop-projects-Portfolio/319b6b7f-8558-4015-a1e7-5fd775fd1226/scratchpad/capa/capa-dark.png /Users/wellingtonmota/Desktop/projects/Portfolio/public/capa-livro-dark.png)",
+      "Bash(cp /private/tmp/claude-501/-Users-wellingtonmota-Desktop-projects-Portfolio/319b6b7f-8558-4015-a1e7-5fd775fd1226/scratchpad/capa/capa-light.png /Users/wellingtonmota/Desktop/projects/Portfolio/public/capa-livro-light.png)",
+      "Bash(sips --resampleWidth 720 -s format jpeg -s formatOptions 88 capa-livro-dark.png --out capa-livro-dark.jpg)",
+      "Bash(sips --resampleWidth 720 -s format jpeg -s formatOptions 88 capa-livro-light.png --out capa-livro-light.jpg)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/wellingtonmota/Desktop/projects/Portfolio/public/capa-livro-dark.jpg)",
+      "Bash(gh repo *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
