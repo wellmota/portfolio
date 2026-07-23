@@ -7,6 +7,14 @@ const lang = 'pt' as const;
 /* Checkout do produto na Kiwify — R$ 37 (de R$ 57) */
 const BUY_URL = 'https://pay.kiwify.com.br/iDcoBhO';
 const SAMPLE_URL = '/amostra-do-design-ao-digital.pdf';
+
+/* Captura de e-mail antes da amostra (lead magnet).
+   Preencha LEAD_ENDPOINT com o "action" do formulario da sua ferramenta de e-mail
+   (MailerLite / Brevo / etc.) e ajuste os nomes dos campos abaixo.
+   Enquanto LEAD_ENDPOINT estiver vazio, o download continua direto (sem captura). */
+const LEAD_ENDPOINT = '';
+const LEAD_FIELD_NAME = 'fields[name]';
+const LEAD_FIELD_EMAIL = 'fields[email]';
 const WHATSAPP_URL = 'https://wa.me/5561981043296';
 
 const PRICE_FULL = 'R$ 57,00';
@@ -722,6 +730,64 @@ const breadcrumbSchema = {
       </p>
     </div>
   </footer>
+
+  <!-- Gate de e-mail da amostra gratis -->
+  <div
+    id="lead-gate"
+    class="lead-gate"
+    data-endpoint={LEAD_ENDPOINT}
+    data-sample={SAMPLE_URL}
+    data-fname={LEAD_FIELD_NAME}
+    data-femail={LEAD_FIELD_EMAIL}
+    hidden
+  >
+    <div class="lead-gate__backdrop" data-close></div>
+    <div
+      class="lead-gate__card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="lead-gate-title"
+    >
+      <button
+        class="lead-gate__x"
+        type="button"
+        data-close
+        aria-label="Fechar"
+      >&times;</button>
+      <p class="lead-gate__kicker mono">[ AMOSTRA GRATIS ]</p>
+      <h3 id="lead-gate-title" class="lead-gate__title">
+        Receba a amostra no seu e-mail
+      </h3>
+      <p class="lead-gate__sub">
+        Deixe seu nome e e-mail que eu te envio a abertura do livro agora &mdash;
+        mais conteudo sobre a transicao para UX/UI.
+      </p>
+      <form class="lead-gate__form" novalidate>
+        <input
+          class="lead-gate__input"
+          type="text"
+          name="name"
+          placeholder="Seu nome"
+          autocomplete="name"
+          required
+        />
+        <input
+          class="lead-gate__input"
+          type="email"
+          name="email"
+          placeholder="Seu melhor e-mail"
+          autocomplete="email"
+          required
+        />
+        <button class="lead-gate__submit" type="submit">
+          Quero a amostra gratis
+        </button>
+        <p class="lead-gate__hint mono" data-role="status">
+          Sem spam. So a amostra e conteudo de carreira.
+        </p>
+      </form>
+    </div>
+  </div>
 </Layout>
 
 <script>
@@ -752,13 +818,88 @@ const breadcrumbSchema = {
       trackFB('InitiateCheckout', { currency: 'BRL', value: 37 });
     });
 
-    // Download da amostra grátis → GA + Meta Lead
-    on('a[href*="amostra"]', () => {
+    // Download da amostra grátis → GA + Meta Lead (+ captura de e-mail opcional)
+    const fireLeadEvents = () => {
       track('amostra_download', {
         file_name: 'amostra-do-design-ao-digital.pdf',
       });
       trackFB('Lead', { content_name: 'amostra Do Design ao Digital' });
-    });
+    };
+
+    const gate = document.getElementById('lead-gate');
+    const gEndpoint = gate ? gate.getAttribute('data-endpoint') || '' : '';
+
+    if (gate && gEndpoint) {
+      const gSample = gate.getAttribute('data-sample') || '/';
+      const gFName = gate.getAttribute('data-fname') || 'name';
+      const gFEmail = gate.getAttribute('data-femail') || 'email';
+      const form = gate.querySelector('form') as HTMLFormElement | null;
+      const status = gate.querySelector('[data-role="status"]');
+      let sending = false;
+
+      const openGate = () => {
+        gate.hidden = false;
+        document.body.style.overflow = 'hidden';
+        const first = gate.querySelector('input') as HTMLInputElement | null;
+        if (first) first.focus();
+      };
+      const closeGate = () => {
+        gate.hidden = true;
+        document.body.style.overflow = '';
+      };
+
+      document.querySelectorAll('a[href*="amostra"]').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          openGate();
+        });
+      });
+      gate.querySelectorAll('[data-close]').forEach((el) =>
+        el.addEventListener('click', closeGate)
+      );
+      document.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Escape' && !gate.hidden) closeGate();
+      });
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (sending) return;
+          const nameEl = form.querySelector('input[name="name"]') as HTMLInputElement | null;
+          const emailEl = form.querySelector('input[name="email"]') as HTMLInputElement | null;
+          const nameVal = ((nameEl && nameEl.value) || '').trim();
+          const emailVal = ((emailEl && emailEl.value) || '').trim();
+          if (!emailVal || !/.+@.+\..+/.test(emailVal)) {
+            if (emailEl) emailEl.focus();
+            if (status) status.textContent = 'Digite um e-mail válido.';
+            return;
+          }
+          sending = true;
+          if (status) status.textContent = 'Enviando...';
+          const params = new URLSearchParams();
+          params.set(gFEmail, emailVal);
+          if (nameVal) params.set(gFName, nameVal);
+          const done = () => {
+            fireLeadEvents();
+            if (status) status.textContent = 'Pronto! Abrindo a amostra...';
+            window.open(gSample, '_blank', 'noopener');
+            setTimeout(closeGate, 900);
+            sending = false;
+          };
+          fetch(gEndpoint, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: params.toString(),
+          })
+            .then(done)
+            .catch(done);
+        });
+      }
+    } else {
+      // Sem captura configurada: download direto (comportamento atual)
+      on('a[href*="amostra"]', fireLeadEvents);
+    }
 
     // Clique no WhatsApp
     on('a[href*="wa.me"]', () => track('whatsapp_click', {}));
@@ -771,5 +912,103 @@ const breadcrumbSchema = {
     border-color: var(--color-line);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+  }
+
+  .lead-gate[hidden] {
+    display: none;
+  }
+  .lead-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+  .lead-gate__backdrop {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-ink) 78%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .lead-gate__card {
+    position: relative;
+    width: min(440px, 100%);
+    background: var(--color-ink);
+    border: 1px solid var(--color-line);
+    padding: 34px 30px 30px;
+  }
+  .lead-gate__x {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: none;
+    border: 0;
+    color: var(--color-faint);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .lead-gate__x:hover {
+    color: var(--color-cream);
+  }
+  .lead-gate__kicker {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--color-lime);
+    margin: 0 0 12px;
+  }
+  .lead-gate__title {
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 800;
+    line-height: 1.12;
+    margin: 0 0 10px;
+    color: var(--color-cream);
+  }
+  .lead-gate__sub {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-faint);
+    margin: 0 0 20px;
+  }
+  .lead-gate__form {
+    display: grid;
+    gap: 12px;
+  }
+  .lead-gate__input {
+    width: 100%;
+    padding: 13px 14px;
+    background: color-mix(in srgb, var(--color-cream) 4%, transparent);
+    border: 1px solid var(--color-line);
+    color: var(--color-cream);
+    font-size: 15px;
+  }
+  .lead-gate__input::placeholder {
+    color: color-mix(in srgb, var(--color-faint) 80%, transparent);
+  }
+  .lead-gate__input:focus {
+    outline: none;
+    border-color: var(--color-lime);
+  }
+  .lead-gate__submit {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--color-lime);
+    color: var(--color-ink);
+    border: 0;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .lead-gate__submit:hover {
+    opacity: 0.9;
+  }
+  .lead-gate__hint {
+    font-size: 11px;
+    color: var(--color-faint);
+    text-align: center;
+    margin: 4px 0 0;
   }
 </style>
