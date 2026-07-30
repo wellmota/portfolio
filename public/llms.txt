@@ -32,7 +32,7 @@ accessibility and performance.
 - Built a design system used by 3 cross-functional teams
 - ~40% reduction in handoff time; ~28% increase in feature adoption
 - Technical leadership role; works with stakeholders across the globe
-- Education: Analysis & Systems Development; MBA in Fullstack (in progress)
+- Education: Analysis & Systems Development; MBA in Fullstack Development
 - Languages: Portuguese (native), English (advanced — has served UK and US clients)
 
 ## Selected clients & brands

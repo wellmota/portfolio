@@ -51,7 +51,7 @@ const en: SiteData = {
       'I close the gap between design and code: research, design, and ship.',
     body: [
       'I am a Product Engineer at the intersection of design systems, component architecture, and user-centered product thinking. From UX research and high-fidelity prototypes to production React/TypeScript code, integrated with REST and GraphQL APIs.',
-      '15+ years in product design and 3+ years shipping front-end on modern stacks (React, Next.js, Node.js). Degree in Systems Analysis and Development, MBA in Fullstack (in progress). I thrive on lean teams where one person can own the entire experience — cutting delivery time and handoff noise.',
+      '15+ years in product design and 3+ years shipping front-end on modern stacks (React, Next.js, Node.js). Degree in Systems Analysis and Development, MBA in Fullstack Development. I thrive on lean teams where one person can own the entire experience — cutting delivery time and handoff noise.',
     ],
     signatureRole: 'Design + Code',
   },
@@ -240,7 +240,7 @@ const en: SiteData = {
 
   testimonials: [
     {
-      quote: 'Muito legal! Inclusive, o texto ficou ótimo. Você tem um toque mágico… vai em frente!',
+      quote: 'Really cool! The copy turned out great, by the way. You have a magic touch… keep going!',
       author: 'J. C. Nery',
       company: 'Director of Innovation & Technology · Mitsubishi',
       logo: '/logos/mitsubishi.svg',
@@ -254,7 +254,7 @@ const en: SiteData = {
       tag: 'App Design',
     },
     {
-      quote: 'Cara, essa nova versão tá maravilhosa. Parabéns — mandou muito bem!',
+      quote: 'Man, this new version is stunning. Congrats — you nailed it!',
       author: 'Fernando Cardoso',
       company: 'CEO HyperGestor · Head of Innovation, Mitsubishi Motors',
       logo: 'https://www.hypergestor.com.br/templates/hypergestor/images/hypergestor-light-mode-CdjvtdrG.svg',
@@ -267,11 +267,11 @@ const en: SiteData = {
       tag: 'UI/UX',
     },
     {
-      quote: 'Você mandou bem demais na criação do site, nas ideias e aprimoramentos. Você realmente é um cara diferenciado e estou muito feliz que você esteja no time. Parabéns!',
+      quote: 'You did an amazing job on the website, the ideas, and the refinements. You truly are one of a kind, and I’m really happy you’re on the team. Congrats!',
       author: 'Cadu',
       company: 'Head of Marketing · Tutory',
       logo: 'https://www.tutory.com.br/tutory-logo-v2.svg',
-      tag: 'Site',
+      tag: 'Website',
     },
     {
       quote: "You've really made a difference! It's fantastic to see the work you guys are doing start to make an impact on actual revenue.",
@@ -281,7 +281,7 @@ const en: SiteData = {
       tag: 'App Design',
     },
     {
-      quote: 'Boa, meu mano! Caraca, arrepiei.',
+      quote: 'Nice one, bro! Wow, I got goosebumps.',
       author: 'Marlom Andrade',
       company: 'CEO & Founder · Tutory',
       logo: 'https://www.tutory.com.br/tutory-logo-v2.svg',
@@ -301,11 +301,11 @@ const en: SiteData = {
       tag: 'Packaging',
     },
     {
-      quote: 'Meu Deus, meu Deus, meu Deus. Sinistro, Well!',
+      quote: 'Oh my God, oh my God, oh my God. This is insane, Well!',
       author: 'Letícia Sousa',
       company: 'Marketing · Tutory',
       logo: 'https://www.tutory.com.br/tutory-logo-v2.svg',
-      tag: 'Site',
+      tag: 'Website',
     },
   ],
 
