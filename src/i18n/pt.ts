@@ -167,6 +167,28 @@ const pt: SiteData = {
   ],
 
   projects: [
+    /* Case studies em espera — descomente para publicar
+    {
+      title: 'VESS Studio',
+      meta: 'Wellness · Case Study',
+      categories: ['Product', 'App', 'Web'],
+      description:
+        'Sistema completo para estúdio premium de Pilates: site, app iOS/Android, admin multi-unidade, pagamentos e agendamentos — solo, do conceito à App Store. Ver case study →',
+      image: '/cases/vess/site-hero.jpg',
+      accent: '#d8b98a',
+      href: '/pt/work/vess',
+    },
+    {
+      title: 'Tutory',
+      meta: 'EdTech · Case Study',
+      categories: ['Product', 'Branding', 'Web'],
+      description:
+        'Rebranding, site, plataforma white-label, CMS próprio e dashboard executivo para o ecossistema de educação — 9 meses, solo. Ver case study →',
+      image: '/cases/tutory/site-hero.jpg',
+      accent: '#3B7BF5',
+      href: '/pt/work/tutory',
+    },
+    */
     {
       title: 'Kia Telluride LX',
       meta: 'Automotivo · Landing Page',
