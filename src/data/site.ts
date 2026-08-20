@@ -10,7 +10,7 @@ export const profile = {
   role: 'Product Engineer — Design + Fullstack',
   roleAi: 'AI Specialist',
   tagline:
-    'Product Engineer que faz as duas pontas: desenho e entrego o produto digital completo — do protótipo à aplicação fullstack React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy — MVPs no ar em dias, não meses.',
+    'Product Engineer que faz as duas pontas: desenho e entrego o produto digital completo — do protótipo à aplicação fullstack React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: spec-driven development, agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy — MVPs no ar em dias, não meses.',
   location: 'Brasília, BR',
   timezone: 'America/Sao_Paulo',
   email: 'wellingtonmota42@gmail.com',
@@ -69,6 +69,7 @@ export const marquee = [
   'UX Research',
   'Tailwind CSS',
   'Node.js',
+  'Spec-Driven Development',
   'Agent Orchestration',
   'Prompt Engineering',
   'Evals',
@@ -122,15 +123,15 @@ export const services = [
     index: '04',
     icon: 'ai',
     title: 'AI Engineering & Orchestration',
-    metaLeft: 'Agents · LLM',
+    metaLeft: 'Specs · Agents · LLM',
     badge: 'ADVANCED',
     points: [
+      'Spec-driven development',
       'Orquestração de agentes (MCP)',
       'Evals & qualidade no CI',
-      'Otimização de token & custo',
       'RAG na interface do produto',
     ],
-    ai: 'Pipelines multi-agente, prompts versionados como código, caching inteligente e evals LLM-as-judge no CI.',
+    ai: 'Specs executáveis viram código: pipelines multi-agente, prompts versionados e evals LLM-as-judge no CI.',
   },
   {
     index: '05',
@@ -372,7 +373,7 @@ export const faqs = [
   },
   {
     q: 'Como você usa IA no seu trabalho?',
-    a: 'Muito além de autocompletar código. Orquestro agentes e fluxos multi-etapa (com MCP), versiono e testo prompts como código, otimizo custo/tokens (caching e roteamento de modelos) e uso evals com LLM-as-judge para garantir qualidade antes do deploy — integrando features de IA direto na interface do produto.',
+    a: 'Muito além de autocompletar código. Trabalho com spec-driven development: a especificação vira a fonte da verdade e agentes orquestrados em fluxos multi-etapa (com MCP) a transformam em código. Versiono e testo prompts como código, otimizo custo/tokens (caching e roteamento de modelos) e uso evals com LLM-as-judge para garantir qualidade antes do deploy — integrando features de IA direto na interface do produto.',
   },
   {
     q: 'Você é um "vibe coder"? Só joga prompt e aceita o que vier?',

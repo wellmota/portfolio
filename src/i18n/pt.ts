@@ -7,7 +7,7 @@ const pt: SiteData = {
     role: 'Product Engineer — Design + Fullstack',
     roleAi: 'AI Specialist',
     tagline:
-      'Product Engineer que faz as duas pontas: desenho e entrego o produto digital completo — do protótipo à aplicação fullstack React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy — MVPs no ar em dias, não meses.',
+      'Product Engineer que faz as duas pontas: desenho e entrego o produto digital completo — do protótipo à aplicação fullstack React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: spec-driven development, agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy — MVPs no ar em dias, não meses.',
     location: 'Brasília, BR',
     timezone: 'America/Sao_Paulo',
     email: 'wellingtonmota42@gmail.com',
@@ -58,8 +58,8 @@ const pt: SiteData = {
 
   marquee: [
     'React', 'Next.js', 'TypeScript', 'Design Systems', 'Figma',
-    'UX Research', 'Tailwind CSS', 'Node.js', 'Agent Orchestration',
-    'Prompt Engineering', 'Evals', 'MCP', 'RAG', 'Token Optimization',
+    'UX Research', 'Tailwind CSS', 'Node.js', 'Spec-Driven Development',
+    'Agent Orchestration', 'Prompt Engineering', 'Evals', 'MCP', 'RAG', 'Token Optimization',
   ],
 
   services: [
@@ -106,15 +106,15 @@ const pt: SiteData = {
       index: '04',
       icon: 'ai',
       title: 'AI Engineering & Orchestration',
-      metaLeft: 'Agents · LLM',
+      metaLeft: 'Specs · Agents · LLM',
       badge: 'ADVANCED',
       points: [
+        'Spec-driven development',
         'Orquestração de agentes (MCP)',
         'Evals & qualidade no CI',
-        'Otimização de token & custo',
         'RAG na interface do produto',
       ],
-      ai: 'Pipelines multi-agente, prompts versionados como código, caching inteligente e evals LLM-as-judge no CI.',
+      ai: 'Specs executáveis viram código: pipelines multi-agente, prompts versionados e evals LLM-as-judge no CI.',
     },
     {
       index: '05',
@@ -328,7 +328,7 @@ const pt: SiteData = {
     },
     {
       q: 'Como você usa IA no seu trabalho?',
-      a: 'Muito além de autocompletar código. Orquestro agentes e fluxos multi-etapa (com MCP), versiono e testo prompts como código, otimizo custo/tokens (caching e roteamento de modelos) e uso evals com LLM-as-judge para garantir qualidade antes do deploy — integrando features de IA direto na interface do produto.',
+      a: 'Muito além de autocompletar código. Trabalho com spec-driven development: a especificação vira a fonte da verdade e agentes orquestrados em fluxos multi-etapa (com MCP) a transformam em código. Versiono e testo prompts como código, otimizo custo/tokens (caching e roteamento de modelos) e uso evals com LLM-as-judge para garantir qualidade antes do deploy — integrando features de IA direto na interface do produto.',
     },
     {
       q: 'Você é um "vibe coder"? Só joga prompt e aceita o que vier?',
@@ -394,7 +394,7 @@ const pt: SiteData = {
     sectionWork: { index: '04', label: 'Projetos em destaque', title: 'Onde deixei', titleMuted: 'minha marca.', caption: 'Projetos para grandes empresas e instituições — do Brasil ao Reino Unido e EUA.' },
     sectionTestimonials: { index: '05', label: 'Depoimentos', title: 'O que dizem', titleMuted: 'sobre o trabalho.', caption: 'Feedback real de founders, CEOs e heads de produto do Brasil, Reino Unido e EUA.' },
     sectionFaq: { index: '07', label: 'Perguntas frequentes', title: 'Dúvidas?', titleMuted: 'Respondidas.', caption: '' },
-    sectionWriting: { index: '08', label: 'Escrita', title: 'Penso em voz', titleMuted: 'alta.', caption: 'Artigos sobre design, front-end e a interseção entre os dois.' },
+    sectionWriting: { index: '08', label: 'Escrita & Código', title: 'Penso em voz alta.', titleMuted: 'E entrego.', caption: 'Artigos no Medium, código no GitHub — pensamento e entrega lado a lado.' },
     sectionGithub: { index: '09', label: 'GitHub', title: 'Sempre', titleMuted: 'entregando.', caption: 'contribuições no último ano', legendLess: 'Menos', legendMore: 'Mais', cta: 'Seguir no GitHub →' },
   },
 };

@@ -7,7 +7,7 @@ const en: SiteData = {
     role: 'Product Engineer — Design + Fullstack',
     roleAi: 'AI Specialist',
     tagline:
-      'Product Engineer who owns both sides: I design and ship the complete digital product — from prototype to fullstack React/TypeScript application in production, no handoff, from discovery to metrics. And I use AI beyond autocomplete: orchestrated agents, version-controlled prompts, and evals ensuring quality before deploy — MVPs shipped in days, not months.',
+      'Product Engineer who owns both sides: I design and ship the complete digital product — from prototype to fullstack React/TypeScript application in production, no handoff, from discovery to metrics. And I use AI beyond autocomplete: spec-driven development, orchestrated agents, version-controlled prompts, and evals ensuring quality before deploy — MVPs shipped in days, not months.',
     location: 'Brasília, BR',
     timezone: 'America/Sao_Paulo',
     email: 'wellingtonmota42@gmail.com',
@@ -58,8 +58,8 @@ const en: SiteData = {
 
   marquee: [
     'React', 'Next.js', 'TypeScript', 'Design Systems', 'Figma',
-    'UX Research', 'Tailwind CSS', 'Node.js', 'Agent Orchestration',
-    'Prompt Engineering', 'Evals', 'MCP', 'RAG', 'Token Optimization',
+    'UX Research', 'Tailwind CSS', 'Node.js', 'Spec-Driven Development',
+    'Agent Orchestration', 'Prompt Engineering', 'Evals', 'MCP', 'RAG', 'Token Optimization',
   ],
 
   services: [
@@ -106,15 +106,15 @@ const en: SiteData = {
       index: '04',
       icon: 'ai',
       title: 'AI Engineering & Orchestration',
-      metaLeft: 'Agents · LLM',
+      metaLeft: 'Specs · Agents · LLM',
       badge: 'ADVANCED',
       points: [
+        'Spec-driven development',
         'Agent orchestration (MCP)',
         'Evals & CI quality gates',
-        'Token & cost optimization',
         'RAG in the product UI',
       ],
-      ai: 'Multi-agent pipelines, version-controlled prompts, smart caching, and LLM-as-judge evals in CI.',
+      ai: 'Executable specs become code: multi-agent pipelines, version-controlled prompts, and LLM-as-judge evals in CI.',
     },
     {
       index: '05',
@@ -328,7 +328,7 @@ const en: SiteData = {
     },
     {
       q: 'How do you use AI in your work?',
-      a: 'Far beyond code autocomplete. I orchestrate agents and multi-step flows (with MCP), version and test prompts as code, optimize cost/tokens (caching and model routing), and use LLM-as-judge evals to ensure quality before deploy — integrating AI features directly into the product UI.',
+      a: 'Far beyond code autocomplete. I work spec-driven: the specification becomes the source of truth, and orchestrated agents in multi-step flows (with MCP) turn it into code. I version and test prompts as code, optimize cost/tokens (caching and model routing), and use LLM-as-judge evals to ensure quality before deploy — integrating AI features directly into the product UI.',
     },
     {
       q: 'Are you a "vibe coder"? Just throw prompts and accept whatever comes out?',
@@ -394,7 +394,7 @@ const en: SiteData = {
     sectionWork: { index: '04', label: 'Featured projects', title: 'Where I left', titleMuted: 'my mark.', caption: 'Projects for major companies and institutions — from Brazil to the UK and US.' },
     sectionTestimonials: { index: '05', label: 'Testimonials', title: 'What they say', titleMuted: 'about the work.', caption: 'Real feedback from founders, CEOs, and product heads from Brazil, the UK, and US.' },
     sectionFaq: { index: '07', label: 'FAQ', title: 'Questions?', titleMuted: 'Answered.', caption: '' },
-    sectionWriting: { index: '08', label: 'Writing', title: 'Thinking out', titleMuted: 'loud.', caption: 'Articles on design, front-end, and the intersection of both.' },
+    sectionWriting: { index: '08', label: 'Writing & Code', title: 'Thinking out loud.', titleMuted: 'And shipping.', caption: 'Articles on Medium, code on GitHub — thinking and shipping side by side.' },
     sectionGithub: { index: '09', label: 'GitHub', title: 'Always', titleMuted: 'shipping.', caption: 'contributions in the last year', legendLess: 'Less', legendMore: 'More', cta: 'Follow on GitHub →' },
   },
 };
