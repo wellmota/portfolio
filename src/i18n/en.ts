@@ -4,10 +4,10 @@ const en: SiteData = {
   profile: {
     name: 'Wellington Mota',
     firstName: 'Wellington',
-    role: 'Product Engineer — Design + Front-end',
+    role: 'Product Engineer — Design + Fullstack',
     roleAi: 'AI Specialist',
     tagline:
-      'Product Engineer who owns both sides: I create high-fidelity prototypes and ship React/TypeScript to production — no handoff, from discovery to metrics. And I use AI beyond autocomplete: orchestrated agents, version-controlled prompts, and evals ensuring quality before deploy.',
+      'Product Engineer who owns both sides: I design and ship the complete digital product — from prototype to fullstack React/TypeScript application in production, no handoff, from discovery to metrics. And I use AI beyond autocomplete: orchestrated agents, version-controlled prompts, and evals ensuring quality before deploy — MVPs shipped in days, not months.',
     location: 'Brasília, BR',
     timezone: 'America/Sao_Paulo',
     email: 'wellingtonmota42@gmail.com',
@@ -50,7 +50,7 @@ const en: SiteData = {
     heading:
       'I close the gap between design and code: research, design, and ship.',
     body: [
-      'I am a Product Engineer at the intersection of design systems, component architecture, and user-centered product thinking. From UX research and high-fidelity prototypes to production React/TypeScript code, integrated with REST and GraphQL APIs.',
+      'I am a Product Engineer at the intersection of design systems, component architecture, and user-centered product thinking. From UX research and high-fidelity prototypes to fullstack applications in production — React/TypeScript integrated with REST and GraphQL APIs.',
       '15+ years in product design and 3+ years shipping front-end on modern stacks (React, Next.js, Node.js). Degree in Systems Analysis and Development, MBA in Fullstack Development. I thrive on lean teams where one person can own the entire experience — cutting delivery time and handoff noise.',
     ],
     signatureRole: 'Design + Code',

@@ -7,10 +7,10 @@
 export const profile = {
   name: 'Wellington Mota',
   firstName: 'Wellington',
-  role: 'Product Engineer — Design + Front-end',
+  role: 'Product Engineer — Design + Fullstack',
   roleAi: 'AI Specialist',
   tagline:
-    'Product Engineer que faz as duas pontas: pesquiso e crio protótipos de alta fidelidade e entrego em React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy.',
+    'Product Engineer que faz as duas pontas: desenho e entrego o produto digital completo — do protótipo à aplicação fullstack React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy — MVPs no ar em dias, não meses.',
   location: 'Brasília, BR',
   timezone: 'America/Sao_Paulo',
   email: 'wellingtonmota42@gmail.com',
@@ -54,8 +54,8 @@ export const about = {
   heading:
     'Fecho a distância entre design e código: pesquiso, desenho e coloco no ar.',
   body: [
-    'Sou Product Engineer no cruzamento entre design systems, arquitetura de componentes e pensamento de produto centrado no usuário. Vou da pesquisa de UX e protótipos de alta fidelidade até o código React/TypeScript em produção, integrado a APIs REST e GraphQL.',
-    '15+ anos em design de produto e 3+ anos entregando front-end em stacks modernas (React, Next.js, Node.js). Graduação em Análise e Desenvolvimento de Sistemas e MBA em Fullstack Development. Brilho em times enxutos onde uma pessoa consegue ser dona da experiência inteira — cortando tempo de entrega e ruído no handoff.',
+    'Sou Product Engineer no cruzamento entre design systems, arquitetura de componentes e pensamento de produto centrado no usuário. Vou da pesquisa de UX e do protótipo de alta fidelidade à aplicação fullstack em produção — React/TypeScript integrado a APIs REST e GraphQL.',
+    '15+ anos em design de produto e 3+ anos entregando front-end em stacks modernas (React, Next.js, Node.js). Graduação em Análise e Desenvolvimento de Sistemas e MBA em Fullstack Development. Me sinto em casa em times enxutos onde uma pessoa consegue ser dona da experiência inteira — cortando tempo de entrega e ruído no handoff.',
   ],
   signatureRole: 'Design + Código',
 };
