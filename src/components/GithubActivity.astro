@@ -1,0 +1,232 @@
+---
+import { getSiteData, type Locale } from '../i18n';
+import SectionHeader from './SectionHeader.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const t = data.ui.sectionGithub;
+
+const GITHUB_USER = 'wellmota';
+
+interface Day {
+  date: string;
+  level: number; // 0–4, escala do próprio GitHub
+  count: number | null;
+}
+interface Calendar {
+  weeks: Day[][];
+  total: number | null;
+}
+
+const LEVEL_BY_NAME: Record<string, number> = {
+  NONE: 0,
+  FIRST_QUARTILE: 1,
+  SECOND_QUARTILE: 2,
+  THIRD_QUARTILE: 3,
+  FOURTH_QUARTILE: 4,
+};
+
+async function fromGraphQL(token: string): Promise<Calendar | null> {
+  const res = await fetch('https://api.github.com/graphql', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'User-Agent': 'portfolio-build',
+    },
+    body: JSON.stringify({
+      query: `query($login: String!) {
+        user(login: $login) {
+          contributionsCollection {
+            contributionCalendar {
+              totalContributions
+              weeks { contributionDays { date contributionCount contributionLevel } }
+            }
+          }
+        }
+      }`,
+      variables: { login: GITHUB_USER },
+    }),
+  });
+  if (!res.ok) return null;
+  const json = await res.json();
+  const cal = json?.data?.user?.contributionsCollection?.contributionCalendar;
+  if (!cal?.weeks?.length) return null;
+  return {
+    total: cal.totalContributions ?? null,
+    weeks: cal.weeks.map((w: { contributionDays: { date: string; contributionCount: number; contributionLevel: string }[] }) =>
+      w.contributionDays.map((d) => ({
+        date: d.date,
+        count: d.contributionCount,
+        level: LEVEL_BY_NAME[d.contributionLevel] ?? 0,
+      }))
+    ),
+  };
+}
+
+/** Fallback sem token: a página pública de contribuições já traz data-date/data-level. */
+async function fromPublicPage(): Promise<Calendar | null> {
+  const res = await fetch(`https://github.com/users/${GITHUB_USER}/contributions`, {
+    headers: {
+      'User-Agent': 'portfolio-build',
+      Accept: 'text/html',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+  });
+  if (!res.ok) return null;
+  const html = await res.text();
+
+  const days: Day[] = [];
+  for (const tag of html.match(/<td[^>]*ContributionCalendar-day[^>]*>/g) ?? []) {
+    const date = tag.match(/data-date="([\d-]+)"/)?.[1];
+    const level = tag.match(/data-level="(\d)"/)?.[1];
+    if (date && level) days.push({ date, level: Number(level), count: null });
+  }
+  if (!days.length) return null;
+  days.sort((a, b) => a.date.localeCompare(b.date));
+
+  // O HTML vem em linhas por dia da semana; reconstruímos as colunas (semanas) pela data
+  const weeks: Day[][] = [];
+  for (const day of days) {
+    const dow = new Date(`${day.date}T00:00:00Z`).getUTCDay();
+    if (dow === 0 || !weeks.length) weeks.push([]);
+    weeks[weeks.length - 1].push(day);
+  }
+
+  const total = html.match(/([\d.,]+)\s+contributions?\s+in the last year/i)?.[1];
+  return { weeks, total: total ? Number(total.replace(/[.,]/g, '')) : null };
+}
+
+let calendar: Calendar | null = null;
+try {
+  const token = import.meta.env.GITHUB_TOKEN ?? process.env.GITHUB_TOKEN;
+  if (token) calendar = await fromGraphQL(token).catch(() => null);
+  if (!calendar) calendar = await fromPublicPage();
+} catch {
+  calendar = null;
+}
+
+// Geometria do gráfico
+const CELL = 11;
+const GAP = 3;
+const STEP = CELL + GAP;
+const TOP = 20; // faixa dos rótulos de mês
+const weeks = calendar?.weeks ?? [];
+const svgWidth = weeks.length * STEP - GAP;
+const svgHeight = TOP + 7 * STEP - GAP;
+
+const FILL_OPACITY = [0, 0.22, 0.45, 0.7, 1];
+
+const monthFmt = new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : 'en-US', { month: 'short', timeZone: 'UTC' });
+const dayFmt = new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : 'en-US', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+const monthLabels: { x: number; label: string }[] = [];
+let lastMonth = -1;
+weeks.forEach((week, i) => {
+  const first = week[0];
+  if (!first) return;
+  const m = new Date(`${first.date}T00:00:00Z`).getUTCMonth();
+  if (m !== lastMonth) {
+    lastMonth = m;
+    monthLabels.push({ x: i * STEP, label: monthFmt.format(new Date(`${first.date}T00:00:00Z`)) });
+  }
+});
+// A primeira coluna é mês parcial — some com o rótulo se ficar colado no seguinte
+if (monthLabels.length > 1 && monthLabels[1].x - monthLabels[0].x < 2 * STEP) {
+  monthLabels.shift();
+}
+
+const totalLabel = calendar?.total != null ? `${calendar.total.toLocaleString(lang === 'pt' ? 'pt-BR' : 'en-US')} ${t.caption}` : undefined;
+---
+
+{
+  calendar && (
+    <section id="github" class="container-page py-14 sm:py-20 md:py-32">
+      <SectionHeader
+        index={t.index}
+        label={t.label}
+        title={t.title}
+        titleMuted={t.titleMuted}
+        caption={totalLabel}
+      />
+
+      <div class="mt-16 border border-line bg-ink-soft p-4 sm:p-6" data-reveal>
+        <div class="overflow-x-auto">
+          <svg
+            width={svgWidth}
+            height={svgHeight}
+            viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+            role="img"
+            aria-label={totalLabel ?? t.label}
+            class="block"
+            style="min-width: 640px"
+          >
+            {monthLabels.map((m) => (
+              <text x={m.x} y="10" class="gh-month">
+                {m.label}
+              </text>
+            ))}
+            {weeks.map((week, wi) =>
+              week.map((day) => {
+                const dow = new Date(`${day.date}T00:00:00Z`).getUTCDay();
+                return (
+                  <rect
+                    x={wi * STEP}
+                    y={TOP + dow * STEP}
+                    width={CELL}
+                    height={CELL}
+                    rx="2"
+                    fill={day.level === 0 ? 'var(--color-surface-2)' : 'var(--color-lime)'}
+                    fill-opacity={day.level === 0 ? 1 : FILL_OPACITY[day.level]}
+                  >
+                    <title>
+                      {day.count != null ? `${day.count} · ` : ''}
+                      {dayFmt.format(new Date(`${day.date}T00:00:00Z`))}
+                    </title>
+                  </rect>
+                );
+              })
+            )}
+          </svg>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between gap-4">
+          <a
+            href={`https://github.com/${GITHUB_USER}`}
+            target="_blank"
+            rel="noreferrer"
+            class="mono link-underline text-[13px] text-mist transition-colors hover:text-cream"
+          >
+            {t.cta}
+          </a>
+          <div class="mono flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-faint">
+            <span class="mr-1">{t.legendLess}</span>
+            {FILL_OPACITY.map((o, i) => (
+              <span
+                class="inline-block h-[10px] w-[10px] rounded-[2px]"
+                style={i === 0 ? 'background: var(--color-surface-2)' : `background: color-mix(in srgb, var(--color-lime) ${o * 100}%, transparent)`}
+              />
+            ))}
+            <span class="ml-1">{t.legendMore}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .gh-month {
+    font-family: var(--font-mono, monospace);
+    font-size: 10px;
+    fill: var(--color-faint);
+  }
+</style>

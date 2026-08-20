@@ -98,5 +98,6 @@ export interface SiteData {
     sectionTestimonials: { index: string; label: string; title: string; titleMuted: string; caption: string };
     sectionFaq: { index: string; label: string; title: string; titleMuted: string; caption: string };
     sectionWriting: { index: string; label: string; title: string; titleMuted: string; caption: string };
+    sectionGithub: { index: string; label: string; title: string; titleMuted: string; caption: string; legendLess: string; legendMore: string; cta: string };
   };
 }

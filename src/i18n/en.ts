@@ -395,6 +395,7 @@ const en: SiteData = {
     sectionTestimonials: { index: '05', label: 'Testimonials', title: 'What they say', titleMuted: 'about the work.', caption: 'Real feedback from founders, CEOs, and product heads from Brazil, the UK, and US.' },
     sectionFaq: { index: '07', label: 'FAQ', title: 'Questions?', titleMuted: 'Answered.', caption: '' },
     sectionWriting: { index: '08', label: 'Writing', title: 'Thinking out', titleMuted: 'loud.', caption: 'Articles on design, front-end, and the intersection of both.' },
+    sectionGithub: { index: '09', label: 'GitHub', title: 'Always', titleMuted: 'shipping.', caption: 'contributions in the last year', legendLess: 'Less', legendMore: 'More', cta: 'Follow on GitHub →' },
   },
 };
 
