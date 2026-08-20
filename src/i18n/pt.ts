@@ -359,9 +359,11 @@ const pt: SiteData = {
 
   contact: {
     eyebrow: 'Vamos trabalhar juntos',
-    heading: 'Bora construir um produto que as pessoas amem usar?',
+    heading: 'Bora construir',
+    headingMuted: 'algo memorável?',
     sub: 'Aberto a oportunidades remotas e projetos. Respondo em até 24h.',
     cta: 'Falar comigo',
+    details: { email: 'E-mail', whatsapp: 'WhatsApp', location: 'Localização', status: 'Status' },
   },
 
   faqAside: {
@@ -387,6 +389,7 @@ const pt: SiteData = {
     socialLabel: 'Redes',
     portfolioEdition: 'Portfólio — Ed. 2026',
     readArticle: 'Ler artigo',
+    viewAllMedium: 'Ver todos no Medium →',
     sectionClients: { index: '01', label: 'Quem já atendi', title: 'Marcas que', titleMuted: 'confiam no meu trabalho.' },
     sectionAbout: { index: '06', label: 'Sobre mim' },
     sectionServices: { index: '02', label: 'Especialidades', title: 'Do conceito ao', titleMuted: 'produto, ponta a ponta.', caption: 'Um profissional só para desenhar e construir sua experiência digital, sem handoff.' },

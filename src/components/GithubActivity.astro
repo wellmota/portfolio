@@ -108,12 +108,13 @@ try {
   calendar = null;
 }
 
-// Geometria do gráfico — células menores para caber na coluna
-const CELL = 8;
-const GAP = 2;
+// Geometria do gráfico — só as últimas ~26 semanas (6 meses), com células grandes
+const VISIBLE_WEEKS = 26;
+const CELL = 16;
+const GAP = 4;
 const STEP = CELL + GAP;
-const TOP = 18; // faixa dos rótulos de mês
-const weeks = calendar?.weeks ?? [];
+const TOP = 24; // faixa dos rótulos de mês
+const weeks = (calendar?.weeks ?? []).slice(-VISIBLE_WEEKS);
 const svgWidth = weeks.length * STEP - GAP;
 const svgHeight = TOP + 7 * STEP - GAP;
 
@@ -167,7 +168,7 @@ const totalLabel = calendar?.total != null ? `${calendar.total.toLocaleString(la
           style="min-width: 440px"
         >
           {monthLabels.map((m) => (
-            <text x={m.x} y="9" class="gh-month">
+            <text x={m.x} y="11" class="gh-month">
               {m.label}
             </text>
           ))}
@@ -180,7 +181,7 @@ const totalLabel = calendar?.total != null ? `${calendar.total.toLocaleString(la
                   y={TOP + dow * STEP}
                   width={CELL}
                   height={CELL}
-                  rx="2"
+                  rx="3"
                   fill={day.level === 0 ? 'var(--color-surface-2)' : 'var(--color-lime)'}
                   fill-opacity={day.level === 0 ? 1 : FILL_OPACITY[day.level]}
                 >
@@ -222,7 +223,7 @@ const totalLabel = calendar?.total != null ? `${calendar.total.toLocaleString(la
 <style>
   .gh-month {
     font-family: var(--font-mono, monospace);
-    font-size: 9px;
+    font-size: 11px;
     fill: var(--color-faint);
   }
 </style>

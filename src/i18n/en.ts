@@ -359,9 +359,11 @@ const en: SiteData = {
 
   contact: {
     eyebrow: 'Let’s work together',
-    heading: 'Ready to build a product people love to use?',
+    heading: 'Let’s build',
+    headingMuted: 'something memorable?',
     sub: 'Open to remote opportunities and projects. I respond within 24h.',
     cta: 'Get in touch',
+    details: { email: 'Email', whatsapp: 'WhatsApp', location: 'Location', status: 'Status' },
   },
 
   faqAside: {
@@ -387,6 +389,7 @@ const en: SiteData = {
     socialLabel: 'Social',
     portfolioEdition: 'Portfolio — Ed. 2026',
     readArticle: 'Read article',
+    viewAllMedium: 'See all on Medium →',
     sectionClients: { index: '01', label: 'Clients', title: 'Brands that', titleMuted: 'trust my work.' },
     sectionAbout: { index: '06', label: 'About me' },
     sectionServices: { index: '02', label: 'Services', title: 'From concept to', titleMuted: 'product, end to end.', caption: 'One professional to design and build your digital experience, no handoff.' },

@@ -68,8 +68,10 @@ export interface SiteData {
   contact: {
     eyebrow: string;
     heading: string;
+    headingMuted: string;
     sub: string;
     cta: string;
+    details: { email: string; whatsapp: string; location: string; status: string };
   };
   faqAside: {
     quote: string;
@@ -90,6 +92,7 @@ export interface SiteData {
     socialLabel: string;
     portfolioEdition: string;
     readArticle: string;
+    viewAllMedium: string;
     sectionClients: { index: string; label: string; title: string; titleMuted: string };
     sectionAbout: { index: string; label: string };
     sectionServices: { index: string; label: string; title: string; titleMuted: string; caption: string };

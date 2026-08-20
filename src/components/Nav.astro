@@ -10,7 +10,7 @@ const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
 
 <header
   data-nav
-  class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-colors duration-300"
+  class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-colors duration-300 [&.is-scrolled]:border-line [&.is-scrolled]:bg-ink/60 [&.is-scrolled]:backdrop-blur-lg"
 >
   <div class="container-page">
     <nav class="flex items-center justify-between gap-4 py-4">
@@ -102,13 +102,6 @@ const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
 </header>
 
 <style>
-  [data-nav].is-scrolled {
-    background: color-mix(in srgb, var(--color-ink) 82%, transparent);
-    border-color: var(--color-line);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
   .burger__lines,
   .burger__lines::before,
   .burger__lines::after {

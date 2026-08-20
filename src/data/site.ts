@@ -406,9 +406,11 @@ export const articles = [
 
 export const contact = {
   eyebrow: 'Vamos trabalhar juntos',
-  heading: 'Bora construir um produto que as pessoas amem usar?',
+  heading: 'Bora construir',
+  headingMuted: 'algo memorável?',
   sub: 'Aberto a oportunidades remotas e projetos. Respondo em até 24h.',
   cta: 'Falar comigo',
+  details: { email: 'E-mail', whatsapp: 'WhatsApp', location: 'Localização', status: 'Status' },
 };
 
 export const faqAside = {
