@@ -360,6 +360,15 @@ const pt: SiteData = {
 
   articles: [
     {
+      title: 'Architecture for Designers',
+      excerpt:
+        'Deck de 27 slides: monte sua própria stack com Vite, Supabase, Claude Code, Git e Vercel — e transforme o localhost num caçador de edge cases.',
+      date: 'Ago 2026',
+      source: 'Palestra · Slides',
+      tag: 'Arquitetura',
+      href: '/talks/architecture-for-designers/',
+    },
+    {
       title: 'From UX/UI Design to Front-End Development: Embracing a New Chapter',
       excerpt:
         'Minha transição depois de 15+ anos em UX/UI design para o front-end — e por que fechar a distância entre design e código virou meu foco.',

@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A 27-slide deck by Wellington Mota: build your own stack with Vite, Supabase, Claude Code, Git and Vercel — and turn localhost into an edge case hunter.">
+<meta property="og:title" content="Architecture for Designers">
+<meta property="og:description" content="Build your own stack: Vite + Supabase + Claude Code + Git + Vercel — from prototype to a real application.">
+<meta property="og:type" content="website">
+<meta charset="utf-8">
+<title>Architecture for Designers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+
+<style>
+/* ============================================================
+   ARQUITETURA PARA DESIGNERS — deck
+   Brutalismo editorial: papel cru riscado a tinta preta,
+   grade exposta, vermelho de cartaz + amarelo de sinalização
+   Ato II apaga a luz: quase-preto + verde-ácido
+   ============================================================ */
+
+:root{
+  /* -- palheta PAPEL -- */
+  --p-bg:#F2F1EC;  --p-bg2:#E9E8E0;  --p-bg3:#DEDDD3;
+  --p-fg:#121210;  --p-fg2:#45443E;  --p-fg3:#7C7B70;
+  --p-line:#121210; --p-line2:#121210;
+  --p-acc:#E23A16; --p-accbg:#FFD41E; --p-accln:#121210;
+  --p-bad:#C21F07; --p-badbg:#F3D8CC;
+  --p-ok:#1D6B33;
+
+  /* -- palheta TINTA -- */
+  --d-bg:#151513;  --d-bg2:#1E1E1A;  --d-bg3:#272722;
+  --d-fg:#F0EFE6;  --d-fg2:#B9B8AC;  --d-fg3:#7B7A6F;
+  --d-line:#F0EFE6; --d-line2:#F0EFE6;
+  --d-acc:#C6F21F; --d-accbg:#C6F21F; --d-accln:#F0EFE6;
+  --d-bad:#FF6A4D; --d-badbg:#421F15;
+  --d-ok:#8FD96A;
+
+  /* tinta sobre os blocos de acento (amarelo / verde-ácido) */
+  --onacc:#121210;
+
+  /* -- atribuição: claro por padrão -- */
+  --bg:var(--p-bg); --bg2:var(--p-bg2); --bg3:var(--p-bg3);
+  --fg:var(--p-fg); --fg2:var(--p-fg2); --fg3:var(--p-fg3);
+  --line:var(--p-line); --line2:var(--p-line2);
+  --acc:var(--p-acc); --accbg:var(--p-accbg); --accln:var(--p-accln);
+  --bad:var(--p-bad); --badbg:var(--p-badbg); --ok:var(--p-ok);
+
+  --disp:"Anton",Impact,"Arial Narrow","Helvetica Neue",sans-serif;
+  --sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"Space Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+
+/* placas do Ato II: paleta oposta à do ambiente */
+.act-2{
+  --bg:var(--d-bg); --bg2:var(--d-bg2); --bg3:var(--d-bg3);
+  --fg:var(--d-fg); --fg2:var(--d-fg2); --fg3:var(--d-fg3);
+  --line:var(--d-line); --line2:var(--d-line2);
+  --acc:var(--d-acc); --accbg:var(--d-accbg); --accln:var(--d-accln);
+  --bad:var(--d-bad); --badbg:var(--d-badbg); --ok:var(--d-ok);
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:var(--d-bg); --bg2:var(--d-bg2); --bg3:var(--d-bg3);
+    --fg:var(--d-fg); --fg2:var(--d-fg2); --fg3:var(--d-fg3);
+    --line:var(--d-line); --line2:var(--d-line2);
+    --acc:var(--d-acc); --accbg:var(--d-accbg); --accln:var(--d-accln);
+    --bad:var(--d-bad); --badbg:var(--d-badbg); --ok:var(--d-ok);
+  }
+  :root:not([data-theme="light"]) .act-2{
+    --bg:var(--p-bg); --bg2:var(--p-bg2); --bg3:var(--p-bg3);
+    --fg:var(--p-fg); --fg2:var(--p-fg2); --fg3:var(--p-fg3);
+    --line:var(--p-line); --line2:var(--p-line2);
+    --acc:var(--p-acc); --accbg:var(--p-accbg); --accln:var(--p-accln);
+    --bad:var(--p-bad); --badbg:var(--p-badbg); --ok:var(--p-ok);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:var(--d-bg); --bg2:var(--d-bg2); --bg3:var(--d-bg3);
+  --fg:var(--d-fg); --fg2:var(--d-fg2); --fg3:var(--d-fg3);
+  --line:var(--d-line); --line2:var(--d-line2);
+  --acc:var(--d-acc); --accbg:var(--d-accbg); --accln:var(--d-accln);
+  --bad:var(--d-bad); --badbg:var(--d-badbg); --ok:var(--d-ok);
+}
+:root[data-theme="dark"] .act-2{
+  --bg:var(--p-bg); --bg2:var(--p-bg2); --bg3:var(--p-bg3);
+  --fg:var(--p-fg); --fg2:var(--p-fg2); --fg3:var(--p-fg3);
+  --line:var(--p-line); --line2:var(--p-line2);
+  --acc:var(--p-acc); --accbg:var(--p-accbg); --accln:var(--p-accln);
+  --bad:var(--p-bad); --badbg:var(--p-badbg); --ok:var(--p-ok);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg2); color:var(--fg);
+  font-family:var(--sans); overflow:hidden;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+
+/* ---------- palco ---------- */
+.viewport{position:fixed;inset:0;display:grid;place-items:center}
+.stage{position:relative;width:1280px;height:720px;transform:scale(var(--k,1));transform-origin:center center}
+.frame{position:absolute;inset:0}
+.slide{
+  position:absolute;inset:0;background:var(--bg);color:var(--fg);
+  border:2px solid var(--fg);
+  opacity:0;visibility:hidden;transition:opacity .18s linear;
+  display:flex;flex-direction:column;
+}
+.slide.is-active{opacity:1;visibility:visible}
+
+/* ---------- cromo: a linha de rota ---------- */
+.chrome{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  gap:24px;padding:15px 40px 13px;border-bottom:2px solid var(--fg);
+  font-family:var(--mono);font-weight:700;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--fg);
+}
+.chrome .route{color:var(--fg3)}
+.chrome .route b{font-weight:700;color:var(--fg)}
+.chrome .route i{font-style:normal;color:var(--acc);font-weight:700}
+.chrome .pager{display:flex;align-items:center;gap:12px;white-space:nowrap}
+.chrome .pager em{font-style:normal;background:var(--accbg);color:var(--onacc);border:2px solid var(--fg);padding:2px 7px 1px}
+.chrome .pager strong{font-weight:700;color:var(--fg);font-variant-numeric:tabular-nums}
+
+.content{flex:1 1 auto;min-height:0;padding:30px 88px 28px;display:flex;flex-direction:column}
+.slide[data-wide] .content{padding-inline:64px}
+
+/* ---------- tipografia ---------- */
+.d1{font-family:var(--disp);font-weight:400;font-size:100px;line-height:.95;letter-spacing:.004em;text-transform:uppercase;margin:0;text-wrap:balance}
+.d2{font-family:var(--disp);font-weight:400;font-size:74px;line-height:.98;letter-spacing:.004em;text-transform:uppercase;margin:0;text-wrap:balance}
+.d3{font-family:var(--disp);font-weight:400;font-size:52px;line-height:1;letter-spacing:.005em;text-transform:uppercase;margin:0;text-wrap:balance}
+.d4{font-family:var(--disp);font-weight:400;font-size:34px;line-height:1.08;letter-spacing:.008em;text-transform:uppercase;margin:0;text-wrap:balance}
+.d1 i,.d2 i,.d3 i,.d4 i{font-style:normal;color:var(--acc)}
+.lead{font-size:19px;line-height:1.55;font-weight:400;color:var(--fg2);margin:0;max-width:60ch}
+.lead strong{font-weight:700;color:var(--fg)}
+.tx{font-size:16px;line-height:1.6;font-weight:400;color:var(--fg2);margin:0;max-width:64ch}
+.tx strong{font-weight:700;color:var(--fg)}
+.sm{font-size:14px;line-height:1.55;color:var(--fg2);margin:0}
+.kicker{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--acc);margin:0;
+}
+.kicker::before{content:"[ "}
+.kicker::after{content:" ]"}
+.kicker.mute{color:var(--fg3)}
+.rule{height:2px;background:var(--fg);border:0;margin:0}
+.rule.acc{background:var(--acc)}
+
+/* espaçamentos verticais por gap, nunca por margin solto */
+.stack-y{display:flex;flex-direction:column}
+.g8{gap:8px}.g10{gap:10px}.g12{gap:12px}.g14{gap:14px}.g16{gap:16px}.g20{gap:20px}.g24{gap:24px}.g28{gap:28px}.g36{gap:36px}.g44{gap:44px}
+.push{margin-top:auto}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.cols-38{display:grid;grid-template-columns:.78fr 1fr;gap:56px;align-items:start}
+.cols-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 34px;align-items:start}
+.cols-2t{display:grid;grid-template-columns:repeat(2,1fr);gap:20px 40px}
+
+/* ---------- entrada ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.slide.is-active .content>*{animation:rise .48s cubic-bezier(.2,.72,.2,1) both}
+.slide.is-active .content>*:nth-child(1){animation-delay:.02s}
+.slide.is-active .content>*:nth-child(2){animation-delay:.08s}
+.slide.is-active .content>*:nth-child(3){animation-delay:.14s}
+.slide.is-active .content>*:nth-child(4){animation-delay:.2s}
+.slide.is-active .content>*:nth-child(5){animation-delay:.26s}
+.slide.is-active .content>*:nth-child(6){animation-delay:.32s}
+@media (prefers-reduced-motion:reduce){
+  .slide.is-active .content>*{animation:none}
+  .slide{transition:none}
+}
+
+/* ---------- listas rotuladas ---------- */
+.defs{display:flex;flex-direction:column;gap:0;border-top:2px solid var(--fg)}
+.defs>div{display:grid;grid-template-columns:186px 1fr;gap:28px;padding:14px 0;border-bottom:1px solid var(--line)}
+.defs dt,.defs .k{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--fg);padding-top:3px;margin:0;
+}
+.defs dd,.defs .v{margin:0;font-size:15px;line-height:1.55;color:var(--fg2)}
+.defs dd strong,.defs .v strong{font-weight:700;color:var(--fg)}
+
+.ticks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.ticks li{
+  position:relative;padding:9px 0 9px 40px;
+  border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.5;color:var(--fg2);
+}
+.ticks li:first-child{border-top:2px solid var(--fg)}
+.ticks li::before{
+  content:attr(data-n);position:absolute;left:0;top:9px;line-height:21.75px;
+  font-family:var(--mono);font-size:10.5px;font-weight:700;
+  color:var(--acc);letter-spacing:.06em;font-variant-numeric:tabular-nums;
+}
+.ticks li strong{font-weight:700;color:var(--fg)}
+.ticks.tight li{padding:7px 0 7px 40px;font-size:14px}
+.ticks.tight li::before{top:7px;line-height:21px}
+
+/* ---------- diagrama da stack ---------- */
+.dia{display:flex;flex-direction:column;gap:8px}
+.dia .layer{
+  display:grid;grid-template-columns:150px 1fr auto;gap:26px;align-items:center;
+  border:2px solid var(--fg);background:var(--bg);padding:14px 20px;
+}
+.dia .layer.you{border-color:var(--fg);background:var(--accbg)}
+.dia .layer .nm{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--fg)}
+.dia .layer .ds{font-size:14px;line-height:1.45;color:var(--fg2)}
+.dia .layer .tg{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg3);white-space:nowrap}
+.dia .layer.you .nm,.dia .layer.you .ds,.dia .layer.you .tg{color:var(--onacc)}
+.dia .seam{display:flex;align-items:center;gap:12px;padding-left:150px}
+.dia .seam span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg3)}
+.dia .seam::before{content:"";width:26px;height:2px;background:var(--fg)}
+
+/* ---------- código ---------- */
+.code{
+  background:var(--bg2);border:2px solid var(--fg);padding:18px 22px;overflow-x:auto;
+  font-family:var(--mono);font-size:13px;line-height:1.8;color:var(--fg);margin:0;
+  -moz-tab-size:2;tab-size:2;
+}
+.code.sm{font-size:12px;line-height:1.7;padding:14px 18px}
+.code .c{color:var(--fg3)}
+.code .k{color:var(--acc);font-weight:700}
+.code .s{color:var(--fg2)}
+.code .b{color:var(--bad)}
+.code .o{color:var(--ok)}
+
+/* ---------- tabela comparativa ---------- */
+.cmp{width:100%;border-collapse:collapse;font-size:14.5px}
+.cmp th,.cmp td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+.cmp thead th{
+  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--fg);border-bottom:3px solid var(--fg);padding-bottom:9px;
+}
+.cmp tbody th{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg);width:172px}
+.cmp td{color:var(--fg2)}
+.cmp td.win{color:var(--onacc);font-weight:500;background:var(--accbg)}
+
+/* ---------- a matriz de casos ---------- */
+.matrix{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cell{margin:0;border:2px solid var(--fg);background:var(--bg);padding:11px 12px 13px;display:flex;flex-direction:column;gap:9px;position:relative}
+.cell figcaption{
+  font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--fg3);display:flex;justify-content:space-between;gap:8px;
+}
+.cell.bad{border-color:var(--bad);background:var(--badbg)}
+.cell.bad figcaption{color:var(--bad);padding-right:58px}
+.mock{display:flex;flex-direction:column;gap:5px}
+.mock .ml{font-size:10.5px;font-weight:600;color:var(--fg);letter-spacing:.01em}
+.mock .mi{
+  border:1.5px solid var(--fg);background:var(--bg);height:28px;display:flex;align-items:center;
+  padding:0 8px;font-size:11.5px;color:var(--fg);white-space:nowrap;overflow:hidden;
+}
+.mock .mi.empty{color:var(--fg3)}
+.mock .mi.focus{border-color:var(--acc);box-shadow:0 0 0 2px var(--accbg)}
+.mock .mi.err{border-color:var(--bad)}
+.mock .mi.dis{background:var(--bg3);color:var(--fg3);border-style:dashed}
+.mock .mi.spill{position:relative}
+.mock .mi.spill::after{content:"";position:absolute;top:-1px;right:-1px;bottom:-1px;width:3px;background:var(--bad)}
+.mock .mi.spill::before{content:"";position:absolute;top:0;right:2px;bottom:0;width:34px;background:linear-gradient(to right,transparent,var(--bg));z-index:1}
+.mock .me{font-size:10px;color:var(--bad);line-height:1.3}
+.mock .mp{height:2px;background:var(--line2);position:relative;overflow:hidden}
+.mock .mp::after{content:"";position:absolute;inset:0;width:40%;background:var(--acc);animation:sl 1.3s ease-in-out infinite}
+@keyframes sl{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+@media (prefers-reduced-motion:reduce){.mock .mp::after{animation:none;width:55%}}
+.flag{
+  position:absolute;top:-2px;right:-2px;background:var(--bad);color:var(--bg);
+  font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.1em;padding:2px 5px;
+}
+
+/* ---------- nota: régua + seta ---------- */
+.note{position:relative;border-top:2px solid var(--fg);padding:12px 0 0 30px;font-size:14.5px;line-height:1.5;color:var(--fg2);max-width:66ch}
+.note::before{content:"→";position:absolute;left:0;top:10px;color:var(--acc);font-weight:700;font-size:17px;line-height:1.5}
+.note strong{font-weight:700;color:var(--fg)}
+.chip{
+  display:inline-block;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;border:2px solid var(--fg);color:var(--onacc);background:var(--accbg);padding:6px 10px;
+}
+code.inl{font-family:var(--mono);font-size:.88em;background:var(--bg2);border:1px solid var(--fg);padding:1px 5px;color:var(--fg)}
+
+/* ---------- links, prompts e assinatura ---------- */
+a.lk{font-family:var(--mono);font-size:.92em;font-weight:700;color:var(--fg);text-decoration:none;border-bottom:2px solid var(--acc);padding-bottom:1px}
+a.lk:hover{background:var(--accbg);color:var(--onacc);border-bottom-color:var(--fg)}
+a.lk:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.say{display:block;font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--fg);background:var(--bg2);border:2px solid var(--fg);border-left:8px solid var(--acc);padding:10px 14px;max-width:72ch}
+.say::before{content:"you ask:";display:block;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:4px}
+.ai{display:inline-block;font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--fg);color:var(--bg);padding:3px 7px;vertical-align:1px}
+.sig{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--fg2);margin:0;display:flex;align-items:center;gap:12px}
+.sig::before{content:"";width:34px;height:2px;background:var(--acc);flex:0 0 auto}
+
+/* ---------- capa ---------- */
+.cover{flex:1;display:flex;flex-direction:column;justify-content:center;gap:32px;position:relative}
+.cover .push{margin-top:6px}
+.cover .marks{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.star{
+  position:absolute;right:0;top:10px;width:96px;height:96px;
+  background:var(--accbg);border:2px solid var(--fg);color:var(--onacc);
+  display:grid;place-items:center;
+}
+
+/* ---------- rodapé de slide ---------- */
+.foot{
+  flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;gap:24px;
+  padding:0 40px 18px;font-family:var(--mono);font-size:10px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--fg3);
+}
+
+/* ---------- HUD ---------- */
+.hud{
+  position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;
+  align-items:flex-end;padding:14px 18px;pointer-events:none;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--p-fg3);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hud{color:var(--d-fg3)}}
+:root[data-theme="dark"] .hud{color:var(--d-fg3)}
+.hud kbd{font:inherit;border:1px solid currentColor;padding:1px 4px;opacity:.75}
+.hud .keys{display:flex;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+.prog{position:fixed;left:0;bottom:0;height:4px;background:var(--p-acc);transition:width .2s ease;z-index:5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .prog{background:var(--d-acc)}}
+:root[data-theme="dark"] .prog{background:var(--d-acc)}
+
+/* ---------- grade (tecla G) ---------- */
+body.grid .slide::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:9;
+  background:
+    repeating-linear-gradient(to right,var(--acc) 0 1px,transparent 1px 100%) 88px 0/ calc((1104px - 11*24px)/12 + 24px) 100%,
+    repeating-linear-gradient(to bottom,var(--acc) 0 1px,transparent 1px 8px);
+  opacity:.3;
+  -webkit-mask-image:linear-gradient(#000,#000);
+}
+
+/* ---------- visão geral (tecla O) ---------- */
+body.overview{overflow:auto}
+body.overview .viewport{position:static;display:block;padding:36px 30px 90px}
+body.overview .stage{width:auto;height:auto;transform:none;display:grid;grid-template-columns:repeat(auto-fill,296px);gap:16px;justify-content:center}
+body.overview .frame{position:relative;inset:auto;width:296px;height:166.5px;overflow:hidden;cursor:pointer;outline:1px solid var(--p-line)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body.overview .frame{outline-color:var(--d-line)}}
+body.overview .frame:hover{outline:2px solid var(--p-acc)}
+body.overview .frame.cur{outline:2px solid var(--p-acc)}
+body.overview .slide{position:absolute;top:0;left:0;width:1280px;height:720px;transform:scale(.23125);transform-origin:top left;opacity:1;visibility:visible;border:0}
+body.overview .slide.is-active .content>*{animation:none}
+body.overview .hud .keys{display:none}
+
+/* ---------- impressão ---------- */
+@page{size:1280px 720px;margin:0}
+@media print{
+  body{overflow:visible;background:#fff}
+  .hud,.prog{display:none}
+  .viewport{position:static;display:block}
+  .stage{width:1280px;height:auto;transform:none}
+  .frame{position:relative;inset:auto;width:1280px;height:720px;break-after:page;page-break-after:always}
+  .slide{opacity:1;visibility:visible;border:0}
+  .slide.is-active .content>*{animation:none}
+}
+</style>
+
+<div class="viewport"><div class="stage" id="stage">
+
+<!-- 01 ─ COVER ─────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/" data-act="—">
+  <div class="content cover">
+    <p class="kicker">Vite · Supabase · Claude · Git · Vercel</p>
+    <div class="star" aria-hidden="true"><svg viewBox="0 0 100 100" width="54" height="54"><g stroke="currentColor" stroke-width="14"><line x1="50" y1="4" x2="50" y2="96"/><line x1="10" y1="27" x2="90" y2="73"/><line x1="10" y1="73" x2="90" y2="27"/></g></svg></div>
+    <h1 class="d1">Architecture<br>for <i>designers</i></h1>
+    <p class="lead">How to build your own stack, stop depending on a screen generator — and turn <strong>localhost</strong> into an edge case hunter.</p>
+    <div class="push stack-y g16">
+      <p class="sig">Wellington Mota — Product Engineering</p>
+      <div class="marks">
+        <span class="chip">Act I — The stack</span>
+        <span class="chip">Act II — Edge Case Hunter</span>
+        <span class="chip">Coda — Ship</span>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+<!-- 02 ─ THE CEILING ───────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/why-leave" data-act="I">
+  <div class="content stack-y g28">
+    <div class="stack-y g16">
+      <p class="kicker mute">Where we start</p>
+      <h2 class="d3">Lovable gives you speed.<br>Then it gives you a <i>ceiling</i>.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>Black box</dt><dd>You describe, a screen appears. But the build, the routing, the database and the deploy live on the other side of the glass.</dd></div>
+      <div><dt>Cost per try</dt><dd>Every iteration burns credits. The visual refinement loop — which is <strong>exactly your job</strong> — becomes the most expensive line item in the project.</dd></div>
+      <div><dt>Export, no manual</dt><dd>You can export the code. What comes out is a project you never configured, full of decisions nobody explained to you.</dd></div>
+      <div><dt>Complexity ceiling</dt><dd>Row-level permissions, migrations, seed data, state testing. There's a day the tool doesn't come along.</dd></div>
+    </dl>
+    <p class="note push">None of this is a knock on the product. It's the price of an environment that <strong>decides things for you</strong> — and the bill arrives the day you need to decide.</p>
+  </div>
+</section></div>
+
+<!-- 03 ─ THESIS ────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/thesis" data-act="I">
+  <div class="content stack-y g36">
+    <p class="kicker">The trade</p>
+    <h2 class="d2">Vite runs the app.<br>Supabase holds the data.<br>Claude writes the <i>code</i>.</h2>
+    <div class="cols">
+      <p class="tx">Three pieces you swap independently. None of them owns your project — each solves one problem and gets out of the way.</p>
+      <p class="tx">And a fourth piece, the most important and the cheapest: <strong>your browser, open on localhost.</strong></p>
+    </div>
+    <p class="note push">Git keeps the history. Vercel publishes. None of these five things charges you for looking at the same screen again.</p>
+  </div>
+</section></div>
+
+<!-- 04 ─ ANATOMY ───────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/anatomy" data-act="I">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker mute">Anatomy</p>
+      <h2 class="d4">Six layers. No arrow crosses a black box.</h2>
+    </div>
+    <div class="dia">
+      <div class="layer you"><span class="nm">Browser</span><span class="ds">localhost:5173 — the only screen where judgment happens</span><span class="tg">DevTools · Zoom · Keyboard</span></div>
+      <div class="layer"><span class="nm">Vite</span><span class="ds">Dev server, HMR and the production build</span><span class="tg">React · TypeScript · Tailwind</span></div>
+      <div class="layer"><span class="nm">Supabase</span><span class="ds">Postgres, auth, files and row-level permissions</span><span class="tg">SDK in the client · SQL in the DB</span></div>
+      <div class="layer"><span class="nm">Claude Code</span><span class="ds">Reads, writes and runs the project from your terminal</span><span class="tg">CLAUDE.md · MCP · Screenshots</span></div>
+      <div class="layer"><span class="nm">Git + GitHub</span><span class="ds">The readable history and the undo that AI doesn't have</span><span class="tg">commit · branch · diff</span></div>
+      <div class="layer"><span class="nm">Vercel</span><span class="ds">The public URL — a deploy on every push, a preview per branch</span><span class="tg">preview · production · rollback</span></div>
+    </div>
+    <p class="note push">Every layer has public docs, a competing alternative and an exit door. That's what separates <strong>architecture</strong> from a <strong>subscription</strong>.</p>
+  </div>
+</section></div>
+
+<!-- 05 ─ VITE ──────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/vite" data-act="I">
+  <div class="content stack-y g44">
+    <div class="cols-38">
+      <div class="stack-y g14">
+        <p class="kicker">The dev server</p>
+        <h2 class="d3">The server<br>you <i>already have</i>.</h2>
+      </div>
+      <div class="stack-y g20">
+        <p class="tx">Vite serves your project's files straight to the browser, without bundling anything first. The server is up in milliseconds and you work on port <code class="inl">5173</code>.</p>
+        <p class="tx"><strong>HMR</strong> swaps only the component that changed — no page reload. What you typed in the form is still there. The modal is still open. Step three of the wizard is still on step three.</p>
+      </div>
+    </div>
+    <dl class="defs">
+      <div><dt>Why it matters</dt><dd>You save the file and the screen changes before your hand leaves the keyboard. <strong>That's the loop</strong> — the same one you have in Figma, now running on real code.</dd></div>
+      <div><dt>In the end</dt><dd><code class="inl">npm run build</code> outputs static HTML, CSS and JS. That's what Vercel publishes.</dd></div>
+      <div><dt>Exit doors</dt><dd>Next.js, Astro, SvelteKit — same idea, more opinions. Vite is the smallest thing that does the job, and the easiest to leave.</dd></div>
+    </dl>
+  </div>
+</section></div>
+
+<!-- 06 ─ SUPABASE ──────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/supabase" data-act="I">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker">The data</p>
+      <h2 class="d3">A real Postgres,<br>with a <i>door</i> in front.</h2>
+    </div>
+    <div class="cols-3">
+      <div class="stack-y g8"><p class="kicker mute">Database</p><p class="sm">Postgres. Tables, relations, SQL. You open the editor and see the data — not an abstraction of it.</p></div>
+      <div class="stack-y g8"><p class="kicker mute">Auth</p><p class="sm">Email and password, magic link, Google, GitHub. The session arrives already resolved in the client.</p></div>
+      <div class="stack-y g8"><p class="kicker mute">RLS</p><p class="sm">The rule of who sees what lives <strong>in the database</strong>, not in an <code class="inl">if</code> in the frontend.</p></div>
+      <div class="stack-y g8"><p class="kicker mute">Storage</p><p class="sm">Image and file uploads, under the same permission rules.</p></div>
+      <div class="stack-y g8"><p class="kicker mute">Realtime</p><p class="sm">The table changes, the screen changes. Useful for shared lists and notifications.</p></div>
+      <div class="stack-y g8"><p class="kicker mute">Local</p><p class="sm"><code class="inl">supabase start</code> runs the whole database in Docker on your machine. No internet needed.</p></div>
+    </div>
+    <p class="note push">Running the database locally is what closes the loop in Act II: you <strong>seed absurd data on purpose</strong> — a 74-character name, an order with no items, a user with no photo — and watch what the interface does.</p>
+  </div>
+</section></div>
+
+<!-- 07 ─ CLAUDE ────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/claude" data-act="I">
+  <div class="content stack-y g28">
+    <div class="stack-y g14">
+      <p class="kicker">The builder</p>
+      <h2 class="d3">Not a screen generator.<br>Someone who <i>opens the files</i>.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>Reads the project</dt><dd>The whole repository, not just the prompt. It knows <code class="inl">Button.tsx</code> already exists and that your spacing scale goes by 4.</dd></div>
+      <div><dt>Runs the project</dt><dd>Executes <code class="inl">npm run dev</code>, reads the error in the terminal, applies the fix and runs again. The error doesn't turn into an apology — it turns into a line of code.</dd></div>
+      <div><dt>Looks at the screen</dt><dd>Opens <code class="inl">localhost:5173</code> in the browser, takes a screenshot, measures the element that overflowed, resizes to 320px and does it again.</dd></div>
+      <div><dt>Writes the history</dt><dd>Makes the commit with the right message. You read the <code class="inl">git diff</code> before accepting.</dd></div>
+    </dl>
+    <p class="note push">The difference between <strong>asking for a screen</strong> and <strong>asking for a fix</strong>: the second requires the tool to see the current state. Only something with the repository and the browser can.</p>
+  </div>
+</section></div>
+
+<!-- 08 ─ GIT ───────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/git" data-act="I">
+  <div class="content stack-y g24">
+    <div class="cols-38">
+      <div class="stack-y g14">
+        <p class="kicker">The undo</p>
+        <h2 class="d3">Git is the <i>Cmd+Z</i> that survives closing the laptop.</h2>
+      </div>
+      <div class="stack-y g20">
+        <p class="tx">It's the piece designers postpone the most and need the most. Working with AI, Git stops being developer bureaucracy and becomes a <strong>safety net</strong>: if the last round made everything worse, one line takes you back.</p>
+        <pre class="code sm"><span class="c"># before the first screen, not after</span>
+git init
+git add -A &amp;&amp; git commit -m <span class="s">"scaffold"</span>
+
+<span class="c"># one experiment per branch</span>
+git switch -c <span class="k">feat/editorial-home</span>
+<span class="c"># didn't work out? the whole experiment disappears:</span>
+git switch main</pre>
+      </div>
+    </div>
+    <dl class="defs">
+      <div><dt>git diff</dt><dd>Your code review. You read <strong>exactly</strong> what the AI changed, line by line, before accepting. Never commit what you haven't read.</dd></div>
+      <div><dt>.gitignore</dt><dd><code class="inl">.env.local</code> and <code class="inl">node_modules</code> stay out. The Supabase key <strong>never</strong> goes to GitHub.</dd></div>
+      <div><dt>The history</dt><dd>In a screen generator, history is a list of prompts. Here it's a list of changes you can read, revert and explain to someone else.</dd></div>
+    </dl>
+  </div>
+</section></div>
+
+<!-- 09 ─ SETUP ─────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/setup" data-act="I">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker mute">Day one</p>
+      <h2 class="d4">From zero to localhost in six lines.</h2>
+    </div>
+    <pre class="code"><span class="c"># 1. the project</span>
+npm create vite@latest my-app -- --template react-ts
+cd my-app &amp;&amp; npm install &amp;&amp; git init
+
+<span class="c"># 2. style and data</span>
+npm install @supabase/supabase-js
+npm install -D tailwindcss @tailwindcss/vite
+
+<span class="c"># 3. the database, on your machine</span>
+npx supabase init &amp;&amp; npx supabase start
+
+<span class="c"># 4. the loop starts here</span>
+npm run dev            <span class="c">→ http://localhost:5173</span></pre>
+    <div class="cols">
+      <p class="sm">After that, <code class="inl">claude</code> in the same directory. It now sees everything above.</p>
+      <p class="sm">The local Supabase key shows up in the output of <code class="inl">supabase start</code>. It goes into <code class="inl">.env.local</code> with the <code class="inl">VITE_</code> prefix — without it, Vite won't expose the variable.</p>
+    </div>
+    <p class="note push">Six lines. None of them is irreversible, none of them charges per run, and the result <strong>is yours before it exists</strong>.</p>
+  </div>
+</section></div>
+
+<!-- 09b ─ NO TERMINAL ──────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/no-terminal" data-act="I">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker mute">Never touched a terminal?</p>
+      <h2 class="d4">The whole setup is one ask away.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>01 — Node.js</dt><dd>Download the LTS installer at <a class="lk" href="https://nodejs.org">nodejs.org</a> and click through it like any app. This is the only step with no shortcut.</dd></div>
+      <div><dt>02 — Claude Code</dt><dd>Get it at <a class="lk" href="https://claude.com/product/claude-code">claude.com</a> — the site hands you one line to paste in the Terminal. <span class="ai">Claude app</span> can walk you through both installs if anything looks scary.</dd></div>
+      <div><dt>03 — Open it</dt><dd>Make a folder for the project, open the Terminal there, type <code class="inl">claude</code>. From here you stop typing commands and start asking. <span class="ai">Claude Code</span></dd></div>
+      <div><dt>04 — First ask</dt><dd><span class="say">Create a Vite project here with React, TypeScript and Tailwind, start the dev server and open it in my browser.</span></dd></div>
+    </dl>
+    <p class="note push">Every command on the previous slide is something you <strong>can</strong> type — and never have to. The six lines become one sentence.</p>
+  </div>
+</section></div>
+
+<!-- 09c ─ PROMPTS TO STEAL ─────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/prompts" data-act="I">
+  <div class="content stack-y g20">
+    <div class="stack-y g10">
+      <p class="kicker">Prompts to steal</p>
+      <h2 class="d4">Connect the pieces by asking.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>Supabase</dt><dd class="stack-y g8"><span class="say">Set up Supabase in this project: install the client, create src/lib/supabase.ts reading the keys from .env.local, and tell me exactly where in the dashboard I find those two values.</span><span class="sm">You create the free project at <a class="lk" href="https://supabase.com">supabase.com</a> — <span class="ai">Claude Code</span> does the rest.</span></dd></div>
+      <div><dt>GitHub</dt><dd><span class="say">Create a private GitHub repo for this project and push it. If I'm not logged in, walk me through gh auth login step by step.</span></dd></div>
+      <div><dt>Vercel</dt><dd><span class="say">Connect this repo to Vercel, add my two Supabase keys as environment variables, and deploy. Give me the URL.</span></dd></div>
+      <div><dt>When it breaks</dt><dd><span class="say">Read the error in the terminal, explain it in one sentence, then fix it.</span></dd></div>
+    </dl>
+  </div>
+</section></div>
+
+<!-- 10 ─ STRUCTURE ─────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/structure" data-act="I">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker mute">Topography</p>
+      <h2 class="d4">Where each decision lives.</h2>
+    </div>
+    <div class="cols-38" style="gap:44px">
+      <pre class="code sm">my-app/
+├─ <span class="k">CLAUDE.md</span>
+├─ .env.local
+├─ vercel.json
+├─ src/
+│  ├─ <span class="k">tokens.css</span>
+│  ├─ components/
+│  ├─ routes/
+│  │  └─ <span class="k">hunt/</span>
+│  └─ lib/supabase.ts
+└─ supabase/
+   └─ migrations/</pre>
+      <dl class="defs" style="border-top:0">
+        <div style="border-top:1px solid var(--line)"><dt>CLAUDE.md</dt><dd>The contract: how this project behaves. Next slide.</dd></div>
+        <div><dt>tokens.css</dt><dd>Color, type, space, radius. The source of truth. No literal hex outside this file.</dd></div>
+        <div><dt>components/</dt><dd>One file, one component. If there are two, it isn't done yet.</dd></div>
+        <div><dt>routes/hunt/</dt><dd>All of Act II lives here. It doesn't ship to production.</dd></div>
+        <div><dt>migrations/</dt><dd>The database's history, versioned in Git next to the code.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section></div>
+
+<!-- 11 ─ CONTRACT ──────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/contract" data-act="I">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker">The contract</p>
+      <h2 class="d3">The file that makes the AI<br>stop <i>improvising</i>.</h2>
+    </div>
+    <div class="cols-38" style="gap:48px">
+      <div class="stack-y g16">
+        <p class="tx">You write the rules <strong>once</strong>. Every future session starts with them on the table. It's a design system written in prose — and it's the piece a designer writes better than a developer.</p>
+        <p class="note">Without this file, every conversation starts from scratch and every component invents a new gray.</p>
+      </div>
+      <pre class="code sm" style="line-height:1.6"><span class="c"># CLAUDE.md</span>
+
+<span class="k">## Visual</span>
+- Every color comes from src/tokens.css.
+  A literal hex in a component is a bug.
+- Spacing on the 4px scale only.
+- Display face: serif. Body: Inter.
+
+<span class="k">## Components</span>
+- One file per component.
+- Every new component gets a case in
+  src/routes/hunt/ before it ships.
+
+<span class="k">## Forms</span>
+- Label always visible. Never placeholder-only.
+- Error below the field + aria-describedby.
+- Submit locks on the second click.
+
+<span class="k">## House rules</span>
+- Never install a UI library without asking.
+- Small commits, messages in the imperative.</pre>
+    </div>
+  </div>
+</section></div>
+
+<!-- 12 ─ THE LOOP ──────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/loop" data-act="I">
+  <div class="content stack-y g28">
+    <div class="stack-y g14">
+      <p class="kicker mute">The method</p>
+      <h2 class="d3">Four steps. Only one<br>of them can't be <i>automated</i>.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>01 — Describe</dt><dd>In plain language, with the context <code class="inl">CLAUDE.md</code> doesn't cover. <em>"An order card with photo, status and amount. Follows the tokens."</em></dd></div>
+      <div><dt>02 — Generate</dt><dd>It writes the file, runs the server, fixes its own type and syntax errors before handing it back.</dd></div>
+      <div><dt>03 — Look</dt><dd><strong>You, in your browser.</strong> Not an embedded preview, not a screenshot. The real screen, at the width you choose.</dd></div>
+      <div><dt>04 — Correct</dt><dd><em>"The amount is competing with the status. Set the amount in tabular figures and move the status below."</em> — a designer's vocabulary, not a developer's.</dd></div>
+    </dl>
+    <p class="note push">Step 3 is yours, and it's the only one you can't outsource: <strong>it's judgment.</strong> The rest of the architecture exists to make that step fast and cheap.</p>
+  </div>
+</section></div>
+
+<!-- 13 ─ SCORECARD ─────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/stack/scorecard" data-act="I">
+  <div class="content stack-y g20">
+    <div class="stack-y g10">
+      <p class="kicker mute">Act I scorecard</p>
+      <h2 class="d4">What changes places.</h2>
+    </div>
+    <table class="cmp">
+      <thead><tr><th></th><th>Screen generator</th><th>Your own stack</th></tr></thead>
+      <tbody>
+        <tr><th>Where it runs</th><td>On their server</td><td class="win">On your machine, on localhost</td></tr>
+        <tr><th>The error</th><td>A summary in natural language</td><td class="win">The stack trace, in your terminal</td></tr>
+        <tr><th>Tokens</th><td>Approximated inside generated CSS</td><td class="win">One file, imported by everything</td></tr>
+        <tr><th>Database</th><td>Abstracted behind a panel</td><td class="win">Postgres, with SQL and migrations</td></tr>
+        <tr><th>History</th><td>A list of prompts</td><td class="win">Git — readable, reversible, yours</td></tr>
+        <tr><th>Publishing</th><td>Their button, their domain</td><td class="win">Vercel: a preview per branch, your domain</td></tr>
+        <tr><th>Cost to iterate</th><td>Per prompt</td><td class="win">Saving the file</td></tr>
+        <tr><th>Ceiling</th><td>Exists, and you find it late</td><td class="win">Yours</td></tr>
+      </tbody>
+    </table>
+    <p class="note push">The real prize isn't any single row — it's that no company sits between you and your work. Every piece is swappable, every file lives on your machine, and if a tool disappears or doubles its price, <strong>you walk away owning everything you built</strong>.</p>
+  </div>
+</section></div>
+
+<!-- 14 ─ ACT II ────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/hunt" data-act="II">
+  <div class="content cover">
+    <p class="kicker">Act II — Edge Case Hunter</p>
+    <h2 class="d2">The happy path is<br>twenty percent<br>of the <i>work</i>.</h2>
+    <p class="lead">The other eighty are the situations nobody designed: the 74-character name, the network that dropped mid-submit, the empty list on first login, the server error on a field that was already correct.</p>
+    <p class="note push">You don't find these in Figma. You find them <strong>in the browser</strong> — and that's why Act I exists.</p>
+  </div>
+</section></div>
+
+<!-- 15 ─ TAXONOMY ──────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/hunt/taxonomy" data-act="II">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker mute">Taxonomy</p>
+      <h2 class="d4">Six axes. Every component is crossed by all six.</h2>
+    </div>
+    <div class="cols-3">
+      <div class="stack-y g8"><p class="kicker">Data</p><p class="sm">Empty. One. Many. Too long. Emoji and accents. Zero. Negative. Null. Right-to-left text.</p></div>
+      <div class="stack-y g8"><p class="kicker">State</p><p class="sm">Idle. Loading. Saving. Success. Error. Disabled. Read-only. Partially filled.</p></div>
+      <div class="stack-y g8"><p class="kicker">Network</p><p class="sm">Slow. Offline. 500. Timeout. Responses arriving out of order. Session expiring midway.</p></div>
+      <div class="stack-y g8"><p class="kicker">Input</p><p class="sm">Paste. Browser autofill. Double-click on submit. Keyboard only. Browser back with a draft.</p></div>
+      <div class="stack-y g8"><p class="kicker">Environment</p><p class="sm">320px. 4K. Dark theme. Large system font. 200% zoom. Reduced motion.</p></div>
+      <div class="stack-y g8"><p class="kicker">Permission</p><p class="sm">Logged out. No access to that row. Viewer role. Suspended account. Someone else's data.</p></div>
+    </div>
+    <p class="note push">Six axes × eight states × three widths × two themes. <strong>Nobody clicks through that by hand.</strong> So we render all of it at once.</p>
+  </div>
+</section></div>
+
+<!-- 16 ─ WHAT IT IS ────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/hunt/what-it-is" data-act="II">
+  <div class="content stack-y g28">
+    <div class="stack-y g14">
+      <p class="kicker">The tool</p>
+      <h2 class="d3">A route in your own app that renders <i>everything that can go wrong</i>.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>What it is</dt><dd>A <code class="inl">/hunt</code> route inside the same project. Same CSS, same tokens, same fonts, same theme. The component there is <strong>the production component</strong> — not a copy.</dd></div>
+      <div><dt>Why not a screenshot</dt><dd>Because a screenshot has no keyboard focus, no zoom, no screen reader, no <code class="inl">prefers-reduced-motion</code>, and doesn't break at 320px.</dd></div>
+      <div><dt>Why localhost</dt><dd>It's the real browser. You open DevTools, drag the window down to 320px, bump the system font size, turn on VoiceOver. <strong>Everything the user can do, you do first.</strong></dd></div>
+      <div><dt>Doesn't ship</dt><dd>One line in the router keeps the route out of the final build — or you leave it in, behind auth, and it becomes the team's QA page.</dd></div>
+    </dl>
+  </div>
+</section></div>
+
+<!-- 17 ─ HARNESS ───────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/hunt/harness" data-act="II">
+  <div class="content stack-y g20">
+    <div class="stack-y g10">
+      <p class="kicker mute">The harness</p>
+      <h2 class="d4">You describe the cases. The matrix builds itself.</h2>
+    </div>
+    <div class="cols" style="gap:40px">
+      <pre class="code sm"><span class="c">// src/routes/hunt/text-field.cases.ts</span>
+<span class="k">export default</span> defineCases(TextField, {
+  base:      { label: <span class="s">'Name'</span>, value: <span class="s">'Ana Prado'</span> },
+  empty:     { value: <span class="s">''</span> },
+  <span class="b">long</span>:      { value: <span class="s">'Maria das Graças A. Sant\'Anna'</span> },
+  unicode:   { value: <span class="s">'🇧🇷 José Ávila 🌱'</span> },
+  error:     { error: <span class="s">'Enter a name'</span> },
+  errorLong: { error: <span class="s">'An account with this name already…'</span> },
+  pending:   { pending: <span class="k">true</span> },
+  disabled:  { disabled: <span class="k">true</span> },
+})</pre>
+      <div class="stack-y g16">
+        <pre class="code sm"><span class="c">// src/routes/hunt/index.tsx</span>
+&lt;<span class="k">CaseMatrix</span>
+  cases={cases}
+  viewports={[<span class="o">320</span>, <span class="o">768</span>, <span class="o">1280</span>]}
+  themes={[<span class="s">'light'</span>, <span class="s">'dark'</span>]}
+/&gt;
+
+<span class="c">// 8 cases × 3 widths × 2 themes</span>
+<span class="c">// = 48 screens on one page</span></pre>
+        <p class="note">Each case is <strong>three lines</strong>. Writing the case is faster than opening the screen and reproducing the situation by hand — and it stays there forever.</p>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+<!-- 18 ─ THE MATRIX ────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/hunt/matrix" data-act="II">
+  <div class="content stack-y g16">
+    <div class="stack-y g10">
+      <p class="kicker mute">What you see when you open the route</p>
+      <h2 class="d4">Eight versions of the same field, side by side.</h2>
+    </div>
+    <p class="sm" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg3)">TextField · viewport 320 px · light theme · zoom 100%</p>
+    <div class="matrix">
+      <figure class="cell"><figcaption><span>base</span></figcaption>
+        <div class="mock"><span class="ml">Name</span><span class="mi">Ana Prado</span></div></figure>
+      <figure class="cell"><figcaption><span>empty</span></figcaption>
+        <div class="mock"><span class="ml">Name</span><span class="mi empty">Your full name</span></div></figure>
+      <figure class="cell bad"><span class="flag">CLIPPED</span><figcaption><span>long</span><span>74 chars</span></figcaption>
+        <div class="mock"><span class="ml">Name</span><span class="mi spill">Maria das Graças Albuquerqu</span></div></figure>
+      <figure class="cell"><figcaption><span>unicode</span></figcaption>
+        <div class="mock"><span class="ml">Name</span><span class="mi">🇧🇷 José Ávila 🌱</span></div></figure>
+      <figure class="cell"><figcaption><span>error</span></figcaption>
+        <div class="mock"><span class="ml">Name</span><span class="mi err">Ana</span><span class="me">Enter your last name</span></div></figure>
+      <figure class="cell bad"><span class="flag">PUSHES</span><figcaption><span>errorLong</span><span>2 lines</span></figcaption>
+        <div class="mock"><span class="ml">Name</span><span class="mi err">Ana Prado</span><span class="me">An account with this name already exists in this organization.</span></div></figure>
+      <figure class="cell"><figcaption><span>pending</span></figcaption>
+        <div class="mock"><span class="ml">Name</span><span class="mi empty">Checking…</span><span class="mp"></span></div></figure>
+      <figure class="cell"><figcaption><span>disabled</span></figcaption>
+        <div class="mock"><span class="ml">Name</span><span class="mi dis">Ana Prado</span></div></figure>
+    </div>
+    <p class="note push">The clipping in the <strong>long</strong> case doesn't show up in a Figma export. It shows up here, at 320px, in the third cell — and the two-line error pushes the button below the fold in the sixth.</p>
+  </div>
+</section></div>
+
+<!-- 19 ─ FORMS ─────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/hunt/forms" data-act="II">
+  <div class="content stack-y g20">
+    <div class="stack-y g10">
+      <p class="kicker">Where it hurts most</p>
+      <h2 class="d4">The form is the battlefield.</h2>
+    </div>
+    <div class="cols-2t">
+      <ol class="ticks tight" style="margin:0">
+        <li data-n="01"><strong>A 74-character name.</strong> Does it wrap, truncate, or leak out of the card?</li>
+        <li data-n="02"><strong><code class="inl">josé+test@company.com.br</code></strong> Does your validation accept <code class="inl">+</code> and accents?</li>
+        <li data-n="03"><strong>Password pasted</strong> from a manager. Does <code class="inl">onChange</code> fire, or does the field stay "empty"?</li>
+        <li data-n="04"><strong>Browser autofill.</strong> Does the floating label move up, or sit on top of the text?</li>
+        <li data-n="05"><strong>Double-click on Submit.</strong> Two rows in the database?</li>
+        <li data-n="06"><strong>Network drops mid-submit.</strong> Does the button recover, or spin forever?</li>
+      </ol>
+      <ol class="ticks tight" style="margin:0">
+        <li data-n="07"><strong>Error coming from the server.</strong> Does it land next to the right field — or in a toast that vanishes?</li>
+        <li data-n="08"><strong>Browser back.</strong> Does the draft survive, or does the person type it all again?</li>
+        <li data-n="09"><strong>200% zoom.</strong> Is the submit button still reachable?</li>
+        <li data-n="10"><strong>Keyboard only.</strong> Can you reach submit? Does the Tab order make sense?</li>
+        <li data-n="11"><strong>Submit with an empty field.</strong> Does focus jump to the first error?</li>
+        <li data-n="12"><strong>Screen reader.</strong> Is the error announced, or just painted red?</li>
+      </ol>
+    </div>
+    <p class="note push">Twelve lines of cases. <strong>Twelve bugs that never reach the user</strong> — and none of them needed a QA person clicking.</p>
+  </div>
+</section></div>
+
+<!-- 20 ─ THE HUNT ──────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/hunt/loop" data-act="II">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker">The hunt</p>
+      <h2 class="d3">It opens the <i>same screen</i> you do.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>You ask</dt><dd><em>"Open <code class="inl">/hunt/text-field</code> at 320px and tell me what overflows."</em></dd></div>
+      <div><dt>It navigates</dt><dd>Drives the browser, resizes the window, takes a screenshot, reads the DOM and measures how far the element went past its container. In pixels, not opinions.</dd></div>
+      <div><dt>It fixes the right thing</dt><dd>Fixes <strong>the component</strong>, never the test case. If the case stopped reproducing, the bug was hidden, not solved.</dd></div>
+      <div><dt>The matrix reloads</dt><dd>Vite's HMR. All 48 screens redraw. You check the other 47 <strong>with your eyes</strong> — because fixing one almost always breaks another.</dd></div>
+      <div><dt>It becomes a commit</dt><dd><code class="inl">git diff</code>, you read it, you accept it. The case stays in the repository: next month, it'll still be testing.</dd></div>
+    </dl>
+    <p class="note push">Its job is to <strong>find</strong>. Yours is to decide whether it's good.</p>
+  </div>
+</section></div>
+
+<!-- 21 ─ DONE ──────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/ship/done" data-act="CODA">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker mute">Coda</p>
+      <h2 class="d3">A component is<br><i>done</i> when:</h2>
+    </div>
+    <ol class="ticks">
+      <li data-n="01">It has cases in <code class="inl">/hunt</code> for <strong>empty, long, error and pending</strong>. Without those, it doesn't exist.</li>
+      <li data-n="02">It survives <strong>320px</strong> without horizontal scroll and <strong>200% zoom</strong> without losing the button.</li>
+      <li data-n="03">It works in <strong>both themes</strong> — and none of its colors is a literal.</li>
+      <li data-n="04">It gets <strong>visible focus</strong> from the keyboard, in the order people expect.</li>
+      <li data-n="05">The error is <strong>announced</strong>, not just painted red.</li>
+      <li data-n="06">It's in a <strong>commit you've read</strong>, with a message that explains why.</li>
+      <li data-n="07">It's been seen on a <strong>preview URL</strong>, on someone else's actual phone.</li>
+    </ol>
+  </div>
+</section></div>
+
+<!-- 22 ─ DEPLOY ────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/ship/deploy" data-act="CODA">
+  <div class="content stack-y g20">
+    <div class="cols-38" style="gap:44px">
+      <div class="stack-y g14">
+        <p class="kicker">Ship</p>
+        <h2 class="d3">One <i>push</i>, one URL.</h2>
+        <p class="tx">Vite's <code class="inl">npm run build</code> outputs static files. Vercel detects the project on its own, publishes to the CDN and hands back an address — in seconds, not in a meeting with infrastructure.</p>
+      </div>
+      <pre class="code sm"><span class="c"># the repository</span>
+gh repo create my-app --private --source=. --push
+
+<span class="c"># connect and publish</span>
+npm i -g vercel
+vercel link
+
+<span class="c"># the keys, per environment</span>
+vercel env add VITE_SUPABASE_URL production
+vercel env add VITE_SUPABASE_ANON_KEY production
+
+vercel --prod</pre>
+    </div>
+    <dl class="defs">
+      <div><dt>Preview per branch</dt><dd>Every branch and every PR gets <strong>its own permanent URL</strong>. You send the link on WhatsApp and the person opens it on their phone. It's the most honest design review there is.</dd></div>
+      <div><dt>Production &amp; rollback</dt><dd><code class="inl">main</code> becomes production on every push. If something broke, the previous deploy comes back in one click — Git's history and Vercel's history are the same history.</dd></div>
+      <div><dt>The route that 404s</dt><dd>A SPA with client-side routes needs a <em>rewrite</em> to <code class="inl">/index.html</code> in <code class="inl">vercel.json</code>, or <code class="inl">/hunt</code> only works when you navigate to it from inside.</dd></div>
+    </dl>
+  </div>
+</section></div>
+
+<!-- 23 ─ ROADMAP ───────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/ship/roadmap" data-act="CODA">
+  <div class="content stack-y g24">
+    <div class="stack-y g12">
+      <p class="kicker mute">Four steps</p>
+      <h2 class="d4">From prototype to a real application.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>Step 1 — the setup</dt><dd><code class="inl">git init</code> before the first screen. Vite + Tailwind + <code class="inl">tokens.css</code> + <code class="inl">CLAUDE.md</code>. One static screen, one branch, <strong>one Vercel preview</strong> to prove the whole path works.</dd></div>
+      <div><dt>Step 2 — the data</dt><dd><code class="inl">supabase start</code> on your machine. One table, one read, one write. Email login. The first screen that changes depending on who's logged in.</dd></div>
+      <div><dt>Step 3 — the hunt</dt><dd>The <code class="inl">/hunt</code> route and the first eight cases for your text field. The first overflow found at 320px. The first fix you wouldn't have seen in Figma.</dd></div>
+      <div><dt>Step 4 — your ceiling</dt><dd>RLS on the tables, versioned migrations, domain pointed, <code class="inl">vercel --prod</code>. And the matrix covering the five components you use most.</dd></div>
+    </dl>
+    <p class="note push">No step depends on learning everything. Each one delivers <strong>one thing that works</strong> and gets out of the way.</p>
+  </div>
+</section></div>
+
+<!-- 23b ─ LINKS ────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/ship/links" data-act="CODA">
+  <div class="content stack-y g20">
+    <div class="stack-y g10">
+      <p class="kicker mute">The links</p>
+      <h2 class="d4">Every piece has a front door.</h2>
+    </div>
+    <dl class="defs">
+      <div><dt>Node.js</dt><dd>The runtime everything rides on — <a class="lk" href="https://nodejs.org">nodejs.org</a></dd></div>
+      <div><dt>Vite</dt><dd>The dev server and the build — <a class="lk" href="https://vite.dev">vite.dev</a></dd></div>
+      <div><dt>React</dt><dd>The UI library underneath — <a class="lk" href="https://react.dev">react.dev</a></dd></div>
+      <div><dt>Tailwind</dt><dd>Utility CSS on top of your tokens — <a class="lk" href="https://tailwindcss.com">tailwindcss.com</a></dd></div>
+      <div><dt>Supabase</dt><dd>Postgres, auth, storage and RLS — <a class="lk" href="https://supabase.com">supabase.com</a></dd></div>
+      <div><dt>Claude Code</dt><dd>The builder in your terminal — <a class="lk" href="https://claude.com/product/claude-code">claude.com</a> · docs at <a class="lk" href="https://code.claude.com/docs">code.claude.com/docs</a></dd></div>
+      <div><dt>Git + GitHub</dt><dd>History and the remote — <a class="lk" href="https://git-scm.com">git-scm.com</a> · <a class="lk" href="https://github.com">github.com</a></dd></div>
+      <div><dt>Vercel</dt><dd>Deploys, previews, rollback — <a class="lk" href="https://vercel.com">vercel.com</a></dd></div>
+    </dl>
+  </div>
+</section></div>
+
+<!-- 24 ─ CLOSE ─────────────────────────────────────────── -->
+<div class="frame"><section class="slide" data-route="/" data-act="—">
+  <div class="content cover">
+    <p class="kicker">End</p>
+    <div class="star" aria-hidden="true"><svg viewBox="0 0 100 100" width="54" height="54"><g stroke="currentColor" stroke-width="14"><line x1="50" y1="4" x2="50" y2="96"/><line x1="10" y1="27" x2="90" y2="73"/><line x1="10" y1="73" x2="90" y2="27"/></g></svg></div>
+    <h2 class="d2">A good tool is<br>one you can <i>open</i>.</h2>
+    <p class="lead">Vite opens. Supabase opens. Git opens. The browser opens. And when you can open it, you can fix it — including the ninety-nine situations nobody designed.</p>
+    <div class="push stack-y g16">
+      <p class="sig">Wellington Mota — Product Engineering</p>
+      <div class="marks">
+        <span class="chip">git init</span>
+        <span class="chip">npm run dev</span>
+        <span class="chip">localhost:5173/hunt</span>
+        <span class="chip">vercel --prod</span>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+</div></div>
+
+<div class="prog" id="prog"></div>
+<div class="hud">
+  <span id="hint">Architecture for Designers</span>
+  <span class="keys">
+    <span><kbd>←</kbd> <kbd>→</kbd> navigate</span>
+    <span><kbd>O</kbd> overview</span>
+    <span><kbd>G</kbd> grid</span>
+    <span><kbd>P</kbd> print</span>
+  </span>
+</div>
+
+<script>
+(function(){
+  var frames = Array.prototype.slice.call(document.querySelectorAll('.frame'));
+  var slides = frames.map(function(f){ return f.querySelector('.slide'); });
+  var stage  = document.getElementById('stage');
+  var prog   = document.getElementById('prog');
+  var total  = slides.length;
+  var i = 0;
+
+  // chrome: route + pager, derived from data-attributes
+  slides.forEach(function(s, n){
+    if (s.dataset.act === 'II') s.classList.add('act-2');
+    var route = s.dataset.route;
+    var parts = route === '/' ? ['', ''] : route.replace(/^\//,'').split('/');
+    var head = document.createElement('header');
+    head.className = 'chrome';
+    var r = document.createElement('span');
+    r.className = 'route';
+    r.innerHTML = '<b>localhost:5173</b>' + (route === '/' ? '/' :
+      '/<i>' + parts[0] + '</i>' + (parts[1] ? '/' + parts.slice(1).join('/') : ''));
+    var p = document.createElement('span');
+    p.className = 'pager';
+    var actLabel = s.dataset.act === '—' ? '' : (s.dataset.act === 'CODA' ? 'Coda' : 'Act ' + s.dataset.act);
+    p.innerHTML = (actLabel ? '<em>' + actLabel + '</em>' : '') +
+      '<strong>' + String(n + 1).padStart(2, '0') + ' / ' + total + '</strong>';
+    head.appendChild(r); head.appendChild(p);
+    s.insertBefore(head, s.firstChild);
+  });
+
+  function show(n){
+    i = Math.max(0, Math.min(total - 1, n));
+    slides.forEach(function(s, k){ s.classList.toggle('is-active', k === i); });
+    frames.forEach(function(f, k){ f.classList.toggle('cur', k === i); });
+    prog.style.width = ((i + 1) / total * 100) + '%';
+    if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+    if (document.body.classList.contains('overview')) {
+      frames[i].scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  function fit(){
+    if (document.body.classList.contains('overview')) return;
+    var k = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.94;
+    stage.style.setProperty('--k', k);
+  }
+
+  function overview(on){
+    document.body.classList.toggle('overview', on);
+    if (on) { stage.style.removeProperty('--k'); frames[i].scrollIntoView({block:'center'}); }
+    else fit();
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ') { e.preventDefault(); show(i + 1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (k === 'Home') { e.preventDefault(); show(0); }
+    else if (k === 'End') { e.preventDefault(); show(total - 1); }
+    else if (k === 'o' || k === 'O') { overview(!document.body.classList.contains('overview')); }
+    else if (k === 'Escape') { overview(false); }
+    else if (k === 'g' || k === 'G') { document.body.classList.toggle('grid'); }
+    else if (k === 'p' || k === 'P') { window.print(); }
+  });
+
+  frames.forEach(function(f, n){
+    f.addEventListener('click', function(){
+      if (document.body.classList.contains('overview')) { show(n); overview(false); }
+    });
+  });
+
+  // click on the stage advances (outside overview); left quarter goes back
+  document.querySelector('.viewport').addEventListener('click', function(e){
+    if (document.body.classList.contains('overview')) return;
+    if (e.target && e.target.closest && e.target.closest('a')) return;
+    if (window.getSelection && String(window.getSelection())) return;
+    show(i + (e.clientX < window.innerWidth * 0.25 ? -1 : 1));
+  });
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', function(){
+    var n = parseInt(location.hash.slice(1), 10);
+    if (n && n - 1 !== i) show(n - 1);
+  });
+
+  fit();
+  var start = parseInt(location.hash.slice(1), 10);
+  show(start ? start - 1 : 0);
+})();
+</script>
+</html>
