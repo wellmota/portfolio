@@ -54,6 +54,7 @@ Kineo, Tako, Solomon, Cogmo Tecnologia.
 
 ## Writing
 
+- [Architecture for Designers (slide deck)](https://userexperience.com.br/talks/architecture-for-designers/) — a 27-slide talk: build your own stack (Vite, Supabase, Claude Code, Git, Vercel) instead of depending on screen generators like Lovable, own everything you build, and turn localhost into an edge case hunter
 - [From UX/UI Design to Front-End Development: Embracing a New Chapter](https://medium.com/@wellingtonmota/from-ux-ui-design-to-front-end-development-embracing-a-new-chapter-756f55de93df) — the transition from 15+ years of design into front-end, and closing the design/dev gap
 - [Why you should try Hands-off UX/UI documentation like this…](https://medium.com/design-bootcamp/level-up-your-ux-ui-game-why-you-should-do-hands-off-documentation-like-this-6233def429ae) — practical hands-off documentation: user stories, acceptance criteria and Given-When-Then scenarios
 
