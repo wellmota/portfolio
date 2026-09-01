@@ -1,25 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A 27-slide deck by Wellington Mota: build your own stack with Vite, Supabase, Claude Code, Git and Vercel — and turn localhost into an edge case hunter.">
-<meta property="og:title" content="Architecture for Designers">
-<meta property="og:description" content="Build your own stack: Vite + Supabase + Claude Code + Git + Vercel — from prototype to a real application.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://userexperience.com.br/talks/architecture-for-designers/">
-<meta property="og:image" content="https://userexperience.com.br/talks/architecture-for-designers/og.png">
-<meta property="og:image:width" content="1280">
-<meta property="og:image:height" content="720">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="author" content="Wellington Mota">
-<link rel="canonical" href="https://userexperience.com.br/talks/architecture-for-designers/">
-<meta charset="utf-8">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="A 27-slide deck by Wellington Mota: build your own stack with Vite, Supabase, Claude Code, Git and Vercel — and turn localhost into an edge case hunter." name="description"/>
+<meta content="Architecture for Designers" property="og:title"/>
+<meta content="Build your own stack: Vite + Supabase + Claude Code + Git + Vercel — from prototype to a real application." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://userexperience.com.br/talks/architecture-for-designers/" property="og:url"/>
+<meta content="https://userexperience.com.br/talks/architecture-for-designers/og.png" property="og:image"/>
+<meta content="1280" property="og:image:width"/>
+<meta content="720" property="og:image:height"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Wellington Mota" name="author"/>
+<link href="https://userexperience.com.br/talks/architecture-for-designers/" rel="canonical"/>
+<meta charset="utf-8"/>
 <title>Architecture for Designers</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
-
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Archivo:wght@400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
 <style>
 /* ============================================================
    ARQUITETURA PARA DESIGNERS — deck
@@ -361,607 +361,595 @@ body.overview .hud .keys{display:none}
   .slide{opacity:1;visibility:visible;border:0}
   .slide.is-active .content>*{animation:none}
 }
+
+/* ---------- seletor de idioma ---------- */
+.hud-left{display:flex;align-items:center;gap:12px;min-width:0}
+.langsw{display:inline-flex;border:1px solid currentColor;pointer-events:auto;flex:0 0 auto}
+.langsw-b{
+  appearance:none;background:transparent;border:0;cursor:pointer;color:inherit;
+  font:inherit;letter-spacing:.12em;text-transform:uppercase;
+  padding:3px 9px 2px;line-height:1.4;
+}
+.langsw-b + .langsw-b{border-left:1px solid currentColor}
+.langsw-b:hover{opacity:1;text-decoration:underline;text-underline-offset:3px}
+.langsw-b[aria-pressed="true"]{background:var(--p-acc);color:var(--p-bg);font-weight:700}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .langsw-b[aria-pressed="true"]{background:var(--d-acc);color:var(--d-bg)}
+}
+:root[data-theme="dark"] .langsw-b[aria-pressed="true"]{background:var(--d-acc);color:var(--d-bg)}
+.langsw-b:focus-visible{outline:2px solid var(--p-acc);outline-offset:2px}
+@media (max-width:640px){ .hud #hint{display:none} }
+@media print{ .langsw{display:none} }
 </style>
-
 <div class="viewport"><div class="stage" id="stage">
-
 <!-- 01 ─ COVER ─────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/" data-act="—">
-  <div class="content cover">
-    <p class="kicker">Vite · Supabase · Claude · Git · Vercel</p>
-    <div class="star" aria-hidden="true"><svg viewBox="0 0 100 100" width="54" height="54"><g stroke="currentColor" stroke-width="14"><line x1="50" y1="4" x2="50" y2="96"/><line x1="10" y1="27" x2="90" y2="73"/><line x1="10" y1="73" x2="90" y2="27"/></g></svg></div>
-    <h1 class="d1">Architecture<br>for <i>designers</i></h1>
-    <p class="lead">How to build your own stack, stop depending on a screen generator — and turn <strong>localhost</strong> into an edge case hunter.</p>
-    <div class="push stack-y g16">
-      <p class="sig">Wellington Mota — Product Engineering</p>
-      <div class="marks">
-        <span class="chip">Act I — The stack</span>
-        <span class="chip">Act II — Edge Case Hunter</span>
-        <span class="chip">Coda — Ship</span>
-      </div>
-    </div>
-  </div>
+<div class="frame"><section class="slide" data-act="—" data-route="/">
+<div class="content cover">
+<p class="kicker" data-i18n="t001">Vite · Supabase · Claude · Git · Vercel</p>
+<div aria-hidden="true" class="star"><svg height="54" viewbox="0 0 100 100" width="54"><g stroke="currentColor" stroke-width="14"><line x1="50" x2="50" y1="4" y2="96"></line><line x1="10" x2="90" y1="27" y2="73"></line><line x1="10" x2="90" y1="73" y2="27"></line></g></svg></div>
+<h1 class="d1" data-i18n="t002">Architecture<br/>for <i>designers</i></h1>
+<p class="lead" data-i18n="t003">How to build your own stack, stop depending on a screen generator — and turn <strong>localhost</strong> into an edge case hunter.</p>
+<div class="push stack-y g16">
+<p class="sig" data-i18n="t004">Wellington Mota — Product Engineering</p>
+<div class="marks">
+<span class="chip" data-i18n="t005">Act I — The stack</span>
+<span class="chip" data-i18n="t006">Act II — Edge Case Hunter</span>
+<span class="chip" data-i18n="t007">Coda — Ship</span>
+</div>
+</div>
+</div>
 </section></div>
-
 <!-- 02 ─ THE CEILING ───────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/why-leave" data-act="I">
-  <div class="content stack-y g28">
-    <div class="stack-y g16">
-      <p class="kicker mute">Where we start</p>
-      <h2 class="d3">Lovable gives you speed.<br>Then it gives you a <i>ceiling</i>.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>Black box</dt><dd>You describe, a screen appears. But the build, the routing, the database and the deploy live on the other side of the glass.</dd></div>
-      <div><dt>Cost per try</dt><dd>Every iteration burns credits. The visual refinement loop — which is <strong>exactly your job</strong> — becomes the most expensive line item in the project.</dd></div>
-      <div><dt>Export, no manual</dt><dd>You can export the code. What comes out is a project you never configured, full of decisions nobody explained to you.</dd></div>
-      <div><dt>Complexity ceiling</dt><dd>Row-level permissions, migrations, seed data, state testing. There's a day the tool doesn't come along.</dd></div>
-    </dl>
-    <p class="note push">None of this is a knock on the product. It's the price of an environment that <strong>decides things for you</strong> — and the bill arrives the day you need to decide.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/why-leave">
+<div class="content stack-y g28">
+<div class="stack-y g16">
+<p class="kicker mute" data-i18n="t008">Where we start</p>
+<h2 class="d3" data-i18n="t009">Lovable gives you speed.<br/>Then it gives you a <i>ceiling</i>.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t010">Black box</dt><dd data-i18n="t011">You describe, a screen appears. But the build, the routing, the database and the deploy live on the other side of the glass.</dd></div>
+<div><dt data-i18n="t012">Cost per try</dt><dd data-i18n="t013">Every iteration burns credits. The visual refinement loop — which is <strong>exactly your job</strong> — becomes the most expensive line item in the project.</dd></div>
+<div><dt data-i18n="t014">Export, no manual</dt><dd data-i18n="t015">You can export the code. What comes out is a project you never configured, full of decisions nobody explained to you.</dd></div>
+<div><dt data-i18n="t016">Complexity ceiling</dt><dd data-i18n="t017">Row-level permissions, migrations, seed data, state testing. There's a day the tool doesn't come along.</dd></div>
+</dl>
+<p class="note push" data-i18n="t018">None of this is a knock on the product. It's the price of an environment that <strong>decides things for you</strong> — and the bill arrives the day you need to decide.</p>
+</div>
 </section></div>
-
 <!-- 03 ─ THESIS ────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/thesis" data-act="I">
-  <div class="content stack-y g36">
-    <p class="kicker">The trade</p>
-    <h2 class="d2">Vite runs the app.<br>Supabase holds the data.<br>Claude writes the <i>code</i>.</h2>
-    <div class="cols">
-      <p class="tx">Three pieces you swap independently. None of them owns your project — each solves one problem and gets out of the way.</p>
-      <p class="tx">And a fourth piece, the most important and the cheapest: <strong>your browser, open on localhost.</strong></p>
-    </div>
-    <p class="note push">Git keeps the history. Vercel publishes. None of these five things charges you for looking at the same screen again.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/thesis">
+<div class="content stack-y g36">
+<p class="kicker" data-i18n="t019">The trade</p>
+<h2 class="d2" data-i18n="t020">Vite runs the app.<br/>Supabase holds the data.<br/>Claude writes the <i>code</i>.</h2>
+<div class="cols">
+<p class="tx" data-i18n="t021">Three pieces you swap independently. None of them owns your project — each solves one problem and gets out of the way.</p>
+<p class="tx" data-i18n="t022">And a fourth piece, the most important and the cheapest: <strong>your browser, open on localhost.</strong></p>
+</div>
+<p class="note push" data-i18n="t023">Git keeps the history. Vercel publishes. None of these five things charges you for looking at the same screen again.</p>
+</div>
 </section></div>
-
 <!-- 04 ─ ANATOMY ───────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/anatomy" data-act="I">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker mute">Anatomy</p>
-      <h2 class="d4">Six layers. No arrow crosses a black box.</h2>
-    </div>
-    <div class="dia">
-      <div class="layer you"><span class="nm">Browser</span><span class="ds">localhost:5173 — the only screen where judgment happens</span><span class="tg">DevTools · Zoom · Keyboard</span></div>
-      <div class="layer"><span class="nm">Vite</span><span class="ds">Dev server, HMR and the production build</span><span class="tg">React · TypeScript · Tailwind</span></div>
-      <div class="layer"><span class="nm">Supabase</span><span class="ds">Postgres, auth, files and row-level permissions</span><span class="tg">SDK in the client · SQL in the DB</span></div>
-      <div class="layer"><span class="nm">Claude Code</span><span class="ds">Reads, writes and runs the project from your terminal</span><span class="tg">CLAUDE.md · MCP · Screenshots</span></div>
-      <div class="layer"><span class="nm">Git + GitHub</span><span class="ds">The readable history and the undo that AI doesn't have</span><span class="tg">commit · branch · diff</span></div>
-      <div class="layer"><span class="nm">Vercel</span><span class="ds">The public URL — a deploy on every push, a preview per branch</span><span class="tg">preview · production · rollback</span></div>
-    </div>
-    <p class="note push">Every layer has public docs, a competing alternative and an exit door. That's what separates <strong>architecture</strong> from a <strong>subscription</strong>.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/anatomy">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker mute" data-i18n="t024">Anatomy</p>
+<h2 class="d4" data-i18n="t025">Six layers. No arrow crosses a black box.</h2>
+</div>
+<div class="dia">
+<div class="layer you"><span class="nm" data-i18n="t026">Browser</span><span class="ds" data-i18n="t027">localhost:5173 — the only screen where judgment happens</span><span class="tg" data-i18n="t028">DevTools · Zoom · Keyboard</span></div>
+<div class="layer"><span class="nm" data-i18n="t029">Vite</span><span class="ds" data-i18n="t030">Dev server, HMR and the production build</span><span class="tg" data-i18n="t031">React · TypeScript · Tailwind</span></div>
+<div class="layer"><span class="nm" data-i18n="t032">Supabase</span><span class="ds" data-i18n="t033">Postgres, auth, files and row-level permissions</span><span class="tg" data-i18n="t034">SDK in the client · SQL in the DB</span></div>
+<div class="layer"><span class="nm" data-i18n="t035">Claude Code</span><span class="ds" data-i18n="t036">Reads, writes and runs the project from your terminal</span><span class="tg" data-i18n="t037">CLAUDE.md · MCP · Screenshots</span></div>
+<div class="layer"><span class="nm" data-i18n="t038">Git + GitHub</span><span class="ds" data-i18n="t039">The readable history and the undo that AI doesn't have</span><span class="tg" data-i18n="t040">commit · branch · diff</span></div>
+<div class="layer"><span class="nm" data-i18n="t041">Vercel</span><span class="ds" data-i18n="t042">The public URL — a deploy on every push, a preview per branch</span><span class="tg" data-i18n="t043">preview · production · rollback</span></div>
+</div>
+<p class="note push" data-i18n="t044">Every layer has public docs, a competing alternative and an exit door. That's what separates <strong>architecture</strong> from a <strong>subscription</strong>.</p>
+</div>
 </section></div>
-
 <!-- 05 ─ VITE ──────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/vite" data-act="I">
-  <div class="content stack-y g44">
-    <div class="cols-38">
-      <div class="stack-y g14">
-        <p class="kicker">The dev server</p>
-        <h2 class="d3">The server<br>you <i>already have</i>.</h2>
-      </div>
-      <div class="stack-y g20">
-        <p class="tx">Vite serves your project's files straight to the browser, without bundling anything first. The server is up in milliseconds and you work on port <code class="inl">5173</code>.</p>
-        <p class="tx"><strong>HMR</strong> swaps only the component that changed — no page reload. What you typed in the form is still there. The modal is still open. Step three of the wizard is still on step three.</p>
-      </div>
-    </div>
-    <dl class="defs">
-      <div><dt>Why it matters</dt><dd>You save the file and the screen changes before your hand leaves the keyboard. <strong>That's the loop</strong> — the same one you have in Figma, now running on real code.</dd></div>
-      <div><dt>In the end</dt><dd><code class="inl">npm run build</code> outputs static HTML, CSS and JS. That's what Vercel publishes.</dd></div>
-      <div><dt>Exit doors</dt><dd>Next.js, Astro, SvelteKit — same idea, more opinions. Vite is the smallest thing that does the job, and the easiest to leave.</dd></div>
-    </dl>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/vite">
+<div class="content stack-y g44">
+<div class="cols-38">
+<div class="stack-y g14">
+<p class="kicker" data-i18n="t045">The dev server</p>
+<h2 class="d3" data-i18n="t046">The server<br/>you <i>already have</i>.</h2>
+</div>
+<div class="stack-y g20">
+<p class="tx" data-i18n="t047">Vite serves your project's files straight to the browser, without bundling anything first. The server is up in milliseconds and you work on port <code class="inl">5173</code>.</p>
+<p class="tx" data-i18n="t048"><strong>HMR</strong> swaps only the component that changed — no page reload. What you typed in the form is still there. The modal is still open. Step three of the wizard is still on step three.</p>
+</div>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t049">Why it matters</dt><dd data-i18n="t050">You save the file and the screen changes before your hand leaves the keyboard. <strong>That's the loop</strong> — the same one you have in Figma, now running on real code.</dd></div>
+<div><dt data-i18n="t051">In the end</dt><dd data-i18n="t052"><code class="inl">npm run build</code> outputs static HTML, CSS and JS. That's what Vercel publishes.</dd></div>
+<div><dt data-i18n="t053">Exit doors</dt><dd data-i18n="t054">Next.js, Astro, SvelteKit — same idea, more opinions. Vite is the smallest thing that does the job, and the easiest to leave.</dd></div>
+</dl>
+</div>
 </section></div>
-
 <!-- 06 ─ SUPABASE ──────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/supabase" data-act="I">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker">The data</p>
-      <h2 class="d3">A real Postgres,<br>with a <i>door</i> in front.</h2>
-    </div>
-    <div class="cols-3">
-      <div class="stack-y g8"><p class="kicker mute">Database</p><p class="sm">Postgres. Tables, relations, SQL. You open the editor and see the data — not an abstraction of it.</p></div>
-      <div class="stack-y g8"><p class="kicker mute">Auth</p><p class="sm">Email and password, magic link, Google, GitHub. The session arrives already resolved in the client.</p></div>
-      <div class="stack-y g8"><p class="kicker mute">RLS</p><p class="sm">The rule of who sees what lives <strong>in the database</strong>, not in an <code class="inl">if</code> in the frontend.</p></div>
-      <div class="stack-y g8"><p class="kicker mute">Storage</p><p class="sm">Image and file uploads, under the same permission rules.</p></div>
-      <div class="stack-y g8"><p class="kicker mute">Realtime</p><p class="sm">The table changes, the screen changes. Useful for shared lists and notifications.</p></div>
-      <div class="stack-y g8"><p class="kicker mute">Local</p><p class="sm"><code class="inl">supabase start</code> runs the whole database in Docker on your machine. No internet needed.</p></div>
-    </div>
-    <p class="note push">Running the database locally is what closes the loop in Act II: you <strong>seed absurd data on purpose</strong> — a 74-character name, an order with no items, a user with no photo — and watch what the interface does.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/supabase">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker" data-i18n="t055">The data</p>
+<h2 class="d3" data-i18n="t056">A real Postgres,<br/>with a <i>door</i> in front.</h2>
+</div>
+<div class="cols-3">
+<div class="stack-y g8"><p class="kicker mute" data-i18n="t057">Database</p><p class="sm" data-i18n="t058">Postgres. Tables, relations, SQL. You open the editor and see the data — not an abstraction of it.</p></div>
+<div class="stack-y g8"><p class="kicker mute" data-i18n="t059">Auth</p><p class="sm" data-i18n="t060">Email and password, magic link, Google, GitHub. The session arrives already resolved in the client.</p></div>
+<div class="stack-y g8"><p class="kicker mute" data-i18n="t061">RLS</p><p class="sm" data-i18n="t062">The rule of who sees what lives <strong>in the database</strong>, not in an <code class="inl">if</code> in the frontend.</p></div>
+<div class="stack-y g8"><p class="kicker mute" data-i18n="t063">Storage</p><p class="sm" data-i18n="t064">Image and file uploads, under the same permission rules.</p></div>
+<div class="stack-y g8"><p class="kicker mute" data-i18n="t065">Realtime</p><p class="sm" data-i18n="t066">The table changes, the screen changes. Useful for shared lists and notifications.</p></div>
+<div class="stack-y g8"><p class="kicker mute" data-i18n="t067">Local</p><p class="sm" data-i18n="t068"><code class="inl">supabase start</code> runs the whole database in Docker on your machine. No internet needed.</p></div>
+</div>
+<p class="note push" data-i18n="t069">Running the database locally is what closes the loop in Act II: you <strong>seed absurd data on purpose</strong> — a 74-character name, an order with no items, a user with no photo — and watch what the interface does.</p>
+</div>
 </section></div>
-
 <!-- 07 ─ CLAUDE ────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/claude" data-act="I">
-  <div class="content stack-y g28">
-    <div class="stack-y g14">
-      <p class="kicker">The builder</p>
-      <h2 class="d3">Not a screen generator.<br>Someone who <i>opens the files</i>.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>Reads the project</dt><dd>The whole repository, not just the prompt. It knows <code class="inl">Button.tsx</code> already exists and that your spacing scale goes by 4.</dd></div>
-      <div><dt>Runs the project</dt><dd>Executes <code class="inl">npm run dev</code>, reads the error in the terminal, applies the fix and runs again. The error doesn't turn into an apology — it turns into a line of code.</dd></div>
-      <div><dt>Looks at the screen</dt><dd>Opens <code class="inl">localhost:5173</code> in the browser, takes a screenshot, measures the element that overflowed, resizes to 320px and does it again.</dd></div>
-      <div><dt>Writes the history</dt><dd>Makes the commit with the right message. You read the <code class="inl">git diff</code> before accepting.</dd></div>
-    </dl>
-    <p class="note push">The difference between <strong>asking for a screen</strong> and <strong>asking for a fix</strong>: the second requires the tool to see the current state. Only something with the repository and the browser can.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/claude">
+<div class="content stack-y g28">
+<div class="stack-y g14">
+<p class="kicker" data-i18n="t070">The builder</p>
+<h2 class="d3" data-i18n="t071">Not a screen generator.<br/>Someone who <i>opens the files</i>.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t072">Reads the project</dt><dd data-i18n="t073">The whole repository, not just the prompt. It knows <code class="inl">Button.tsx</code> already exists and that your spacing scale goes by 4.</dd></div>
+<div><dt data-i18n="t074">Runs the project</dt><dd data-i18n="t075">Executes <code class="inl">npm run dev</code>, reads the error in the terminal, applies the fix and runs again. The error doesn't turn into an apology — it turns into a line of code.</dd></div>
+<div><dt data-i18n="t076">Looks at the screen</dt><dd data-i18n="t077">Opens <code class="inl">localhost:5173</code> in the browser, takes a screenshot, measures the element that overflowed, resizes to 320px and does it again.</dd></div>
+<div><dt data-i18n="t078">Writes the history</dt><dd data-i18n="t079">Makes the commit with the right message. You read the <code class="inl">git diff</code> before accepting.</dd></div>
+</dl>
+<p class="note push" data-i18n="t080">The difference between <strong>asking for a screen</strong> and <strong>asking for a fix</strong>: the second requires the tool to see the current state. Only something with the repository and the browser can.</p>
+</div>
 </section></div>
-
 <!-- 08 ─ GIT ───────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/git" data-act="I">
-  <div class="content stack-y g24">
-    <div class="cols-38">
-      <div class="stack-y g14">
-        <p class="kicker">The undo</p>
-        <h2 class="d3">Git is the <i>Cmd+Z</i> that survives closing the laptop.</h2>
-      </div>
-      <div class="stack-y g20">
-        <p class="tx">It's the piece designers postpone the most and need the most. Working with AI, Git stops being developer bureaucracy and becomes a <strong>safety net</strong>: if the last round made everything worse, one line takes you back.</p>
-        <pre class="code sm"><span class="c"># before the first screen, not after</span>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/git">
+<div class="content stack-y g24">
+<div class="cols-38">
+<div class="stack-y g14">
+<p class="kicker" data-i18n="t081">The undo</p>
+<h2 class="d3" data-i18n="t082">Git is the <i>Cmd+Z</i> that survives closing the laptop.</h2>
+</div>
+<div class="stack-y g20">
+<p class="tx" data-i18n="t083">It's the piece designers postpone the most and need the most. Working with AI, Git stops being developer bureaucracy and becomes a <strong>safety net</strong>: if the last round made everything worse, one line takes you back.</p>
+<pre class="code sm"><span class="c" data-i18n="t084"># before the first screen, not after</span>
 git init
 git add -A &amp;&amp; git commit -m <span class="s">"scaffold"</span>
 
-<span class="c"># one experiment per branch</span>
-git switch -c <span class="k">feat/editorial-home</span>
-<span class="c"># didn't work out? the whole experiment disappears:</span>
+<span class="c" data-i18n="t085"># one experiment per branch</span>
+git switch -c <span class="k" data-i18n="t086">feat/editorial-home</span>
+<span class="c" data-i18n="t087"># didn't work out? the whole experiment disappears:</span>
 git switch main</pre>
-      </div>
-    </div>
-    <dl class="defs">
-      <div><dt>git diff</dt><dd>Your code review. You read <strong>exactly</strong> what the AI changed, line by line, before accepting. Never commit what you haven't read.</dd></div>
-      <div><dt>.gitignore</dt><dd><code class="inl">.env.local</code> and <code class="inl">node_modules</code> stay out. The Supabase key <strong>never</strong> goes to GitHub.</dd></div>
-      <div><dt>The history</dt><dd>In a screen generator, history is a list of prompts. Here it's a list of changes you can read, revert and explain to someone else.</dd></div>
-    </dl>
-  </div>
+</div>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t088">git diff</dt><dd data-i18n="t089">Your code review. You read <strong>exactly</strong> what the AI changed, line by line, before accepting. Never commit what you haven't read.</dd></div>
+<div><dt data-i18n="t090">.gitignore</dt><dd data-i18n="t091"><code class="inl">.env.local</code> and <code class="inl">node_modules</code> stay out. The Supabase key <strong>never</strong> goes to GitHub.</dd></div>
+<div><dt data-i18n="t092">The history</dt><dd data-i18n="t093">In a screen generator, history is a list of prompts. Here it's a list of changes you can read, revert and explain to someone else.</dd></div>
+</dl>
+</div>
 </section></div>
-
 <!-- 09 ─ SETUP ─────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/setup" data-act="I">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker mute">Day one</p>
-      <h2 class="d4">From zero to localhost in six lines.</h2>
-    </div>
-    <pre class="code"><span class="c"># 1. the project</span>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/setup">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker mute" data-i18n="t094">Day one</p>
+<h2 class="d4" data-i18n="t095">From zero to localhost in six lines.</h2>
+</div>
+<pre class="code"><span class="c" data-i18n="t096"># 1. the project</span>
 npm create vite@latest my-app -- --template react-ts
 cd my-app &amp;&amp; npm install &amp;&amp; git init
 
-<span class="c"># 2. style and data</span>
+<span class="c" data-i18n="t097"># 2. style and data</span>
 npm install @supabase/supabase-js
 npm install -D tailwindcss @tailwindcss/vite
 
-<span class="c"># 3. the database, on your machine</span>
+<span class="c" data-i18n="t098"># 3. the database, on your machine</span>
 npx supabase init &amp;&amp; npx supabase start
 
-<span class="c"># 4. the loop starts here</span>
-npm run dev            <span class="c">→ http://localhost:5173</span></pre>
-    <div class="cols">
-      <p class="sm">After that, <code class="inl">claude</code> in the same directory. It now sees everything above.</p>
-      <p class="sm">The local Supabase key shows up in the output of <code class="inl">supabase start</code>. It goes into <code class="inl">.env.local</code> with the <code class="inl">VITE_</code> prefix — without it, Vite won't expose the variable.</p>
-    </div>
-    <p class="note push">Six lines. None of them is irreversible, none of them charges per run, and the result <strong>is yours before it exists</strong>.</p>
-  </div>
+<span class="c" data-i18n="t099"># 4. the loop starts here</span>
+npm run dev            <span class="c" data-i18n="t100">→ http://localhost:5173</span></pre>
+<div class="cols">
+<p class="sm" data-i18n="t101">After that, <code class="inl">claude</code> in the same directory. It now sees everything above.</p>
+<p class="sm" data-i18n="t102">The local Supabase key shows up in the output of <code class="inl">supabase start</code>. It goes into <code class="inl">.env.local</code> with the <code class="inl">VITE_</code> prefix — without it, Vite won't expose the variable.</p>
+</div>
+<p class="note push" data-i18n="t103">Six lines. None of them is irreversible, none of them charges per run, and the result <strong>is yours before it exists</strong>.</p>
+</div>
 </section></div>
-
 <!-- 09b ─ NO TERMINAL ──────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/no-terminal" data-act="I">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker mute">Never touched a terminal?</p>
-      <h2 class="d4">The whole setup is one ask away.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>01 — Node.js</dt><dd>Download the LTS installer at <a class="lk" href="https://nodejs.org">nodejs.org</a> and click through it like any app. This is the only step with no shortcut.</dd></div>
-      <div><dt>02 — Claude Code</dt><dd>Get it at <a class="lk" href="https://claude.com/product/claude-code">claude.com</a> — the site hands you one line to paste in the Terminal. <span class="ai">Claude app</span> can walk you through both installs if anything looks scary.</dd></div>
-      <div><dt>03 — Open it</dt><dd>Make a folder for the project, open the Terminal there, type <code class="inl">claude</code>. From here you stop typing commands and start asking. <span class="ai">Claude Code</span></dd></div>
-      <div><dt>04 — First ask</dt><dd><span class="say">Create a Vite project here with React, TypeScript and Tailwind, start the dev server and open it in my browser.</span></dd></div>
-    </dl>
-    <p class="note push">Every command on the previous slide is something you <strong>can</strong> type — and never have to. The six lines become one sentence.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/no-terminal">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker mute" data-i18n="t104">Never touched a terminal?</p>
+<h2 class="d4" data-i18n="t105">The whole setup is one ask away.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t106">01 — Node.js</dt><dd data-i18n="t107">Download the LTS installer at <a class="lk" href="https://nodejs.org">nodejs.org</a> and click through it like any app. This is the only step with no shortcut.</dd></div>
+<div><dt data-i18n="t108">02 — Claude Code</dt><dd data-i18n="t109">Get it at <a class="lk" href="https://claude.com/product/claude-code">claude.com</a> — the site hands you one line to paste in the Terminal. <span class="ai">Claude app</span> can walk you through both installs if anything looks scary.</dd></div>
+<div><dt data-i18n="t110">03 — Open it</dt><dd data-i18n="t111">Make a folder for the project, open the Terminal there, type <code class="inl">claude</code>. From here you stop typing commands and start asking. <span class="ai">Claude Code</span></dd></div>
+<div><dt data-i18n="t112">04 — First ask</dt><dd data-i18n="t113"><span class="say">Create a Vite project here with React, TypeScript and Tailwind, start the dev server and open it in my browser.</span></dd></div>
+</dl>
+<p class="note push" data-i18n="t114">Every command on the previous slide is something you <strong>can</strong> type — and never have to. The six lines become one sentence.</p>
+</div>
 </section></div>
-
 <!-- 09c ─ PROMPTS TO STEAL ─────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/prompts" data-act="I">
-  <div class="content stack-y g20">
-    <div class="stack-y g10">
-      <p class="kicker">Prompts to steal</p>
-      <h2 class="d4">Connect the pieces by asking.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>Supabase</dt><dd class="stack-y g8"><span class="say">Set up Supabase in this project: install the client, create src/lib/supabase.ts reading the keys from .env.local, and tell me exactly where in the dashboard I find those two values.</span><span class="sm">You create the free project at <a class="lk" href="https://supabase.com">supabase.com</a> — <span class="ai">Claude Code</span> does the rest.</span></dd></div>
-      <div><dt>GitHub</dt><dd><span class="say">Create a private GitHub repo for this project and push it. If I'm not logged in, walk me through gh auth login step by step.</span></dd></div>
-      <div><dt>Vercel</dt><dd><span class="say">Connect this repo to Vercel, add my two Supabase keys as environment variables, and deploy. Give me the URL.</span></dd></div>
-      <div><dt>When it breaks</dt><dd><span class="say">Read the error in the terminal, explain it in one sentence, then fix it.</span></dd></div>
-    </dl>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/prompts">
+<div class="content stack-y g20">
+<div class="stack-y g10">
+<p class="kicker" data-i18n="t115">Prompts to steal</p>
+<h2 class="d4" data-i18n="t116">Connect the pieces by asking.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t117">Supabase</dt><dd class="stack-y g8" data-i18n="t118"><span class="say">Set up Supabase in this project: install the client, create src/lib/supabase.ts reading the keys from .env.local, and tell me exactly where in the dashboard I find those two values.</span><span class="sm" data-i18n="t119">You create the free project at <a class="lk" href="https://supabase.com">supabase.com</a> — <span class="ai">Claude Code</span> does the rest.</span></dd></div>
+<div><dt data-i18n="t120">GitHub</dt><dd data-i18n="t121"><span class="say">Create a private GitHub repo for this project and push it. If I'm not logged in, walk me through gh auth login step by step.</span></dd></div>
+<div><dt data-i18n="t122">Vercel</dt><dd data-i18n="t123"><span class="say">Connect this repo to Vercel, add my two Supabase keys as environment variables, and deploy. Give me the URL.</span></dd></div>
+<div><dt data-i18n="t124">When it breaks</dt><dd data-i18n="t125"><span class="say">Read the error in the terminal, explain it in one sentence, then fix it.</span></dd></div>
+</dl>
+</div>
 </section></div>
-
 <!-- 10 ─ STRUCTURE ─────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/structure" data-act="I">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker mute">Topography</p>
-      <h2 class="d4">Where each decision lives.</h2>
-    </div>
-    <div class="cols-38" style="gap:44px">
-      <pre class="code sm">my-app/
-├─ <span class="k">CLAUDE.md</span>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/structure">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker mute" data-i18n="t126">Topography</p>
+<h2 class="d4" data-i18n="t127">Where each decision lives.</h2>
+</div>
+<div class="cols-38" style="gap:44px">
+<pre class="code sm">my-app/
+├─ <span class="k" data-i18n="t128">CLAUDE.md</span>
 ├─ .env.local
 ├─ vercel.json
 ├─ src/
-│  ├─ <span class="k">tokens.css</span>
+│  ├─ <span class="k" data-i18n="t129">tokens.css</span>
 │  ├─ components/
 │  ├─ routes/
-│  │  └─ <span class="k">hunt/</span>
+│  │  └─ <span class="k" data-i18n="t130">hunt/</span>
 │  └─ lib/supabase.ts
 └─ supabase/
    └─ migrations/</pre>
-      <dl class="defs" style="border-top:0">
-        <div style="border-top:1px solid var(--line)"><dt>CLAUDE.md</dt><dd>The contract: how this project behaves. Next slide.</dd></div>
-        <div><dt>tokens.css</dt><dd>Color, type, space, radius. The source of truth. No literal hex outside this file.</dd></div>
-        <div><dt>components/</dt><dd>One file, one component. If there are two, it isn't done yet.</dd></div>
-        <div><dt>routes/hunt/</dt><dd>All of Act II lives here. It doesn't ship to production.</dd></div>
-        <div><dt>migrations/</dt><dd>The database's history, versioned in Git next to the code.</dd></div>
-      </dl>
-    </div>
-  </div>
+<dl class="defs" style="border-top:0">
+<div style="border-top:1px solid var(--line)"><dt data-i18n="t131">CLAUDE.md</dt><dd data-i18n="t132">The contract: how this project behaves. Next slide.</dd></div>
+<div><dt data-i18n="t133">tokens.css</dt><dd data-i18n="t134">Color, type, space, radius. The source of truth. No literal hex outside this file.</dd></div>
+<div><dt data-i18n="t135">components/</dt><dd data-i18n="t136">One file, one component. If there are two, it isn't done yet.</dd></div>
+<div><dt data-i18n="t137">routes/hunt/</dt><dd data-i18n="t138">All of Act II lives here. It doesn't ship to production.</dd></div>
+<div><dt data-i18n="t139">migrations/</dt><dd data-i18n="t140">The database's history, versioned in Git next to the code.</dd></div>
+</dl>
+</div>
+</div>
 </section></div>
-
 <!-- 11 ─ CONTRACT ──────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/contract" data-act="I">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker">The contract</p>
-      <h2 class="d3">The file that makes the AI<br>stop <i>improvising</i>.</h2>
-    </div>
-    <div class="cols-38" style="gap:48px">
-      <div class="stack-y g16">
-        <p class="tx">You write the rules <strong>once</strong>. Every future session starts with them on the table. It's a design system written in prose — and it's the piece a designer writes better than a developer.</p>
-        <p class="note">Without this file, every conversation starts from scratch and every component invents a new gray.</p>
-      </div>
-      <pre class="code sm" style="line-height:1.6"><span class="c"># CLAUDE.md</span>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/contract">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker" data-i18n="t141">The contract</p>
+<h2 class="d3" data-i18n="t142">The file that makes the AI<br/>stop <i>improvising</i>.</h2>
+</div>
+<div class="cols-38" style="gap:48px">
+<div class="stack-y g16">
+<p class="tx" data-i18n="t143">You write the rules <strong>once</strong>. Every future session starts with them on the table. It's a design system written in prose — and it's the piece a designer writes better than a developer.</p>
+<p class="note" data-i18n="t144">Without this file, every conversation starts from scratch and every component invents a new gray.</p>
+</div>
+<pre class="code sm" style="line-height:1.6"><span class="c" data-i18n="t145"># CLAUDE.md</span>
 
-<span class="k">## Visual</span>
+<span class="k" data-i18n="t146">## Visual</span>
 - Every color comes from src/tokens.css.
   A literal hex in a component is a bug.
 - Spacing on the 4px scale only.
 - Display face: serif. Body: Inter.
 
-<span class="k">## Components</span>
+<span class="k" data-i18n="t147">## Components</span>
 - One file per component.
 - Every new component gets a case in
   src/routes/hunt/ before it ships.
 
-<span class="k">## Forms</span>
+<span class="k" data-i18n="t148">## Forms</span>
 - Label always visible. Never placeholder-only.
 - Error below the field + aria-describedby.
 - Submit locks on the second click.
 
-<span class="k">## House rules</span>
+<span class="k" data-i18n="t149">## House rules</span>
 - Never install a UI library without asking.
 - Small commits, messages in the imperative.</pre>
-    </div>
-  </div>
+</div>
+</div>
 </section></div>
-
 <!-- 12 ─ THE LOOP ──────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/loop" data-act="I">
-  <div class="content stack-y g28">
-    <div class="stack-y g14">
-      <p class="kicker mute">The method</p>
-      <h2 class="d3">Four steps. Only one<br>of them can't be <i>automated</i>.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>01 — Describe</dt><dd>In plain language, with the context <code class="inl">CLAUDE.md</code> doesn't cover. <em>"An order card with photo, status and amount. Follows the tokens."</em></dd></div>
-      <div><dt>02 — Generate</dt><dd>It writes the file, runs the server, fixes its own type and syntax errors before handing it back.</dd></div>
-      <div><dt>03 — Look</dt><dd><strong>You, in your browser.</strong> Not an embedded preview, not a screenshot. The real screen, at the width you choose.</dd></div>
-      <div><dt>04 — Correct</dt><dd><em>"The amount is competing with the status. Set the amount in tabular figures and move the status below."</em> — a designer's vocabulary, not a developer's.</dd></div>
-    </dl>
-    <p class="note push">Step 3 is yours, and it's the only one you can't outsource: <strong>it's judgment.</strong> The rest of the architecture exists to make that step fast and cheap.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/loop">
+<div class="content stack-y g28">
+<div class="stack-y g14">
+<p class="kicker mute" data-i18n="t150">The method</p>
+<h2 class="d3" data-i18n="t151">Four steps. Only one<br/>of them can't be <i>automated</i>.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t152">01 — Describe</dt><dd data-i18n="t153">In plain language, with the context <code class="inl">CLAUDE.md</code> doesn't cover. <em>"An order card with photo, status and amount. Follows the tokens."</em></dd></div>
+<div><dt data-i18n="t154">02 — Generate</dt><dd data-i18n="t155">It writes the file, runs the server, fixes its own type and syntax errors before handing it back.</dd></div>
+<div><dt data-i18n="t156">03 — Look</dt><dd data-i18n="t157"><strong>You, in your browser.</strong> Not an embedded preview, not a screenshot. The real screen, at the width you choose.</dd></div>
+<div><dt data-i18n="t158">04 — Correct</dt><dd data-i18n="t159"><em>"The amount is competing with the status. Set the amount in tabular figures and move the status below."</em> — a designer's vocabulary, not a developer's.</dd></div>
+</dl>
+<p class="note push" data-i18n="t160">Step 3 is yours, and it's the only one you can't outsource: <strong>it's judgment.</strong> The rest of the architecture exists to make that step fast and cheap.</p>
+</div>
 </section></div>
-
 <!-- 13 ─ SCORECARD ─────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/stack/scorecard" data-act="I">
-  <div class="content stack-y g20">
-    <div class="stack-y g10">
-      <p class="kicker mute">Act I scorecard</p>
-      <h2 class="d4">What changes places.</h2>
-    </div>
-    <table class="cmp">
-      <thead><tr><th></th><th>Screen generator</th><th>Your own stack</th></tr></thead>
-      <tbody>
-        <tr><th>Where it runs</th><td>On their server</td><td class="win">On your machine, on localhost</td></tr>
-        <tr><th>The error</th><td>A summary in natural language</td><td class="win">The stack trace, in your terminal</td></tr>
-        <tr><th>Tokens</th><td>Approximated inside generated CSS</td><td class="win">One file, imported by everything</td></tr>
-        <tr><th>Database</th><td>Abstracted behind a panel</td><td class="win">Postgres, with SQL and migrations</td></tr>
-        <tr><th>History</th><td>A list of prompts</td><td class="win">Git — readable, reversible, yours</td></tr>
-        <tr><th>Publishing</th><td>Their button, their domain</td><td class="win">Vercel: a preview per branch, your domain</td></tr>
-        <tr><th>Cost to iterate</th><td>Per prompt</td><td class="win">Saving the file</td></tr>
-        <tr><th>Ceiling</th><td>Exists, and you find it late</td><td class="win">Yours</td></tr>
-      </tbody>
-    </table>
-    <p class="note push">The real prize isn't any single row — it's that no company sits between you and your work. Every piece is swappable, every file lives on your machine, and if a tool disappears or doubles its price, <strong>you walk away owning everything you built</strong>.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="I" data-route="/stack/scorecard">
+<div class="content stack-y g20">
+<div class="stack-y g10">
+<p class="kicker mute" data-i18n="t161">Act I scorecard</p>
+<h2 class="d4" data-i18n="t162">What changes places.</h2>
+</div>
+<table class="cmp">
+<thead><tr><th></th><th data-i18n="t163">Screen generator</th><th data-i18n="t164">Your own stack</th></tr></thead>
+<tbody>
+<tr><th data-i18n="t165">Where it runs</th><td data-i18n="t166">On their server</td><td class="win" data-i18n="t167">On your machine, on localhost</td></tr>
+<tr><th data-i18n="t168">The error</th><td data-i18n="t169">A summary in natural language</td><td class="win" data-i18n="t170">The stack trace, in your terminal</td></tr>
+<tr><th data-i18n="t171">Tokens</th><td data-i18n="t172">Approximated inside generated CSS</td><td class="win" data-i18n="t173">One file, imported by everything</td></tr>
+<tr><th data-i18n="t174">Database</th><td data-i18n="t175">Abstracted behind a panel</td><td class="win" data-i18n="t176">Postgres, with SQL and migrations</td></tr>
+<tr><th data-i18n="t177">History</th><td data-i18n="t178">A list of prompts</td><td class="win" data-i18n="t179">Git — readable, reversible, yours</td></tr>
+<tr><th data-i18n="t180">Publishing</th><td data-i18n="t181">Their button, their domain</td><td class="win" data-i18n="t182">Vercel: a preview per branch, your domain</td></tr>
+<tr><th data-i18n="t183">Cost to iterate</th><td data-i18n="t184">Per prompt</td><td class="win" data-i18n="t185">Saving the file</td></tr>
+<tr><th data-i18n="t186">Ceiling</th><td data-i18n="t187">Exists, and you find it late</td><td class="win" data-i18n="t188">Yours</td></tr>
+</tbody>
+</table>
+<p class="note push" data-i18n="t189">The real prize isn't any single row — it's that no company sits between you and your work. Every piece is swappable, every file lives on your machine, and if a tool disappears or doubles its price, <strong>you walk away owning everything you built</strong>.</p>
+</div>
 </section></div>
-
 <!-- 14 ─ ACT II ────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/hunt" data-act="II">
-  <div class="content cover">
-    <p class="kicker">Act II — Edge Case Hunter</p>
-    <h2 class="d2">The happy path is<br>twenty percent<br>of the <i>work</i>.</h2>
-    <p class="lead">The other eighty are the situations nobody designed: the 74-character name, the network that dropped mid-submit, the empty list on first login, the server error on a field that was already correct.</p>
-    <p class="note push">You don't find these in Figma. You find them <strong>in the browser</strong> — and that's why Act I exists.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="II" data-route="/hunt">
+<div class="content cover">
+<p class="kicker" data-i18n="t190">Act II — Edge Case Hunter</p>
+<h2 class="d2" data-i18n="t191">The happy path is<br/>twenty percent<br/>of the <i>work</i>.</h2>
+<p class="lead" data-i18n="t192">The other eighty are the situations nobody designed: the 74-character name, the network that dropped mid-submit, the empty list on first login, the server error on a field that was already correct.</p>
+<p class="note push" data-i18n="t193">You don't find these in Figma. You find them <strong>in the browser</strong> — and that's why Act I exists.</p>
+</div>
 </section></div>
-
 <!-- 15 ─ TAXONOMY ──────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/hunt/taxonomy" data-act="II">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker mute">Taxonomy</p>
-      <h2 class="d4">Six axes. Every component is crossed by all six.</h2>
-    </div>
-    <div class="cols-3">
-      <div class="stack-y g8"><p class="kicker">Data</p><p class="sm">Empty. One. Many. Too long. Emoji and accents. Zero. Negative. Null. Right-to-left text.</p></div>
-      <div class="stack-y g8"><p class="kicker">State</p><p class="sm">Idle. Loading. Saving. Success. Error. Disabled. Read-only. Partially filled.</p></div>
-      <div class="stack-y g8"><p class="kicker">Network</p><p class="sm">Slow. Offline. 500. Timeout. Responses arriving out of order. Session expiring midway.</p></div>
-      <div class="stack-y g8"><p class="kicker">Input</p><p class="sm">Paste. Browser autofill. Double-click on submit. Keyboard only. Browser back with a draft.</p></div>
-      <div class="stack-y g8"><p class="kicker">Environment</p><p class="sm">320px. 4K. Dark theme. Large system font. 200% zoom. Reduced motion.</p></div>
-      <div class="stack-y g8"><p class="kicker">Permission</p><p class="sm">Logged out. No access to that row. Viewer role. Suspended account. Someone else's data.</p></div>
-    </div>
-    <p class="note push">Six axes × eight states × three widths × two themes. <strong>Nobody clicks through that by hand.</strong> So we render all of it at once.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="II" data-route="/hunt/taxonomy">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker mute" data-i18n="t194">Taxonomy</p>
+<h2 class="d4" data-i18n="t195">Six axes. Every component is crossed by all six.</h2>
+</div>
+<div class="cols-3">
+<div class="stack-y g8"><p class="kicker" data-i18n="t196">Data</p><p class="sm" data-i18n="t197">Empty. One. Many. Too long. Emoji and accents. Zero. Negative. Null. Right-to-left text.</p></div>
+<div class="stack-y g8"><p class="kicker" data-i18n="t198">State</p><p class="sm" data-i18n="t199">Idle. Loading. Saving. Success. Error. Disabled. Read-only. Partially filled.</p></div>
+<div class="stack-y g8"><p class="kicker" data-i18n="t200">Network</p><p class="sm" data-i18n="t201">Slow. Offline. 500. Timeout. Responses arriving out of order. Session expiring midway.</p></div>
+<div class="stack-y g8"><p class="kicker" data-i18n="t202">Input</p><p class="sm" data-i18n="t203">Paste. Browser autofill. Double-click on submit. Keyboard only. Browser back with a draft.</p></div>
+<div class="stack-y g8"><p class="kicker" data-i18n="t204">Environment</p><p class="sm" data-i18n="t205">320px. 4K. Dark theme. Large system font. 200% zoom. Reduced motion.</p></div>
+<div class="stack-y g8"><p class="kicker" data-i18n="t206">Permission</p><p class="sm" data-i18n="t207">Logged out. No access to that row. Viewer role. Suspended account. Someone else's data.</p></div>
+</div>
+<p class="note push" data-i18n="t208">Six axes × eight states × three widths × two themes. <strong>Nobody clicks through that by hand.</strong> So we render all of it at once.</p>
+</div>
 </section></div>
-
 <!-- 16 ─ WHAT IT IS ────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/hunt/what-it-is" data-act="II">
-  <div class="content stack-y g28">
-    <div class="stack-y g14">
-      <p class="kicker">The tool</p>
-      <h2 class="d3">A route in your own app that renders <i>everything that can go wrong</i>.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>What it is</dt><dd>A <code class="inl">/hunt</code> route inside the same project. Same CSS, same tokens, same fonts, same theme. The component there is <strong>the production component</strong> — not a copy.</dd></div>
-      <div><dt>Why not a screenshot</dt><dd>Because a screenshot has no keyboard focus, no zoom, no screen reader, no <code class="inl">prefers-reduced-motion</code>, and doesn't break at 320px.</dd></div>
-      <div><dt>Why localhost</dt><dd>It's the real browser. You open DevTools, drag the window down to 320px, bump the system font size, turn on VoiceOver. <strong>Everything the user can do, you do first.</strong></dd></div>
-      <div><dt>Doesn't ship</dt><dd>One line in the router keeps the route out of the final build — or you leave it in, behind auth, and it becomes the team's QA page.</dd></div>
-    </dl>
-  </div>
+<div class="frame"><section class="slide" data-act="II" data-route="/hunt/what-it-is">
+<div class="content stack-y g28">
+<div class="stack-y g14">
+<p class="kicker" data-i18n="t209">The tool</p>
+<h2 class="d3" data-i18n="t210">A route in your own app that renders <i>everything that can go wrong</i>.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t211">What it is</dt><dd data-i18n="t212">A <code class="inl">/hunt</code> route inside the same project. Same CSS, same tokens, same fonts, same theme. The component there is <strong>the production component</strong> — not a copy.</dd></div>
+<div><dt data-i18n="t213">Why not a screenshot</dt><dd data-i18n="t214">Because a screenshot has no keyboard focus, no zoom, no screen reader, no <code class="inl">prefers-reduced-motion</code>, and doesn't break at 320px.</dd></div>
+<div><dt data-i18n="t215">Why localhost</dt><dd data-i18n="t216">It's the real browser. You open DevTools, drag the window down to 320px, bump the system font size, turn on VoiceOver. <strong>Everything the user can do, you do first.</strong></dd></div>
+<div><dt data-i18n="t217">Doesn't ship</dt><dd data-i18n="t218">One line in the router keeps the route out of the final build — or you leave it in, behind auth, and it becomes the team's QA page.</dd></div>
+</dl>
+</div>
 </section></div>
-
 <!-- 17 ─ HARNESS ───────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/hunt/harness" data-act="II">
-  <div class="content stack-y g20">
-    <div class="stack-y g10">
-      <p class="kicker mute">The harness</p>
-      <h2 class="d4">You describe the cases. The matrix builds itself.</h2>
-    </div>
-    <div class="cols" style="gap:40px">
-      <pre class="code sm"><span class="c">// src/routes/hunt/text-field.cases.ts</span>
-<span class="k">export default</span> defineCases(TextField, {
+<div class="frame"><section class="slide" data-act="II" data-route="/hunt/harness">
+<div class="content stack-y g20">
+<div class="stack-y g10">
+<p class="kicker mute" data-i18n="t219">The harness</p>
+<h2 class="d4" data-i18n="t220">You describe the cases. The matrix builds itself.</h2>
+</div>
+<div class="cols" style="gap:40px">
+<pre class="code sm"><span class="c" data-i18n="t221">// src/routes/hunt/text-field.cases.ts</span>
+<span class="k" data-i18n="t222">export default</span> defineCases(TextField, {
   base:      { label: <span class="s">'Name'</span>, value: <span class="s">'Ana Prado'</span> },
   empty:     { value: <span class="s">''</span> },
   <span class="b">long</span>:      { value: <span class="s">'Maria das Graças A. Sant\'Anna'</span> },
   unicode:   { value: <span class="s">'🇧🇷 José Ávila 🌱'</span> },
   error:     { error: <span class="s">'Enter a name'</span> },
   errorLong: { error: <span class="s">'An account with this name already…'</span> },
-  pending:   { pending: <span class="k">true</span> },
-  disabled:  { disabled: <span class="k">true</span> },
+  pending:   { pending: <span class="k" data-i18n="t223">true</span> },
+  disabled:  { disabled: <span class="k" data-i18n="t224">true</span> },
 })</pre>
-      <div class="stack-y g16">
-        <pre class="code sm"><span class="c">// src/routes/hunt/index.tsx</span>
-&lt;<span class="k">CaseMatrix</span>
+<div class="stack-y g16">
+<pre class="code sm"><span class="c" data-i18n="t225">// src/routes/hunt/index.tsx</span>
+&lt;<span class="k" data-i18n="t226">CaseMatrix</span>
   cases={cases}
   viewports={[<span class="o">320</span>, <span class="o">768</span>, <span class="o">1280</span>]}
   themes={[<span class="s">'light'</span>, <span class="s">'dark'</span>]}
 /&gt;
 
-<span class="c">// 8 cases × 3 widths × 2 themes</span>
-<span class="c">// = 48 screens on one page</span></pre>
-        <p class="note">Each case is <strong>three lines</strong>. Writing the case is faster than opening the screen and reproducing the situation by hand — and it stays there forever.</p>
-      </div>
-    </div>
-  </div>
+<span class="c" data-i18n="t227">// 8 cases × 3 widths × 2 themes</span>
+<span class="c" data-i18n="t228">// = 48 screens on one page</span></pre>
+<p class="note" data-i18n="t229">Each case is <strong>three lines</strong>. Writing the case is faster than opening the screen and reproducing the situation by hand — and it stays there forever.</p>
+</div>
+</div>
+</div>
 </section></div>
-
 <!-- 18 ─ THE MATRIX ────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/hunt/matrix" data-act="II">
-  <div class="content stack-y g16">
-    <div class="stack-y g10">
-      <p class="kicker mute">What you see when you open the route</p>
-      <h2 class="d4">Eight versions of the same field, side by side.</h2>
-    </div>
-    <p class="sm" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg3)">TextField · viewport 320 px · light theme · zoom 100%</p>
-    <div class="matrix">
-      <figure class="cell"><figcaption><span>base</span></figcaption>
-        <div class="mock"><span class="ml">Name</span><span class="mi">Ana Prado</span></div></figure>
-      <figure class="cell"><figcaption><span>empty</span></figcaption>
-        <div class="mock"><span class="ml">Name</span><span class="mi empty">Your full name</span></div></figure>
-      <figure class="cell bad"><span class="flag">CLIPPED</span><figcaption><span>long</span><span>74 chars</span></figcaption>
-        <div class="mock"><span class="ml">Name</span><span class="mi spill">Maria das Graças Albuquerqu</span></div></figure>
-      <figure class="cell"><figcaption><span>unicode</span></figcaption>
-        <div class="mock"><span class="ml">Name</span><span class="mi">🇧🇷 José Ávila 🌱</span></div></figure>
-      <figure class="cell"><figcaption><span>error</span></figcaption>
-        <div class="mock"><span class="ml">Name</span><span class="mi err">Ana</span><span class="me">Enter your last name</span></div></figure>
-      <figure class="cell bad"><span class="flag">PUSHES</span><figcaption><span>errorLong</span><span>2 lines</span></figcaption>
-        <div class="mock"><span class="ml">Name</span><span class="mi err">Ana Prado</span><span class="me">An account with this name already exists in this organization.</span></div></figure>
-      <figure class="cell"><figcaption><span>pending</span></figcaption>
-        <div class="mock"><span class="ml">Name</span><span class="mi empty">Checking…</span><span class="mp"></span></div></figure>
-      <figure class="cell"><figcaption><span>disabled</span></figcaption>
-        <div class="mock"><span class="ml">Name</span><span class="mi dis">Ana Prado</span></div></figure>
-    </div>
-    <p class="note push">The clipping in the <strong>long</strong> case doesn't show up in a Figma export. It shows up here, at 320px, in the third cell — and the two-line error pushes the button below the fold in the sixth.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="II" data-route="/hunt/matrix">
+<div class="content stack-y g16">
+<div class="stack-y g10">
+<p class="kicker mute" data-i18n="t230">What you see when you open the route</p>
+<h2 class="d4" data-i18n="t231">Eight versions of the same field, side by side.</h2>
+</div>
+<p class="sm" data-i18n="t232" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg3)">TextField · viewport 320 px · light theme · zoom 100%</p>
+<div class="matrix">
+<figure class="cell"><figcaption data-i18n="t233"><span>base</span></figcaption>
+<div class="mock"><span class="ml" data-i18n="t234">Name</span><span class="mi" data-i18n="t235">Ana Prado</span></div></figure>
+<figure class="cell"><figcaption data-i18n="t236"><span>empty</span></figcaption>
+<div class="mock"><span class="ml" data-i18n="t237">Name</span><span class="mi empty" data-i18n="t238">Your full name</span></div></figure>
+<figure class="cell bad"><span class="flag">CLIPPED</span><figcaption data-i18n="t239"><span>long</span><span>74 chars</span></figcaption>
+<div class="mock"><span class="ml" data-i18n="t240">Name</span><span class="mi spill" data-i18n="t241">Maria das Graças Albuquerqu</span></div></figure>
+<figure class="cell"><figcaption data-i18n="t242"><span>unicode</span></figcaption>
+<div class="mock"><span class="ml" data-i18n="t243">Name</span><span class="mi" data-i18n="t244">🇧🇷 José Ávila 🌱</span></div></figure>
+<figure class="cell"><figcaption data-i18n="t245"><span>error</span></figcaption>
+<div class="mock"><span class="ml" data-i18n="t246">Name</span><span class="mi err" data-i18n="t247">Ana</span><span class="me" data-i18n="t248">Enter your last name</span></div></figure>
+<figure class="cell bad"><span class="flag">PUSHES</span><figcaption data-i18n="t249"><span>errorLong</span><span>2 lines</span></figcaption>
+<div class="mock"><span class="ml" data-i18n="t250">Name</span><span class="mi err" data-i18n="t251">Ana Prado</span><span class="me" data-i18n="t252">An account with this name already exists in this organization.</span></div></figure>
+<figure class="cell"><figcaption data-i18n="t253"><span>pending</span></figcaption>
+<div class="mock"><span class="ml" data-i18n="t254">Name</span><span class="mi empty" data-i18n="t255">Checking…</span><span class="mp"></span></div></figure>
+<figure class="cell"><figcaption data-i18n="t256"><span>disabled</span></figcaption>
+<div class="mock"><span class="ml" data-i18n="t257">Name</span><span class="mi dis" data-i18n="t258">Ana Prado</span></div></figure>
+</div>
+<p class="note push" data-i18n="t259">The clipping in the <strong>long</strong> case doesn't show up in a Figma export. It shows up here, at 320px, in the third cell — and the two-line error pushes the button below the fold in the sixth.</p>
+</div>
 </section></div>
-
 <!-- 19 ─ FORMS ─────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/hunt/forms" data-act="II">
-  <div class="content stack-y g20">
-    <div class="stack-y g10">
-      <p class="kicker">Where it hurts most</p>
-      <h2 class="d4">The form is the battlefield.</h2>
-    </div>
-    <div class="cols-2t">
-      <ol class="ticks tight" style="margin:0">
-        <li data-n="01"><strong>A 74-character name.</strong> Does it wrap, truncate, or leak out of the card?</li>
-        <li data-n="02"><strong><code class="inl">josé+test@company.com.br</code></strong> Does your validation accept <code class="inl">+</code> and accents?</li>
-        <li data-n="03"><strong>Password pasted</strong> from a manager. Does <code class="inl">onChange</code> fire, or does the field stay "empty"?</li>
-        <li data-n="04"><strong>Browser autofill.</strong> Does the floating label move up, or sit on top of the text?</li>
-        <li data-n="05"><strong>Double-click on Submit.</strong> Two rows in the database?</li>
-        <li data-n="06"><strong>Network drops mid-submit.</strong> Does the button recover, or spin forever?</li>
-      </ol>
-      <ol class="ticks tight" style="margin:0">
-        <li data-n="07"><strong>Error coming from the server.</strong> Does it land next to the right field — or in a toast that vanishes?</li>
-        <li data-n="08"><strong>Browser back.</strong> Does the draft survive, or does the person type it all again?</li>
-        <li data-n="09"><strong>200% zoom.</strong> Is the submit button still reachable?</li>
-        <li data-n="10"><strong>Keyboard only.</strong> Can you reach submit? Does the Tab order make sense?</li>
-        <li data-n="11"><strong>Submit with an empty field.</strong> Does focus jump to the first error?</li>
-        <li data-n="12"><strong>Screen reader.</strong> Is the error announced, or just painted red?</li>
-      </ol>
-    </div>
-    <p class="note push">Twelve lines of cases. <strong>Twelve bugs that never reach the user</strong> — and none of them needed a QA person clicking.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="II" data-route="/hunt/forms">
+<div class="content stack-y g20">
+<div class="stack-y g10">
+<p class="kicker" data-i18n="t260">Where it hurts most</p>
+<h2 class="d4" data-i18n="t261">The form is the battlefield.</h2>
+</div>
+<div class="cols-2t">
+<ol class="ticks tight" style="margin:0">
+<li data-i18n="t262" data-n="01"><strong>A 74-character name.</strong> Does it wrap, truncate, or leak out of the card?</li>
+<li data-i18n="t263" data-n="02"><strong><code class="inl">josé+test@company.com.br</code></strong> Does your validation accept <code class="inl">+</code> and accents?</li>
+<li data-i18n="t264" data-n="03"><strong>Password pasted</strong> from a manager. Does <code class="inl">onChange</code> fire, or does the field stay "empty"?</li>
+<li data-i18n="t265" data-n="04"><strong>Browser autofill.</strong> Does the floating label move up, or sit on top of the text?</li>
+<li data-i18n="t266" data-n="05"><strong>Double-click on Submit.</strong> Two rows in the database?</li>
+<li data-i18n="t267" data-n="06"><strong>Network drops mid-submit.</strong> Does the button recover, or spin forever?</li>
+</ol>
+<ol class="ticks tight" style="margin:0">
+<li data-i18n="t268" data-n="07"><strong>Error coming from the server.</strong> Does it land next to the right field — or in a toast that vanishes?</li>
+<li data-i18n="t269" data-n="08"><strong>Browser back.</strong> Does the draft survive, or does the person type it all again?</li>
+<li data-i18n="t270" data-n="09"><strong>200% zoom.</strong> Is the submit button still reachable?</li>
+<li data-i18n="t271" data-n="10"><strong>Keyboard only.</strong> Can you reach submit? Does the Tab order make sense?</li>
+<li data-i18n="t272" data-n="11"><strong>Submit with an empty field.</strong> Does focus jump to the first error?</li>
+<li data-i18n="t273" data-n="12"><strong>Screen reader.</strong> Is the error announced, or just painted red?</li>
+</ol>
+</div>
+<p class="note push" data-i18n="t274">Twelve lines of cases. <strong>Twelve bugs that never reach the user</strong> — and none of them needed a QA person clicking.</p>
+</div>
 </section></div>
-
 <!-- 20 ─ THE HUNT ──────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/hunt/loop" data-act="II">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker">The hunt</p>
-      <h2 class="d3">It opens the <i>same screen</i> you do.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>You ask</dt><dd><em>"Open <code class="inl">/hunt/text-field</code> at 320px and tell me what overflows."</em></dd></div>
-      <div><dt>It navigates</dt><dd>Drives the browser, resizes the window, takes a screenshot, reads the DOM and measures how far the element went past its container. In pixels, not opinions.</dd></div>
-      <div><dt>It fixes the right thing</dt><dd>Fixes <strong>the component</strong>, never the test case. If the case stopped reproducing, the bug was hidden, not solved.</dd></div>
-      <div><dt>The matrix reloads</dt><dd>Vite's HMR. All 48 screens redraw. You check the other 47 <strong>with your eyes</strong> — because fixing one almost always breaks another.</dd></div>
-      <div><dt>It becomes a commit</dt><dd><code class="inl">git diff</code>, you read it, you accept it. The case stays in the repository: next month, it'll still be testing.</dd></div>
-    </dl>
-    <p class="note push">Its job is to <strong>find</strong>. Yours is to decide whether it's good.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="II" data-route="/hunt/loop">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker" data-i18n="t275">The hunt</p>
+<h2 class="d3" data-i18n="t276">It opens the <i>same screen</i> you do.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t277">You ask</dt><dd data-i18n="t278"><em>"Open <code class="inl">/hunt/text-field</code> at 320px and tell me what overflows."</em></dd></div>
+<div><dt data-i18n="t279">It navigates</dt><dd data-i18n="t280">Drives the browser, resizes the window, takes a screenshot, reads the DOM and measures how far the element went past its container. In pixels, not opinions.</dd></div>
+<div><dt data-i18n="t281">It fixes the right thing</dt><dd data-i18n="t282">Fixes <strong>the component</strong>, never the test case. If the case stopped reproducing, the bug was hidden, not solved.</dd></div>
+<div><dt data-i18n="t283">The matrix reloads</dt><dd data-i18n="t284">Vite's HMR. All 48 screens redraw. You check the other 47 <strong>with your eyes</strong> — because fixing one almost always breaks another.</dd></div>
+<div><dt data-i18n="t285">It becomes a commit</dt><dd data-i18n="t286"><code class="inl">git diff</code>, you read it, you accept it. The case stays in the repository: next month, it'll still be testing.</dd></div>
+</dl>
+<p class="note push" data-i18n="t287">Its job is to <strong>find</strong>. Yours is to decide whether it's good.</p>
+</div>
 </section></div>
-
 <!-- 21 ─ DONE ──────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/ship/done" data-act="CODA">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker mute">Coda</p>
-      <h2 class="d3">A component is<br><i>done</i> when:</h2>
-    </div>
-    <ol class="ticks">
-      <li data-n="01">It has cases in <code class="inl">/hunt</code> for <strong>empty, long, error and pending</strong>. Without those, it doesn't exist.</li>
-      <li data-n="02">It survives <strong>320px</strong> without horizontal scroll and <strong>200% zoom</strong> without losing the button.</li>
-      <li data-n="03">It works in <strong>both themes</strong> — and none of its colors is a literal.</li>
-      <li data-n="04">It gets <strong>visible focus</strong> from the keyboard, in the order people expect.</li>
-      <li data-n="05">The error is <strong>announced</strong>, not just painted red.</li>
-      <li data-n="06">It's in a <strong>commit you've read</strong>, with a message that explains why.</li>
-      <li data-n="07">It's been seen on a <strong>preview URL</strong>, on someone else's actual phone.</li>
-    </ol>
-  </div>
+<div class="frame"><section class="slide" data-act="CODA" data-route="/ship/done">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker mute" data-i18n="t288">Coda</p>
+<h2 class="d3" data-i18n="t289">A component is<br/><i>done</i> when:</h2>
+</div>
+<ol class="ticks">
+<li data-i18n="t290" data-n="01">It has cases in <code class="inl">/hunt</code> for <strong>empty, long, error and pending</strong>. Without those, it doesn't exist.</li>
+<li data-i18n="t291" data-n="02">It survives <strong>320px</strong> without horizontal scroll and <strong>200% zoom</strong> without losing the button.</li>
+<li data-i18n="t292" data-n="03">It works in <strong>both themes</strong> — and none of its colors is a literal.</li>
+<li data-i18n="t293" data-n="04">It gets <strong>visible focus</strong> from the keyboard, in the order people expect.</li>
+<li data-i18n="t294" data-n="05">The error is <strong>announced</strong>, not just painted red.</li>
+<li data-i18n="t295" data-n="06">It's in a <strong>commit you've read</strong>, with a message that explains why.</li>
+<li data-i18n="t296" data-n="07">It's been seen on a <strong>preview URL</strong>, on someone else's actual phone.</li>
+</ol>
+</div>
 </section></div>
-
 <!-- 22 ─ DEPLOY ────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/ship/deploy" data-act="CODA">
-  <div class="content stack-y g20">
-    <div class="cols-38" style="gap:44px">
-      <div class="stack-y g14">
-        <p class="kicker">Ship</p>
-        <h2 class="d3">One <i>push</i>, one URL.</h2>
-        <p class="tx">Vite's <code class="inl">npm run build</code> outputs static files. Vercel detects the project on its own, publishes to the CDN and hands back an address — in seconds, not in a meeting with infrastructure.</p>
-      </div>
-      <pre class="code sm"><span class="c"># the repository</span>
+<div class="frame"><section class="slide" data-act="CODA" data-route="/ship/deploy">
+<div class="content stack-y g20">
+<div class="cols-38" style="gap:44px">
+<div class="stack-y g14">
+<p class="kicker" data-i18n="t297">Ship</p>
+<h2 class="d3" data-i18n="t298">One <i>push</i>, one URL.</h2>
+<p class="tx" data-i18n="t299">Vite's <code class="inl">npm run build</code> outputs static files. Vercel detects the project on its own, publishes to the CDN and hands back an address — in seconds, not in a meeting with infrastructure.</p>
+</div>
+<pre class="code sm"><span class="c" data-i18n="t300"># the repository</span>
 gh repo create my-app --private --source=. --push
 
-<span class="c"># connect and publish</span>
+<span class="c" data-i18n="t301"># connect and publish</span>
 npm i -g vercel
 vercel link
 
-<span class="c"># the keys, per environment</span>
+<span class="c" data-i18n="t302"># the keys, per environment</span>
 vercel env add VITE_SUPABASE_URL production
 vercel env add VITE_SUPABASE_ANON_KEY production
 
 vercel --prod</pre>
-    </div>
-    <dl class="defs">
-      <div><dt>Preview per branch</dt><dd>Every branch and every PR gets <strong>its own permanent URL</strong>. You send the link on WhatsApp and the person opens it on their phone. It's the most honest design review there is.</dd></div>
-      <div><dt>Production &amp; rollback</dt><dd><code class="inl">main</code> becomes production on every push. If something broke, the previous deploy comes back in one click — Git's history and Vercel's history are the same history.</dd></div>
-      <div><dt>The route that 404s</dt><dd>A SPA with client-side routes needs a <em>rewrite</em> to <code class="inl">/index.html</code> in <code class="inl">vercel.json</code>, or <code class="inl">/hunt</code> only works when you navigate to it from inside.</dd></div>
-    </dl>
-  </div>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t303">Preview per branch</dt><dd data-i18n="t304">Every branch and every PR gets <strong>its own permanent URL</strong>. You send the link on WhatsApp and the person opens it on their phone. It's the most honest design review there is.</dd></div>
+<div><dt data-i18n="t305">Production &amp; rollback</dt><dd data-i18n="t306"><code class="inl">main</code> becomes production on every push. If something broke, the previous deploy comes back in one click — Git's history and Vercel's history are the same history.</dd></div>
+<div><dt data-i18n="t307">The route that 404s</dt><dd data-i18n="t308">A SPA with client-side routes needs a <em>rewrite</em> to <code class="inl">/index.html</code> in <code class="inl">vercel.json</code>, or <code class="inl">/hunt</code> only works when you navigate to it from inside.</dd></div>
+</dl>
+</div>
 </section></div>
-
 <!-- 23 ─ ROADMAP ───────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/ship/roadmap" data-act="CODA">
-  <div class="content stack-y g24">
-    <div class="stack-y g12">
-      <p class="kicker mute">Four steps</p>
-      <h2 class="d4">From prototype to a real application.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>Step 1 — the setup</dt><dd><code class="inl">git init</code> before the first screen. Vite + Tailwind + <code class="inl">tokens.css</code> + <code class="inl">CLAUDE.md</code>. One static screen, one branch, <strong>one Vercel preview</strong> to prove the whole path works.</dd></div>
-      <div><dt>Step 2 — the data</dt><dd><code class="inl">supabase start</code> on your machine. One table, one read, one write. Email login. The first screen that changes depending on who's logged in.</dd></div>
-      <div><dt>Step 3 — the hunt</dt><dd>The <code class="inl">/hunt</code> route and the first eight cases for your text field. The first overflow found at 320px. The first fix you wouldn't have seen in Figma.</dd></div>
-      <div><dt>Step 4 — your ceiling</dt><dd>RLS on the tables, versioned migrations, domain pointed, <code class="inl">vercel --prod</code>. And the matrix covering the five components you use most.</dd></div>
-    </dl>
-    <p class="note push">No step depends on learning everything. Each one delivers <strong>one thing that works</strong> and gets out of the way.</p>
-  </div>
+<div class="frame"><section class="slide" data-act="CODA" data-route="/ship/roadmap">
+<div class="content stack-y g24">
+<div class="stack-y g12">
+<p class="kicker mute" data-i18n="t309">Four steps</p>
+<h2 class="d4" data-i18n="t310">From prototype to a real application.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t311">Step 1 — the setup</dt><dd data-i18n="t312"><code class="inl">git init</code> before the first screen. Vite + Tailwind + <code class="inl">tokens.css</code> + <code class="inl">CLAUDE.md</code>. One static screen, one branch, <strong>one Vercel preview</strong> to prove the whole path works.</dd></div>
+<div><dt data-i18n="t313">Step 2 — the data</dt><dd data-i18n="t314"><code class="inl">supabase start</code> on your machine. One table, one read, one write. Email login. The first screen that changes depending on who's logged in.</dd></div>
+<div><dt data-i18n="t315">Step 3 — the hunt</dt><dd data-i18n="t316">The <code class="inl">/hunt</code> route and the first eight cases for your text field. The first overflow found at 320px. The first fix you wouldn't have seen in Figma.</dd></div>
+<div><dt data-i18n="t317">Step 4 — your ceiling</dt><dd data-i18n="t318">RLS on the tables, versioned migrations, domain pointed, <code class="inl">vercel --prod</code>. And the matrix covering the five components you use most.</dd></div>
+</dl>
+<p class="note push" data-i18n="t319">No step depends on learning everything. Each one delivers <strong>one thing that works</strong> and gets out of the way.</p>
+</div>
 </section></div>
-
 <!-- 23b ─ LINKS ────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/ship/links" data-act="CODA">
-  <div class="content stack-y g20">
-    <div class="stack-y g10">
-      <p class="kicker mute">The links</p>
-      <h2 class="d4">Every piece has a front door.</h2>
-    </div>
-    <dl class="defs">
-      <div><dt>Node.js</dt><dd>The runtime everything rides on — <a class="lk" href="https://nodejs.org">nodejs.org</a></dd></div>
-      <div><dt>Vite</dt><dd>The dev server and the build — <a class="lk" href="https://vite.dev">vite.dev</a></dd></div>
-      <div><dt>React</dt><dd>The UI library underneath — <a class="lk" href="https://react.dev">react.dev</a></dd></div>
-      <div><dt>Tailwind</dt><dd>Utility CSS on top of your tokens — <a class="lk" href="https://tailwindcss.com">tailwindcss.com</a></dd></div>
-      <div><dt>Supabase</dt><dd>Postgres, auth, storage and RLS — <a class="lk" href="https://supabase.com">supabase.com</a></dd></div>
-      <div><dt>Claude Code</dt><dd>The builder in your terminal — <a class="lk" href="https://claude.com/product/claude-code">claude.com</a> · docs at <a class="lk" href="https://code.claude.com/docs">code.claude.com/docs</a></dd></div>
-      <div><dt>Git + GitHub</dt><dd>History and the remote — <a class="lk" href="https://git-scm.com">git-scm.com</a> · <a class="lk" href="https://github.com">github.com</a></dd></div>
-      <div><dt>Vercel</dt><dd>Deploys, previews, rollback — <a class="lk" href="https://vercel.com">vercel.com</a></dd></div>
-    </dl>
-  </div>
+<div class="frame"><section class="slide" data-act="CODA" data-route="/ship/links">
+<div class="content stack-y g20">
+<div class="stack-y g10">
+<p class="kicker mute" data-i18n="t320">The links</p>
+<h2 class="d4" data-i18n="t321">Every piece has a front door.</h2>
+</div>
+<dl class="defs">
+<div><dt data-i18n="t322">Node.js</dt><dd data-i18n="t323">The runtime everything rides on — <a class="lk" href="https://nodejs.org">nodejs.org</a></dd></div>
+<div><dt data-i18n="t324">Vite</dt><dd data-i18n="t325">The dev server and the build — <a class="lk" href="https://vite.dev">vite.dev</a></dd></div>
+<div><dt data-i18n="t326">React</dt><dd data-i18n="t327">The UI library underneath — <a class="lk" href="https://react.dev">react.dev</a></dd></div>
+<div><dt data-i18n="t328">Tailwind</dt><dd data-i18n="t329">Utility CSS on top of your tokens — <a class="lk" href="https://tailwindcss.com">tailwindcss.com</a></dd></div>
+<div><dt data-i18n="t330">Supabase</dt><dd data-i18n="t331">Postgres, auth, storage and RLS — <a class="lk" href="https://supabase.com">supabase.com</a></dd></div>
+<div><dt data-i18n="t332">Claude Code</dt><dd data-i18n="t333">The builder in your terminal — <a class="lk" href="https://claude.com/product/claude-code">claude.com</a> · docs at <a class="lk" href="https://code.claude.com/docs">code.claude.com/docs</a></dd></div>
+<div><dt data-i18n="t334">Git + GitHub</dt><dd data-i18n="t335">History and the remote — <a class="lk" href="https://git-scm.com">git-scm.com</a> · <a class="lk" href="https://github.com">github.com</a></dd></div>
+<div><dt data-i18n="t336">Vercel</dt><dd data-i18n="t337">Deploys, previews, rollback — <a class="lk" href="https://vercel.com">vercel.com</a></dd></div>
+</dl>
+</div>
 </section></div>
-
 <!-- 24 ─ CLOSE ─────────────────────────────────────────── -->
-<div class="frame"><section class="slide" data-route="/" data-act="—">
-  <div class="content cover">
-    <p class="kicker">End</p>
-    <div class="star" aria-hidden="true"><svg viewBox="0 0 100 100" width="54" height="54"><g stroke="currentColor" stroke-width="14"><line x1="50" y1="4" x2="50" y2="96"/><line x1="10" y1="27" x2="90" y2="73"/><line x1="10" y1="73" x2="90" y2="27"/></g></svg></div>
-    <h2 class="d2">A good tool is<br>one you can <i>open</i>.</h2>
-    <p class="lead">Vite opens. Supabase opens. Git opens. The browser opens. And when you can open it, you can fix it — including the ninety-nine situations nobody designed.</p>
-    <div class="push stack-y g16">
-      <p class="sig">Wellington Mota — Product Engineering</p>
-      <div class="marks">
-        <span class="chip">git init</span>
-        <span class="chip">npm run dev</span>
-        <span class="chip">localhost:5173/hunt</span>
-        <span class="chip">vercel --prod</span>
-      </div>
-    </div>
-  </div>
+<div class="frame"><section class="slide" data-act="—" data-route="/">
+<div class="content cover">
+<p class="kicker" data-i18n="t338">End</p>
+<div aria-hidden="true" class="star"><svg height="54" viewbox="0 0 100 100" width="54"><g stroke="currentColor" stroke-width="14"><line x1="50" x2="50" y1="4" y2="96"></line><line x1="10" x2="90" y1="27" y2="73"></line><line x1="10" x2="90" y1="73" y2="27"></line></g></svg></div>
+<h2 class="d2" data-i18n="t339">A good tool is<br/>one you can <i>open</i>.</h2>
+<p class="lead" data-i18n="t340">Vite opens. Supabase opens. Git opens. The browser opens. And when you can open it, you can fix it — including the ninety-nine situations nobody designed.</p>
+<div class="push stack-y g16">
+<p class="sig" data-i18n="t341">Wellington Mota — Product Engineering</p>
+<div class="marks">
+<span class="chip" data-i18n="t342">git init</span>
+<span class="chip" data-i18n="t343">npm run dev</span>
+<span class="chip" data-i18n="t344">localhost:5173/hunt</span>
+<span class="chip" data-i18n="t345">vercel --prod</span>
+</div>
+</div>
+</div>
 </section></div>
-
 </div></div>
-
 <div class="prog" id="prog"></div>
 <div class="hud">
-  <span id="hint">Architecture for Designers</span>
-  <span class="keys">
-    <span><kbd>←</kbd> <kbd>→</kbd> navigate</span>
-    <span><kbd>O</kbd> overview</span>
-    <span><kbd>G</kbd> grid</span>
-    <span><kbd>P</kbd> print</span>
-  </span>
+<span class="hud-left"><div aria-label="Language / Idioma" class="langsw" role="group"><button aria-pressed="true" class="langsw-b" data-lang="en" type="button">EN</button><button aria-pressed="false" class="langsw-b" data-lang="pt" type="button">PT</button></div><span data-i18n="hud.title" id="hint">Architecture for Designers</span></span>
+<span class="keys">
+<span data-i18n="hud.k0"><kbd>←</kbd> <kbd>→</kbd> navigate</span>
+<span data-i18n="hud.k1"><kbd>O</kbd> overview</span>
+<span data-i18n="hud.k2"><kbd>G</kbd> grid</span>
+<span data-i18n="hud.k3"><kbd>P</kbd> print</span>
+</span>
 </div>
-
 <script>
 (function(){
   var frames = Array.prototype.slice.call(document.querySelectorAll('.frame'));
@@ -1051,5 +1039,68 @@ vercel --prod</pre>
   var start = parseInt(location.hash.slice(1), 10);
   show(start ? start - 1 : 0);
 })();
+</script><script>
+(function(){
+  var PT = {"t002": "Arquitetura<br/>para <i>designers</i>", "t003": "Como montar a sua própria stack, largar o gerador de telas e transformar o <strong>localhost</strong> num caçador de edge cases.", "t004": "Wellington Mota · Product Engineering", "t005": "Ato I · A stack", "t006": "Ato II · Edge Case Hunter", "t007": "Coda · Deploy", "t008": "Onde começa", "t009": "O Lovable dá velocidade.<br/>Depois dá um <i>teto</i>.", "t010": "Caixa-preta", "t011": "Você descreve, a tela aparece. Mas o build, as rotas, o banco e o deploy ficam do outro lado do vidro.", "t012": "Crédito por tentativa", "t013": "Cada iteração queima crédito. O loop de refino visual, que é <strong>exatamente o seu trabalho</strong>, vira a linha mais cara do projeto.", "t014": "Exporta, sem manual", "t015": "Você pode exportar o código. O que sai é um projeto que você nunca configurou, cheio de decisões que ninguém te explicou.", "t016": "Teto de complexidade", "t017": "Permissão por linha, migração, seed, teste de estado. Chega o dia em que a ferramenta para na porta.", "t018": "Nada disso é ataque ao produto. É o preço de um ambiente que <strong>decide as coisas por você</strong>, e a conta chega no dia em que você precisa decidir.", "t019": "A troca", "t020": "O Vite roda o app.<br/>O Supabase guarda os dados.<br/>O Claude escreve o <i>código</i>.", "t021": "Três peças que você troca de forma independente. Nenhuma delas é dona do seu projeto: cada uma resolve um problema e sai do caminho.", "t022": "E uma quarta peça, a mais importante e a mais barata: <strong>o seu navegador, aberto no localhost.</strong>", "t023": "O Git guarda o histórico. A Vercel publica. Nenhuma dessas cinco coisas te cobra para olhar a mesma tela de novo.", "t024": "Anatomia", "t025": "Seis camadas. Nenhuma seta atravessa uma caixa-preta.", "t026": "Navegador", "t027": "localhost:5173, a única tela onde acontece julgamento", "t028": "DevTools · Zoom · Teclado", "t030": "Dev server, HMR e o build de produção", "t033": "Postgres, auth, arquivos e permissão por linha", "t034": "SDK no cliente · SQL no banco", "t036": "Lê, escreve e roda o projeto pelo seu terminal", "t039": "O histórico legível e o desfazer que a IA não tem", "t042": "A URL pública, um deploy a cada push, um preview por branch", "t043": "preview · produção · rollback", "t044": "Toda camada tem documentação pública, uma alternativa concorrente e uma porta de saída. É isso que separa <strong>arquitetura</strong> de <strong>assinatura</strong>.", "t045": "O dev server", "t046": "O servidor que<br/>você <i>já tem</i>.", "t047": "O Vite serve os arquivos do seu projeto direto para o navegador, sem empacotar nada antes. O servidor sobe em milissegundos e você trabalha na porta <code class=\"inl\">5173</code>.", "t048": "O <strong>HMR</strong> troca só o componente que mudou, sem recarregar a página. O que você digitou no formulário continua lá. O modal continua aberto. O passo três do wizard continua no passo três.", "t049": "Por que importa", "t050": "Você salva o arquivo e a tela muda antes de a sua mão sair do teclado. <strong>Esse é o loop</strong>, o mesmo que você tem no Figma, agora rodando em código real.", "t051": "No fim", "t052": "O <code class=\"inl\">npm run build</code> gera HTML, CSS e JS estáticos. É isso que a Vercel publica.", "t053": "Portas de saída", "t054": "Next.js, Astro, SvelteKit: mesma ideia, mais opiniões. O Vite é a menor coisa que dá conta do recado, e a mais fácil de abandonar.", "t055": "Os dados", "t056": "Um Postgres de verdade,<br/>com uma <i>porta</i> na frente.", "t057": "Banco", "t058": "Postgres. Tabelas, relações, SQL. Você abre o editor e vê os dados, não uma abstração deles.", "t060": "E-mail e senha, magic link, Google, GitHub. A sessão chega pronta no cliente.", "t062": "A regra de quem vê o quê mora <strong>no banco</strong>, e não num <code class=\"inl\">if</code> do frontend.", "t064": "Upload de imagem e arquivo, sob as mesmas regras de permissão.", "t066": "A tabela muda, a tela muda. Útil para listas compartilhadas e notificações.", "t068": "O <code class=\"inl\">supabase start</code> roda o banco inteiro em Docker na sua máquina. Funciona offline.", "t069": "Rodar o banco local é o que fecha o loop do Ato II: você <strong>planta dados absurdos de propósito</strong>, um nome de 74 caracteres, um pedido sem itens, um usuário sem foto, e observa o que a interface faz.", "t070": "O construtor", "t071": "Não é gerador de tela.<br/>É alguém que <i>abre os arquivos</i>.", "t072": "Lê o projeto", "t073": "O repositório inteiro, não só o prompt. Ele sabe que o <code class=\"inl\">Button.tsx</code> já existe e que a sua escala de espaçamento anda de 4 em 4.", "t074": "Roda o projeto", "t075": "Executa o <code class=\"inl\">npm run dev</code>, lê o erro no terminal, aplica a correção e roda de novo. O erro não vira pedido de desculpas, vira linha de código.", "t076": "Olha a tela", "t077": "Abre o <code class=\"inl\">localhost:5173</code> no navegador, tira um screenshot, mede o elemento que vazou, redimensiona para 320px e repete.", "t078": "Escreve o histórico", "t079": "Faz o commit com a mensagem certa. Você lê o <code class=\"inl\">git diff</code> antes de aceitar.", "t080": "A diferença entre <strong>pedir uma tela</strong> e <strong>pedir uma correção</strong>: a segunda exige que a ferramenta enxergue o estado atual. Só quem tem o repositório e o navegador consegue.", "t081": "O desfazer", "t082": "O Git é o <i>Cmd+Z</i> que sobrevive a fechar o notebook.", "t083": "É a peça que designer mais adia e mais precisa. Trabalhando com IA, o Git deixa de ser burocracia de dev e vira <strong>rede de segurança</strong>: se a última rodada piorou tudo, uma linha te leva de volta.", "t084": "# antes da primeira tela, não depois", "t085": "# um experimento por branch", "t087": "# não deu certo? o experimento inteiro some:", "t089": "O seu code review. Você lê <strong>exatamente</strong> o que a IA mudou, linha por linha, antes de aceitar. Nunca comite o que você não leu.", "t091": "O <code class=\"inl\">.env.local</code> e o <code class=\"inl\">node_modules</code> ficam de fora. A chave do Supabase <strong>nunca</strong> vai para o GitHub.", "t092": "O histórico", "t093": "Num gerador de telas, o histórico é uma lista de prompts. Aqui é uma lista de mudanças que você lê, reverte e explica para outra pessoa.", "t094": "Dia um", "t095": "Do zero ao localhost em seis linhas.", "t096": "# 1. o projeto", "t097": "# 2. estilo e dados", "t098": "# 3. o banco, na sua máquina", "t099": "# 4. o loop começa aqui", "t101": "Depois disso, <code class=\"inl\">claude</code> na mesma pasta. Ele passa a enxergar tudo que está acima.", "t102": "A chave local do Supabase aparece na saída do <code class=\"inl\">supabase start</code>. Ela vai para o <code class=\"inl\">.env.local</code> com o prefixo <code class=\"inl\">VITE_</code>. Sem o prefixo, o Vite não expõe a variável.", "t103": "Seis linhas. Nenhuma é irreversível, nenhuma cobra por execução, e o resultado <strong>já é seu antes de existir</strong>.", "t104": "Nunca abriu um terminal?", "t105": "O setup inteiro cabe num pedido.", "t106": "01 · Node.js", "t107": "Baixe o instalador LTS em <a class=\"lk\" href=\"https://nodejs.org\">nodejs.org</a> e clique como em qualquer app. É o único passo sem atalho.", "t108": "02 · Claude Code", "t109": "Pegue em <a class=\"lk\" href=\"https://claude.com/product/claude-code\">claude.com</a>. O site te entrega uma linha para colar no Terminal. O <span class=\"ai\">Claude app</span> te guia nas duas instalações se algo parecer assustador.", "t110": "03 · Abra", "t111": "Crie uma pasta para o projeto, abra o Terminal nela, digite <code class=\"inl\">claude</code>. Daqui em diante você para de digitar comandos e passa a pedir. <span class=\"ai\">Claude Code</span>", "t112": "04 · Primeiro pedido", "t113": "<span class=\"say\">Crie um projeto Vite aqui com React, TypeScript e Tailwind, suba o dev server e abra no meu navegador.</span>", "t114": "Todo comando do slide anterior é algo que você <strong>pode</strong> digitar, e nunca precisa. As seis linhas viram uma frase.", "t115": "Prompts para roubar", "t116": "Conecte as peças pedindo.", "t118": "<span class=\"say\">Configure o Supabase neste projeto: instale o cliente, crie o src/lib/supabase.ts lendo as chaves do .env.local, e me diga exatamente onde no dashboard eu acho esses dois valores.</span><span class=\"sm\">Você cria o projeto grátis em <a class=\"lk\" href=\"https://supabase.com\">supabase.com</a>. O <span class=\"ai\">Claude Code</span> faz o resto.</span>", "t119": "Você cria o projeto grátis em <a class=\"lk\" href=\"https://supabase.com\">supabase.com</a>. O <span class=\"ai\">Claude Code</span> faz o resto.", "t121": "<span class=\"say\">Crie um repositório privado no GitHub para este projeto e faça o push. Se eu não estiver logado, me guie no gh auth login passo a passo.</span>", "t123": "<span class=\"say\">Conecte este repositório à Vercel, adicione minhas duas chaves do Supabase como variáveis de ambiente e faça o deploy. Me devolva a URL.</span>", "t124": "Quando quebrar", "t125": "<span class=\"say\">Leia o erro no terminal, explique em uma frase e depois corrija.</span>", "t126": "Topografia", "t127": "Onde mora cada decisão.", "t132": "O contrato: como este projeto se comporta. Próximo slide.", "t134": "Cor, tipo, espaço, raio. A fonte da verdade. Nenhum hex literal fora deste arquivo.", "t136": "Um arquivo, um componente. Se tem dois, ainda não terminou.", "t138": "O Ato II inteiro mora aqui. E não vai para produção.", "t140": "O histórico do banco, versionado no Git ao lado do código.", "t141": "O contrato", "t142": "O arquivo que faz a IA<br/>parar de <i>improvisar</i>.", "t143": "Você escreve as regras <strong>uma vez</strong>. Toda sessão futura começa com elas na mesa. É um design system escrito em prosa, e é a peça que designer escreve melhor que dev.", "t144": "Sem este arquivo, toda conversa começa do zero e todo componente inventa um cinza novo.", "t147": "## Componentes", "t148": "## Formulários", "t149": "## Regras da casa", "t150": "O método", "t151": "Quatro passos. Só um<br/>deles resiste à <i>automação</i>.", "t152": "01 · Descreva", "t153": "Em linguagem comum, com o contexto que o <code class=\"inl\">CLAUDE.md</code> não cobre. <em>\"Um card de pedido com foto, status e valor. Segue os tokens.\"</em>", "t154": "02 · Gere", "t155": "Ele escreve o arquivo, sobe o servidor e corrige os próprios erros de tipo e sintaxe antes de devolver.", "t156": "03 · Olhe", "t157": "<strong>Você, no seu navegador.</strong> Não é preview embutido nem screenshot. É a tela real, na largura que você escolher.", "t158": "04 · Corrija", "t159": "<em>\"O valor está competindo com o status. Coloca o valor em algarismos tabulares e joga o status para baixo.\"</em> Vocabulário de designer, não de dev.", "t160": "O passo 3 é seu, e é o único que você não terceiriza: <strong>é julgamento.</strong> O resto da arquitetura existe para deixar esse passo rápido e barato.", "t161": "Placar do Ato I", "t162": "O que muda de lugar.", "t163": "Gerador de telas", "t164": "A sua própria stack", "t165": "Onde roda", "t166": "No servidor deles", "t167": "Na sua máquina, no localhost", "t168": "O erro", "t169": "Um resumo em linguagem natural", "t170": "O stack trace, no seu terminal", "t172": "Aproximados dentro de um CSS gerado", "t173": "Um arquivo, importado por tudo", "t174": "Banco", "t175": "Abstraído atrás de um painel", "t176": "Postgres, com SQL e migrações", "t177": "Histórico", "t178": "Uma lista de prompts", "t179": "Git: legível, reversível, seu", "t180": "Publicação", "t181": "O botão deles, o domínio deles", "t182": "Vercel: um preview por branch, o seu domínio", "t183": "Custo de iterar", "t184": "Por prompt", "t185": "Salvar o arquivo", "t186": "Teto", "t187": "Existe, e você descobre tarde", "t188": "Seu", "t189": "O prêmio real não é nenhuma linha isolada: é que nenhuma empresa fica entre você e o seu trabalho. Toda peça é trocável, todo arquivo mora na sua máquina, e se uma ferramenta sumir ou dobrar de preço, <strong>você sai de lá dono de tudo que construiu</strong>.", "t190": "Ato II · Edge Case Hunter", "t191": "O happy path é<br/>vinte por cento<br/>do <i>trabalho</i>.", "t192": "Os outros oitenta são as situações que ninguém desenhou: o nome de 74 caracteres, a rede que caiu no meio do envio, a lista vazia no primeiro login, o erro do servidor num campo que já estava certo.", "t193": "Você não acha isso no Figma. Você acha <strong>no navegador</strong>, e é por isso que o Ato I existe.", "t194": "Taxonomia", "t195": "Seis eixos. Todo componente é cortado pelos seis.", "t196": "Dados", "t197": "Vazio. Um. Muitos. Longo demais. Emoji e acento. Zero. Negativo. Nulo. Texto da direita para a esquerda.", "t198": "Estado", "t199": "Parado. Carregando. Salvando. Sucesso. Erro. Desabilitado. Somente leitura. Preenchido pela metade.", "t200": "Rede", "t201": "Lenta. Offline. 500. Timeout. Respostas chegando fora de ordem. Sessão expirando no meio.", "t202": "Entrada", "t203": "Colar. Autofill do navegador. Duplo clique no enviar. Só teclado. Voltar do navegador com rascunho.", "t204": "Ambiente", "t205": "320px. 4K. Tema escuro. Fonte do sistema grande. Zoom 200%. Movimento reduzido.", "t206": "Permissão", "t207": "Deslogado. Sem acesso àquela linha. Papel de leitor. Conta suspensa. Dado de outra pessoa.", "t208": "Seis eixos × oito estados × três larguras × dois temas. <strong>Ninguém clica isso na mão.</strong> Então a gente renderiza tudo de uma vez.", "t209": "A ferramenta", "t210": "Uma rota no seu próprio app que renderiza <i>tudo que pode dar errado</i>.", "t211": "O que é", "t212": "Uma rota <code class=\"inl\">/hunt</code> dentro do mesmo projeto. Mesmo CSS, mesmos tokens, mesmas fontes, mesmo tema. O componente que está ali é <strong>o componente de produção</strong>, não uma cópia.", "t213": "Por que não um screenshot", "t214": "Porque screenshot não tem foco de teclado, não tem zoom, não tem leitor de tela, não tem <code class=\"inl\">prefers-reduced-motion</code> e não quebra em 320px.", "t215": "Por que localhost", "t216": "É o navegador de verdade. Você abre o DevTools, arrasta a janela até 320px, aumenta a fonte do sistema, liga o VoiceOver. <strong>Tudo que o usuário pode fazer, você faz antes.</strong>", "t217": "Não vai para produção", "t218": "Uma linha no roteador mantém a rota fora do build final. Ou você deixa ela lá, atrás de login, e ela vira a página de QA do time.", "t219": "O andaime", "t220": "Você descreve os casos. A matriz se monta sozinha.", "t227": "// 8 casos × 3 larguras × 2 temas", "t228": "// = 48 telas numa página só", "t229": "Cada caso são <strong>três linhas</strong>. Escrever o caso é mais rápido do que abrir a tela e reproduzir a situação na mão, e ele fica lá para sempre.", "t230": "O que você vê ao abrir a rota", "t231": "Oito versões do mesmo campo, lado a lado.", "t232": "TextField · viewport 320 px · tema claro · zoom 100%", "t234": "Nome", "t237": "Nome", "t238": "Seu nome completo", "t240": "Nome", "t243": "Nome", "t246": "Nome", "t248": "Informe o seu sobrenome", "t249": "<span>errorLong</span><span>2 linhas</span>", "t250": "Nome", "t252": "Já existe uma conta com este nome nesta organização.", "t254": "Nome", "t255": "Verificando…", "t257": "Nome", "t259": "O corte do caso <strong>long</strong> não aparece num export do Figma. Aparece aqui, em 320px, na terceira célula. E o erro de duas linhas empurra o botão para fora da tela na sexta.", "t260": "Onde dói mais", "t261": "O formulário é o campo de batalha.", "t262": "<strong>Um nome de 74 caracteres.</strong> Quebra linha, trunca, ou vaza para fora do card?", "t263": "<strong><code class=\"inl\">josé+teste@empresa.com.br</code></strong> A sua validação aceita <code class=\"inl\">+</code> e acento?", "t264": "<strong>Senha colada</strong> do gerenciador. O <code class=\"inl\">onChange</code> dispara, ou o campo continua \"vazio\"?", "t265": "<strong>Autofill do navegador.</strong> O label flutuante sobe, ou fica em cima do texto?", "t266": "<strong>Duplo clique no Enviar.</strong> Duas linhas no banco?", "t267": "<strong>A rede cai no meio do envio.</strong> O botão se recupera, ou gira para sempre?", "t268": "<strong>Erro vindo do servidor.</strong> Ele pousa ao lado do campo certo, ou num toast que some?", "t269": "<strong>Voltar do navegador.</strong> O rascunho sobrevive, ou a pessoa digita tudo de novo?", "t270": "<strong>Zoom em 200%.</strong> O botão de enviar ainda está alcançável?", "t271": "<strong>Só teclado.</strong> Dá para chegar no enviar? A ordem do Tab faz sentido?", "t272": "<strong>Enviar com campo vazio.</strong> O foco pula para o primeiro erro?", "t273": "<strong>Leitor de tela.</strong> O erro é anunciado, ou só pintado de vermelho?", "t274": "Doze linhas de casos. <strong>Doze bugs que nunca chegam no usuário</strong>, e nenhum deles precisou de alguém de QA clicando.", "t275": "A caçada", "t276": "Ele abre a <i>mesma tela</i> que você.", "t277": "Você pede", "t278": "<em>\"Abre o <code class=\"inl\">/hunt/text-field</code> em 320px e me diz o que vaza.\"</em>", "t279": "Ele navega", "t280": "Dirige o navegador, redimensiona a janela, tira um screenshot, lê o DOM e mede quanto o elemento passou do container. Em pixels, não em opinião.", "t281": "Ele corrige a coisa certa", "t282": "Corrige <strong>o componente</strong>, nunca o caso de teste. Se o caso parou de reproduzir, o bug foi escondido, não resolvido.", "t283": "A matriz recarrega", "t284": "HMR do Vite. As 48 telas se redesenham. Você confere as outras 47 <strong>com os olhos</strong>, porque consertar uma quase sempre quebra outra.", "t285": "Vira um commit", "t286": "<code class=\"inl\">git diff</code>, você lê, você aceita. O caso fica no repositório: mês que vem, ele ainda está testando.", "t287": "O trabalho dele é <strong>achar</strong>. O seu é decidir se está bom.", "t289": "Um componente está<br/><i>pronto</i> quando:", "t290": "Tem casos em <code class=\"inl\">/hunt</code> para <strong>vazio, longo, erro e pendente</strong>. Sem isso, ele não existe.", "t291": "Sobrevive a <strong>320px</strong> sem scroll horizontal e a <strong>zoom de 200%</strong> sem perder o botão.", "t292": "Funciona nos <strong>dois temas</strong>, e nenhuma cor dele é literal.", "t293": "Recebe <strong>foco visível</strong> pelo teclado, na ordem que as pessoas esperam.", "t294": "O erro é <strong>anunciado</strong>, não só pintado de vermelho.", "t295": "Está num <strong>commit que você leu</strong>, com uma mensagem que explica o porquê.", "t296": "Já foi visto numa <strong>URL de preview</strong>, no celular de verdade de outra pessoa.", "t297": "Publicar", "t298": "Um <i>push</i>, uma URL.", "t299": "O <code class=\"inl\">npm run build</code> do Vite gera arquivos estáticos. A Vercel detecta o projeto sozinha, publica no CDN e devolve um endereço. Em segundos, não numa reunião com infraestrutura.", "t300": "# o repositório", "t301": "# conectar e publicar", "t302": "# as chaves, por ambiente", "t303": "Preview por branch", "t304": "Toda branch e todo PR ganham <strong>uma URL permanente própria</strong>. Você manda o link no WhatsApp e a pessoa abre no celular dela. É o design review mais honesto que existe.", "t305": "Produção e rollback", "t306": "A <code class=\"inl\">main</code> vira produção a cada push. Se algo quebrou, o deploy anterior volta em um clique: o histórico do Git e o da Vercel são o mesmo histórico.", "t307": "A rota que dá 404", "t308": "Uma SPA com rotas no cliente precisa de um <em>rewrite</em> para <code class=\"inl\">/index.html</code> no <code class=\"inl\">vercel.json</code>, senão a <code class=\"inl\">/hunt</code> só funciona quando você navega até ela por dentro.", "t309": "Quatro passos", "t310": "Do protótipo a uma aplicação de verdade.", "t311": "Passo 1 · o setup", "t312": "<code class=\"inl\">git init</code> antes da primeira tela. Vite + Tailwind + <code class=\"inl\">tokens.css</code> + <code class=\"inl\">CLAUDE.md</code>. Uma tela estática, uma branch, <strong>um preview na Vercel</strong> para provar que o caminho inteiro funciona.", "t313": "Passo 2 · os dados", "t314": "<code class=\"inl\">supabase start</code> na sua máquina. Uma tabela, uma leitura, uma escrita. Login por e-mail. A primeira tela que muda dependendo de quem está logado.", "t315": "Passo 3 · a caçada", "t316": "A rota <code class=\"inl\">/hunt</code> e os primeiros oito casos do seu campo de texto. O primeiro vazamento encontrado em 320px. A primeira correção que você não teria visto no Figma.", "t317": "Passo 4 · o seu teto", "t318": "RLS nas tabelas, migrações versionadas, domínio apontado, <code class=\"inl\">vercel --prod</code>. E a matriz cobrindo os cinco componentes que você mais usa.", "t319": "Nenhum passo depende de aprender tudo. Cada um entrega <strong>uma coisa que funciona</strong> e sai do caminho.", "t320": "Os links", "t321": "Toda peça tem uma porta de entrada.", "t323": "O runtime em que tudo anda: <a class=\"lk\" href=\"https://nodejs.org\">nodejs.org</a>", "t325": "O dev server e o build: <a class=\"lk\" href=\"https://vite.dev\">vite.dev</a>", "t327": "A biblioteca de UI por baixo: <a class=\"lk\" href=\"https://react.dev\">react.dev</a>", "t329": "CSS utilitário em cima dos seus tokens: <a class=\"lk\" href=\"https://tailwindcss.com\">tailwindcss.com</a>", "t331": "Postgres, auth, storage e RLS: <a class=\"lk\" href=\"https://supabase.com\">supabase.com</a>", "t333": "O construtor no seu terminal: <a class=\"lk\" href=\"https://claude.com/product/claude-code\">claude.com</a> · docs em <a class=\"lk\" href=\"https://code.claude.com/docs\">code.claude.com/docs</a>", "t335": "Histórico e o remoto: <a class=\"lk\" href=\"https://git-scm.com\">git-scm.com</a> · <a class=\"lk\" href=\"https://github.com\">github.com</a>", "t337": "Deploys, previews, rollback: <a class=\"lk\" href=\"https://vercel.com\">vercel.com</a>", "t338": "Fim", "t339": "Boa ferramenta é<br/>a que você consegue <i>abrir</i>.", "t340": "O Vite abre. O Supabase abre. O Git abre. O navegador abre. E quando você consegue abrir, você consegue consertar, inclusive as noventa e nove situações que ninguém desenhou.", "t341": "Wellington Mota · Product Engineering", "hud.title": "Arquitetura para Designers", "hud.k0": "<kbd>←</kbd> <kbd>→</kbd> navegar", "hud.k1": "<kbd>O</kbd> visão geral", "hud.k2": "<kbd>G</kbd> grade", "hud.k3": "<kbd>P</kbd> imprimir"};
+  var META = {
+    en: {title:"Architecture for Designers",
+         desc:"A 27-slide deck by Wellington Mota: build your own stack with Vite, Supabase, Claude Code, Git and Vercel \u2014 and turn localhost into an edge case hunter."},
+    pt: {title:"Arquitetura para Designers",
+         desc:"Deck de 27 telas por Wellington Mota: monte a sua pr\u00f3pria stack com Vite, Supabase, Claude Code, Git e Vercel, e transforme o localhost num ca\u00e7ador de edge cases."}
+  };
+  var ACT = {'Act I':'Ato I', 'Act II':'Ato II', 'Coda':'Coda'};
+  var ems = document.querySelectorAll('.chrome .pager em');
+  for (var a = 0; a < ems.length; a++){
+    var t = ems[a].textContent.trim();
+    var ak = 'act.' + t.replace(/\s+/g, '_');
+    ems[a].setAttribute('data-i18n', ak);
+    if (ACT[t]) PT[ak] = ACT[t];
+  }
+
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var EN = {};
+  for (var n = 0; n < nodes.length; n++) EN[nodes[n].getAttribute('data-i18n')] = nodes[n].innerHTML;
+
+  function apply(lang){
+    var dict = lang === 'pt' ? PT : EN;
+    for (var i = 0; i < nodes.length; i++){
+      var k = nodes[i].getAttribute('data-i18n');
+      var v = dict[k];
+      if (v === undefined && lang === 'pt') v = EN[k];
+      if (v !== undefined && nodes[i].innerHTML !== v) nodes[i].innerHTML = v;
+    }
+    document.documentElement.lang = (lang === 'pt' ? 'pt-BR' : 'en');
+    document.title = META[lang].title;
+    var m = document.querySelector('meta[name="description"]');
+    if (m) m.setAttribute('content', META[lang].desc);
+    var bs = document.querySelectorAll('.langsw-b');
+    for (var j = 0; j < bs.length; j++)
+      bs[j].setAttribute('aria-pressed', String(bs[j].getAttribute('data-lang') === lang));
+    try { localStorage.setItem('afd-lang', lang); } catch (e) {}
+  }
+
+  function pick(){
+    var q = new URLSearchParams(location.search).get('lang');
+    if (q === 'pt' || q === 'en') return q;
+    try { var s = localStorage.getItem('afd-lang'); if (s) return s; } catch (e) {}
+    return (navigator.language || 'en').toLowerCase().indexOf('pt') === 0 ? 'pt' : 'en';
+  }
+
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.langsw-b');
+    if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    apply(b.getAttribute('data-lang'));
+  }, true);
+
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'l' || e.key === 'L'){
+      apply(document.documentElement.lang.indexOf('pt') === 0 ? 'en' : 'pt');
+    }
+  });
+
+  apply(pick());
+})();
 </script>
-</html>
+</head></html>
