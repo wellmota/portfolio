@@ -22,10 +22,46 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/" />
   </url>
   <url>
-    <loc>https://userexperience.com.br/livro</loc>
-    <lastmod>2026-07-23</lastmod>
+    <loc>https://userexperience.com.br/livro/</loc>
+    <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://userexperience.com.br/work/vess</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/vess" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/vess" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/vess" />
+  </url>
+  <url>
+    <loc>https://userexperience.com.br/pt/work/vess</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/vess" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/vess" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/vess" />
+  </url>
+  <url>
+    <loc>https://userexperience.com.br/work/tutory</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/tutory" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/tutory" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/tutory" />
+  </url>
+  <url>
+    <loc>https://userexperience.com.br/pt/work/tutory</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/tutory" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/tutory" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/tutory" />
   </url>
   <url>
     <loc>https://userexperience.com.br/talks/architecture-for-designers/</loc>
