@@ -178,6 +178,7 @@ const en: SiteData = {
       highlight: 'From redesign to production in 7 days',
       href: '/work/cuidame',
     },
+    /* Case studies em espera — descomente para publicar
     {
       title: 'HyperGestor',
       meta: 'Automotive · Case Study',
@@ -189,7 +190,6 @@ const en: SiteData = {
       highlight: 'ERP + agentic CRM · 18 modules',
       href: '/work/hypergestor',
     },
-    /* Case studies em espera — descomente para publicar
     {
       title: 'VESS Studio',
       meta: 'Wellness · Case Study',
