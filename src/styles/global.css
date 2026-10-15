@@ -324,6 +324,7 @@ body {
 .js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+  will-change: auto; /* libera a camada composta depois do reveal (vídeo dentro de will-change pisca no Chrome/macOS) */
 }
 
 /* Hero wordmark: CSS load animation — robust, no observer dependency */
@@ -536,4 +537,23 @@ body {
 }
 .faq-box[open] .faq-sign-plus {
   transform: rotate(45deg);
+}
+
+/* ------------------------------------------------------------------
+ *  Prints do app novo: cantos da tela do iPhone (raio proporcional à largura).
+ *  Os prints do app antigo ficam retos.
+ * ------------------------------------------------------------------ */
+.print-ios {
+  container-type: inline-size;
+}
+.print-ios img {
+  display: block;
+  width: 100%;
+  border-radius: 15cqw;
+  border: 1px solid var(--color-line);
+}
+@supports not (border-radius: 1cqw) {
+  .print-ios img {
+    border-radius: 28px;
+  }
 }

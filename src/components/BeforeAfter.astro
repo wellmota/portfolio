@@ -1,0 +1,75 @@
+---
+/**
+ * Pares "antes → depois" em zig-zag: imagens de um lado (tela antiga em P&B, bem menor,
+ * ao lado da nova), texto do outro, alternando a cada linha. Cada par traz a heurística
+ * aplicada e o que mudou no redesign.
+ */
+import type { ComparePair } from '../data/cases/types';
+
+interface Props {
+  pairs: ComparePair[];
+  beforeLabel: string;
+  afterLabel: string;
+  heuristicLabel: string;
+  caption?: string;
+}
+
+const { pairs, beforeLabel, afterLabel, heuristicLabel, caption } = Astro.props;
+---
+
+<div class="mt-12 border-t border-line">
+  {
+    pairs.map((p, i) => (
+      <article class="grid gap-6 border-b border-line py-10 md:grid-cols-2 md:items-center md:gap-14 md:py-14" data-reveal>
+        <div class:list={['ba-media', i % 2 === 1 && 'md:order-2']}>
+          <div class="ba-pair">
+            <div>
+              <span class="mono mb-2 block text-[10px] uppercase tracking-widest text-faint">{beforeLabel}</span>
+              <div class="ba-before overflow-hidden border border-line">
+                <img src={p.before.src} alt={p.before.alt} loading="lazy" class="block w-full" />
+              </div>
+            </div>
+            <div>
+              <span class="mono mb-2 block text-[10px] uppercase tracking-widest" style="color: var(--color-lime)">{afterLabel}</span>
+              <div class="print-ios">
+                <img src={p.after.src} alt={p.after.alt} loading="lazy" class="block w-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class:list={['max-w-xl', i % 2 === 1 && 'md:order-1 md:justify-self-end']}>
+          <p class="mono text-[11px] uppercase tracking-widest" style="color: var(--color-lime)">
+            {String(i + 1).padStart(2, '0')} — {p.label}
+          </p>
+          <p class="mono mt-3 text-[11px] uppercase tracking-widest text-faint">
+            {heuristicLabel}: <span class="text-mist">{p.heuristic}</span>
+          </p>
+          <div class="mt-5 space-y-4">
+            {p.body.map((t) => (
+              <p class="text-[15.5px] leading-relaxed text-mist md:text-base">{t}</p>
+            ))}
+          </div>
+        </div>
+      </article>
+    ))
+  }
+  {caption && <p class="mono mt-3 text-[11px] tracking-wide text-faint">{caption}</p>}
+</div>
+
+<style>
+  .ba-pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 12px;
+    align-items: start;
+  }
+  @media (min-width: 768px) {
+    .ba-pair {
+      gap: 16px;
+    }
+  }
+  .ba-before img {
+    filter: grayscale(1) contrast(1.02);
+    opacity: 0.9;
+  }
+</style>

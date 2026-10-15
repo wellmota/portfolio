@@ -1,0 +1,513 @@
+import type { CaseStudy } from './types';
+
+const cuidame: CaseStudy = {
+  pt: {
+    slug: 'cuidame',
+    accent: '#2FA98C',
+    kicker: 'Case Study — 2026',
+    title: 'CuidaMe',
+    subtitle:
+      'O resgate de um app de cuidado dado como perdido: menos escopo, foco na família e, em uma semana, workshop, redesign e 100% do front-end prontos para beta — aprovados de primeira.',
+    heroVideo: { src: '/cases/cuidame/cuidame-editorial.mp4', poster: '/cases/cuidame/cover-real.webp' },
+    cover: {
+      src: '/cases/cuidame/cover-real.webp',
+      alt: 'Mockup do app CuidaMe: prontuário compartilhado da família em telas de celular',
+    },
+    meta: [
+      { label: 'Cliente', value: 'Altevita · Clínica de cuidado' },
+      { label: 'Ano', value: '2026' },
+      { label: 'Papel', value: 'Product Designer & Design Engineer — solo' },
+      { label: 'Plataforma', value: 'App mobile · iOS & Android' },
+      { label: 'Contexto', value: 'Resgate de um projeto travado há 2 anos antes da minha entrada' },
+    ],
+    stats: [
+      { value: '2 anos', label: 'travado antes da minha entrada, destravado' },
+      { value: '1 semana', label: 'workshop, redesign e 100% do front-end' },
+      { value: '100%', label: 'do front pronto para beta testers em 7 dias' },
+      { value: '1ª', label: 'versão do protótipo aprovada de primeira' },
+      { value: '0', label: 'handoff — do design direto para a produção' },
+      { value: 'Novo', label: 'produto que o cliente agora vai comercializar' },
+    ],
+    intro: [
+      'O CuidaMe é um app da Altevita para acompanhar o cuidado de pessoas. Nasceu como ferramenta de uma empresa de cuidado, com gestão de equipe, escalas e visita de cuidador no centro.',
+      'Quando cheguei, o produto estava há dois anos num ciclo de vai e vem: fazia, não era o esperado, refazia. A relação com o cliente estava desgastada e o projeto, na prática, fadado ao cancelamento. Eu entrei para destravar.',
+    ],
+    roleLabel: 'O que eu fiz',
+    roleList: [
+      'Resgate de projeto',
+      'Workshop de mapeamento',
+      'Redefinição de escopo',
+      'UX research & fluxos',
+      'Redesign de UI',
+      'Protótipo navegável',
+      'Ciclos de validação',
+      'Design system',
+      'Front-end (direto em produção)',
+      'Reuniões com stakeholders',
+    ],
+    sections: [
+      {
+        kicker: '01 — As telas',
+        title: 'Telas que a família entende de primeira',
+        body: [
+          'Redesenhei a interface inteira para o novo público: linguagem simples, hierarquia clara e as ações do dia a dia a um toque. Um só prontuário, visto por todos que cuidam.',
+        ],
+        gallery: [
+          { src: '/cases/cuidame/print-home.webp', alt: 'Início do app CuidaMe: card da Helena com rotina do dia, agenda e gastos', device: 'ios' },
+          { src: '/cases/cuidame/print-perfil-helena.webp', alt: 'Resumo da Helena: remédios e cuidados feitos hoje, próximo compromisso e tratamento em curso', device: 'ios' },
+          { src: '/cases/cuidame/print-agenda-detalhe.webp', alt: 'Evento na agenda do CuidaMe: retorno com a pediatra, local, descrição e lembretes', device: 'ios' },
+          { src: '/cases/cuidame/print-remedios.webp', alt: 'Prescrição médica no app CuidaMe: remédios ativos organizados por horário', device: 'ios' },
+          { src: '/cases/cuidame/print-chat.webp', alt: 'Chat da família no app CuidaMe entre a mãe e o pai da Helena', device: 'ios' },
+          { src: '/cases/cuidame/print-gastos.webp', alt: 'Divisão de gastos estilo Tricount no app CuidaMe: quem pagou e o acerto do mês', device: 'ios' },
+        ],
+      },
+      {
+        kicker: '02 — O problema',
+        title: 'Dois anos de vai e vem e uma relação para resetar',
+        body: [
+          'Antes da minha entrada, o projeto passou dois anos com outro time e descarrilou pelo motivo mais comum: falta de detalhamento. Pedia-se uma coisa, entregava-se outra, refazia. Dois anos depois, o cliente estava frustrado com razão e o produto, parado.',
+          'O meu trabalho não era desenhar telas bonitas em cima de um escopo nebuloso. Era ser a peça que destrava: devolver clareza antes de devolver código.',
+          'A relação estava desgastada, e isso vinha antes de qualquer tela. Apliquei um processo de empatia com o cliente: ouvir onde doía, entender o que elas esperavam e o que já tinham desistido de pedir. A meta não era entregar o combinado — era entregar muito além da expectativa, para a confiança voltar junto com o produto.',
+        ],
+        image: {
+          src: '/cases/cuidame/problema.svg',
+          alt: 'Diagrama do ciclo de retrabalho: pedir, entregar fora do esperado, refazer',
+          caption: 'A raiz do descarrilamento: escopo sem detalhe vira retrabalho infinito.',
+        },
+        galleryTitle: 'Antes — o app que eu herdei',
+        galleryBadge: 'Antes',
+        galleryCaption: 'O app publicado antes da minha entrada, dois anos de retrabalho depois: formulários de quinze campos, telas feitas de botões iguais, modal em cima de modal e uma aba “Mais” só com Sair e Excluir conta. Era isso que a cliente usava — e por isso estava frustrada.',
+        gallery: [
+          { src: '/cases/cuidame/before-bw/old-add-paciente-1.webp', alt: 'App antigo: formulário de cadastro de paciente com seletor de nível de dependência solto no meio da tela' },
+          { src: '/cases/cuidame/before-bw/old-add-cuidador.webp', alt: 'App antigo: formulário de cadastro de cuidador com sete campos obrigatórios e regras de senha' },
+          { src: '/cases/cuidame/before-bw/old-paciente-julia.webp', alt: 'App antigo: tela do paciente com uma lista de oito botões iguais, sem hierarquia' },
+          { src: '/cases/cuidame/before-bw/old-onboarding-detalhe.webp', alt: 'App antigo: modal de ajuda sobreposto por um toast de sucesso' },
+          { src: '/cases/cuidame/before-bw/old-mais.webp', alt: 'App antigo: tela "Mais" só com Sair e Excluir conta em vermelho' },
+        ],
+      },
+      {
+        kicker: '03 — O método',
+        title: 'Mapear tela a tela antes de prometer qualquer prazo',
+        body: [
+          'Inverti a ordem. Antes de falar em prazo, conduzi um workshop de mapeamento com o cliente: tela a tela, fluxo a fluxo, jornada a jornada. Nada de reunião de meia hora.',
+          'Dali saiu um protótipo navegável que o cliente conseguia usar de verdade. Eles criticavam, eu ajustava, em ciclo, até estar 100%. Só então assumimos prazo — com o escopo claro para os dois lados, não no escuro.',
+          'O protótipo já nasceu na stack final, em Expo. Antes de cada rodada com a cliente, eu passava as telas por heurísticas de usabilidade e boas práticas de UI; o teste ficava para o que só o uso real mostra. O refino visual acontecia direto no código, no mesmo dia, sem documento no meio. Quando a cliente aprovou, o protótipo era o produto.',
+        ],
+        image: {
+          src: '/cases/cuidame/mapeamento.svg',
+          alt: 'Mapa de telas e fluxos do CuidaMe montado no workshop',
+          caption: 'Do workshop ao protótipo aprovado: heurísticas antes do teste, teste com a cliente, refino direto na stack. O protótipo aprovado é a produção.',
+        },
+      },
+      {
+        kicker: '04 — A virada de produto',
+        title: 'Tirar, não acrescentar.',
+        body: [
+          'A direção mudou: não era um app novo, era o atual, simplificado. Nas palavras da cliente, o objetivo não era acrescentar nada — era tirar. O público também mudou, de ferramenta de empresa para uso familiar, em casa.',
+          'O CuidaMe virou um prontuário compartilhado da família. Dois cenários guiaram tudo: irmãos dividindo o cuidado de pais idosos, e pais separados dividindo o cuidado dos filhos.',
+          'Saíram as funcionalidades de empresa: gestão, escala, visita do cuidador, checagem de sinais vitais e evolução. Ficou o essencial da família: agenda de compromissos, prescrição de medicamentos e de cuidados, chat da família, anotação de enfermagem só para intercorrências e um canal para enviar comunicados e vídeos.',
+          'E entrou uma peça nova: divisão de contas no estilo Tricount. Cada um lança o que gastou com o cuidado e o app calcula quem paga quem — porque dividir o cuidado é também dividir a conta.',
+        ],
+        compare: {
+          beforeLabel: 'Antes',
+          afterLabel: 'Depois',
+          heuristicLabel: 'Heurística',
+          caption: 'À esquerda ou à direita de cada par, a tela publicada antes do resgate, em preto e branco. Ao lado, a tela redesenhada.',
+          pairs: [
+            {
+              label: 'Perfil da pessoa',
+              heuristic: 'Estética e design minimalista · reconhecimento em vez de memorização',
+              body: [
+                'A tela da pessoa era uma pilha de oito botões iguais, sem dizer o que importa hoje, e com jargão clínico no topo: “ND: Alto”.',
+                'No redesign, a tela abre com o que a família precisa saber agora: 7 de 9 feitos no dia, o próximo compromisso e o tratamento em curso. As ações viraram acesso rápido com ícone e nome, e “ND: Alto” virou “Dependência baixa”, em linguagem de casa.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-paciente-julia.webp', alt: 'App antigo: tela da pessoa como lista de oito botões iguais' },
+              after: { src: '/cases/cuidame/print-perfil-helena.webp', alt: 'App novo: resumo da Helena com progresso do dia, próximo compromisso e tratamento' },
+            },
+            {
+              label: 'Cadastro e ficha',
+              heuristic: 'Prevenção de erros · flexibilidade e eficiência de uso',
+              body: [
+                'O cadastro era um formulário de quinze campos, com um seletor de nível de dependência solto no meio da tela e rótulos como “Digite o alergias”.',
+                'A ficha virou um cartão de leitura: alergias em destaque vermelho, contato de emergência com botão de ligar, diagnóstico e cuidados especiais em frases curtas. O preenchimento ficou em passos, com o essencial primeiro.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-add-paciente-1.webp', alt: 'App antigo: formulário de cadastro com seletor solto no meio da tela' },
+              after: { src: '/cases/cuidame/print-detalhes-paciente.webp', alt: 'App novo: ficha de saúde com alergias em destaque e contato de emergência' },
+            },
+            {
+              label: 'Prescrição',
+              heuristic: 'Correspondência entre o sistema e o mundo real',
+              body: [
+                'A prescrição nascia num formulário técnico: relógio digital em 00:00, frequência “Nenhum”, recorrência, botão “Criar” desabilitado sem explicar por quê.',
+                'Agora o remédio é um cartão que a família lê como lê uma receita: nome e dose, “a cada 8 horas”, horários do dia, período com “termina em 4 dias” e a observação da médica, incluindo o lembrete de levar o frasco na troca de casa.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-prescricao-form.webp', alt: 'App antigo: formulário de criar prescrição com relógio em 00:00 e frequência “Nenhum”' },
+              after: { src: '/cases/cuidame/print-remedio-detalhe.webp', alt: 'App novo: remédio como cartão com dose, horários, período e observações' },
+            },
+            {
+              label: 'Divisão de gastos',
+              heuristic: 'Visibilidade do status do sistema',
+              body: [
+                'Antes, o app dividia o total por um número de pessoas escolhido à mão, com botões de mais e menos, e não dizia quem devia a quem.',
+                'Agora mostra quem pagou, quanto e a porcentagem de cada um, e calcula o acerto do mês no estilo Tricount: “Mariana repassa R$ 225,50 para Rafael”. Dividir o cuidado é também dividir a conta, sem planilha.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-gastos.webp', alt: 'App antigo: divisão de gastos por valor fixo, sem acerto entre as pessoas' },
+              after: { src: '/cases/cuidame/print-gastos.webp', alt: 'App novo: quem pagou, porcentagens e acerto do mês' },
+            },
+            {
+              label: 'Primeiro acesso',
+              heuristic: 'Consistência e padrões · estética',
+              body: [
+                'O primeiro acesso eram quatro slides com ilustração genérica e texto corrido para pular.',
+                'O novo abre com a marca, uma frase e dois caminhos: “Já tenho uma conta” ou “Criar minha conta”. Menos para ler, nada para pular, e a identidade do CuidaMe desde a primeira tela.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-apresentacao.webp', alt: 'App antigo: slides de apresentação com ilustração genérica' },
+              after: { src: '/cases/cuidame/print-boas-vindas.webp', alt: 'App novo: tela de boas-vindas com dois caminhos' },
+            },
+            {
+              label: 'Ajuda e modais',
+              heuristic: 'Ajuda e documentação · controle e liberdade do usuário',
+              body: [
+                'A ajuda era um modal cobrindo a tela inteira, às vezes com um toast de sucesso por cima, e um botão “Mais” que só oferecia Sair e Excluir conta.',
+                'No redesign, a ajuda foi para dentro da tela: hierarquia, rótulos claros e o acesso rápido no lugar certo. Nada para fechar antes de começar a usar.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-onboarding-detalhe.webp', alt: 'App antigo: modal de ajuda sobreposto por um toast' },
+              after: { src: '/cases/cuidame/print-home.webp', alt: 'App novo: início com card da pessoa e acesso rápido, sem modal' },
+            },
+          ],
+        },
+      },
+      {
+        kicker: '05 — Resultado',
+        title: 'De fadado ao cancelamento a nova fonte de receita',
+        body: [
+          'Tudo isso em uma semana: workshop de mapeamento, redesign completo e 100% do front-end feito, pronto para os beta testers. Fiz o trabalho direto no front, cortando o handoff. O que saía do design já ia para produção — e o cliente aprovou de primeira, depois de dois anos sem conseguir fechar uma versão.',
+          'Um projeto que ia ser cancelado agora será comercializado pela Altevita como produto próprio, uma nova fonte de receita, e abriu perspectiva para novos projetos juntos. A relação, de desgastada, virou parceria.',
+        ],
+        whatsapp: {
+          caption: 'Grupo do projeto no WhatsApp, no dia da entrega do protótipo. Nomes parcialmente ocultos.',
+          messages: [
+            {
+              firstName: 'Mariana',
+              lastName: 'Ruback',
+              initial: 'M',
+              avatarBg: '#6b4f3a',
+              nameColor: '#d9a773',
+              time: '09:23',
+              lines: ['Bom dia', 'Que noticia maravilhosa', 'Beatriz, ficarei no seu aguardo sobre a sua percepção do app'],
+            },
+            {
+              firstName: 'Beatriz',
+              lastName: 'Monção',
+              initial: 'B',
+              avatarBg: '#1f4a63',
+              nameColor: '#53bdeb',
+              time: '11:54',
+              lines: [
+                'Bom dia, Wellington! Jóia e você?',
+                'Consegui dar uma olhada sim, achei que ficou bem completo e alinhado ao que a gente espera mesmo. Podemos agendar uma reunião sim.',
+              ],
+            },
+            {
+              firstName: 'Beatriz',
+              lastName: 'Monção',
+              initial: 'B',
+              avatarBg: '#1f4a63',
+              nameColor: '#53bdeb',
+              time: '12:34',
+              lines: ['Boa tarde! Pelo vídeo, não identifiquei nenhuma necessidade de ajuste'],
+            },
+          ],
+        },
+      },
+    ],
+    outcomesLabel: 'Resultados',
+    outcomesTitle: 'O que mudou para o negócio',
+    outcomes: [
+      'De dois anos travado (antes de mim) a protótipo aprovado de primeira',
+      'Uma semana do workshop ao front-end 100% pronto para beta testers',
+      'Escopo simplificado: funcionalidades de empresa cortadas, foco na família',
+      'App reposicionado como prontuário compartilhado da família',
+      'Novo módulo de divisão de contas no estilo Tricount',
+      'Design direto em produção, sem handoff',
+      'De fadado ao cancelamento a produto comercializável, com novos projetos à vista',
+    ],
+    stackLabel: 'Stack',
+    stack: [
+      'Figma',
+      'Protótipo navegável',
+      'React',
+      'React Native / Expo',
+      'TypeScript',
+      'NativeWind',
+      'Design System',
+    ],
+    cta: {
+      heading: 'Tem um projeto travado que precisa destravar?',
+      sub: 'Eu entro, mapeio, prototipo e entrego em produção — até ficar 100%.',
+      label: 'Falar comigo',
+    },
+    ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
+    seo: {
+      title: 'CuidaMe — Case Study · Wellington Mota',
+      description:
+        'Resgate e redesign de um app de cuidado travado por dois anos: em uma semana, workshop, redesign e 100% do front-end prontos para beta, aprovados de primeira — do design direto à produção.',
+    },
+  },
+
+  en: {
+    slug: 'cuidame',
+    accent: '#2FA98C',
+    kicker: 'Case Study — 2026',
+    title: 'CuidaMe',
+    subtitle:
+      'Rescuing a care app everyone had given up on: less scope, a family-first focus and, in one week, workshop, redesign and 100% of the front end ready for beta — approved on the first try.',
+    heroVideo: { src: '/cases/cuidame/cuidame-editorial.mp4', poster: '/cases/cuidame/cover-real.webp' },
+    cover: {
+      src: '/cases/cuidame/cover-real.webp',
+      alt: 'CuidaMe app mockup: a shared family care record across phone screens',
+    },
+    meta: [
+      { label: 'Client', value: 'Altevita · Care clinic' },
+      { label: 'Year', value: '2026' },
+      { label: 'Role', value: 'Product Designer & Design Engineer — solo' },
+      { label: 'Platform', value: 'Mobile app · iOS & Android' },
+      { label: 'Context', value: 'Rescue of a project stuck for 2 years before I came in' },
+    ],
+    stats: [
+      { value: '2 years', label: 'stuck before I came in, unblocked' },
+      { value: '1 week', label: 'workshop, redesign and 100% of the front end' },
+      { value: '100%', label: 'of the front end ready for beta testers in 7 days' },
+      { value: '1st', label: 'prototype version, approved on the first try' },
+      { value: '0', label: 'handoff — from design straight to production' },
+      { value: 'New', label: 'product the client will now commercialize' },
+    ],
+    intro: [
+      'CuidaMe is an Altevita app for following someone’s care. It began as a care-company tool, built around team management, shift scheduling and caregiver visits.',
+      'By the time I came in, the product had spent two years in a loop: build it, it is not what they expected, build it again. The client relationship was worn down and the project was, in practice, headed for cancellation. I was brought in to unblock it.',
+    ],
+    roleLabel: 'What I did',
+    roleList: [
+      'Project rescue',
+      'Mapping workshop',
+      'Scope redefinition',
+      'UX research & flows',
+      'UI redesign',
+      'Navigable prototype',
+      'Validation cycles',
+      'Design system',
+      'Front-end (straight to production)',
+      'Stakeholder meetings',
+    ],
+    sections: [
+      {
+        kicker: '01 — The screens',
+        title: 'Screens a family understands the first time',
+        body: [
+          'I redesigned the whole interface for the new audience: plain language, clear hierarchy, and the everyday actions one tap away. One record, seen by everyone who cares.',
+        ],
+        gallery: [
+          { src: '/cases/cuidame/print-home.webp', alt: 'CuidaMe home: Helena’s card with today’s routine, agenda and expenses', device: 'ios' },
+          { src: '/cases/cuidame/print-perfil-helena.webp', alt: 'Helena’s summary: medications and care done today, next appointment and ongoing treatment', device: 'ios' },
+          { src: '/cases/cuidame/print-agenda-detalhe.webp', alt: 'Agenda event in CuidaMe: pediatric follow-up with place, notes and reminders', device: 'ios' },
+          { src: '/cases/cuidame/print-remedios.webp', alt: 'Medication prescriptions in CuidaMe: active medicines grouped by time of day', device: 'ios' },
+          { src: '/cases/cuidame/print-chat.webp', alt: 'Family chat in CuidaMe between Helena’s mother and father', device: 'ios' },
+          { src: '/cases/cuidame/print-gastos.webp', alt: 'Tricount-style expense splitting in CuidaMe: who paid and the monthly settlement', device: 'ios' },
+        ],
+      },
+      {
+        kicker: '02 — The problem',
+        title: 'Two years of back-and-forth and a relationship to reset',
+        body: [
+          'Before I came in, the project had spent two years with another team and derailed for the most common reason: a lack of detail. One thing was asked for, another was delivered, and it was redone. Two years in, the client was frustrated with good reason and the product had stalled.',
+          'My job was not to draw pretty screens on top of a fuzzy scope. It was to be the piece that unblocks: give back clarity before giving back code.',
+          'The relationship was worn down, and that came before any screen. I ran an empathy process with the client: listening to where it hurt, understanding what they expected and what they had already given up asking for. The goal was not to deliver what was agreed — it was to deliver far beyond expectations, so trust came back together with the product.',
+        ],
+        image: {
+          src: '/cases/cuidame/problema-en.svg',
+          alt: 'Diagram of the rework loop: ask, deliver off-target, redo',
+          caption: 'The root of the derailment: scope without detail turns into endless rework.',
+        },
+        galleryTitle: 'Before — the app I inherited',
+        galleryBadge: 'Before',
+        galleryCaption: 'The app as published before I came in, two years of rework later: fifteen-field forms, screens made of identical buttons, modals on top of modals and a “More” tab with nothing but Sign out and Delete account. This is what the client was using — and why she was frustrated.',
+        gallery: [
+          { src: '/cases/cuidame/before-bw/old-add-paciente-1.webp', alt: 'Old app: patient sign-up form with a dependency-level picker floating mid-screen' },
+          { src: '/cases/cuidame/before-bw/old-add-cuidador.webp', alt: 'Old app: caregiver sign-up form with seven required fields and password rules' },
+          { src: '/cases/cuidame/before-bw/old-paciente-julia.webp', alt: 'Old app: patient screen as a list of eight identical buttons with no hierarchy' },
+          { src: '/cases/cuidame/before-bw/old-onboarding-detalhe.webp', alt: 'Old app: help modal covered by a success toast' },
+          { src: '/cases/cuidame/before-bw/old-mais.webp', alt: 'Old app: "More" screen with only Sign out and Delete account in red' },
+        ],
+      },
+      {
+        kicker: '03 — The method',
+        title: 'Map every screen before promising any deadline',
+        body: [
+          'I flipped the order. Before talking about deadlines, I ran a mapping workshop with the client: screen by screen, flow by flow, journey by journey. No thirty-minute meeting.',
+          'Out of it came a navigable prototype the client could actually use. They critiqued, I adjusted, in cycles, until it was 100%. Only then did we commit to a timeline — with the scope clear to both sides, not in the dark.',
+          'The prototype was born in the final stack, in Expo. Before each round with the client I ran the screens through usability heuristics and UI best practices; testing was saved for what only real use reveals. Visual polish happened straight in the code, the same day, with no document in between. When the client approved, the prototype was the product.',
+        ],
+        image: {
+          src: '/cases/cuidame/mapeamento-en.svg',
+          alt: 'Map of CuidaMe screens and flows built in the workshop',
+          caption: 'From workshop to approved prototype: heuristics before testing, testing with the client, polish straight in the stack. The approved prototype is production.',
+        },
+      },
+      {
+        kicker: '04 — The product pivot',
+        title: 'Less app, not more app',
+        body: [
+          'The direction changed: it was not a new app, it was the current one, simplified. In the client’s words, the goal was not to add anything — it was to remove. The audience changed too, from a company tool to family use, at home.',
+          'CuidaMe became a shared family care record. Two scenarios guided everything: siblings sharing the care of aging parents, and separated parents sharing the care of their children.',
+          'Out went the company features: management, shift scheduling, caregiver visits, vital-sign checks and progress logs. What stayed was the family essentials: an appointments calendar, medication and care prescriptions, a family chat, nursing notes only for incidents, and a channel to send announcements and videos.',
+          'And one new piece came in: expense splitting in the style of Tricount. Each person logs what they spent on care and the app works out who owes whom — because sharing care also means sharing the bill.',
+        ],
+        compare: {
+          beforeLabel: 'Before',
+          afterLabel: 'After',
+          heuristicLabel: 'Heuristic',
+          caption: 'On either side of each pair, the app as published before the rescue, in black and white. Next to it, the redesigned screen.',
+          pairs: [
+            {
+              label: 'Person profile',
+              heuristic: 'Aesthetic and minimalist design · recognition rather than recall',
+              body: [
+                'The person screen was a stack of eight identical buttons that said nothing about what matters today, topped by clinical jargon: “ND: Alto”.',
+                'The redesign opens with what the family needs right now: 7 of 9 done today, the next appointment and the ongoing treatment. Actions became quick access with icon and name, and “ND: Alto” became “Low dependency”, in plain home language.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-paciente-julia.webp', alt: 'Old app: person screen as a list of eight identical buttons' },
+              after: { src: '/cases/cuidame/print-perfil-helena.webp', alt: 'New app: Helena’s summary with today’s progress, next appointment and treatment' },
+            },
+            {
+              label: 'Sign-up and record',
+              heuristic: 'Error prevention · flexibility and efficiency of use',
+              body: [
+                'Sign-up was a fifteen-field form, with a dependency-level picker floating mid-screen and labels like “Type the allergies”.',
+                'The record became a reading card: allergies highlighted in red, an emergency contact with a call button, diagnosis and special care in short sentences. Data entry moved to steps, essentials first.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-add-paciente-1.webp', alt: 'Old app: sign-up form with a picker floating mid-screen' },
+              after: { src: '/cases/cuidame/print-detalhes-paciente.webp', alt: 'New app: health record with highlighted allergies and emergency contact' },
+            },
+            {
+              label: 'Prescription',
+              heuristic: 'Match between system and the real world',
+              body: [
+                'A prescription started in a technical form: a digital clock at 00:00, frequency “None”, recurrence, and a disabled “Create” button with no explanation.',
+                'Now a medicine is a card the family reads like a prescription: name and dose, “every 8 hours”, times of day, a period with “ends in 4 days”, and the doctor’s note, including the reminder to pack the bottle for the custody swap.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-prescricao-form.webp', alt: 'Old app: create-prescription form with a 00:00 clock and frequency “None”' },
+              after: { src: '/cases/cuidame/print-remedio-detalhe.webp', alt: 'New app: medicine card with dose, times, period and notes' },
+            },
+            {
+              label: 'Expense splitting',
+              heuristic: 'Visibility of system status',
+              body: [
+                'Before, the app split the total by a hand-picked number of people, with plus and minus buttons, and never said who owed whom.',
+                'Now it shows who paid, how much and each share, and works out the monthly settlement Tricount-style: “Mariana pays Rafael R$ 225.50”. Sharing care also means sharing the bill, without a spreadsheet.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-gastos.webp', alt: 'Old app: expense split by flat amount, with no settlement between people' },
+              after: { src: '/cases/cuidame/print-gastos.webp', alt: 'New app: who paid, percentages and the monthly settlement' },
+            },
+            {
+              label: 'First launch',
+              heuristic: 'Consistency and standards · aesthetics',
+              body: [
+                'First launch was four slides with stock illustration and running text to skip.',
+                'The new one opens with the brand, one sentence and two paths: “I already have an account” or “Create my account”. Less to read, nothing to skip, and CuidaMe’s identity from the first screen.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-apresentacao.webp', alt: 'Old app: intro slides with stock illustration' },
+              after: { src: '/cases/cuidame/print-boas-vindas.webp', alt: 'New app: welcome screen with two paths' },
+            },
+            {
+              label: 'Help and modals',
+              heuristic: 'Help and documentation · user control and freedom',
+              body: [
+                'Help was a modal covering the whole screen, sometimes with a success toast on top, and a “More” tab that only offered Sign out and Delete account.',
+                'In the redesign, help moved into the screen itself: hierarchy, clear labels and quick access where it belongs. Nothing to dismiss before you start using it.',
+              ],
+              before: { src: '/cases/cuidame/before-bw/old-onboarding-detalhe.webp', alt: 'Old app: help modal covered by a toast' },
+              after: { src: '/cases/cuidame/print-home.webp', alt: 'New app: home with the person card and quick access, no modal' },
+            },
+          ],
+        },
+      },
+      {
+        kicker: '05 — Outcome',
+        title: 'From headed for cancellation to a new revenue stream',
+        body: [
+          'All of it in one week: mapping workshop, full redesign and 100% of the front end built, ready for beta testers. I did the work straight on the front end, cutting the handoff. What came out of design went straight to production — and the client approved it on the first try, after two years of never closing a single version.',
+          'A project that was about to be cancelled will now be commercialized by Altevita as a product of their own, a new revenue stream, and it opened the door to new projects together. A worn-down relationship turned into a partnership.',
+        ],
+        whatsapp: {
+          caption: 'Project WhatsApp group on the day the prototype was delivered. Names partially hidden; messages kept in the original Portuguese.',
+          messages: [
+            {
+              firstName: 'Mariana',
+              lastName: 'Ruback',
+              initial: 'M',
+              avatarBg: '#6b4f3a',
+              nameColor: '#d9a773',
+              time: '09:23',
+              lines: ['Bom dia', 'Que noticia maravilhosa', 'Beatriz, ficarei no seu aguardo sobre a sua percepção do app'],
+            },
+            {
+              firstName: 'Beatriz',
+              lastName: 'Monção',
+              initial: 'B',
+              avatarBg: '#1f4a63',
+              nameColor: '#53bdeb',
+              time: '11:54',
+              lines: [
+                'Bom dia, Wellington! Jóia e você?',
+                'Consegui dar uma olhada sim, achei que ficou bem completo e alinhado ao que a gente espera mesmo. Podemos agendar uma reunião sim.',
+              ],
+            },
+            {
+              firstName: 'Beatriz',
+              lastName: 'Monção',
+              initial: 'B',
+              avatarBg: '#1f4a63',
+              nameColor: '#53bdeb',
+              time: '12:34',
+              lines: ['Boa tarde! Pelo vídeo, não identifiquei nenhuma necessidade de ajuste'],
+            },
+          ],
+        },
+      },
+    ],
+    outcomesLabel: 'Results',
+    outcomesTitle: 'What changed for the business',
+    outcomes: [
+      'From two years stuck (before me) to a prototype approved on the first try',
+      'One week from workshop to a front end 100% ready for beta testers',
+      'Scope simplified: company features cut, focus on the family',
+      'App repositioned as a shared family care record',
+      'A new Tricount-style expense-splitting module',
+      'Design straight to production, with no handoff',
+      'From headed for cancellation to a commercializable product, with new projects ahead',
+    ],
+    stackLabel: 'Stack',
+    stack: [
+      'Figma',
+      'Navigable prototype',
+      'React',
+      'React Native / Expo',
+      'TypeScript',
+      'NativeWind',
+      'Design System',
+    ],
+    cta: {
+      heading: 'Got a stuck project that needs unblocking?',
+      sub: 'I come in, map it, prototype it and ship it to production — until it is 100%.',
+      label: 'Get in touch',
+    },
+    ui: { back: 'Back to projects', visit: 'Visit the site' },
+    seo: {
+      title: 'CuidaMe — Case Study · Wellington Mota',
+      description:
+        'Rescue and redesign of a care app stuck for two years: in one week, workshop, redesign and 100% of the front end ready for beta, approved on the first try — from design straight to production.',
+    },
+  },
+};
+
+export default cuidame;

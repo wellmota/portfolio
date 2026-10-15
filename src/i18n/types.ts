@@ -47,6 +47,10 @@ export interface SiteData {
     description: string;
     image: string;
     accent: string;
+    /** Link do card — case study interno ou externo; sem href, cai no #contato */
+    href?: string;
+  /** Destaque curto em lime acima do título do card (ex.: prazo). */
+  highlight?: string;
   }[];
   clients: string[];
   testimonials: {

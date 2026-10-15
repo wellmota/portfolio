@@ -1,0 +1,83 @@
+export interface WhatsAppMessage {
+  /** Nome mostrado por extenso; o sobrenome sai borrado na página. */
+  firstName: string;
+  lastName: string;
+  initial: string;
+  avatarBg: string;
+  nameColor: string;
+  time: string;
+  lines: string[];
+}
+
+export interface ComparePair {
+  label: string;
+  /** Heurística ou princípio que guiou o redesign deste par. */
+  heuristic: string;
+  /** O que estava errado e o que mudou (1–2 parágrafos). */
+  body: string[];
+  before: { src: string; alt: string };
+  after: { src: string; alt: string };
+}
+
+export interface ShowcaseItem {
+  src: string;
+  alt: string;
+  label: string;
+  /** Texto curto à direita do rótulo (ex.: módulo, idioma). */
+  meta?: string;
+  caption?: string;
+  /** URL mostrada na barra da janela; cai no `url` do showcase se omitida. */
+  url?: string;
+  /** 'half' = duas telas lado a lado no desktop. Padrão: largura toda. */
+  size?: 'full' | 'half';
+}
+
+export interface CaseSection {
+  kicker: string;
+  title: string;
+  body: string[];
+  image?: { src: string; alt: string; caption?: string };
+  /** `device: 'ios'` = print do app novo, com os cantos arredondados da tela do iPhone. */
+  gallery?: { src: string; alt: string; device?: 'ios' }[];
+  /** Rótulo acima da galeria, selo em cada imagem e legenda abaixo (ex.: "Antes"). */
+  galleryTitle?: string;
+  galleryBadge?: string;
+  galleryCaption?: string;
+  /** Depoimentos recriados com a cara do WhatsApp (telefone oculto, sobrenome borrado). */
+  whatsapp?: { messages: WhatsAppMessage[]; caption?: string };
+  /** Prints de desktop em moldura de janela, grandes, um por bloco. */
+  showcase?: { url?: string; items: ShowcaseItem[] };
+  /** Pares antes/depois (tela antiga em P&B ao lado da nova). */
+  compare?: { pairs: ComparePair[]; beforeLabel: string; afterLabel: string; heuristicLabel: string; caption?: string };
+}
+
+export interface CaseStudyContent {
+  slug: string;
+  accent: string;
+  kicker: string;
+  title: string;
+  subtitle: string;
+  cover: { src: string; alt: string };
+  /** Vídeo de abertura (mp4, mudo, em loop) exibido no lugar da capa quando presente. */
+  heroVideo?: { src: string; poster?: string };
+  meta: { label: string; value: string }[];
+  stats: { value: string; label: string }[];
+  intro: string[];
+  roleLabel: string;
+  roleList: string[];
+  sections: CaseSection[];
+  outcomesLabel: string;
+  outcomesTitle: string;
+  outcomes: string[];
+  stackLabel: string;
+  stack: string[];
+  cta: { heading: string; sub: string; label: string };
+  ui: { back: string; visit: string };
+  liveUrl?: string;
+  seo: { title: string; description: string };
+}
+
+export interface CaseStudy {
+  pt: CaseStudyContent;
+  en: CaseStudyContent;
+}

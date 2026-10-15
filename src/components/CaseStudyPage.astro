@@ -1,0 +1,308 @@
+---
+import { getSiteData, getLocalePath, type Locale } from '../i18n';
+import type { CaseStudyContent } from '../data/cases/types';
+import WhatsAppQuote from './WhatsAppQuote.astro';
+import BeforeAfter from './BeforeAfter.astro';
+import ScreenShowcase from './ScreenShowcase.astro';
+
+interface Props {
+  lang: Locale;
+  content: CaseStudyContent;
+  /** URL da mesma página no outro idioma */
+  altHref: string;
+  altLabel: string;
+}
+
+const { lang, content: c, altHref, altLabel } = Astro.props;
+const data = getSiteData(lang);
+const homeHref = getLocalePath(lang);
+const projectsHref = getLocalePath(lang, '#projetos');
+const contactHref = getLocalePath(lang, '#contato');
+---
+
+<header class="border-b border-line">
+  <div class="container-page">
+    <nav class="flex items-center justify-between gap-4 py-4">
+      <a href={homeHref} class="flex items-center gap-2.5 shrink-0">
+        <span class="gothic grid h-8 w-8 place-items-center bg-lime pb-0.5 text-[19px] text-ink">
+          {data.profile.firstName.charAt(0)}
+        </span>
+        <span class="hidden text-[14px] font-semibold tracking-tight sm:inline">
+          {data.profile.name}
+        </span>
+      </a>
+      <div class="flex items-center gap-5">
+        <a
+          href={projectsHref}
+          class="mono text-[11px] uppercase tracking-widest text-mist transition-colors hover:text-cream"
+        >
+          ← {c.ui.back}
+        </a>
+        <a
+          href={altHref}
+          class="mono border border-line px-3 py-1.5 text-[11px] uppercase tracking-widest text-mist transition-colors hover:border-line-strong hover:text-cream"
+        >
+          {altLabel}
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="container-page pt-14 sm:pt-20 md:pt-28">
+    <p class="mono text-[11px] uppercase tracking-widest" style={`color:${c.accent}`} data-reveal>
+      {c.kicker}
+    </p>
+    <h1 class="display mt-5 max-w-4xl text-5xl leading-[1.02] sm:text-6xl md:text-[5.2rem]" data-reveal>
+      {c.title}
+    </h1>
+    <p class="mt-6 max-w-2xl text-[17px] leading-relaxed text-mist md:text-lg" data-reveal>
+      {c.subtitle}
+    </p>
+
+    <!-- Meta -->
+    <dl class="mt-12 grid grid-cols-2 gap-x-8 gap-y-6 border-t border-line pt-8 sm:grid-cols-3 lg:grid-cols-5" data-reveal>
+      {
+        c.meta.map((m) => (
+          <div>
+            <dt class="mono text-[10px] uppercase tracking-widest text-faint">{m.label}</dt>
+            <dd class="mt-2 text-[13.5px] leading-snug text-cream">{m.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <!-- Cover -->
+  <section class="container-page mt-12 md:mt-16">
+    <div class="relative overflow-hidden border border-line" data-reveal={c.heroVideo ? undefined : true}>
+      <span class="absolute left-0 top-0 z-10 h-1 w-full" style={`background:${c.accent}`}></span>
+      {
+        c.heroVideo ? (
+          <video
+            class="block w-full object-cover"
+            src={c.heroVideo.src}
+            poster={c.heroVideo.poster ?? c.cover.src}
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            aria-label={c.cover.alt}
+          />
+        ) : (
+          <img src={c.cover.src} alt={c.cover.alt} class="w-full object-cover" fetchpriority="high" />
+        )
+      }
+    </div>
+    {
+      c.liveUrl && (
+        <div class="mt-4 flex justify-end">
+          <a
+            href={c.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mono text-[11px] uppercase tracking-widest text-mist transition-colors hover:text-cream"
+          >
+            {c.ui.visit} ↗
+          </a>
+        </div>
+      )
+    }
+  </section>
+
+  <!-- Intro + role -->
+  <section class="container-page mt-14 grid gap-10 md:mt-24 md:grid-cols-[1.5fr_1fr] md:gap-16">
+    <div class="space-y-5" data-reveal>
+      {c.intro.map((p) => <p class="text-[15.5px] leading-relaxed text-mist md:text-base">{p}</p>)}
+    </div>
+    <div data-reveal>
+      <p class="mono text-[10px] uppercase tracking-widest text-faint">{c.roleLabel}</p>
+      <div class="mt-4 flex flex-wrap gap-1.5">
+        {
+          c.roleList.map((r) => (
+            <span class="mono border border-line px-2.5 py-1 text-[10.5px] uppercase tracking-wider text-mist">
+              {r}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="container-page mt-14 md:mt-24">
+    <div class="grid grid-cols-2 border-l border-t border-line sm:grid-cols-3 lg:grid-cols-6">
+      {
+        c.stats.map((s) => (
+          <div class="border-b border-r border-line p-5 md:p-6" data-reveal data-reveal-group>
+            <span class="display block text-4xl md:text-[2.6rem]" style={`color:${c.accent}`}>
+              {s.value}
+            </span>
+            <span class="mt-2 block text-[12px] leading-snug text-mist">{s.label}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Sections -->
+  {
+    c.sections.map((s) => (
+      <section
+        class:list={[
+          'container-page mt-16 md:mt-28',
+          s.whatsapp && 'md:grid md:grid-cols-[1.15fr_1fr] md:items-start md:gap-12 lg:gap-16',
+        ]}
+      >
+        <div class="max-w-3xl">
+          <p class="mono text-[11px] uppercase tracking-widest" style={`color:${c.accent}`} data-reveal>
+            {s.kicker}
+          </p>
+          <h2 class="display mt-4 text-3xl leading-tight sm:text-4xl md:text-[2.6rem]" data-reveal>
+            {s.title}
+          </h2>
+          <div class="mt-6 space-y-5" data-reveal>
+            {s.body.map((p) => (
+              <p class="text-[15.5px] leading-relaxed text-mist md:text-base">{p}</p>
+            ))}
+          </div>
+        </div>
+
+        {s.image && (
+          <figure class="mt-10" data-reveal>
+            <div class="overflow-hidden border border-line">
+              <img src={s.image.src} alt={s.image.alt} loading="lazy" class="w-full object-cover" />
+            </div>
+            {s.image.caption && (
+              <figcaption class="mono mt-3 text-[11px] tracking-wide text-faint">
+                {s.image.caption}
+              </figcaption>
+            )}
+          </figure>
+        )}
+
+        {s.showcase && <ScreenShowcase items={s.showcase.items} accent={c.accent} url={s.showcase.url} />}
+
+        {s.compare && (
+          <BeforeAfter
+            pairs={s.compare.pairs}
+            beforeLabel={s.compare.beforeLabel}
+            afterLabel={s.compare.afterLabel}
+            heuristicLabel={s.compare.heuristicLabel}
+            caption={s.compare.caption}
+          />
+        )}
+
+        {s.whatsapp && <WhatsAppQuote messages={s.whatsapp.messages} caption={s.whatsapp.caption} side />}
+
+        {s.gallery && s.galleryTitle && (
+          <p class="mono mt-12 text-[11px] uppercase tracking-widest text-faint" data-reveal>
+            {s.galleryTitle}
+          </p>
+        )}
+        {s.gallery && (
+          <div
+            class:list={[
+              s.galleryTitle ? 'mt-4 grid gap-3 md:gap-4' : 'mt-10 grid gap-3 md:gap-4',
+              s.gallery.length >= 5
+                ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-5'
+                : s.gallery.length === 4
+                  ? 'grid-cols-2 md:grid-cols-4'
+                  : s.gallery.length === 3
+                    ? 'grid-cols-2 md:grid-cols-3'
+                    : 'grid-cols-1 sm:grid-cols-2',
+            ]}
+          >
+            {s.gallery.map((g) => (
+              <div
+                class:list={['relative', g.device === 'ios' ? 'print-ios' : 'overflow-hidden border border-line bg-ink-soft']}
+                data-reveal
+                data-reveal-group
+              >
+                <img src={g.src} alt={g.alt} loading="lazy" class="block w-full object-cover" />
+                {s.galleryBadge && (
+                  <span class="mono absolute left-2 top-2 border border-line-strong bg-ink/85 px-2 py-1 text-[9.5px] uppercase tracking-widest text-mist">
+                    {s.galleryBadge}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        {s.gallery && s.galleryCaption && (
+          <p class="mono mt-3 max-w-3xl text-[11px] leading-relaxed tracking-wide text-faint" data-reveal>
+            {s.galleryCaption}
+          </p>
+        )}
+      </section>
+    ))
+  }
+
+  <!-- Outcomes + stack -->
+  <section class="container-page mt-16 md:mt-28">
+    <div class="grid gap-10 border-t border-line pt-10 md:grid-cols-[1.5fr_1fr] md:gap-16">
+      <div data-reveal>
+        <p class="mono text-[11px] uppercase tracking-widest" style={`color:${c.accent}`}>
+          {c.outcomesLabel}
+        </p>
+        <h2 class="display mt-4 text-3xl leading-tight sm:text-4xl">{c.outcomesTitle}</h2>
+        <ul class="mt-6 space-y-3">
+          {
+            c.outcomes.map((o) => (
+              <li class="flex gap-3 text-[15px] leading-relaxed text-mist">
+                <span class="mt-[2px] shrink-0" style={`color:${c.accent}`}>
+                  +
+                </span>
+                {o}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div data-reveal>
+        <p class="mono text-[10px] uppercase tracking-widest text-faint">{c.stackLabel}</p>
+        <div class="mt-4 flex flex-wrap gap-1.5">
+          {
+            c.stack.map((t) => (
+              <span class="mono border border-line px-2.5 py-1 text-[10.5px] uppercase tracking-wider text-mist">
+                {t}
+              </span>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="container-page my-16 md:my-28">
+    <div class="border border-line bg-ink-soft p-8 text-center md:p-14" data-reveal>
+      <h2 class="display mx-auto max-w-2xl text-3xl leading-tight sm:text-4xl">{c.cta.heading}</h2>
+      <p class="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-mist">{c.cta.sub}</p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+        <a href={contactHref} class="btn btn-solid">
+          {c.cta.label}
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <path
+              d="M4 12L12 4M12 4H5M12 4V11"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a>
+        <a href={projectsHref} class="btn btn-outline">{c.ui.back}</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="border-t border-line">
+  <div class="container-page flex flex-wrap items-center justify-between gap-3 py-6">
+    <span class="mono text-[11px] text-faint">{data.footer.legal}</span>
+    <span class="mono text-[11px] text-faint">{data.ui.portfolioEdition}</span>
+  </div>
+</footer>

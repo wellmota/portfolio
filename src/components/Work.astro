@@ -21,7 +21,7 @@ const { projects } = data;
     {
       projects.map((project) => (
         <a
-          href="#contato"
+          href={project.href ?? '#contato'}
           class="group flex flex-col border border-line bg-ink-soft p-4 transition-colors duration-300 hover:border-line-strong"
           data-reveal
           data-reveal-group
@@ -37,12 +37,20 @@ const { projects } = data;
           </div>
 
           {/* Image */}
-          <div class="relative aspect-[16/10] overflow-hidden">
+          {/* Imagem inteira (contain); o que sobrar do 16:10 é preenchido pela própria imagem desfocada */}
+          <div class="relative aspect-[16/10] overflow-hidden bg-ink-soft">
+            <img
+              src={project.image}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              class="absolute inset-0 h-full w-full scale-125 object-cover opacity-90 blur-2xl"
+            />
             <img
               src={project.image}
               alt={project.title}
               loading="lazy"
-              class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+              class="relative h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.04]"
             />
             <span
               class="absolute left-0 top-0 h-1 w-full origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
@@ -53,6 +61,12 @@ const { projects } = data;
           {/* Footer */}
           <div class="flex items-start justify-between gap-4 px-1 pb-1 pt-5">
             <div>
+              {project.highlight && (
+                <p class="mono mb-3 inline-flex items-center gap-2 border border-lime/40 px-2.5 py-1 text-[10.5px] uppercase tracking-widest text-lime">
+                  <span class="h-1.5 w-1.5 rounded-full bg-lime" />
+                  {project.highlight}
+                </p>
+              )}
               <h3 class="display text-2xl leading-tight md:text-[1.7rem]">
                 {project.title}
               </h3>

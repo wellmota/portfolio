@@ -167,6 +167,28 @@ const pt: SiteData = {
   ],
 
   projects: [
+    {
+      title: 'CuidaMe',
+      meta: 'Health · Case Study',
+      categories: ['Product', 'App', 'UX'],
+      description:
+        'Resgate de um app travado por 2 anos antes de mim: em 1 semana, workshop, redesign e 100% do front-end prontos para beta, aprovados de primeira. Ver case study →',
+      image: '/cases/cuidame/card-pt.webp',
+      accent: '#2FA98C',
+      highlight: 'Do redesign à produção em 7 dias',
+      href: '/pt/work/cuidame',
+    },
+    {
+      title: 'HyperGestor',
+      meta: 'Automotivo · Case Study',
+      categories: ['Product', 'Branding', 'Web'],
+      description:
+        'ERP com CRM agêntico para concessionárias: marca, site e o redesenho completo do sistema — 18 módulos, design system e painel de lead com WhatsApp e IA, em produção. Ver case study →',
+      image: '/cases/hypergestor/gestor-de-clientes.webp',
+      accent: '#F48220',
+      highlight: 'ERP + CRM agêntico · 18 módulos',
+      href: '/pt/work/hypergestor',
+    },
     /* Case studies em espera — descomente para publicar
     {
       title: 'VESS Studio',
@@ -258,7 +280,7 @@ const pt: SiteData = {
     'Solomon', 'Autódromo Velocitta', 'Animalle', 'Grupo SOMA', 'Wevr',
     'Resilience Dynamic', 'Soluti', 'Sankhya', 'Cogmo Tecnologia',
     'Your Digital Media', 'Chris Corsini', 'Nomoo',
-    'Brintel', 'Belo Monte',
+    'Brintel', 'Belo Monte', 'Altevita',
   ],
 
   testimonials: [

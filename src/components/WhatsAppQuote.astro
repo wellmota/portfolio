@@ -1,0 +1,155 @@
+---
+/**
+ * Depoimento com a cara do WhatsApp (tema escuro): avatar com inicial, nome colorido,
+ * telefone sempre oculto e sobrenome borrado. Recriado em HTML a partir de prints reais,
+ * para não publicar dados pessoais nas imagens.
+ */
+import type { WhatsAppMessage } from '../data/cases/types';
+
+interface Props {
+  messages: WhatsAppMessage[];
+  caption?: string;
+  /** Ao lado do texto da seção (grid): sem margem superior no desktop. */
+  side?: boolean;
+}
+
+const { messages, caption, side = false } = Astro.props;
+---
+
+<figure class:list={['wa-wrap mt-10', side && 'md:mt-0']} data-reveal>
+  <div class="wa-chat">
+    {
+      messages.map((m) => (
+        <div class="wa-row">
+          <div class="wa-avatar" style={`background:${m.avatarBg}`} aria-hidden="true">
+            {m.initial}
+          </div>
+          <div class="wa-bubble">
+            <div class="wa-head">
+              <span class="wa-name" style={`color:${m.nameColor}`}>
+                ~ {m.firstName.slice(0, 3)}
+                <span class="wa-blur" aria-hidden="true">{m.firstName.slice(3)} {m.lastName}</span>
+                <span class="sr-only">{m.firstName[0]}. {m.lastName[0]}.</span>
+              </span>
+              <span class="wa-phone" aria-hidden="true">
+                +55 61 <span class="wa-blur">9000-0000</span>
+              </span>
+            </div>
+            <div class="wa-text">
+              {m.lines.map((l) => (
+                <p>{l}</p>
+              ))}
+            </div>
+            <span class="wa-time">{m.time}</span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  {caption && <figcaption class="mono mt-3 text-[11px] tracking-wide text-faint">{caption}</figcaption>}
+</figure>
+
+<style>
+  .wa-wrap {
+    max-width: 48rem;
+  }
+  .wa-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 18px;
+    border: 1px solid var(--color-line);
+    background-color: #0b141a;
+    /* rabiscos do fundo do WhatsApp, em CSS */
+    background-image:
+      radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.045) 0 2px, transparent 3px),
+      radial-gradient(circle at 78% 65%, rgba(255, 255, 255, 0.04) 0 2px, transparent 3px),
+      radial-gradient(circle at 40% 85%, rgba(255, 255, 255, 0.035) 0 1.5px, transparent 2.5px),
+      radial-gradient(circle at 62% 12%, rgba(255, 255, 255, 0.035) 0 1.5px, transparent 2.5px),
+      repeating-linear-gradient(135deg, transparent 0 22px, rgba(255, 255, 255, 0.018) 22px 23px);
+    font-family:
+      system-ui,
+      -apple-system,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      sans-serif;
+  }
+  .wa-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .wa-avatar {
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #e9edef;
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .wa-bubble {
+    position: relative;
+    max-width: calc(100% - 48px);
+    padding: 7px 12px 8px 10px;
+    border-radius: 8px;
+    border-top-left-radius: 0;
+    background: #202c33;
+    color: #e9edef;
+    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.35);
+  }
+  /* rabinho da bolha */
+  .wa-bubble::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -8px;
+    border-style: solid;
+    border-width: 0 8px 10px 0;
+    border-color: transparent #202c33 transparent transparent;
+  }
+  .wa-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 2px;
+  }
+  .wa-name {
+    font-size: 14.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .wa-phone {
+    font-size: 13px;
+    color: #8696a0;
+    white-space: nowrap;
+  }
+  .wa-blur {
+    filter: blur(5px);
+    user-select: none;
+  }
+  .wa-text {
+    font-size: 15px;
+    line-height: 1.35;
+    padding-right: 44px;
+  }
+  .wa-text p + p {
+    margin-top: 1px;
+  }
+  .wa-time {
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    font-size: 11px;
+    color: #8696a0;
+  }
+  @media (max-width: 640px) {
+    .wa-phone {
+      display: none;
+    }
+  }
+</style>
