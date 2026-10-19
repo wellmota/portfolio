@@ -188,6 +188,17 @@ const pt: SiteData = {
       highlight: 'Do conceito à TV da sala em 1 semana',
       href: '/pt/work/aeroporto-de-leads',
     },
+    {
+      title: 'Tutory: marca e site',
+      meta: 'EdTech · Case Study',
+      categories: ['Branding', 'Web', 'SEO'],
+      description:
+        'Rebranding com arquétipos, deck interativo de 37 slides, geradores 3D e um site novo em Astro: do WordPress ao ar em 63 dias, com Lighthouse 100. Ver case study →',
+      image: '/cases/tutory-rebrand/card-pt.webp',
+      accent: '#3B7BF5',
+      highlight: 'Do símbolo ao site no ar em 3 meses',
+      href: '/pt/work/tutory-rebrand',
+    },
     /* Case studies em espera — descomente para publicar
     {
       title: 'HyperGestor',

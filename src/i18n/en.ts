@@ -188,6 +188,17 @@ const en: SiteData = {
       highlight: 'Concept to the sales-room TV in 1 week',
       href: '/work/aeroporto-de-leads',
     },
+    {
+      title: 'Tutory: brand and website',
+      meta: 'EdTech · Case Study',
+      categories: ['Branding', 'Web', 'SEO'],
+      description:
+        'Rebranding with archetypes, a 37-slide interactive deck, 3D generators and a new Astro website: from WordPress to live in 63 days, with Lighthouse 100. Read the case study →',
+      image: '/cases/tutory-rebrand/card-en.webp',
+      accent: '#3B7BF5',
+      highlight: 'From symbol to live site in 3 months',
+      href: '/work/tutory-rebrand',
+    },
     /* Case studies em espera — descomente para publicar
     {
       title: 'HyperGestor',
