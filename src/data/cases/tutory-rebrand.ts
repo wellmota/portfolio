@@ -34,7 +34,7 @@ const tutoryRebrand: CaseStudy = {
     ],
     intro: [
       'Por fora, a Tutory era um cérebro azul de contorno arredondado, um site em WordPress e um discurso de features. Por dentro, era um ecossistema com três produtos, milhares de mentores, um podcast e um evento próprio. Quem chegava pelo site via uma ferramenta. Quem ficava, descobria o ecossistema.',
-      'Meu trabalho foi fechar essa distância em duas frentes: uma identidade que dissesse o tamanho da empresa e um site que contasse a história do jeito que o time comercial já contava nas calls. Pesquisa, posicionamento, símbolo, deck, design e código saíram das mesmas mãos, com o cliente decidindo a cada etapa.',
+      'Meu trabalho foi fechar essa distância em duas frentes, uma identidade que dissesse o tamanho da empresa e um site que contasse a história do jeito que o time comercial já contava nas calls, e depois estender a marca para o físico, com a gamificação da Hub e seus seis troféus. Pesquisa, posicionamento, símbolo, deck, design e código saíram das mesmas mãos, com o cliente decidindo a cada etapa.',
     ],
     roleLabel: 'O que eu fiz',
     roleList: [
@@ -43,7 +43,7 @@ const tutoryRebrand: CaseStudy = {
       'Símbolo, paleta e tipografia',
       'Deck interativo em HTML',
       'Geradores 3D (Three.js)',
-      'Troféu em Blender',
+      'Gamificação: 6 troféus 3D',
       'Site em Astro + React',
       'Migração do WordPress',
       'Performance e acessibilidade',
@@ -74,13 +74,6 @@ const tutoryRebrand: CaseStudy = {
         showcase: {
           items: [
             {
-              src: '/cases/tutory-rebrand/marca-sistema.webp',
-              alt: 'Folha do sistema de identidade: símbolo, logotipo, arquétipos, seis cores e duas famílias tipográficas',
-              label: 'Sistema de identidade',
-              meta: 'símbolo · paleta · tipografia',
-              caption: 'Símbolo, logotipo, os dois arquétipos, as seis cores (Abyss, Deep, Electric, Beam, Ice e Gold) e as duas famílias, Gilroy e Manrope, numa folha só.',
-            },
-            {
               src: '/cases/tutory-rebrand/marca-v1.webp',
               alt: 'Proposta 1 da marca: símbolo em supernova e paleta de oceano, numa placa de vidro segurada contra a luz',
               label: 'Proposta 1 — Supernova',
@@ -95,6 +88,20 @@ const tutoryRebrand: CaseStudy = {
               meta: '31 mar · aprovada',
               size: 'half',
               caption: 'O cérebro redesenhado em azul elétrico. O que a Tutory já era, com a forma à altura.',
+            },
+            {
+              src: '/cases/tutory-rebrand/marca-sistema.webp',
+              alt: 'Folha do sistema de identidade: símbolo, logotipo, arquétipos, seis cores e duas famílias tipográficas',
+              label: 'Sistema de identidade',
+              meta: 'símbolo · paleta · tipografia',
+              caption: 'Símbolo, logotipo, os dois arquétipos, as seis cores (Abyss, Deep, Electric, Beam, Ice e Gold) e as duas famílias, Gilroy e Manrope, numa folha só.',
+            },
+            {
+              src: '/cases/tutory-rebrand/marca-blueprint.webp',
+              alt: 'Desenho de construção do símbolo em estilo blueprint: grade, cotas, ângulos, vista explodida em quatro peças, três detalhes ampliados e tabela de especificação',
+              label: 'Desenho de construção',
+              meta: 'blueprint · cotas · ângulos',
+              caption: 'Caixa de 146,79 × 167,06, vão central de 10,92 (7,4 % da largura), inclinações de 26,6°, 27,6° e 31,3°. A silhueta hexagonal, os dois hemisférios e os cortes internos, cotados a partir do vetor final.',
             },
             {
               src: '/cases/tutory-rebrand/marca-palco.webp',
@@ -124,16 +131,16 @@ const tutoryRebrand: CaseStudy = {
           { src: '/cases/tutory-rebrand/marca-f1.webp', alt: 'Estande com símbolo em neon azul e carro de corrida com a marca Tutory' },
           { src: '/cases/tutory-rebrand/marca-piloto.webp', alt: 'Piloto de costas com o logotipo Tutory no macacão' },
           { src: '/cases/tutory-rebrand/marca-cracha.webp', alt: 'Crachá preto com o símbolo em cromo e a assinatura Empowering Intelligence' },
-          { src: '/cases/tutory-rebrand/marca-trofeu.webp', alt: 'Troféu Tutory Legacy Award: símbolo dourado entre pétalas de vidro sobre base preta' },
+          { src: '/cases/tutory-rebrand/marca-trofeu.webp', alt: 'Troféu Legacy da gamificação da Hub: rede neural dourada com medalha de esmeralda sobre base preta' },
         ],
-        galleryCaption: 'Estande, uniforme, crachá e o troféu Tutory Legacy Award, modelado em Blender para o evento.',
+        galleryCaption: 'Estande, uniforme, crachá e o troféu Legacy, último nível da gamificação da Hub.',
       },
       {
         kicker: '03 — O deck e as ferramentas',
         title: 'Uma marca que se apresenta sozinha',
         body: [
           'Em vez de um PDF, a marca foi apresentada num deck interativo em HTML puro: 37 slides, 21 deles visíveis e o resto guardado como variações, navegação por setas, roda e toque, versão vertical para celular e link direto para cada slide. A mesma apresentação virou o manual: paleta, tipografia, voz e um slide de downloads com o kit, logos vetoriais e fontes.',
-          'Para a marca não se degradar no dia a dia, construí duas ferramentas em Three.js. Um gerador de vidro refrativo extruda o símbolo e renderiza versões em cristal, cromo ou neon (20 formas, 9 estilos, exporta PNG, 4K e GLB). Um gerador de medalhas 3D produz as placas Prata, Ouro, Diamante, Ruby e Esmeralda da Mentoria e sai empacotado como web component: uma tag, e a medalha gira em qualquer página.',
+          'Para a marca não se degradar no dia a dia, a mesma pasta ganhou dois utilitários em Three.js: um gerador de vidro refrativo para renders do símbolo e um gerador de medalhas 3D empacotado como web component. Ferramentas de bastidor, para quem produz peça todo dia sem passar pelo designer.',
         ],
         showcase: {
           items: [
@@ -158,27 +165,74 @@ const tutoryRebrand: CaseStudy = {
               meta: 'slide 08',
               size: 'half',
             },
+          ],
+        },
+      },
+      {
+        kicker: '04 — Gamificação',
+        title: 'Da faísca ao legado',
+        body: [
+          'A Hub precisava de um programa de reconhecimento para os educadores que vendem na plataforma. A tese virou frase no deck: "O mercado te mede pelo quanto você fatura. Nós celebramos quem você transforma." São seis níveis por marco de faturamento, de Spark (R$ 100 mil) a Legacy (R$ 25 milhões), e cada um vem com um troféu físico: uma rede neural dourada que ganha nós e conexões a cada nível, sobre a mesma base preta. A Tutory nasceu de um cérebro, e o prêmio conta essa história.',
+          'Os troféus são 100% procedurais em Three.js. Cada rede nasce de uma semente fixa, então a mesma peça sai sempre igual, requisito de fabricação: esferas e hastes de latão banhado, medalha em aço, ônix, safira, ouro ou esmeralda, e a esfera de cristal do Spark com dispersão real. Do mesmo código saem a ficha técnica de cada peça (seis vistas, medidas, peso estimado e CSV de nós e hastes para a oficina), os STL para impressão 3D com remesh no Blender, as pranchas A4 em escala real de placas e medalhas, os ícones 2D e 3D e um deck de 30 slides com as peças girando ao vivo. Um sprint de quatro dias em agosto, 50 commits.',
+        ],
+        showcase: {
+          items: [
             {
-              src: '/cases/tutory-rebrand/gerador-vidro.webp',
-              alt: 'Gerador de vidro refrativo com o símbolo Tutory em cromo escuro e o painel de controles de material',
-              label: 'Gerador de vidro',
-              meta: 'three.js · png · 4K · glb',
-              size: 'half',
-              caption: 'Preset "Tutory Symbol": IOR, transmissão, dispersão e clearcoat ajustáveis, semente reproduzível.',
+              src: '/cases/tutory-rebrand/game-linha.webp',
+              alt: 'Os seis troféus em fila sobre fundo escuro: Spark, Vision, Neural, Fusion, Genius e Legacy, com marco de faturamento e número de nós e hastes',
+              label: 'Os seis níveis',
+              meta: 'Spark → Legacy · escala real',
+              caption: 'De 10 nós e 16 hastes (Vision) a 100 nós, 302 hastes e 18 m de latão (Legacy). A base é a mesma em todos: só a rede cresce.',
             },
             {
-              src: '/cases/tutory-rebrand/gerador-medalha.webp',
-              alt: 'Medalha 3D Mentoria Tutory Ruby: anel cromado, face hexagonal azul e texto em volta',
-              label: 'Gerador de medalhas',
-              meta: 'web component',
+              src: '/cases/tutory-rebrand/game-spark.webp',
+              alt: 'Troféu Spark: esfera de cristal com gravação interna numa caixa de nogueira com veludo azul',
+              label: 'Spark · R$ 100 mil',
+              meta: 'cristal · caixa de nogueira',
               size: 'half',
-              caption: 'As placas da Mentoria em 3D de verdade, com anel de texto e reflexos, numa tag HTML.',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-legacy.webp',
+              alt: 'Troféu Legacy: rede geodésica dourada com dendritos internos e medalha de esmeralda',
+              label: 'Legacy · R$ 25 milhões',
+              meta: 'geodésica · esmeralda',
+              size: 'half',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-ficha.webp',
+              alt: 'Ficha técnica do troféu Legacy: seis vistas cotadas, materiais, guia de produção e peso estimado',
+              label: 'Ficha técnica',
+              meta: '/ficha/legacy · pdf · csv',
+              size: 'half',
+              caption: 'Seis vistas ortográficas, medidas, peso e as coordenadas de cada nó e haste, prontos para orçar com a oficina.',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-impressao.webp',
+              alt: 'Render em argila dos cinco troféus de rede em fila, preparados para impressão 3D',
+              label: 'Impressão 3D',
+              meta: 'stl · remesh no blender',
+              size: 'half',
+              caption: 'Cada rede vira um STL fechado por remesh de 0,5 mm; a fila sai em escala real, 34 cm entre peças.',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-pranchas.webp',
+              alt: 'Duas pranchas A4 em escala 1:1 com as cinco placas e as cinco medalhas, com cotas e barra de escala',
+              label: 'Placas e medalhas',
+              meta: 'A4 · escala 1:1',
+              size: 'half',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-deck.webp',
+              alt: 'Slide Fusion do deck Gamificação Hub, com o troféu 3D girando ao vivo ao lado do texto',
+              label: 'Deck Gamificação Hub',
+              meta: '30 slides · 3D ao vivo',
+              size: 'half',
             },
           ],
         },
       },
       {
-        kicker: '04 — O site',
+        kicker: '05 — O site',
         title: 'Um site à altura do ecossistema',
         body: [
           'Com a marca aprovada, o site começou em 16 de abril e foi ao ar em 18 de junho: 63 dias, 14 páginas, um monorepo em Astro com ilhas React só onde há movimento. A home conta a história do ecossistema em sequência: hero com um anel 3D de cartões sobre a foto do casal, uma frase que se revela palavra a palavra ao rolar, os números, o gráfico de crescimento e três blocos de produto que trocam como cortinas.',
@@ -202,11 +256,13 @@ const tutoryRebrand: CaseStudy = {
               size: 'half',
             },
             {
-              src: '/cases/tutory-rebrand/site-hub.webp',
-              alt: 'Bloco Tutory Hub em azul elétrico com uma esteira de telas do produto',
+              src: '/cases/tutory-rebrand/hub-marquee-poster.webp',
+              video: { src: '/cases/tutory-rebrand/hub-marquee.mp4' },
+              alt: 'Vídeo: bloco Tutory Hub em azul elétrico com a esteira diagonal de telas do produto deslizando em loop',
               label: 'Tutory Hub',
-              meta: 'bloco parallax',
+              meta: 'vídeo · bloco parallax',
               size: 'half',
+              caption: 'A esteira de cartões do produto desliza em três colunas com ritmos diferentes; aqui em loop de 30 s.',
             },
             {
               src: '/cases/tutory-rebrand/site-orbita.webp',
@@ -223,12 +279,13 @@ const tutoryRebrand: CaseStudy = {
               size: 'half',
             },
             {
-              src: '/cases/tutory-rebrand/pagina-mentoria-placas.webp',
-              alt: 'Seção Porque crescer precisa ser celebrado, com as placas Ouro, Diamante, Ruby, Esmeralda e Prata',
+              src: '/cases/tutory-rebrand/placas-poster.webp',
+              video: { src: '/cases/tutory-rebrand/placas.mp4', webm: '/cases/tutory-rebrand/placas.webm' },
+              alt: 'Vídeo: as placas Ouro, Diamante, Ruby, Esmeralda e Prata rolam em letreiro; um clique na Diamante abre a ficha da conquista num painel lateral',
               label: 'Placas da Mentoria',
-              meta: '/produtos/mentoria',
+              meta: 'vídeo · /produtos/mentoria',
               size: 'half',
-              caption: 'As placas de conquista, com brilho e reflexo de vidro, vêm do mesmo gerador 3D da marca.',
+              caption: 'As placas Prata, Ouro, Diamante, Ruby e Esmeralda rolam em letreiro; o clique abre a ficha da conquista.',
             },
             {
               src: '/cases/tutory-rebrand/pagina-hub-maia.webp',
@@ -248,7 +305,7 @@ const tutoryRebrand: CaseStudy = {
         },
       },
       {
-        kicker: '05 — Performance, SEO e GEO',
+        kicker: '06 — Performance, SEO e GEO',
         title: 'Rápido para pessoas, legível para máquinas',
         body: [
           'Performance foi tratada como feature: imagens de 159 MB para 28 MB, 50 fotos convertidas para WebP, a textura de ruído de 2,2 MB para 60 KB, largura e altura em todas as imagens para zerar o salto de layout, e 55 das 57 ilhas da home deixando de hidratar no carregamento. Acessibilidade subiu de 84 para 100 no Lighthouse, com 100 também em SEO e boas práticas.',
@@ -261,7 +318,7 @@ const tutoryRebrand: CaseStudy = {
         },
       },
       {
-        kicker: '06 — Conteúdo',
+        kicker: '07 — Conteúdo',
         title: 'Publicar sem depender de ninguém',
         body: [
           'O blog, os cases e os guias precisavam de um fluxo que o time de marketing tocasse sozinho. Testei três. Um fork do Sveltia CMS traduzido para pt-BR durou uma semana. Um CMS próprio em Astro SSR com Postgres, editor, biblioteca de mídia e deploy automático durou dois meses. O terceiro era o mais simples: conteúdo em markdown no repositório, publicado por pull request.',
@@ -288,10 +345,10 @@ const tutoryRebrand: CaseStudy = {
         },
       },
       {
-        kicker: '07 — Resultado',
+        kicker: '08 — Resultado',
         title: 'A mesma empresa, enfim reconhecível',
         body: [
-          'Em três meses, a Tutory saiu de um cérebro arredondado num site de WordPress para uma identidade que assina palco, produto, dashboards internos, crachás e troféu, e para um site que conta a história do ecossistema do jeito que o time comercial sempre contou.',
+          'Em três meses, a Tutory saiu de um cérebro arredondado num site de WordPress para uma identidade que assina palco, produto, dashboards internos, crachás e os seis troféus da gamificação, e para um site que conta a história do ecossistema do jeito que o time comercial sempre contou.',
           'A marca v2 já vive fora do site: o Tutory OS, o Aeroporto de Leads e os painéis internos nasceram nela. E o site segue evoluindo em produção, 247 commits até outubro, com artigos novos, área do professor e ajustes de hero, sem nunca ter saído do ar.',
         ],
       },
@@ -304,7 +361,7 @@ const tutoryRebrand: CaseStudy = {
       'Lighthouse 100 em acessibilidade, SEO e boas práticas (acessibilidade vinha de 84)',
       'Imagens 82% mais leves e 55 de 57 ilhas sem hidratar no carregamento',
       'Pronto para IAs: robots, llms.txt, dados estruturados e IndexNow',
-      'Deck interativo e geradores 3D mantêm a marca no padrão sem depender de mim',
+      'Gamificação da Hub: seis troféus procedurais, da ficha técnica à impressão 3D',
     ],
     stackLabel: 'Stack',
     stack: ['Illustrator', 'Blender', 'Three.js', 'Astro 6', 'React', 'TypeScript', 'Tailwind CSS 4', 'Motion · Lenis', 'Vercel', 'GTM · Consent Mode v2', 'Typebot', 'schema.org · llms.txt'],
@@ -350,7 +407,7 @@ const tutoryRebrand: CaseStudy = {
     ],
     intro: [
       'From the outside, Tutory was a rounded blue brain, a WordPress website and a feature pitch. Inside, it was an ecosystem with three products, thousands of mentors, a podcast and its own event. Whoever arrived through the website saw a tool. Whoever stayed discovered the ecosystem.',
-      'My job was to close that gap on two fronts: an identity that said how big the company had become, and a website that told the story the way the sales team already told it on calls. Research, positioning, symbol, deck, design and code came from the same hands, with the client deciding at every step.',
+      'My job was to close that gap on two fronts, an identity that said how big the company had become and a website that told the story the way the sales team already told it on calls, and then to extend the brand into the physical world with the Hub gamification and its six trophies. Research, positioning, symbol, deck, design and code came from the same hands, with the client deciding at every step.',
     ],
     roleLabel: 'What I did',
     roleList: [
@@ -359,7 +416,7 @@ const tutoryRebrand: CaseStudy = {
       'Symbol, palette and type',
       'Interactive HTML deck',
       '3D generators (Three.js)',
-      'Trophy in Blender',
+      'Gamification: six 3D trophies',
       'Astro + React website',
       'WordPress migration',
       'Performance and accessibility',
@@ -390,13 +447,6 @@ const tutoryRebrand: CaseStudy = {
         showcase: {
           items: [
             {
-              src: '/cases/tutory-rebrand/marca-sistema.webp',
-              alt: 'Identity system sheet: symbol, wordmark, archetypes, six colors and two type families',
-              label: 'Identity system',
-              meta: 'symbol · palette · type',
-              caption: 'Symbol, wordmark, the two archetypes, the six colors (Abyss, Deep, Electric, Beam, Ice and Gold) and the two families, Gilroy and Manrope, on one sheet.',
-            },
-            {
               src: '/cases/tutory-rebrand/marca-v1.webp',
               alt: 'Brand proposal 1: supernova symbol and ocean palette on a glass tile held against the light',
               label: 'Proposal 1 — Supernova',
@@ -411,6 +461,20 @@ const tutoryRebrand: CaseStudy = {
               meta: 'Mar 31 · approved',
               size: 'half',
               caption: 'The brain redrawn in electric blue. What Tutory already was, with a form to match.',
+            },
+            {
+              src: '/cases/tutory-rebrand/marca-sistema.webp',
+              alt: 'Identity system sheet: symbol, wordmark, archetypes, six colors and two type families',
+              label: 'Identity system',
+              meta: 'symbol · palette · type',
+              caption: 'Symbol, wordmark, the two archetypes, the six colors (Abyss, Deep, Electric, Beam, Ice and Gold) and the two families, Gilroy and Manrope, on one sheet.',
+            },
+            {
+              src: '/cases/tutory-rebrand/marca-blueprint.webp',
+              alt: 'Blueprint-style construction drawing of the symbol: grid, dimensions, angles, an exploded view in four pieces, three magnified details and a specification table',
+              label: 'Construction drawing',
+              meta: 'blueprint · dimensions · angles',
+              caption: 'A 146.79 × 167.06 box, a 10.92 central gap (7.4% of the width), slopes of 26.6°, 27.6° and 31.3°. The hexagonal silhouette, the two hemispheres and the inner cuts, dimensioned from the final vector.',
             },
             {
               src: '/cases/tutory-rebrand/marca-palco.webp',
@@ -440,16 +504,16 @@ const tutoryRebrand: CaseStudy = {
           { src: '/cases/tutory-rebrand/marca-f1.webp', alt: 'Stand with the symbol in blue neon and a race car with the Tutory brand' },
           { src: '/cases/tutory-rebrand/marca-piloto.webp', alt: 'Driver from behind with the Tutory wordmark on the suit' },
           { src: '/cases/tutory-rebrand/marca-cracha.webp', alt: 'Black badge with the chrome symbol and the Empowering Intelligence tagline' },
-          { src: '/cases/tutory-rebrand/marca-trofeu.webp', alt: 'Tutory Legacy Award trophy: golden symbol between glass petals on a black base' },
+          { src: '/cases/tutory-rebrand/marca-trofeu.webp', alt: 'Legacy trophy from the Hub gamification: golden neural network with an emerald medal on a black base' },
         ],
-        galleryCaption: 'Stand, uniform, badge and the Tutory Legacy Award trophy, modeled in Blender for the event.',
+        galleryCaption: 'Stand, uniform, badge and the Legacy trophy, the top level of the Hub gamification.',
       },
       {
         kicker: '03 — The deck and the tools',
         title: 'A brand that presents itself',
         body: [
           'Instead of a PDF, the brand was presented in an interactive deck in plain HTML: 37 slides, 21 of them visible and the rest kept as variations, arrow, wheel and touch navigation, a vertical version for phones and a direct link to every slide. The same presentation became the guidelines: palette, type, voice and a downloads slide with the kit, vector logos and fonts.',
-          'So the brand would not degrade in daily use, I built two tools in Three.js. A refractive glass generator extrudes the symbol and renders it in crystal, chrome or neon (20 shapes, 9 styles, exports PNG, 4K and GLB). A 3D medal generator produces the Mentoria plaques, Silver, Gold, Diamond, Ruby and Emerald, and ships as a web component: one tag, and the medal spins on any page.',
+          'So the brand would not degrade in daily use, the same folder got two Three.js utilities: a refractive glass generator for symbol renders and a 3D medal generator packaged as a web component. Backstage tools for the people who produce assets every day without going through the designer.',
         ],
         showcase: {
           items: [
@@ -474,27 +538,74 @@ const tutoryRebrand: CaseStudy = {
               meta: 'slide 08',
               size: 'half',
             },
+          ],
+        },
+      },
+      {
+        kicker: '04 — Gamification',
+        title: 'From a spark to a legacy',
+        body: [
+          'The Hub needed a recognition program for the educators who sell on the platform. The thesis became a line in the deck: "The market measures you by how much you bill. We celebrate who you transform." There are six levels by revenue milestone, from Spark (R$ 100 thousand) to Legacy (R$ 25 million), and each one comes with a physical trophy: a golden neural network that gains nodes and connections at every level, on the same black base. Tutory was born from a brain, and the award tells that story.',
+          'The trophies are 100% procedural in Three.js. Each network grows from a fixed seed, so the same piece always comes out identical, a fabrication requirement: plated brass spheres and rods, a medal in steel, onyx, sapphire, gold or emerald, and the Spark crystal sphere with real dispersion. The same code produces the technical sheet of every piece (six views, measurements, estimated weight and a CSV of nodes and rods for the workshop), STLs for 3D printing with a Blender remesh, real-scale A4 sheets for plates and medals, 2D and 3D icons, and a 30-slide deck with the pieces spinning live. A four-day sprint in August, 50 commits.',
+        ],
+        showcase: {
+          items: [
             {
-              src: '/cases/tutory-rebrand/gerador-vidro.webp',
-              alt: 'Refractive glass generator with the Tutory symbol in dark chrome and the material control panel',
-              label: 'Glass generator',
-              meta: 'three.js · png · 4K · glb',
-              size: 'half',
-              caption: '"Tutory Symbol" preset: adjustable IOR, transmission, dispersion and clearcoat, with a reproducible seed.',
+              src: '/cases/tutory-rebrand/game-linha.webp',
+              alt: 'The six trophies in a row on a dark background: Spark, Vision, Neural, Fusion, Genius and Legacy, with revenue milestone and node and rod counts',
+              label: 'The six levels',
+              meta: 'Spark → Legacy · true scale',
+              caption: 'From 10 nodes and 16 rods (Vision) to 100 nodes, 302 rods and 18 m of brass (Legacy). The base is the same for all: only the network grows.',
             },
             {
-              src: '/cases/tutory-rebrand/gerador-medalha.webp',
-              alt: '3D medal Mentoria Tutory Ruby: chrome ring, blue hexagonal face and text around it',
-              label: 'Medal generator',
-              meta: 'web component',
+              src: '/cases/tutory-rebrand/game-spark.webp',
+              alt: 'Spark trophy: crystal sphere with internal engraving in a walnut box with blue velvet',
+              label: 'Spark · R$ 100 thousand',
+              meta: 'crystal · walnut box',
               size: 'half',
-              caption: 'The Mentoria plaques in real 3D, with a text ring and reflections, in one HTML tag.',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-legacy.webp',
+              alt: 'Legacy trophy: golden geodesic network with inner dendrites and an emerald medal',
+              label: 'Legacy · R$ 25 million',
+              meta: 'geodesic · emerald',
+              size: 'half',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-ficha.webp',
+              alt: 'Technical sheet of the Legacy trophy: six dimensioned views, materials, production guide and estimated weight',
+              label: 'Technical sheet',
+              meta: '/ficha/legacy · pdf · csv',
+              size: 'half',
+              caption: 'Six orthographic views, measurements, weight and the coordinates of every node and rod, ready to quote with the workshop.',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-impressao.webp',
+              alt: 'Clay render of the five network trophies in a row, prepared for 3D printing',
+              label: '3D printing',
+              meta: 'stl · blender remesh',
+              size: 'half',
+              caption: 'Each network becomes a closed STL through a 0.5 mm remesh; the row is laid out at true scale, 34 cm apart.',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-pranchas.webp',
+              alt: 'Two A4 sheets at 1:1 with the five plates and the five medals, dimensioned, with a scale bar',
+              label: 'Plates and medals',
+              meta: 'A4 · 1:1 scale',
+              size: 'half',
+            },
+            {
+              src: '/cases/tutory-rebrand/game-deck.webp',
+              alt: 'Fusion slide from the Hub Gamification deck, with the 3D trophy spinning live next to the copy',
+              label: 'Hub Gamification deck',
+              meta: '30 slides · live 3D',
+              size: 'half',
             },
           ],
         },
       },
       {
-        kicker: '04 — The website',
+        kicker: '05 — The website',
         title: 'A website worthy of the ecosystem',
         body: [
           'With the brand approved, the site started on April 16 and went live on June 18: 63 days, 14 pages, an Astro monorepo with React islands only where things move. The home tells the ecosystem story in sequence: a hero with a 3D ring of cards over the couple’s photo, a sentence that reveals word by word as you scroll, the numbers, the growth chart and three product blocks that switch like curtains.',
@@ -518,11 +629,13 @@ const tutoryRebrand: CaseStudy = {
               size: 'half',
             },
             {
-              src: '/cases/tutory-rebrand/site-hub.webp',
-              alt: 'Tutory Hub block in electric blue with a conveyor of product screens',
+              src: '/cases/tutory-rebrand/hub-marquee-poster.webp',
+              video: { src: '/cases/tutory-rebrand/hub-marquee.mp4' },
+              alt: 'Video: Tutory Hub block in electric blue with the diagonal conveyor of product screens sliding in a loop',
               label: 'Tutory Hub',
-              meta: 'parallax block',
+              meta: 'video · parallax block',
               size: 'half',
+              caption: 'The conveyor of product cards drifts in three columns at different rhythms; here as a 30 s loop.',
             },
             {
               src: '/cases/tutory-rebrand/site-orbita.webp',
@@ -539,12 +652,13 @@ const tutoryRebrand: CaseStudy = {
               size: 'half',
             },
             {
-              src: '/cases/tutory-rebrand/pagina-mentoria-placas.webp',
-              alt: 'Section Because growing deserves celebration, with the Gold, Diamond, Ruby, Emerald and Silver plaques',
+              src: '/cases/tutory-rebrand/placas-poster.webp',
+              video: { src: '/cases/tutory-rebrand/placas.mp4', webm: '/cases/tutory-rebrand/placas.webm' },
+              alt: 'Video: the Gold, Diamond, Ruby, Emerald and Silver plaques scroll in a marquee; a click on Diamond opens the achievement sheet in a side panel',
               label: 'Mentoria plaques',
-              meta: '/produtos/mentoria',
+              meta: 'video · /produtos/mentoria',
               size: 'half',
-              caption: 'The achievement plaques, with glow and glass reflection, come from the brand’s own 3D generator.',
+              caption: 'The Silver, Gold, Diamond, Ruby and Emerald plaques scroll in a marquee; a click opens the achievement sheet.',
             },
             {
               src: '/cases/tutory-rebrand/pagina-hub-maia.webp',
@@ -564,7 +678,7 @@ const tutoryRebrand: CaseStudy = {
         },
       },
       {
-        kicker: '05 — Performance, SEO and GEO',
+        kicker: '06 — Performance, SEO and GEO',
         title: 'Fast for people, readable for machines',
         body: [
           'Performance was treated as a feature: images from 159 MB to 28 MB, 50 photos converted to WebP, the noise texture from 2.2 MB to 60 KB, width and height on every image to kill layout shift, and 55 of the home’s 57 islands no longer hydrating on load. Accessibility went from 84 to 100 on Lighthouse, with 100 on SEO and best practices too.',
@@ -577,7 +691,7 @@ const tutoryRebrand: CaseStudy = {
         },
       },
       {
-        kicker: '06 — Content',
+        kicker: '07 — Content',
         title: 'Publishing without depending on anyone',
         body: [
           'The blog, the cases and the guides needed a workflow the marketing team could run alone. I tried three. A Sveltia CMS fork translated to pt-BR lasted a week. A custom CMS on Astro SSR with Postgres, an editor, a media library and automatic deploys lasted two months. The third was the simplest: content as markdown in the repository, published through pull requests.',
@@ -604,10 +718,10 @@ const tutoryRebrand: CaseStudy = {
         },
       },
       {
-        kicker: '07 — Outcome',
+        kicker: '08 — Outcome',
         title: 'The same company, finally recognizable',
         body: [
-          'In three months, Tutory went from a rounded brain on a WordPress site to an identity that signs stages, product, internal dashboards, badges and a trophy, and to a website that tells the ecosystem story the way the sales team always told it.',
+          'In three months, Tutory went from a rounded brain on a WordPress site to an identity that signs stages, product, internal dashboards, badges and the six gamification trophies, and to a website that tells the ecosystem story the way the sales team always told it.',
           'Brand v2 already lives beyond the site: Tutory OS, the Lead Airport and the internal dashboards were born in it. And the site keeps evolving in production, 247 commits through October, with new articles, a teacher area and hero tweaks, without ever going down.',
         ],
       },
@@ -620,7 +734,7 @@ const tutoryRebrand: CaseStudy = {
       'Lighthouse 100 on accessibility, SEO and best practices (accessibility was 84)',
       'Images 82% lighter and 55 of 57 islands not hydrating on load',
       'Ready for AIs: robots, llms.txt, structured data and IndexNow',
-      'Interactive deck and 3D generators keep the brand on standard without me',
+      'Hub gamification: six procedural trophies, from technical sheet to 3D printing',
     ],
     stackLabel: 'Stack',
     stack: ['Illustrator', 'Blender', 'Three.js', 'Astro 6', 'React', 'TypeScript', 'Tailwind CSS 4', 'Motion · Lenis', 'Vercel', 'GTM · Consent Mode v2', 'Typebot', 'schema.org · llms.txt'],

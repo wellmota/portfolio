@@ -46,7 +46,7 @@ Kineo, Tako, Solomon, Cogmo Tecnologia.
 ## Selected projects
 
 - **Lead Airport (Aeroporto de Leads) · Tutory OS** — the lead table on Tutory’s sales-room TV turned into a live isometric 3D airport (three.js, real-time Supabase polling, Smart TV performance): every lead is a plane that lands, qualified leads enter the hangar. Concept, design and code in one week. Case study: https://userexperience.com.br/work/aeroporto-de-leads/
-- **Tutory: brand and website** — rebranding (archetypes, geometric symbol, electric-blue palette, Gilroy + Manrope), a 37-slide interactive HTML deck, Three.js glass and medal generators, and a new institutional site in Astro 6 (14 pages, WordPress migration with 301s, Lighthouse 100 accessibility/SEO/best practices, llms.txt, structured data, IndexNow). From first commit to live in 63 days. Case study: https://userexperience.com.br/work/tutory-rebrand/
+- **Tutory: brand and website** — rebranding (archetypes, geometric symbol, electric-blue palette, Gilroy + Manrope), a 37-slide interactive HTML deck, the Hub gamification (six revenue levels with procedural Three.js trophies, technical sheets, 3D-printing STLs and A4 plate/medal sheets), and a new institutional site in Astro 6 (14 pages, WordPress migration with 301s, Lighthouse 100 accessibility/SEO/best practices, llms.txt, structured data, IndexNow). From first commit to live in 63 days. Case study: https://userexperience.com.br/work/tutory-rebrand/
 - **Kia Telluride LX** — automotive landing page: layout, UI and vehicle configurator experience
 - **Autódromo Velocitta** — brand identity and digital presence for the racetrack
 - **Wevr Virtual Studio (WVS)** — interface and experience for a VR production platform (US)

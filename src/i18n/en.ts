@@ -193,7 +193,7 @@ const en: SiteData = {
       meta: 'EdTech · Case Study',
       categories: ['Branding', 'Web', 'SEO'],
       description:
-        'Rebranding with archetypes, a 37-slide interactive deck, 3D generators and a new Astro website: from WordPress to live in 63 days, with Lighthouse 100. Read the case study →',
+        'Rebranding with archetypes, an interactive deck, six 3D gamification trophies and a new Astro website: from WordPress to live in 63 days, with Lighthouse 100. Read the case study →',
       image: '/cases/tutory-rebrand/card-en.webp',
       accent: '#3B7BF5',
       highlight: 'From symbol to live site in 3 months',
