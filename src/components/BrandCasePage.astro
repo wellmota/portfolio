@@ -30,7 +30,7 @@ const glyph = (key: string, px: number) => {
 };
 ---
 
-<div class="brand" data-theme="dark">
+<div class="brand">
   <header class="b-hairline-b">
     <div class="container-page">
       <nav class="flex items-center justify-between gap-4 py-4">
@@ -54,7 +54,7 @@ const glyph = (key: string, px: number) => {
 
   <main>
     <!-- Abertura -->
-    <section class="container-page pt-16 sm:pt-24 md:pt-32" data-theme-section="dark">
+    <section class="container-page pt-16 sm:pt-24 md:pt-32">
       <p class="mono flex items-center gap-3 text-[11px] uppercase tracking-[.22em] b-muted" data-reveal>
         <span class="b-dot" aria-hidden="true"></span>{c.kicker}
       </p>
@@ -65,7 +65,7 @@ const glyph = (key: string, px: number) => {
     </section>
 
     <!-- Vídeo de abertura, de ponta a ponta -->
-    <section class="mt-14 md:mt-20" data-theme-section="dark">
+    <section class="mt-14 md:mt-20">
       <figure>
         <div class="b-bleed b-stage" data-hero-stage data-hold="6000">
           <video
@@ -91,7 +91,7 @@ const glyph = (key: string, px: number) => {
     </section>
 
     <!-- Ficha -->
-    <section class="container-page mt-14 md:mt-20" data-theme-section="dark">
+    <section class="container-page mt-14 md:mt-20">
       <dl class="grid grid-cols-2 gap-x-8 gap-y-7 b-hairline-t pt-8 sm:grid-cols-3 lg:grid-cols-5" data-reveal>
         {
           c.meta.map((m) => (
@@ -104,10 +104,16 @@ const glyph = (key: string, px: number) => {
       </dl>
     </section>
 
-    <!-- Capítulos -->
+    <!-- Capítulos: cada um com o próprio fundo; entre temas diferentes, uma faixa longa de degradê -->
     {
-      c.chapters.map((ch) => (
-        <section class="container-page pt-24 md:pt-36" data-theme-section={ch.theme ?? 'dark'}>
+      c.chapters.map((ch, i) => {
+        const theme = ch.theme ?? 'dark';
+        const prev = i === 0 ? 'dark' : (c.chapters[i - 1].theme ?? 'dark');
+        return (
+        <>
+        {prev !== theme && <div class={`b-fade b-fade--${prev}-${theme}`} aria-hidden="true"></div>}
+        <section class={`b-sec b-sec--${theme}`}>
+        <div class="container-page pt-24 md:pt-36">
           <div class="b-hairline-t pt-8 md:grid md:grid-cols-[200px_1fr] md:gap-12 lg:grid-cols-[260px_1fr]">
             <div class="flex items-baseline gap-4 md:sticky md:top-24 md:block md:self-start" data-reveal>
               <span class="display block text-5xl leading-none b-num md:text-[5.5rem]">{ch.num}</span>
@@ -150,7 +156,7 @@ const glyph = (key: string, px: number) => {
                   {b.items.map((img) => (
                     <figure data-reveal data-reveal-group>
                       <div class="b-px">
-                        <img src={img.src} alt={img.alt} loading="lazy" class="block w-full" data-parallax="2" />
+                        <img src={img.src} alt={img.alt} loading="lazy" class="block w-full" />
                       </div>
                       <figcaption class="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                         {img.label && <span class="mono text-[11px] uppercase tracking-widest b-muted">{img.label}</span>}
@@ -342,12 +348,12 @@ const glyph = (key: string, px: number) => {
 
               {b.type === 'evolution' && (
                 <div class="grid gap-12 md:grid-cols-2 md:gap-16" data-reveal>
-                  {b.columns.map((col, i) => (
+                  {b.columns.map((col, j) => (
                     <div>
-                      <p class:list={['mono text-[10px] uppercase tracking-widest', i === 0 ? 'b-faint' : 'b-gold']}>{col.label}</p>
+                      <p class:list={['mono text-[10px] uppercase tracking-widest', j === 0 ? 'b-faint' : 'b-gold']}>{col.label}</p>
                       <ul class="mt-4">
                         {col.items.map((it) => (
-                          <li class:list={['display b-hairline-b py-4 text-2xl leading-none md:text-[2.2rem]', i === 0 ? 'b-faint' : 'b-ink']}>{it}</li>
+                          <li class:list={['display b-hairline-b py-4 text-2xl leading-none md:text-[2.2rem]', j === 0 ? 'b-faint' : 'b-ink']}>{it}</li>
                         ))}
                       </ul>
                     </div>
@@ -356,12 +362,16 @@ const glyph = (key: string, px: number) => {
               )}
             </div>
           ))}
+        </div>
         </section>
-      ))
+        </>
+        );
+      })
     }
+    {(c.chapters[c.chapters.length - 1]?.theme ?? 'dark') === 'light' && <div class="b-fade b-fade--light-dark" aria-hidden="true"></div>}
 
     <!-- Números -->
-    <section class="container-page pt-24 md:pt-36" data-theme-section="dark">
+    <section class="container-page pt-24 md:pt-36">
       <p class="mono text-[11px] uppercase tracking-[.22em] b-gold" data-reveal>{c.statsLabel}</p>
       <div class="mt-6 grid grid-cols-2 b-hairline-t sm:grid-cols-3 lg:grid-cols-6">
         {
@@ -376,7 +386,7 @@ const glyph = (key: string, px: number) => {
     </section>
 
     <!-- Resultados + ferramentas -->
-    <section class="container-page mt-20 md:mt-28" data-theme-section="dark">
+    <section class="container-page mt-20 md:mt-28">
       <div class="grid gap-10 md:grid-cols-[1.5fr_1fr] md:gap-16">
         <div data-reveal>
           <p class="mono text-[11px] uppercase tracking-[.22em] b-gold">{c.outcomesLabel}</p>
@@ -406,7 +416,7 @@ const glyph = (key: string, px: number) => {
     </section>
 
     <!-- Próximo case -->
-    <section class="container-page mt-20 md:mt-28" data-theme-section="dark">
+    <section class="container-page mt-20 md:mt-28">
       <a href={c.next.href} class="b-next block b-hairline p-7 transition-colors md:p-10" data-reveal>
         <p class="mono text-[10px] uppercase tracking-widest b-gold">{c.next.label}</p>
         <span class="mt-4 flex items-center justify-between gap-6">
@@ -422,7 +432,7 @@ const glyph = (key: string, px: number) => {
     </section>
 
     <!-- CTA -->
-    <section class="container-page my-20 md:my-28" data-theme-section="dark">
+    <section class="container-page my-20 md:my-28">
       <div class="b-hairline p-8 text-center md:p-14" data-reveal>
         <h2 class="display mx-auto max-w-2xl text-3xl leading-tight b-ink sm:text-4xl">{c.cta.heading}</h2>
         <p class="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed b-muted">{c.cta.sub}</p>
@@ -452,10 +462,12 @@ const glyph = (key: string, px: number) => {
 </style>
 
 <style>
-  /* Temas: escuro (padrão) e claro; a página inteira faz a transição conforme o capítulo em foco */
+  /* Temas: escuro (padrão da página) e claro (por seção); entre eles, faixas longas de degradê */
   .brand {
     --b-ease: cubic-bezier(0.65, 0, 0.35, 1);
-    --b-bg: #000;
+    --b-dark: #000;
+    --b-light: #f5f4f0;
+    --b-bg: var(--b-dark);
     --b-ink: #fafaf8;
     --b-muted: rgba(255, 255, 255, 0.58);
     --b-faint: rgba(255, 255, 255, 0.34);
@@ -465,10 +477,10 @@ const glyph = (key: string, px: number) => {
     background: var(--b-bg);
     color: var(--b-ink);
     overflow-x: clip;
-    transition: background-color 0.9s var(--b-ease);
   }
-  .brand[data-theme='light'] {
-    --b-bg: #f5f4f0;
+  .b-sec { background: var(--b-bg); color: var(--b-ink); }
+  .b-sec--light {
+    --b-bg: var(--b-light);
     --b-ink: #15151c;
     --b-muted: rgba(21, 21, 28, 0.62);
     --b-faint: rgba(21, 21, 28, 0.5);
@@ -476,13 +488,33 @@ const glyph = (key: string, px: number) => {
     --b-num: rgba(21, 21, 28, 0.09);
     --b-gold: #8a6d3b;
   }
-  .b-ink, .b-muted, .b-faint, .b-gold, .b-num { transition: color 0.9s var(--b-ease); }
+  /* faixa de transição: degradê longo, em curva suave (vários pontos) para não parecer uma rampa reta */
+  .b-fade { height: clamp(280px, 38vh, 520px); width: 100%; }
+  .b-fade--dark-light {
+    background: linear-gradient(
+      180deg,
+      var(--b-dark) 0%,
+      color-mix(in oklab, var(--b-dark) 88%, var(--b-light)) 18%,
+      color-mix(in oklab, var(--b-dark) 55%, var(--b-light)) 45%,
+      color-mix(in oklab, var(--b-dark) 18%, var(--b-light)) 76%,
+      var(--b-light) 100%
+    );
+  }
+  .b-fade--light-dark {
+    background: linear-gradient(
+      180deg,
+      var(--b-light) 0%,
+      color-mix(in oklab, var(--b-light) 82%, var(--b-dark)) 24%,
+      color-mix(in oklab, var(--b-light) 45%, var(--b-dark)) 55%,
+      color-mix(in oklab, var(--b-light) 12%, var(--b-dark)) 82%,
+      var(--b-dark) 100%
+    );
+  }
   .b-ink { color: var(--b-ink); }
   .b-muted { color: var(--b-muted); }
   .b-faint { color: var(--b-faint); }
   .b-gold { color: var(--b-gold); }
   .b-num { color: var(--b-num); }
-  .b-hairline, .b-hairline-t, .b-hairline-b, .b-hairline-l { transition: border-color 0.9s var(--b-ease); }
   .b-hairline { border: 1px solid var(--b-line); }
   .b-hairline-t { border-top: 1px solid var(--b-line); }
   .b-hairline-b { border-bottom: 1px solid var(--b-line); }
@@ -521,8 +553,7 @@ const glyph = (key: string, px: number) => {
   .b-stage.is-after .b-stage-after,
   .b-stage.is-after .b-stage-label { opacity: 1; }
   /* parallax: a figura inteira anda um pouco mais devagar que a página, sem escala e sem recorte */
-  .brand.is-px .b-px img { will-change: transform; }
-  .brand.is-px .b-stage { will-change: transform, opacity; }
+  .b-px img { backface-visibility: hidden; }
   .b-swatch { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-ink) 12%, transparent); }
   .b-swatch-gold { box-shadow: inset 0 0 0 1px rgba(201, 169, 110, 0.9); }
   /* slides do deck remontados: tag com borda, título leve, destaque em azul */
@@ -574,7 +605,6 @@ const glyph = (key: string, px: number) => {
   .b-btn-outline { border-color: color-mix(in srgb, var(--b-ink) 28%, transparent); color: var(--b-ink); }
   .b-btn-outline:hover { border-color: var(--b-ink); background: color-mix(in srgb, var(--b-ink) 6%, transparent); }
   @media (prefers-reduced-motion: reduce) {
-    .brand, .b-ink, .b-muted, .b-faint, .b-gold, .b-num { transition: none; }
     .b-strip { scroll-behavior: auto; }
   }
 </style>
@@ -606,34 +636,31 @@ const glyph = (key: string, px: number) => {
     });
   }
 
-  // Tema por capítulo: a seção cujo topo já passou da metade da tela define preto ou branco.
-  const themed = Array.from(document.querySelectorAll<HTMLElement>('[data-theme-section]'));
-  function applyTheme() {
-    if (!root) return;
-    const ref = window.innerHeight * 0.5;
-    let theme = 'dark';
-    for (const s of themed) {
-      if (s.getBoundingClientRect().top <= ref) theme = s.dataset.themeSection || 'dark';
-    }
-    if (root.dataset.theme !== theme) root.dataset.theme = theme;
-  }
-
-  // Parallax suave: imagens andam mais devagar que a página; o hero encolhe e esmaece ao sair.
+  // Parallax leve: só as imagens de largura total, e só enquanto estão na tela (IntersectionObserver).
   const px = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
+  const visible = new Set<HTMLElement>();
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        const el = e.target as HTMLElement;
+        if (e.isIntersecting) visible.add(el);
+        else {
+          visible.delete(el);
+          el.style.transform = '';
+        }
+      }
+      onScroll();
+    },
+    { rootMargin: '10% 0px' },
+  );
+  px.forEach((el) => io.observe(el));
   function applyParallax() {
     const vh = window.innerHeight;
-    for (const el of px) {
+    for (const el of visible) {
       const box = (el.parentElement as HTMLElement).getBoundingClientRect();
-      if (box.bottom < -80 || box.top > vh + 80) continue;
       const p = (box.top + box.height / 2 - vh / 2) / vh;
-      const k = Math.min(48, (parseFloat(el.dataset.parallax || '3') / 100) * box.height);
+      const k = Math.min(40, (parseFloat(el.dataset.parallax || '2') / 100) * box.height);
       el.style.transform = `translate3d(0, ${(-p * k).toFixed(1)}px, 0)`;
-    }
-    if (stage) {
-      const r = stage.getBoundingClientRect();
-      const gone = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height)));
-      stage.style.transform = `scale(${(1 - gone * 0.06).toFixed(4)})`;
-      stage.style.opacity = String(1 - gone * 0.55);
     }
   }
 
@@ -642,13 +669,14 @@ const glyph = (key: string, px: number) => {
     if (ticking) return;
     ticking = true;
     window.requestAnimationFrame(() => {
-      applyTheme();
-      if (!reduced) applyParallax();
+      applyParallax();
       ticking = false;
     });
   }
-  if (root && !reduced) root.classList.add('is-px');
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  onScroll();
+  if (root && !reduced) {
+    root.classList.add('is-px');
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+  }
 </script>
