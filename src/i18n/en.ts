@@ -167,17 +167,6 @@ const en: SiteData = {
 
   projects: [
     {
-      title: 'CuidaMe',
-      meta: 'Health · Case Study',
-      categories: ['Product', 'App', 'UX'],
-      description:
-        'Rescue of an app stuck for 2 years before me: in 1 week, workshop, redesign and 100% of the front end ready for beta, approved on the first try. See case study →',
-      image: '/cases/cuidame/card-en.webp',
-      accent: '#2FA98C',
-      highlight: 'From redesign to production in 7 days',
-      href: '/work/cuidame',
-    },
-    {
       title: 'Lead Airport',
       meta: 'EdTech · Case Study',
       categories: ['Product', '3D', 'Data'],
@@ -185,7 +174,6 @@ const en: SiteData = {
         'The lead table on Tutory’s sales-room TV became a live 3D airport: every lead is a plane that lands, qualified ones enter the hangar. three.js, real time and Smart TV — in one week. Read the case study →',
       image: '/cases/aeroporto/card-en.webp',
       accent: '#2456E6',
-      highlight: 'Concept to the sales-room TV in 1 week',
       href: '/work/aeroporto-de-leads',
     },
     {
@@ -196,7 +184,6 @@ const en: SiteData = {
         'Rebranding with archetypes: the brain rebuilt as architecture, palette, voice, a 37-slide interactive deck and six 3D gamification trophies. Read the case study →',
       image: '/cases/tutory-rebrand/card-en.webp',
       accent: '#C9A96E',
-      highlight: 'From proposal to approved brand in 4 days',
       href: '/work/tutory-rebrand',
     },
     {
@@ -207,8 +194,18 @@ const en: SiteData = {
         'From WordPress to a 14-page Astro website: migration with 301s, Lighthouse 100, Consent Mode v2 and ready to be cited by AIs. Read the case study →',
       image: '/cases/tutory-site/card-en.webp',
       accent: '#3B7BF5',
-      highlight: 'From first commit to live in 63 days',
       href: '/work/tutory-site',
+    },
+    {
+      title: 'CuidaMe',
+      meta: 'Health · Case Study',
+      categories: ['Product', 'App', 'UX'],
+      description:
+        'Rescue of an app stuck for 2 years before me: in 1 week, workshop, redesign and 100% of the front end ready for beta, approved on the first try. See case study →',
+      image: '/cases/cuidame/card-en.webp',
+      accent: '#2FA98C',
+      highlight: 'From redesign to production in 7 days',
+      href: '/work/cuidame',
     },
     /* Case studies em espera — descomente para publicar
     {

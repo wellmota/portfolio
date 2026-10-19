@@ -167,17 +167,6 @@ const pt: SiteData = {
 
   projects: [
     {
-      title: 'CuidaMe',
-      meta: 'Health · Case Study',
-      categories: ['Product', 'App', 'UX'],
-      description:
-        'Resgate de um app travado por 2 anos antes de mim: em 1 semana, workshop, redesign e 100% do front-end prontos para beta, aprovados de primeira. Ver case study →',
-      image: '/cases/cuidame/card-pt.webp',
-      accent: '#2FA98C',
-      highlight: 'Do redesign à produção em 7 dias',
-      href: '/pt/work/cuidame',
-    },
-    {
       title: 'Aeroporto de Leads',
       meta: 'EdTech · Case Study',
       categories: ['Product', '3D', 'Data'],
@@ -185,7 +174,6 @@ const pt: SiteData = {
         'A tabela de leads da TV da Tutory virou um aeroporto 3D ao vivo: cada lead é um avião que pousa, qualificado entra no hangar. three.js, tempo real e Smart TV — em uma semana. Ver case study →',
       image: '/cases/aeroporto/card-pt.webp',
       accent: '#2456E6',
-      highlight: 'Do conceito à TV da sala em 1 semana',
       href: '/pt/work/aeroporto-de-leads',
     },
     {
@@ -196,7 +184,6 @@ const pt: SiteData = {
         'Rebranding com arquétipos: o cérebro reconstruído como arquitetura, paleta, voz, deck interativo de 37 slides e seis troféus 3D da gamificação. Ver case study →',
       image: '/cases/tutory-rebrand/card-pt.webp',
       accent: '#C9A96E',
-      highlight: 'Da proposta à marca aprovada em 4 dias',
       href: '/pt/work/tutory-rebrand',
     },
     {
@@ -207,8 +194,18 @@ const pt: SiteData = {
         'Do WordPress a um site em Astro com 14 páginas: migração com 301, Lighthouse 100, Consent Mode v2 e pronto para ser citado por IAs. Ver case study →',
       image: '/cases/tutory-site/card-pt.webp',
       accent: '#3B7BF5',
-      highlight: 'Do primeiro commit ao ar em 63 dias',
       href: '/pt/work/tutory-site',
+    },
+    {
+      title: 'CuidaMe',
+      meta: 'Health · Case Study',
+      categories: ['Product', 'App', 'UX'],
+      description:
+        'Resgate de um app travado por 2 anos antes de mim: em 1 semana, workshop, redesign e 100% do front-end prontos para beta, aprovados de primeira. Ver case study →',
+      image: '/cases/cuidame/card-pt.webp',
+      accent: '#2FA98C',
+      highlight: 'Do redesign à produção em 7 dias',
+      href: '/pt/work/cuidame',
     },
     /* Case studies em espera — descomente para publicar
     {
