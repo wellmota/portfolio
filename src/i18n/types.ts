@@ -8,7 +8,6 @@ export interface SiteData {
     location: string;
     timezone: string;
     email: string;
-    phone: string;
     available: boolean;
     availableText: string;
   };
@@ -75,7 +74,7 @@ export interface SiteData {
     headingMuted: string;
     sub: string;
     cta: string;
-    details: { email: string; whatsapp: string; location: string; status: string };
+    details: { email: string; location: string; status: string };
   };
   faqAside: {
     quote: string;
@@ -92,7 +91,6 @@ export interface SiteData {
     openMenu: string;
     viewExperience: string;
     talkToMe: string;
-    viewFullCv: string;
     socialLabel: string;
     portfolioEdition: string;
     readArticle: string;

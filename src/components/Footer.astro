@@ -5,7 +5,6 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const data = getSiteData(lang);
 const { footer, profile, socials, nav } = data;
-const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
 
 const abbr: Record<string, string> = {
   GitHub: 'GH',
@@ -85,13 +84,6 @@ const iconPaths: Record<string, string> = {
           href={`mailto:${profile.email}`}
           class="link-underline mono mt-4 block text-[15px] text-cream"
           >{profile.email}</a
-        >
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noreferrer"
-          class="link-underline mono mt-2 block w-fit text-[15px] text-mist"
-          >WhatsApp</a
         >
 
         <span class="label mt-12 block">Navegação</span>

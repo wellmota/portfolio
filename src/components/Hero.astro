@@ -7,7 +7,6 @@ const data = getSiteData(lang);
 const { profile, heroStats, socials } = data;
 const [first, ...rest] = profile.name.split(' ');
 const last = rest.join(' ');
-const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
 ---
 
 <section
@@ -204,7 +203,7 @@ const whatsappUrl = `https://wa.me/${profile.phone.replace(/\D/g, '')}`;
                 stroke-linejoin="round"></path>
             </svg>
           </a>
-          <a href={whatsappUrl} target="_blank" rel="noreferrer" class="btn btn-outline w-full justify-between sm:w-auto">
+          <a href="#contato" class="btn btn-outline w-full justify-between sm:w-auto">
             {data.ui.talkToMe}
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path

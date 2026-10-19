@@ -8,11 +8,6 @@ const { contact, profile } = data;
 
 const details = [
   { label: contact.details.email, value: profile.email, href: `mailto:${profile.email}` },
-  {
-    label: contact.details.whatsapp,
-    value: data.ui.talkToMe,
-    href: `https://wa.me/${profile.phone.replace(/\D/g, '')}`,
-  },
   { label: contact.details.location, value: profile.location, href: null },
   { label: contact.details.status, value: profile.availableText, href: null },
 ];
@@ -50,7 +45,7 @@ const details = [
     </div>
 
     <!-- Contact detail table -->
-    <div class="mt-12 grid grid-cols-1 border-t border-line sm:mt-16 sm:grid-cols-2 lg:grid-cols-4" data-reveal>
+    <div class="mt-12 grid grid-cols-1 border-t border-line sm:mt-16 sm:grid-cols-2 lg:grid-cols-3" data-reveal>
       {
         details.map((d) => (
           <div class="border-b border-line py-5 sm:py-6 sm:odd:pr-6 sm:even:pl-6 sm:even:border-l lg:border-b-0 lg:border-l lg:pl-6 lg:first:border-l-0 lg:first:pl-0">

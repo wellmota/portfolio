@@ -11,7 +11,6 @@ const pt: SiteData = {
     location: 'Brasília, BR',
     timezone: 'America/Sao_Paulo',
     email: 'wellingtonmota42@gmail.com',
-    phone: '+55 61 98104-3296',
     available: true,
     availableText: 'Aberto a oportunidades remotas',
   },
@@ -428,7 +427,7 @@ const pt: SiteData = {
     headingMuted: 'algo memorável?',
     sub: 'Aberto a oportunidades remotas e projetos. Respondo em até 24h.',
     cta: 'Falar comigo',
-    details: { email: 'E-mail', whatsapp: 'WhatsApp', location: 'Localização', status: 'Status' },
+    details: { email: 'E-mail', location: 'Localização', status: 'Status' },
   },
 
   faqAside: {
@@ -450,7 +449,6 @@ const pt: SiteData = {
     openMenu: 'Abrir menu',
     viewExperience: 'Ver experiência',
     talkToMe: 'Fale comigo',
-    viewFullCv: 'Ver CV completo',
     socialLabel: 'Redes',
     portfolioEdition: 'Portfólio — Ed. 2026',
     readArticle: 'Ler artigo',

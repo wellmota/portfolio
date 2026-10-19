@@ -14,7 +14,6 @@ export const profile = {
   location: 'Brasília, BR',
   timezone: 'America/Sao_Paulo',
   email: 'wellingtonmota42@gmail.com',
-  phone: '+55 61 98104-3296',
   available: true,
   availableText: 'Aberto a oportunidades remotas',
 };
