@@ -17,6 +17,8 @@ export type BrandBlock =
   | { type: 'pair'; items: [BrandImage, BrandImage] }
   | { type: 'trio'; items: [BrandImage, BrandImage, BrandImage] }
   | { type: 'slides'; items: BrandImage[] }
+  /** Slide do deck remontado em código: texto à esquerda, vídeo em loop à direita. */
+  | { type: 'slide'; num: string; tag: string; title: string; accent: string; text: string; video: { src: string; webm?: string; poster: string }; alt: string }
   | { type: 'quote'; text: string; by?: string }
   | { type: 'voice'; beforeLabel: string; before: string; afterLabel: string; after: string }
   | { type: 'archetypes'; items: { role: string; name: string; desc: string; refs: string }[] }
@@ -39,7 +41,14 @@ export interface BrandCaseContent {
   kicker: string;
   title: string;
   subtitle: string;
-  hero: { video: { src: string; webm?: string }; poster: string; alt: string; caption: string };
+  hero: {
+    video: { src: string; webm?: string };
+    poster: string;
+    alt: string;
+    caption: string;
+    /** Imagem que toma o lugar do vídeo, em fade, quando ele termina; depois o vídeo recomeça. */
+    after: { src: string; alt: string; label: string };
+  };
   cover: { src: string; alt: string };
   meta: { label: string; value: string }[];
   chapters: BrandChapter[];
@@ -91,6 +100,11 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       poster: `${B}/blueprint-poster.webp`,
       alt: 'Vídeo em loop: o símbolo da Tutory sendo construído como desenho técnico em linhas brancas sobre preto, com cotas, ângulos e uma lupa percorrendo os detalhes, até as linhas se refinarem e revelarem o logotipo pronto',
       caption: 'Do blueprint à realidade: a construção do símbolo, cotada a partir do vetor final, em loop.',
+      after: {
+        src: `${B}/marca-palco.webp`,
+        alt: 'Painel de palco com o logotipo Tutory e a assinatura Empowering Intelligence, uma pessoa caminhando à frente',
+        label: 'Empowering Intelligence · painel de palco · Tutory Experience',
+      },
     },
     cover: {
       src: `${B}/cover.webp`,
@@ -160,13 +174,14 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         ],
         blocks: [
           {
-            type: 'full',
-            image: {
-              src: `${B}/deck-simbolo.webp`,
-              alt: 'Slide do deck: o símbolo renderizado em vidro e cromo sobre preto, ao lado do título O mesmo símbolo, uma arquitetura completamente nova',
-              label: 'Nova arquitetura',
-              meta: 'deck · slide 09',
-            },
+            type: 'slide',
+            num: '09 — símbolo',
+            tag: 'Nova arquitetura',
+            title: 'O mesmo símbolo. Uma arquitetura completamente',
+            accent: 'nova.',
+            text: 'Cada ângulo calculado, cada linha com intenção: o cérebro que sempre representou a Tutory, redesenhado à altura do que ela se tornou.',
+            video: { src: `${B}/simbolo.mp4`, webm: `${B}/simbolo.webm`, poster: `${B}/simbolo-poster.webp` },
+            alt: 'Vídeo em loop: o símbolo da Tutory em cromo girando lentamente sobre fundo preto',
           },
           {
             type: 'full',
@@ -224,15 +239,6 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
           'Uma identidade só existe quando sai do deck. A Tutory Experience reúne os maiores mentores do país num dia, e a assinatura Empowering Intelligence foi desenhada para esse tamanho: painel de palco, estande, uniforme, crachá, papelaria e social. Preto, azul elétrico e um só ponto de luz.',
         ],
         blocks: [
-          {
-            type: 'full',
-            image: {
-              src: `${B}/marca-palco.webp`,
-              alt: 'Painel de palco com o logotipo Tutory e a assinatura Empowering Intelligence, uma pessoa caminhando à frente',
-              label: 'Empowering Intelligence',
-              meta: 'painel de palco · Tutory Experience',
-            },
-          },
           {
             type: 'trio',
             items: [
@@ -400,6 +406,11 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       poster: `${B}/blueprint-poster.webp`,
       alt: 'Looping video: the Tutory symbol being constructed as a technical drawing in white lines on black, with dimensions, angles and a magnifier moving over the details, until the lines refine and reveal the finished logo',
       caption: 'From blueprint to reality: the construction of the symbol, dimensioned from the final vector, on a loop.',
+      after: {
+        src: `${B}/marca-palco.webp`,
+        alt: 'Stage panel with the Tutory wordmark and the Empowering Intelligence signature, a person walking in front',
+        label: 'Empowering Intelligence · stage panel · Tutory Experience',
+      },
     },
     cover: {
       src: `${B}/cover.webp`,
@@ -469,13 +480,14 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         ],
         blocks: [
           {
-            type: 'full',
-            image: {
-              src: `${B}/deck-simbolo.webp`,
-              alt: 'Deck slide: the symbol rendered in glass and chrome on black, next to the title The same symbol, a completely new architecture',
-              label: 'New architecture',
-              meta: 'deck · slide 09',
-            },
+            type: 'slide',
+            num: '09 — symbol',
+            tag: 'New architecture',
+            title: 'The same symbol. A completely',
+            accent: 'new architecture.',
+            text: 'Every angle calculated, every line with intent: the brain that always represented Tutory, redrawn to match what it has become.',
+            video: { src: `${B}/simbolo.mp4`, webm: `${B}/simbolo.webm`, poster: `${B}/simbolo-poster.webp` },
+            alt: 'Looping video: the Tutory symbol in chrome slowly rotating on a black background',
           },
           {
             type: 'full',
@@ -542,15 +554,6 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
           'An identity only exists once it leaves the deck. Tutory Experience gathers the country’s top mentors for a day, and the Empowering Intelligence signature was designed for that scale: stage panel, stand, uniform, badge, stationery and social. Black, electric blue and a single point of light.',
         ],
         blocks: [
-          {
-            type: 'full',
-            image: {
-              src: `${B}/marca-palco.webp`,
-              alt: 'Stage panel with the Tutory wordmark and the Empowering Intelligence signature, a person walking in front',
-              label: 'Empowering Intelligence',
-              meta: 'stage panel · Tutory Experience',
-            },
-          },
           {
             type: 'trio',
             items: [
