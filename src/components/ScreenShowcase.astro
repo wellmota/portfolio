@@ -11,20 +11,23 @@ interface Props {
   items: ShowcaseItem[];
   accent: string;
   url?: string;
+  start?: number;
 }
 
-const { items, accent } = Astro.props;
+const { items, accent, start = 0 } = Astro.props;
 ---
 
-<div class="mt-10 grid gap-8 md:grid-cols-2 md:gap-10" style={`--sc-accent:${accent}`}>
+<!-- faixa clara de ponta a ponta: quebra o preto da página; o grid por dentro volta à largura do container -->
+<div class="sc-band mt-10 md:mt-14" style={`--sc-accent:${accent}`}>
+<div class="container-page grid gap-8 py-10 md:grid-cols-2 md:gap-10 md:py-16">
   {
     items.map((it, i) => (
       <figure class:list={[it.size === 'half' ? 'md:col-span-1' : 'md:col-span-2']} data-reveal>
         <div class="mb-3 flex items-baseline justify-between gap-4">
-          <span class="mono text-[11px] uppercase tracking-widest text-cream">
-            {String(i + 1).padStart(2, '0')} — {it.label}
+          <span class="mono text-[11px] uppercase tracking-widest text-sc-ink">
+            {String(i + 1 + start).padStart(2, '0')} — {it.label}
           </span>
-          {it.meta && <span class="mono text-[10px] uppercase tracking-widest text-faint">{it.meta}</span>}
+          {it.meta && <span class="mono text-[10px] uppercase tracking-widest text-sc-muted">{it.meta}</span>}
         </div>
         <div class="sc-panel">
           <div class="sc-device">
@@ -32,25 +35,38 @@ const { items, accent } = Astro.props;
             <span class="sc-btn sc-btn--top-b" aria-hidden="true" />
             <span class="sc-btn sc-btn--side" aria-hidden="true" />
             <div class="sc-screen">
-              <img src={it.src} alt={it.alt} loading="lazy" class="block w-full" />
+              {it.video ? (
+                <video class="block w-full" poster={it.src} autoplay muted loop playsinline preload="metadata" aria-label={it.alt}>
+                  {it.video.webm && <source src={it.video.webm} type="video/webm" />}
+                  <source src={it.video.src} type="video/mp4" />
+                </video>
+              ) : (
+                <img src={it.src} alt={it.alt} loading="lazy" class="block w-full" />
+              )}
             </div>
           </div>
         </div>
-        {it.caption && <figcaption class="mono mt-3 text-[11px] leading-relaxed tracking-wide text-faint">{it.caption}</figcaption>}
+        {it.caption && <figcaption class="mono mt-3 text-[11px] leading-relaxed tracking-wide text-sc-muted">{it.caption}</figcaption>}
       </figure>
     ))
   }
 </div>
+</div>
 
 <style>
-  /* painel claro, como num shot de apresentação; o device escuro ganha contraste no site escuro */
+  /* faixa clara de ponta a ponta (100vw, centrada), com um leve tom do accent do case */
+  .sc-band {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    background:
+      radial-gradient(90% 70% at 10% 0%, color-mix(in srgb, var(--sc-accent) 10%, #f3f3f3) 0%, transparent 55%),
+      linear-gradient(180deg, #f1f1f1 0%, #e4e4e4 100%);
+  }
+  .text-sc-ink { color: #141414; }
+  .text-sc-muted { color: #6a6a70; }
+  /* cada device apoia direto na faixa: sem painel próprio, só a sombra */
   .sc-panel {
     container-type: inline-size;
-    padding: clamp(18px, 4vw, 56px) clamp(18px, 4.5vw, 64px);
-    border: 1px solid var(--color-line);
-    background:
-      radial-gradient(110% 90% at 15% 0%, color-mix(in srgb, var(--sc-accent) 9%, #f1f1f1) 0%, transparent 60%),
-      linear-gradient(180deg, #ececec 0%, #d9d9d9 100%);
   }
   .sc-device {
     position: relative;

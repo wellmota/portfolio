@@ -178,6 +178,17 @@ const en: SiteData = {
       highlight: 'From redesign to production in 7 days',
       href: '/work/cuidame',
     },
+    {
+      title: 'Lead Airport',
+      meta: 'EdTech · Case Study',
+      categories: ['Product', '3D', 'Data'],
+      description:
+        'The lead table on Tutory’s sales-room TV became a live 3D airport: every lead is a plane that lands, qualified ones enter the hangar. three.js, real time and Smart TV — in one week. Read the case study →',
+      image: '/cases/aeroporto/card-en.webp',
+      accent: '#2456E6',
+      highlight: 'Concept to the sales-room TV in 1 week',
+      href: '/work/aeroporto-de-leads',
+    },
     /* Case studies em espera — descomente para publicar
     {
       title: 'HyperGestor',

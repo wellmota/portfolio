@@ -69,4 +69,22 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/hypergestor/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/hypergestor/" />
   </url>
+  <url>
+    <loc>https://userexperience.com.br/work/aeroporto-de-leads/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/aeroporto-de-leads/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/aeroporto-de-leads/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/aeroporto-de-leads/" />
+  </url>
+  <url>
+    <loc>https://userexperience.com.br/pt/work/aeroporto-de-leads/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/aeroporto-de-leads/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/aeroporto-de-leads/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/aeroporto-de-leads/" />
+  </url>
 </urlset>

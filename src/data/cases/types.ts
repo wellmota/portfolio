@@ -30,6 +30,8 @@ export interface ShowcaseItem {
   url?: string;
   /** 'half' = duas telas lado a lado no desktop. Padrão: largura toda. */
   size?: 'full' | 'half';
+  /** Vídeo em loop (mp4, mudo) no lugar da imagem; `src` vira o poster. */
+  video?: { src: string; webm?: string };
 }
 
 export interface CaseSection {
@@ -45,8 +47,8 @@ export interface CaseSection {
   galleryCaption?: string;
   /** Depoimentos recriados com a cara do WhatsApp (telefone oculto, sobrenome borrado). */
   whatsapp?: { messages: WhatsAppMessage[]; caption?: string };
-  /** Prints de desktop em moldura de janela, grandes, um por bloco. */
-  showcase?: { url?: string; items: ShowcaseItem[] };
+  /** Prints de desktop em moldura de janela, grandes, um por bloco. `start` desloca a numeração (ex.: 1 → o primeiro item é "02"). */
+  showcase?: { url?: string; start?: number; items: ShowcaseItem[] };
   /** Pares antes/depois (tela antiga em P&B ao lado da nova). */
   compare?: { pairs: ComparePair[]; beforeLabel: string; afterLabel: string; heuristicLabel: string; caption?: string };
 }
