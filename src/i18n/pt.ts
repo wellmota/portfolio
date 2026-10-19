@@ -189,15 +189,26 @@ const pt: SiteData = {
       href: '/pt/work/aeroporto-de-leads',
     },
     {
-      title: 'Tutory: marca e site',
+      title: 'Tutory: identidade visual',
       meta: 'EdTech · Case Study',
-      categories: ['Branding', 'Web', 'SEO'],
+      categories: ['Branding', 'Identidade', '3D'],
       description:
-        'Rebranding com arquétipos, deck interativo, seis troféus 3D da gamificação e um site novo em Astro: do WordPress ao ar em 63 dias, com Lighthouse 100. Ver case study →',
+        'Rebranding com arquétipos: o cérebro reconstruído como arquitetura, paleta, voz, deck interativo de 37 slides e seis troféus 3D da gamificação. Ver case study →',
       image: '/cases/tutory-rebrand/card-pt.webp',
-      accent: '#3B7BF5',
-      highlight: 'Do símbolo ao site no ar em 3 meses',
+      accent: '#C9A96E',
+      highlight: 'Da proposta à marca aprovada em 4 dias',
       href: '/pt/work/tutory-rebrand',
+    },
+    {
+      title: 'Tutory: site',
+      meta: 'EdTech · Case Study',
+      categories: ['Web', 'SEO', 'Astro'],
+      description:
+        'Do WordPress a um site em Astro com 14 páginas: migração com 301, Lighthouse 100, Consent Mode v2 e pronto para ser citado por IAs. Ver case study →',
+      image: '/cases/tutory-site/card-pt.webp',
+      accent: '#3B7BF5',
+      highlight: 'Do primeiro commit ao ar em 63 dias',
+      href: '/pt/work/tutory-site',
     },
     /* Case studies em espera — descomente para publicar
     {

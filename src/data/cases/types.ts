@@ -47,8 +47,8 @@ export interface CaseSection {
   galleryCaption?: string;
   /** Depoimentos recriados com a cara do WhatsApp (telefone oculto, sobrenome borrado). */
   whatsapp?: { messages: WhatsAppMessage[]; caption?: string };
-  /** Prints de desktop em moldura de janela, grandes, um por bloco. `start` desloca a numeração (ex.: 1 → o primeiro item é "02"). */
-  showcase?: { url?: string; start?: number; items: ShowcaseItem[] };
+  /** Prints de desktop, grandes, um por bloco. `frame: 'flat'` = sem moldura de device (só cantos e sombra). `start` desloca a numeração (ex.: 1 → o primeiro item é "02"). */
+  showcase?: { url?: string; start?: number; frame?: "device" | "flat"; items: ShowcaseItem[] };
   /** Pares antes/depois (tela antiga em P&B ao lado da nova). */
   compare?: { pairs: ComparePair[]; beforeLabel: string; afterLabel: string; heuristicLabel: string; caption?: string };
 }

@@ -1,10 +1,10 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import CaseStudyPage from '../../../components/CaseStudyPage.astro';
-import tutoryRebrand from '../../../data/cases/tutory-rebrand';
+import BrandCasePage from '../../../components/BrandCasePage.astro';
+import tutoryBrand from '../../../data/cases/tutory-brand';
 
 const lang = 'pt' as const;
-const content = tutoryRebrand[lang];
+const content = tutoryBrand[lang];
 ---
 
 <Layout
@@ -17,5 +17,5 @@ const content = tutoryRebrand[lang];
   ogImageHeight={1000}
   alternates={false}
 >
-  <CaseStudyPage lang={lang} content={content} altHref="/work/tutory-rebrand" altLabel="EN" />
+  <BrandCasePage lang={lang} content={content} altHref="/work/tutory-rebrand" altLabel="EN" />
 </Layout>

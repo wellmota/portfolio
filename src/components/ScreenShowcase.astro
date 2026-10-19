@@ -12,9 +12,11 @@ interface Props {
   accent: string;
   url?: string;
   start?: number;
+  /** 'flat' = print sem moldura de device: só cantos arredondados e sombra sobre a faixa. */
+  frame?: 'device' | 'flat';
 }
 
-const { items, accent, start = 0 } = Astro.props;
+const { items, accent, start = 0, frame = 'device' } = Astro.props;
 ---
 
 <!-- faixa clara de ponta a ponta: quebra o preto da página; o grid por dentro volta à largura do container -->
@@ -30,11 +32,15 @@ const { items, accent, start = 0 } = Astro.props;
           {it.meta && <span class="mono text-[10px] uppercase tracking-widest text-sc-muted">{it.meta}</span>}
         </div>
         <div class="sc-panel">
-          <div class="sc-device">
-            <span class="sc-btn sc-btn--top-a" aria-hidden="true" />
-            <span class="sc-btn sc-btn--top-b" aria-hidden="true" />
-            <span class="sc-btn sc-btn--side" aria-hidden="true" />
-            <div class="sc-screen">
+          <div class={frame === 'flat' ? 'sc-flat' : 'sc-device'}>
+            {frame !== 'flat' && (
+              <>
+                <span class="sc-btn sc-btn--top-a" aria-hidden="true" />
+                <span class="sc-btn sc-btn--top-b" aria-hidden="true" />
+                <span class="sc-btn sc-btn--side" aria-hidden="true" />
+              </>
+            )}
+            <div class={frame === 'flat' ? 'sc-flat-screen' : 'sc-screen'}>
               {it.video ? (
                 <video class="block w-full" poster={it.src} autoplay muted loop playsinline preload="metadata" aria-label={it.alt}>
                   {it.video.webm && <source src={it.video.webm} type="video/webm" />}
@@ -84,6 +90,20 @@ const { items, accent, start = 0 } = Astro.props;
     border-radius: 1.9cqw;
     background: #000;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  /* sem device: o print apoia direto na faixa, só cantos e sombra */
+  .sc-flat {
+    position: relative;
+    border-radius: 1.2cqw;
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.1),
+      0 30px 60px rgba(0, 0, 0, 0.28),
+      0 8px 18px rgba(0, 0, 0, 0.16);
+  }
+  .sc-flat-screen {
+    overflow: hidden;
+    border-radius: 1.2cqw;
+    background: #000;
   }
   /* botões: duas barras na borda superior, uma lateral à direita */
   .sc-btn {
