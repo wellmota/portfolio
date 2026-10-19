@@ -40,7 +40,7 @@ const en: SiteData = {
     { value: '15+', label: 'years in product design' },
     { value: '40%', label: 'less handoff time' },
     { value: '28%', label: 'increase in feature adoption' },
-    { value: '2×', label: 'faster feature delivery' },
+    { value: '4×', label: 'faster feature delivery' },
   ],
 
   about: {
