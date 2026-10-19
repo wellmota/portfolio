@@ -24,10 +24,29 @@ export type BrandBlock =
   | { type: 'archetypes'; items: { role: string; name: string; desc: string; refs: string }[] }
   | { type: 'palette'; colors: { n: string; name: string; hex: string; rgb: string }[]; note: string }
   | { type: 'spec'; rows: [string, string][] }
-  | { type: 'evolution'; columns: { label: string; items: string[] }[] };
+  | { type: 'evolution'; columns: { label: string; items: string[] }[] }
+  /** Slide de tipografia em código: amostras da Gilroy como contornos SVG (fonte comercial), Manrope real. */
+  | {
+      type: 'type';
+      num: string;
+      tag: string;
+      title: string;
+      accent: string;
+      lede: string;
+      faces: { family: 'gilroy' | 'manrope'; role: string; name: string; cls: string; use: string }[];
+      weightsTitle: string;
+      weights: string[];
+      scaleHead: [string, string];
+      scale: (
+        | { glyph: string; px: number; token: string; spec: string }
+        | { text: string; style: 'body' | 'caption' | 'overline'; token: string; spec: string }
+      )[];
+    };
 
 export interface BrandChapter {
   num: string;
+  /** Fundo do capítulo; a página faz a transição no scroll. Padrão: escuro. */
+  theme?: 'dark' | 'light';
   kicker: string;
   title: string;
   /** Frase grande, em destaque, antes do corpo. */
@@ -130,6 +149,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '02',
+        theme: 'light',
         kicker: 'Personalidade',
         title: 'O Governante, com um traço de O Mágico.',
         body: [
@@ -147,6 +167,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '03',
+        theme: 'light',
         kicker: 'Duas propostas',
         title: 'A primeira era linda. E era outra empresa.',
         body: [
@@ -198,6 +219,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '05',
+        theme: 'light',
         kicker: 'Paleta',
         title: 'A cor da inteligência.',
         body: [
@@ -214,13 +236,27 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         ],
         blocks: [
           {
-            type: 'full',
-            image: {
-              src: `${B}/deck-tipografia.webp`,
-              alt: 'Slide A voz escrita: Gilroy para títulos, Manrope para corpo, com a escala tipográfica',
-              label: 'A voz escrita',
-              meta: 'deck · slide 15',
-            },
+            type: 'type',
+            num: '11 — sistema tipográfico',
+            tag: 'Tipografia',
+            title: 'A voz',
+            accent: 'escrita.',
+            lede: 'Gilroy nos títulos, Manrope no corpo: duas famílias, um sistema.',
+            faces: [
+              { family: 'gilroy', role: 'Display · Títulos', name: 'Gilroy', cls: 'Geometric Sans · 9 pesos', use: 'Headlines e momentos de impacto.' },
+              { family: 'manrope', role: 'Corpo · Interface', name: 'Manrope', cls: 'Humanist Sans · Variável', use: 'Parágrafos, navegação e UI.' },
+            ],
+            weightsTitle: 'Pesos · Gilroy',
+            weights: ['300 · Light', '400 · Regular', '600 · SemiBold', '800 · ExtraBold'],
+            scaleHead: ['Escala de tipos', 'Tamanho · Peso · Entrelinha · Tracking'],
+            scale: [
+              { glyph: 'display300', px: 64, token: 'Display · Gilroy', spec: '64px · 300 · 1.05' },
+              { glyph: 'h1_pt', px: 40, token: 'H1 · Gilroy', spec: '40px · 300 · 1.1' },
+              { glyph: 'h2_pt', px: 28, token: 'H2 · Gilroy', spec: '28px · 600 · 1.2' },
+              { text: 'Corpo de texto padrão para parágrafos.', style: 'body', token: 'Body · Manrope', spec: '16px · 400 · 1.6' },
+              { text: 'Legenda e apoio', style: 'caption', token: 'Caption · Manrope', spec: '13px · 500 · 1.4' },
+              { text: 'Overline · Rótulo', style: 'overline', token: 'Overline · Manrope', spec: '11px · 600 · +0.25em' },
+            ],
           },
           {
             type: 'voice',
@@ -319,6 +355,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '09',
+        theme: 'light',
         kicker: 'O deck',
         title: 'Uma marca que se apresenta sozinha.',
         body: [
@@ -339,6 +376,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '10',
+        theme: 'light',
         kicker: 'Evolução',
         title: 'Tutory permanece. A expressão evolui.',
         body: [
@@ -436,6 +474,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '02',
+        theme: 'light',
         kicker: 'Personality',
         title: 'The Ruler, with a streak of The Magician.',
         body: [
@@ -453,6 +492,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '03',
+        theme: 'light',
         kicker: 'Two proposals',
         title: 'The first was beautiful. And it was another company.',
         body: [
@@ -513,6 +553,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '05',
+        theme: 'light',
         kicker: 'Palette',
         title: 'The color of intelligence.',
         body: [
@@ -529,13 +570,27 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         ],
         blocks: [
           {
-            type: 'full',
-            image: {
-              src: `${B}/deck-tipografia.webp`,
-              alt: 'Slide The written voice: Gilroy for headlines, Manrope for body, with the type scale',
-              label: 'The written voice',
-              meta: 'deck · slide 15',
-            },
+            type: 'type',
+            num: '11 — type system',
+            tag: 'Typography',
+            title: 'The written',
+            accent: 'voice.',
+            lede: 'Gilroy for headlines, Manrope for body: two families, one system.',
+            faces: [
+              { family: 'gilroy', role: 'Display · Headlines', name: 'Gilroy', cls: 'Geometric Sans · 9 weights', use: 'Headlines and moments of impact.' },
+              { family: 'manrope', role: 'Body · Interface', name: 'Manrope', cls: 'Humanist Sans · Variable', use: 'Paragraphs, navigation and UI.' },
+            ],
+            weightsTitle: 'Weights · Gilroy',
+            weights: ['300 · Light', '400 · Regular', '600 · SemiBold', '800 · ExtraBold'],
+            scaleHead: ['Type scale', 'Size · Weight · Line height · Tracking'],
+            scale: [
+              { glyph: 'display300', px: 64, token: 'Display · Gilroy', spec: '64px · 300 · 1.05' },
+              { glyph: 'h1_en', px: 40, token: 'H1 · Gilroy', spec: '40px · 300 · 1.1' },
+              { glyph: 'h2_en', px: 28, token: 'H2 · Gilroy', spec: '28px · 600 · 1.2' },
+              { text: 'Default body text for paragraphs.', style: 'body', token: 'Body · Manrope', spec: '16px · 400 · 1.6' },
+              { text: 'Caption and support', style: 'caption', token: 'Caption · Manrope', spec: '13px · 500 · 1.4' },
+              { text: 'Overline · Label', style: 'overline', token: 'Overline · Manrope', spec: '11px · 600 · +0.25em' },
+            ],
           },
           {
             type: 'voice',
@@ -634,6 +689,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '09',
+        theme: 'light',
         kicker: 'The deck',
         title: 'A brand that presents itself.',
         body: [
@@ -654,6 +710,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '10',
+        theme: 'light',
         kicker: 'Evolution',
         title: 'Tutory stays. The expression evolves.',
         body: [

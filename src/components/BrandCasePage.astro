@@ -1,10 +1,12 @@
 ---
 /**
- * Página de case editorial, no formato da apresentação da marca Tutory: fundo preto,
- * capítulos numerados, imagens grandes sem moldura de device, dourado só em detalhes.
+ * Página de case editorial, no formato da apresentação da marca Tutory: capítulos numerados,
+ * imagens grandes sem moldura de device, dourado só em detalhes. A página alterna entre preto e
+ * branco conforme o capítulo em foco (fade no scroll), com coluna do capítulo fixa e parallax suave.
  */
 import { getSiteData, getLocalePath, type Locale } from '../i18n';
-import type { BrandCaseContent, BrandImage } from '../data/cases/tutory-brand';
+import type { BrandCaseContent } from '../data/cases/tutory-brand';
+import glyphs from '../data/cases/tutory-type-glyphs';
 
 interface Props {
   lang: Locale;
@@ -21,9 +23,14 @@ const projectsHref = getLocalePath(lang, '#projetos');
 const contactHref = getLocalePath(lang, '#contato');
 
 const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2');
+/** Amostra em Gilroy como SVG (contorno), no tamanho em px pedido. */
+const glyph = (key: string, px: number) => {
+  const g = glyphs[key];
+  return { d: g.d, vb: g.vb, w: (px * g.w).toFixed(1), h: (px * g.em).toFixed(1) };
+};
 ---
 
-<div class="brand">
+<div class="brand" data-theme="dark">
   <header class="b-hairline-b">
     <div class="container-page">
       <nav class="flex items-center justify-between gap-4 py-4">
@@ -34,13 +41,10 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
           <span class="hidden text-[14px] font-semibold tracking-tight sm:inline b-ink">{data.profile.name}</span>
         </a>
         <div class="flex items-center gap-5">
-          <a href={projectsHref} class="mono text-[11px] uppercase tracking-widest b-muted transition-colors hover:text-white">
+          <a href={projectsHref} class="mono b-hover text-[11px] uppercase tracking-widest b-muted transition-colors">
             ← {c.ui.back}
           </a>
-          <a
-            href={altHref}
-            class="mono b-hairline px-3 py-1.5 text-[11px] uppercase tracking-widest b-muted transition-colors hover:border-white/40 hover:text-white"
-          >
+          <a href={altHref} class="mono b-hover b-hairline px-3 py-1.5 text-[11px] uppercase tracking-widest b-muted transition-colors">
             {altLabel}
           </a>
         </div>
@@ -50,7 +54,7 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
 
   <main>
     <!-- Abertura -->
-    <section class="container-page pt-16 sm:pt-24 md:pt-32">
+    <section class="container-page pt-16 sm:pt-24 md:pt-32" data-theme-section="dark">
       <p class="mono flex items-center gap-3 text-[11px] uppercase tracking-[.22em] b-muted" data-reveal>
         <span class="b-dot" aria-hidden="true"></span>{c.kicker}
       </p>
@@ -61,7 +65,7 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     </section>
 
     <!-- Vídeo de abertura, de ponta a ponta -->
-    <section class="mt-14 md:mt-20">
+    <section class="mt-14 md:mt-20" data-theme-section="dark">
       <figure>
         <div class="b-bleed b-stage" data-hero-stage data-hold="6000">
           <video
@@ -87,7 +91,7 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     </section>
 
     <!-- Ficha -->
-    <section class="container-page mt-14 md:mt-20">
+    <section class="container-page mt-14 md:mt-20" data-theme-section="dark">
       <dl class="grid grid-cols-2 gap-x-8 gap-y-7 b-hairline-t pt-8 sm:grid-cols-3 lg:grid-cols-5" data-reveal>
         {
           c.meta.map((m) => (
@@ -103,9 +107,9 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     <!-- Capítulos -->
     {
       c.chapters.map((ch) => (
-        <section class="container-page mt-24 md:mt-36">
+        <section class="container-page pt-24 md:pt-36" data-theme-section={ch.theme ?? 'dark'}>
           <div class="b-hairline-t pt-8 md:grid md:grid-cols-[200px_1fr] md:gap-12 lg:grid-cols-[260px_1fr]">
-            <div class="flex items-baseline gap-4 md:block" data-reveal>
+            <div class="flex items-baseline gap-4 md:sticky md:top-24 md:block md:self-start" data-reveal>
               <span class="display block text-5xl leading-none b-num md:text-[5.5rem]">{ch.num}</span>
               <p class="mono text-[11px] uppercase tracking-[.22em] b-gold md:mt-5">{ch.kicker}</p>
             </div>
@@ -130,7 +134,9 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
             <div class="mt-12 md:mt-16">
               {b.type === 'full' && (
                 <figure data-reveal>
-                  <img src={b.image.src} alt={b.image.alt} loading="lazy" class="block w-full" />
+                  <div class="b-px">
+                    <img src={b.image.src} alt={b.image.alt} loading="lazy" class="block w-full" data-parallax="5" />
+                  </div>
                   <figcaption class="mt-3 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
                     {b.image.label && <span class="mono text-[11px] uppercase tracking-widest b-muted">{b.image.label}</span>}
                     {b.image.meta && <span class="mono text-[10px] uppercase tracking-widest b-faint">{b.image.meta}</span>}
@@ -143,7 +149,9 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
                 <div class:list={['grid gap-5 md:gap-6', figCols(b.items.length)]}>
                   {b.items.map((img) => (
                     <figure data-reveal data-reveal-group>
-                      <img src={img.src} alt={img.alt} loading="lazy" class="block w-full" />
+                      <div class="b-px">
+                        <img src={img.src} alt={img.alt} loading="lazy" class="block w-full" data-parallax="3" />
+                      </div>
                       <figcaption class="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                         {img.label && <span class="mono text-[11px] uppercase tracking-widest b-muted">{img.label}</span>}
                         {img.meta && <span class="mono text-[10px] uppercase tracking-widest b-faint">{img.meta}</span>}
@@ -180,6 +188,89 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
                       {b.video.webm && <source src={b.video.webm} type="video/webm" />}
                       <source src={b.video.src} type="video/mp4" />
                     </video>
+                  </div>
+                </div>
+              )}
+
+              {b.type === 'type' && (
+                <div class="b-typo" data-reveal>
+                  <div class="b-typo-glow" aria-hidden="true"></div>
+                  <div class="relative b-hairline-t pt-10 md:pt-14">
+                    <p class="mono text-[10px] uppercase tracking-[.3em] b-faint">{b.num}</p>
+                    <span class="b-tag mt-6">{b.tag}</span>
+                    <h3 class="b-slide-title mt-6 b-ink">
+                      {b.title} <strong class="font-semibold">{b.accent}</strong>
+                    </h3>
+                    <p class="mt-4 max-w-xl text-[17px] leading-relaxed b-muted">{b.lede}</p>
+
+                    <div class="mt-12 grid gap-12 md:grid-cols-[1fr_1.3fr] md:gap-16 lg:gap-24">
+                      <div class="flex flex-col gap-10">
+                        {b.faces.map((f) => (
+                          <div class="flex items-start gap-6">
+                            <div class="b-ink w-[96px] shrink-0">
+                              {f.family === 'gilroy' ? (
+                                <svg viewBox={glyph('aa800', 84).vb} width={glyph('aa800', 84).w} height={glyph('aa800', 84).h} role="img" aria-label="Aa">
+                                  <path d={glyph('aa800', 84).d} fill="currentColor" />
+                                </svg>
+                              ) : (
+                                <span class="b-manrope block text-[84px] font-normal leading-none">Aa</span>
+                              )}
+                            </div>
+                            <div class="pt-1">
+                              <p class="mono text-[10px] uppercase tracking-[.25em] b-faint">{f.role}</p>
+                              <p class="b-ink mt-2">
+                                {f.family === 'gilroy' ? (
+                                  <svg viewBox={glyph('name800', 30).vb} width={glyph('name800', 30).w} height={glyph('name800', 30).h} role="img" aria-label={f.name}>
+                                    <path d={glyph('name800', 30).d} fill="currentColor" />
+                                  </svg>
+                                ) : (
+                                  <span class="b-manrope block text-[28px] font-semibold leading-none">{f.name}</span>
+                                )}
+                              </p>
+                              <p class="mono mt-2 text-[10px] uppercase tracking-[.2em] b-gold">{f.cls}</p>
+                              <p class="mt-2 text-[15px] b-muted">{f.use}</p>
+                            </div>
+                          </div>
+                        ))}
+                        <div class="b-hairline-t pt-6">
+                          <p class="mono text-[10px] uppercase tracking-[.25em] b-faint">{b.weightsTitle}</p>
+                          <div class="mt-5 flex flex-wrap justify-between gap-4">
+                            {['ag300', 'ag400', 'ag600', 'ag800'].map((k, i) => (
+                              <div class="flex flex-col items-center gap-2 b-ink">
+                                <svg viewBox={glyph(k, 40).vb} width={glyph(k, 40).w} height={glyph(k, 40).h} role="img" aria-label="Ag">
+                                  <path d={glyph(k, 40).d} fill="currentColor" />
+                                </svg>
+                                <span class="mono text-[9.5px] uppercase tracking-[.18em] b-faint">{b.weights[i]}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div class="flex items-baseline justify-between gap-6 b-hairline-b pb-3">
+                          <span class="mono text-[10px] uppercase tracking-[.25em] b-faint">{b.scaleHead[0]}</span>
+                          <span class="mono text-[9.5px] uppercase tracking-[.2em] b-faint">{b.scaleHead[1]}</span>
+                        </div>
+                        {b.scale.map((row) => (
+                          <div class="grid items-center gap-3 b-hairline-b py-5 sm:grid-cols-[1fr_auto] sm:gap-8">
+                            <div class="b-ink">
+                              {'glyph' in row ? (
+                                <svg viewBox={glyph(row.glyph, row.px).vb} width={glyph(row.glyph, row.px).w} height={glyph(row.glyph, row.px).h} class="max-w-full" role="img" aria-label={row.token}>
+                                  <path d={glyph(row.glyph, row.px).d} fill="currentColor" />
+                                </svg>
+                              ) : (
+                                <span class:list={['b-manrope block', `b-t-${row.style}`]}>{row.text}</span>
+                              )}
+                            </div>
+                            <div class="sm:text-right">
+                              <p class="text-[13px] b-muted">{row.token}</p>
+                              <p class="mono mt-1 text-[10px] tracking-[.12em] b-faint">{row.spec}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -270,7 +361,7 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     }
 
     <!-- Números -->
-    <section class="container-page mt-24 md:mt-36">
+    <section class="container-page pt-24 md:pt-36" data-theme-section="dark">
       <p class="mono text-[11px] uppercase tracking-[.22em] b-gold" data-reveal>{c.statsLabel}</p>
       <div class="mt-6 grid grid-cols-2 b-hairline-t sm:grid-cols-3 lg:grid-cols-6">
         {
@@ -285,7 +376,7 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     </section>
 
     <!-- Resultados + ferramentas -->
-    <section class="container-page mt-20 md:mt-28">
+    <section class="container-page mt-20 md:mt-28" data-theme-section="dark">
       <div class="grid gap-10 md:grid-cols-[1.5fr_1fr] md:gap-16">
         <div data-reveal>
           <p class="mono text-[11px] uppercase tracking-[.22em] b-gold">{c.outcomesLabel}</p>
@@ -315,12 +406,12 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     </section>
 
     <!-- Próximo case -->
-    <section class="container-page mt-20 md:mt-28">
-      <a href={c.next.href} class="b-next group block b-hairline p-7 transition-colors md:p-10" data-reveal>
+    <section class="container-page mt-20 md:mt-28" data-theme-section="dark">
+      <a href={c.next.href} class="b-next block b-hairline p-7 transition-colors md:p-10" data-reveal>
         <p class="mono text-[10px] uppercase tracking-widest b-gold">{c.next.label}</p>
         <span class="mt-4 flex items-center justify-between gap-6">
           <span class="display text-3xl leading-tight b-ink sm:text-4xl md:text-[2.8rem]">{c.next.title}</span>
-          <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full b-hairline b-muted transition-all group-hover:border-white group-hover:text-white">
+          <span class="b-next-arrow grid h-12 w-12 shrink-0 place-items-center rounded-full b-hairline b-muted transition-all">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
@@ -331,7 +422,7 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     </section>
 
     <!-- CTA -->
-    <section class="container-page my-20 md:my-28">
+    <section class="container-page my-20 md:my-28" data-theme-section="dark">
       <div class="b-hairline p-8 text-center md:p-14" data-reveal>
         <h2 class="display mx-auto max-w-2xl text-3xl leading-tight b-ink sm:text-4xl">{c.cta.heading}</h2>
         <p class="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed b-muted">{c.cta.sub}</p>
@@ -356,32 +447,53 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
   </footer>
 </div>
 
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap');
+</style>
+
 <style>
+  /* Temas: escuro (padrão) e claro; a página inteira faz a transição conforme o capítulo em foco */
   .brand {
+    --b-ease: cubic-bezier(0.65, 0, 0.35, 1);
+    --b-bg: #000;
     --b-ink: #fafaf8;
     --b-muted: rgba(255, 255, 255, 0.58);
     --b-faint: rgba(255, 255, 255, 0.34);
     --b-line: rgba(255, 255, 255, 0.13);
+    --b-num: rgba(255, 255, 255, 0.14);
     --b-gold: #c9a96e;
-    background: #000;
+    background: var(--b-bg);
     color: var(--b-ink);
     overflow-x: clip;
+    transition: background-color 0.9s var(--b-ease);
   }
+  .brand[data-theme='light'] {
+    --b-bg: #f5f4f0;
+    --b-ink: #15151c;
+    --b-muted: rgba(21, 21, 28, 0.62);
+    --b-faint: rgba(21, 21, 28, 0.5);
+    --b-line: rgba(21, 21, 28, 0.14);
+    --b-num: rgba(21, 21, 28, 0.09);
+    --b-gold: #8a6d3b;
+  }
+  .b-ink, .b-muted, .b-faint, .b-gold, .b-num { transition: color 0.9s var(--b-ease); }
   .b-ink { color: var(--b-ink); }
   .b-muted { color: var(--b-muted); }
   .b-faint { color: var(--b-faint); }
   .b-gold { color: var(--b-gold); }
-  .b-num { color: rgba(255, 255, 255, 0.14); }
+  .b-num { color: var(--b-num); }
+  .b-hairline, .b-hairline-t, .b-hairline-b, .b-hairline-l { transition: border-color 0.9s var(--b-ease); }
   .b-hairline { border: 1px solid var(--b-line); }
   .b-hairline-t { border-top: 1px solid var(--b-line); }
   .b-hairline-b { border-bottom: 1px solid var(--b-line); }
   .b-hairline-l { border-left: 1px solid var(--b-line); }
+  .b-hover:hover { color: var(--b-ink); border-color: color-mix(in srgb, var(--b-ink) 40%, transparent); }
   .b-dot { width: 6px; height: 6px; border-radius: 999px; background: var(--b-gold); flex: none; }
   .b-rule { width: 56px; height: 1px; background: var(--b-gold); }
   .b-bleed { width: 100vw; margin-left: calc(50% - 50vw); background: #000; }
   .b-bleed video { max-height: 100svh; object-fit: cover; margin-inline: auto; }
   /* abertura: o vídeo termina, some em fade e a imagem do palco toma a largura toda por alguns segundos */
-  .b-stage { position: relative; }
+  .b-stage { position: relative; transform-origin: 50% 0; }
   .b-stage-video { transition: opacity 0.9s ease; }
   .b-stage-after {
     position: absolute;
@@ -390,7 +502,7 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 1.4s cubic-bezier(0.65, 0, 0.35, 1);
+    transition: opacity 1.4s var(--b-ease);
     pointer-events: none;
   }
   .b-stage-label {
@@ -408,16 +520,20 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
   .b-stage.is-after .b-stage-video { opacity: 0; }
   .b-stage.is-after .b-stage-after,
   .b-stage.is-after .b-stage-label { opacity: 1; }
-  .b-swatch { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+  /* parallax: a imagem anda mais devagar que a página dentro de uma moldura que a recorta */
+  .b-px { overflow: hidden; }
+  .brand.is-px .b-px img { transform: scale(1.12); will-change: transform; }
+  .brand.is-px .b-stage { will-change: transform, opacity; }
+  .b-swatch { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-ink) 12%, transparent); }
   .b-swatch-gold { box-shadow: inset 0 0 0 1px rgba(201, 169, 110, 0.9); }
-  /* slide do deck remontado: tag com borda, título leve, palavra de destaque em azul, vídeo 4:5 à direita */
+  /* slides do deck remontados: tag com borda, título leve, destaque em azul */
   .b-tag {
     display: inline-block;
     font-family: var(--font-mono);
     font-size: 0.68rem;
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid color-mix(in srgb, var(--b-ink) 30%, transparent);
     padding: 0.45em 1.2em;
     border-radius: 2px;
     color: var(--b-ink);
@@ -438,18 +554,36 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
     background: #000;
   }
   .b-slide-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* tipografia em código: brilho azul que se funde com o fundo da página */
+  .b-typo { position: relative; padding-bottom: 3rem; }
+  .b-typo-glow {
+    position: absolute;
+    inset: -12% -50vw -10%;
+    pointer-events: none;
+    background:
+      radial-gradient(42% 55% at 82% 62%, rgba(0, 64, 200, 0.5) 0%, rgba(0, 64, 200, 0.16) 38%, rgba(0, 64, 200, 0) 72%),
+      radial-gradient(30% 40% at 12% 18%, rgba(59, 123, 245, 0.16) 0%, rgba(59, 123, 245, 0) 70%);
+  }
+  .b-manrope { font-family: Manrope, Inter, system-ui, sans-serif; }
+  .b-t-body { font-size: 18px; font-weight: 400; line-height: 1.5; color: var(--b-muted); }
+  .b-t-caption { font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--b-muted); }
+  .b-t-overline { font-size: 12.5px; font-weight: 600; line-height: 1.4; letter-spacing: 0.25em; text-transform: uppercase; color: var(--b-faint); }
   .b-strip { scrollbar-width: none; }
   .b-strip::-webkit-scrollbar { display: none; }
   .b-next:hover { border-color: var(--b-gold); }
-  .b-btn-outline { border-color: rgba(255, 255, 255, 0.28); color: var(--b-ink); }
-  .b-btn-outline:hover { border-color: var(--b-ink); background: rgba(255, 255, 255, 0.06); }
+  .b-next:hover .b-next-arrow { border-color: var(--b-ink); color: var(--b-ink); }
+  .b-btn-outline { border-color: color-mix(in srgb, var(--b-ink) 28%, transparent); color: var(--b-ink); }
+  .b-btn-outline:hover { border-color: var(--b-ink); background: color-mix(in srgb, var(--b-ink) 6%, transparent); }
   @media (prefers-reduced-motion: reduce) {
+    .brand, .b-ink, .b-muted, .b-faint, .b-gold, .b-num { transition: none; }
     .b-strip { scroll-behavior: auto; }
   }
 </style>
 
 <script>
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const root = document.querySelector<HTMLElement>('.brand');
+
   // Respeita prefers-reduced-motion: os vídeos ficam no poster.
   if (reduced) {
     document.querySelectorAll<HTMLVideoElement>('.brand video[autoplay]').forEach((v) => {
@@ -457,6 +591,7 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
       v.pause();
     });
   }
+
   // Abertura: ao terminar, o vídeo some em fade e a imagem do palco aparece; depois o vídeo recomeça do zero.
   const stage = document.querySelector<HTMLElement>('[data-hero-stage]');
   const video = stage?.querySelector('video');
@@ -471,4 +606,50 @@ const figCols = (n: number) => (n === 3 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-c
       }, hold);
     });
   }
+
+  // Tema por capítulo: a seção cujo topo já passou da metade da tela define preto ou branco.
+  const themed = Array.from(document.querySelectorAll<HTMLElement>('[data-theme-section]'));
+  function applyTheme() {
+    if (!root) return;
+    const ref = window.innerHeight * 0.5;
+    let theme = 'dark';
+    for (const s of themed) {
+      if (s.getBoundingClientRect().top <= ref) theme = s.dataset.themeSection || 'dark';
+    }
+    if (root.dataset.theme !== theme) root.dataset.theme = theme;
+  }
+
+  // Parallax suave: imagens andam mais devagar que a página; o hero encolhe e esmaece ao sair.
+  const px = Array.from(document.querySelectorAll<HTMLElement>('[data-parallax]'));
+  function applyParallax() {
+    const vh = window.innerHeight;
+    for (const el of px) {
+      const box = (el.parentElement as HTMLElement).getBoundingClientRect();
+      if (box.bottom < -80 || box.top > vh + 80) continue;
+      const p = (box.top + box.height / 2 - vh / 2) / vh;
+      const k = (parseFloat(el.dataset.parallax || '5') / 100) * box.height;
+      el.style.transform = `translate3d(0, ${(-p * k).toFixed(1)}px, 0) scale(1.12)`;
+    }
+    if (stage) {
+      const r = stage.getBoundingClientRect();
+      const gone = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height)));
+      stage.style.transform = `scale(${(1 - gone * 0.06).toFixed(4)})`;
+      stage.style.opacity = String(1 - gone * 0.55);
+    }
+  }
+
+  let ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(() => {
+      applyTheme();
+      if (!reduced) applyParallax();
+      ticking = false;
+    });
+  }
+  if (root && !reduced) root.classList.add('is-px');
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
 </script>
