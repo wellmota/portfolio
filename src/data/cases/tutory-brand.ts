@@ -140,23 +140,14 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         ],
         blocks: [
           {
-            type: 'pair',
-            items: [
-              {
-                src: `${B}/marca-v1.webp`,
-                alt: 'Proposta 1 da marca: símbolo em supernova e paleta de oceano, numa placa de vidro segurada contra a luz',
-                label: 'Proposta 1 · Supernova',
-                meta: '27 mar · descartada',
-                caption: 'A ruptura total: símbolo novo, paleta de oceano.',
-              },
-              {
-                src: `${B}/marca-v2.webp`,
-                alt: 'Proposta 2 da marca: cérebro geométrico em azul elétrico, na mesma placa de vidro',
-                label: 'Proposta 2 · Arquitetura',
-                meta: '31 mar · aprovada',
-                caption: 'O cérebro redesenhado em azul elétrico. O que a Tutory já era, com a forma à altura.',
-              },
-            ],
+            type: 'full',
+            image: {
+              src: `${B}/marca-v2.webp`,
+              alt: 'Proposta 2 da marca: cérebro geométrico em azul elétrico, numa placa de vidro segurada contra a luz',
+              label: 'Proposta 2 · Arquitetura',
+              meta: '31 mar · aprovada',
+              caption: 'O cérebro redesenhado em azul elétrico. O que a Tutory já era, com a forma à altura.',
+            },
           },
         ],
       },
@@ -458,23 +449,14 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         ],
         blocks: [
           {
-            type: 'pair',
-            items: [
-              {
-                src: `${B}/marca-v1.webp`,
-                alt: 'Brand proposal 1: supernova symbol and ocean palette on a glass tile held against the light',
-                label: 'Proposal 1 · Supernova',
-                meta: 'Mar 27 · discarded',
-                caption: 'The clean break: new symbol, ocean palette.',
-              },
-              {
-                src: `${B}/marca-v2.webp`,
-                alt: 'Brand proposal 2: geometric brain in electric blue on the same glass tile',
-                label: 'Proposal 2 · Architecture',
-                meta: 'Mar 31 · approved',
-                caption: 'The brain redrawn in electric blue. What Tutory already was, with a form to match.',
-              },
-            ],
+            type: 'full',
+            image: {
+              src: `${B}/marca-v2.webp`,
+              alt: 'Brand proposal 2: geometric brain in electric blue on a glass tile held against the light',
+              label: 'Proposal 2 · Architecture',
+              meta: 'Mar 31 · approved',
+              caption: 'The brain redrawn in electric blue. What Tutory already was, with a form to match.',
+            },
           },
         ],
       },
