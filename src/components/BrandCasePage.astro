@@ -168,6 +168,22 @@ const glyph = (key: string, px: number) => {
                 </div>
               )}
 
+              {b.type === 'bento' && (
+                <div class="b-bento">
+                  <div class="grid gap-4 sm:grid-cols-2 md:gap-5">
+                    {b.items.map((img) => (
+                      <figure data-reveal data-reveal-group>
+                        <div class="b-px b-round">
+                          <img src={img.src} alt={img.alt} loading="lazy" class="block w-full" />
+                        </div>
+                        {img.label && <figcaption class="mono mt-3 text-[11px] uppercase tracking-widest b-muted">{img.label}</figcaption>}
+                      </figure>
+                    ))}
+                  </div>
+                  {b.note && <p class="mono mt-4 text-[10px] uppercase tracking-widest b-faint">{b.note}</p>}
+                </div>
+              )}
+
               {b.type === 'slides' && (
                 <div class="b-strip -mx-[var(--gutter)] flex snap-x snap-mandatory gap-4 overflow-x-auto px-[var(--gutter)] pb-4 md:gap-6">
                   {b.items.map((img) => (
@@ -322,7 +338,7 @@ const glyph = (key: string, px: number) => {
                       <div>
                         <div
                           class:list={['aspect-[4/5] w-full', col.name === 'Gold' ? 'b-swatch-gold' : 'b-swatch']}
-                          style={`background:${col.hex}`}
+                          style={col.name === 'Gold' ? undefined : `background:${col.hex}`}
                         ></div>
                         <p class="mono mt-4 text-[10px] uppercase tracking-widest b-faint">{col.n}</p>
                         <p class="mt-1 text-[15px] font-semibold b-ink">{col.name}</p>
@@ -554,8 +570,28 @@ const glyph = (key: string, px: number) => {
   .b-stage.is-after .b-stage-label { opacity: 1; }
   /* parallax: a figura inteira anda um pouco mais devagar que a página, sem escala e sem recorte */
   .b-px img { backface-visibility: hidden; }
+  .b-round { border-radius: clamp(14px, 2vw, 24px); overflow: hidden; }
   .b-swatch { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b-ink) 12%, transparent); }
-  .b-swatch-gold { box-shadow: inset 0 0 0 1px rgba(201, 169, 110, 0.9); }
+  /* Gold: foil — gradiente metálico com faixa de brilho + ruído fino em overlay (só neste swatch) */
+  .b-swatch-gold {
+    position: relative;
+    overflow: hidden;
+    background-color: #c9a96e;
+    background-image:
+      linear-gradient(118deg, rgba(255, 255, 255, 0) 30%, rgba(255, 248, 230, 0.34) 44%, rgba(255, 255, 255, 0) 56%),
+      linear-gradient(160deg, #e8d3a0 0%, #cfb078 38%, #c9a96e 55%, #a4834a 100%);
+    box-shadow: inset 0 0 0 1px rgba(201, 169, 110, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+  .b-swatch-gold::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.32;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
   /* slides do deck remontados: tag com borda, título leve, destaque em azul */
   .b-tag {
     display: inline-block;

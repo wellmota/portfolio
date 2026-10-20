@@ -17,6 +17,8 @@ export type BrandBlock =
   | { type: 'pair'; items: [BrandImage, BrandImage] }
   | { type: 'trio'; items: [BrandImage, BrandImage, BrandImage] }
   | { type: 'slides'; items: BrandImage[] }
+  /** Grade 2×2 de cantos arredondados (kit digital), com uma nota opcional embaixo. */
+  | { type: 'bento'; items: BrandImage[]; note?: string }
   /** Slide do deck remontado em código: texto à esquerda, vídeo em loop à direita. */
   | { type: 'slide'; num: string; tag: string; title: string; accent: string; text: string; video: { src: string; webm?: string; poster: string }; alt: string }
   | { type: 'quote'; text: string; by?: string }
@@ -113,7 +115,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     kicker: 'Tutory · Identidade visual · 2026',
     title: 'O mesmo símbolo. Uma arquitetura nova.',
     subtitle:
-      'A Tutory cresceu além do que a marca conseguia transmitir. Em quatro dias de propostas e cinco meses de aplicação, o cérebro que todo mundo já reconhecia foi reconstruído como arquitetura: símbolo, paleta, voz, deck e seis troféus.',
+      'A Tutory cresceu além do que a marca conseguia transmitir. Em catorze dias de projeto e cinco meses de aplicação, o cérebro que todo mundo já reconhecia foi reconstruído como arquitetura: símbolo, paleta, voz, deck e seis troféus.',
     hero: {
       video: { src: `${B}/blueprint.mp4`, webm: `${B}/blueprint.webm` },
       poster: `${B}/blueprint-poster.webp`,
@@ -169,9 +171,9 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         num: '03',
         theme: 'light',
         kicker: 'Duas propostas',
-        title: 'A primeira era linda. E era outra empresa.',
+        title: 'Manter o cérebro. Reconstruir o resto.',
         body: [
-          'A proposta de 27 de março levou os arquétipos ao extremo: uma supernova no lugar do cérebro, paleta de oceano, tipografia de sistema. Era bonita, e apagava quinze anos de reconhecimento. Quatro dias depois veio a resposta certa: manter o cérebro e reconstruí-lo como arquitetura. Aprovada em 31 de março.',
+          'A proposta de 27 de março levou os arquétipos ao extremo: uma supernova no lugar do cérebro, paleta de oceano, tipografia de sistema. Era bonita, e apagava quinze anos de reconhecimento. Dias depois veio a resposta certa: manter o cérebro e reconstruí-lo como arquitetura. Aprovada em 31 de março.',
         ],
         blocks: [
           {
@@ -270,9 +272,10 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       {
         num: '07',
         kicker: 'A marca no mundo',
-        title: 'De palco a crachá.',
+        title: 'Em tamanho real.',
         body: [
           'Uma identidade só existe quando sai do deck. A Tutory Experience reúne os maiores mentores do país num dia, e a assinatura Empowering Intelligence foi desenhada para esse tamanho: painel de palco, estande, uniforme, crachá, papelaria e social. Preto, azul elétrico e um só ponto de luz.',
+          'E precisa caber no menor dos tamanhos. O mesmo cérebro que preenche um painel vira ícone na tela inicial, mostrador no pulso e logotipo sobre o azul elétrico, sem perder uma linha.',
         ],
         blocks: [
           {
@@ -305,6 +308,16 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
               label: 'Papelaria',
               meta: 'selo · cartões · caderno',
             },
+          },
+          {
+            type: 'bento',
+            items: [
+              { src: `${B}/kit-logotipo.webp`, alt: 'Logotipo Tutory em branco sobre gradiente azul elétrico', label: 'Logotipo' },
+              { src: `${B}/kit-painel.webp`, alt: 'Painel de evento com o logotipo Tutory sobre uma faixa de luz azul', label: 'Painel · Tutory Experience' },
+              { src: `${B}/kit-icones.webp`, alt: 'Ícone do app Tutory numa barra de aplicativos e um celular na mão com o ícone na tela inicial', label: 'Ícone de app' },
+              { src: `${B}/kit-watch.webp`, alt: 'Relógio de pulso com o símbolo da Tutory no mostrador', label: 'Mostrador' },
+            ],
+            note: 'Kit digital · ícone · mostrador · painel · logotipo',
           },
         ],
       },
@@ -356,27 +369,6 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       {
         num: '09',
         theme: 'light',
-        kicker: 'O deck',
-        title: 'Uma marca que se apresenta sozinha.',
-        body: [
-          'Em vez de um PDF, a marca foi apresentada num deck interativo em HTML puro: 37 slides, 21 deles visíveis e o resto guardado como variações, navegação por setas, roda e toque, versão vertical para celular e link direto para cada slide. A mesma apresentação virou o manual, com um slide de downloads: kit, logos vetoriais e fontes. Na mesma pasta, dois utilitários em Three.js, um gerador de vidro refrativo e um gerador de medalhas, para quem produz peça todo dia sem passar pelo designer.',
-        ],
-        blocks: [
-          {
-            type: 'slides',
-            items: [
-              { src: `${B}/deck-capa.webp`, alt: 'Capa do deck: Tutory, rebranding', label: '01 · Capa' },
-              { src: `${B}/deck-cores.webp`, alt: 'Slide A cor da inteligência com as seis cores da paleta', label: '10 · Cores' },
-              { src: `${B}/deck-simbolo.webp`, alt: 'Slide do símbolo renderizado em vidro', label: '09 · Símbolo' },
-              { src: `${B}/deck-voz.webp`, alt: 'Slide Como falamos: antes e agora', label: '11 · Voz' },
-              { src: `${B}/deck-kit.webp`, alt: 'Slide de downloads: kit, logos e fontes', label: '16 · Kit' },
-            ],
-          },
-        ],
-      },
-      {
-        num: '10',
-        theme: 'light',
         kicker: 'Evolução',
         title: 'Tutory permanece. A expressão evolui.',
         body: [
@@ -396,7 +388,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     ],
     statsLabel: 'Em números',
     stats: [
-      { value: '4 dias', label: 'da primeira proposta à marca aprovada' },
+      { value: '14 dias', label: 'de projeto de marca até a aprovação' },
       { value: '2', label: 'arquétipos: O Governante e O Mágico' },
       { value: '6', label: 'cores, de Abyss a Gold' },
       { value: '37', label: 'slides no deck interativo' },
@@ -406,7 +398,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     outcomesLabel: 'Resultados',
     outcomesTitle: 'O que a marca passou a fazer',
     outcomes: [
-      'Identidade aprovada em quatro dias e em uso em todo o ecossistema: site, Tutory OS, Aeroporto de Leads e painéis internos',
+      'Identidade aprovada em catorze dias e em uso em todo o ecossistema: site, Tutory OS, Aeroporto de Leads e painéis internos',
       'Deck interativo que funciona como manual: paleta, tipografia, voz e kit para download',
       'Geradores de vidro e medalha em Three.js para o time produzir peças sem o designer',
       'Gamificação da Hub: seis troféus, da ficha técnica à impressão 3D',
@@ -429,7 +421,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     seo: {
       title: 'Tutory: identidade visual — Case Study · Wellington Mota',
       description:
-        'Rebranding da Tutory: arquétipos, símbolo reconstruído como arquitetura, paleta, voz, deck interativo de 37 slides e seis troféus 3D da gamificação. Aprovado em quatro dias.',
+        'Rebranding da Tutory: arquétipos, símbolo reconstruído como arquitetura, paleta, voz, deck interativo de 37 slides e seis troféus 3D da gamificação. Aprovada em catorze dias.',
     },
   },
 
@@ -438,7 +430,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     kicker: 'Tutory · Visual identity · 2026',
     title: 'The same symbol. A new architecture.',
     subtitle:
-      'Tutory had outgrown what its brand could say. In four days of proposals and five months of application, the brain everyone already recognized was rebuilt as architecture: symbol, palette, voice, deck and six trophies.',
+      'Tutory had outgrown what its brand could say. In fourteen days of project and five months of application, the brain everyone already recognized was rebuilt as architecture: symbol, palette, voice, deck and six trophies.',
     hero: {
       video: { src: `${B}/blueprint.mp4`, webm: `${B}/blueprint.webm` },
       poster: `${B}/blueprint-poster.webp`,
@@ -494,9 +486,9 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         num: '03',
         theme: 'light',
         kicker: 'Two proposals',
-        title: 'The first was beautiful. And it was another company.',
+        title: 'Keep the brain. Rebuild the rest.',
         body: [
-          'The March 27 proposal took the archetypes to the extreme: a supernova instead of the brain, an ocean palette, system typography. It was beautiful, and it erased fifteen years of recognition. Four days later came the right answer: keep the brain and rebuild it as architecture. Approved on March 31.',
+          'The March 27 proposal took the archetypes to the extreme: a supernova instead of the brain, an ocean palette, system typography. It was beautiful, and it erased fifteen years of recognition. Days later came the right answer: keep the brain and rebuild it as architecture. Approved on March 31.',
         ],
         blocks: [
           {
@@ -604,9 +596,10 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       {
         num: '07',
         kicker: 'The brand in the world',
-        title: 'From stage to badge.',
+        title: 'Life-size.',
         body: [
           'An identity only exists once it leaves the deck. Tutory Experience gathers the country’s top mentors for a day, and the Empowering Intelligence signature was designed for that scale: stage panel, stand, uniform, badge, stationery and social. Black, electric blue and a single point of light.',
+          'And it has to fit the smallest sizes. The same brain that fills a panel becomes a home-screen icon, a watch face and the wordmark over electric blue, without losing a single line.',
         ],
         blocks: [
           {
@@ -639,6 +632,16 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
               label: 'Stationery',
               meta: 'seal · cards · notebook',
             },
+          },
+          {
+            type: 'bento',
+            items: [
+              { src: `${B}/kit-logotipo.webp`, alt: 'Tutory wordmark in white over an electric blue gradient', label: 'Wordmark' },
+              { src: `${B}/kit-painel.webp`, alt: 'Event panel with the Tutory wordmark over a band of blue light', label: 'Panel · Tutory Experience' },
+              { src: `${B}/kit-icones.webp`, alt: 'Tutory app icon in an app dock, and a phone held in hand showing the icon on the home screen', label: 'App icon' },
+              { src: `${B}/kit-watch.webp`, alt: 'Wristwatch with the Tutory symbol on the face', label: 'Watch face' },
+            ],
+            note: 'Digital kit · icon · watch face · panel · wordmark',
           },
         ],
       },
@@ -690,27 +693,6 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       {
         num: '09',
         theme: 'light',
-        kicker: 'The deck',
-        title: 'A brand that presents itself.',
-        body: [
-          'Instead of a PDF, the brand was presented in an interactive deck in plain HTML: 37 slides, 21 of them visible and the rest kept as variations, navigation by arrows, wheel and touch, a vertical version for phones and a direct link to every slide. The same presentation became the manual, with a downloads slide: kit, vector logos and fonts. In the same folder, two Three.js utilities, a refractive glass generator and a medal generator, for people who produce pieces every day without going through the designer.',
-        ],
-        blocks: [
-          {
-            type: 'slides',
-            items: [
-              { src: `${B}/deck-capa.webp`, alt: 'Deck cover: Tutory, rebranding', label: '01 · Cover' },
-              { src: `${B}/deck-cores.webp`, alt: 'Slide The color of intelligence with the six palette colors', label: '10 · Colors' },
-              { src: `${B}/deck-simbolo.webp`, alt: 'Slide of the symbol rendered in glass', label: '09 · Symbol' },
-              { src: `${B}/deck-voz.webp`, alt: 'Slide How we speak: before and now', label: '11 · Voice' },
-              { src: `${B}/deck-kit.webp`, alt: 'Downloads slide: kit, logos and fonts', label: '16 · Kit' },
-            ],
-          },
-        ],
-      },
-      {
-        num: '10',
-        theme: 'light',
         kicker: 'Evolution',
         title: 'Tutory stays. The expression evolves.',
         body: [
@@ -730,7 +712,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     ],
     statsLabel: 'In numbers',
     stats: [
-      { value: '4 days', label: 'from first proposal to approved brand' },
+      { value: '14 days', label: 'of brand project until approval' },
       { value: '2', label: 'archetypes: The Ruler and The Magician' },
       { value: '6', label: 'colors, from Abyss to Gold' },
       { value: '37', label: 'slides in the interactive deck' },
@@ -740,7 +722,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     outcomesLabel: 'Results',
     outcomesTitle: 'What the brand started doing',
     outcomes: [
-      'Identity approved in four days and in use across the ecosystem: website, Tutory OS, Lead Airport and internal dashboards',
+      'Identity approved in fourteen days and in use across the ecosystem: website, Tutory OS, Lead Airport and internal dashboards',
       'An interactive deck that works as the manual: palette, typography, voice and a downloadable kit',
       'Glass and medal generators in Three.js so the team produces pieces without the designer',
       'Hub gamification: six trophies, from technical sheet to 3D printing',
@@ -763,7 +745,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     seo: {
       title: 'Tutory: visual identity — Case Study · Wellington Mota',
       description:
-        'Tutory rebranding: archetypes, a symbol rebuilt as architecture, palette, voice, a 37-slide interactive deck and six 3D gamification trophies. Approved in four days.',
+        'Tutory rebranding: archetypes, a symbol rebuilt as architecture, palette, voice, a 37-slide interactive deck and six 3D gamification trophies. Approved in fourteen days.',
     },
   },
 };
