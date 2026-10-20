@@ -18,6 +18,8 @@ interface Props {
 
 const { lang, content: c, altHref, altLabel } = Astro.props;
 const data = getSiteData(lang);
+/** Capítulos visíveis (os `hidden` ficam guardados nos dados); a numeração segue a posição. */
+const chapters = c.chapters.filter((ch) => !ch.hidden);
 const homeHref = getLocalePath(lang);
 const projectsHref = getLocalePath(lang, '#projetos');
 const contactHref = getLocalePath(lang, '#contato');
@@ -106,9 +108,9 @@ const glyph = (key: string, px: number) => {
 
     <!-- Capítulos: cada um com o próprio fundo; entre temas diferentes, uma faixa longa de degradê -->
     {
-      c.chapters.map((ch, i) => {
+      chapters.map((ch, i) => {
         const theme = ch.theme ?? 'dark';
-        const prev = i === 0 ? 'dark' : (c.chapters[i - 1].theme ?? 'dark');
+        const prev = i === 0 ? 'dark' : (chapters[i - 1].theme ?? 'dark');
         return (
         <>
         {prev !== theme && <div class={`b-fade b-fade--${prev}-${theme}`} aria-hidden="true"></div>}
@@ -116,7 +118,7 @@ const glyph = (key: string, px: number) => {
         <div class="container-page pt-24 md:pt-36">
           <div class="b-hairline-t pt-8 md:grid md:grid-cols-[200px_1fr] md:gap-12 lg:grid-cols-[260px_1fr]">
             <div class="flex items-baseline gap-4 md:sticky md:top-24 md:block md:self-start" data-reveal>
-              <span class="display block text-5xl leading-none b-num md:text-[5.5rem]">{ch.num}</span>
+              <span class="display block text-5xl leading-none b-num md:text-[5.5rem]">{String(i + 1).padStart(2, '0')}</span>
               <p class="mono text-[11px] uppercase tracking-[.22em] b-gold md:mt-5">{ch.kicker}</p>
             </div>
             <div class="mt-8 md:mt-0">
@@ -384,7 +386,7 @@ const glyph = (key: string, px: number) => {
         );
       })
     }
-    {(c.chapters[c.chapters.length - 1]?.theme ?? 'dark') === 'light' && <div class="b-fade b-fade--light-dark" aria-hidden="true"></div>}
+    {(chapters[chapters.length - 1]?.theme ?? 'dark') === 'light' && <div class="b-fade b-fade--light-dark" aria-hidden="true"></div>}
 
     <!-- Números -->
     <section class="container-page pt-24 md:pt-36">

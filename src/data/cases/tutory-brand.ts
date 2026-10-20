@@ -55,6 +55,8 @@ export interface BrandChapter {
   lead?: string;
   body: string[];
   blocks?: BrandBlock[];
+  /** Capítulo guardado mas não renderizado (a numeração pula). */
+  hidden?: boolean;
 }
 
 export interface BrandCaseContent {
@@ -115,7 +117,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     kicker: 'Tutory · Identidade visual · 2026',
     title: 'O mesmo símbolo. Uma arquitetura nova.',
     subtitle:
-      'A Tutory cresceu além do que a marca conseguia transmitir. Em catorze dias de projeto e cinco meses de aplicação, o cérebro que todo mundo já reconhecia foi reconstruído como arquitetura: símbolo, paleta, voz, deck e seis troféus.',
+      'A Tutory cresceu além do que a marca conseguia transmitir. Em catorze dias de projeto e cinco meses de aplicação, o cérebro que todo mundo já reconhecia foi reconstruído como arquitetura: símbolo, paleta, voz e deck.',
     hero: {
       video: { src: `${B}/blueprint.mp4`, webm: `${B}/blueprint.webm` },
       poster: `${B}/blueprint-poster.webp`,
@@ -136,7 +138,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       { label: 'Período', value: 'Mar — Ago 2026' },
       { label: 'Papel', value: 'Brand designer, solo' },
       { label: 'Arquétipos', value: 'O Governante · O Mágico' },
-      { label: 'Entrega', value: 'Símbolo · paleta · voz · deck · troféus' },
+      { label: 'Entrega', value: 'Símbolo · paleta · voz · deck' },
     ],
     chapters: [
       {
@@ -319,6 +321,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '08',
+        hidden: true, // escondido por enquanto (20/10/2026)
         kicker: 'Gamificação',
         title: 'Da faísca ao legado.',
         body: [
@@ -368,7 +371,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'Evolução',
         title: 'Tutory permanece. A expressão evolui.',
         body: [
-          'Rebranding não é recomeço. Os resultados, os mentores, a experiência e o propósito ficam onde estavam. O que muda é como tudo isso se apresenta: o símbolo, a paleta, o posicionamento, a expressão e a narrativa. A marca v2 vive hoje no site, no Tutory OS, no Aeroporto de Leads, nos painéis internos e nos troféus.',
+          'Rebranding não é recomeço. Os resultados, os mentores, a experiência e o propósito ficam onde estavam. O que muda é como tudo isso se apresenta: o símbolo, a paleta, o posicionamento, a expressão e a narrativa. A marca v2 vive hoje no site, no Tutory OS, no Aeroporto de Leads, e nos painéis internos.',
         ],
         blocks: [
           {
@@ -386,8 +389,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     stats: [
       { value: '14 dias', label: 'de projeto de marca até a aprovação' },
       { value: '15 anos', label: 'de reconhecimento preservados no símbolo' },
-      { value: '5 meses', label: 'de aplicação, do site aos troféus' },
-      { value: '6', label: 'troféus procedurais, de Spark a Legacy' },
+      { value: '5 meses', label: 'de aplicação, do site ao Tutory OS' },
     ],
     outcomesLabel: 'Resultados',
     outcomesTitle: 'O que a marca passou a fazer',
@@ -395,7 +397,6 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       'Identidade aprovada em catorze dias e em uso em todo o ecossistema: site, Tutory OS, Aeroporto de Leads e painéis internos',
       'Deck interativo que funciona como manual: paleta, tipografia, voz e kit para download',
       'Geradores de vidro e medalha em Three.js para o time produzir peças sem o designer',
-      'Gamificação da Hub: seis troféus, da ficha técnica à impressão 3D',
       'Um símbolo documentado como desenho técnico, reproduzível em qualquer escala',
     ],
     stackLabel: 'Ferramentas',
@@ -415,7 +416,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     seo: {
       title: 'Tutory: identidade visual — Case Study · Wellington Mota',
       description:
-        'Rebranding da Tutory: arquétipos, símbolo reconstruído como arquitetura, paleta, voz, deck interativo e seis troféus 3D da gamificação. Aprovada em catorze dias.',
+        'Rebranding da Tutory: arquétipos, símbolo reconstruído como arquitetura, paleta, voz, deck interativo. Aprovada em catorze dias.',
     },
   },
 
@@ -424,7 +425,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     kicker: 'Tutory · Visual identity · 2026',
     title: 'The same symbol. A new architecture.',
     subtitle:
-      'Tutory had outgrown what its brand could say. In fourteen days of project and five months of application, the brain everyone already recognized was rebuilt as architecture: symbol, palette, voice, deck and six trophies.',
+      'Tutory had outgrown what its brand could say. In fourteen days of project and five months of application, the brain everyone already recognized was rebuilt as architecture: symbol, palette, voice and deck.',
     hero: {
       video: { src: `${B}/blueprint.mp4`, webm: `${B}/blueprint.webm` },
       poster: `${B}/blueprint-poster.webp`,
@@ -445,7 +446,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       { label: 'Period', value: 'Mar — Aug 2026' },
       { label: 'Role', value: 'Brand designer, solo' },
       { label: 'Archetypes', value: 'The Ruler · The Magician' },
-      { label: 'Delivered', value: 'Symbol · palette · voice · deck · trophies' },
+      { label: 'Delivered', value: 'Symbol · palette · voice · deck' },
     ],
     chapters: [
       {
@@ -637,6 +638,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       },
       {
         num: '08',
+        hidden: true, // escondido por enquanto (20/10/2026)
         kicker: 'Gamification',
         title: 'From a spark to a legacy.',
         body: [
@@ -686,7 +688,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'Evolution',
         title: 'Tutory stays. The expression evolves.',
         body: [
-          'Rebranding is not a restart. The results, the mentors, the experience and the purpose stay where they were. What changes is how all of it shows up: the symbol, the palette, the positioning, the expression and the narrative. Brand v2 now lives on the website, in Tutory OS, in the Lead Airport, on the internal dashboards and on the trophies.',
+          'Rebranding is not a restart. The results, the mentors, the experience and the purpose stay where they were. What changes is how all of it shows up: the symbol, the palette, the positioning, the expression and the narrative. Brand v2 now lives on the website, in Tutory OS, in the Lead Airport, and on the internal dashboards.',
         ],
         blocks: [
           {
@@ -704,8 +706,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     stats: [
       { value: '14 days', label: 'of brand project until approval' },
       { value: '15 years', label: 'of recognition preserved in the symbol' },
-      { value: '5 months', label: 'of application, from website to trophies' },
-      { value: '6', label: 'procedural trophies, from Spark to Legacy' },
+      { value: '5 months', label: 'of application, from website to Tutory OS' },
     ],
     outcomesLabel: 'Results',
     outcomesTitle: 'What the brand started doing',
@@ -713,7 +714,6 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       'Identity approved in fourteen days and in use across the ecosystem: website, Tutory OS, Lead Airport and internal dashboards',
       'An interactive deck that works as the manual: palette, typography, voice and a downloadable kit',
       'Glass and medal generators in Three.js so the team produces pieces without the designer',
-      'Hub gamification: six trophies, from technical sheet to 3D printing',
       'A symbol documented as a technical drawing, reproducible at any scale',
     ],
     stackLabel: 'Tools',
@@ -733,7 +733,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     seo: {
       title: 'Tutory: visual identity — Case Study · Wellington Mota',
       description:
-        'Tutory rebranding: archetypes, a symbol rebuilt as architecture, palette, voice, an interactive deck and six 3D gamification trophies. Approved in fourteen days.',
+        'Tutory rebranding: archetypes, a symbol rebuilt as architecture, palette, voice, an interactive deck. Approved in fourteen days.',
     },
   },
 };
