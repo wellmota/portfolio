@@ -297,17 +297,13 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
             type: 'pair',
             items: [
               { src: `${B}/marca-social.webp`, alt: 'Post social com mentora sorrindo, o símbolo e a frase Que bom que você está aqui', label: 'Social · boas-vindas' },
-              { src: `${B}/marca-social-2.webp`, alt: 'Post social com mentora e a frase Escolha técnica e dedicação', label: 'Social · depoimento' },
+              {
+                src: `${B}/marca-papelaria.webp`,
+                alt: 'Papelaria da marca: papel timbrado com selo circular, cartões, caderno, envelope e pendrive',
+                label: 'Papelaria',
+                meta: 'selo · cartões · caderno',
+              },
             ],
-          },
-          {
-            type: 'full',
-            image: {
-              src: `${B}/marca-papelaria.webp`,
-              alt: 'Papelaria da marca: papel timbrado com selo circular, cartões, caderno, envelope e pendrive',
-              label: 'Papelaria',
-              meta: 'selo · cartões · caderno',
-            },
           },
           {
             type: 'bento',
@@ -621,17 +617,13 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
             type: 'pair',
             items: [
               { src: `${B}/marca-social.webp`, alt: 'Social post with a smiling mentor, the symbol and a welcome message', label: 'Social · welcome' },
-              { src: `${B}/marca-social-2.webp`, alt: 'Social post with a mentor and the line Technical choice and dedication', label: 'Social · testimonial' },
+              {
+                src: `${B}/marca-papelaria.webp`,
+                alt: 'Brand stationery: letterhead with a circular seal, cards, notebook, envelope and flash drive',
+                label: 'Stationery',
+                meta: 'seal · cards · notebook',
+              },
             ],
-          },
-          {
-            type: 'full',
-            image: {
-              src: `${B}/marca-papelaria.webp`,
-              alt: 'Brand stationery: letterhead with a circular seal, cards, notebook, envelope and flash drive',
-              label: 'Stationery',
-              meta: 'seal · cards · notebook',
-            },
           },
           {
             type: 'bento',
