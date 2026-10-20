@@ -117,7 +117,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     kicker: 'Tutory · Identidade visual · 2026',
     title: 'O mesmo símbolo. Uma arquitetura nova.',
     subtitle:
-      'A Tutory cresceu além do que a marca conseguia transmitir. Em catorze dias de projeto e cinco meses de aplicação, o cérebro que todo mundo já reconhecia foi reconstruído como arquitetura: símbolo, paleta, voz e deck.',
+      'A Tutory cresceu além do que a marca conseguia transmitir. Em catorze dias de projeto e sessenta de aplicação, o cérebro que todo mundo já reconhecia foi reconstruído como arquitetura: símbolo, paleta, voz e deck.',
     hero: {
       video: { src: `${B}/blueprint.mp4`, webm: `${B}/blueprint.webm` },
       poster: `${B}/blueprint-poster.webp`,
@@ -389,7 +389,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     stats: [
       { value: '14 dias', label: 'de projeto de marca até a aprovação' },
       { value: '15 anos', label: 'de reconhecimento preservados no símbolo' },
-      { value: '5 meses', label: 'de aplicação, do site ao Tutory OS' },
+      { value: '60 dias', label: 'de aplicação, do site ao Tutory OS' },
     ],
     outcomesLabel: 'Resultados',
     outcomesTitle: 'O que a marca passou a fazer',
@@ -425,7 +425,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     kicker: 'Tutory · Visual identity · 2026',
     title: 'The same symbol. A new architecture.',
     subtitle:
-      'Tutory had outgrown what its brand could say. In fourteen days of project and five months of application, the brain everyone already recognized was rebuilt as architecture: symbol, palette, voice and deck.',
+      'Tutory had outgrown what its brand could say. In fourteen days of project and sixty of application, the brain everyone already recognized was rebuilt as architecture: symbol, palette, voice and deck.',
     hero: {
       video: { src: `${B}/blueprint.mp4`, webm: `${B}/blueprint.webm` },
       poster: `${B}/blueprint-poster.webp`,
@@ -706,7 +706,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     stats: [
       { value: '14 days', label: 'of brand project until approval' },
       { value: '15 years', label: 'of recognition preserved in the symbol' },
-      { value: '5 months', label: 'of application, from website to Tutory OS' },
+      { value: '60 days', label: 'of application, from website to Tutory OS' },
     ],
     outcomesLabel: 'Results',
     outcomesTitle: 'What the brand started doing',
