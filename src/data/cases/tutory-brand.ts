@@ -385,11 +385,9 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     statsLabel: 'Em números',
     stats: [
       { value: '14 dias', label: 'de projeto de marca até a aprovação' },
-      { value: '2', label: 'arquétipos: O Governante e O Mágico' },
-      { value: '6', label: 'cores, de Abyss a Gold' },
-      { value: '37', label: 'slides no deck interativo' },
+      { value: '15 anos', label: 'de reconhecimento preservados no símbolo' },
+      { value: '5 meses', label: 'de aplicação, do site aos troféus' },
       { value: '6', label: 'troféus procedurais, de Spark a Legacy' },
-      { value: '50', label: 'commits no sprint da gamificação' },
     ],
     outcomesLabel: 'Resultados',
     outcomesTitle: 'O que a marca passou a fazer',
@@ -417,7 +415,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     seo: {
       title: 'Tutory: identidade visual — Case Study · Wellington Mota',
       description:
-        'Rebranding da Tutory: arquétipos, símbolo reconstruído como arquitetura, paleta, voz, deck interativo de 37 slides e seis troféus 3D da gamificação. Aprovada em catorze dias.',
+        'Rebranding da Tutory: arquétipos, símbolo reconstruído como arquitetura, paleta, voz, deck interativo e seis troféus 3D da gamificação. Aprovada em catorze dias.',
     },
   },
 
@@ -705,11 +703,9 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     statsLabel: 'In numbers',
     stats: [
       { value: '14 days', label: 'of brand project until approval' },
-      { value: '2', label: 'archetypes: The Ruler and The Magician' },
-      { value: '6', label: 'colors, from Abyss to Gold' },
-      { value: '37', label: 'slides in the interactive deck' },
+      { value: '15 years', label: 'of recognition preserved in the symbol' },
+      { value: '5 months', label: 'of application, from website to trophies' },
       { value: '6', label: 'procedural trophies, from Spark to Legacy' },
-      { value: '50', label: 'commits in the gamification sprint' },
     ],
     outcomesLabel: 'Results',
     outcomesTitle: 'What the brand started doing',
@@ -737,7 +733,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     seo: {
       title: 'Tutory: visual identity — Case Study · Wellington Mota',
       description:
-        'Tutory rebranding: archetypes, a symbol rebuilt as architecture, palette, voice, a 37-slide interactive deck and six 3D gamification trophies. Approved in fourteen days.',
+        'Tutory rebranding: archetypes, a symbol rebuilt as architecture, palette, voice, an interactive deck and six 3D gamification trophies. Approved in fourteen days.',
     },
   },
 };
