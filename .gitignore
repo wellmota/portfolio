@@ -27,3 +27,6 @@ yarn-error.log*
 # Remotion motion sub-project
 motion/node_modules/
 motion/out/
+
+# Gilroy (licença comercial) usada só no render do teaser Tutory
+motion/public/tutory/fonts/

@@ -41,7 +41,7 @@ try {
         composition,
         serveUrl,
         codec: 'h264',
-        concurrency: 2,
+        concurrency: Number(process.env.CONCURRENCY ?? 2),
         outputLocation: out,
         puppeteerInstance: browser,
         browserExecutable: BROWSER,

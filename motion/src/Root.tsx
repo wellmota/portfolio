@@ -6,6 +6,8 @@ import { Cover } from './Cover';
 import { Shot, type ShotProps } from './Shot';
 import { FPS, HEIGHT, WIDTH, type Variant } from './theme';
 import { totalFrames } from './timeline';
+import { TEASER_FRAMES, TutoryTeaser } from './tutory/TutoryTeaser';
+import { FPS as TFPS, H as TH, W as TW } from './tutory/theme';
 
 const variants: Variant[] = ['editorial', 'product', 'kinetic'];
 const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
@@ -13,6 +15,9 @@ const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Folder name="Tutory">
+        <Composition id="Tutory-Teaser" component={TutoryTeaser} durationInFrames={TEASER_FRAMES} fps={TFPS} width={TW} height={TH} />
+      </Folder>
       <Folder name="CuidaMe">
         {variants.map((variant) => (
           <Composition
