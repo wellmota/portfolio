@@ -66,6 +66,11 @@ const carecloud: CaseStudy = {
             },
           ],
         },
+        image: {
+          src: '/cases/carecloud/devices.webp',
+          alt: 'A reconstrução moderna da CareCloud: o painel no desktop e a ficha do paciente no celular, em tema claro e escuro',
+          caption: 'O mesmo sistema de componentes, do desktop ao celular — e em tema claro e escuro.',
+        },
       },
       {
         kicker: '02 — O prontuário',
@@ -315,6 +320,11 @@ const carecloud: CaseStudy = {
               caption: 'The day’s tasks, the appointment load, the schedule, the message center and performance gauges on one screen. Hover the window to scroll the page.',
             },
           ],
+        },
+        image: {
+          src: '/cases/carecloud/devices.webp',
+          alt: 'The modern CareCloud rebuild: the dashboard on desktop and the patient chart on a phone, in light and dark',
+          caption: 'One component system, from desktop to phone — and in light and dark.',
         },
       },
       {
