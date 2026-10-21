@@ -32,6 +32,17 @@ export interface ShowcaseItem {
   size?: 'full' | 'half';
   /** Vídeo em loop (mp4, mudo) no lugar da imagem; `src` vira o poster. */
   video?: { src: string; webm?: string };
+  /** Print de página inteira: janela 16:10 que rola até o fim no hover ou foco. `scrollSeconds` é a duração (padrão 8). */
+  scroll?: boolean;
+  scrollSeconds?: number;
+}
+
+export interface DetailItem {
+  src: string;
+  alt: string;
+  /** Título curto da decisão de design (ex.: "Chips de três estados"). */
+  label: string;
+  text: string;
 }
 
 export interface CaseSection {
@@ -48,7 +59,9 @@ export interface CaseSection {
   /** Depoimentos recriados com a cara do WhatsApp (telefone oculto, sobrenome borrado). */
   whatsapp?: { messages: WhatsAppMessage[]; caption?: string };
   /** Prints de desktop, grandes, um por bloco. `frame: 'flat'` = sem moldura de device (só cantos e sombra). `start` desloca a numeração (ex.: 1 → o primeiro item é "02"). */
-  showcase?: { url?: string; start?: number; frame?: "device" | "flat"; items: ShowcaseItem[] };
+  showcase?: { url?: string; start?: number; frame?: "device" | "flat" | "browser"; items: ShowcaseItem[] };
+  /** Recortes de detalhe, um por decisão de design, em grade escura de 2–3 colunas. */
+  details?: { title?: string; items: DetailItem[] };
   /** Pares antes/depois (tela antiga em P&B ao lado da nova). */
   compare?: { pairs: ComparePair[]; beforeLabel: string; afterLabel: string; heuristicLabel: string; caption?: string };
 }

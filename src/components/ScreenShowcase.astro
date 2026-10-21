@@ -1,9 +1,12 @@
 ---
 /**
- * Prints de desktop em destaque dentro de um device genérico (moldura escura com cantos
- * arredondados e botões laterais, como um tablet largo) sobre um painel claro. A tela do
- * device assume o aspect ratio do print — nada é cortado nem esticado. `size: 'half'`
- * põe dois devices lado a lado no desktop; o padrão ocupa a largura toda.
+ * Prints de desktop em destaque sobre uma faixa clara. Três molduras:
+ *  - `device` (padrão): moldura escura com cantos arredondados e botões laterais, como um tablet largo;
+ *  - `flat`: só cantos arredondados e sombra;
+ *  - `browser`: janela de navegador com barra, três pontos e a URL do showcase (ou do item).
+ * A tela assume o aspect ratio do print — nada é cortado nem esticado — exceto itens com `scroll`,
+ * que ganham uma janela 16:10 e rolam até o fim da página no hover (ou foco, no teclado/toque).
+ * `size: 'half'` põe dois lado a lado no desktop; o padrão ocupa a largura toda.
  */
 import type { ShowcaseItem } from '../data/cases/types';
 
@@ -12,11 +15,12 @@ interface Props {
   accent: string;
   url?: string;
   start?: number;
-  /** 'flat' = print sem moldura de device: só cantos arredondados e sombra sobre a faixa. */
-  frame?: 'device' | 'flat';
+  frame?: 'device' | 'flat' | 'browser';
 }
 
-const { items, accent, start = 0, frame = 'device' } = Astro.props;
+const { items, accent, url, start = 0, frame = 'device' } = Astro.props;
+const screenClass = frame === 'flat' ? 'sc-flat-screen' : frame === 'browser' ? 'sc-browser-screen' : 'sc-screen';
+const frameClass = frame === 'flat' ? 'sc-flat' : frame === 'browser' ? 'sc-browser' : 'sc-device';
 ---
 
 <!-- faixa clara de ponta a ponta: quebra o preto da página; o grid por dentro volta à largura do container -->
@@ -32,15 +36,25 @@ const { items, accent, start = 0, frame = 'device' } = Astro.props;
           {it.meta && <span class="mono text-[10px] uppercase tracking-widest text-sc-muted">{it.meta}</span>}
         </div>
         <div class="sc-panel">
-          <div class={frame === 'flat' ? 'sc-flat' : 'sc-device'}>
-            {frame !== 'flat' && (
+          <div class={frameClass}>
+            {frame === 'device' && (
               <>
                 <span class="sc-btn sc-btn--top-a" aria-hidden="true" />
                 <span class="sc-btn sc-btn--top-b" aria-hidden="true" />
                 <span class="sc-btn sc-btn--side" aria-hidden="true" />
               </>
             )}
-            <div class={frame === 'flat' ? 'sc-flat-screen' : 'sc-screen'}>
+            {frame === 'browser' && (
+              <div class="sc-bar" aria-hidden="true">
+                <span class="sc-dots"><i /><i /><i /></span>
+                <span class="sc-url">{it.url ?? url ?? ''}</span>
+              </div>
+            )}
+            <div
+              class:list={[screenClass, it.scroll && 'sc-scroll']}
+              style={it.scroll && it.scrollSeconds ? `--sc-dur:${it.scrollSeconds}s` : undefined}
+              tabindex={it.scroll ? 0 : undefined}
+            >
               {it.video ? (
                 <video class="block w-full" poster={it.src} autoplay muted loop playsinline preload="metadata" aria-label={it.alt}>
                   {it.video.webm && <source src={it.video.webm} type="video/webm" />}
@@ -92,7 +106,8 @@ const { items, accent, start = 0, frame = 'device' } = Astro.props;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   }
   /* sem device: o print apoia direto na faixa, só cantos e sombra */
-  .sc-flat {
+  .sc-flat,
+  .sc-browser {
     position: relative;
     border-radius: 1.2cqw;
     box-shadow:
@@ -104,6 +119,75 @@ const { items, accent, start = 0, frame = 'device' } = Astro.props;
     overflow: hidden;
     border-radius: 1.2cqw;
     background: #000;
+  }
+  /* janela de navegador: barra clara com três pontos e a URL centralizada */
+  .sc-browser {
+    background: #e9eaee;
+  }
+  .sc-bar {
+    display: flex;
+    align-items: center;
+    gap: 1cqw;
+    height: 3.2cqw;
+    padding: 0 1.3cqw;
+    border-radius: 1.2cqw 1.2cqw 0 0;
+    background: linear-gradient(180deg, #f6f6f8, #e9e9ed);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  }
+  .sc-dots {
+    display: inline-flex;
+    gap: 0.55cqw;
+  }
+  .sc-dots i {
+    width: 0.95cqw;
+    height: 0.95cqw;
+    border-radius: 50%;
+    background: #c8c8cf;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  }
+  .sc-url {
+    margin: 0 auto;
+    min-width: 38%;
+    padding: 0.38cqw 1.4cqw;
+    border-radius: 0.5cqw;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+    font-family: var(--font-mono);
+    font-size: max(10px, 1.05cqw);
+    letter-spacing: 0.02em;
+    color: #6a6a70;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .sc-browser-screen {
+    overflow: hidden;
+    border-radius: 0 0 1.2cqw 1.2cqw;
+    background: #fff;
+  }
+  /* página inteira: janela 16:10 que rola até o fim no hover/foco; a duração vem do item */
+  .sc-scroll {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    container-type: size;
+    cursor: ns-resize;
+    outline: none;
+  }
+  .sc-scroll img {
+    will-change: transform;
+    transition: transform var(--sc-dur, 8s) cubic-bezier(0.45, 0, 0.2, 1);
+  }
+  .sc-scroll:hover img,
+  .sc-scroll:focus img,
+  .sc-scroll:focus-within img {
+    transform: translateY(calc(100cqh - 100%));
+  }
+  .sc-scroll:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--sc-accent);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sc-scroll img {
+      transition: none;
+    }
   }
   /* botões: duas barras na borda superior, uma lateral à direita */
   .sc-btn {
@@ -136,5 +220,10 @@ const { items, accent, start = 0, frame = 'device' } = Astro.props;
     .sc-device { padding: 22px; border-radius: 36px; }
     .sc-screen { border-radius: 20px; }
     .sc-btn { display: none; }
+    .sc-bar { height: 34px; padding: 0 14px; gap: 10px; }
+    .sc-dots i { width: 10px; height: 10px; }
+    .sc-url { font-size: 11px; padding: 4px 14px; }
+    .sc-scroll img { transition: none; }
+    .sc-scroll:hover img { transform: none; }
   }
 </style>

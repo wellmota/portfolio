@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CaseStudyPage from '../../components/CaseStudyPage.astro';
+import carecloud from '../../data/cases/carecloud';
+
+const lang = 'en' as const;
+const content = carecloud[lang];
+---
+
+<Layout
+  lang={lang}
+  title={content.seo.title}
+  description={content.seo.description}
+  ogImage={content.cover.src}
+  ogImageAlt={content.cover.alt}
+  ogImageWidth={1600}
+  ogImageHeight={1000}
+  alternates={false}
+>
+  <CaseStudyPage lang={lang} content={content} altHref="/pt/work/carecloud" altLabel="PT" />
+</Layout>

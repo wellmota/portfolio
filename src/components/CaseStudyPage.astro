@@ -186,6 +186,31 @@ const contactHref = getLocalePath(lang, '#contato');
 
         {s.showcase && <ScreenShowcase items={s.showcase.items} accent={c.accent} url={s.showcase.url} start={s.showcase.start} frame={s.showcase.frame} />}
 
+        {s.details && (
+          <div class="mt-12 md:mt-16">
+            {s.details.title && (
+              <p class="mono text-[11px] uppercase tracking-widest text-faint" data-reveal>
+                {s.details.title}
+              </p>
+            )}
+            <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {s.details.items.map((d) => (
+                <figure class="border border-line bg-ink-soft" data-reveal data-reveal-group>
+                  <div class="cs-detail">
+                    <img src={d.src} alt={d.alt} loading="lazy" />
+                  </div>
+                  <figcaption class="p-4 md:p-5">
+                    <span class="mono block text-[10.5px] uppercase tracking-widest" style={`color:${c.accent}`}>
+                      {d.label}
+                    </span>
+                    <p class="mt-2 text-[13.5px] leading-relaxed text-mist">{d.text}</p>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        )}
+
         {s.compare && (
           <BeforeAfter
             pairs={s.compare.pairs}
@@ -306,3 +331,26 @@ const contactHref = getLocalePath(lang, '#contato');
     <span class="mono text-[11px] text-faint">{data.ui.portfolioEdition}</span>
   </div>
 </footer>
+
+<style>
+  /* recorte de detalhe: moldura clara (o fundo do próprio app), print centralizado com sombra curta */
+  .cs-detail {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 12 / 5;
+    padding: 4%;
+    background: linear-gradient(180deg, #f1f2f4, #e6e8ec);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .cs-detail img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    border-radius: 6px;
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.07),
+      0 14px 30px rgba(0, 0, 0, 0.18);
+  }
+</style>

@@ -207,6 +207,16 @@ const pt: SiteData = {
       highlight: 'Do redesign à produção em 7 dias',
       href: '/pt/work/cuidame',
     },
+    {
+      title: 'CareCloud',
+      meta: 'Health-tech · Case Study',
+      categories: ['Product', 'UX', 'Healthcare'],
+      description:
+        'Ajudar a replataformar uma suíte clínica americana de Adobe Flex para React: quatro meses in loco em Miami, time de cinco UX e fluxos hi-fi testados com médicos reais. Ver case study →',
+      image: '/cases/carecloud/card-pt.webp',
+      accent: '#1E8FD5',
+      href: '/pt/work/carecloud',
+    },
     /* Case studies em espera — descomente para publicar
     {
       title: 'HyperGestor',
