@@ -1,0 +1,1075 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard · GolfHub ERP</title>
+    <link rel="icon" href="../app/assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=DM+Sans:wght@400;700&display=swap" />
+    <link rel="stylesheet" href="assets/erp.css" />
+    <script src="../app/assets/icons.js"></script>
+    <script src="../app/assets/data.js"></script>
+    <script src="assets/erp.js"></script>
+    <style>
+      /* Figma "Dashboard" (403:6838): KPI row + gauge · capacity donut, balance bars, birthdays · three goal cards.
+         The empty fourth slot of the last row now holds a live 3D view of Campo A. */
+      .dash {
+        display: grid;
+        gap: 26px;
+      }
+      .row1 {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 2.12fr);
+        gap: var(--gap);
+      }
+      .row2,
+      .row3 {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--gap);
+      }
+      .row2 > .card {
+        height: 352px;
+      }
+      .row3 > .card {
+        height: 123px;
+      }
+      .span2 {
+        grid-column: span 2;
+      }
+
+      /* gauge — Figma "Atual vs Predição" → "Reservas no mês" */
+      .gauge {
+        padding: 26px 20px 18px;
+        display: flex;
+        flex-direction: column;
+      }
+      .gauge__fig {
+        position: relative;
+        width: 248px;
+        max-width: 100%;
+        margin: auto auto 0;
+      }
+      .gauge svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+      }
+      .gauge__val {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 6px;
+        text-align: center;
+      }
+      .gauge__val b {
+        display: block;
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      .gauge__val small {
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .sweep {
+        stroke-dasharray: var(--p) 200;
+        animation: sweep 1.6s var(--ease) both;
+        animation-delay: calc(var(--d, 0) * 70ms + 250ms);
+      }
+      @keyframes sweep {
+        from {
+          stroke-dasharray: 0 200;
+          opacity: 0;
+        }
+        8% {
+          opacity: 1;
+        }
+      }
+      .gauge .badge span + span {
+        margin-left: 4px;
+      }
+      .gauge__tick {
+        font-size: 11px;
+        fill: var(--ink-3);
+      }
+
+      /* donut — Figma "Capacidade de campo" → "Ocupação do campo hoje" */
+      .cap {
+        padding: 26px 22px 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .donut {
+        position: relative;
+        width: 152px;
+        height: 152px;
+        margin: 20px auto 0;
+      }
+      .donut svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+        overflow: visible;
+      }
+      .donut circle {
+        fill: none;
+        stroke-width: 20;
+      }
+      .donut .seg {
+        stroke-linecap: round;
+        stroke-dasharray: var(--p) 200;
+        stroke-dashoffset: var(--o, 0);
+        animation: sweep 1.4s var(--ease) both;
+        animation-delay: var(--dl);
+        transition: stroke-width 0.3s var(--spring);
+        cursor: pointer;
+      }
+      .donut .seg:hover,
+      .donut .seg.is-hot {
+        stroke-width: 24;
+      }
+      .donut__c {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        text-align: center;
+        pointer-events: none;
+      }
+      .donut__c b {
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      .donut__c small {
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .lrow__v small {
+        font-weight: 400;
+        font-size: 12px;
+      }
+      .legend {
+        margin-top: auto;
+        display: grid;
+        gap: 6px;
+      }
+      .lrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 4px;
+        margin: 0 -4px;
+        border-radius: 10px;
+        transition: background 0.2s;
+      }
+      .lrow.is-hot {
+        background: var(--canvas);
+      }
+      .lrow__ico {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: var(--tint);
+        color: var(--c);
+        flex: none;
+      }
+      .lrow__ico .i {
+        width: 18px;
+        height: 18px;
+      }
+      .lrow__t {
+        flex: 1;
+        min-width: 0;
+      }
+      .lrow__t b {
+        display: block;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 1.3;
+      }
+      .lrow__t small {
+        display: block;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .lrow__v {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      /* balance bars */
+      .bal {
+        padding: 26px 22px 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .bal__key {
+        display: flex;
+        gap: 12px;
+        font-size: 11.5px;
+        color: var(--ink-3);
+        margin-top: 4px;
+      }
+      .bal__key i {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 3px;
+        margin-right: 5px;
+        background: var(--indigo);
+      }
+      .bal__key i.m {
+        background: #dfe3e8;
+      }
+      .bars {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        align-items: end;
+        gap: 8px;
+        height: 150px;
+        margin-top: 10px;
+      }
+      .bars__col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: flex-end;
+        cursor: default;
+      }
+      .bars__v {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-2);
+        margin-bottom: 4px;
+        animation: rise 0.6s var(--ease) both;
+        animation-delay: calc(var(--k) * 90ms + 900ms);
+      }
+      .bars__stack {
+        position: relative;
+        width: 30px;
+        height: calc(var(--h) * 1px);
+      }
+      .bars__meta,
+      .bars__rec {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 9px 9px 3px 3px;
+        transform-origin: bottom;
+        animation: grow-y 1.1s var(--ease) both;
+      }
+      .bars__meta {
+        height: calc(var(--m) * 1px);
+        background: var(--track);
+        animation-delay: calc(var(--k) * 70ms + 200ms);
+      }
+      .bars__rec {
+        height: calc(var(--r) * 1px);
+        background: linear-gradient(180deg, #5b4dff, var(--indigo));
+        animation-delay: calc(var(--k) * 90ms + 380ms);
+        transition: filter 0.2s;
+      }
+      .bars__rec.is-over::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: calc(var(--m) * 1px - 1px);
+        height: 2px;
+        background: #fff;
+        opacity: 0.85;
+      }
+      .bars__col:hover .bars__rec {
+        filter: brightness(1.12) drop-shadow(0 6px 10px rgba(74, 58, 255, 0.4));
+      }
+      .bars__col.is-partial .bars__rec {
+        background: repeating-linear-gradient(135deg, #5b4dff 0 6px, #4a3aff 6px 12px);
+      }
+      @keyframes grow-y {
+        from {
+          transform: scaleY(0);
+        }
+      }
+      .bars__m {
+        font-size: 13px;
+        color: var(--ink-3);
+        margin-top: 8px;
+      }
+      .bal .legend {
+        margin-top: 16px;
+      }
+
+      /* birthdays */
+      .bday {
+        padding: 26px 22px 12px;
+        display: flex;
+        flex-direction: column;
+      }
+      .bday ul {
+        margin-top: 10px;
+      }
+      .bday li {
+        display: grid;
+        grid-template-columns: 40px minmax(0, 1.5fr) minmax(0, 1fr) 164px;
+        align-items: center;
+        gap: 14px;
+        height: 56px;
+        padding: 0 8px;
+        margin: 0 -8px;
+        border-radius: 12px;
+        transition: background 0.2s;
+      }
+      .bday li:hover {
+        background: var(--canvas);
+      }
+      .bday__n b,
+      .bday__d b {
+        display: block;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .bday__n small,
+      .bday__d small {
+        display: block;
+        font-size: 12px;
+        color: var(--ink-3);
+        white-space: nowrap;
+      }
+      .bday__d b.is-today {
+        color: var(--indigo);
+      }
+      .bday .av {
+        transition: transform 0.4s var(--spring);
+      }
+      .bday li:hover .av {
+        transform: scale(1.08) rotate(-4deg);
+      }
+      .cheer {
+        position: relative;
+        justify-self: end;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 36px;
+        padding: 0 12px;
+        border-radius: 10px;
+        color: var(--indigo);
+        font-weight: 500;
+        font-size: 13.5px;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .cheer:hover {
+        background: var(--indigo-50);
+      }
+      .cheer .i {
+        width: 16px;
+        height: 16px;
+      }
+      .cheer.is-sent {
+        color: var(--ok);
+        cursor: default;
+        background: none;
+      }
+      .cheer.is-sent .i {
+        animation: pop-in 0.5s var(--spring);
+      }
+      .confetti {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 7px;
+        height: 7px;
+        border-radius: 2px;
+        pointer-events: none;
+        animation: burst 0.9s var(--ease) forwards;
+      }
+      @keyframes burst {
+        to {
+          transform: translate(var(--x), var(--y)) rotate(var(--rot));
+          opacity: 0;
+        }
+      }
+
+      /* goal cards — Figma "Metas / Retorno / Operação" */
+      .goal {
+        padding: 16px 20px 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .goal__h {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .goal__h h2 {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .goal__h .badge {
+        height: 22px;
+        font-size: 11.5px;
+      }
+      .goal__v {
+        margin-top: 2px;
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+      }
+      .goal__v small {
+        font-size: 13px;
+        color: var(--ink-3);
+        font-weight: 400;
+      }
+      .goal__s {
+        font-size: 12px;
+        color: var(--ink-3);
+        margin: 1px 0 auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* 3D course card */
+      .c3d {
+        overflow: hidden;
+        background: radial-gradient(120% 140% at 80% 100%, #e9f8f1 0%, #fff 62%);
+      }
+      .c3d canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .c3d__txt {
+        position: relative;
+        z-index: 1;
+        padding: 16px 18px;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .c3d__txt h2 {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .c3d__txt p {
+        font-size: 12px;
+        line-height: 1.35;
+        color: var(--ink-3);
+        margin-top: 4px;
+        max-width: 112px;
+      }
+      .c3d__txt p b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .c3d__txt .link {
+        margin-top: auto;
+        pointer-events: auto;
+        align-self: flex-start;
+      }
+      .c3d__txt .link::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+      }
+      .c3d__fallback {
+        display: none;
+      }
+      .c3d.no-gl .c3d__fallback {
+        display: block;
+      }
+
+      @media (max-width: 1360px) {
+        .bday li {
+          grid-template-columns: 40px minmax(0, 1.4fr) minmax(0, 0.9fr) 40px;
+          gap: 10px;
+        }
+        .cheer span {
+          display: none;
+        }
+        .cheer {
+          width: 40px;
+          padding: 0;
+          justify-content: center;
+        }
+        .kpi__value {
+          font-size: 22px;
+        }
+      }
+      /* ≤1200px: KPIs 2×2 beside the gauge, row 2 in two columns (birthdays full width), goals 2×2 */
+      @media (max-width: 1200px) {
+        .row1 {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) minmax(0, 1.25fr);
+        }
+        .row1 .gauge {
+          grid-column: 3;
+          grid-row: 1 / span 2;
+        }
+        .kpi {
+          min-height: 0;
+          display: grid;
+          grid-template-columns: 40px minmax(0, 1fr);
+          column-gap: 14px;
+          padding: 18px 16px;
+        }
+        .kpi__ico {
+          grid-column: 1;
+          grid-row: 1 / span 3;
+        }
+        .kpi__label {
+          margin-top: 0;
+        }
+        .kpi__value {
+          margin-top: 2px;
+        }
+        .kpi__delta {
+          margin-top: 6px;
+        }
+        .row2,
+        .row3 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body data-page="dashboard">
+    <a class="skip" href="#main">Pular para o conteúdo</a>
+    <div class="shell">
+      <aside class="side" data-side></aside>
+      <script>
+        ERP.side(document.querySelector('[data-side]'));
+      </script>
+      <div class="frame">
+        <header class="top" data-top></header>
+        <script>
+          ERP.top(document.querySelector('[data-top]'));
+        </script>
+        <main class="main dash" id="main" tabindex="-1">
+          <h1 class="sr-only">Dashboard do clube</h1>
+
+          <section class="row1" aria-label="Indicadores do dia">
+            <article class="card card--lift kpi rise" style="--d: 0">
+              <span class="kpi__ico" style="--c: #64cbf4" data-ico="profile"></span>
+              <h2 class="kpi__label"><a class="stretch" href="socios.html">Sócios ativos</a></h2>
+              <p class="kpi__value"><span data-count="2316"></span></p>
+              <p class="kpi__delta"><span class="up" data-ico-sm="arrow-up"></span><b class="up">+3,5%</b> no mês</p>
+            </article>
+            <article class="card card--lift kpi rise" style="--d: 1">
+              <span class="kpi__ico" style="--c: #ff9f38" data-ico="calendar"></span>
+              <h2 class="kpi__label"><a class="stretch" href="agenda.html">Reservas hoje</a></h2>
+              <p class="kpi__value"><span data-count="120"></span></p>
+              <p class="kpi__delta"><span class="up" data-ico-sm="arrow-up"></span><b class="up">+21%</b> vs. ontem</p>
+            </article>
+            <article class="card card--lift kpi rise" style="--d: 2">
+              <span class="kpi__ico" style="--c: #e391ea" data-ico="car"></span>
+              <h2 class="kpi__label"><a class="stretch" href="financeiro.html">Aluguéis hoje</a></h2>
+              <p class="kpi__value"><span data-count="3434" data-fmt="brl0"></span></p>
+              <p class="kpi__delta"><span class="up" data-ico-sm="arrow-up"></span><b class="up">+12%</b> vs. ontem</p>
+            </article>
+            <article class="card card--lift kpi rise" style="--d: 3">
+              <span class="kpi__ico" style="--c: #6c5dd3" data-ico="clock"></span>
+              <h2 class="kpi__label"><a class="stretch" href="financeiro.html#atraso">Inadimplência</a></h2>
+              <p class="kpi__value"><span data-count="23016" data-fmt="brl0"></span></p>
+              <p class="kpi__delta"><span class="up" data-ico-sm="arrow-down"></span><b class="up">−3%</b> no mês <span class="sr-only">(melhora)</span></p>
+            </article>
+            <article class="card card--lift gauge rise" style="--d: 4">
+              <div class="card__h">
+                <h2 class="card__t">Reservas no mês</h2>
+                <span class="badge badge--indigo"><span data-count="82" data-fmt="pct"></span><span>da previsão</span></span>
+              </div>
+              <figure class="gauge__fig" id="gauge"></figure>
+            </article>
+          </section>
+
+          <section class="row2" aria-label="Campo, balanço e aniversariantes">
+            <article class="card card--lift cap rise" style="--d: 5">
+              <h2 class="card__t">Ocupação hoje</h2>
+                            <div class="donut" id="donut"></div>
+              <ul class="legend" id="donut-legend"></ul>
+            </article>
+            <article class="card card--lift bal rise" style="--d: 6">
+              <div class="card__h">
+                <h2 class="card__t">Balanço</h2>
+                <a class="link" href="financeiro.html">Ver<span class="sr-only"> financeiro</span><span data-ico-sm="arrow-right"></span></a>
+              </div>
+              <p class="bal__key"><span><i></i>Receita</span><span><i class="m"></i>Meta</span><span>em R$ mil</span></p>
+              <div class="bars" id="bars" role="img"></div>
+              <ul class="legend" id="bal-rows"></ul>
+            </article>
+            <article class="card card--lift bday span2 rise" style="--d: 7">
+              <div class="card__h">
+                <h2 class="card__t">Aniversariantes da semana</h2>
+                <span class="badge badge--neutral" data-ico-b="cake"></span>
+              </div>
+              <ul id="bdays"></ul>
+            </article>
+          </section>
+
+          <section class="row3" aria-label="Metas">
+            <article class="card card--lift goal rise" style="--d: 8" id="g1"></article>
+            <article class="card card--lift goal rise" style="--d: 9" id="g2"></article>
+            <article class="card card--lift goal rise" style="--d: 10" id="g3"></article>
+            <article class="card card--lift c3d rise" style="--d: 11" id="c3d">
+              <canvas aria-hidden="true"></canvas>
+              <div class="c3d__txt">
+                <h2><span class="live-dot" aria-hidden="true"></span>Campo A agora</h2>
+                <p id="c3d-sub"></p>
+                <p class="c3d__fallback">Mapa 3D indisponível neste navegador.</p>
+                <a class="link" href="agenda.html?campo=a">Ver agenda<span data-ico-sm="arrow-right"></span></a>
+              </div>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const S = ERP.stats;
+        const F = ERP.fmt;
+        const $ = (s) => document.querySelector(s);
+        document.querySelectorAll('[data-ico]').forEach((el) => (el.innerHTML = ERP.icon(el.dataset.ico, '', true)));
+        document.querySelectorAll('[data-ico-sm]').forEach((el) => (el.outerHTML = ERP.icon(el.dataset.icoSm, 'i--xs ' + el.className)));
+
+        /* ---------- Gauge: reservas no mês ---------- */
+        const gp = (S.reservasMes / S.reservasPrev) * 100;
+        const r = 113;
+        $('#gauge').innerHTML = `<svg viewBox="0 0 248 138" role="img" aria-label="${F.num(S.reservasMes)} de ${F.num(S.reservasPrev)} reservas previstas no mês (${F.pct(gp)})">
+            <defs><linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#6b5dff"/><stop offset="1" stop-color="#4a3aff"/></linearGradient>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#4a3aff" flood-opacity=".35"/></filter></defs>
+            <path d="${ERP.arc(124, 124, r, Math.PI, 2 * Math.PI)}" fill="none" stroke="#eff2f4" stroke-width="22" stroke-linecap="round"/>
+            <path class="sweep" style="--p:${gp.toFixed(1)};--d:4" pathLength="100" d="${ERP.arc(124, 124, r, Math.PI, 2 * Math.PI)}" fill="none" stroke="url(#gg)" stroke-width="22" stroke-linecap="round" filter="url(#glow)"/>
+          </svg>
+          <figcaption class="gauge__val"><b data-count="${S.reservasMes}"></b><small>de ${F.num(S.reservasPrev)} previstas</small></figcaption>`;
+
+        /* ---------- Donut: ocupação hoje (manhã + tarde) ---------- */
+        const sx = S.saidas;
+        const pm = (sx.manha / sx.vagas) * 100;
+        const pt = (sx.tarde / sx.vagas) * 100;
+        const segs = [
+          { id: 'manha', label: 'Manhã', sub: '06h30–12h', v: sx.manha, p: pm, o: 0, c: '#52cd9f', tint: '#e3f7ef', icon: 'sun-1' },
+          { id: 'tarde', label: 'Tarde', sub: '12h–17h', v: sx.tarde, p: pt, o: -pm, c: '#8fdcbe', tint: '#eef9f4', icon: 'cloud-sunny' },
+        ];
+        $('#donut').innerHTML = `<svg viewBox="0 0 160 160" role="img" aria-label="Ocupação de hoje: ${F.pct(S.ocupacao)}. Manhã ${sx.manha} saídas, tarde ${sx.tarde}, de ${sx.vagas} vagas.">
+            <circle cx="80" cy="80" r="67" stroke="#eff2f4"/>
+            ${segs
+              .slice()
+              .reverse()
+              .map((s, i) => `<circle class="seg" data-seg="${s.id}" cx="80" cy="80" r="67" pathLength="100" stroke="${s.c}" style="--p:${s.p.toFixed(2)};--o:${s.o.toFixed(2)};--dl:${i ? 600 : 1100}ms"/>`)
+              .join('')}
+          </svg><div class="donut__c"><b data-count="${S.ocupacao}" data-fmt="pct"></b><small>ocupado</small></div>`;
+        $('#donut-legend').innerHTML = segs
+          .map(
+            (s) => `<li class="lrow" data-seg="${s.id}"><span class="lrow__ico" style="--c:${s.id === 'manha' ? '#1f9a6c' : '#2b8f69'};--tint:${s.tint}">${ERP.icon(s.icon)}</span>
+              <span class="lrow__t"><b>${s.label} <span class="t-muted">· ${F.pct(s.p)}</span></b><small>${s.sub}</small></span><span class="lrow__v num">${s.v} <small class="t-muted">saídas</small></span></li>`,
+          )
+          .join('');
+        const hot = (id, on) => document.querySelectorAll(`[data-seg="${id}"]`).forEach((el) => el.classList.toggle('is-hot', on));
+        document.querySelectorAll('#donut .seg').forEach((el) => {
+          const s = segs.find((x) => x.id === el.dataset.seg);
+          el.addEventListener('pointermove', (e) => (ERP.tip.show(`<b>${s.label}</b> · ${s.v} saídas<small>${F.pct(s.p)} das ${sx.vagas} vagas · ${s.sub}</small>`, e.clientX, e.clientY), hot(s.id, true)));
+          el.addEventListener('pointerleave', () => (ERP.tip.hide(), hot(s.id, false)));
+        });
+        document.querySelectorAll('#donut-legend .lrow').forEach((el) => {
+          el.addEventListener('pointerenter', () => hot(el.dataset.seg, true));
+          el.addEventListener('pointerleave', () => hot(el.dataset.seg, false));
+        });
+
+        /* ---------- Balanço: last five months, revenue vs target ---------- */
+        const n = 5;
+        const rec = S.receita.slice(-n);
+        const met = S.meta.slice(-n);
+        const mon = ERP.months.slice(-n);
+        const max = Math.max(...rec, ...met);
+        const H = 118;
+        $('#bars').setAttribute('aria-label', 'Receita x meta por mês: ' + mon.map((m, i) => `${F.month(m)} ${F.mil(rec[i])} de ${F.mil(met[i])}`).join('; '));
+        $('#bars').innerHTML = rec
+          .map((v, i) => {
+            const partial = i === n - 1;
+            return `<div class="bars__col${partial ? ' is-partial' : ''}" data-i="${i}">
+              <span class="bars__v" style="--k:${i}">${F.num(Math.round(v / 1000))}</span>
+              <span class="bars__stack" style="--h:${Math.round((Math.max(v, met[i]) / max) * H)}">
+                <span class="bars__meta" style="--k:${i};--m:${Math.round((met[i] / max) * H)}"></span>
+                <span class="bars__rec${v > met[i] ? ' is-over' : ''}" style="--k:${i};--r:${Math.round((v / max) * H)};--m:${Math.round((met[i] / max) * H)}"></span>
+              </span>
+              <span class="bars__m">${F.mon(mon[i])}</span></div>`;
+          })
+          .join('');
+        document.querySelectorAll('.bars__col').forEach((col) => {
+          const i = +col.dataset.i;
+          const pc = (rec[i] / met[i]) * 100;
+          col.addEventListener('pointermove', (e) =>
+            ERP.tip.show(
+              `<b>${F.month(mon[i])[0].toUpperCase() + F.month(mon[i]).slice(1)}${i === n - 1 ? ' (até hoje)' : ''}</b><small><span class="sw" style="background:#4a3aff"></span>Receita ${F.brl0(rec[i])}</small><small><span class="sw" style="background:#dfe3e8"></span>Meta ${F.brl0(met[i])} · ${F.pct(pc)}</small>`,
+              e.clientX,
+              col.getBoundingClientRect().top + 10,
+            ),
+          );
+          col.addEventListener('pointerleave', () => ERP.tip.hide());
+        });
+        $('#bal-rows').innerHTML = [
+          { t: 'Carrinhos', s: 'Alugados no mês', v: S.carrinhosMes, c: '#1b8fc2', tint: '#e3f5fd', icon: 'car' },
+          { t: 'Pagamentos', s: 'Recebidos hoje', v: S.pagamentosHoje, c: '#c76a00', tint: '#fff0df', icon: 'wallet-2' },
+        ]
+          .map(
+            (x) => `<li class="lrow"><span class="lrow__ico" style="--c:${x.c};--tint:${x.tint}">${ERP.icon(x.icon)}</span>
+              <span class="lrow__t"><b>${x.t}</b><small>${x.s}</small></span><span class="lrow__v" data-count="${x.v}" data-delay="400"></span></li>`,
+          )
+          .join('');
+
+        /* ---------- Aniversariantes da semana ---------- */
+        const bd = ERP.birthdays;
+        document.querySelector('[data-ico-b]').innerHTML = ERP.icon('cake', 'i--xs') + bd.length + ' sócios';
+        $('#bdays').innerHTML = bd
+          .map((m) => {
+            const dd = ERP.dayDiff(m.date);
+            const sent = dd < 0;
+            const lbl = F.dayLabel(m.date);
+            return `<li>
+              ${ERP.avatar(m, 40)}
+              <span class="bday__n"><b>${m.name}</b><small>${m.cat} · nº ${m.number}</small></span>
+              <span class="bday__d"><b class="${dd === 0 ? 'is-today' : ''}">${lbl}</b><small>${m.age} anos</small></span>
+              <button type="button" class="cheer${sent ? ' is-sent' : ''}" data-id="${m.id}" ${sent ? 'aria-disabled="true"' : ''} aria-label="${sent ? 'Parabéns já enviados para ' + m.name : (dd > 0 ? 'Agendar parabéns para ' : 'Enviar parabéns para ') + m.name}">
+                ${ERP.icon(sent ? 'tick-circle' : dd > 0 ? 'calendar-tick' : 'send-2')}<span>${sent ? 'Enviado' : dd > 0 ? 'Agendar parabéns' : 'Enviar parabéns'}</span></button>
+            </li>`;
+          })
+          .join('');
+        const COLORS = ['#4a3aff', '#52cd9f', '#ff9f38', '#e391ea', '#64cbf4'];
+        $('#bdays').addEventListener('click', (e) => {
+          const b = e.target.closest('.cheer');
+          if (!b || b.classList.contains('is-sent')) return;
+          const m = ERP.person(b.dataset.id);
+          const future = ERP.dayDiff(bd.find((x) => x.id === m.id).date) > 0;
+          b.classList.add('is-sent');
+          b.setAttribute('aria-disabled', 'true');
+          b.innerHTML = ERP.icon('tick-circle') + `<span>${future ? 'Agendado' : 'Enviado'}</span>`;
+          b.setAttribute('aria-label', (future ? 'Parabéns agendados para ' : 'Parabéns enviados para ') + m.name);
+          ERP.toast(future ? `Parabéns agendados para ${ERP.first(m)}: app e e-mail às 08:00 do dia` : `Parabéns enviados para ${ERP.first(m)} pelo app e por e-mail`, { icon: 'cake' });
+          if (ERP.reduced()) return;
+          for (let i = 0; i < 14; i++) {
+            const c = document.createElement('i');
+            c.className = 'confetti';
+            const a = (i / 14) * Math.PI * 2;
+            const d = 26 + Math.random() * 24;
+            c.style.cssText = `background:${COLORS[i % 5]};--x:${Math.cos(a) * d}px;--y:${Math.sin(a) * d - 8}px;--rot:${Math.random() * 360}deg`;
+            b.appendChild(c);
+            setTimeout(() => c.remove(), 950);
+          }
+        });
+
+        /* ---------- Goal cards ---------- */
+        const goal = (el, g) => {
+          const pc = Math.round((g.v / g.of) * 100);
+          const st = pc >= 80 ? { l: 'No ritmo', b: 'indigo', c: '#4a3aff' } : pc >= 60 ? { l: 'Atenção', b: 'warn', c: '#ff9f38' } : { l: 'Abaixo', b: 'bad', c: '#f0475a' };
+          el.innerHTML = `<div class="goal__h"><h2>${g.t}</h2><span class="badge badge--${st.b}">${st.l}</span></div>
+            <p class="goal__v"><span data-count="${g.v}"></span> <small>/ ${F.num(g.of)}</small></p>
+            <p class="goal__s">${g.s} · ${pc}%</p>
+            <div class="bar" role="progressbar" aria-label="${g.t}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pc}" aria-valuetext="${g.v} de ${g.of} (${pc}%)" style="margin-top:9px"><i style="--v:${pc};--c:${st.c};--d:${el.style.getPropertyValue('--d')}"></i></div>`;
+        };
+        goal($('#g1'), { t: 'Novos sócios', v: S.novosAno, of: S.metaNovos, s: 'Meta do ano' });
+        goal($('#g2'), { t: 'Retorno', v: S.retorno, of: S.metaRetorno, s: 'Voltaram a jogar' });
+        goal($('#g3'), { t: 'Operação', v: S.operacao, of: S.metaOperacao, s: 'Saídas no mês' });
+
+        /* ---------- Campo A agora (groups on the course, from the tee sheet) ---------- */
+        const sheet = ERP.sheet(ERP.today, 'a');
+        const groups = sheet.rows
+          .filter((r) => r.bk && r.m <= ERP.clockMins && ERP.clockMins - r.m < 260 && ['chegou', 'parcial'].includes(ERP.status(r.bk)))
+          .map((r) => ({ hole: Math.min(18, 1 + Math.floor((ERP.clockMins - r.m) / 13)), frac: ((ERP.clockMins - r.m) % 13) / 13, players: r.bk.players, t: r.t }));
+        const nP = groups.reduce((a, g) => a + g.players.length, 0);
+        const next = sheet.rows.find((r) => r.bk && r.m > ERP.clockMins);
+        $('#c3d-sub').innerHTML = `<b>${groups.length}</b> grupos em jogo<br/><b>${nP}</b> jogadores`;
+        window.__groups = groups;
+      })();
+    </script>
+    <script type="module">
+      /* Campo A in 3D: a procedural mini-map of the 18 holes (from GH.holes) with the groups now on the course.
+         three.js r169 (vendored), procedural geometry only. */
+      import * as THREE from '../app/assets/vendor/three.module.min.js';
+      const card = document.getElementById('c3d');
+      const canvas = card.querySelector('canvas');
+      const groups = window.__groups || [];
+      let renderer;
+      try {
+        renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
+      } catch (e) {
+        card.classList.add('no-gl');
+      }
+      if (renderer) {
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        const scene = new THREE.Scene();
+        const cam = new THREE.PerspectiveCamera(26, 2, 0.1, 200);
+        scene.add(new THREE.HemisphereLight(0xffffff, 0xcfe9dc, 1.6));
+        const sun = new THREE.DirectionalLight(0xffffff, 1.6);
+        sun.position.set(-8, 16, 10);
+        sun.castShadow = true;
+        sun.shadow.mapSize.set(768, 768);
+        Object.assign(sun.shadow.camera, { left: -16, right: 16, top: 10, bottom: -10, near: 1, far: 50 });
+        sun.shadow.radius = 4;
+        scene.add(sun);
+
+        const world = new THREE.Group();
+        world.scale.setScalar(0.5);
+        world.position.set(8.2, 0, 0.6);
+        scene.add(world);
+        const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, metalness: 0, ...o });
+        /* plate */
+        const W = 22.5;
+        const Dp = 11;
+        const shape = new THREE.Shape();
+        const rr = 1.2;
+        shape.moveTo(-W / 2 + rr, -Dp / 2);
+        shape.lineTo(W / 2 - rr, -Dp / 2);
+        shape.quadraticCurveTo(W / 2, -Dp / 2, W / 2, -Dp / 2 + rr);
+        shape.lineTo(W / 2, Dp / 2 - rr);
+        shape.quadraticCurveTo(W / 2, Dp / 2, W / 2 - rr, Dp / 2);
+        shape.lineTo(-W / 2 + rr, Dp / 2);
+        shape.quadraticCurveTo(-W / 2, Dp / 2, -W / 2, Dp / 2 - rr);
+        shape.lineTo(-W / 2, -Dp / 2 + rr);
+        shape.quadraticCurveTo(-W / 2, -Dp / 2, -W / 2 + rr, -Dp / 2);
+        const plate = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: 0.5, bevelEnabled: true, bevelSize: 0.18, bevelThickness: 0.18, bevelSegments: 3 }), [M(0xdff3e9), M(0xc9eadb)]);
+        plate.rotation.x = -Math.PI / 2;
+        plate.position.y = -0.68; /* top face flush with y = 0 */
+        plate.receiveShadow = true;
+        world.add(plate);
+
+        const fairMat = M(0x8fdcbe);
+        const fairHot = M(0x52cd9f, { emissive: 0x1f7a56, emissiveIntensity: 0.25 });
+        const greenMat = M(0x3fbf8c);
+        const teeMat = M(0xffffff);
+        const sandMat = M(0xf3e2bf);
+        const waterMat = M(0x8fd3f3, { roughness: 0.25, metalness: 0.1 });
+        const treeMats = [M(0x2c9b6f), M(0x37ad7d), M(0x248a61)];
+        const flagMat = M(0x4a3aff, { emissive: 0x4a3aff, emissiveIntensity: 0.3 });
+
+        const holes = (window.GH && GH.holes) || [];
+        const colW = W / 9.4;
+        const holeObjs = [];
+        const rnd = (s) => {
+          const x = Math.sin(s * 9301 + 49297) * 233280;
+          return x - Math.floor(x);
+        };
+        holes.forEach((h, i) => {
+          const g = new THREE.Group();
+          const front = i < 9;
+          const col = front ? i : 17 - i;
+          const x = -W / 2 + colW * (col + 0.7);
+          const len = 1.5 + (h.m / 515) * 2.9;
+          const dir = front ? -1 : 1; /* front nine play away from the camera, back nine come back */
+          const zc = front ? -Dp / 4 : Dp / 4;
+          const z0 = zc - (dir * len) / 2;
+          const bend = h.shape.bend * 0.9;
+          const pts = [];
+          for (let k = 0; k <= 16; k++) {
+            const t = k / 16;
+            pts.push(new THREE.Vector3(x + Math.sin(t * Math.PI) * bend * 0.8 + bend * t * 0.4, 0, z0 + dir * len * t));
+          }
+          const curve = new THREE.CatmullRomCurve3(pts);
+          /* fairway ribbon as a flat tube */
+          const fw = new THREE.Mesh(new THREE.TubeGeometry(curve, 24, 0.42, 8, false), fairMat);
+          fw.scale.y = 0.18;
+          fw.position.y = 0.02;
+          fw.receiveShadow = true;
+          g.add(fw);
+          const end = curve.getPoint(1);
+          const start = curve.getPoint(0);
+          const green = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.66, 0.12, 24), greenMat);
+          green.position.set(end.x, 0.06, end.z);
+          green.receiveShadow = true;
+          g.add(green);
+          const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.9, 6), teeMat);
+          pole.position.set(end.x, 0.5, end.z);
+          g.add(pole);
+          const flag = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.2, 0.02), flagMat);
+          flag.position.set(end.x + 0.17, 0.85, end.z);
+          g.add(flag);
+          const tee = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.1, 0.34), teeMat);
+          tee.position.set(start.x, 0.05, start.z - dir * 0.25);
+          tee.castShadow = true;
+          g.add(tee);
+          for (let b = 0; b < Math.min(3, h.shape.bunkers); b++) {
+            const t = 0.55 + b * 0.16;
+            const p = curve.getPoint(Math.min(0.96, t));
+            const s = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.2, 0.06, 14), sandMat);
+            s.position.set(p.x + (b % 2 ? 0.55 : -0.55), 0.03, p.z);
+            s.scale.z = 1.4;
+            g.add(s);
+          }
+          if (h.shape.water) {
+            const p = curve.getPoint(h.shape.water === 'front' ? 0.82 : 0.5);
+            const wtr = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 0.05, 20), waterMat);
+            const off = h.shape.water === 'left' ? -0.8 : h.shape.water === 'right' ? 0.8 : 0;
+            wtr.position.set(p.x + off * (front ? 1 : -1), 0.02, p.z);
+            wtr.scale.set(h.shape.water === 'front' ? 1.2 : 0.75, 1, h.shape.water === 'front' ? 0.55 : 1.5);
+            g.add(wtr);
+          }
+          /* sphere trees along the edges */
+          const nT = h.shape.trees === 'both' ? 4 : 2;
+          for (let tI = 0; tI < nT; tI++) {
+            const side = h.shape.trees === 'left' ? -1 : h.shape.trees === 'right' ? 1 : tI % 2 ? 1 : -1;
+            const p = curve.getPoint(0.15 + (tI / nT) * 0.7);
+            const r = 0.2 + rnd(i * 10 + tI) * 0.14;
+            const tree = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10), treeMats[(i + tI) % 3]);
+            tree.position.set(p.x + side * (0.78 + rnd(i + tI) * 0.2) * (front ? 1 : -1), r * 0.9, p.z);
+            tree.castShadow = true;
+            g.add(tree);
+          }
+          /* invisible hit area for hover */
+          const hit = new THREE.Mesh(new THREE.BoxGeometry(colW * 0.95, 0.4, len + 1.3), new THREE.MeshBasicMaterial({ visible: false }));
+          hit.position.set(x, 0.2, zc);
+          hit.userData.i = i;
+          g.add(hit);
+          g.userData = { i, fw, curve, hit };
+          g.scale.y = reduced ? 1 : 0.001;
+          world.add(g);
+          holeObjs.push(g);
+        });
+
+        /* groups now on the course: a cluster of indigo dots per group, walking toward the green */
+        const dotGeo = new THREE.SphereGeometry(0.3, 16, 12);
+        const dotMat = M(0x4a3aff, { emissive: 0x4a3aff, emissiveIntensity: 0.45, roughness: 0.4 });
+        const glowTex = (() => {
+          const c = document.createElement('canvas');
+          c.width = c.height = 64;
+          const x = c.getContext('2d');
+          const gr = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+          gr.addColorStop(0, 'rgba(110,96,255,.85)');
+          gr.addColorStop(1, 'rgba(110,96,255,0)');
+          x.fillStyle = gr;
+          x.fillRect(0, 0, 64, 64);
+          return new THREE.CanvasTexture(c);
+        })();
+        const moving = [];
+        groups.forEach((gr, k) => {
+          const hole = holeObjs[gr.hole - 1];
+          if (!hole) return;
+          const cl = new THREE.Group();
+          const d = new THREE.Mesh(dotGeo, dotMat);
+          d.position.y = 0.32;
+          d.castShadow = true;
+          cl.add(d);
+          const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, depthWrite: false, transparent: true }));
+          glow.scale.set(2.2, 2.2, 1);
+          glow.position.y = 0.32;
+          cl.add(glow);
+          world.add(cl);
+          moving.push({ cl, glow, hole, t: Math.min(0.92, 0.08 + gr.frac * 0.8), k, gr });
+        });
+
+        /* hover → tooltip (hole info + who is there) */
+        const ray = new THREE.Raycaster();
+        const ptr = new THREE.Vector2();
+        let hotI = -1;
+        const fmtM = (v) => v.toLocaleString('pt-BR') + ' m';
+        canvas.addEventListener('pointermove', (e) => {
+          const b = canvas.getBoundingClientRect();
+          ptr.set(((e.clientX - b.left) / b.width) * 2 - 1, -((e.clientY - b.top) / b.height) * 2 + 1);
+          ray.setFromCamera(ptr, cam);
+          const hit = ray.intersectObjects(holeObjs.map((h) => h.userData.hit))[0];
+          const i = hit ? hit.object.userData.i : -1;
+          if (i !== hotI) {
+            if (hotI >= 0) holeObjs[hotI].userData.fw.material = fairMat;
+            if (i >= 0) holeObjs[i].userData.fw.material = fairHot;
+            hotI = i;
+            canvas.style.cursor = i >= 0 ? 'pointer' : '';
+          }
+          if (i < 0) return window.ERP && ERP.tip.hide();
+          const h = holes[i];
+          const here = moving.filter((m) => m.hole === holeObjs[i]);
+          ERP.tip.show(
+            `<b>Buraco ${h.n}</b> · par ${h.par} · ${fmtM(h.m)}<small>${here.length ? here.map((m) => m.gr.players.map((p) => p.name.split(' ')[0]).join(', ') + ' · saída ' + m.gr.t).join('<br/>') : 'Livre agora'}</small>`,
+            e.clientX,
+            e.clientY,
+          );
+        });
+        canvas.addEventListener('pointerleave', () => {
+          if (hotI >= 0) holeObjs[hotI].userData.fw.material = fairMat;
+          hotI = -1;
+          ERP.tip.hide();
+        });
+        canvas.addEventListener('click', () => (location.href = 'agenda.html?campo=a'));
+
+        let settled = false;
+        const size = () => {
+          const w = card.clientWidth;
+          const h = card.clientHeight;
+          renderer.setSize(w, h, false);
+          cam.aspect = w / h;
+          cam.updateProjectionMatrix();
+          if (settled) (update(3.5), renderer.render(scene, cam));
+        };
+        new ResizeObserver(size).observe(card);
+        size();
+
+        let vis = true;
+        new IntersectionObserver((en) => (vis = en[0].isIntersecting)).observe(card);
+        const t0 = performance.now();
+        const ease = (x) => 1 - Math.pow(1 - x, 3);
+        const update = (t) => {
+          const sway = reduced ? 0 : Math.sin(t * 0.22) * 0.1;
+          const ang = -0.18 + sway;
+          cam.position.set(2.6 + Math.sin(ang) * 14.7, 18.8, 0.4 + Math.cos(ang) * 14.7);
+          cam.lookAt(2.6, 0, 0.4);
+          holeObjs.forEach((g, i) => {
+            const k = reduced ? 1 : Math.min(1, Math.max(0, (t - 0.9 - i * 0.045) / 0.6));
+            g.scale.y = 0.001 + ease(k) * 0.999;
+          });
+          moving.forEach((m) => {
+            const tt = reduced ? m.t : Math.min(0.96, m.t + ((t * 0.006) % 0.05));
+            const p = m.hole.userData.curve.getPoint(tt);
+            const appear = reduced ? 1 : Math.min(1, Math.max(0, (t - 1.9 - m.k * 0.06) / 0.5));
+            m.cl.position.set(p.x, (1 - appear) * 2 + (reduced ? 0 : Math.abs(Math.sin(t * 3 + m.k)) * 0.05), p.z);
+            m.cl.scale.setScalar(Math.max(0.001, ease(appear)));
+            m.glow.material.opacity = 0.6 + (reduced ? 0 : Math.sin(t * 2.4 + m.k) * 0.25);
+          });
+        };
+        /* ?shot=1 (captures): settle on the final state after the entry animation and stop rendering */
+        const still = new URLSearchParams(location.search).has('shot');
+        let lastF = 0;
+        const tick = (now) => {
+          const t = (now - t0) / 1000;
+          if (reduced || (still && t > 3.2)) {
+            settled = true;
+            update(3.5);
+            return renderer.render(scene, cam);
+          }
+          requestAnimationFrame(tick);
+          if (!vis || document.hidden || now - lastF < 30) return;
+          lastF = now;
+          update(t);
+          renderer.render(scene, cam);
+        };
+        requestAnimationFrame(tick);
+      }
+    </script>
+  </body>
+</html>

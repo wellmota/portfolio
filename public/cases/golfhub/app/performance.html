@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Performance · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <link rel="modulepreload" href="assets/hole3d.js" />
+    <link rel="modulepreload" href="assets/vendor/three.module.min.js" />
+    <style>
+      /* Figma "iPhone 13 mini - 5" (410:7536): in-round hole view. The raster hole map is now a live, procedural
+         3D hole (assets/hole3d.js) that fills the screen behind the UI; the UI floats over it. */
+      .perf {
+        position: relative;
+        padding: 0;
+        overflow: hidden;
+      }
+      .map {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        /* the stage's soft-light sun glow blends against this, so it only warms the course, not the white page */
+        --h3d-bg: var(--bg);
+      }
+      .ptop {
+        position: absolute;
+        inset: 0 0 auto;
+        z-index: 3;
+        padding: max(8px, env(safe-area-inset-top)) var(--gutter) 0;
+        pointer-events: none;
+      }
+      .has-status .ptop {
+        padding-top: 50px;
+      }
+      .ptop > *,
+      .pfoot > * {
+        pointer-events: auto;
+      }
+      .phead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        min-height: 54px;
+      }
+      .phead .t-eyebrow {
+        margin-bottom: 2px;
+        color: var(--violet-600);
+      }
+      .phead__actions {
+        display: flex;
+        gap: 6px;
+        margin-right: -6px;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.72);
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        box-shadow: var(--shadow-xs);
+        color: var(--ink);
+      }
+      .glass:hover {
+        background: #fff;
+      }
+
+      /* distance tile + hole chips (Figma: dark "125" tile with the flag, chips to the right) */
+      .prow {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-top: 6px;
+        pointer-events: none;
+      }
+      .prow > * {
+        pointer-events: auto;
+      }
+      .dist {
+        flex: none;
+        position: relative;
+        min-width: 92px;
+        gap: 0;
+        padding: 10px 12px 9px;
+        border-radius: 12px;
+        background: var(--char);
+        box-shadow: 0 16px 22px -14px rgba(20, 20, 20, 0.85);
+      }
+      .dist .flag {
+        width: 14px;
+        height: 21px;
+        color: #fff;
+        margin-bottom: 2px;
+      }
+      .dist .stat-dark__val {
+        font-size: 26px;
+        line-height: 1.05;
+      }
+      .dist .stat-dark__unit {
+        white-space: nowrap;
+      }
+      .prow__r {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+        gap: 6px;
+        padding-top: 8px;
+      }
+      .holes {
+        padding: 4px 24px 6px 4px;
+        margin: -4px -24px -6px -4px;
+        scroll-behavior: smooth;
+        -webkit-mask: linear-gradient(to right, #000 calc(100% - 34px), transparent);
+        mask: linear-gradient(to right, #000 calc(100% - 34px), transparent);
+      }
+      .hole-chip {
+        min-width: 38px;
+        height: 32px;
+        transition:
+          background var(--t-fast) var(--ease),
+          color var(--t-fast) var(--ease),
+          box-shadow var(--t-fast) var(--ease),
+          transform var(--t-med) var(--ease-spring),
+          min-width var(--t-med) var(--ease-spring);
+      }
+      .hole-chip:active {
+        transform: scale(0.92);
+      }
+      .hole-chip.is-view:not([aria-current='true']) {
+        color: var(--indigo-600);
+        background: var(--indigo-50);
+        box-shadow: inset 0 0 0 2px var(--indigo-500);
+      }
+      .hole-chip.is-pop {
+        animation: chip-pop 520ms var(--ease-spring);
+      }
+      @keyframes chip-pop {
+        40% {
+          transform: scale(1.18);
+        }
+      }
+      .hole-chip .draw-check path {
+        animation-delay: 0ms;
+      }
+      .prow__meta {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-3);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .prow__meta b {
+        color: var(--ink);
+        font-weight: 650;
+      }
+
+      /* frosted conditions card (Figma: sun 24.5C / route 345M) */
+      .cond {
+        width: 86px;
+        margin-top: 14px;
+        padding: 12px 6px;
+        display: grid;
+        justify-items: center;
+        gap: 10px;
+        text-align: center;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.62);
+        -webkit-backdrop-filter: blur(14px) saturate(1.3);
+        backdrop-filter: blur(14px) saturate(1.3);
+        box-shadow:
+          inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+          0 14px 30px -14px rgba(20, 40, 20, 0.35);
+      }
+      .cond__i {
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+      }
+      .cond__i .i {
+        color: var(--ink-2);
+      }
+      .cond__v {
+        font-size: 13px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+      }
+      .cond__k {
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--ink-3);
+        margin-top: -3px;
+      }
+      .cond hr {
+        width: 56px;
+        height: 1px;
+        margin: 0;
+        border: 0;
+        background: rgba(0, 0, 0, 0.12);
+      }
+
+      /* bottom: log action + Figma score bar */
+      .pfoot {
+        position: absolute;
+        inset: auto 0 0;
+        z-index: 3;
+        display: grid;
+        justify-items: center;
+        gap: 12px;
+        padding: 0 var(--gutter) calc(14px + env(safe-area-inset-bottom));
+        pointer-events: none;
+      }
+      .has-status .pfoot {
+        padding-bottom: 30px;
+      }
+      .log {
+        min-height: 48px;
+        padding: 0 22px 0 18px;
+        border-radius: var(--r-pill);
+        font-size: 15px;
+      }
+      .log .i {
+        width: 20px;
+        height: 20px;
+      }
+      .scorebar {
+        width: 100%;
+        grid-template-columns: auto 1fr auto auto;
+      }
+      .scorebar .av {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
+      }
+      .scorebar__v {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .topar {
+        display: inline-grid;
+        place-items: center;
+        min-width: 22px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .topar.is-under {
+        color: #0b3d1c;
+        background: var(--green-300);
+      }
+      .topar.is-over {
+        color: #4a2a00;
+        background: #ffc58a;
+      }
+
+      /* tour / preview */
+      .tcard {
+        width: 100%;
+        display: grid;
+        gap: 8px;
+        padding: 14px 16px 16px;
+        border-radius: var(--r-lg);
+        background: rgba(255, 255, 255, 0.86);
+        -webkit-backdrop-filter: blur(16px) saturate(1.4);
+        backdrop-filter: blur(16px) saturate(1.4);
+        box-shadow:
+          inset 0 0 0 1px rgba(255, 255, 255, 0.8),
+          var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+      }
+      .tcard__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .tcard__n {
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .tcard__badges {
+        display: flex;
+        gap: 6px;
+      }
+      .tcard__tip {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        font-size: 13.5px;
+        line-height: 1.4;
+        color: var(--ink-2);
+      }
+      .tcard__tip .i {
+        flex: none;
+        width: 18px;
+        height: 18px;
+        margin-top: 1px;
+        color: var(--violet-600);
+      }
+      .tcard.is-swap .tcard__body {
+        animation: rise 520ms var(--ease) both;
+      }
+      .tbar {
+        position: absolute;
+        inset: auto 0 0;
+        height: 3px;
+        background: var(--sunken-2);
+      }
+      .tbar i {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, var(--violet-400), var(--violet-600));
+        transform-origin: left;
+        transform: scaleX(0);
+      }
+      .tbar.is-run i {
+        animation: tprog var(--tour, 6s) linear forwards;
+      }
+      @keyframes tprog {
+        to {
+          transform: scaleX(1);
+        }
+      }
+      .perf[data-mode='round'] .tonly,
+      .perf:not([data-mode='round']) .ronly {
+        display: none !important;
+      }
+
+      /* score sheet */
+      .ss-sec {
+        display: grid;
+      }
+      .ss-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 62px;
+        border-bottom: 1px solid var(--line);
+      }
+      .ss-row:last-child {
+        border-bottom: 0;
+      }
+      .ss-k {
+        display: grid;
+        gap: 3px;
+        min-width: 0;
+      }
+      .ss-k b {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .ss-k small {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .ss-who {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0 2px;
+      }
+      .ss-h {
+        margin: 16px 0 2px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .note {
+        display: inline-flex;
+        align-items: center;
+        justify-self: start;
+        height: 22px;
+        padding: 0 9px;
+        border-radius: var(--r-pill);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--ink-2);
+        background: var(--sunken);
+      }
+      .note.is-pop {
+        animation: chip-pop 420ms var(--ease-spring);
+      }
+      .note--under {
+        color: var(--green-700);
+        background: var(--green-100);
+      }
+      .note--par {
+        color: var(--indigo-600);
+        background: var(--indigo-50);
+      }
+      .note--over {
+        color: #8a5300;
+        background: var(--amber-50);
+      }
+      .note--bad {
+        color: #b42318;
+        background: var(--red-50);
+      }
+      .stepper button {
+        transition:
+          transform 160ms var(--ease-spring),
+          background var(--t-fast) var(--ease);
+      }
+      .stepper button:active:not(:disabled) {
+        transform: scale(0.86);
+      }
+      .stepper output {
+        display: inline-block;
+      }
+      .stepper output.bump-up {
+        animation: bump-up 300ms var(--ease) both;
+      }
+      .stepper output.bump-down {
+        animation: bump-down 300ms var(--ease) both;
+      }
+      @keyframes bump-up {
+        from {
+          transform: translateY(8px);
+          opacity: 0.2;
+        }
+      }
+      @keyframes bump-down {
+        from {
+          transform: translateY(-8px);
+          opacity: 0.2;
+        }
+      }
+      .stepper--lg button {
+        width: 46px;
+        height: 46px;
+      }
+      .stepper--lg output {
+        min-width: 44px;
+        font-size: 24px;
+      }
+      .seg--fw {
+        min-width: 196px;
+      }
+      .seg--fw button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 12px;
+      }
+      .seg--fw .i {
+        width: 16px;
+        height: 16px;
+      }
+      .ss-save {
+        margin-top: 18px;
+      }
+
+      /* celebration burst for birdie or better */
+      .burst {
+        position: absolute;
+        z-index: 90;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+      }
+      .burst i {
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 2px;
+        animation: burst 900ms var(--ease) forwards;
+      }
+      @keyframes burst {
+        from {
+          transform: translate(0, 0) rotate(0) scale(1);
+          opacity: 1;
+        }
+        to {
+          transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(0.6);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body data-status="float">
+    <div class="app">
+      <main class="screen perf" id="main" data-mode="round">
+        <div class="map" id="map"></div>
+
+        <div class="ptop" id="ptop">
+          <header class="phead rise">
+            <div>
+              <p class="t-eyebrow tonly" id="eyebrow"></p>
+              <h1 class="t-title" id="title">Performance</h1>
+            </div>
+            <div class="phead__actions">
+              <button class="icon-btn glass tonly" type="button" id="tour-toggle" aria-pressed="true" hidden></button>
+              <a class="icon-btn glass ronly" href="cartao.html" id="card-link" aria-label="Cartão de jogo"><span data-icon="task-square"></span></a>
+              <a class="icon-btn glass" href="home.html" id="close" aria-label="Fechar e voltar ao início"><span data-icon="close-circle"></span></a>
+            </div>
+          </header>
+
+          <div class="prow rise" style="--d: 1" id="prow">
+            <div class="stat-dark dist ronly" id="dist">
+              <span data-flag class="flag"></span>
+              <span class="stat-dark__val" id="dist-v">125</span>
+              <span class="stat-dark__unit" id="dist-u">m até o pin</span>
+            </div>
+            <div class="prow__r">
+              <nav class="holes" id="holes" aria-label="Buracos"></nav>
+              <p class="prow__meta" id="meta" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <aside class="cond ronly rise" style="--d: 2" id="cond" aria-label="Condições agora"></aside>
+        </div>
+
+        <div class="pfoot" id="pfoot">
+          <p class="sr-only" id="aim-live" aria-live="polite"></p>
+          <button class="btn btn--violet log ronly pop" style="--d: 4" type="button" id="log"></button>
+          <a class="btn btn--violet log ronly pop" style="--d: 4" href="cartao.html" id="see-card" hidden>
+            <span data-icon="task-square"></span>Ver cartão
+          </a>
+          <a class="scorebar ronly rise press" style="--d: 5" href="cartao.html" id="scorebar"></a>
+
+          <article class="tcard tonly rise" style="--d: 3" id="tcard" aria-live="polite"></article>
+          <a class="btn btn--primary btn--block tonly rise" style="--d: 4" id="book" href="reservar.html?campo=a">
+            <span data-icon="calendar-add"></span>Reservar horário
+          </a>
+        </div>
+      </main>
+
+      <!-- score entry -->
+      <div class="sheet" id="score-sheet" role="dialog" aria-modal="true" aria-labelledby="ss-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <div>
+            <h2 class="sheet__title" id="ss-title"></h2>
+            <p class="t-sm t-muted" id="ss-sub"></p>
+          </div>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="ss-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        /* plain check for completed hole chips (Iconsax tick) */
+        GH.icons['tick'] = GH.icons['tick'] || '<path d="m5 12.6 4.4 4.4L19 7.4"/>';
+
+        const q = new URLSearchParams(location.search);
+        const mode = q.has('tour') ? 'tour' : q.has('preview') ? 'preview' : 'round';
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const main = document.getElementById('main');
+        main.dataset.mode = mode;
+        const $ = (id) => document.getElementById(id);
+
+        /* ---------- course tables ----------
+           Campo A = GH.holes. Campo B (9 buracos, par 34, 2.480 m): the same par / metres / index table as
+           rodada.html, cartao.html and resumo.html (candidate for GH.holesB), plus a 3D shape per hole. */
+        const HOLES = {
+          a: GH.holes,
+          b: [
+            [4, 330, 3, { bend: -0.35, water: null, bunkers: 2, trees: 'both' }],
+            [3, 150, 7, { bend: 0, water: 'front', bunkers: 2, trees: 'left' }],
+            [4, 345, 1, { bend: -0.55, water: 'right', bunkers: 3, trees: 'both' }],
+            [4, 310, 5, { bend: 0.25, water: null, bunkers: 3, trees: 'right' }],
+            [3, 140, 9, { bend: -0.1, water: 'right', bunkers: 3, trees: 'both' }],
+            [5, 470, 2, { bend: 0.6, water: 'left', bunkers: 4, trees: 'both' }],
+            [4, 300, 4, { bend: -0.45, water: null, bunkers: 2, trees: 'both' }],
+            [3, 135, 8, { bend: -0.15, water: null, bunkers: 3, trees: 'both' }],
+            [4, 300, 6, { bend: 0.4, water: null, bunkers: 2, trees: 'left' }],
+          ].map(([par, m, idx, shape], i) => ({ n: i + 1, par, m, idx, clubhouse: i === 0, shape })),
+        };
+        const TIPS = {
+          a: [
+            'Abra com o drive no centro: o fairway dobra suave para a direita.',
+            'Dogleg à direita com água à esquerda: mire no lado direito do fairway.',
+            'Par 3 sobre o lago: jogue um taco a mais e fique no fundo do green.',
+            'O mais difícil do campo: dois bons tiros à esquerda deixam um wedge.',
+            'Fairway largo e green elevado: escolha o taco pela bandeira.',
+            'Vento de través neste par 3; a água à esquerda pede saída pela direita.',
+            'Dogleg à direita: um drive de 220 m abre a vista do green.',
+            'Par 5 longo: deixe o segundo tiro à esquerda, longe da água.',
+            'Volta para o clubhouse: green rápido, putt de cima para baixo.',
+            'Saída estreita com água à esquerda: a madeira 3 é a escolha segura.',
+            'Par 5 alcançável em dois para quem bate longo; 4 bunkers guardam o green.',
+            'Green em aeração esta semana: green temporário em uso, mire no centro.',
+            'Curto e estratégico: um ferro na saída evita os bunkers do fairway.',
+            'Dogleg à esquerda com água à direita: não force a curva.',
+            'O par 3 mais longo: o green aceita bolas que rolam pela entrada.',
+            'Água à esquerda em toda a extensão; o lay-up a 100 m é o tiro certo.',
+            'Dogleg forte à direita: corte por cima das árvores só com vento a favor.',
+            'Final com lago na frente do green: o segundo tiro precisa de carry.',
+          ],
+          b: [
+            'Abertura com dobra suave à esquerda: um drive no centro deixa um ferro curto.',
+            'Par 3 sobre o lago: confie no taco e mire no centro do green.',
+            'O mais difícil do Campo B: dogleg à esquerda com água à direita, fique no lado esquerdo.',
+            'Dobra à direita e green elevado: na aproximação, um taco a mais.',
+            'Par 3 curto com água à direita: a saída segura é pela esquerda.',
+            'O único par 5, com água à esquerda até o green: deixe o lay-up pela direita.',
+            'Dogleg curto à esquerda: um híbrido na saída deixa um wedge.',
+            'O par 3 mais curto, com três bunkers em volta do green: jogue no centro.',
+            'Volta ao clubhouse: green rápido, cuidado com o putt de descida.',
+          ],
+        };
+
+        /* ---------- state ---------- */
+        const round = GH.round({ demo: true });
+        const course = mode === 'round' ? (round.course === 'b' ? 'b' : 'a') : q.get('campo') === 'b' ? 'b' : 'a';
+        const ALL = HOLES[course];
+        /* the holes of this round: 18, the front nine (start 1) or the back nine (start 10), like cartao.html */
+        const start = mode === 'round' ? Math.max(1, round.start || 1) : 1;
+        let LIST = mode === 'round' ? ALL.filter((h) => h.n >= start && h.n < start + (round.holes || ALL.length)) : ALL;
+        if (!LIST.length) LIST = ALL;
+        const FIRST = LIST[0].n,
+          LAST = LIST[LIST.length - 1].n;
+        const nextN = (n) => (n >= LAST ? FIRST : n + 1);
+        const tee = mode === 'round' ? round.tee || 'branco' : 'branco';
+        const holeOf = (n) => LIST.find((h) => h.n === n) || ALL[n - 1] || LIST[0];
+        const lenOf = (n) => Math.round(holeOf(n).m * GH.tee(tee).factor);
+        const me = GH.user;
+        const scoreOf = (n, who = me) => (round.scores && round.scores[n] && round.scores[n][who]) || null;
+        /* GH.tally reads Campo A pars; count against this course's table instead */
+        const tally = () =>
+          LIST.reduce(
+            (t, h) => {
+              const s = scoreOf(h.n);
+              if (s && s.strokes) (t.strokes += s.strokes), (t.par += h.par), t.played++;
+              t.toPar = t.strokes - t.par;
+              return t;
+            },
+            { strokes: 0, par: 0, played: 0, toPar: 0 }
+          );
+        const ballFor = (n) => {
+          if (mode !== 'round') return null;
+          if (n !== round.current) return null;
+          const b = round.ball;
+          return b && b.hole === n ? { carried: b.carried, toPin: b.toPin } : { carried: 0, toPin: lenOf(n) };
+        };
+        const clampN = (n) => Math.min(LAST, Math.max(FIRST, n | 0));
+        let view = clampN(+q.get('hole') || (mode === 'round' ? round.current : FIRST));
+        let hole3d = null;
+        const pending = [];
+        const when3d = (fn) => (hole3d ? fn(hole3d) : pending.push(fn));
+
+        /* ---------- header ---------- */
+        const C = GH.course(course);
+        if (mode !== 'round') {
+          $('eyebrow').textContent = mode === 'tour' ? 'Tour 3D' : 'Prévia do campo';
+          $('title').textContent = C.name;
+          document.title = `${mode === 'tour' ? 'Tour 3D' : 'Prévia'} · ${C.name} · GolfHub`;
+          $('book').href = `reservar.html?campo=${course}`;
+          $('book').setAttribute('aria-label', `Reservar horário no ${C.name}`);
+        }
+
+        /* ---------- hole chips ---------- */
+        const holesEl = $('holes');
+        function chips() {
+          holesEl.innerHTML = LIST.map(({ n }) => {
+            if (mode !== 'round')
+              return `<button class="hole-chip" type="button" data-n="${n}"${n === view ? ' aria-current="true"' : ''} aria-label="Buraco ${n}">${n}</button>`;
+            const s = scoreOf(n),
+              cur = n === round.current;
+            const cls = ['hole-chip', s && !cur ? 'is-done' : '', n === view ? 'is-view' : ''].join(' ').trim();
+            const label = `Buraco ${n}${cur ? ', atual' : ''}${s ? `, ${s.strokes} tacadas` : ''}${n === view && !cur ? ', em prévia' : ''}`;
+            return `<button class="${cls}" type="button" data-n="${n}"${cur ? ' aria-current="true"' : ''} aria-label="${label}">${s && !cur ? GH.icon('tick') : n}</button>`;
+          }).join('');
+        }
+        function scrollChip(n, smooth) {
+          const c = holesEl.querySelector(`[data-n="${n}"]`);
+          if (!c) return;
+          /* keep the previous chip as context, flush with the meta line (offsetLeft is relative to .ptop, not the row) */
+          const ref = c.previousElementSibling || c;
+          const x = ref.getBoundingClientRect().left - holesEl.getBoundingClientRect().left + holesEl.scrollLeft - 4;
+          holesEl.scrollTo({ left: Math.max(0, x), behavior: smooth && !reduce ? 'smooth' : 'auto' });
+        }
+        const pop = (el) => {
+          if (!el || reduce) return;
+          el.classList.remove('is-pop');
+          void el.offsetWidth;
+          el.classList.add('is-pop');
+        };
+
+        /* ---------- distance tile, meta line, conditions ---------- */
+        const distV = $('dist-v');
+        let distShown = null;
+        function tile(n, animate) {
+          const b = ballFor(n);
+          const v = b ? b.toPin : lenOf(n);
+          $('dist-u').textContent = b ? 'm até o pin' : 'm do tee';
+          $('dist').setAttribute('aria-label', b ? `${v} metros até o pin` : `Buraco ${n}: ${v} metros do tee ao green`);
+          if (animate && distShown != null && distShown !== v) GH.countUp(distV, v, { from: distShown, dur: 900 });
+          else distV.textContent = GH.fmt.num(v);
+          distShown = v;
+        }
+        function meta(n) {
+          const h = holeOf(n);
+          const pre = mode === 'round' && n !== round.current ? 'Prévia · ' : '';
+          /* the metres already sit in the tile and the conditions card */
+          $('meta').innerHTML = `${pre}<b>Buraco ${n}</b> · Par ${h.par} · Índice ${h.idx}`;
+        }
+        function cond(n) {
+          const w = GH.club.weather;
+          $('cond').innerHTML = `
+            <div class="cond__i">${GH.icon('sun-1')}<span class="cond__v">${GH.fmt.temp(w.temp)}</span></div><hr/>
+            <div class="cond__i">${GH.icon('wind')}<span class="cond__v">${w.wind} km/h</span><span class="cond__k">${w.windDir}</span></div><hr/>
+            <div class="cond__i">${GH.icon('routing-2')}<span class="cond__v" id="cond-len">${GH.fmt.m(lenOf(n))}</span><span class="cond__k">buraco ${n}</span></div>`;
+        }
+
+        /* ---------- score bar + action ---------- */
+        const sb = $('scorebar');
+        let shownStrokes = null;
+        function scorebar(animate) {
+          const t = tally();
+          const h = holeOf(round.current);
+          const p = GH.person(me);
+          const tp = t.played ? GH.fmt.toPar(t.toPar) : '–';
+          sb.setAttribute('aria-label', `Ver cartão. ${GH.first(me)}: ${t.strokes} tacadas em ${t.played} ${t.played === 1 ? 'buraco' : 'buracos'}, ${t.toPar === 0 ? 'no par' : tp + ' no par'}. Handicap ${GH.fmt.hcp(p.hcp)}.`);
+          sb.innerHTML = `${GH.avatar(me, { size: 'lg' })}
+            <span><span class="scorebar__name">${GH.esc(GH.first(me))}</span><br/><span class="scorebar__sub">Buraco ${round.current} · Par ${h.par}</span></span>
+            <span class="scorebar__cell"><span class="scorebar__v"><span id="sb-strokes">${t.strokes}</span><span class="topar${t.toPar < 0 ? ' is-under' : t.toPar > 0 ? ' is-over' : ''}">${tp}</span></span><span class="scorebar__k">Score</span></span>
+            <span class="scorebar__cell"><span class="scorebar__v">${GH.fmt.hcp(p.hcp)}</span><span class="scorebar__k">HCP</span></span>`;
+          if (animate && shownStrokes != null && shownStrokes !== t.strokes) GH.countUp($('sb-strokes'), t.strokes, { from: shownStrokes, dur: 800 });
+          shownStrokes = t.strokes;
+        }
+        const allDone = () => LIST.every((h) => scoreOf(h.n));
+        function action() {
+          const done = allDone();
+          $('see-card').hidden = !done;
+          $('log').hidden = done;
+          const s = scoreOf(view);
+          /* previewing a hole you haven't reached: the action takes you back to the one you're on */
+          const ahead = !s && view !== round.current && view > round.current;
+          $('log').dataset.back = ahead ? '1' : '';
+          $('log').innerHTML = ahead ? `${GH.icon('arrow-left')}Voltar ao buraco ${round.current}` : `${GH.icon('edit-2')}${s ? 'Editar' : 'Anotar'} buraco ${view}`;
+        }
+
+        /* ---------- show a hole (chips, tile, meta, 3D) ---------- */
+        function show(n, opt = {}) {
+          const prev = view;
+          view = clampN(n);
+          chips();
+          scrollChip(view, prev !== view);
+          pop(holesEl.querySelector(`[data-n="${view}"]`));
+          if (mode === 'round') {
+            tile(view, true);
+            meta(view);
+            const cl = $('cond-len');
+            if (cl) cl.textContent = GH.fmt.m(lenOf(view));
+            if (cl) cl.nextElementSibling.textContent = `buraco ${view}`;
+            action();
+          } else tcard(view);
+          if (opt.no3d) return Promise.resolve();
+          return new Promise((res) =>
+            when3d((v) => v.setHole(holeOf(view), { ball: ballFor(view), course, tee, instant: opt.instant }).then(res))
+          );
+        }
+
+        /* ---------- tour / preview card ---------- */
+        function tcard(n) {
+          const h = holeOf(n),
+            card = $('tcard');
+          card.innerHTML = `<div class="tcard__body"><div class="tcard__top"><span class="tcard__n">Buraco ${n}</span>
+            <span class="tcard__badges"><span class="badge badge--dark">Par ${h.par}</span><span class="badge">${GH.fmt.m(lenOf(n))}</span><span class="badge">Índice ${h.idx}</span></span></div>
+            <p class="tcard__tip">${GH.icon('lamp')}<span>${GH.esc(TIPS[course][n - 1])}</span></p></div>
+            ${mode === 'tour' ? '<span class="tbar" aria-hidden="true"><i></i></span>' : ''}`;
+          if (!reduce) {
+            card.classList.remove('is-swap');
+            void card.offsetWidth;
+            card.classList.add('is-swap');
+          }
+          bar();
+        }
+        /* auto-advance every ~6 s with a fly-over; stops for good on interaction (the play button resumes) */
+        const STEP = 6200;
+        let auto = mode === 'tour' && !reduce && q.get('auto') !== '0',
+          timer = 0;
+        const toggle = $('tour-toggle');
+        function bar() {
+          const b = document.querySelector('.tbar');
+          if (!b) return;
+          b.style.setProperty('--tour', STEP + 'ms');
+          b.classList.toggle('is-run', auto);
+        }
+        function paintToggle() {
+          if (mode !== 'tour') return;
+          toggle.hidden = false;
+          toggle.setAttribute('aria-pressed', String(auto));
+          toggle.setAttribute('aria-label', auto ? 'Pausar o tour' : 'Retomar o tour');
+          toggle.innerHTML = GH.icon(auto ? 'pause' : 'play');
+        }
+        function schedule() {
+          clearTimeout(timer);
+          if (!auto || document.hidden) return;
+          timer = setTimeout(() => {
+            show(nextN(view));
+            schedule();
+          }, STEP);
+        }
+        function stopTour() {
+          if (!auto) return;
+          auto = false;
+          clearTimeout(timer);
+          paintToggle();
+          bar();
+        }
+        toggle.addEventListener('click', () => {
+          auto = !auto;
+          paintToggle();
+          if (auto) {
+            show(nextN(view));
+            schedule();
+          } else {
+            clearTimeout(timer);
+            bar();
+          }
+        });
+        document.addEventListener('visibilitychange', () => (document.hidden ? clearTimeout(timer) : schedule()));
+
+        holesEl.addEventListener('click', (e) => {
+          const c = e.target.closest('[data-n]');
+          if (!c) return;
+          GH.haptic();
+          if (mode === 'tour') stopTour();
+          const n = +c.dataset.n;
+          if (n === view) return when3d((v) => v.reset());
+          show(n);
+        });
+
+        /* ---------- score sheet ---------- */
+        const sheet = $('score-sheet');
+        const NOTE = (d, strokes) => {
+          if (strokes === 1) return ['Hole in one', 'under'];
+          if (d <= -3) return ['Albatroz', 'under'];
+          if (d === -2) return ['Eagle', 'under'];
+          if (d === -1) return ['Birdie', 'under'];
+          if (d === 0) return ['Par', 'par'];
+          if (d === 1) return ['Bogey', 'over'];
+          if (d === 2) return ['Duplo bogey', 'bad'];
+          return [`+${d}`, 'bad'];
+        };
+        const stepper = (key, val, min, max, label, lg) =>
+          `<div class="stepper${lg ? ' stepper--lg' : ''}" data-key="${key}" data-min="${min}" data-max="${max}">
+            <button type="button" data-d="-1" aria-label="Menos ${label}"${val <= min ? ' disabled' : ''}>${GH.icon('minus', 'i--sm')}</button>
+            <output aria-live="polite" aria-label="${label}">${val}</output>
+            <button type="button" data-d="1" aria-label="Mais ${label}"${val >= max ? ' disabled' : ''}>${GH.icon('add', 'i--sm')}</button>
+          </div>`;
+        let draft = null;
+        function openSheet(n, opener) {
+          const h = holeOf(n);
+          const mine = scoreOf(n) || { strokes: h.par, putts: 2, fairway: null };
+          draft = { n, me: { ...mine }, others: {} };
+          const partners = (round.players || []).filter((p) => p !== me);
+          partners.forEach((p) => (draft.others[p] = { strokes: (scoreOf(n, p) || {}).strokes || h.par }));
+          $('ss-title').textContent = `Buraco ${n}`;
+          $('ss-sub').textContent = `Par ${h.par} · ${GH.fmt.m(lenOf(n))} · Índice ${h.idx}`;
+          const last = n === LAST && (n === round.current || LIST.every((h) => h.n === LAST || scoreOf(h.n)));
+          const nextLabel = n === round.current && n < LAST ? `Salvar e ir para o buraco ${n + 1}` : last ? 'Salvar e ver cartão' : 'Salvar';
+          const [nt, nk] = NOTE(draft.me.strokes - h.par, draft.me.strokes);
+          $('ss-body').innerHTML = `
+            <div class="ss-sec">
+              <div class="ss-who">${GH.avatar(me, { size: 'sm' })}<span class="t-h3">Você</span></div>
+              <div class="ss-row"><span class="ss-k"><b>Tacadas</b><span class="note note--${nk}" id="ss-note">${nt}</span></span>${stepper('strokes', draft.me.strokes, 1, 12, 'tacadas', true)}</div>
+              <div class="ss-row"><span class="ss-k"><b>Putts</b><small>No green</small></span>${stepper('putts', draft.me.putts, 0, 6, 'putts')}</div>
+              ${
+                h.par > 3
+                  ? `<div class="ss-row"><span class="ss-k"><b id="fw-l">Fairway</b><small>Na saída</small></span>
+                  <div class="seg seg--fw" role="radiogroup" aria-labelledby="fw-l">
+                    <button type="button" role="radio" data-fw="1" aria-checked="${draft.me.fairway === true}">${GH.icon('tick')}Acertou</button>
+                    <button type="button" role="radio" data-fw="0" aria-checked="${draft.me.fairway === false}">${GH.icon('close-circle')}Errou</button>
+                  </div></div>`
+                  : ''
+              }
+            </div>
+            ${
+              partners.length
+                ? `<h3 class="ss-h">Parceiros</h3><div class="ss-sec">${partners
+                    .map(
+                      (p) => `<div class="ss-row"><span class="ss-who">${GH.avatar(p, { size: 'sm' })}<span class="ss-k"><b>${GH.esc(GH.first(p))}</b><small>HCP ${GH.fmt.hcp(GH.person(p).hcp)}</small></span></span>${stepper('p:' + p, draft.others[p].strokes, 1, 12, 'tacadas de ' + GH.first(p))}</div>`
+                    )
+                    .join('')}</div>`
+                : ''
+            }
+            <button class="btn btn--primary btn--block ss-save" type="button" id="ss-save">${GH.icon('tick-circle')}${nextLabel}</button>`;
+          GH.sheet.open(sheet, opener);
+        }
+        $('ss-body').addEventListener('click', (e) => {
+          const b = e.target.closest('.stepper button');
+          if (b) {
+            const st = b.closest('.stepper'),
+              key = st.dataset.key,
+              d = +b.dataset.d;
+            const min = +st.dataset.min,
+              max = +st.dataset.max;
+            const obj = key.startsWith('p:') ? draft.others[key.slice(2)] : draft.me;
+            const field = key.startsWith('p:') ? 'strokes' : key;
+            let v = clamp(obj[field] + d, min, max);
+            if (v === obj[field]) return;
+            obj[field] = v;
+            if (field === 'strokes' && obj === draft.me && draft.me.putts > v) setStep('putts', (draft.me.putts = v));
+            if (field === 'putts' && v > draft.me.strokes) return setStep('putts', (draft.me.putts = draft.me.strokes));
+            setStep(key, v, d);
+            GH.haptic(6);
+            if (obj === draft.me && field === 'strokes') {
+              const [nt, nk] = NOTE(v - holeOf(draft.n).par, v);
+              const note = $('ss-note');
+              note.textContent = nt;
+              note.className = `note note--${nk}`;
+              pop(note);
+            }
+            return;
+          }
+          const f = e.target.closest('[data-fw]');
+          if (f) {
+            draft.me.fairway = f.dataset.fw === '1';
+            f.parentElement.querySelectorAll('[data-fw]').forEach((x) => x.setAttribute('aria-checked', String(x === f)));
+            GH.haptic(6);
+            return;
+          }
+          if (e.target.closest('#ss-save')) save();
+        });
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        function setStep(key, v, d = 0) {
+          const st = $('ss-body').querySelector(`.stepper[data-key="${key}"]`);
+          if (!st) return;
+          const out = st.querySelector('output');
+          out.textContent = v;
+          st.querySelector('[data-d="-1"]').disabled = v <= +st.dataset.min;
+          st.querySelector('[data-d="1"]').disabled = v >= +st.dataset.max;
+          if (d && !reduce) {
+            out.classList.remove('bump-up', 'bump-down');
+            void out.offsetWidth;
+            out.classList.add(d > 0 ? 'bump-up' : 'bump-down');
+          }
+        }
+        function burst(el) {
+          if (reduce || !el) return;
+          const r = el.getBoundingClientRect(),
+            a = document.querySelector('.app').getBoundingClientRect();
+          const b = document.createElement('span');
+          b.className = 'burst';
+          b.style.left = r.left - a.left + r.width / 2 + 'px';
+          b.style.top = r.top - a.top + r.height / 2 + 'px';
+          const cols = ['#38eb7f', '#10b853', '#771aa3', '#4a3aff', '#f2a33a', '#9449b7'];
+          b.innerHTML = Array.from({ length: 18 }, (_, i) => {
+            const ang = (i / 18) * Math.PI * 2 + Math.random() * 0.3,
+              d = 60 + Math.random() * 70;
+            return `<i style="background:${cols[i % cols.length]};--x:${(Math.cos(ang) * d).toFixed(0)}px;--y:${(Math.sin(ang) * d - 30).toFixed(0)}px;--r:${(Math.random() * 540).toFixed(0)}deg"></i>`;
+          }).join('');
+          document.querySelector('.app').appendChild(b);
+          setTimeout(() => b.remove(), 1000);
+        }
+        function save() {
+          const n = draft.n,
+            h = holeOf(n);
+          round.scores = round.scores || {};
+          round.scores[n] = { [me]: { strokes: draft.me.strokes, putts: draft.me.putts, fairway: h.par > 3 ? draft.me.fairway : null } };
+          Object.entries(draft.others).forEach(([p, s]) => (round.scores[n][p] = { strokes: s.strokes, putts: null, fairway: null }));
+          const wasCurrent = n === round.current;
+          let next = null;
+          if (wasCurrent && n < LAST) {
+            next = n + 1;
+            round.current = next;
+            round.ball = { hole: next, carried: 0, toPin: lenOf(next) };
+          }
+          GH.saveRound(round);
+          GH.sheet.close(sheet);
+          const d = draft.me.strokes - h.par;
+          const [nt] = NOTE(d, draft.me.strokes);
+          const msg =
+            d < 0 || draft.me.strokes === 1
+              ? `${nt}! Buraco ${n} em ${draft.me.strokes} ${draft.me.strokes === 1 ? 'tacada' : 'tacadas'}.`
+              : d === 0
+                ? `Par no buraco ${n}. Segue o jogo.`
+                : d === 1
+                  ? `Bogey no buraco ${n}. Bora recuperar no próximo.`
+                  : `${nt} no buraco ${n}. Respira e segue.`;
+          GH.toast(msg, d < 0 || draft.me.strokes === 1 ? 'medal-star' : d === 0 ? 'tick-circle' : 'flag');
+          GH.haptic(d < 0 ? 24 : 10);
+          if (d < 0 || draft.me.strokes === 1) setTimeout(() => burst($('scorebar')), 250);
+          scorebar(true);
+          if (allDone() && (wasCurrent || n === LAST)) {
+            action();
+            chips();
+            setTimeout(() => (location.href = 'cartao.html'), reduce ? 600 : 1500);
+            return;
+          }
+          setTimeout(() => show(wasCurrent && next ? next : round.current), 260);
+        }
+        $('log').addEventListener('click', (e) => (e.currentTarget.dataset.back ? show(round.current) : openSheet(view, e.currentTarget)));
+
+        /* ---------- first paint ---------- */
+        if (mode === 'round') {
+          cond(view);
+          scorebar(false);
+        }
+        show(view, { no3d: true });
+        /* chip widths change once Inter is in: line the row up again */
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => scrollChip(view, false));
+        paintToggle();
+        if (mode === 'tour') schedule();
+        if (mode === 'round' && q.get('sheet') === 'score') setTimeout(() => openSheet(view), 700);
+
+        /* ---------- the 3D hole ---------- */
+        const mapEl = $('map');
+        const insets = () => {
+          const m = mapEl.getBoundingClientRect();
+          const top = $('prow').getBoundingClientRect().bottom - m.top + (mode === 'round' ? 10 : 4);
+          const foot = $('pfoot');
+          const firstVisible = [...foot.children].find((c) => c.offsetParent !== null && !c.classList.contains('sr-only'));
+          const bottom = m.bottom - (firstVisible ? firstVisible.getBoundingClientRect().top : m.bottom) + 6;
+          return { top, bottom, left: 6, right: 6 };
+        };
+        const say = (t) => ($('aim-live').textContent = t);
+        import('./assets/hole3d.js')
+          .then(({ mount }) => {
+            hole3d = mount(mapEl, {
+              hole: holeOf(view),
+              course,
+              tee,
+              ball: ballFor(view),
+              mode,
+              insets,
+              avatar: `assets/img/av/${GH.me().photo}.webp`,
+              fallback: q.has('nogl'),
+              /* QA: ?lite=0 forces the full pipeline (intro, fly-over) even on a software rasteriser */
+              lite: q.has('lite') ? q.get('lite') !== '0' : undefined,
+              onInteract: () => mode === 'tour' && stopTour(),
+              onAim: ({ toAim, aimToPin }) => say(`Mira a ${GH.fmt.m(toAim)}; da mira ao pin, ${GH.fmt.m(aimToPin)}.`),
+            });
+            pending.splice(0).forEach((fn) => fn(hole3d));
+            /* the UI blocks were still rising when the insets were first read: frame again once they settle */
+            setTimeout(() => hole3d && hole3d.refit(), 900);
+          })
+          .catch(() => {
+            mapEl.innerHTML = `<img src="assets/figma/perf-holemap.png" alt="Mapa do buraco ${view}" style="position:absolute;inset:200px 8px 170px;width:calc(100% - 16px);height:calc(100% - 370px);object-fit:contain"/>`;
+          });
+        /* leaving the page: stop the tour and free the GL context (kept alive only when the page goes into the bfcache) */
+        window.addEventListener('pagehide', (e) => {
+          clearTimeout(timer);
+          if (e.persisted || !hole3d) return;
+          hole3d.destroy();
+          hole3d = null;
+        });
+        window.addEventListener('pageshow', (e) => e.persisted && schedule());
+      })();
+    </script>
+  </body>
+</html>

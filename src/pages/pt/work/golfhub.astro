@@ -1,0 +1,21 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import CaseStudyPage from '../../../components/CaseStudyPage.astro';
+import golfhub from '../../../data/cases/golfhub';
+
+const lang = 'pt' as const;
+const content = golfhub[lang];
+---
+
+<Layout
+  lang={lang}
+  title={content.seo.title}
+  description={content.seo.description}
+  ogImage={content.cover.src}
+  ogImageAlt={content.cover.alt}
+  ogImageWidth={1600}
+  ogImageHeight={1000}
+  alternates={false}
+>
+  <CaseStudyPage lang={lang} content={content} altHref="/work/golfhub" altLabel="EN" />
+</Layout>

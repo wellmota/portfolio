@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b2414" />
+    <title>Entrar · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <!-- DM Sans only for the wordmark, as in the Figma logo (subset to the letters it uses) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,700&text=GolfHub&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Splash + login (entry point). Inferred screen: the deck cover's wordmark over the Campo A photo,
+         then a white sheet with the login. Same tokens as the Figma screens (charcoal CTA, Inter, green accents).
+         Sequence: 1) the six dots fly in and assemble the mark, the wordmark slides up, centred on dark green;
+         2) the logo glides to the top, the photo fades in with a slow Ken Burns, the login sheet rises. */
+      .app {
+        background: #0b2414;
+      }
+      .login {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      /* ---- photo + dark-green gradient + grain ---- */
+      .login__photo {
+        position: absolute;
+        inset: 34px 0 auto;
+        height: 58%;
+        min-height: 440px;
+        overflow: hidden;
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 1200ms var(--ease);
+      }
+      .is-ready .login__photo {
+        opacity: 1;
+      }
+      .login__photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform-origin: 62% 62%;
+        transform: translate3d(var(--px, 0), var(--py, 0), 0) scale(1.12);
+        /* one slow push on entry that settles on the resting frame; pointer parallax keeps working after */
+        animation: kenburns 9s cubic-bezier(0.22, 1, 0.36, 1) 1;
+        will-change: transform;
+      }
+      @keyframes kenburns {
+        from {
+          transform: translate3d(calc(var(--px, 0px) + 8px), calc(var(--py, 0px) - 4px), 0) scale(1.2);
+        }
+      }
+      .login__photo::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background:
+          linear-gradient(180deg, #0b2414 0%, rgba(7, 28, 13, 0.72) 14%, rgba(7, 28, 13, 0.55) 34%, rgba(9, 34, 17, 0.12) 56%, rgba(10, 36, 19, 0.4) 78%, #0b2414 100%),
+          radial-gradient(120% 70% at 0% 0%, rgba(16, 111, 54, 0.45), transparent 60%);
+      }
+      .login__photo::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.16;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+      }
+      /* soft green aurora behind the logo while it assembles */
+      .aura {
+        position: absolute;
+        left: 50%;
+        top: 44%;
+        width: 360px;
+        height: 360px;
+        margin: -180px 0 0 -180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(56, 235, 127, 0.22), rgba(74, 58, 255, 0.12) 40%, transparent 68%);
+        filter: blur(10px);
+        pointer-events: none;
+        z-index: 0;
+        animation: aura 1400ms var(--ease) both;
+        transition: opacity 900ms var(--ease);
+      }
+      .is-ready .aura {
+        opacity: 0;
+      }
+      @keyframes aura {
+        from {
+          transform: scale(0.4);
+          opacity: 0;
+        }
+      }
+
+      /* ---- hero: wordmark, tagline, club ---- */
+      .login__hero {
+        position: relative;
+        z-index: 1;
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        min-height: 300px;
+        padding: 44px var(--gutter) 28px;
+        color: #fff;
+      }
+      .has-status .login__hero {
+        padding-top: 82px;
+      }
+      .brand {
+        align-self: flex-start;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0;
+        font-family: 'DM Sans', var(--font);
+        font-size: 40px;
+        line-height: 1;
+        letter-spacing: -0.012em;
+        color: #fff;
+        white-space: nowrap;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+        transform-origin: center;
+        will-change: transform;
+      }
+      .brand.is-gliding {
+        transition: transform 1000ms cubic-bezier(0.65, 0, 0.2, 1);
+      }
+      .brand__mark {
+        width: 38px;
+        height: 38px;
+        overflow: visible;
+        filter: drop-shadow(0 6px 14px rgba(74, 58, 255, 0.55));
+      }
+      .brand__mark circle {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: dot-in 760ms var(--ease-spring) both;
+        animation-delay: calc(120ms + var(--i) * 90ms);
+      }
+      @keyframes dot-in {
+        0% {
+          opacity: 0;
+          transform: translate(var(--fx), var(--fy)) scale(0.2);
+        }
+        60% {
+          opacity: 1;
+        }
+      }
+      .brand__word {
+        display: inline-flex;
+        overflow: hidden;
+        padding: 4px 2px 6px;
+        margin: -4px -2px -6px;
+      }
+      .brand__word span {
+        display: inline-block;
+        animation: word-up 760ms var(--ease) both;
+        animation-delay: 640ms;
+      }
+      .brand__word b {
+        display: inline-block;
+        font-weight: 700;
+        animation: word-up 760ms var(--ease) both;
+        animation-delay: 720ms;
+      }
+      @keyframes word-up {
+        from {
+          transform: translateY(110%);
+          opacity: 0;
+        }
+      }
+      .login__copy {
+        display: grid;
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .login__tag {
+        max-width: 15ch;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.12;
+        letter-spacing: -0.03em;
+        color: #fff;
+        text-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
+      }
+      .login__club {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .login__club .i {
+        width: 20px;
+        height: 20px;
+        color: var(--green-300);
+      }
+
+      /* ---- the white sheet ---- */
+      .panel {
+        position: relative;
+        z-index: 2;
+        flex: none;
+        padding: 26px var(--gutter) calc(20px + env(safe-area-inset-bottom));
+        border-radius: 28px 28px 0 0;
+        background: var(--surface);
+        box-shadow: 0 -24px 50px -20px rgba(0, 0, 0, 0.45);
+        animation: panel-up 900ms var(--ease) both;
+        animation-delay: 80ms;
+      }
+      .has-status .panel {
+        padding-bottom: 26px;
+      }
+      @keyframes panel-up {
+        from {
+          transform: translateY(102%);
+        }
+      }
+      /* intro: everything after the logo waits (paused at its first frame) */
+      .is-intro .panel,
+      .is-intro .login__copy .rise,
+      .is-intro .panel .rise {
+        animation-play-state: paused;
+      }
+      .panel__title {
+        font-size: 21px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .form {
+        display: grid;
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .field__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 20px;
+      }
+      .field__row .link {
+        min-height: 44px;
+        margin: -12px -8px -12px 0;
+        padding: 0 8px;
+        font-size: 13px;
+      }
+      .input-wrap {
+        position: relative;
+      }
+      .input-wrap .input {
+        padding-right: 54px;
+      }
+      .peek {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        color: var(--ink-3);
+        transform: translateY(-50%);
+      }
+      .peek:hover {
+        color: var(--ink);
+      }
+      .peek .i {
+        width: 22px;
+        height: 22px;
+        transition: transform var(--t-med) var(--ease-spring);
+      }
+      .peek:active .i {
+        transform: scale(0.8);
+      }
+      .field__error {
+        animation: err-in 320ms var(--ease) both;
+      }
+      @keyframes err-in {
+        from {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+      }
+      .input.is-shake {
+        animation: shake 420ms var(--ease);
+      }
+      @keyframes shake {
+        20%,
+        60% {
+          transform: translateX(-6px);
+        }
+        40%,
+        80% {
+          transform: translateX(6px);
+        }
+      }
+      .actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .btn--primary {
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform var(--t-fast) var(--ease),
+          background 400ms var(--ease),
+          box-shadow 400ms var(--ease);
+      }
+      /* a light sweep across the CTA while it waits */
+      .btn--primary.is-busy::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.14) 50%, transparent 70%);
+        background-size: 250% 100%;
+        animation: sweep 1100ms linear infinite;
+      }
+      @keyframes sweep {
+        from {
+          background-position: 120% 0;
+        }
+        to {
+          background-position: -120% 0;
+        }
+      }
+      .btn.is-busy {
+        cursor: progress;
+      }
+      .btn.is-done {
+        background: linear-gradient(180deg, #17a54f, var(--green-700));
+        box-shadow: 0 18px 28px -14px rgba(16, 111, 54, 0.8);
+      }
+      .btn .draw-check {
+        stroke-width: 2;
+      }
+      .spin {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(255, 255, 255, 0.28);
+        border-top-color: #fff;
+        animation: spin 700ms linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .first {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        margin-top: 2px;
+        font-size: 14px;
+        color: var(--ink-3);
+      }
+      .first .link {
+        font-size: 14px;
+      }
+      .form[aria-busy='true'] .input,
+      .form[aria-busy='true'] .peek {
+        opacity: 0.6;
+      }
+      /* leaving: the sheet drops, the photo zooms in (then home.html arrives through the view transition) */
+      .is-leaving .panel {
+        transition: transform 520ms cubic-bezier(0.55, 0, 0.6, 0.2);
+        transform: translateY(104%);
+      }
+      .is-leaving .login__copy,
+      .is-leaving .brand {
+        transition: opacity 400ms var(--ease);
+        opacity: 0;
+      }
+
+      /* ---- Face ID HUD ---- */
+      .faceid {
+        position: absolute;
+        inset: 0;
+        z-index: 90;
+        display: grid;
+        place-items: center;
+        background: rgba(8, 20, 12, 0.32);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--t-med) var(--ease);
+      }
+      .faceid.is-on {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .faceid__box {
+        display: grid;
+        justify-items: center;
+        gap: 14px;
+        width: 168px;
+        padding: 28px 0 22px;
+        border-radius: 32px;
+        color: #fff;
+        background: rgba(28, 28, 28, 0.9);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: var(--shadow-md);
+        transform: scale(0.86);
+        transition: transform 420ms var(--ease-spring);
+      }
+      .faceid.is-on .faceid__box {
+        transform: none;
+      }
+      .faceid__ico {
+        position: relative;
+        width: 76px;
+        height: 76px;
+        perspective: 300px;
+      }
+      .faceid__ico .i {
+        position: absolute;
+        inset: 0;
+        width: 76px;
+        height: 76px;
+        stroke-width: 1.1;
+      }
+      .faceid__face {
+        transition:
+          opacity 260ms var(--ease),
+          transform 260ms var(--ease);
+        animation: face-turn 1100ms ease-in-out infinite alternate;
+      }
+      @keyframes face-turn {
+        0% {
+          transform: rotateY(-22deg);
+        }
+        100% {
+          transform: rotateY(22deg);
+        }
+      }
+      /* scan line sweeping over the face */
+      .faceid__scan {
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 6px;
+        height: 3px;
+        border-radius: 3px;
+        background: linear-gradient(90deg, transparent, var(--green-300), transparent);
+        box-shadow: 0 0 14px 2px rgba(56, 235, 127, 0.6);
+        animation: scanline 900ms ease-in-out infinite alternate;
+      }
+      @keyframes scanline {
+        to {
+          transform: translateY(64px);
+        }
+      }
+      .faceid__ok {
+        opacity: 0;
+        color: var(--green-300);
+        stroke-width: 1.6 !important;
+      }
+      .faceid.is-ok .faceid__face,
+      .faceid.is-ok .faceid__scan {
+        opacity: 0;
+        transform: scale(0.7);
+        animation: none;
+      }
+      .faceid.is-ok .faceid__ok {
+        opacity: 1;
+      }
+      .faceid__label {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .login__photo img {
+          animation: none;
+          transform: none;
+        }
+        /* app.css shortens animations to 1ms but keeps them infinite, which flickers.
+           Decorative loops stop; the spinner stays as a slow, essential busy cue. */
+        .btn--primary.is-busy::after,
+        .faceid__face,
+        .faceid__scan {
+          animation: none !important;
+        }
+        .spin {
+          animation-duration: 1.6s !important;
+        }
+        .login__photo {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body data-status="light">
+    <div class="app is-intro" id="app">
+      <main class="screen screen--flush login" id="main">
+        <div class="login__photo" aria-hidden="true">
+          <img src="assets/img/campo-a.webp" alt="" width="736" height="552" fetchpriority="high" decoding="async" id="photo" />
+        </div>
+        <div class="aura" aria-hidden="true"></div>
+
+        <div class="login__hero">
+          <h1 class="brand" id="brand" aria-label="GolfHub">
+            <svg class="brand__mark" viewBox="0 0 30 30" aria-hidden="true">
+              <defs>
+                <linearGradient id="dots" x1="0" y1="1" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                  <stop offset="0" stop-color="#4a3aff" />
+                  <stop offset="1" stop-color="#a48bff" />
+                </linearGradient>
+              </defs>
+              <!-- the six dots fly in from scattered spots and lock into the triangle -->
+              <g fill="url(#dots)">
+                <circle cx="5" cy="25" r="4.3" style="--i: 0; --fx: -26px; --fy: 18px" />
+                <circle cx="15" cy="25" r="4.3" style="--i: 1; --fx: -6px; --fy: 34px" />
+                <circle cx="15" cy="15" r="4.3" style="--i: 2; --fx: -30px; --fy: -22px" />
+                <circle cx="25" cy="25" r="4.3" style="--i: 3; --fx: 24px; --fy: 30px" />
+                <circle cx="25" cy="15" r="4.3" style="--i: 4; --fx: 34px; --fy: -4px" />
+                <circle cx="25" cy="5" r="4.3" style="--i: 5; --fx: 8px; --fy: -32px" />
+              </g>
+            </svg>
+            <span class="brand__word" aria-hidden="true"><span>Golf</span><b>Hub</b></span>
+          </h1>
+
+          <div class="login__copy">
+            <p class="login__tag rise" style="--d: 1">Reserve, jogue e acompanhe seu jogo</p>
+            <p class="login__club rise" style="--d: 2"><span data-icon="gps"></span><span id="club"></span></p>
+          </div>
+        </div>
+
+        <section class="panel" aria-labelledby="panel-title">
+          <h2 class="panel__title rise" style="--d: 3" id="panel-title">Acesse sua conta</h2>
+          <form class="form" id="form" novalidate>
+            <div class="field rise" style="--d: 4">
+              <label class="field__label" for="user">Nº de sócio ou e-mail</label>
+              <input class="input" id="user" name="user" type="text" autocomplete="username" autocapitalize="off" spellcheck="false" enterkeyhint="next" aria-describedby="user-err" />
+              <p class="field__error" id="user-err" hidden></p>
+            </div>
+            <div class="field rise" style="--d: 5">
+              <div class="field__row">
+                <label class="field__label" for="pass">Senha</label>
+                <button class="link" type="button" data-soon="Recuperar senha">Esqueci minha senha</button>
+              </div>
+              <div class="input-wrap">
+                <input class="input" id="pass" name="pass" type="password" autocomplete="current-password" enterkeyhint="go" aria-describedby="pass-err" />
+                <button class="peek" type="button" id="peek" aria-controls="pass" aria-pressed="false" aria-label="Mostrar senha"></button>
+              </div>
+              <p class="field__error" id="pass-err" hidden></p>
+            </div>
+            <div class="actions rise" style="--d: 6">
+              <button class="btn btn--primary btn--block" type="submit" id="go"><span>Entrar</span></button>
+              <button class="btn btn--ghost btn--block" type="button" id="faceid-btn"></button>
+            </div>
+            <p class="first rise" style="--d: 7">Primeiro acesso? <button class="link" type="button" data-soon="Ativação de conta">Ative sua conta</button></p>
+          </form>
+          <p class="sr-only" id="status" role="status" aria-live="polite"></p>
+        </section>
+      </main>
+
+      <div class="faceid" id="faceid" aria-hidden="true">
+        <div class="faceid__box">
+          <div class="faceid__ico" id="faceid-ico"></div>
+          <p class="faceid__label" id="faceid-label">Face ID</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        /* Face ID glyph (Iconsax has none): frame corners, eyes, nose, smile */
+        GH.icons['face-id'] =
+          '<path d="M2 9V6.5C2 4.01 4.01 2 6.5 2H9M15 2h2.5C19.99 2 22 4.01 22 6.5V9M22 15v2.5c0 2.49-2.01 4.5-4.5 4.5H15M9 22H6.5C4.01 22 2 19.99 2 17.5V15"/><path d="M8.5 8.5v2M15.5 8.5v2M12 8.5v4.2c0 .6-.4 1-1 1h-.6M8.8 16.2c1.8 1.5 4.6 1.5 6.4 0"/>';
+
+        const $ = (id) => document.getElementById(id);
+        /* haptic only after a real tap (Chrome logs an error for navigator.vibrate before any user gesture) */
+        const buzz = (ms) => {
+          if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
+          if (GH.haptic) GH.haptic(ms);
+        };
+        const app = $('app');
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+        const q = new URLSearchParams(location.search);
+        const me = GH.me();
+        $('club').textContent = GH.club.name;
+        $('faceid-btn').innerHTML = GH.icon('face-id') + '<span>Entrar com Face ID</span>';
+
+        /* arriving here = signed out: the tab ball starts on "Início" without sliding */
+        try {
+          sessionStorage.removeItem('gh:tab');
+        } catch (e) {}
+
+        /* ---- intro: logo assembles in the centre, then glides to its place ---- */
+        const brand = $('brand');
+        const ready = () => {
+          app.classList.remove('is-intro');
+          app.classList.add('is-ready');
+        };
+        if (reduce || q.has('skip')) {
+          ready();
+        } else {
+          const a = app.getBoundingClientRect();
+          const b = brand.getBoundingClientRect();
+          const dx = a.left + a.width / 2 - (b.left + b.width / 2);
+          const dy = a.top + a.height * 0.44 - (b.top + b.height / 2);
+          brand.style.transform = `translate(${dx}px, ${dy}px) scale(1.3)`;
+          setTimeout(() => {
+            brand.classList.add('is-gliding');
+            brand.style.transform = '';
+            ready();
+          }, 1250);
+        }
+
+        /* subtle parallax on the photo (pointer on desktop, tilt on phones) */
+        const photo = $('photo');
+        if (!reduce) {
+          const par = (x, y) => {
+            photo.style.setProperty('--px', `${(x * -10).toFixed(1)}px`);
+            photo.style.setProperty('--py', `${(y * -8).toFixed(1)}px`);
+          };
+          app.addEventListener('pointermove', (e) => {
+            const r = app.getBoundingClientRect();
+            par((e.clientX - r.left) / r.width - 0.5, (e.clientY - r.top) / r.height - 0.5);
+          });
+          window.addEventListener('deviceorientation', (e) => {
+            if (e.gamma == null) return;
+            par(Math.max(-1, Math.min(1, e.gamma / 30)) / 2, Math.max(-1, Math.min(1, (e.beta - 45) / 30)) / 2);
+          });
+        }
+
+        /* ---- form ---- */
+        const form = $('form');
+        const user = $('user');
+        const pass = $('pass');
+        const go = $('go');
+        const peek = $('peek');
+        const status = $('status');
+
+        /* demo values: one tap enters */
+        user.value = me.number;
+        pass.value = 'birdie2023';
+
+        const setPeek = (on) => {
+          pass.type = on ? 'text' : 'password';
+          peek.setAttribute('aria-pressed', String(on));
+          peek.setAttribute('aria-label', on ? 'Ocultar senha' : 'Mostrar senha');
+          peek.innerHTML = GH.icon(on ? 'eye-slash' : 'eye');
+        };
+        setPeek(false);
+        peek.addEventListener('click', () => {
+          setPeek(pass.type === 'password');
+          buzz();
+        });
+
+        const setErr = (input, msg) => {
+          const p = $(input.id + '-err');
+          if (msg) {
+            p.innerHTML = GH.icon('warning-2', 'i--sm') + '<span></span>';
+            p.lastChild.textContent = msg;
+            p.hidden = false;
+            input.setAttribute('aria-invalid', 'true');
+          } else {
+            p.hidden = true;
+            input.removeAttribute('aria-invalid');
+          }
+        };
+        const shake = (el) => {
+          el.classList.remove('is-shake');
+          void el.offsetWidth;
+          el.classList.add('is-shake');
+        };
+        const checkUser = () => {
+          const v = user.value.trim();
+          if (!v) return 'Informe seu nº de sócio ou e-mail.';
+          if (v.includes('@')) return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? '' : 'Esse e-mail parece incompleto.';
+          return /^\d{3,6}$/.test(v) ? '' : 'O nº de sócio tem só números (ex.: 0427).';
+        };
+        const checkPass = () => {
+          const v = pass.value;
+          if (!v) return 'Informe sua senha.';
+          return v.length < 6 ? 'A senha tem pelo menos 6 caracteres.' : '';
+        };
+        const validate = (focus = true) => {
+          const a = checkUser();
+          const b = checkPass();
+          setErr(user, a);
+          setErr(pass, b);
+          if (a) shake(user);
+          if (b) shake(pass);
+          if (focus) {
+            if (a) user.focus();
+            else if (b) pass.focus();
+          }
+          if (a || b) {
+            status.textContent = 'Revise os campos destacados.';
+            buzz(30);
+          }
+          return !a && !b;
+        };
+        [user, pass].forEach((el) =>
+          el.addEventListener('input', () => {
+            if (el.getAttribute('aria-invalid') === 'true') setErr(el, el === user ? checkUser() : checkPass());
+          })
+        );
+
+        /* loading → success → home */
+        let busy = false;
+        const setBusy = () => {
+          busy = true;
+          form.setAttribute('aria-busy', 'true');
+          go.classList.add('is-busy');
+          go.setAttribute('aria-busy', 'true');
+          [user, pass].forEach((el) => (el.readOnly = true));
+          go.innerHTML = '<span class="spin" aria-hidden="true"></span><span>Entrando…</span>';
+          status.textContent = 'Entrando…';
+        };
+        const leave = () => {
+          if (!reduce) app.classList.add('is-leaving');
+          setTimeout(() => (location.href = 'home.html'), reduce ? 150 : 420);
+        };
+        const enter = () => {
+          go.classList.remove('is-busy');
+          go.classList.add('is-done');
+          go.innerHTML = GH.check() + `<span>Olá, ${GH.esc(GH.first(GH.user))}!</span>`;
+          status.textContent = 'Pronto. Abrindo o início.';
+          buzz(14);
+          setTimeout(leave, 700);
+        };
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (busy) return;
+          if (!validate()) return;
+          setBusy();
+          setTimeout(enter, 1150);
+        });
+
+        /* Face ID: face turns while the scan line sweeps → drawn check → home */
+        const fid = $('faceid');
+        const fidOk = () => {
+          fid.classList.add('is-ok');
+          $('faceid-ico').insertAdjacentHTML('beforeend', GH.check('faceid__ok'));
+          $('faceid-label').textContent = `Olá, ${GH.first(GH.user)}`;
+        };
+        const fidOpen = () => {
+          $('faceid-ico').innerHTML = GH.icon('face-id', 'faceid__face') + '<span class="faceid__scan"></span>';
+          fid.classList.remove('is-ok');
+          fid.classList.add('is-on');
+          $('faceid-label').textContent = 'Face ID';
+        };
+        $('faceid-btn').addEventListener('click', () => {
+          if (busy) return;
+          busy = true;
+          fidOpen();
+          status.textContent = 'Reconhecendo seu rosto…';
+          setTimeout(() => {
+            fidOk();
+            status.textContent = 'Rosto reconhecido. Abrindo o início.';
+            buzz(14);
+            setTimeout(leave, 900);
+          }, 1300);
+        });
+
+        /* deep links: ?erro=1 (empty fields, errors shown) · ?erro=formato · ?entrando=1 (loading) ·
+           ?faceid=1 (scan HUD) · ?faceid=ok (recognised) · ?skip=1 (no intro) */
+        const after = reduce || q.has('skip') ? 0 : 1900;
+        if (q.has('erro')) {
+          const fmt = q.get('erro') === 'formato';
+          user.value = fmt ? 'pedro@clube' : '';
+          pass.value = fmt ? '1234' : '';
+          setTimeout(() => validate(false), after);
+        }
+        if (q.has('entrando')) setBusy();
+        if (q.has('faceid')) {
+          busy = true;
+          setTimeout(() => {
+            fidOpen();
+            if (q.get('faceid') === 'ok') fidOk();
+          }, after);
+        }
+      })();
+    </script>
+  </body>
+</html>

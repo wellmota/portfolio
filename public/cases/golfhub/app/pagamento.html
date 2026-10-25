@@ -1,0 +1,2103 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Pagamento · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Deck modules "Gateway de pagamento" + "Voucher". One checkout for every purchase in the app
+         (tee time, range, lesson, tournament, event, pro shop). Figma language: white rows with the soft shadow,
+         the indigo Visa card (card/short_card-active) with the green "Novo cartão" ball, charcoal CTA. */
+      .section {
+        margin-top: 22px;
+      }
+
+      /* ---- order summary ---- */
+      .order {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        margin-top: 4px;
+      }
+      .order__head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .order__thumb {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 68px;
+        height: 68px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 14px 18px -12px rgba(26, 78, 38, 0.65);
+      }
+      .order__thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .order__thumb--photo img {
+        view-transition-name: gh-course-photo;
+      }
+      .order__thumb .tile-ico {
+        width: 68px;
+        height: 68px;
+        border-radius: 20px;
+      }
+      .order__thumb .tile-ico .i {
+        width: 30px;
+        height: 30px;
+      }
+      .order__thumb .av {
+        --s: 68px;
+        border-radius: 20px;
+      }
+      .order__title {
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.015em;
+      }
+      .order__sub {
+        font-size: 13px;
+        color: var(--ink-3);
+        margin-top: 2px;
+      }
+      .facts {
+        display: grid;
+        padding-top: 4px;
+        border-top: 1px solid var(--line);
+      }
+      .fact {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 48px;
+      }
+      .fact__ico {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        color: var(--ink-2);
+        background: var(--sunken);
+      }
+      .fact__txt {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+      }
+      .fact__k {
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .fact__v {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14.5px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .fact__v .stack .av {
+        --s: 24px;
+      }
+      .fact__v .stack > * + * {
+        margin-left: -8px;
+      }
+      .fact .stepper {
+        flex: none;
+      }
+      .fact .meter {
+        width: 64px;
+        height: 6px;
+        flex: none;
+      }
+
+      /* ---- notices ---- */
+      .notice {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px;
+        margin-top: 6px;
+        border-radius: 18px;
+        background: var(--amber-50);
+      }
+      .notice--green {
+        background: var(--green-50);
+      }
+      .notice--indigo {
+        background: var(--indigo-50);
+      }
+      .notice .tile-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #fff;
+      }
+      .notice__t {
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .notice__s {
+        font-size: 13px;
+        color: var(--ink-2);
+        margin-top: 2px;
+      }
+
+      /* ---- line items ---- */
+      .lines {
+        padding: 4px 16px;
+      }
+      .line {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        padding: 11px 0;
+        font-size: 14.5px;
+        color: var(--ink-2);
+      }
+      .line + .line {
+        border-top: 1px solid var(--line);
+      }
+      .line__label {
+        flex: 1;
+        min-width: 0;
+      }
+      .line__note {
+        margin-left: 4px;
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .line__sub {
+        display: block;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .line__amt {
+        font-weight: 600;
+        color: var(--ink);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .line__amt--free {
+        color: var(--green-700);
+      }
+      .line.line--total {
+        align-items: center;
+        padding: 14px 0 12px;
+        border-top: 1.5px dashed var(--line-strong);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .line--total .line__amt {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      /* ---- payment methods ---- */
+      .pms {
+        display: grid;
+        gap: 10px;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+      .pms legend {
+        padding: 0;
+        margin-bottom: 12px;
+      }
+      .pm {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-height: 72px;
+        padding: 12px 16px;
+        border-radius: var(--r-md);
+        background: var(--surface);
+        box-shadow:
+          var(--shadow-card),
+          inset 0 0 0 1.5px transparent;
+        transition:
+          box-shadow var(--t-med) var(--ease),
+          transform var(--t-fast) var(--ease);
+        cursor: pointer;
+      }
+      .pm:has(input:checked) {
+        box-shadow:
+          0 10px 26px -12px rgba(74, 58, 255, 0.35),
+          inset 0 0 0 2px var(--indigo-500);
+      }
+      .pm:has(input:focus-visible) {
+        outline: 2.5px solid var(--indigo-500);
+        outline-offset: 3px;
+      }
+      .pm__body {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+        gap: 2px;
+      }
+      .pm__title {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .pm__sub {
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .pm__radio {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 2px var(--ink-5);
+        transition: box-shadow var(--t-fast) var(--ease);
+      }
+      .pm__radio::after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--indigo-500);
+        transform: scale(0);
+        transition: transform var(--t-med) var(--ease-spring);
+      }
+      .pm:has(input:checked) .pm__radio {
+        box-shadow: inset 0 0 0 2px var(--indigo-500);
+      }
+      .pm:has(input:checked) .pm__radio::after {
+        transform: scale(1);
+      }
+      .pm .badge {
+        height: 20px;
+        font-size: 11px;
+        padding: 0 7px;
+      }
+      /* panels open with a height morph (grid rows 0fr → 1fr) */
+      .pm__panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        margin-top: -10px;
+        opacity: 0;
+        transition:
+          grid-template-rows 480ms var(--ease),
+          opacity 300ms var(--ease),
+          margin 480ms var(--ease);
+      }
+      .pm__panel > div {
+        min-height: 0;
+        overflow: hidden;
+      }
+      .pm__panel.is-open {
+        grid-template-rows: 1fr;
+        margin-top: 0;
+        opacity: 1;
+      }
+      .panel {
+        padding: 16px;
+        border-radius: var(--r-md);
+        background: var(--sunken);
+      }
+
+      /* conta: invoice preview */
+      .inv__bar {
+        display: flex;
+        height: 10px;
+        margin: 10px 0 12px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--sunken-2);
+      }
+      .inv__bar i {
+        display: block;
+        height: 100%;
+        transform-origin: left;
+        animation: meter-fill 900ms var(--ease) both;
+      }
+      .inv__bar i:first-child {
+        background: var(--char-3);
+      }
+      .inv__bar i:last-child {
+        background: var(--green-500);
+        animation-delay: 180ms;
+      }
+      .inv__row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--ink-2);
+        padding: 3px 0;
+      }
+      .inv__row b {
+        margin-left: auto;
+        font-weight: 600;
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+      }
+      .inv__row .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--char-3);
+      }
+      .inv__row .dot--g {
+        background: var(--green-500);
+      }
+      .inv__row--total {
+        margin-top: 6px;
+        padding-top: 9px;
+        border-top: 1px solid var(--line-strong);
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      /* card: the Figma indigo Visa + grey inactive cards + dashed "Novo cartão" with the green ball */
+      .cards {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        margin: -16px -16px 0;
+        padding: 16px 16px 20px;
+        scrollbar-width: none;
+        scroll-snap-type: x proximity;
+      }
+      .cards::-webkit-scrollbar {
+        display: none;
+      }
+      .cpay {
+        flex: none;
+        position: relative;
+        cursor: pointer;
+        scroll-snap-align: start;
+        border-radius: 14px;
+      }
+      .cpay:has(input:focus-visible) {
+        outline: 2.5px solid var(--indigo-500);
+        outline-offset: 3px;
+      }
+      .flip {
+        position: relative;
+        display: block;
+        width: 150px;
+        height: 100px;
+        border-radius: 14px;
+      }
+      .flip__in {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 760ms var(--ease-spring);
+      }
+      .flip.is-flipped .flip__in {
+        transform: perspective(700px) rotateY(180deg);
+      }
+      .flip__in > .ccard {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+      .ccard--back {
+        transform: rotateY(180deg);
+        padding: 14px 0 10px;
+        align-content: start;
+        gap: 10px;
+      }
+      .ccard__stripe {
+        height: 20px;
+        background: rgba(10, 8, 40, 0.75);
+      }
+      .ccard__sig {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 12px;
+      }
+      .ccard__sig i {
+        flex: 1;
+        height: 22px;
+        padding: 0 8px;
+        border-radius: 4px;
+        font: italic 500 10px/22px var(--font);
+        color: #3b3b3b;
+        background: repeating-linear-gradient(-45deg, #fff 0 4px, #eceaff 4px 8px);
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .ccard__sig b {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+      .ccard__holo {
+        position: absolute;
+        right: 12px;
+        bottom: 10px;
+        width: 30px;
+        height: 20px;
+        border-radius: 5px;
+        background: conic-gradient(from 90deg, #ffd6f6, #c9f2ff, #fff6c4, #d2ffd9, #ffd6f6);
+        opacity: 0.85;
+      }
+      .ccard__chip {
+        width: 26px;
+        height: 19px;
+        border-radius: 5px;
+        background: linear-gradient(135deg, #f4dd9a, #c9a24a);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+      }
+      .ccard__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .ccard__num {
+        font-size: 15px;
+      }
+      .ccard__exp {
+        font-size: 11px;
+      }
+      .cpay .ccard {
+        transition:
+          background var(--t-med) var(--ease),
+          color var(--t-med) var(--ease),
+          box-shadow var(--t-med) var(--ease);
+      }
+      .cpay:not(:has(input:checked)) .ccard {
+        color: var(--ink-3);
+        background: #e7e7ee;
+        box-shadow: none;
+      }
+      .cpay:not(:has(input:checked)) .ccard__chip {
+        filter: grayscale(1);
+        opacity: 0.6;
+      }
+      .newcard {
+        flex: none;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        gap: 8px;
+        width: 150px;
+        height: 100px;
+        border-radius: 14px;
+        border: 1.5px dashed var(--dash);
+        background: #f7f8fa;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--ink-3);
+        scroll-snap-align: start;
+      }
+      .newcard__ball {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(180deg, var(--green-400), var(--green-600));
+        box-shadow: 0 8px 14px -6px rgba(16, 184, 83, 0.75);
+        transition: transform var(--t-med) var(--ease-spring);
+      }
+      .newcard:hover .newcard__ball {
+        transform: rotate(90deg) scale(1.06);
+      }
+      .cards-hint {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+
+      /* pix: QR with a scanning light + a draining countdown ring */
+      .pix {
+        display: grid;
+        grid-template-columns: 132px 1fr;
+        gap: 16px;
+        align-items: center;
+      }
+      .pix__qr {
+        position: relative;
+        width: 132px;
+        height: 132px;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: var(--shadow-sm);
+      }
+      /* GH.qr() returns a bare <svg>: give it a quiet zone so the finder patterns clear the rounded corners */
+      .pix__qr {
+        padding: 10px;
+      }
+      .pix__qr > svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        transition:
+          filter var(--t-med) var(--ease),
+          opacity var(--t-med) var(--ease);
+      }
+      .pix__scan {
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 0;
+        height: 34px;
+        border-radius: 4px;
+        background: linear-gradient(to bottom, transparent, rgba(56, 235, 127, 0.28) 70%, rgba(56, 235, 127, 0.55));
+        border-bottom: 2px solid var(--green-400);
+        box-shadow: 0 6px 14px -2px rgba(56, 235, 127, 0.55);
+        animation: scan 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite alternate;
+        pointer-events: none;
+      }
+      @keyframes scan {
+        from {
+          translate: 0 -30px;
+        }
+        to {
+          translate: 0 126px;
+        }
+      }
+      .pix.is-expired .pix__qr > svg {
+        filter: blur(3px);
+        opacity: 0.35;
+      }
+      .pix.is-expired .pix__scan {
+        display: none;
+      }
+      .pix__side {
+        display: grid;
+        gap: 10px;
+        justify-items: start;
+      }
+      .ring {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .ring svg {
+        width: 46px;
+        height: 46px;
+        transform: rotate(-90deg);
+        flex: none;
+      }
+      .ring circle {
+        fill: none;
+        stroke-width: 4;
+      }
+      .ring__bg {
+        stroke: var(--sunken-2);
+      }
+      .ring__fg {
+        stroke: var(--ring, var(--green-500));
+        stroke-linecap: round;
+        stroke-dasharray: 100;
+        transition:
+          stroke-dashoffset 1s linear,
+          stroke var(--t-med) var(--ease);
+      }
+      .ring__t {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.1;
+      }
+      .ring__k {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .pix__code {
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: #fff;
+        font: 500 11.5px/1.4 ui-monospace, 'SF Mono', Menlo, monospace;
+        color: var(--ink-3);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .policy {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-top: 18px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .policy .i {
+        flex: none;
+        color: var(--green-600);
+      }
+
+      /* ---- CTA ---- */
+      .bottom-bar {
+        padding-top: 22px;
+        background: linear-gradient(to top, var(--bg) calc(100% - 20px), color-mix(in srgb, var(--bg) 0%, transparent));
+      }
+      .btn .num {
+        font-variant-numeric: tabular-nums;
+      }
+      .bb-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .bb-row .btn {
+        padding: 0 10px;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+
+      /* ---- processing: a putt rolls into the cup ---- */
+      .proc {
+        position: absolute;
+        inset: 0;
+        z-index: 70;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px) saturate(1.2);
+        -webkit-backdrop-filter: blur(12px) saturate(1.2);
+        opacity: 0;
+        transition: opacity 280ms var(--ease);
+      }
+      .proc.is-on {
+        opacity: 1;
+      }
+      .proc__card {
+        width: 100%;
+        max-width: 300px;
+        display: grid;
+        justify-items: center;
+        gap: 16px;
+        padding: 26px 22px 22px;
+        border-radius: 28px;
+        background: #fff;
+        box-shadow: var(--shadow-md);
+        transform: translateY(18px) scale(0.95);
+        transition: transform 520ms var(--ease-spring);
+      }
+      .proc.is-on .proc__card {
+        transform: none;
+      }
+      .putt {
+        position: relative;
+        width: 100%;
+        height: 64px;
+        border-radius: 32px;
+        background:
+          repeating-linear-gradient(100deg, rgba(255, 255, 255, 0.18) 0 14px, transparent 14px 28px),
+          linear-gradient(180deg, #4fd387, var(--green-600));
+        box-shadow:
+          inset 0 2px 6px rgba(0, 0, 0, 0.18),
+          0 14px 20px -14px rgba(16, 111, 54, 0.9);
+      }
+      .putt__hole {
+        position: absolute;
+        right: 22px;
+        top: 50%;
+        width: 22px;
+        height: 13px;
+        margin-top: -4px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at 50% 35%, #06210f 40%, #0d3b1d);
+        box-shadow: inset 0 3px 3px rgba(0, 0, 0, 0.55);
+      }
+      .putt__flag {
+        position: absolute;
+        right: 28px;
+        bottom: 26px;
+        width: 18px;
+        height: 30px;
+        color: #303030;
+        transform-origin: 2px 100%;
+      }
+      .putt__trail {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        height: 2px;
+        width: 0;
+        margin-top: 1px;
+        border-radius: 2px;
+        background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.75) 0 5px, transparent 5px 10px);
+        transition: width 1100ms cubic-bezier(0.5, 0, 0.2, 1);
+      }
+      .putt__ball {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        width: 18px;
+        height: 18px;
+        margin-top: -8px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #fff 0 30%, #eef1ef 60%, #c8cfcb);
+        box-shadow: 0 4px 5px -1px rgba(0, 0, 0, 0.35);
+        transition:
+          translate 1100ms cubic-bezier(0.5, 0, 0.2, 1),
+          rotate 1100ms cubic-bezier(0.5, 0, 0.2, 1),
+          scale 240ms var(--ease),
+          opacity 240ms var(--ease);
+      }
+      .putt__ball::after {
+        content: '';
+        position: absolute;
+        inset: 2px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0, 0, 0, 0.16) 0.9px, transparent 1.3px) 0 0 / 4px 4px;
+      }
+      .proc.is-sunk .putt__ball {
+        scale: 0.45;
+        opacity: 0;
+      }
+      .proc.is-sunk .putt__flag {
+        animation: wiggle 600ms var(--ease);
+      }
+      @keyframes wiggle {
+        30% {
+          rotate: -10deg;
+        }
+        60% {
+          rotate: 6deg;
+        }
+      }
+      .proc__msg {
+        min-height: 22px;
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center;
+      }
+      .proc__msg span {
+        display: inline-block;
+        animation: msg-in 320ms var(--ease) both;
+      }
+      @keyframes msg-in {
+        from {
+          opacity: 0;
+          translate: 0 8px;
+        }
+      }
+      .proc__steps {
+        display: flex;
+        gap: 6px;
+      }
+      .proc__steps i {
+        width: 22px;
+        height: 5px;
+        border-radius: 5px;
+        background: var(--sunken-2);
+        transition:
+          background var(--t-med) var(--ease),
+          width var(--t-med) var(--ease);
+      }
+      .proc__steps i.is-on {
+        width: 34px;
+        background: var(--green-500);
+      }
+      .proc__pct {
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+
+      /* ---- success: self-drawing check + the voucher as a physical ticket ---- */
+      .ok {
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+        text-align: center;
+        padding-top: 2px;
+      }
+      .ok__check {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 76px;
+        height: 76px;
+        margin-bottom: 8px;
+        border-radius: 50%;
+        color: var(--green-600);
+        background: var(--green-50);
+      }
+      .ok__check .i {
+        width: 50px;
+        height: 50px;
+        stroke-width: 1.7;
+      }
+      .ok__check::before,
+      .ok__check::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid var(--green-300);
+        opacity: 0;
+        animation: ripple 1400ms var(--ease) 500ms;
+      }
+      .ok__check::after {
+        animation-delay: 750ms;
+      }
+      @keyframes ripple {
+        from {
+          opacity: 0.8;
+          transform: scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: scale(1.9);
+        }
+      }
+      .ok__title {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
+        outline: none;
+      }
+      .ok__sub {
+        font-size: 14px;
+        color: var(--ink-3);
+      }
+      .ticket-wrap {
+        margin-top: 18px;
+        filter: drop-shadow(0 18px 22px rgba(20, 30, 22, 0.16)) drop-shadow(0 2px 3px rgba(20, 30, 22, 0.08));
+        animation: ticket-in 1000ms var(--ease-spring) 380ms backwards;
+      }
+      @keyframes ticket-in {
+        from {
+          opacity: 0;
+          transform: perspective(900px) translateY(90px) rotateX(28deg) scale(0.94);
+        }
+        35% {
+          opacity: 1;
+        }
+      }
+      .ticket {
+        --cut: 112px;
+        position: relative;
+        border-radius: 24px;
+        background: #fff;
+        overflow: hidden;
+        -webkit-mask:
+          radial-gradient(circle 12px at 0 var(--cut), #0000 97%, #000) 0 0 / 51% 100% no-repeat,
+          radial-gradient(circle 12px at 100% var(--cut), #0000 97%, #000) 100% 0 / 51% 100% no-repeat;
+        mask:
+          radial-gradient(circle 12px at 0 var(--cut), #0000 97%, #000) 0 0 / 51% 100% no-repeat,
+          radial-gradient(circle 12px at 100% var(--cut), #0000 97%, #000) 100% 0 / 51% 100% no-repeat;
+      }
+      .ticket__top {
+        position: relative;
+        height: var(--cut);
+        display: grid;
+        align-content: space-between;
+        padding: 16px 20px 18px;
+        color: #fff;
+        background:
+          radial-gradient(120% 140% at 100% 0%, rgba(56, 235, 127, 0.22), transparent 55%),
+          linear-gradient(160deg, #3a3a3a, #232323);
+        isolation: isolate;
+      }
+      .ticket__top::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.18;
+        mix-blend-mode: overlay;
+      }
+      /* perforation: holes along the tear line */
+      .ticket__top::after {
+        content: '';
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: -3px;
+        height: 6px;
+        background: radial-gradient(circle 2.6px at 3px 3px, #fff 96%, transparent) 0 0 / 11px 6px repeat-x;
+      }
+      .ticket__holo {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(
+          115deg,
+          transparent 22%,
+          rgba(255, 110, 210, 0.55) 34%,
+          rgba(110, 220, 255, 0.55) 44%,
+          rgba(255, 238, 120, 0.5) 54%,
+          rgba(130, 255, 175, 0.5) 62%,
+          transparent 74%
+        );
+        background-size: 280% 280%;
+        background-position: var(--sx, 100%) var(--sy, 0%);
+        mix-blend-mode: color-dodge;
+        opacity: 0.35;
+        animation: holo 2200ms var(--ease) 900ms backwards;
+      }
+      .tilt.is-tilting .ticket__holo {
+        opacity: 0.6;
+      }
+      @keyframes holo {
+        from {
+          background-position: 0% 100%;
+          opacity: 0.85;
+        }
+      }
+      .ticket__brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.75);
+      }
+      .ticket__brand .flag {
+        width: 11px;
+        height: 17px;
+        color: #fff;
+      }
+      .ticket__brand b {
+        flex: none;
+        color: #fff;
+        font-weight: 700;
+      }
+      .ticket__brand > span:last-child {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .ticket__sep {
+        flex: none;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .ticket__row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .ticket__k {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.65);
+      }
+      .ticket__title {
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.2;
+      }
+      .ticket__code {
+        text-align: right;
+      }
+      .ticket__code p:last-child {
+        font-size: 19px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+      .ticket__body {
+        display: grid;
+        grid-template-columns: 106px 1fr;
+        gap: 16px;
+        align-items: center;
+        padding: 18px 20px 14px;
+      }
+      .ticket__qr {
+        width: 106px;
+        height: 106px;
+        padding: 6px;
+        border-radius: 14px;
+        box-shadow: inset 0 0 0 1px var(--line);
+      }
+      .ticket__qr svg {
+        width: 100%;
+        height: 100%;
+      }
+      .ticket__grid {
+        display: grid;
+        gap: 7px;
+        min-width: 0;
+      }
+      .ticket__grid div {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+      }
+      .ticket__grid dt {
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .ticket__grid dd {
+        font-size: 13.5px;
+        font-weight: 600;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ticket__foot {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 20px;
+        padding: 12px 0 16px;
+        border-top: 1px solid var(--line);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--green-700);
+      }
+      .ticket__foot .i {
+        flex: none;
+      }
+      .paid {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        margin-top: 14px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .paid .i {
+        color: var(--ink-4);
+      }
+
+      /* ---- new card sheet ---- */
+      .sheet .ccard.preview {
+        width: 100%;
+        height: 170px;
+        padding: 18px 20px;
+        border-radius: 20px;
+      }
+      .preview-wrap {
+        position: relative;
+        height: 170px;
+        margin: 4px 0 18px;
+      }
+      .preview-wrap .flip {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+      }
+      .preview-wrap .ccard {
+        border-radius: 20px;
+        padding: 18px 20px;
+      }
+      .preview-wrap .ccard__brand {
+        font-size: 20px;
+      }
+      .preview-wrap .ccard__num {
+        font-size: 19px;
+        justify-content: flex-start;
+        gap: 12px;
+      }
+      .preview-wrap .ccard__foot {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        opacity: 0.85;
+      }
+      .preview-wrap .ccard--back {
+        padding: 22px 0 16px;
+        gap: 16px;
+      }
+      .preview-wrap .ccard__stripe {
+        height: 34px;
+      }
+      .preview-wrap .ccard__sig {
+        margin: 0 20px;
+      }
+      .preview-wrap .ccard__sig i {
+        height: 30px;
+        line-height: 30px;
+        font-size: 12px;
+      }
+      .preview-wrap .ccard__sig b {
+        font-size: 15px;
+      }
+      .form {
+        display: grid;
+        gap: 14px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      /* the scan line only runs while the Pix panel is open; under reduced motion it is not drawn at all */
+      .pm__panel:not(.is-open) .pix__scan {
+        animation-play-state: paused;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pix__scan {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <div class="bar rise" id="bar">
+          <a class="icon-btn" id="back" href="home.html" data-back aria-label="Voltar"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title" id="bar-title">Pagamento</h1>
+          <span id="bar-end" aria-hidden="true"></span>
+        </div>
+        <div id="view"></div>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 6" id="bb"></div>
+
+      <!-- processing -->
+      <div class="proc" id="proc" hidden>
+        <div class="proc__card" role="status" aria-live="polite">
+          <div class="putt" aria-hidden="true">
+            <span class="putt__trail" id="trail"></span>
+            <span class="putt__hole"></span>
+            <span class="putt__flag" data-flag></span>
+            <span class="putt__ball" id="ball"></span>
+          </div>
+          <p class="proc__msg" id="proc-msg"></p>
+          <div class="proc__steps" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+
+      <!-- new card -->
+      <div class="sheet" id="card-sheet" role="dialog" aria-modal="true" aria-labelledby="ns-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="ns-title">Novo cartão</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <form class="sheet__body form" id="card-form" novalidate>
+          <div class="preview-wrap" aria-hidden="true">
+            <span class="flip" id="pv">
+              <span class="flip__in">
+                <span class="ccard">
+                  <span class="ccard__top"><span class="ccard__brand" id="pv-brand">CARTÃO</span><span class="ccard__chip"></span></span>
+                  <span class="ccard__num num" id="pv-num">•••• •••• •••• ••••</span>
+                  <span class="ccard__foot"><span id="pv-name">Nome no cartão</span><span id="pv-exp">MM/AA</span></span>
+                </span>
+                <span class="ccard ccard--back">
+                  <span class="ccard__stripe"></span>
+                  <span class="ccard__sig"><i id="pv-sig">Assinatura</i><b id="pv-cvv">•••</b></span>
+                  <span class="ccard__holo"></span>
+                </span>
+              </span>
+            </span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="cc-num">Número do cartão</label>
+            <input class="input num" id="cc-num" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="23" aria-describedby="cc-num-e" />
+            <p class="field__error" id="cc-num-e" hidden></p>
+          </div>
+          <div class="grid2">
+            <div class="field">
+              <label class="field__label" for="cc-exp">Validade</label>
+              <input class="input num" id="cc-exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxlength="5" aria-describedby="cc-exp-e" />
+              <p class="field__error" id="cc-exp-e" hidden></p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="cc-cvv">CVV</label>
+              <input class="input num" id="cc-cvv" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" aria-describedby="cc-cvv-e" />
+              <p class="field__error" id="cc-cvv-e" hidden></p>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field__label" for="cc-name">Nome impresso no cartão</label>
+            <input class="input" id="cc-name" autocomplete="cc-name" placeholder="Como está no cartão" aria-describedby="cc-name-e" />
+            <p class="field__error" id="cc-name-e" hidden></p>
+          </div>
+          <button class="btn btn--primary btn--block" type="submit">Salvar cartão</button>
+          <p class="t-xs t-muted" style="text-align: center">Protótipo: nenhum dado é enviado ou cobrado.</p>
+        </form>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        /* Pix glyph (Iconsax has none): the four-petal mark, drawn as a stroked outline on the 24 px grid */
+        GH.icons['pix'] =
+          '<path d="M6.3 8.1 9.7 4.7a3.2 3.2 0 0 1 4.6 0l3.4 3.4M17.7 15.9l-3.4 3.4a3.2 3.2 0 0 1-4.6 0l-3.4-3.4"/><path d="M4.6 9.7 6.3 8h1.3c.8 0 1.6.3 2.2.9l1.1 1.1a1.6 1.6 0 0 0 2.2 0l1.1-1.1c.6-.6 1.4-.9 2.2-.9h1.3l1.7 1.7a3.2 3.2 0 0 1 0 4.6L17.7 16h-1.3c-.8 0-1.6-.3-2.2-.9l-1.1-1.1a1.6 1.6 0 0 0-2.2 0l-1.1 1.1c-.6.6-1.4.9-2.2.9H6.3l-1.7-1.7a3.2 3.2 0 0 1 0-4.6Z"/>';
+
+        const $ = (id) => document.getElementById(id);
+        const q = new URLSearchParams(location.search);
+        const P = GH.prices;
+        const pad = (n) => String(n).padStart(2, '0');
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const int = (k, d) => {
+          const v = parseInt(q.get(k), 10);
+          return Number.isFinite(v) ? v : d;
+        };
+        const hash = (s) => [...s].reduce((a, c) => Math.imul(a ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
+        const rng = (seed) => () => {
+          seed = (seed + 0x6d2b79f5) | 0;
+          let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+        const at = (dISO, hm, offset = 1) => {
+          let d;
+          if (/^\d{4}-\d\d-\d\d$/.test(dISO || '')) {
+            const [y, m, dd] = dISO.split('-').map(Number);
+            d = new Date(y, m - 1, dd);
+          } else d = GH.day(/^\d{1,2}$/.test(q.get('dia') || '') ? +q.get('dia') : offset); /* ?dia=n: n days from today (stable screenshots) */
+          const [h, mi] = (/^\d\d:\d\d$/.test(hm || '') ? hm : '07:40').split(':').map(Number);
+          d.setHours(h, mi, 0, 0);
+          return d;
+        };
+        const longDate = (d) => `${cap(GH.fmt.weekday(d))}, ${GH.fmt.long(d)}`;
+        const shortDate = (d) => `${cap(GH.fmt.weekdayShort(d))}, ${GH.fmt.ddmm(d)}`;
+        const names = (arr) => (arr.length > 1 ? `${arr.slice(0, -1).join(', ')} e ${arr[arr.length - 1]}` : arr[0] || '');
+        const brandName = (b) => (b === 'VISA' ? 'Visa' : b === 'MASTERCARD' ? 'Mastercard' : b === 'AMEX' ? 'Amex' : 'Cartão');
+        const pretty = (p) => p.toString().replace(/%3A/gi, ':').replace(/%2C/gi, ',');
+        const ALPH = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        const codeFrom = (seed) => {
+          const r = rng(seed);
+          return 'GH-' + Array.from({ length: 4 }, () => ALPH[Math.floor(r() * ALPH.length)]).join('');
+        };
+
+        const TIPOS = ['tee', 'range', 'aula', 'torneio', 'evento', 'loja'];
+        const tipo = TIPOS.includes(q.get('tipo')) ? q.get('tipo') : 'tee';
+        const done = q.get('done') === '1';
+        const stored = q.get('reserva') ? (GH.store.get('bookings', []) || []).find((b) => b.id === q.get('reserva')) : null;
+        const me = { ...GH.me() };
+        /* demo override for the tournament handicap gate: ?hcp=31.5 */
+        if (/^\d{1,2}([.,]\d)?$/.test(q.get('hcp') || '')) me.hcp = parseFloat(q.get('hcp').replace(',', '.'));
+        const due = (() => {
+          const n = GH.now;
+          let d = new Date(n.getFullYear(), n.getMonth(), GH.membership.dueDay, 9, 0);
+          if (d <= n) d = new Date(n.getFullYear(), n.getMonth() + 1, GH.membership.dueDay, 9, 0);
+          return d;
+        })();
+        const cardsAll = () => [GH.membership.card, ...((GH.store.get('cards', []) || []).filter((c) => c && c.last4 && c.last4 !== GH.membership.card.last4))];
+        const S = {
+          method: ['conta', 'card', 'pix'].includes(q.get('metodo')) ? q.get('metodo') : 'conta',
+          card: GH.store.get('defaultCard') || GH.membership.card.last4,
+          qtd: int('qtd', 1),
+        };
+        if (!cardsAll().some((c) => c.last4 === S.card)) S.card = GH.membership.card.last4;
+        const ico = (name, tone = '') => `<span class="tile-ico ${tone}">${GH.icon(name, '', true)}</span>`;
+
+        /* ---------- what is being bought ---------- */
+        function build() {
+          const o = { kind: tipo, lines: [], facts: [], agenda: true, view: 'Ver reserva', ok: 'Reserva confirmada', blocked: null };
+          if (tipo === 'tee') {
+            const c = GH.course(['a', 'b'].includes(q.get('campo')) ? q.get('campo') : 'a');
+            const players = clamp(int('jogadores', 4), 1, 4);
+            const guests = clamp(int('convidados', 0), 0, players - 1);
+            let friends = q.has('amigos') ? (q.get('amigos') || '').split(',').filter((id) => GH.friends.includes(id)) : GH.friends.slice(0, players - 1 - guests);
+            friends = [...new Set(friends)].slice(0, players - 1 - guests);
+            const open = players - 1 - friends.length - guests;
+            const cart = q.get('carrinho') === '1',
+              clubs = q.get('tacos') === '1';
+            o.date = at(q.get('data'), q.get('hora'), 1);
+            Object.assign(o, {
+              eyebrow: 'Horário de saída',
+              title: c.name,
+              sub: c.kind,
+              thumb: `<span class="order__thumb order__thumb--photo"><img src="assets/img/${c.photo}.webp" alt="" width="736" height="552"/></span>`,
+              place: `${c.name}, tee 1`,
+              back: `reservar.html?${pretty(new URLSearchParams({ campo: c.id, data: q.get('data') || '', hora: GH.fmt.time(o.date), jogadores: players, convidados: guests, amigos: friends.join(','), carrinho: +cart, tacos: +clubs }))}`,
+              policy: 'Cancelamento sem custo até 24 h antes da saída. Faça check-in pelo app ao chegar.',
+              booking: { kind: 'tee', course: c.id, players: [GH.user, ...friends], guests, cart, clubs },
+            });
+            const who = ['Você', ...friends.map(GH.first)];
+            if (guests) who.push(GH.fmt.plural(guests, 'convidado', 'convidados'));
+            if (open) who.push(`${open} a definir`);
+            o.facts = [
+              ['calendar', 'Data', longDate(o.date)],
+              ['clock', 'Saída', `${GH.fmt.time(o.date)} · tee 1`],
+              ['profile-2-user', GH.fmt.plural(players, 'jogador', 'jogadores'), `${GH.stack([GH.user, ...friends], players)}<span>${GH.esc(names(who))}</span>`],
+            ];
+            const members = players - guests;
+            o.lines.push({ label: 'Green fee de sócio', note: `× ${members}`, amount: 0 });
+            if (guests) o.lines.push({ label: 'Green fee de convidado', note: `× ${guests}`, amount: guests * P.greenFeeGuest });
+            if (cart) o.lines.push({ label: 'Carrinho elétrico', sub: '2 lugares · 18 buracos', amount: P.cart });
+            if (clubs) o.lines.push({ label: 'Aluguel de tacos', sub: 'Set completo · 14 tacos', amount: P.clubs });
+            o.voucher = [
+              ['Data', shortDate(o.date)],
+              ['Saída', GH.fmt.time(o.date)],
+              ['Local', `${c.name}, tee 1`],
+              ['Jogadores', String(players)],
+            ];
+            o.freeNote = ['Nada a cobrar', 'Sócios não pagam green fee. É só confirmar.'];
+            o.cta0 = 'Confirmar reserva';
+          } else if (tipo === 'range') {
+            const c = GH.course('range');
+            const buckets = clamp(int('baldes', 1), 1, 10);
+            o.date = at(q.get('data'), q.get('hora') || '08:00', 1);
+            const bay = 1 + (hash(`${q.get('data')}|${q.get('hora')}`) % 40);
+            Object.assign(o, {
+              eyebrow: 'Driving range',
+              title: `Baia ${bay}`,
+              sub: 'Driving range · 1 hora',
+              thumb: `<span class="order__thumb order__thumb--photo"><img src="assets/img/${c.photo}.webp" alt="" width="736" height="552"/></span>`,
+              place: `Driving range, baia ${bay}`,
+              back: `reservar.html?campo=range&data=${q.get('data') || ''}&hora=${GH.fmt.time(o.date)}&baldes=${buckets}`,
+              policy: 'Cancelamento sem custo até 2 h antes. Os baldes ficam com o starter do range.',
+              booking: { kind: 'range', course: 'range', bay, items: [{ id: 'balls', qty: buckets }] },
+            });
+            o.facts = [
+              ['calendar', 'Data', longDate(o.date)],
+              ['clock', 'Horário', `${GH.fmt.time(o.date)} às ${GH.fmt.time(new Date(+o.date + 36e5))}`],
+              ['shopping-bag', 'Bolas', GH.fmt.plural(buckets, 'balde de 60', 'baldes de 60')],
+            ];
+            o.lines.push({ label: 'Baia no driving range', note: '1 h', amount: 0 });
+            o.lines.push({ label: 'Balde de bolas', note: `× ${buckets}`, amount: buckets * P.balls });
+            o.voucher = [
+              ['Data', shortDate(o.date)],
+              ['Horário', GH.fmt.time(o.date)],
+              ['Baia', String(bay)],
+              ['Baldes', String(buckets)],
+            ];
+          } else if (tipo === 'aula') {
+            const pr = GH.pros.find((p) => p.id === q.get('pro')) || GH.pros[0];
+            const person = GH.person(pr.id);
+            const dur = q.get('dur') === '30' ? 30 : 60;
+            const price = dur === 30 ? P.lesson30 : P.lesson;
+            const place = /curto|putt/i.test(pr.focus) ? 'Chipping e putting green' : 'Driving range';
+            o.date = at(q.get('data'), q.get('hora') || '17:00', 1);
+            Object.assign(o, {
+              eyebrow: 'Aula',
+              title: person.name,
+              sub: `${pr.title} · ${pr.focus}`,
+              thumb: `<span class="order__thumb">${GH.avatar(pr.id, { size: 'xl' })}</span>`,
+              place,
+              back: `aulas.html?pro=${pr.id}`,
+              policy: 'Remarque ou cancele sem custo até 12 h antes da aula.',
+              booking: { kind: 'aula', pro: pr.id, dur, topic: pr.focus },
+            });
+            o.facts = [
+              ['calendar', 'Data', longDate(o.date)],
+              ['clock', 'Horário', `${GH.fmt.time(o.date)} · ${dur} min`],
+              ['location', 'Local', place],
+            ];
+            o.lines.push({ label: `Aula individual`, note: `${dur} min`, amount: price });
+            o.voucher = [
+              ['Data', shortDate(o.date)],
+              ['Horário', GH.fmt.time(o.date)],
+              ['Professor', GH.first(pr.id)],
+              ['Local', place.split(' ')[0] === 'Chipping' ? 'Putting green' : place],
+            ];
+          } else if (tipo === 'torneio') {
+            const t = GH.tournaments.find((x) => x.id === q.get('id')) || GH.tournaments[0];
+            const c = GH.course(t.course);
+            const left = t.spots - t.entered;
+            o.date = new Date(t.date);
+            Object.assign(o, {
+              eyebrow: 'Torneio',
+              title: t.name,
+              sub: t.format,
+              thumb: `<span class="order__thumb">${ico('cup', 'tile-ico--violet')}</span>`,
+              place: c.name,
+              back: `torneios.html?id=${t.id}`,
+              ok: 'Inscrição confirmada',
+              view: 'Ver inscrição',
+              policy: 'Reembolso integral até o fechamento das inscrições. Saídas divulgadas na véspera.',
+              booking: { kind: 'torneio', ref: t.id, course: t.course },
+            });
+            o.facts = [
+              ['calendar', 'Data', longDate(o.date)],
+              ['clock', 'Concentração', `${GH.fmt.time(o.date)} · ${c.name}`],
+              ['medal-star', 'Seu handicap', `HCP ${GH.fmt.hcp(me.hcp)} <span class="badge ${me.hcp > t.hcpMax ? 'badge--red' : 'badge--green'}">Limite ${t.hcpMax}</span>`],
+              ['profile-2-user', 'Vagas', `<span class="meter" style="--meter:${left < 10 ? 'var(--amber-500)' : 'var(--green-500)'}"><i style="--v:${(t.entered / t.spots).toFixed(2)}"></i></span>${left > 0 ? `${left} de ${t.spots} livres` : 'Esgotado'}`],
+            ];
+            o.lines.push({ label: 'Inscrição', sub: 'Inclui green fee, kit e almoço de premiação', amount: t.fee });
+            o.voucher = [
+              ['Data', shortDate(o.date)],
+              ['Concentração', GH.fmt.time(o.date)],
+              ['Local', c.name],
+              ['Formato', t.format.split(' · ')[0]],
+            ];
+            const entries = GH.store.get('entries', []) || [];
+            if (me.hcp > t.hcpMax)
+              o.blocked = {
+                hard: true,
+                tone: 'amber',
+                icon: 'medal-star',
+                t: 'Handicap acima do limite',
+                s: `Seu HCP ${GH.fmt.hcp(me.hcp)} passa do limite de ${t.hcpMax} deste torneio, então a inscrição não pode ser feita. Escolha um torneio aberto ao seu handicap.`,
+                cta: `<a class="btn btn--primary btn--block" href="torneios.html">${GH.icon('cup')}Ver outros torneios</a>`,
+              };
+            else if (!done && (t.status === 'lotada' || left <= 0))
+              o.blocked = { tone: 'amber', icon: 'cup', t: 'Inscrições esgotadas', s: `As ${t.spots} vagas foram preenchidas. Entre na lista de espera e avisamos se abrir uma vaga.`, cta: `<a class="btn btn--primary btn--block" href="torneios.html?id=${t.id}">${GH.icon('notification-bing')}Entrar na lista de espera</a>` };
+            else if (!done && entries.includes(t.id)) {
+              const mine = (GH.store.get('bookings', []) || []).find((b) => b.ref === t.id);
+              o.blocked = { tone: 'green', icon: 'tick-circle', t: 'Você já está inscrito', s: 'Sua inscrição neste torneio está confirmada.', cta: `<a class="btn btn--primary btn--block" href="reservas.html${mine ? '?id=' + mine.id : ''}">Ver inscrição</a>` };
+            }
+          } else if (tipo === 'evento') {
+            const e = GH.events.find((x) => x.id === q.get('id')) || GH.events[0];
+            const max = Math.max(1, Math.min(6, e.left));
+            S.qtd = clamp(S.qtd, 1, max);
+            o.date = new Date(e.date);
+            Object.assign(o, {
+              eyebrow: 'Evento',
+              title: e.name,
+              sub: e.host ? `Com ${GH.person(e.host).name}` : e.place,
+              thumb: `<span class="order__thumb">${ico(e.fee ? 'ticket-star' : 'ticket', 'tile-ico--amber')}</span>`,
+              place: e.place,
+              back: `torneios.html?id=${e.id}`,
+              ok: e.fee ? 'Inscrição confirmada' : 'Presença confirmada',
+              view: 'Ver inscrição',
+              policy: e.fee ? 'Reembolso até 48 h antes do evento.' : 'Se não puder ir, cancele pelo app para liberar o lugar.',
+              booking: { kind: 'evento', ref: e.id, qty: S.qtd },
+              qty: { max, left: e.left },
+            });
+            o.facts = [
+              ['calendar', 'Data', longDate(o.date)],
+              ['clock', 'Horário', GH.fmt.time(o.date)],
+              ['location', 'Local', e.place],
+            ];
+            o.lines.push(e.fee ? { label: 'Ingresso', note: `× ${S.qtd}`, amount: e.fee * S.qtd } : { label: 'Entrada', note: `× ${S.qtd}`, amount: 0, free: 'Gratuita' });
+            o.voucher = [
+              ['Data', shortDate(o.date)],
+              ['Horário', GH.fmt.time(o.date)],
+              ['Local', e.place.split(' · ')[0]],
+              ['Ingressos', String(S.qtd)],
+            ];
+            o.freeNote = ['Evento gratuito', 'Para sócios e convidados. Só confirme sua presença.'];
+            o.cta0 = 'Confirmar presença';
+            if (!done && e.left <= 0) o.blocked = { tone: 'amber', icon: 'ticket', t: 'Lugares esgotados', s: 'Todos os lugares deste evento foram reservados.', cta: `<a class="btn btn--primary btn--block" href="torneios.html?id=${e.id}">${GH.icon('notification-bing')}Entrar na lista de espera</a>` };
+          } else {
+            /* loja: gh:cart, or ?itens=prov1:1,glove:2, or ?demo=1 */
+            let cart;
+            if (stored && stored.items) cart = stored.items;
+            else if (q.has('itens'))
+              cart = q
+                .get('itens')
+                .split(',')
+                .map((x) => x.split(':'))
+                .map(([id, n]) => ({ id, qty: parseInt(n, 10) || 1 }));
+            else cart = GH.store.get('cart', []) || [];
+            if (!cart.length && (q.get('demo') === '1' || done))
+              cart = [
+                { id: 'prov1', qty: 1 },
+                { id: 'glove', qty: 1 },
+                { id: 'balls', qty: 2 },
+              ];
+            const items = cart.map((c) => ({ ...GH.shop.find((s) => s.id === c.id), qty: c.qty })).filter((i) => i.name && i.qty > 0);
+            const n = items.reduce((a, i) => a + i.qty, 0);
+            /* purchases are collected at the pro shop; rentals are delivered at the tee of the next booked round (same rule as loja.html) */
+            const rent = items.some((i) => i.kind === 'aluguel'),
+              buy = items.some((i) => i.kind !== 'aluguel');
+            const nb = rent ? GH.nextBooking() : null;
+            const teeAt = nb ? `${GH.fmt.dayLabel(nb.date).toLowerCase()}, ${GH.fmt.time(nb.date)}` : '';
+            const rentLine = nb ? `Entregue no tee · ${teeAt}` : 'Entregue no tee na sua saída';
+            o.date = new Date(GH.now);
+            Object.assign(o, {
+              eyebrow: 'Loja do clube',
+              title: rent && !buy ? 'Aluguel' : 'Pro shop',
+              sub: `${GH.fmt.plural(n, 'item', 'itens')} · ${buy && rent ? 'pro shop e tee' : buy ? 'retirada no pro shop' : 'entregue no tee'}`,
+              thumb: `<span class="order__thumb">${ico(rent && !buy ? 'car' : 'bag-2', 'tile-ico--indigo')}</span>`,
+              place: buy ? 'Pro shop do clubhouse' : 'Tee de saída',
+              back: 'loja.html',
+              ok: 'Pedido confirmado',
+              view: 'Ver pedido',
+              agenda: false,
+              policy: [buy && 'Retire os produtos no pro shop com o código do voucher, das 7h às 19h. Troca em até 7 dias.', rent && 'O aluguel é entregue no tee na hora da sua saída.'].filter(Boolean).join(' '),
+              when: buy && rent ? 'Produtos no pro shop · aluguel no tee' : buy ? 'Retire hoje no pro shop, das 7h às 19h' : nb ? `Entregue no tee ${teeAt}` : 'Entregue no tee na sua saída',
+              foot: buy ? `${GH.icon('shop', 'i--sm')}${rent ? 'Mostre o código no pro shop e no tee' : 'Mostre o código no pro shop para retirar'}` : `${GH.icon('flag', 'i--sm')}O aluguel chega no tee na hora da saída`,
+              booking: { kind: 'loja', items: items.map((i) => ({ id: i.id, qty: i.qty })) },
+            });
+            o.facts = [buy && ['shop', 'Produtos', 'Retire no pro shop, hoje das 7h às 19h'], rent && ['flag', 'Aluguel', rentLine]].filter(Boolean);
+            items.forEach((i) => o.lines.push({ label: i.name, sub: i.sub, note: `× ${i.qty}`, amount: i.price * i.qty }));
+            o.voucher = [
+              ['Pedido', shortDate(o.date)],
+              ['Itens', String(n)],
+              ...(buy ? [['Pro shop', '7h às 19h']] : []),
+              ...(rent ? [['Aluguel', nb ? `Tee · ${GH.fmt.time(nb.date)}` : 'No tee']] : []),
+              ...(buy && rent ? [] : [buy ? ['Retirada', 'Pro shop'] : ['Saída', nb ? shortDate(nb.date) : 'A combinar']]),
+            ];
+            if (!items.length) o.blocked = { tone: 'indigo', icon: 'bag-2', t: 'Seu carrinho está vazio', s: 'Escolha produtos ou aluguéis na loja do clube.', cta: `<a class="btn btn--primary btn--block" href="loja.html">${GH.icon('shop')}Ir para a loja</a>`, empty: true };
+          }
+          o.total = o.lines.reduce((a, l) => a + l.amount, 0);
+          return o;
+        }
+
+        let o = build();
+        const view = $('view');
+        const bb = $('bb');
+        const back = $('back');
+        back.href = o.back;
+
+        /* ---------- checkout ---------- */
+        const linesHTML = () =>
+          o.lines
+            .map(
+              (l) => `<div class="line"><span class="line__label">${GH.esc(l.label)}<span class="line__note">${GH.esc(l.note || '')}</span>${l.sub ? `<span class="line__sub">${GH.esc(l.sub)}</span>` : ''}</span>
+              <span class="line__amt${l.amount ? '' : ' line__amt--free'}">${l.amount ? GH.fmt.brl(l.amount) : l.free || 'Incluso'}</span></div>`
+            )
+            .join('') + `<div class="line line--total"><span class="line__label">Total</span><span class="line__amt num" id="total">${o.total ? GH.fmt.brl(o.total) : 'R$ 0,00'}</span></div>`;
+
+        const invoiceHTML = () => {
+          const fee = GH.membership.price;
+          return `<p class="t-sm"><b>Fatura de ${GH.fmt.ddmm(due)}</b> <span class="t-muted">· débito no ${brandName(GH.membership.card.brand)} final ${GH.membership.card.last4}</span></p>
+            <div class="inv__bar" aria-hidden="true"><i style="width:${(fee / (fee + o.total)) * 100}%"></i><i style="width:${(o.total / (fee + o.total)) * 100}%"></i></div>
+            <div class="inv__row"><span class="dot"></span>Mensalidade<b>${GH.fmt.brl(fee)}</b></div>
+            <div class="inv__row"><span class="dot dot--g"></span>${tipo === 'loja' ? 'Este pedido' : tipo === 'torneio' || tipo === 'evento' ? 'Esta inscrição' : 'Esta reserva'}<b id="inv-this">${GH.fmt.brl(o.total)}</b></div>
+            <div class="inv__row inv__row--total">Total da fatura<b id="inv-total">${GH.fmt.brl(fee + o.total)}</b></div>`;
+        };
+
+        const cardHTML = (c, i) => {
+          const on = c.last4 === S.card;
+          return `<label class="cpay">
+            <input class="sr-only" type="radio" name="card" value="${GH.esc(c.last4)}" ${on ? 'checked' : ''} aria-label="${brandName(c.brand)} final ${GH.esc(c.last4)}, validade ${GH.esc(c.exp)}"/>
+            <span class="flip" data-tilt>
+              <span class="flip__in">
+                <span class="ccard">
+                  <span class="ccard__top"><span class="ccard__brand">${GH.esc(c.brand === 'VISA' ? 'VISA' : brandName(c.brand))}</span><span class="ccard__chip"></span></span>
+                  <span class="ccard__num num"><span>* * * *</span><span>${GH.esc(c.last4)}</span></span>
+                  <span class="ccard__exp">Validade ${GH.esc(c.exp)}</span>
+                </span>
+                <span class="ccard ccard--back">
+                  <span class="ccard__stripe"></span>
+                  <span class="ccard__sig"><i>${GH.esc(c.holder || me.name.toUpperCase())}</i><b>•••</b></span>
+                  <span class="ccard__holo"></span>
+                </span>
+              </span>
+            </span>
+          </label>`;
+        };
+
+        const pmRow = (val, icon, tone, title, sub, badge = '') => `<label class="pm press">
+            <input class="sr-only" type="radio" name="pm" value="${val}" ${S.method === val ? 'checked' : ''} aria-describedby="pm-${val}-s"/>
+            <span class="tile-ico ${tone}">${GH.icon(icon)}</span>
+            <span class="pm__body"><span class="pm__title">${title}${badge}</span><span class="pm__sub" id="pm-${val}-s">${sub}</span></span>
+            <span class="pm__radio" aria-hidden="true"></span>
+          </label>`;
+
+        function checkout() {
+          document.title = 'Pagamento · GolfHub';
+          const qtyRow = o.qty
+            ? `<li class="fact"><span class="fact__ico">${GH.icon('ticket', 'i--sm')}</span><span class="fact__txt"><span class="fact__v" id="qty-label">${GH.fmt.plural(S.qtd, 'ingresso', 'ingressos')}</span><span class="fact__k">${GH.fmt.plural(o.qty.left, 'lugar restante', 'lugares restantes')}</span></span>
+                <span class="stepper" role="group" aria-label="Ingressos"><button type="button" id="q-minus" aria-label="Menos um ingresso">${GH.icon('minus', 'i--sm')}</button><output class="num" id="q-out" aria-live="polite">${S.qtd}</output><button type="button" id="q-plus" aria-label="Mais um ingresso">${GH.icon('add', 'i--sm')}</button></span></li>`
+            : '';
+          const pay = o.total > 0 && !o.blocked;
+          view.innerHTML = `
+            ${o.blocked ? `<div class="notice ${o.blocked.tone === 'green' ? 'notice--green' : o.blocked.tone === 'indigo' ? 'notice--indigo' : ''} rise" style="--d:1">${ico(o.blocked.icon, o.blocked.tone === 'green' ? '' : o.blocked.tone === 'indigo' ? 'tile-ico--indigo' : 'tile-ico--amber')}<div><p class="notice__t">${o.blocked.t}</p><p class="notice__s">${o.blocked.s}</p></div></div>` : ''}
+            ${
+              o.blocked && o.blocked.empty
+                ? ''
+                : `<article class="card order rise" style="--d:1" aria-labelledby="o-title">
+              <div class="order__head">${o.thumb}<div><p class="t-eyebrow">${GH.esc(o.eyebrow)}</p><h2 class="order__title" id="o-title">${GH.esc(o.title)}</h2><p class="order__sub">${GH.esc(o.sub)}</p></div></div>
+              <ul class="facts">${o.facts.map(([i, k, v]) => `<li class="fact"><span class="fact__ico">${GH.icon(i, 'i--sm')}</span><span class="fact__txt"><span class="fact__k">${k}</span><span class="fact__v">${v}</span></span></li>`).join('')}${qtyRow}</ul>
+            </article>
+            <section class="section rise" style="--d:2" aria-labelledby="v-title">
+              <div class="section__head"><h2 class="section__title" id="v-title">${tipo === 'loja' ? 'Itens' : 'Valores'}</h2>${tipo === 'loja' ? `<a class="link" href="loja.html">Editar</a>` : ''}</div>
+              <div class="card lines" id="lines">${linesHTML()}</div>
+            </section>`
+            }
+            ${
+              pay
+                ? `<section class="section rise" style="--d:3">
+              <fieldset class="pms" id="pms">
+                <legend class="section__title">Forma de pagamento</legend>
+                ${pmRow('conta', 'wallet-2', '', 'Lançar na mensalidade', `Fatura de ${GH.fmt.ddmm(due)} · sem taxas`, '<span class="badge badge--green">Recomendado</span>')}
+                <div class="pm__panel" data-panel="conta"><div><div class="panel" id="inv">${invoiceHTML()}</div></div></div>
+                ${pmRow('card', 'card', 'tile-ico--indigo', 'Cartão de crédito', `<span id="card-sub">${cardSub()}</span>`)}
+                <div class="pm__panel" data-panel="card"><div><div class="panel">
+                  <div class="cards" id="cards" role="radiogroup" aria-label="Cartões salvos"></div>
+                  <p class="cards-hint">${GH.icon('refresh-2', 'i--xs')}Toque no cartão escolhido para ver o verso</p>
+                </div></div></div>
+                ${pmRow('pix', 'pix', 'tile-ico--sky', 'Pix', 'Aprovação na hora, sem taxas')}
+                <div class="pm__panel" data-panel="pix"><div><div class="panel" id="pix-panel"></div></div></div>
+              </fieldset>
+            </section>`
+                : !o.blocked && o.freeNote
+                  ? `<div class="notice notice--green rise" style="--d:3; margin-top:18px">${ico('tick-circle')}<div><p class="notice__t">${o.freeNote[0]}</p><p class="notice__s">${o.freeNote[1]}</p></div></div>`
+                  : ''
+            }
+            ${o.blocked && (o.blocked.empty || o.blocked.hard) ? '' : `<p class="policy rise" style="--d:4">${GH.icon('shield-tick', 'i--sm')}<span>${o.policy}</span></p>`}`;
+
+          if (o.blocked) bb.innerHTML = o.blocked.cta;
+          else
+            bb.innerHTML = `<button class="btn btn--primary btn--block" type="button" id="pay">${
+              pay ? `<span>Confirmar e pagar</span><span class="num" id="pay-v">${GH.fmt.brl(o.total)}</span>` : `<span>${o.cta0 || 'Confirmar'}</span>`
+            }</button>`;
+
+          if (pay) {
+            renderCards();
+            renderPix();
+            openPanel(false);
+          }
+          wire();
+          GH.reveal();
+        }
+
+        function cardSub() {
+          const c = cardsAll().find((x) => x.last4 === S.card) || GH.membership.card;
+          return `${brandName(c.brand)} •••• ${GH.esc(c.last4)}`;
+        }
+        function renderCards() {
+          const rail = $('cards');
+          if (!rail) return;
+          rail.innerHTML =
+            cardsAll().map(cardHTML).join('') +
+            `<button class="newcard" type="button" id="newcard"><span class="newcard__ball">${GH.icon('add', 'i--sm')}</span>Novo cartão</button>`;
+          rail.querySelectorAll('[data-tilt]').forEach((el) => GH.tilt(el, { max: 10 }));
+          $('card-sub').textContent = cardSub().replace(/&amp;/g, '&');
+        }
+
+        function openPanel(focusIn) {
+          document.querySelectorAll('.pm__panel').forEach((p) => {
+            const open = p.dataset.panel === S.method;
+            p.classList.toggle('is-open', open);
+            p.inert = !open;
+          });
+          if (S.method === 'pix') startPix();
+          const pay = $('pay');
+          if (pay) pay.disabled = S.method === 'pix' && pix.left <= 0;
+        }
+
+        /* ---------- pix ---------- */
+        const PIX_TTL = 15 * 60;
+        const pix = { left: PIX_TTL, started: false, timer: null, n: 0 };
+        const pixCode = () => {
+          const amt = o.total.toFixed(2);
+          return `00020101021226860014br.gov.bcb.pix2564pix.golfhub.com.br/qr/v2/${codeFrom(hash(location.search + pix.n)).slice(3)}${pad(pix.n)}52040000530398654${pad(amt.length)}${amt}5802BR5925CLUBE DE GOLFE DE BRASIL6008BRASILIA62070503***6304${(hash(amt + pix.n) % 65535).toString(16).toUpperCase().padStart(4, '0')}`;
+        };
+        function renderPix() {
+          const el = $('pix-panel');
+          if (!el) return;
+          el.innerHTML = `<div class="pix" id="pix">
+              <div class="pix__qr">${GH.qr(pixCode(), 'QR code Pix para pagar ' + GH.fmt.brl(o.total))}<span class="pix__scan" aria-hidden="true"></span></div>
+              <div class="pix__side">
+                <div class="ring"><svg viewBox="0 0 46 46" aria-hidden="true"><circle class="ring__bg" cx="23" cy="23" r="19"/><circle class="ring__fg" id="ring" cx="23" cy="23" r="19" pathLength="100"/></svg>
+                  <div><div class="ring__t num" id="pix-t" aria-hidden="true">15:00</div><div class="ring__k" id="pix-k">para pagar</div></div></div>
+                <button class="btn btn--outline btn--sm" type="button" id="pix-copy">${GH.icon('copy', 'i--sm')}Copiar código</button>
+              </div>
+            </div>
+            <p class="pix__code" id="pix-code" title="Pix copia e cola">${GH.esc(pixCode())}</p>
+            <p class="sr-only" id="pix-sr">O código expira em 15 minutos.</p>`;
+          tickPix();
+        }
+        function tickPix() {
+          const t = $('pix-t'),
+            r = $('ring'),
+            box = $('pix');
+          if (!t) return;
+          const m = Math.floor(pix.left / 60),
+            s = pix.left % 60;
+          t.textContent = `${pad(m)}:${pad(s)}`;
+          r.style.strokeDashoffset = String(100 - (pix.left / PIX_TTL) * 100);
+          r.style.setProperty('--ring', pix.left <= 60 ? 'var(--red-500)' : pix.left <= 180 ? 'var(--amber-500)' : 'var(--green-500)');
+          const expired = pix.left <= 0;
+          box.classList.toggle('is-expired', expired);
+          $('pix-k').textContent = expired ? 'código expirado' : 'para pagar';
+          const btn = $('pix-copy');
+          if (expired && !btn.dataset.renew) {
+            btn.dataset.renew = '1';
+            btn.innerHTML = `${GH.icon('refresh-2', 'i--sm')}Gerar novo código`;
+            $('pix-sr').textContent = 'O código Pix expirou. Gere um novo para pagar.';
+          }
+          const pay = $('pay');
+          if (pay && S.method === 'pix') pay.disabled = expired;
+        }
+        function startPix() {
+          if (pix.started) return;
+          pix.started = true;
+          pix.timer = setInterval(() => {
+            if (pix.left > 0) pix.left--;
+            tickPix();
+          }, 1000);
+        }
+        if (q.has('pixexpira')) pix.left = clamp(int('pixexpira', 0), 0, PIX_TTL);
+
+        function copy(text, msg) {
+          const ok = () => GH.toast(msg, 'copy');
+          try {
+            navigator.clipboard.writeText(text).then(ok, () => fallback());
+          } catch (e) {
+            fallback();
+          }
+          function fallback() {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.cssText = 'position:absolute;left:-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+              document.execCommand('copy');
+            } catch (e) {}
+            ta.remove();
+            ok();
+          }
+        }
+
+        /* ---------- money refresh (event tickets) ---------- */
+        let shownTotal = o.total;
+        function refreshMoney() {
+          o = build();
+          $('lines').innerHTML = linesHTML();
+          const tot = $('total');
+          GH.countUp(tot, o.total, { from: shownTotal, dur: 600, format: (v) => GH.fmt.brl(Math.round(v)) });
+          const pv = $('pay-v');
+          if (pv) GH.countUp(pv, o.total, { from: shownTotal, dur: 600, format: (v) => GH.fmt.brl(Math.round(v)) });
+          shownTotal = o.total;
+          if ($('inv')) $('inv').innerHTML = invoiceHTML();
+          if ($('pix-code')) {
+            pix.n++;
+            renderPix();
+          }
+        }
+
+        function wire() {
+          const pms = $('pms');
+          if (pms)
+            pms.addEventListener('change', (e) => {
+              if (e.target.name === 'pm') {
+                S.method = e.target.value;
+                GH.haptic();
+                openPanel(true);
+              }
+            });
+          const rail = $('cards');
+          if (rail)
+            rail.addEventListener('click', (e) => {
+              if (e.target.closest('#newcard')) return openCardSheet(e.target.closest('#newcard'));
+              const inp = e.target.closest('input[name="card"]');
+              if (!inp) return;
+              const flip = inp.parentElement.querySelector('.flip');
+              if (inp.value === S.card) {
+                flip.classList.toggle('is-flipped');
+                GH.haptic(12);
+              } else {
+                S.card = inp.value;
+                rail.querySelectorAll('.flip.is-flipped').forEach((f) => f.classList.remove('is-flipped'));
+                $('card-sub').textContent = cardSub();
+                GH.haptic();
+              }
+            });
+          const pc = $('pix-panel');
+          if (pc)
+            pc.addEventListener('click', (e) => {
+              const b = e.target.closest('#pix-copy');
+              if (!b) return;
+              if (b.dataset.renew) {
+                pix.left = PIX_TTL;
+                pix.n++;
+                renderPix();
+                $('pix-copy').focus();
+                GH.toast('Novo código Pix gerado', 'refresh-2');
+                return;
+              }
+              copy(pixCode(), 'Código Pix copiado');
+            });
+          if ($('q-plus')) {
+            const upd = () => {
+              $('q-out').textContent = S.qtd;
+              $('qty-label').textContent = GH.fmt.plural(S.qtd, 'ingresso', 'ingressos');
+              $('q-minus').disabled = S.qtd <= 1;
+              $('q-plus').disabled = S.qtd >= o.qty.max;
+            };
+            upd();
+            $('q-plus').addEventListener('click', () => {
+              if (S.qtd >= o.qty.max) return;
+              S.qtd++;
+              GH.haptic();
+              refreshMoney();
+              upd();
+            });
+            $('q-minus').addEventListener('click', () => {
+              if (S.qtd <= 1) return;
+              S.qtd--;
+              GH.haptic();
+              refreshMoney();
+              upd();
+            });
+          }
+          const pay = $('pay');
+          if (pay) pay.addEventListener('click', submit);
+        }
+
+        /* ---------- new card ---------- */
+        const cs = $('card-sheet');
+        const f = { num: $('cc-num'), exp: $('cc-exp'), cvv: $('cc-cvv'), name: $('cc-name') };
+        const brandOf = (d) => (/^4/.test(d) ? 'VISA' : /^(5[1-5]|2[2-7])/.test(d) ? 'MASTERCARD' : /^3[47]/.test(d) ? 'AMEX' : 'CARTÃO');
+        function openCardSheet(opener) {
+          $('card-form').reset();
+          Object.keys(f).forEach((k) => setErr(k, ''));
+          paintPreview();
+          GH.sheet.open(cs, opener);
+        }
+        function paintPreview() {
+          const d = f.num.value.replace(/\D/g, '');
+          $('pv-brand').textContent = d ? (brandOf(d) === 'CARTÃO' ? 'CARTÃO' : brandOf(d)) : 'CARTÃO';
+          const shown = (d + '•'.repeat(Math.max(0, 16 - d.length))).slice(0, 16);
+          $('pv-num').textContent = shown.replace(/(.{4})/g, '$1 ').trim();
+          $('pv-exp').textContent = f.exp.value || 'MM/AA';
+          $('pv-name').textContent = f.name.value.trim() || 'Nome no cartão';
+          $('pv-sig').textContent = f.name.value.trim() || 'Assinatura';
+          $('pv-cvv').textContent = f.cvv.value ? f.cvv.value.replace(/./g, '•') : '•••';
+        }
+        f.num.addEventListener('input', () => {
+          const d = f.num.value.replace(/\D/g, '').slice(0, 19);
+          f.num.value = d.replace(/(.{4})/g, '$1 ').trim();
+          paintPreview();
+        });
+        f.exp.addEventListener('input', (e) => {
+          let d = f.exp.value.replace(/\D/g, '').slice(0, 4);
+          if (d.length >= 3) d = d.slice(0, 2) + '/' + d.slice(2);
+          f.exp.value = d;
+          paintPreview();
+        });
+        f.cvv.addEventListener('input', () => {
+          f.cvv.value = f.cvv.value.replace(/\D/g, '').slice(0, 4);
+          paintPreview();
+        });
+        f.name.addEventListener('input', paintPreview);
+        f.cvv.addEventListener('focus', () => $('pv').classList.add('is-flipped'));
+        f.cvv.addEventListener('blur', () => $('pv').classList.remove('is-flipped'));
+        function setErr(k, msg) {
+          const e = $(`cc-${k}-e`);
+          f[k].setAttribute('aria-invalid', msg ? 'true' : 'false');
+          e.hidden = !msg;
+          e.innerHTML = msg ? `${GH.icon('warning-2', 'i--xs')}${msg}` : '';
+        }
+        $('card-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const d = f.num.value.replace(/\D/g, '');
+          const [mm, yy] = f.exp.value.split('/').map(Number);
+          const expOk = mm >= 1 && mm <= 12 && yy >= 0 && new Date(2000 + yy, mm, 1) > GH.now;
+          const errs = {
+            num: d.length < 13 ? 'Confira o número do cartão' : '',
+            exp: !/^\d\d\/\d\d$/.test(f.exp.value) ? 'Use o formato MM/AA' : !expOk ? 'Cartão vencido' : '',
+            cvv: f.cvv.value.length < 3 ? 'O CVV tem 3 ou 4 dígitos' : '',
+            name: f.name.value.trim().length < 3 ? 'Digite o nome como está no cartão' : '',
+          };
+          Object.entries(errs).forEach(([k, m]) => setErr(k, m));
+          const first = Object.keys(errs).find((k) => errs[k]);
+          if (first) return f[first].focus();
+          const card = { brand: brandOf(d), last4: d.slice(-4), exp: f.exp.value, holder: f.name.value.trim().toUpperCase() };
+          const list = (GH.store.get('cards', []) || []).filter((c) => c.last4 !== card.last4);
+          GH.store.set('cards', [...list, card]);
+          S.card = card.last4;
+          GH.sheet.close(cs);
+          renderCards();
+          GH.toast(`Cartão final ${card.last4} adicionado`, 'card-tick');
+          const rail = $('cards');
+          requestAnimationFrame(() => rail.scrollTo({ left: rail.scrollWidth, behavior: GH.reduceMotion() ? 'auto' : 'smooth' }));
+        });
+
+        /* ---------- submit → processing → success ---------- */
+        let busy = false;
+        function submit() {
+          const pay = $('pay');
+          if (busy || !pay || pay.disabled) return;
+          busy = true;
+          pay.disabled = true;
+          pay.setAttribute('aria-busy', 'true');
+          GH.haptic(14);
+          const method = o.total > 0 ? S.method : 'conta';
+          const proc = $('proc');
+          const msg = $('proc-msg');
+          const steps = proc.querySelectorAll('.proc__steps i');
+          const say = (t, k) => {
+            msg.innerHTML = `<span>${t}</span>`;
+            steps.forEach((s, i) => s.classList.toggle('is-on', i <= k));
+          };
+          const mid = o.total === 0 ? 'Confirmando' : method === 'pix' ? 'Confirmando o Pix' : method === 'card' ? 'Autorizando o cartão' : 'Lançando na mensalidade';
+          proc.hidden = false;
+          $('main').inert = true;
+          bb.inert = true;
+          say('Validando dados', 0);
+          requestAnimationFrame(() => {
+            proc.classList.add('is-on');
+            const w = proc.querySelector('.putt').clientWidth;
+            requestAnimationFrame(() => {
+              $('ball').style.translate = `${w - 58}px 0`;
+              $('ball').style.rotate = '900deg';
+              $('trail').style.width = `${w - 66}px`;
+            });
+          });
+          setTimeout(() => say(mid, 1), 380);
+          setTimeout(() => say(o.kind === 'loja' ? 'Gerando o pedido' : 'Gerando o voucher', 2), 820);
+          setTimeout(() => proc.classList.add('is-sunk'), 1120);
+          setTimeout(() => {
+            const b = commit(method);
+            clearInterval(pix.timer);
+            success(b, true);
+            proc.classList.remove('is-on');
+            $('main').inert = false;
+            bb.inert = false;
+            setTimeout(() => {
+              proc.hidden = true;
+              proc.classList.remove('is-sunk');
+            }, 320);
+          }, 1420);
+        }
+
+        /* fixed = { id, code } when a ?done=1 deep link is opened directly: same id on every load, so it is written once */
+        function commit(method, fixed) {
+          const id = fixed ? fixed.id : 'bk-' + Date.now().toString(36);
+          const b = {
+            id,
+            ...o.booking,
+            date: o.date.toISOString(),
+            status: 'confirmada',
+            code: fixed ? fixed.code : codeFrom(hash(id + Math.random())),
+            total: o.total,
+            method,
+          };
+          if (method === 'card') b.card = S.card;
+          const saved = GH.store.get('bookings', []) || [];
+          if (!saved.some((x) => x.id === id)) GH.store.set('bookings', [b, ...saved]);
+          if (o.booking.ref) {
+            const en = GH.store.get('entries', []) || [];
+            if (!en.includes(o.booking.ref)) GH.store.set('entries', [...en, o.booking.ref]);
+          }
+          if (tipo === 'loja') GH.store.remove('cart');
+          /* refresh shows the voucher instead of charging twice */
+          const p = new URLSearchParams(location.search);
+          p.set('done', '1');
+          p.set('reserva', id);
+          p.set('metodo', method);
+          if (tipo === 'evento') p.set('qtd', S.qtd);
+          try {
+            history.replaceState(null, '', `${location.pathname}?${pretty(p)}`);
+          } catch (e) {}
+          return b;
+        }
+
+        function payLine(b) {
+          if (!b.total) return o.kind === 'evento' ? 'Evento gratuito' : 'Sem custo para sócios';
+          if (b.method === 'pix') return `Pago via Pix · ${GH.fmt.brl(b.total)}`;
+          if (b.method === 'card') {
+            const c = cardsAll().find((x) => x.last4 === b.card) || GH.membership.card;
+            return `Pago com ${brandName(c.brand)} •••• ${c.last4} · ${GH.fmt.brl(b.total)}`;
+          }
+          return `${GH.fmt.brl(b.total)} na fatura de ${GH.fmt.ddmm(due)}`;
+        }
+
+        function success(b, live) {
+          const when = o.when || `${longDate(o.date)} · ${GH.fmt.time(o.date)}`;
+          document.title = `${o.ok} · GolfHub`;
+          $('bar-title').textContent = o.kind === 'loja' ? 'Pedido' : 'Voucher';
+          back.removeAttribute('data-back');
+          back.href = 'home.html';
+          back.setAttribute('aria-label', 'Fechar e voltar ao início');
+          back.innerHTML = GH.icon('close-circle');
+          $('bar-end').outerHTML = `<button class="icon-btn" type="button" id="share" aria-label="Compartilhar voucher">${GH.icon('share')}</button>`;
+          const foot =
+            o.foot ||
+            (o.kind === 'torneio'
+                ? `${GH.icon('location-tick', 'i--sm')}Faça check-in pelo app ao chegar ao clube`
+                : `${GH.icon('location-tick', 'i--sm')}Faça check-in pelo app ao chegar`);
+          view.innerHTML = `
+            <div class="ok">
+              <div class="ok__check pop">${GH.check('i--xl')}</div>
+              <h2 class="ok__title rise" style="--d:2" id="ok-title" tabindex="-1">${o.ok}</h2>
+              <p class="ok__sub rise" style="--d:3">${GH.esc(when)}</p>
+            </div>
+            <div class="ticket-wrap">
+              <article class="ticket" id="ticket" aria-labelledby="t-k">
+                <div class="ticket__top">
+                  <span class="ticket__holo" aria-hidden="true"></span>
+                  <p class="ticket__brand">${GH.flag('flag')}<b>GolfHub</b><span class="ticket__sep" aria-hidden="true"></span><span>${GH.esc(GH.club.name)}</span></p>
+                  <div class="ticket__row">
+                    <div><p class="ticket__k" id="t-k">${GH.esc(o.eyebrow)}</p><p class="ticket__title">${GH.esc(o.title)}</p></div>
+                    <div class="ticket__code"><p class="ticket__k">Código</p><p>${GH.esc(b.code)}</p></div>
+                  </div>
+                </div>
+                <div class="ticket__body">
+                  <div class="ticket__qr">${GH.qr(b.code, `QR code do voucher ${b.code}`)}</div>
+                  <dl class="ticket__grid">${o.voucher.map(([k, v]) => `<div><dt>${k}</dt><dd>${GH.esc(v)}</dd></div>`).join('')}</dl>
+                </div>
+                <p class="ticket__foot">${foot}</p>
+              </article>
+            </div>
+            <p class="paid rise" style="--d:12">${GH.icon(b.method === 'pix' ? 'pix' : b.method === 'card' ? 'card' : 'wallet-2', 'i--xs')}${GH.esc(payLine(b))}</p>`;
+          const href = b.id && (GH.store.get('bookings', []) || []).some((x) => x.id === b.id) ? `reservas.html?id=${encodeURIComponent(b.id)}` : 'reservas.html';
+          bb.innerHTML = `<a class="btn btn--primary btn--block rise" style="--d:10" href="${href}">${GH.icon(o.kind === 'loja' ? 'receipt-text' : 'calendar-tick')}${o.view}</a>
+            <div class="bb-row rise" style="--d:12">
+              ${o.agenda ? `<button class="btn btn--ghost btn--sm" type="button" id="agenda">Adicionar à agenda</button>` : `<a class="btn btn--ghost btn--sm" href="loja.html">Continuar comprando</a>`}
+              <a class="btn btn--ghost btn--sm" href="home.html">Voltar ao início</a>
+            </div>`;
+          GH.tilt($('ticket'), { max: 7 });
+          const ag = $('agenda');
+          if (ag)
+            ag.addEventListener('click', () => {
+              ag.disabled = true;
+              ag.innerHTML = `${GH.icon('calendar-tick', 'i--sm')}Na sua agenda`;
+              GH.toast('Adicionado à sua agenda', 'calendar-tick');
+            });
+          $('share').addEventListener('click', () => {
+            const text = `${o.ok} · ${o.kind === 'loja' ? 'Pro shop' : o.title} · ${o.kind === 'loja' ? '' : shortDate(o.date) + ' ' + GH.fmt.time(o.date) + ' · '}código ${b.code} — ${GH.club.name}`;
+            if (navigator.share) navigator.share({ title: 'GolfHub', text }).catch(() => {});
+            else copy(text, 'Voucher copiado para compartilhar');
+          });
+          if (live) {
+            GH.haptic(20);
+            requestAnimationFrame(() => $('ok-title').focus({ preventScroll: true }));
+          }
+        }
+
+        /* ---------- boot ---------- */
+        if (done && (stored || !(o.blocked && o.blocked.hard))) {
+          /* ?done=1 opened directly (deep link / screenshot): honour the contract and save the booking, so "Ver reserva" opens it.
+             A hard block (handicap over the limit) never confirms, not even from a deep link. */
+          let b = stored;
+          if (!b) {
+            const code = codeFrom(hash(tipo + [...q.entries()].filter(([k]) => !['done', 'shot', 'metodo', 'reserva'].includes(k)).join('&')));
+            const method = o.total > 0 ? (['conta', 'card', 'pix'].includes(q.get('metodo')) ? q.get('metodo') : 'conta') : 'conta';
+            b = o.blocked ? { id: null, code, total: o.total, method, card: S.card } : commit(method, { id: 'bk-' + code.slice(3).toLowerCase(), code });
+          }
+          success(b);
+        } else checkout();
+      })();
+    </script>
+  </body>
+</html>

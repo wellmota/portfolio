@@ -1,0 +1,1511 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Nova rodada · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Round setup (inferred from Home's "Começar rodada"): course, tee, nines, group, options, summary.
+         Same language as the Figma: photo cards with the green glow, charcoal selection, white rows, flag CTA. */
+      .screen {
+        padding-bottom: 40px;
+      }
+      .block {
+        display: grid;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .block__head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .block__sub {
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+
+      /* ---- round in progress ---- */
+      .live {
+        display: grid;
+        gap: 14px;
+        margin-top: 6px;
+        padding: 16px 16px 14px;
+        border-radius: var(--r-lg);
+        color: #fff;
+        background: var(--char);
+        box-shadow: var(--shadow-btn);
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .live::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.08;
+        mix-blend-mode: overlay;
+      }
+      .live__top {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .live__ico {
+        position: relative;
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: var(--char-2);
+      }
+      .live__ico .flag {
+        width: 18px;
+        height: 26px;
+        color: #fff;
+      }
+      .live__ico::after {
+        /* live dot */
+        content: '';
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--green-300);
+        box-shadow: 0 0 0 2.5px var(--char);
+        animation: live 1.8s var(--ease) infinite;
+      }
+      @keyframes live {
+        0%,
+        100% {
+          box-shadow:
+            0 0 0 2.5px var(--char),
+            0 0 0 2.5px rgba(56, 235, 127, 0.5);
+        }
+        60% {
+          box-shadow:
+            0 0 0 2.5px var(--char),
+            0 0 0 10px rgba(56, 235, 127, 0);
+        }
+      }
+      .live__k {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--green-300);
+      }
+      .live__t {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        color: #fff;
+      }
+      .live__s {
+        font-size: 13px;
+        color: #c2c2c2;
+      }
+      .live__actions {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 8px;
+      }
+      .live__go {
+        color: var(--ink);
+        background: #fff;
+      }
+      .live__drop {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .live__drop:hover {
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      /* ---- course cards (radiogroup) ---- */
+      .courses {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        padding-bottom: 6px;
+      }
+      .pick {
+        height: 208px;
+        border-radius: 30px;
+        text-align: left;
+        box-shadow: 0 26px 30px -26px rgba(26, 78, 38, 0.55);
+        transition:
+          box-shadow var(--t-med) var(--ease),
+          filter var(--t-med) var(--ease),
+          opacity var(--t-med) var(--ease);
+      }
+      .pick[aria-checked='false'] {
+        filter: saturate(0.7);
+        opacity: 0.82;
+      }
+      .pick[aria-checked='true'] {
+        box-shadow:
+          0 0 0 3px #fff,
+          0 0 0 5.5px var(--indigo-500),
+          var(--shadow-photo);
+      }
+      .pick:focus-visible {
+        outline-offset: 7px;
+        border-radius: 30px;
+      }
+      .pick__radio {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition: background var(--t-med) var(--ease);
+      }
+      .pick__radio .i {
+        width: 16px;
+        height: 16px;
+        stroke-width: 2.6;
+        color: #fff;
+        transform: scale(0);
+        transition: transform var(--t-med) var(--ease-spring);
+      }
+      .pick[aria-checked='true'] .pick__radio {
+        background: var(--indigo-500);
+        box-shadow: 0 6px 14px -4px rgba(74, 58, 255, 0.8);
+      }
+      .pick[aria-checked='true'] .pick__radio .i {
+        transform: none;
+      }
+      .pick__foot {
+        position: absolute;
+        inset: auto 16px 16px;
+        display: grid;
+        gap: 2px;
+      }
+      .pick__name {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+      }
+      .pick__kind {
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.86);
+      }
+
+      /* ---- morphing selection (a charcoal / white thumb slides to the chosen option) ---- */
+      .morph {
+        position: relative;
+        isolation: isolate;
+      }
+      .morph__thumb {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        border-radius: 18px;
+        background: var(--char);
+        box-shadow: 0 16px 22px -14px rgba(30, 30, 30, 0.8);
+        transition:
+          transform 520ms var(--ease-spring),
+          width 520ms var(--ease-spring),
+          height 520ms var(--ease-spring);
+        pointer-events: none;
+      }
+      .morph__thumb.is-still {
+        transition: none;
+      }
+      .tees {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .tee {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 62px;
+        padding: 10px 14px;
+        border-radius: 18px;
+        text-align: left;
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+        transition:
+          color 300ms var(--ease),
+          box-shadow 300ms var(--ease);
+      }
+      .tee[aria-checked='true'] {
+        color: #fff;
+        box-shadow: inset 0 0 0 1px transparent;
+      }
+      .tee:active {
+        transform: scale(0.97);
+      }
+      .tee__dot {
+        flex: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--c);
+        box-shadow:
+          inset 0 -3px 4px rgba(0, 0, 0, 0.22),
+          inset 0 2px 3px rgba(255, 255, 255, 0.45),
+          0 0 0 1px rgba(0, 0, 0, 0.14);
+        transition: transform 420ms var(--ease-spring);
+      }
+      .tee[aria-checked='true'] .tee__dot {
+        transform: scale(1.18);
+        box-shadow:
+          inset 0 -3px 4px rgba(0, 0, 0, 0.22),
+          inset 0 2px 3px rgba(255, 255, 255, 0.45),
+          0 0 0 2px rgba(255, 255, 255, 0.85);
+      }
+      .tee__txt {
+        display: grid;
+        line-height: 1.25;
+      }
+      .tee__name {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .tee__len {
+        font-size: 12.5px;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
+        transition: color 300ms var(--ease);
+      }
+      .tee[aria-checked='true'] .tee__len {
+        color: rgba(255, 255, 255, 0.72);
+      }
+      /* segmented control with a sliding white thumb */
+      .seg.morph button {
+        position: relative;
+        background: none;
+        box-shadow: none;
+      }
+      .seg.morph button[aria-checked='true'] {
+        background: none;
+        box-shadow: none;
+        color: var(--ink);
+      }
+      .seg.morph .morph__thumb {
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: var(--shadow-xs), 0 6px 14px -8px rgba(0, 0, 0, 0.18);
+      }
+      .seg button[aria-disabled='true'] {
+        color: var(--ink-4);
+        cursor: default;
+      }
+      .nines-note {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .nines-note .i {
+        color: var(--green-700);
+      }
+
+      /* ---- the foursome ---- */
+      .four {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        padding: 16px 8px 14px;
+        border-radius: var(--r-lg);
+        background: var(--sunken);
+      }
+      .slot {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 6px;
+        text-align: center;
+        min-width: 0;
+      }
+      .slot .av {
+        --s: 56px;
+      }
+      .slot__ring {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+      }
+      .slot--me .slot__ring {
+        background: conic-gradient(from 210deg, var(--green-300), var(--green-700), var(--green-300));
+      }
+      .slot--me .av {
+        box-shadow: 0 0 0 2.5px var(--sunken);
+      }
+      .slot--filled .slot__ring {
+        background: #fff;
+        box-shadow: 0 10px 16px -10px rgba(0, 0, 0, 0.45);
+      }
+      .slot--empty .slot__ring {
+        width: 56px;
+        height: 56px;
+        margin: 3px;
+        border: 1.5px dashed var(--ink-5);
+        color: var(--ink-4);
+        transition:
+          border-color var(--t-fast) var(--ease),
+          color var(--t-fast) var(--ease);
+      }
+      .slot__btn:hover .slot__ring {
+        border-color: var(--ink-3);
+        color: var(--ink-3);
+      }
+      .slot__btn {
+        display: grid;
+        justify-items: center;
+        align-content: start;
+        gap: 6px;
+        width: 100%;
+        min-height: 44px;
+        border-radius: 14px;
+      }
+      .slot__name {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .slot__hcp {
+        margin-top: -6px;
+        font-size: 11.5px;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
+      }
+      .slot--empty .slot__name {
+        font-weight: 500;
+        color: var(--ink-3);
+      }
+      .slot__x {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        display: grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--char);
+        box-shadow: 0 0 0 2px var(--sunken);
+      }
+      .slot__x::before {
+        /* 44 px target around the small badge */
+        content: '';
+        position: absolute;
+        inset: -11px;
+        border-radius: 50%;
+      }
+      .slot__x .i {
+        width: 12px;
+        height: 12px;
+        stroke-width: 2.6;
+      }
+      .slot.is-landing .slot__ring {
+        opacity: 0;
+      }
+      .slot.is-landed .slot__ring {
+        animation: land 520ms var(--ease-spring);
+      }
+      @keyframes land {
+        0% {
+          transform: scale(0.82);
+        }
+        55% {
+          transform: scale(1.08);
+        }
+      }
+      .slot.is-landing .slot__name,
+      .slot.is-landing .slot__hcp {
+        opacity: 0;
+      }
+      .slot__name,
+      .slot__hcp {
+        transition: opacity 300ms var(--ease);
+      }
+      .hint {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .here-dot {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--green-500);
+        vertical-align: 1px;
+      }
+      .rail {
+        display: flex;
+        gap: 4px;
+        margin: -2px calc(var(--gutter) * -1) 0;
+        padding: 6px var(--gutter) 6px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x proximity;
+        scroll-padding: 0 var(--gutter);
+      }
+      .rail::-webkit-scrollbar {
+        display: none;
+      }
+      .friend {
+        flex: none;
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+        width: 70px;
+        padding: 4px 0 6px;
+        border-radius: 16px;
+        scroll-snap-align: start;
+        transition: opacity var(--t-med) var(--ease);
+      }
+      .friend__ring {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 2px transparent;
+        transition: box-shadow var(--t-med) var(--ease);
+      }
+      .friend .av {
+        --s: 50px;
+        transition:
+          transform var(--t-med) var(--ease-spring),
+          filter var(--t-med) var(--ease);
+      }
+      .friend:active .av {
+        transform: scale(0.92);
+      }
+      .friend[aria-pressed='true'] .friend__ring {
+        box-shadow: inset 0 0 0 2.5px var(--indigo-500);
+      }
+      .friend[aria-pressed='true'] .av {
+        filter: saturate(0.6) brightness(1.06);
+        transform: scale(0.86);
+      }
+      .friend__check {
+        position: absolute;
+        right: -2px;
+        bottom: -2px;
+        display: grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--indigo-500);
+        box-shadow: 0 0 0 2px #fff;
+        transform: scale(0);
+        transition: transform var(--t-med) var(--ease-spring);
+      }
+      .friend__check .i {
+        width: 13px;
+        height: 13px;
+        stroke-width: 2.8;
+      }
+      .friend[aria-pressed='true'] .friend__check {
+        transform: none;
+      }
+      .friend__here {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--green-500);
+        box-shadow: 0 0 0 2px #fff;
+      }
+      .friend__name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .friend__hcp {
+        margin-top: -3px;
+        font-size: 11.5px;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
+      }
+      .friend[aria-disabled='true'] {
+        opacity: 0.42;
+      }
+      /* Figma "Novo cartão": dashed outline + green plus */
+      .friend--add .friend__ring {
+        border: 1.5px dashed var(--ink-5);
+      }
+      .friend__plus {
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(180deg, #2ad46e, var(--green-600));
+        box-shadow: 0 8px 14px -6px rgba(16, 111, 54, 0.7);
+      }
+      .friend__plus .i {
+        width: 18px;
+        height: 18px;
+        stroke-width: 2.4;
+      }
+
+      /* the avatar that flies from the rail into the foursome */
+      .flyer {
+        position: absolute;
+        z-index: 70;
+        pointer-events: none;
+        border-radius: 50%;
+        will-change: transform;
+      }
+      .flyer .av {
+        --s: 100%;
+        width: 100%;
+        height: 100%;
+        box-shadow: 0 18px 28px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ---- options ---- */
+      .opt {
+        cursor: pointer;
+      }
+      .opt .row__sub b {
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+
+      /* ---- summary ---- */
+      .sum {
+        display: grid;
+        padding: 6px 18px;
+      }
+      .sum__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        min-height: 50px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .sum__row:last-child {
+        border-bottom: 0;
+      }
+      .sum__k {
+        color: var(--ink-3);
+      }
+      .sum__v {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-align: right;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .sum__v .tee__dot {
+        width: 12px;
+        height: 12px;
+      }
+      .sum__v .stack .av {
+        --s: 26px;
+      }
+      .sum__v .stack > * + * {
+        margin-left: -9px;
+      }
+      .sum__total {
+        align-items: flex-start;
+      }
+      .sum__total .sum__v {
+        display: grid;
+        gap: 2px;
+        font-size: 17px;
+      }
+      .sum__total small {
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--ink-3);
+      }
+
+      .go-btn .flag {
+        transform-origin: 2px 23px;
+        transition: transform 420ms var(--ease-spring);
+      }
+      .go-btn:hover .flag,
+      .go-btn:focus-visible .flag {
+        transform: rotate(-8deg);
+      }
+
+      /* ---- "Ir para o tee": charcoal takes over the screen from the button ---- */
+      .launch {
+        position: absolute;
+        inset: 0;
+        z-index: 90;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        background: radial-gradient(420px 340px at 50% 46%, #2f4a35, var(--char) 70%);
+        clip-path: circle(0 at var(--cx, 50%) var(--cy, 90%));
+        transition: clip-path 760ms cubic-bezier(0.7, 0, 0.2, 1);
+        pointer-events: none;
+        isolation: isolate;
+      }
+      .launch::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.12;
+        mix-blend-mode: overlay;
+      }
+      .launch.is-on {
+        clip-path: circle(150% at var(--cx, 50%) var(--cy, 90%));
+        pointer-events: auto;
+      }
+      .launch__in {
+        display: grid;
+        justify-items: center;
+        gap: 10px;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(16px) scale(0.96);
+        transition:
+          opacity 500ms var(--ease) 320ms,
+          transform 700ms var(--ease) 320ms;
+      }
+      .launch.is-on .launch__in {
+        opacity: 1;
+        transform: none;
+      }
+      .launch__flag {
+        width: 44px;
+        height: 64px;
+        margin-bottom: 8px;
+        color: #fff;
+        transform-origin: 3px 60px;
+        animation: wave 1.4s var(--ease) 500ms both;
+      }
+      @keyframes wave {
+        0% {
+          transform: translateY(26px) scaleY(0.4);
+          opacity: 0;
+        }
+        40% {
+          transform: none;
+          opacity: 1;
+        }
+        60% {
+          transform: rotate(-5deg);
+        }
+        80% {
+          transform: rotate(2deg);
+        }
+      }
+      .launch__k {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--green-300);
+      }
+      .launch__t {
+        font-size: 44px;
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1;
+        color: #fff;
+      }
+      .launch__s {
+        font-size: 15px;
+        color: #c9c9c9;
+      }
+      .launch__bar {
+        width: 140px;
+        height: 4px;
+        margin-top: 18px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.14);
+        overflow: hidden;
+      }
+      .launch__bar i {
+        display: block;
+        height: 100%;
+        background: var(--green-grad);
+        background: linear-gradient(90deg, var(--green-300), var(--green-500));
+        transform-origin: left;
+        transform: scaleX(0);
+      }
+      .launch.is-on .launch__bar i {
+        transition: transform 900ms var(--ease) 420ms;
+        transform: none;
+      }
+
+      .btn--danger {
+        color: #fff;
+        background: #c8322f;
+        box-shadow: 0 18px 26px -16px rgba(200, 50, 47, 0.8);
+      }
+      .sheet-text {
+        font-size: 15px;
+        color: var(--ink-2);
+        margin-bottom: 18px;
+      }
+      .sheet-actions {
+        display: grid;
+        gap: 10px;
+      }
+      .fee {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin: 14px 0 18px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 13px;
+        color: var(--ink-2);
+        background: var(--sunken);
+      }
+      .fee .i {
+        color: var(--violet-600);
+        margin-top: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <div class="bar rise">
+          <a class="icon-btn" href="home.html" data-back aria-label="Voltar"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title">Nova rodada</h1>
+          <span aria-hidden="true"></span>
+        </div>
+
+        <section class="live pop" id="live" aria-labelledby="live-t" hidden></section>
+
+        <section class="block rise" style="--d: 1" aria-labelledby="t-campo">
+          <div class="block__head">
+            <h2 class="section__title" id="t-campo">Campo</h2>
+            <span class="block__sub" id="weather"></span>
+          </div>
+          <div class="courses" id="courses" role="radiogroup" aria-labelledby="t-campo"></div>
+        </section>
+
+        <section class="block rise" style="--d: 2" aria-labelledby="t-tee">
+          <div class="block__head">
+            <h2 class="section__title" id="t-tee">Saída</h2>
+            <span class="block__sub">De qual tee você joga?</span>
+          </div>
+          <div class="tees morph" id="tees" role="radiogroup" aria-labelledby="t-tee"></div>
+        </section>
+
+        <section class="block rise" style="--d: 3" aria-labelledby="t-holes">
+          <h2 class="section__title" id="t-holes">Buracos</h2>
+          <div class="seg morph" id="nines" role="radiogroup" aria-labelledby="t-holes"></div>
+          <p class="nines-note" id="nines-note" aria-live="polite"></p>
+        </section>
+
+        <section class="block reveal" aria-labelledby="t-group">
+          <div class="block__head">
+            <h2 class="section__title" id="t-group">Jogadores</h2>
+            <span class="block__sub num" id="group-count" aria-live="polite"></span>
+          </div>
+          <ol class="four" id="four" aria-label="Seu grupo"></ol>
+          <p class="hint"><span>Toque para chamar até 3 parceiros.</span><span><span class="here-dot" aria-hidden="true"></span> no clube agora</span></p>
+          <div class="rail" id="rail" role="group" aria-label="Parceiros"></div>
+        </section>
+
+        <section class="block reveal" aria-labelledby="t-opt">
+          <h2 class="section__title" id="t-opt">Opções</h2>
+          <div class="rows">
+            <div class="row opt" data-switch="cart">
+              <span class="tile-ico tile-ico--indigo"><span data-icon="car"></span></span>
+              <div class="row__body">
+                <span class="row__title" id="l-cart">Carrinho elétrico</span>
+                <span class="row__sub" id="d-cart"></span>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="l-cart" aria-describedby="d-cart" id="sw-cart"></button>
+            </div>
+            <div class="row opt" data-switch="hcp">
+              <span class="tile-ico"><span data-icon="chart-2"></span></span>
+              <div class="row__body">
+                <span class="row__title" id="l-hcp">Contar handicap</span>
+                <span class="row__sub" id="d-hcp"></span>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="l-hcp" aria-describedby="d-hcp" id="sw-hcp"></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="block reveal" aria-labelledby="t-sum">
+          <h2 class="section__title" id="t-sum">Resumo</h2>
+          <div class="card sum" id="sum" aria-live="polite"></div>
+        </section>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 4">
+        <button class="btn btn--primary btn--block go-btn" type="button" id="go"><span data-flag></span><span id="go-label">Ir para o tee 1</span></button>
+      </div>
+
+      <div class="launch" id="launch" aria-hidden="true">
+        <div class="launch__in">
+          <svg class="launch__flag" viewBox="0 0 16 24" aria-hidden="true">
+            <defs><linearGradient id="lf" x1="0" y1="0" x2="1" y2=".2"><stop offset="0" stop-color="#38eb7f" /><stop offset="1" stop-color="#106f36" /></linearGradient></defs>
+            <rect x="1" y="1" width="1.6" height="22" rx=".8" fill="currentColor" />
+            <path d="M2.6 1.6 14.6 6.6 2.6 12.2Z" fill="url(#lf)" />
+          </svg>
+          <p class="launch__k" id="launch-k">Campo A · Tee branco</p>
+          <p class="launch__t" id="launch-t">Buraco 1</p>
+          <p class="launch__s" id="launch-s"></p>
+          <span class="launch__bar"><i></i></span>
+        </div>
+      </div>
+      <p class="sr-only" role="status" id="announce"></p>
+
+      <!-- guest -->
+      <div class="sheet" id="guest-sheet" role="dialog" aria-modal="true" aria-labelledby="gs-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="gs-title">Adicionar convidado</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <form class="sheet__body" id="guest-form" novalidate>
+          <div class="field">
+            <label class="field__label" for="g-name">Nome do convidado</label>
+            <input class="input" id="g-name" name="name" autocomplete="off" placeholder="Ex.: Marina Souza" aria-describedby="g-err" />
+            <p class="field__error" id="g-err" hidden><span data-icon="warning-2" class="i--sm"></span><span></span></p>
+          </div>
+          <div class="field" style="margin-top: 14px">
+            <label class="field__label" for="g-hcp">Handicap <span class="t-muted" style="font-weight: 400">(opcional)</span></label>
+            <input class="input" id="g-hcp" name="hcp" inputmode="decimal" autocomplete="off" placeholder="Ex.: 18,5" aria-describedby="g-hcp-err" />
+            <p class="field__error" id="g-hcp-err" hidden><span data-icon="warning-2" class="i--sm"></span><span>Use um número entre 0 e 54.</span></p>
+          </div>
+          <p class="fee"><span data-icon="receipt-text" class="i--sm"></span><span id="g-fee"></span></p>
+          <button class="btn btn--primary btn--block" type="submit"><span data-icon="user-add"></span>Adicionar ao grupo</button>
+        </form>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- discard -->
+      <div class="sheet" id="drop-sheet" role="dialog" aria-modal="true" aria-labelledby="ds-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="ds-title">Descartar a rodada?</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body">
+          <p class="sheet-text" id="ds-text"></p>
+          <div class="sheet-actions">
+            <button class="btn btn--danger btn--block" type="button" id="ds-ok"><span data-icon="trash"></span><span id="ds-ok-label">Descartar rodada</span></button>
+            <button class="btn btn--ghost btn--block" type="button" data-sheet-close>Manter rodada</button>
+          </div>
+        </div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const $ = (id) => document.getElementById(id);
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+
+        /* Campo B hole by hole (9 buracos, par 34, 2.480 m). data.js only has Campo A; candidate for GH.holesB. */
+        const HOLES_B = [
+          { n: 1, par: 4, m: 330, idx: 3 },
+          { n: 2, par: 3, m: 150, idx: 7 },
+          { n: 3, par: 4, m: 345, idx: 1 },
+          { n: 4, par: 4, m: 310, idx: 5 },
+          { n: 5, par: 3, m: 140, idx: 9 },
+          { n: 6, par: 5, m: 470, idx: 2 },
+          { n: 7, par: 4, m: 300, idx: 4 },
+          { n: 8, par: 3, m: 135, idx: 8 },
+          { n: 9, par: 4, m: 300, idx: 6 },
+        ];
+        const MAX_PARTNERS = 3;
+        const TICK = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12.4 4 4 8-8.6"/></svg>';
+        const CROSS = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>';
+
+        const state = {
+          course: q.get('campo') === 'b' ? 'b' : 'a',
+          tee: GH.tees.some((t) => t.id === q.get('saida')) ? q.get('saida') : 'branco',
+          nine: 'all', // all | ida | volta
+          group: ['caio', 'lucas'], // partners in the foursome (friend ids or guest names)
+          guests: [], // [{ id: name, hcp }]
+          cart: true,
+          hcp: true,
+        };
+
+        const holesFor = () => {
+          if (state.course === 'b') return HOLES_B;
+          if (state.nine === 'ida') return GH.holes.slice(0, 9);
+          if (state.nine === 'volta') return GH.holes.slice(9);
+          return GH.holes;
+        };
+        const teeLen = (tee) => holesFor().reduce((a, h) => a + Math.round(h.m * GH.tee(tee).factor), 0);
+        const parOf = () => holesFor().reduce((a, h) => a + h.par, 0);
+        const guestOf = (id) => state.guests.find((g) => g.id === id);
+        const hcpOf = (id) => (GH.people[id] ? GH.people[id].hcp : guestOf(id) ? guestOf(id).hcp : null);
+        const teeName = (id) => 'Tee ' + GH.tee(id).name.toLowerCase();
+        const fmtLen = (v) => GH.fmt.m(v);
+
+        /* ---------- radiogroups with roving focus + arrow keys ---------- */
+        function radios(el, onPick) {
+          el.addEventListener('click', (e) => {
+            const b = e.target.closest('[role="radio"]');
+            if (!b || b.getAttribute('aria-disabled') === 'true') return;
+            onPick(b.dataset.v);
+          });
+          el.addEventListener('keydown', (e) => {
+            const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+            if (!step) return;
+            e.preventDefault();
+            const items = [...el.querySelectorAll('[role="radio"]:not([aria-disabled="true"])')];
+            const i = items.indexOf(document.activeElement);
+            const nx = items[(i + step + items.length) % items.length];
+            nx.focus();
+            onPick(nx.dataset.v);
+          });
+        }
+        const sync = (el, v) =>
+          el.querySelectorAll('[role="radio"]').forEach((b) => {
+            const on = b.dataset.v === v;
+            b.setAttribute('aria-checked', String(on));
+            b.tabIndex = on ? 0 : -1;
+          });
+        /* morph thumb: one charcoal/white shape that slides to the checked option */
+        function thumb(el, still) {
+          let t = el.querySelector('.morph__thumb');
+          if (!t) {
+            t = document.createElement('span');
+            t.className = 'morph__thumb is-still';
+            t.setAttribute('aria-hidden', 'true');
+            el.prepend(t);
+          }
+          const on = el.querySelector('[aria-checked="true"]');
+          if (!on) return;
+          if (still || reduce) t.classList.add('is-still');
+          t.style.width = on.offsetWidth + 'px';
+          t.style.height = on.offsetHeight + 'px';
+          t.style.transform = `translate(${on.offsetLeft}px, ${on.offsetTop}px)`;
+          if (still) requestAnimationFrame(() => requestAnimationFrame(() => t.classList.remove('is-still')));
+          else if (!reduce) t.classList.remove('is-still');
+        }
+
+        /* ---------- weather line ---------- */
+        const w = GH.club.weather;
+        $('weather').textContent = `${GH.fmt.temp(w.temp)} · vento ${w.wind} km/h`;
+
+        /* ---------- course cards ---------- */
+        const courses = $('courses');
+        courses.innerHTML = ['a', 'b']
+          .map((id, i) => {
+            const c = GH.course(id);
+            return `<button class="photo-card pick" type="button" role="radio" data-v="${id}" aria-checked="false" aria-label="${GH.esc(c.name)}, ${GH.esc(c.kind)}">
+              <img src="assets/img/${c.photo}.webp" alt="" width="736" height="552" ${i ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async"/>
+              <span class="pick__radio" aria-hidden="true">${TICK}</span>
+              <span class="pick__foot" aria-hidden="true"><span class="pick__name">${GH.esc(c.name)}</span><span class="pick__kind">${GH.esc(c.kind)}</span></span>
+            </button>`;
+          })
+          .join('');
+        courses.querySelectorAll('.pick').forEach((el) => GH.tilt && GH.tilt(el, { max: 7 }));
+        radios(courses, (v) => {
+          if (v === state.course) return;
+          state.course = v;
+          if (v === 'b') state.nine = 'all';
+          GH.haptic && GH.haptic();
+          renderAll();
+        });
+
+        /* ---------- tees ---------- */
+        const tees = $('tees');
+        tees.innerHTML = GH.tees
+          .map(
+            (t) => `<button class="tee" type="button" role="radio" data-v="${t.id}" aria-checked="false">
+              <span class="tee__dot" style="--c:${t.color}" aria-hidden="true"></span>
+              <span class="tee__txt"><span class="tee__name">${t.name}</span><span class="tee__len" data-len="${t.id}"></span></span>
+            </button>`
+          )
+          .join('');
+        radios(tees, (v) => {
+          if (v === state.tee) return;
+          state.tee = v;
+          GH.haptic && GH.haptic();
+          renderAll();
+        });
+        const lastLen = {};
+        function renderTees(first) {
+          sync(tees, state.tee);
+          GH.tees.forEach((t) => {
+            const el = tees.querySelector(`[data-len="${t.id}"]`);
+            const v = teeLen(t.id);
+            if (first || reduce || lastLen[t.id] == null) el.textContent = fmtLen(v);
+            else if (lastLen[t.id] !== v) GH.countUp(el, v, { from: lastLen[t.id], dur: 700, format: (x) => fmtLen(x) });
+            lastLen[t.id] = v;
+            el.closest('.tee').setAttribute('aria-label', `${t.name}, ${fmtLen(v)}`);
+          });
+          thumb(tees, first);
+        }
+
+        /* ---------- nines ---------- */
+        const nines = $('nines');
+        function renderNines(first) {
+          const b = state.course === 'b';
+          const opts = b
+            ? [['all', '9 buracos'], ['x18', '18 buracos', true]]
+            : [['all', '18 buracos'], ['ida', '9 primeiros'], ['volta', '9 últimos']];
+          const key = opts.map((o) => o[0]).join();
+          if (nines.dataset.key !== key) {
+            nines.dataset.key = key;
+            nines.innerHTML = opts
+              .map(([v, l, dis]) => `<button type="button" role="radio" data-v="${v}" aria-checked="false"${dis ? ' aria-disabled="true"' : ''}>${l}</button>`)
+              .join('');
+            first = true;
+          }
+          sync(nines, state.nine);
+          thumb(nines, first);
+          const list = holesFor();
+          $('nines-note').innerHTML = b
+            ? `${GH.icon('info-circle', 'i--sm')}<span>O Campo B tem 9 buracos · par ${parOf()}</span>`
+            : `${GH.icon('flag', 'i--sm')}<span>Buracos ${list[0].n} a ${list[list.length - 1].n} · par ${parOf()} · ${fmtLen(teeLen(state.tee))}</span>`;
+        }
+        radios(nines, (v) => {
+          if (v === state.nine) return;
+          state.nine = v;
+          GH.haptic && GH.haptic();
+          renderAll();
+        });
+
+        /* ---------- the foursome + partners rail ---------- */
+        const four = $('four');
+        const rail = $('rail');
+        const here = new Set([...GH.course('a').here, ...GH.course('b').here]);
+        const short = (id) => (GH.people[id] ? GH.first(id) : String(id).split(' ')[0]);
+        const hcpLabel = (id) => (hcpOf(id) == null ? 'Convidado' : 'HCP ' + GH.fmt.hcp(hcpOf(id)));
+
+        function slotHTML(id, i) {
+          if (i === 0) {
+            return `<li class="slot slot--me"><span class="slot__ring">${GH.avatar(GH.user, { alt: true })}</span><span class="slot__name">Você</span><span class="slot__hcp">HCP ${GH.fmt.hcp(GH.me().hcp)}</span></li>`;
+          }
+          if (!id) {
+            return `<li class="slot slot--empty"><button class="slot__btn" type="button" data-empty aria-label="Vaga ${i + 1}: escolher parceiro"><span class="slot__ring">${GH.icon('add')}</span><span class="slot__name">Vaga</span></button></li>`;
+          }
+          const name = GH.person(id).name;
+          return `<li class="slot slot--filled" data-id="${GH.esc(id)}"><span class="slot__ring">${GH.avatar(id)}</span><span class="slot__name">${GH.esc(short(id))}</span><span class="slot__hcp">${hcpLabel(id)}</span>
+            <button class="slot__x" type="button" data-remove="${GH.esc(id)}" aria-label="Tirar ${GH.esc(name)} do grupo">${CROSS}</button></li>`;
+        }
+        function renderFour(landing) {
+          const ids = [GH.user, ...state.group];
+          four.innerHTML = [0, 1, 2, 3].map((i) => slotHTML(ids[i], i)).join('');
+          if (landing) {
+            const s = four.querySelector(`[data-id="${CSS.escape(landing)}"]`);
+            if (s) s.classList.add('is-landing');
+          }
+          const n = ids.length;
+          $('group-count').textContent = `${n} de 4`;
+        }
+        function renderRail() {
+          const full = state.group.length >= MAX_PARTNERS;
+          rail.innerHTML =
+            `<button class="friend friend--add" type="button" id="add-guest"${full ? ' aria-disabled="true"' : ''}>
+              <span class="friend__ring"><span class="friend__plus">${GH.icon('add')}</span></span>
+              <span class="friend__name">Convidado</span><span class="friend__hcp">Green fee</span>
+            </button>` +
+            GH.friends
+              .map((id) => {
+                const on = state.group.includes(id);
+                const p = GH.person(id);
+                return `<button class="friend" type="button" data-friend="${id}" aria-pressed="${on}"${!on && full ? ' aria-disabled="true"' : ''}
+                  aria-label="${GH.esc(p.name)}, HCP ${GH.fmt.hcp(p.hcp)}${here.has(id) ? ', no clube agora' : ''}">
+                  <span class="friend__ring">${GH.avatar(id)}${here.has(id) ? '<span class="friend__here" aria-hidden="true"></span>' : ''}
+                    <span class="friend__check" aria-hidden="true">${TICK}</span></span>
+                  <span class="friend__name" aria-hidden="true">${GH.esc(GH.first(id))}</span><span class="friend__hcp" aria-hidden="true">${GH.fmt.hcp(p.hcp)}</span>
+                </button>`;
+              })
+              .join('');
+        }
+        function syncRail() {
+          const full = state.group.length >= MAX_PARTNERS;
+          rail.querySelectorAll('[data-friend]').forEach((b) => {
+            const on = state.group.includes(b.dataset.friend);
+            b.setAttribute('aria-pressed', String(on));
+            if (!on && full) b.setAttribute('aria-disabled', 'true');
+            else b.removeAttribute('aria-disabled');
+          });
+          const add = $('add-guest');
+          if (full) add.setAttribute('aria-disabled', 'true');
+          else add.removeAttribute('aria-disabled');
+        }
+
+        /* an avatar copy flies along an arc from one element to another (FLIP-ish, WAAPI) */
+        function fly(fromEl, toEl, id) {
+          if (reduce || !fromEl || !toEl || !Element.prototype.animate) return Promise.resolve();
+          const app = document.querySelector('.app');
+          const ar = app.getBoundingClientRect();
+          const a = fromEl.getBoundingClientRect();
+          const b = toEl.getBoundingClientRect();
+          const g = document.createElement('div');
+          g.className = 'flyer';
+          g.innerHTML = GH.avatar(id);
+          g.style.cssText = `left:${a.left - ar.left}px;top:${a.top - ar.top}px;width:${a.width}px;height:${a.height}px`;
+          app.appendChild(g);
+          const dx = b.left + b.width / 2 - (a.left + a.width / 2);
+          const dy = b.top + b.height / 2 - (a.top + a.height / 2);
+          const s = b.width / a.width;
+          const lift = Math.min(90, Math.abs(dy) * 0.45 + 30);
+          const anim = g.animate(
+            [
+              { transform: 'translate(0,0) scale(1)', offset: 0 },
+              { transform: `translate(${dx * 0.42}px, ${dy * 0.42 - lift}px) scale(${1.18})`, offset: 0.45 },
+              { transform: `translate(${dx}px, ${dy}px) scale(${s})`, offset: 1 },
+            ],
+            { duration: 620, easing: 'cubic-bezier(.45,.05,.2,1)', fill: 'forwards' }
+          );
+          return anim.finished.then(() => g.remove()).catch(() => g.remove());
+        }
+
+        function addPartner(id, fromEl) {
+          if (state.group.includes(id)) return;
+          if (state.group.length >= MAX_PARTNERS) {
+            GH.toast('O grupo já tem 4 jogadores', 'info-circle');
+            return;
+          }
+          state.group.push(id);
+          GH.haptic && GH.haptic(10);
+          renderFour(id);
+          syncRail();
+          const slot = four.querySelector(`[data-id="${CSS.escape(id)}"]`);
+          const target = slot && slot.querySelector('.slot__ring');
+          const src = fromEl && (fromEl.querySelector('.av') || fromEl);
+          fly(src, target, id).then(() => {
+            if (!slot) return;
+            slot.classList.remove('is-landing');
+            slot.classList.add('is-landed');
+          });
+          renderSummary();
+          announce(`${GH.person(id).name} entrou no grupo`);
+        }
+        function removePartner(id, fromSlot) {
+          const slot = four.querySelector(`[data-id="${CSS.escape(id)}"]`);
+          const tile = rail.querySelector(`[data-friend="${CSS.escape(id)}"]`);
+          state.group = state.group.filter((x) => x !== id);
+          state.guests = state.guests.filter((g) => g.id !== id);
+          const from = slot && slot.querySelector('.slot__ring');
+          const p = tile ? fly(from, tile.querySelector('.av'), id) : Promise.resolve();
+          if (slot && !reduce) slot.querySelector('.slot__ring').style.opacity = '0';
+          p.then(() => {
+            renderFour();
+            syncRail();
+            renderSummary();
+          });
+          if (reduce) {
+            renderFour();
+            syncRail();
+            renderSummary();
+          }
+          announce(`${GH.person(id).name} saiu do grupo`);
+          /* the × that had focus is gone: hand focus to the friend's tile (or the add tile) */
+          if (fromSlot)
+            setTimeout(() => {
+              const t = (tile && document.body.contains(tile) && tile) || $('add-guest');
+              t.focus({ preventScroll: true });
+            }, reduce ? 0 : 680);
+        }
+
+        rail.addEventListener('click', (e) => {
+          const add = e.target.closest('#add-guest');
+          if (add) {
+            if (add.getAttribute('aria-disabled') === 'true') return GH.toast('O grupo já tem 4 jogadores', 'info-circle');
+            return openGuest(add);
+          }
+          const f = e.target.closest('[data-friend]');
+          if (!f) return;
+          const id = f.dataset.friend;
+          if (state.group.includes(id)) return removePartner(id);
+          if (f.getAttribute('aria-disabled') === 'true') return GH.toast('O grupo já tem 4 jogadores. Tire alguém para trocar.', 'info-circle');
+          addPartner(id, f);
+        });
+        four.addEventListener('click', (e) => {
+          const x = e.target.closest('[data-remove]');
+          if (x) return removePartner(x.dataset.remove, true);
+          if (e.target.closest('[data-empty]')) {
+            const first = rail.querySelector('[data-friend][aria-pressed="false"]:not([aria-disabled])');
+            rail.scrollTo({ left: 0, behavior: reduce ? 'auto' : 'smooth' });
+            if (first) first.focus({ preventScroll: true });
+            GH.toast('Escolha um parceiro abaixo ou adicione um convidado', 'profile-add');
+          }
+        });
+
+        /* ---------- guest sheet ---------- */
+        const gs = $('guest-sheet');
+        const gName = $('g-name');
+        const gHcp = $('g-hcp');
+        $('g-fee').textContent = `Convidados pagam green fee de ${GH.fmt.brl(GH.prices.greenFeeGuest)}, lançado na sua mensalidade.`;
+        function setErr(input, errEl, msg) {
+          input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+          errEl.hidden = !msg;
+          if (msg && errEl.lastElementChild) errEl.lastElementChild.textContent = msg;
+        }
+        function openGuest(opener) {
+          gName.value = '';
+          gHcp.value = '';
+          setErr(gName, $('g-err'), '');
+          setErr(gHcp, $('g-hcp-err'), '');
+          GH.sheet.open(gs, opener);
+          setTimeout(() => gName.focus({ preventScroll: true }), 420);
+        }
+        $('guest-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = gName.value.trim().replace(/\s+/g, ' ');
+          const hRaw = gHcp.value.trim().replace(',', '.');
+          let ok = true;
+          if (name.length < 2) {
+            setErr(gName, $('g-err'), 'Digite o nome do convidado.');
+            ok = false;
+          } else if ([GH.user, ...state.group].some((id) => GH.person(id).name.toLowerCase() === name.toLowerCase())) {
+            setErr(gName, $('g-err'), 'Essa pessoa já está no grupo.');
+            ok = false;
+          } else setErr(gName, $('g-err'), '');
+          const h = hRaw === '' ? null : Number(hRaw);
+          if (h != null && (!isFinite(h) || h < 0 || h > 54)) {
+            setErr(gHcp, $('g-hcp-err'), 'Use um número entre 0 e 54.');
+            ok = false;
+          } else setErr(gHcp, $('g-hcp-err'), '');
+          if (!ok) return (gName.getAttribute('aria-invalid') === 'true' ? gName : gHcp).focus();
+          state.guests.push({ id: name, hcp: h == null ? null : Math.round(h * 10) / 10 });
+          GH.sheet.close(gs);
+          setTimeout(() => addPartner(name, null), reduce ? 0 : 260);
+          setTimeout(() => {
+            const s = four.querySelector(`[data-id="${CSS.escape(name)}"]`);
+            if (s) {
+              s.classList.remove('is-landing');
+              s.classList.add('is-landed');
+            }
+          }, reduce ? 0 : 300);
+        });
+
+        /* ---------- options (switches; the whole row toggles) ---------- */
+        function renderOptions() {
+          $('sw-cart').setAttribute('aria-checked', String(state.cart));
+          $('sw-hcp').setAttribute('aria-checked', String(state.hcp));
+          $('d-cart').innerHTML = `<b>${GH.fmt.brl(GH.prices.cart)}</b> · lançado na mensalidade`;
+          $('d-hcp').textContent = state.hcp ? `Mostra o placar líquido (net) com o HCP de cada um` : 'Só o placar bruto (gross)';
+        }
+        document.querySelectorAll('[data-switch]').forEach((row) =>
+          row.addEventListener('click', () => {
+            const k = row.dataset.switch;
+            state[k] = !state[k];
+            GH.haptic && GH.haptic();
+            renderOptions();
+            renderSummary();
+          })
+        );
+
+        /* ---------- summary + CTA ---------- */
+        function renderSummary() {
+          const c = GH.course(state.course);
+          const list = holesFor();
+          const ids = [GH.user, ...state.group];
+          const guests = state.guests.length;
+          const total = (state.cart ? GH.prices.cart : 0) + guests * GH.prices.greenFeeGuest;
+          const parts = [];
+          if (state.cart) parts.push(`carrinho ${GH.fmt.brl(GH.prices.cart)}`);
+          if (guests) parts.push(`${GH.fmt.plural(guests, 'green fee', 'green fees')} de convidado`);
+          const names = ids.map((id) => (id === GH.user ? 'você' : short(id)));
+          const nameList = names.length > 1 ? names.slice(0, -1).join(', ') + ' e ' + names[names.length - 1] : names[0];
+          $('sum').innerHTML = `
+            <div class="sum__row"><span class="sum__k">Campo</span><span class="sum__v">${GH.esc(c.name)} · ${list.length === 18 ? '18 buracos' : list[0].n === 10 ? '9 últimos' : list.length === 9 && state.course === 'a' ? '9 primeiros' : '9 buracos'}</span></div>
+            <div class="sum__row"><span class="sum__k">Saída</span><span class="sum__v"><span class="tee__dot" style="--c:${GH.tee(state.tee).color}" aria-hidden="true"></span>${teeName(state.tee)} · ${fmtLen(teeLen(state.tee))} · par ${parOf()}</span></div>
+            <div class="sum__row"><span class="sum__k">Grupo</span><span class="sum__v">${GH.stack(ids, ids.length)}<span>${GH.esc(nameList)}</span></span></div>
+            <div class="sum__row"><span class="sum__k">Placar</span><span class="sum__v">Stroke play${state.hcp ? ' · gross e net' : ''}</span></div>
+            <div class="sum__row sum__total"><span class="sum__k">Na sua conta</span><span class="sum__v"><span class="num">${total ? GH.fmt.brl(total) : 'R$ 0,00'}</span><small>${total ? GH.esc(parts.join(' + ')) : 'Sócio não paga green fee'}</small></span></div>`;
+          $('go-label').textContent = `Ir para o tee ${list[0].n}`;
+        }
+
+        function renderAll(first) {
+          sync(courses, state.course);
+          renderTees(first);
+          renderNines(first);
+          renderSummary();
+        }
+
+        const announce = (msg) => {
+          const a = $('announce');
+          a.textContent = '';
+          setTimeout(() => (a.textContent = msg), 30);
+        };
+
+        /* ---------- round in progress ---------- */
+        const saved = GH.round();
+        const live = saved || (q.has('andamento') ? GH.round({ demo: true }) : null);
+        const liveEl = $('live');
+        function renderLive() {
+          if (!live) return (liveEl.hidden = true);
+          /* GH.tally reads Campo A pars; use this round's course table */
+          const table = live.course === 'b' ? HOLES_B : GH.holes;
+          const t = { strokes: 0, par: 0, played: 0 };
+          Object.entries(live.scores || {}).forEach(([n, sc]) => {
+            const mine = sc[GH.user];
+            if (!mine || !mine.strokes) return;
+            t.strokes += mine.strokes;
+            t.par += (table.find((h) => h.n === +n) || { par: 4 }).par;
+            t.played++;
+          });
+          t.toPar = t.strokes - t.par;
+          const c = GH.course(live.course);
+          liveEl.hidden = false;
+          liveEl.innerHTML = `<div class="live__top">
+              <span class="live__ico">${GH.flag()}</span>
+              <div>
+                <p class="live__k">Rodada em andamento</p>
+                <h2 class="live__t" id="live-t">Buraco ${live.current} · ${GH.esc(c.name)}</h2>
+                <p class="live__s">Começou às ${GH.fmt.time(live.startedAt)} · ${t.played ? `${t.strokes} tacadas (${GH.fmt.toPar(t.toPar)})` : 'nenhum buraco lançado'}</p>
+              </div>
+            </div>
+            <div class="live__actions">
+              <a class="btn btn--sm live__go" href="performance.html?hole=${live.current}">${GH.icon('play')}Continuar</a>
+              <button class="btn btn--sm live__drop" type="button" id="drop">Descartar</button>
+            </div>`;
+          $('drop').addEventListener('click', (e) => openDrop('drop', e.currentTarget));
+        }
+
+        const ds = $('drop-sheet');
+        let dropMode = 'drop';
+        function openDrop(mode, opener) {
+          dropMode = mode;
+          const c = live ? GH.course(live.course) : null;
+          $('ds-title').textContent = mode === 'replace' ? 'Começar uma nova rodada?' : 'Descartar a rodada?';
+          $('ds-text').textContent = live
+            ? `Você está no buraco ${live.current} do ${c.name}. ${mode === 'replace' ? 'Para começar outra, a rodada atual e os placares lançados serão apagados.' : 'Os placares lançados serão apagados.'}`
+            : '';
+          $('ds-ok-label').textContent = mode === 'replace' ? 'Descartar e começar' : 'Descartar rodada';
+          GH.sheet.open(ds, opener);
+        }
+        $('ds-ok').addEventListener('click', () => {
+          if (saved) GH.store.remove('round');
+          GH.sheet.close(ds);
+          if (dropMode === 'replace') return setTimeout(start, reduce ? 0 : 380);
+          if (!reduce && liveEl.animate) {
+            liveEl.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.96) translateY(-8px)' }], { duration: 320, easing: 'ease-in', fill: 'forwards' }).finished.then(() => (liveEl.hidden = true));
+          } else liveEl.hidden = true;
+          liveRef.gone = true;
+          GH.toast('Rodada descartada', 'trash');
+        });
+        const liveRef = { gone: false };
+
+        /* ---------- go: create gh:round and take over the screen ---------- */
+        function start() {
+          const list = holesFor();
+          const first = list[0];
+          const round = {
+            id: 'r-' + Date.now().toString(36),
+            course: state.course,
+            tee: state.tee,
+            holes: list.length === 18 ? 18 : 9,
+            start: first.n,
+            players: [GH.user, ...state.group],
+            guests: state.guests,
+            cart: state.cart,
+            hcp: state.hcp,
+            startedAt: new Date().toISOString(),
+            current: first.n,
+            scores: {},
+            ball: null,
+          };
+          GH.saveRound(round);
+          const href = `performance.html?hole=${first.n}`;
+          const c = GH.course(state.course);
+          $('launch-k').textContent = `${c.name} · ${teeName(state.tee)}`;
+          $('launch-t').textContent = `Buraco ${first.n}`;
+          $('launch-s').textContent = `Par ${first.par} · ${fmtLen(Math.round(first.m * GH.tee(state.tee).factor))} · Índice ${first.idx}`;
+          announce(`Rodada criada. Indo para o tee ${first.n}.`);
+          if (reduce) return (location.href = href);
+          const L = $('launch');
+          const app = document.querySelector('.app').getBoundingClientRect();
+          const b = $('go').getBoundingClientRect();
+          L.style.setProperty('--cx', `${b.left + b.width / 2 - app.left}px`);
+          L.style.setProperty('--cy', `${b.top + b.height / 2 - app.top}px`);
+          GH.haptic && GH.haptic(14);
+          requestAnimationFrame(() => L.classList.add('is-on'));
+          setTimeout(() => (location.href = href), 1500);
+        }
+        $('go').addEventListener('click', (e) => {
+          if (saved && !liveRef.gone) return openDrop('replace', e.currentTarget);
+          start();
+        });
+
+        /* ---------- first paint ---------- */
+        renderLive();
+        renderFour();
+        renderRail();
+        renderOptions();
+        renderAll(true);
+        window.addEventListener('resize', () => {
+          thumb(tees, true);
+          thumb(nines, true);
+        });
+        /* fonts change chip widths: re-place the thumbs once they're in */
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => (thumb(tees, true), thumb(nines, true)));
+
+        /* deep links: ?campo=b · ?saida=azul · ?andamento=1 (banner with the demo round) · ?sheet=convidado|descartar · ?go=1 (launch overlay) */
+        const sh = q.get('sheet');
+        if (sh === 'convidado') setTimeout(() => openGuest(), 700);
+        if (sh === 'descartar' && live) setTimeout(() => openDrop('drop'), 700);
+        if (q.has('go')) {
+          setTimeout(() => {
+            const L = $('launch');
+            const list = holesFor();
+            $('launch-k').textContent = `${GH.course(state.course).name} · ${teeName(state.tee)}`;
+            $('launch-t').textContent = `Buraco ${list[0].n}`;
+            $('launch-s').textContent = `Par ${list[0].par} · ${fmtLen(Math.round(list[0].m * GH.tee(state.tee).factor))} · Índice ${list[0].idx}`;
+            L.classList.add('is-on');
+          }, 400);
+        }
+      })();
+    </script>
+  </body>
+</html>

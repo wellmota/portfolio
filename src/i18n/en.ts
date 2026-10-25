@@ -167,6 +167,17 @@ const en: SiteData = {
 
   projects: [
     {
+      title: 'GolfHub',
+      meta: 'Sports · Case Study',
+      categories: ['Product', 'Prototype', '3D'],
+      description:
+        'A golf club proposal stalled at four screens in Figma. It became a members’ app and a club ERP you can use, with 21 clickable screens and a 3D course. Read the case study →',
+      image: '/cases/golfhub/card-en.webp',
+      accent: '#38EB7F',
+      highlight: 'Playable prototype, 3D course',
+      href: '/work/golfhub',
+    },
+    {
       title: 'Lead Airport',
       meta: 'EdTech · Case Study',
       categories: ['Product', '3D', 'Data'],

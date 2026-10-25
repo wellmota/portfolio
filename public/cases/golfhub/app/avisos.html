@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Avisos · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Tab "Avisos" (the Figma's notification-circle tab). Inferred screen: white rows with the Figma's soft
+         shadow, kind tiles in the palette, green unread dot (same green as the tab-bar dot).
+         Gestures: swipe right = mark as read, swipe left = archive (keyboard: focus the row, the two actions appear). */
+      .screen {
+        padding-bottom: 40px;
+      }
+      .head {
+        padding-bottom: 10px;
+      }
+      .sum {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 44px;
+        margin-top: -4px;
+      }
+      .sum__txt {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        white-space: nowrap;
+        color: var(--ink-3);
+      }
+      .sum .link {
+        white-space: nowrap;
+        font-size: 13.5px;
+      }
+      .sum__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--green-500);
+        box-shadow: 0 0 0 4px var(--green-50);
+      }
+      .sum__txt .i {
+        width: 20px;
+        height: 20px;
+        color: var(--green-600);
+      }
+      .sum .link .i {
+        width: 18px;
+        height: 18px;
+      }
+      .sum .link:disabled {
+        visibility: hidden;
+      }
+
+      /* filter chips: one horizontal rail that bleeds to the edges */
+      .rail {
+        display: flex;
+        gap: 8px;
+        margin: 4px calc(var(--gutter) * -1) 0;
+        padding: 2px var(--gutter) 6px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .rail::-webkit-scrollbar {
+        display: none;
+      }
+      .rail .chip {
+        flex: none;
+        min-height: 40px;
+      }
+      .chip__n {
+        display: inline-grid;
+        place-items: center;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        border-radius: 10px;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--green-600);
+      }
+      .chip[aria-pressed='true'] .chip__n {
+        color: var(--char);
+        background: var(--green-300);
+      }
+
+      /* groups */
+      .grp {
+        margin-top: 22px;
+      }
+      .grp__title {
+        margin: 0 2px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .nts {
+        display: grid;
+        gap: 10px;
+      }
+
+      /* one notification: two action layers under a draggable card */
+      .nt {
+        position: relative;
+        border-radius: 18px;
+        isolation: isolate;
+      }
+      .nt.is-in {
+        animation: nt-in 620ms var(--ease) both;
+        animation-delay: calc(var(--base, 200ms) + var(--d, 0) * 60ms);
+      }
+      @keyframes nt-in {
+        from {
+          opacity: 0;
+          transform: translateY(18px) scale(0.98);
+        }
+      }
+      .nt__act {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 22px;
+        border-radius: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        opacity: 0;
+      }
+      .nt__act .i {
+        transition: transform 300ms var(--ease-spring);
+      }
+      .nt__act--read {
+        background: linear-gradient(90deg, var(--green-600), var(--green-400));
+      }
+      .nt__act--arch {
+        justify-content: flex-end;
+        background: linear-gradient(270deg, var(--char), var(--char-2));
+      }
+      .nt.is-r .nt__act--read,
+      .nt.is-l .nt__act--arch {
+        opacity: 1;
+      }
+      .nt.is-armed .nt__act .i {
+        transform: scale(1.25);
+      }
+      .nt__card {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px 14px 14px;
+        border-radius: inherit;
+        background: var(--surface);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        touch-action: pan-y;
+        transition: transform 520ms var(--ease-spring);
+        will-change: transform;
+      }
+      .nt.is-drag .nt__card {
+        transition: none;
+        cursor: grabbing;
+      }
+      .nt__card:active {
+        cursor: grab;
+      }
+      /* the green light that runs across the rows on "Marcar todas como lidas" */
+      .nt__card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(100deg, transparent 15%, rgba(56, 235, 127, 0.28) 45%, transparent 75%);
+        transform: translateX(-110%);
+        pointer-events: none;
+      }
+      .nt.is-wave .nt__card::after {
+        animation: wave 760ms var(--ease) both;
+      }
+      @keyframes wave {
+        to {
+          transform: translateX(110%);
+        }
+      }
+      .nt__card .tile-ico {
+        width: 44px;
+        height: 44px;
+      }
+      .nt__body {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+        gap: 3px;
+      }
+      .nt__top {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .nt__title {
+        flex: 1;
+        min-width: 0;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+        text-align: left;
+        color: var(--ink);
+      }
+      .nt.is-unread .nt__title {
+        font-weight: 700;
+      }
+      .nt__time {
+        flex: none;
+        font-size: 12px;
+        color: var(--ink-3);
+        white-space: nowrap;
+      }
+      .nt__text {
+        font-size: 13.5px;
+        line-height: 1.4;
+        color: var(--ink-3);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .nt.is-unread .nt__text {
+        color: var(--ink-2);
+      }
+      .nt__dot {
+        position: absolute;
+        top: 18px;
+        right: 14px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--green-500);
+        box-shadow: 0 0 0 3px #fff;
+        transition:
+          transform 380ms var(--ease-spring),
+          opacity 260ms var(--ease);
+      }
+      .nt.is-unread .nt__time {
+        margin-right: 16px;
+        color: var(--green-700);
+        font-weight: 600;
+      }
+      .nt:not(.is-unread) .nt__dot {
+        transform: scale(0);
+        opacity: 0;
+      }
+      .nt__dot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid var(--green-400);
+        opacity: 0;
+      }
+      .nt.is-pop .nt__dot::after {
+        animation: burst 520ms var(--ease) both;
+      }
+      .nt.is-pop .nt__dot {
+        transition-delay: 60ms;
+      }
+      @keyframes burst {
+        0% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(3);
+        }
+      }
+      /* keyboard / screen-reader alternatives to the swipe: hidden until focused */
+      .kact {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      .kact:focus-visible {
+        z-index: 4;
+        bottom: 8px;
+        width: auto;
+        height: 34px;
+        clip: auto;
+        overflow: visible;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+        background: var(--char);
+        box-shadow: var(--shadow-md);
+      }
+      .kact--read:focus-visible {
+        left: 66px;
+      }
+      .kact--arch:focus-visible {
+        right: 10px;
+      }
+      .kact .i {
+        width: 16px;
+        height: 16px;
+      }
+
+      .hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 18px 0 0;
+        font-size: 12.5px;
+        color: var(--ink-3);
+        text-align: center;
+      }
+      .hint .i {
+        width: 16px;
+        height: 16px;
+        color: var(--ink-4);
+      }
+      .prefs {
+        margin-top: 22px;
+        width: 100%;
+        text-align: left;
+      }
+      .prefs .i--chev {
+        margin-left: auto;
+        color: var(--ink-4);
+      }
+      .restore {
+        display: flex;
+        justify-content: center;
+        margin-top: 6px;
+      }
+      .empty {
+        padding: 44px 16px 20px;
+      }
+      .empty.is-in {
+        animation: pop 560ms var(--ease-spring) both;
+      }
+      .empty__t {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      /* undo snackbar (archive) */
+      .undo {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: 110px;
+        z-index: 80;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 6px 6px 16px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #fff;
+        background: var(--char);
+        box-shadow: var(--shadow-md);
+        transform: translateY(24px);
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          transform 420ms var(--ease-spring),
+          opacity 220ms var(--ease);
+      }
+      .undo.is-on {
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .undo span {
+        flex: 1;
+      }
+      .undo button {
+        min-height: 44px;
+        padding: 0 14px;
+        border-radius: 12px;
+        font-weight: 700;
+        color: var(--green-300);
+      }
+      .undo button:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .tabbar a.is-bump .i {
+        animation: bump 620ms var(--ease-spring);
+      }
+      @keyframes bump {
+        40% {
+          transform: scale(1.22) rotate(-8deg);
+        }
+      }
+
+      /* notification sheet */
+      .nsheet {
+        display: grid;
+        justify-items: start;
+        gap: 10px;
+      }
+      .nsheet .tile-ico {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+      }
+      .nsheet__time {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .nsheet__body {
+        font-size: 15px;
+        color: var(--ink-2);
+      }
+      .wx {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+        margin: 6px 0 4px;
+      }
+      .wx .stat-dark {
+        flex: 1;
+        min-width: 0;
+      }
+      .nsheet .btn {
+        margin-top: 8px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .nt__card {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body data-tab="avisos">
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="top rise" data-top></header>
+
+        <div class="head">
+          <h1 class="t-display rise" style="--d: 1">Avisos</h1>
+          <div class="sum rise" style="--d: 2">
+            <p class="sum__txt" id="sum" aria-live="polite"></p>
+            <button class="link" type="button" id="mark-all"></button>
+          </div>
+        </div>
+
+        <div class="rail rise" style="--d: 3" role="group" aria-label="Filtrar avisos" id="filters"></div>
+
+        <div id="feed"></div>
+        <div class="empty" id="empty" hidden></div>
+        <div class="restore" id="restore" hidden></div>
+
+        <p class="hint rise" style="--d: 8" id="hint"><span data-icon="arrow"></span>Deslize um aviso: para a direita marca como lido, para a esquerda arquiva.</p>
+
+        <button class="row row--flat prefs rise" style="--d: 9" type="button" data-soon="Preferências de notificação">
+          <span class="tile-ico tile-ico--dark"><span data-icon="setting-4"></span></span>
+          <span class="row__body"><span class="row__title">Preferências de notificação</span><span class="row__sub">Escolha o que chega no seu celular</span></span>
+          <span data-icon="arrow-right-2" class="i--sm i--chev"></span>
+        </button>
+      </main>
+
+      <div class="undo" id="undo" role="status" aria-live="polite"><span id="undo-msg"></span><button type="button" id="undo-btn">Desfazer</button></div>
+
+      <div class="sheet" id="n-sheet" role="dialog" aria-modal="true" aria-labelledby="ns-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <span></span>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="ns-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        /* haptic only after a real tap (Chrome logs an error for navigator.vibrate before any user gesture) */
+        const buzz = (ms) => {
+          if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
+          if (GH.haptic) GH.haptic(ms);
+        };
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+        const q = new URLSearchParams(location.search);
+
+        /* ---------- data ---------- */
+        if (q.has('reset')) {
+          GH.store.remove('read');
+          GH.store.remove('dismissed');
+        }
+        const KIND = {
+          reserva: { f: 'reservas', tone: '' },
+          convite: { f: 'reservas', tone: 'violet' },
+          torneio: { f: 'torneios', tone: 'violet' },
+          ranking: { f: 'torneios', tone: 'indigo' },
+          pagamento: { f: 'pagamentos', tone: 'dark' },
+          clima: { f: 'clube', tone: 'sky' },
+          clube: { f: 'clube', tone: 'amber' },
+        };
+        const FILTERS = [
+          ['todos', 'Todos'],
+          ['nao-lidos', 'Não lidos'],
+          ['reservas', 'Reservas'],
+          ['torneios', 'Torneios'],
+          ['pagamentos', 'Pagamentos'],
+          ['clube', 'Clube'],
+        ];
+        /* data.js points the tournament notice at "torneio.html"; the page is torneios.html */
+        const fixHref = (h) => (h ? h.replace(/^torneio\.html/, 'torneios.html') : '');
+        const all = GH.notifications.map((n) => ({ ...n, href: fixHref(n.href), at: new Date(n.at) })).sort((a, b) => b.at - a.at);
+        const getRead = () => GH.store.get('read', []) || [];
+        const getGone = () => GH.store.get('dismissed', []) || [];
+        const isUnread = (n) => n.unread && !getRead().includes(n.id);
+        const unreadCount = () => all.filter((n) => isUnread(n) && !getGone().includes(n.id)).length;
+        const dayAgo = (d) => {
+          const a = new Date(GH.now);
+          a.setHours(0, 0, 0, 0);
+          const b = new Date(d);
+          b.setHours(0, 0, 0, 0);
+          return Math.round((a - b) / 864e5);
+        };
+        const groupOf = (n) => {
+          const d = dayAgo(n.at);
+          return d <= 0 ? 'Hoje' : d <= 5 ? 'Esta semana' : 'Anteriores';
+        };
+
+        let filter = FILTERS.some((f) => f[0] === q.get('filtro')) ? q.get('filtro') : 'todos';
+
+        /* ---------- tab-bar dot (app.js draws it from GH.unread() on load) ---------- */
+        const syncTab = (bump) => {
+          const a = document.querySelector('.tabbar a[href="avisos.html"]');
+          if (!a) return;
+          const n = GH.unread();
+          a.classList.toggle('is-unread', n > 0);
+          let sr = a.querySelector('.sr-only');
+          if (n) {
+            if (!sr) {
+              sr = document.createElement('span');
+              sr.className = 'sr-only';
+              a.appendChild(sr);
+            }
+            sr.textContent = `, ${n} não lidos`;
+          } else if (sr) sr.remove();
+          if (bump && !reduce) {
+            a.classList.remove('is-bump');
+            void a.offsetWidth;
+            a.classList.add('is-bump');
+          }
+        };
+
+        /* ---------- header summary + filters ---------- */
+        const sum = $('sum');
+        const markAllBtn = $('mark-all');
+        markAllBtn.innerHTML = GH.icon('tick-square') + 'Marcar todas como lidas';
+        const renderSum = () => {
+          const n = unreadCount();
+          sum.innerHTML = n ? `<span class="sum__dot" aria-hidden="true"></span>${GH.fmt.plural(n, 'não lido', 'não lidos')}` : `${GH.icon('tick-circle')}Tudo lido por aqui`;
+          markAllBtn.disabled = n === 0;
+        };
+        const fEl = $('filters');
+        const renderFilters = () => {
+          const n = unreadCount();
+          fEl.innerHTML = FILTERS.map(
+            ([k, label]) =>
+              `<button class="chip" type="button" data-f="${k}" aria-pressed="${k === filter}">${label}${k === 'nao-lidos' && n ? ` <span class="chip__n">${n}</span>` : ''}</button>`
+          ).join('');
+        };
+        fEl.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-f]');
+          if (!b || b.dataset.f === filter) return;
+          filter = b.dataset.f;
+          renderFilters();
+          renderFeed({ stagger: 30, base: 0 });
+          buzz();
+        });
+
+        /* ---------- feed ---------- */
+        const feed = $('feed');
+        const empty = $('empty');
+        const visible = () =>
+          all.filter((n) => {
+            if (getGone().includes(n.id)) return false;
+            if (filter === 'todos') return true;
+            if (filter === 'nao-lidos') return isUnread(n);
+            return (KIND[n.kind] || {}).f === filter;
+          });
+        const itemHTML = (n, i) => {
+          const k = KIND[n.kind] || { tone: '' };
+          const un = isUnread(n);
+          const sr = un ? '<span class="sr-only">, não lido</span>' : '';
+          const title = n.href
+            ? `<a class="nt__title stretch" href="${n.href}" data-open>${GH.esc(n.title)}${sr}</a>`
+            : `<button class="nt__title stretch" type="button" data-sheet="${n.id}">${GH.esc(n.title)}${sr}</button>`;
+          return `<li class="nt${un ? ' is-unread' : ''}" data-id="${n.id}" style="--d:${i}">
+            <div class="nt__act nt__act--read" aria-hidden="true">${GH.icon('tick-circle')}Lida</div>
+            <div class="nt__act nt__act--arch" aria-hidden="true">Arquivar${GH.icon('archive')}</div>
+            <div class="nt__card">
+              <span class="tile-ico${k.tone ? ' tile-ico--' + k.tone : ''}" aria-hidden="true">${GH.icon(n.icon || 'notification')}</span>
+              <div class="nt__body">
+                <div class="nt__top">${title}<time class="nt__time" datetime="${n.at.toISOString()}">${GH.fmt.ago(n.at)}</time></div>
+                <p class="nt__text">${GH.esc(n.body)}</p>
+              </div>
+              <span class="nt__dot" aria-hidden="true"></span>
+            </div>
+            ${un ? `<button class="kact kact--read" type="button" data-act="read">${GH.icon('tick-circle')}Marcar como lida</button>` : ''}
+            <button class="kact kact--arch" type="button" data-act="arch">${GH.icon('archive')}Arquivar</button>
+          </li>`;
+        };
+        const EMPTY = {
+          'nao-lidos': ['tick-circle', '', 'Tudo lido por aqui', 'Novos avisos de reservas, torneios e do clube aparecem aqui.'],
+          reservas: ['calendar-tick', '', 'Nenhum aviso de reservas', 'Confirmações e convites para jogar aparecem aqui.'],
+          torneios: ['cup', 'violet', 'Nenhum aviso de torneios', 'Inscrições abertas e mudanças no ranking aparecem aqui.'],
+          pagamentos: ['card-tick', 'dark', 'Nenhum aviso de pagamentos', 'Mensalidades e cobranças aparecem aqui.'],
+          clube: ['info-circle', 'amber', 'Nenhum aviso do clube', 'Manutenção, clima e eventos aparecem aqui.'],
+          todos: ['notification', '', 'Sem avisos', 'Quando houver novidades, elas aparecem aqui.'],
+        };
+        const renderFeed = (opt = {}) => {
+          const items = visible();
+          const groups = [];
+          items.forEach((n) => {
+            const g = groupOf(n);
+            let G = groups.find((x) => x.g === g);
+            if (!G) groups.push((G = { g, items: [] }));
+            G.items.push(n);
+          });
+          let i = 0;
+          feed.innerHTML = groups
+            .map(
+              (G) => `<section class="grp" aria-labelledby="g-${G.g.replace(/\s/g, '')}">
+                <h2 class="grp__title" id="g-${G.g.replace(/\s/g, '')}">${G.g}</h2>
+                <ul class="nts">${G.items.map((n) => itemHTML(n, i++)).join('')}</ul></section>`
+            )
+            .join('');
+          if (!reduce && opt.stagger !== 0)
+            feed.querySelectorAll('.nt').forEach((li, k) => {
+              li.style.setProperty('--d', k * ((opt.stagger || 60) / 60));
+              li.style.setProperty('--base', `${opt.base == null ? 260 : opt.base}ms`);
+              li.classList.add('is-in');
+            });
+          const e = EMPTY[filter];
+          empty.hidden = items.length > 0;
+          if (!items.length) {
+            empty.innerHTML = `<span class="tile-ico${e[1] ? ' tile-ico--' + e[1] : ''}">${GH.icon(e[0], 'i--lg')}</span><p class="empty__t">${e[2]}</p><p class="t-sm">${e[3]}</p>${
+              filter !== 'todos' ? '<button class="btn btn--ghost btn--sm" type="button" data-f-all>Ver todos os avisos</button>' : ''
+            }`;
+            empty.classList.remove('is-in');
+            void empty.offsetWidth;
+            if (!reduce) empty.classList.add('is-in');
+          }
+          const gone = getGone().length;
+          const restore = $('restore');
+          restore.hidden = !gone;
+          if (gone) restore.innerHTML = `<button class="link" type="button" id="restore-btn">${GH.icon('refresh-2', 'i--sm')}Mostrar ${GH.fmt.plural(gone, 'aviso arquivado', 'avisos arquivados')}</button>`;
+          $('hint').hidden = !items.length;
+        };
+        empty.addEventListener('click', (e) => {
+          if (!e.target.closest('[data-f-all]')) return;
+          filter = 'todos';
+          renderFilters();
+          renderFeed({ stagger: 30, base: 0 });
+          fEl.querySelector('[data-f="todos"]').focus();
+        });
+        $('restore').addEventListener('click', (e) => {
+          if (!e.target.closest('#restore-btn')) return;
+          GH.store.set('dismissed', []);
+          renderAll({ stagger: 40, base: 0 });
+          GH.toast('Avisos restaurados', 'refresh-2');
+        });
+        const renderAll = (opt) => {
+          renderSum();
+          renderFilters();
+          renderFeed(opt);
+        };
+
+        /* ---------- actions ---------- */
+        const addRead = (ids) => GH.store.set('read', [...new Set([...getRead(), ...ids])]);
+        const markRead = (li, quiet) => {
+          const id = li.dataset.id;
+          const n = all.find((x) => x.id === id);
+          if (!isUnread(n)) return false;
+          addRead([id]);
+          li.classList.add('is-pop');
+          li.classList.remove('is-unread');
+          const sr = li.querySelector('.nt__title .sr-only');
+          if (sr) sr.remove();
+          const k = li.querySelector('.kact--read');
+          if (k) k.remove();
+          syncTab(true);
+          if (!quiet) {
+            renderSum();
+            renderFilters();
+          }
+          return true;
+        };
+        let undoT, lastGone;
+        const archive = (li) => {
+          const id = li.dataset.id;
+          addRead([id]); /* archived notices stop counting as unread everywhere (GH.unread) */
+          GH.store.set('dismissed', [...new Set([...getGone(), id])]);
+          lastGone = id;
+          syncTab(false);
+          const done = () => {
+            renderAll({ stagger: 0 });
+            showUndo('Aviso arquivado');
+          };
+          if (reduce) return done();
+          const h = li.getBoundingClientRect().height;
+          li.animate(
+            [
+              { height: h + 'px', opacity: 1 },
+              { height: '0px', opacity: 0, marginTop: '-10px' },
+            ],
+            { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+          ).onfinish = done;
+        };
+        const undo = $('undo');
+        const showUndo = (msg) => {
+          $('undo-msg').textContent = msg;
+          undo.classList.add('is-on');
+          clearTimeout(undoT);
+          undoT = setTimeout(() => undo.classList.remove('is-on'), 4200);
+        };
+        $('undo-btn').addEventListener('click', () => {
+          if (!lastGone) return;
+          GH.store.set('dismissed', getGone().filter((x) => x !== lastGone));
+          const back = lastGone;
+          lastGone = null;
+          undo.classList.remove('is-on');
+          renderAll({ stagger: 0 });
+          const li = feed.querySelector(`[data-id="${back}"]`);
+          if (li && !reduce) li.animate([{ opacity: 0, transform: 'translateX(-40px)' }, { opacity: 1, transform: 'none' }], { duration: 480, easing: 'cubic-bezier(0.34, 1.3, 0.64, 1)' });
+        });
+
+        /* "Marcar todas como lidas": a green light runs down the list, dots pop as it passes */
+        const markAll = () => {
+          const ids = GH.notifications.map((n) => n.id);
+          const lis = [...feed.querySelectorAll('.nt')];
+          GH.store.set('read', [...new Set([...getRead(), ...ids])]);
+          const finish = () => {
+            renderSum();
+            renderFilters();
+            syncTab(true);
+            if (filter === 'nao-lidos') renderFeed({ stagger: 0 });
+          };
+          if (reduce) {
+            lis.forEach((li) => li.classList.remove('is-unread'));
+            return finish();
+          }
+          lis.forEach((li, i) =>
+            setTimeout(() => {
+              li.classList.add('is-wave');
+              if (li.classList.contains('is-unread')) {
+                li.classList.add('is-pop');
+                li.classList.remove('is-unread');
+                const sr = li.querySelector('.nt__title .sr-only');
+                if (sr) sr.remove();
+                const k = li.querySelector('.kact--read');
+                if (k) k.remove();
+              }
+              setTimeout(() => li.classList.remove('is-wave'), 800);
+            }, i * 70)
+          );
+          setTimeout(finish, lis.length * 70 + 260);
+          buzz(12);
+        };
+        markAllBtn.addEventListener('click', () => {
+          markAll();
+          GH.toast('Tudo marcado como lido');
+        });
+
+        /* open: links mark as read, then navigate; notices without a link open a sheet */
+        const sheet = $('n-sheet');
+        const openSheet = (id, opener) => {
+          const n = all.find((x) => x.id === id);
+          const k = KIND[n.kind] || { tone: '' };
+          const extra =
+            n.kind === 'clima'
+              ? `<div class="wx"><div class="stat-dark">${GH.icon('sun-1')}<span class="stat-dark__val">26°</span><span class="stat-dark__unit">sábado</span></div><div class="stat-dark">${GH.icon('wind')}<span class="stat-dark__val">8</span><span class="stat-dark__unit">km/h</span></div><div class="stat-dark">${GH.icon('drop')}<span class="stat-dark__val">0%</span><span class="stat-dark__unit">chuva</span></div></div>
+                 <a class="btn btn--primary btn--block" href="reservar.html?campo=a">${GH.icon('calendar-add')}Reservar horário no sábado</a>`
+              : n.kind === 'clube'
+                ? `<a class="btn btn--primary btn--block" href="performance.html?hole=12">${GH.icon('map')}Ver o buraco 12</a>`
+                : '';
+          $('ns-body').innerHTML = `<div class="nsheet">
+              <span class="tile-ico${k.tone ? ' tile-ico--' + k.tone : ''}">${GH.icon(n.icon || 'notification', 'i--lg')}</span>
+              <h2 class="sheet__title" id="ns-title">${GH.esc(n.title)}</h2>
+              <p class="nsheet__time">${GH.fmt.dayLabel(n.at)}, ${GH.fmt.time(n.at)} · ${GH.fmt.ago(n.at)}</p>
+              <p class="nsheet__body">${GH.esc(n.body)}</p>
+              ${extra}
+              <button class="btn btn--ghost btn--block" type="button" data-sheet-close>Entendi</button>
+            </div>`;
+          GH.sheet.open(sheet, opener);
+        };
+        feed.addEventListener('click', (e) => {
+          const act = e.target.closest('[data-act]');
+          if (act) {
+            const li = act.closest('.nt');
+            if (act.dataset.act === 'read') {
+              const card = li.querySelector('.nt__title');
+              markRead(li);
+              card.focus();
+            } else archive(li);
+            return;
+          }
+          const a = e.target.closest('[data-open]');
+          if (a) return markRead(a.closest('.nt'), true);
+          const s = e.target.closest('[data-sheet]');
+          if (s) {
+            markRead(s.closest('.nt'));
+            openSheet(s.dataset.sheet, s);
+          }
+        });
+
+        /* ---------- swipe: right = read, left = archive ---------- */
+        const ARM = 92;
+        let sw = null;
+        feed.addEventListener('pointerdown', (e) => {
+          const card = e.target.closest('.nt__card');
+          if (!card || e.button > 0 || reduce) return;
+          sw = { card, li: card.closest('.nt'), x: e.clientX, y: e.clientY, dx: 0, on: false, armed: false, id: e.pointerId };
+        });
+        feed.addEventListener('pointermove', (e) => {
+          if (!sw) return;
+          const dx = e.clientX - sw.x;
+          const dy = e.clientY - sw.y;
+          if (!sw.on) {
+            if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) return (sw = null);
+            if (Math.abs(dx) < 8) return;
+            sw.on = true;
+            sw.li.classList.add('is-drag');
+            try {
+              sw.card.setPointerCapture(sw.id);
+            } catch (err) {}
+          }
+          /* rubber band past the threshold */
+          const lim = 150;
+          const x = Math.abs(dx) > lim ? Math.sign(dx) * (lim + (Math.abs(dx) - lim) * 0.25) : dx;
+          sw.dx = dx;
+          sw.card.style.transform = `translateX(${x}px)`;
+          sw.li.classList.toggle('is-r', dx > 0);
+          sw.li.classList.toggle('is-l', dx < 0);
+          const armed = Math.abs(dx) > ARM;
+          if (armed !== sw.armed) {
+            sw.armed = armed;
+            sw.li.classList.toggle('is-armed', armed);
+            if (armed) buzz(10);
+          }
+        });
+        const endSwipe = () => {
+          if (!sw) return;
+          const { card, li, dx, on, armed } = sw;
+          sw = null;
+          if (!on) return;
+          /* swallow the click that follows a drag (and only that one) */
+          const swallow = (ev) => (ev.preventDefault(), ev.stopPropagation());
+          card.addEventListener('click', swallow, { capture: true, once: true });
+          setTimeout(() => card.removeEventListener('click', swallow, { capture: true }), 80);
+          li.classList.remove('is-drag', 'is-armed');
+          if (armed && dx < 0) {
+            card.style.transition = 'transform 260ms cubic-bezier(0.55, 0, 0.6, 0.2)';
+            card.style.transform = 'translateX(-115%)';
+            setTimeout(() => archive(li), 220);
+            return;
+          }
+          card.style.transform = '';
+          if (armed && dx > 0) {
+            if (markRead(li)) GH.toast('Marcado como lido');
+          }
+          setTimeout(() => li.classList.remove('is-r', 'is-l'), 520);
+        };
+        feed.addEventListener('pointerup', endSwipe);
+        feed.addEventListener('pointercancel', endSwipe);
+
+        /* ---------- first paint ---------- */
+        GH.icons.archive = GH.icons.archive || '<path d="M3.5 7.5h17v11a3 3 0 0 1-3 3h-11a3 3 0 0 1-3-3v-11ZM2.5 3.5c0-.55.45-1 1-1h17c.55 0 1 .45 1 1v3c0 .55-.45 1-1 1h-17c-.55 0-1-.45-1-1v-3ZM10 11.5h4"/>';
+        renderAll({ stagger: 60, base: 260 });
+        syncTab(false);
+
+        /* deep links: ?filtro=nao-lidos|reservas|torneios|pagamentos|clube · ?lidas=1 (after "marcar todas") ·
+           ?aviso=n5 (sheet) · ?swipe=n3 (row held open, archive side) · ?swipe=n1&lado=lida · ?reset=1 */
+        const later = reduce ? 0 : 1100;
+        if (q.has('lidas')) setTimeout(markAll, later);
+        const av = q.get('aviso');
+        if (av && all.some((n) => n.id === av)) setTimeout(() => openSheet(av), later);
+        const sp = q.get('swipe');
+        if (sp) {
+          setTimeout(() => {
+            const li = feed.querySelector(`[data-id="${sp}"]`);
+            if (!li) return;
+            const right = q.get('lado') === 'lida';
+            li.classList.add(right ? 'is-r' : 'is-l', 'is-armed');
+            li.querySelector('.nt__card').style.transform = `translateX(${right ? 112 : -112}px)`;
+          }, later);
+        }
+      })();
+    </script>
+  </body>
+</html>

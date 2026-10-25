@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Início · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma "iPhone 13 mini - 4" (410:7910): greeting + club line, course carousel, "Começar rodada" */
+      .rail {
+        display: flex;
+        gap: 14px;
+        margin: 0 calc(var(--gutter) * -1);
+        padding: 4px calc((100% + var(--gutter) * 2 - 300px) / 2) 30px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        overscroll-behavior-x: contain;
+      }
+      .rail::-webkit-scrollbar {
+        display: none;
+      }
+      .course {
+        flex: none;
+        width: 300px;
+        height: 356px;
+        scroll-snap-align: center;
+        transform: scale(0.94);
+        opacity: 0.75;
+        transition:
+          transform var(--t-slow) var(--ease),
+          opacity var(--t-slow) var(--ease),
+          box-shadow var(--t-slow) var(--ease);
+        box-shadow: 0 30px 40px -30px rgba(26, 78, 38, 0.4);
+      }
+      .course.is-active {
+        transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+        opacity: 1;
+        box-shadow: var(--shadow-photo);
+      }
+      .course__play {
+        position: absolute;
+        top: 22px;
+        right: 22px;
+        z-index: 2;
+      }
+      .course__play .i {
+        width: 26px;
+        height: 26px;
+      }
+      .course__foot {
+        position: absolute;
+        inset: auto 20px 20px;
+        display: grid;
+        gap: 12px;
+      }
+      .course__name {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: #fff;
+      }
+      .course__kind {
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.82);
+        margin-top: 2px;
+      }
+      .course__row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .course__here::before {
+        /* live dot: people are on the course right now */
+        content: '';
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: 6px;
+        border-radius: 50%;
+        background: var(--green-300);
+        box-shadow: 0 0 0 0 rgba(56, 235, 127, 0.6);
+        animation: live 2.4s ease-out infinite;
+        vertical-align: 1px;
+      }
+      @keyframes live {
+        70% {
+          box-shadow: 0 0 0 7px rgba(56, 235, 127, 0);
+        }
+      }
+      .course__here {
+        flex: 1;
+        white-space: nowrap;
+        font-size: 11px;
+        line-height: 1.3;
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .course__go {
+        position: relative;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+      }
+      .course__go .i {
+        width: 20px;
+        height: 20px;
+      }
+      .course .stack {
+        --stack-ring: rgba(255, 255, 255, 0.9);
+      }
+      .head {
+        padding-bottom: 12px;
+      }
+      .dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: -16px;
+      }
+      .dots span {
+        width: 6px;
+        height: 6px;
+        border-radius: 6px;
+        background: var(--line-strong);
+        transition:
+          width var(--t-med) var(--ease),
+          background var(--t-med) var(--ease);
+      }
+      .dots span.is-on {
+        width: 18px;
+        background: var(--green-600);
+      }
+      /* next tee time (inferred from the "Reserva online" module of the deck) */
+      .next {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 14px;
+        padding: 8px 14px 8px 8px;
+        border-radius: 18px;
+        background: var(--sunken);
+      }
+      .next .tile-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #fff;
+      }
+      .next__k {
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .next__v {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .next .i--chev {
+        margin-left: auto;
+        color: var(--ink-4);
+      }
+      /* course sheet */
+      .sheet-photo {
+        height: 132px;
+        border-radius: 22px;
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+      .sheet-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin: 14px 0 16px;
+      }
+      .facts div {
+        display: grid;
+        gap: 2px;
+        padding: 12px;
+        border-radius: 16px;
+        background: var(--sunken);
+      }
+      .facts dt {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .facts dd {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .here-list {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0 18px;
+        font-size: 13.5px;
+        color: var(--ink-2);
+      }
+      .sheet-actions {
+        display: grid;
+        gap: 10px;
+      }
+      .checkin {
+        display: grid;
+        justify-items: center;
+        gap: 14px;
+        text-align: center;
+        padding-bottom: 6px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .course__here::before {
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body data-tab="home">
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="top rise" data-top></header>
+
+        <div class="head">
+          <h1 class="t-display rise" style="--d: 1">Olá, <span id="hello"></span></h1>
+          <p class="club-line rise" style="--d: 2"><span data-icon="gps"></span><span id="club"></span></p>
+        </div>
+
+        <section aria-labelledby="courses-title">
+          <h2 class="sr-only" id="courses-title">Campos</h2>
+          <div class="rail pop" style="--d: 3" id="rail"></div>
+          <div class="dots" id="dots" aria-hidden="true"></div>
+        </section>
+
+        <a class="next press rise" style="--d: 5" id="next" hidden></a>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 6">
+        <a class="btn btn--primary btn--block" id="start" href="rodada.html"><span data-flag></span><span id="start-label">Começar rodada</span></a>
+      </div>
+
+      <!-- course details -->
+      <div class="sheet" id="course-sheet" role="dialog" aria-modal="true" aria-labelledby="cs-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="cs-title"></h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="cs-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- auto check-in (deck module "Auto check-in") -->
+      <div class="sheet" id="checkin-sheet" role="dialog" aria-modal="true" aria-labelledby="ci-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="ci-title">Check-in no clube</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="ci-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const me = GH.me();
+        document.getElementById('hello').textContent = me.name.split(' ')[0];
+        document.getElementById('club').textContent = GH.club.name;
+
+        /* carousel: Driving range | Campo A | Campo B — opens centred on Campo A, like the Figma */
+        const order = ['range', 'a', 'b'];
+        const checked = GH.store.get('checkin');
+        const rail = document.getElementById('rail');
+        rail.innerHTML = order
+          .map((id) => {
+            const c = GH.course(id);
+            const count = c.hereCount + (checked === id ? 1 : 0);
+            const faces = checked === id ? [GH.user, ...c.here].slice(0, 4) : c.here.slice(0, 4);
+            return `<article class="photo-card course" data-id="${id}">
+              <img src="assets/img/${c.photo}.webp" alt="" width="736" height="552" ${id === 'a' ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"/>
+              <a class="course__play glass-btn" href="performance.html?tour=1&campo=${id === 'b' ? 'b' : 'a'}" aria-label="Tour em 3D do ${GH.esc(c.name)}">${GH.icon('play-circle')}</a>
+              <div class="course__foot">
+                <div>
+                  <h3 class="course__name"><button class="stretch" type="button" data-course="${id}" style="text-align:left">${GH.esc(c.name)}</button></h3>
+                  <p class="course__kind">${GH.esc(c.kind)}</p>
+                </div>
+                <div class="course__row">
+                  ${GH.stack(faces, count)}
+                  <span class="course__here">${count} jogadores aqui</span>
+                  <button class="course__go violet-btn" type="button" data-checkin="${id}" aria-label="Fazer check-in no ${GH.esc(c.name)}">${GH.icon('send-2')}</button>
+                </div>
+              </div>
+            </article>`;
+          })
+          .join('');
+        const dots = document.getElementById('dots');
+        dots.innerHTML = order.map(() => '<span></span>').join('');
+
+        const cards = [...rail.children];
+        const setActive = (i) => {
+          cards.forEach((c, k) => c.classList.toggle('is-active', k === i));
+          [...dots.children].forEach((d, k) => d.classList.toggle('is-on', k === i));
+        };
+        const centre = () => {
+          const mid = rail.scrollLeft + rail.clientWidth / 2;
+          let best = 0,
+            dist = Infinity;
+          cards.forEach((c, k) => {
+            const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+            if (d < dist) (dist = d), (best = k);
+          });
+          setActive(best);
+        };
+        cards.forEach((c) => GH.tilt(c, { max: 5 }));
+        const startAt = cards[1];
+        rail.scrollLeft = startAt.offsetLeft + startAt.offsetWidth / 2 - rail.clientWidth / 2;
+        setActive(1);
+        let raf;
+        rail.addEventListener('scroll', () => {
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(centre);
+        });
+
+        /* next tee time */
+        const nb = GH.nextBooking();
+        const next = document.getElementById('next');
+        if (nb) {
+          next.hidden = false;
+          next.href = `reservas.html?id=${encodeURIComponent(nb.id)}`;
+          next.innerHTML = `<span class="tile-ico">${GH.icon('calendar-tick')}</span>
+            <span><span class="next__k">Sua próxima saída</span><br/><span class="next__v">${GH.fmt.dayLabel(nb.date)}, ${GH.fmt.time(nb.date)} · ${GH.esc(GH.course(nb.course).name)}</span></span>
+            ${GH.icon('arrow-right-2', 'i--sm i--chev')}`;
+        }
+
+        /* round in progress → "Continuar rodada" */
+        const r = GH.round();
+        if (r) {
+          document.getElementById('start').href = 'performance.html';
+          document.getElementById('start-label').textContent = `Continuar rodada · buraco ${r.current}`;
+        }
+
+        /* course sheet */
+        const cs = document.getElementById('course-sheet');
+        const openCourse = (id, opener) => {
+          const c = GH.course(id);
+          const isRange = id === 'range';
+          document.getElementById('cs-title').textContent = c.name;
+          const facts = isRange
+            ? [['Baias', '40'], ['Extensão', GH.fmt.m(c.length)], ['Horário', 'até 19h']]
+            : [['Buracos', c.holes], ['Par', c.par], ['Extensão', GH.fmt.m(c.length)]];
+          document.getElementById('cs-body').innerHTML = `
+            <div class="sheet-photo"><img src="assets/img/${c.photo}.webp" alt="" width="736" height="552"/></div>
+            <div class="chips"><span class="badge badge--green">${GH.icon('tick-circle', 'i--xs')}${GH.esc(c.status)}</span><span class="badge">${GH.esc(c.green)}</span></div>
+            <dl class="facts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd class="num">${v}</dd></div>`).join('')}</dl>
+            <div class="here-list">${GH.stack(c.here.slice(0, 4), c.hereCount)}<span>${c.here.slice(0, 2).map(GH.first).join(', ')} e mais ${c.hereCount - 2} estão aqui agora</span></div>
+            <div class="sheet-actions">
+              <a class="btn btn--primary btn--block" href="reservar.html?campo=${id}">${GH.icon('calendar-add')}${isRange ? 'Reservar baia' : 'Reservar horário'}</a>
+              ${isRange ? `<a class="btn btn--ghost btn--block" href="aulas.html">${GH.icon('teacher')}Marcar aula</a>` : `<a class="btn btn--ghost btn--block" href="performance.html?tour=1&campo=${id}">${GH.icon('map')}Ver o campo em 3D</a>`}
+            </div>`;
+          GH.sheet.open(cs, opener);
+        };
+
+        /* check-in sheet */
+        const ci = document.getElementById('checkin-sheet');
+        const openCheckin = (id, opener) => {
+          const c = GH.course(id);
+          const done = GH.store.get('checkin') === id;
+          document.getElementById('ci-body').innerHTML = `<div class="checkin">
+            <div class="qr">${GH.qr('checkin-' + me.number + '-' + id, 'Seu código de sócio para check-in')}</div>
+            <p class="t-h3">${done ? 'Você já fez check-in' : 'Você está no clube'}</p>
+            <p class="t-sm t-muted">${done ? `Bom jogo no ${GH.esc(c.name)}! Seus parceiros veem que você chegou.` : `Detectamos você perto da sede. Confirme o check-in no ${GH.esc(c.name)} ou mostre o código na recepção.`}</p>
+            ${done ? `<button class="btn btn--ghost btn--block" type="button" data-sheet-close>Fechar</button>` : `<button class="btn btn--green btn--block" type="button" id="do-checkin">${GH.icon('location-tick')}Confirmar check-in</button>`}
+          </div>`;
+          GH.sheet.open(ci, opener);
+          const b = document.getElementById('do-checkin');
+          if (b)
+            b.addEventListener('click', () => {
+              GH.store.set('checkin', id);
+              GH.sheet.close(ci);
+              GH.toast('Check-in feito. Bom jogo!');
+              const card = rail.querySelector(`[data-id="${id}"]`);
+              const here = card.querySelector('.course__here');
+              here.textContent = `${c.hereCount + 1} jogadores aqui`;
+              card.querySelector('.stack').outerHTML = GH.stack([GH.user, ...c.here].slice(0, 4), c.hereCount + 1);
+            });
+        };
+
+        rail.addEventListener('click', (e) => {
+          const k = e.target.closest('[data-checkin]');
+          if (k) return openCheckin(k.dataset.checkin, k);
+          const b = e.target.closest('[data-course]');
+          if (b) openCourse(b.dataset.course, b);
+        });
+
+        /* deep links: ?sheet=campo-a | ?sheet=checkin */
+        const q = new URLSearchParams(location.search);
+        const s = q.get('sheet');
+        if (s && s.startsWith('campo-')) setTimeout(() => openCourse(s.slice(6)), 700);
+        if (s === 'checkin') setTimeout(() => openCheckin('a'), 700);
+      })();
+    </script>
+  </body>
+</html>

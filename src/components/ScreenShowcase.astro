@@ -61,7 +61,7 @@ const frameClass = frame === 'flat' ? 'sc-flat' : frame === 'browser' ? 'sc-brow
                   <source src={it.video.src} type="video/mp4" />
                 </video>
               ) : (
-                <img src={it.src} alt={it.alt} loading="lazy" class="block w-full" />
+                <img src={it.src} alt={it.alt} width={it.width} height={it.height} loading="lazy" class="block h-auto w-full" />
               )}
             </div>
           </div>

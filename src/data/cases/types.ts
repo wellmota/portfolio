@@ -15,13 +15,19 @@ export interface ComparePair {
   heuristic: string;
   /** O que estava errado e o que mudou (1–2 parágrafos). */
   body: string[];
-  before: { src: string; alt: string };
-  after: { src: string; alt: string };
+  /** `width`/`height` = tamanho real do arquivo (reserva o espaço da imagem lazy). */
+  before: { src: string; alt: string; width?: number; height?: number };
+  after: { src: string; alt: string; width?: number; height?: number };
+  /** Par de telas de desktop: texto em cima e as duas telas lado a lado, sem moldura de iPhone. */
+  wide?: boolean;
 }
 
 export interface ShowcaseItem {
   src: string;
   alt: string;
+  /** Tamanho real do arquivo; reserva o espaço da imagem lazy. */
+  width?: number;
+  height?: number;
   label: string;
   /** Texto curto à direita do rótulo (ex.: módulo, idioma). */
   meta?: string;
@@ -45,13 +51,32 @@ export interface DetailItem {
   text: string;
 }
 
+export interface PrototypeEmbed {
+  /** Página inicial do protótipo (servida de /public), carregada num iframe 390×844. */
+  src: string;
+  /** Título do iframe, para leitores de tela. */
+  title: string;
+  /** Atalhos à direita do iPhone: cada um troca a tela do iframe. */
+  screens: { label: string; href: string; meta?: string }[];
+  screensLabel: string;
+  hint?: string;
+  openLabel: string;
+  /** Botão que apaga o estado salvo do protótipo (chaves do localStorage com `storagePrefix`). */
+  resetLabel?: string;
+  storagePrefix?: string;
+  caption?: string;
+  /** Liga o tour automático: cada tela fica alguns segundos depois da animação de entrada e passa para a próxima. */
+  autoplay?: { pause: string; resume: string };
+}
+
 export interface CaseSection {
   kicker: string;
   title: string;
   body: string[];
-  image?: { src: string; alt: string; caption?: string };
+  /** `width`/`height` = tamanho real do arquivo; reservam o espaço da imagem lazy e evitam que a página pule. */
+  image?: { src: string; alt: string; caption?: string; width?: number; height?: number };
   /** `device: 'ios'` = print do app novo, com os cantos arredondados da tela do iPhone. */
-  gallery?: { src: string; alt: string; device?: 'ios' }[];
+  gallery?: { src: string; alt: string; device?: 'ios'; width?: number; height?: number }[];
   /** Rótulo acima da galeria, selo em cada imagem e legenda abaixo (ex.: "Antes"). */
   galleryTitle?: string;
   galleryBadge?: string;
@@ -63,7 +88,10 @@ export interface CaseSection {
   /** Recortes de detalhe, um por decisão de design, em grade escura de 2–3 colunas. */
   details?: { title?: string; items: DetailItem[] };
   /** Pares antes/depois (tela antiga em P&B ao lado da nova). */
-  compare?: { pairs: ComparePair[]; beforeLabel: string; afterLabel: string; heuristicLabel: string; caption?: string };
+  /** `even: true` = antes e depois do mesmo tamanho e o antes em cor (quando a mudança de cor faz parte da história). */
+  compare?: { pairs: ComparePair[]; beforeLabel: string; afterLabel: string; heuristicLabel: string; caption?: string; even?: boolean };
+  /** Protótipo navegável num iPhone, com atalhos de tela ao lado. */
+  prototype?: PrototypeEmbed;
 }
 
 export interface CaseStudyContent {

@@ -1,0 +1,1023 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Cartão · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Scorecard (inferred, "Cartão de jogo" in the menu): Figma head + the charcoal score bar,
+         then a real golf card — holes as rows, one column per player, Ida/Volta/Total, notation marks. */
+      .head {
+        padding-bottom: 16px;
+      }
+      .tee-dot {
+        flex: none;
+        width: 14px;
+        height: 14px;
+        margin: 0 5px;
+        border-radius: 50%;
+        background: var(--c);
+        box-shadow:
+          inset 0 -2px 3px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(0, 0, 0, 0.16);
+      }
+
+      /* Figma score bar, extended with Pedro's four numbers */
+      .strip {
+        display: grid;
+        grid-template-columns: auto repeat(4, 1fr);
+        align-items: center;
+        gap: 6px;
+        min-height: 74px;
+        padding: 10px 12px 10px 12px;
+        border-radius: var(--r-lg);
+        color: #fff;
+        background: var(--char);
+        box-shadow: var(--shadow-btn);
+      }
+      .strip .av {
+        --s: 46px;
+        margin-right: 6px;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+      }
+      .strip__cell {
+        display: grid;
+        justify-items: center;
+        gap: 1px;
+        min-width: 0;
+      }
+      .strip__v {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .strip__v small {
+        font-size: 13px;
+        font-weight: 500;
+        color: #b3b3b3;
+      }
+      .strip__k {
+        font-size: 11px;
+        color: #b3b3b3;
+      }
+
+      /* ---- the card ---- */
+      .sc-card {
+        margin-top: 22px;
+        padding: 0;
+        border-radius: var(--r-lg);
+      }
+      .sc-t {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: fixed;
+        font-size: 13px;
+        font-variant-numeric: tabular-nums;
+      }
+      .sc-t th,
+      .sc-t td {
+        height: 44px;
+        padding: 0;
+        text-align: center;
+        font-weight: 400;
+        border-bottom: 1px solid var(--line);
+      }
+      .sc-t thead th {
+        position: sticky;
+        top: -8px;
+        z-index: 3;
+        height: 58px;
+        padding-top: 8px;
+        background: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: var(--ink-3);
+        border-bottom: 1px solid var(--line-strong);
+      }
+      .sc-t thead th:first-child {
+        border-top-left-radius: var(--r-lg);
+      }
+      .sc-t thead th:last-child {
+        border-top-right-radius: var(--r-lg);
+      }
+      .ph {
+        display: grid;
+        justify-items: center;
+        gap: 3px;
+      }
+      .ph .av {
+        --s: 26px;
+      }
+      .ph__n {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .ph--me .av {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--green-500);
+      }
+      .sc-t td.m,
+      .sc-t td.ix {
+        color: var(--ink-3);
+      }
+      .sc-t td.par {
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+      .sc-t tbody tr[data-hole] {
+        cursor: pointer;
+        transition: background var(--t-fast) var(--ease);
+      }
+      @media (hover: hover) {
+        .sc-t tbody tr[data-hole]:hover {
+          background: #fafafa;
+        }
+      }
+      .sc-t tbody tr[data-hole]:active {
+        background: var(--sunken);
+      }
+      .hn {
+        display: inline-grid;
+        place-items: center;
+        min-width: 30px;
+        height: 26px;
+        padding: 0 6px;
+        border-radius: var(--r-pill);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .hn::after {
+        /* the whole row is the target */
+        content: '';
+        position: absolute;
+        inset: 0;
+      }
+      .sc-t tr[data-hole] th {
+        position: relative;
+      }
+      .sc-t tr.is-current {
+        background: var(--indigo-50);
+      }
+      .sc-t tr.is-current .hn {
+        color: #fff;
+        background: var(--indigo-500);
+        box-shadow: 0 6px 12px -6px rgba(74, 58, 255, 0.8);
+      }
+      .sc-t tr.is-sub th,
+      .sc-t tr.is-sub td {
+        height: 40px;
+        font-weight: 700;
+        color: var(--ink);
+        background: var(--sunken);
+      }
+      .sc-t tr.is-sub th {
+        text-align: left;
+        padding-left: 10px;
+        white-space: nowrap;
+        font-size: 12px;
+        letter-spacing: 0.02em;
+      }
+      .sc-t tr.is-total th,
+      .sc-t tr.is-total td {
+        height: 48px;
+        font-size: 15px;
+        color: #fff;
+        background: var(--char);
+        border-bottom-color: var(--char-2);
+      }
+      .sc-t tr.is-total td.m,
+      .sc-t tr.is-total td.ix {
+        color: #b3b3b3;
+        font-size: 13px;
+      }
+      .sc-t tr.is-topar th,
+      .sc-t tr.is-topar td,
+      .sc-t tr.is-net th,
+      .sc-t tr.is-net td {
+        height: 40px;
+        background: #fff;
+        font-weight: 600;
+      }
+      .sc-t tr.is-topar th,
+      .sc-t tr.is-net th {
+        text-align: left;
+        padding-left: 14px;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .sc-t tbody tr:last-child th,
+      .sc-t tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      .sc-t tbody tr:last-child th:first-child {
+        border-bottom-left-radius: var(--r-lg);
+      }
+      .sc-t tbody tr:last-child td:last-child {
+        border-bottom-right-radius: var(--r-lg);
+      }
+      .under {
+        color: var(--green-700);
+      }
+
+      /* ---- score notation: birdie ○, eagle ◎, bogey □, double+ ⧈ — the shapes draw themselves ---- */
+      .sc {
+        position: relative;
+        display: inline-grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        vertical-align: middle;
+        color: var(--ink);
+      }
+      .sc b {
+        position: relative;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .sc__m {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5;
+      }
+      .sc--eagle,
+      .sc--birdie {
+        color: var(--green-700);
+      }
+      .sc--eagle b,
+      .sc--birdie b {
+        font-weight: 700;
+      }
+      .sc--double {
+        color: var(--ink);
+      }
+      .sc--par {
+        color: var(--ink-2);
+      }
+      .sc--empty {
+        color: var(--ink-5);
+      }
+      .is-intro .sc b {
+        animation: sc-pop 460ms var(--ease-spring) both;
+        animation-delay: calc(var(--i, 0) * 36ms + 300ms);
+      }
+      .is-intro .sc__m *,
+      .sc.is-new .sc__m * {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: draw 620ms var(--ease) forwards;
+        animation-delay: calc(var(--i, 0) * 36ms + 520ms);
+      }
+      .is-intro .sc__m * + * {
+        animation-delay: calc(var(--i, 0) * 36ms + 680ms);
+      }
+      .sc.is-new b {
+        animation: sc-pop 460ms var(--ease-spring) both;
+      }
+      .sc.is-new .sc__m * {
+        animation-delay: 200ms;
+      }
+      @keyframes sc-pop {
+        from {
+          opacity: 0;
+          transform: scale(0.4);
+        }
+      }
+      .flash {
+        animation: flash 1200ms var(--ease);
+      }
+      @keyframes flash {
+        0%,
+        30% {
+          background: var(--green-50);
+        }
+      }
+
+      /* legend */
+      .legend {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 12px;
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-radius: var(--r-md);
+        background: var(--sunken);
+        font-size: 12.5px;
+        color: var(--ink-2);
+      }
+      .legend li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .legend .sc {
+        width: 26px;
+        height: 26px;
+      }
+      .legend .sc b {
+        font-size: 11px;
+      }
+      .legend__t {
+        grid-column: 1 / -1;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .note {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-top: 14px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .note .i {
+        flex: none;
+        margin-top: 1px;
+      }
+
+      .bb-2 {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+      }
+      .bb-2 .btn {
+        padding: 0 18px;
+        white-space: nowrap;
+      }
+
+      /* ---- edit sheet ---- */
+      .es-sub {
+        font-size: 13px;
+        color: var(--ink-3);
+        margin-top: 2px;
+      }
+      .ed-list {
+        display: grid;
+        gap: 4px;
+        margin-bottom: 18px;
+      }
+      .ed {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 60px;
+        padding: 6px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .ed:last-child {
+        border-bottom: 0;
+      }
+      .ed__who {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+      .ed__name {
+        display: block;
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .ed__res {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+        min-height: 20px;
+      }
+      .ed__res .sc {
+        width: 20px;
+        height: 20px;
+      }
+      .ed__res .sc b {
+        display: none;
+      }
+      .ed--sub {
+        min-height: 52px;
+        padding-left: 56px;
+        border-bottom: 1px dashed var(--line);
+      }
+      .ed--sub .ed__lab {
+        font-size: 14px;
+        color: var(--ink-2);
+      }
+      .ed .seg {
+        min-width: 176px;
+      }
+      .ed .seg button {
+        min-height: 40px;
+        padding: 0 10px;
+      }
+      .stepper output {
+        display: inline-block;
+      }
+      .stepper output.bump {
+        animation: bump 300ms var(--ease-spring);
+      }
+      @keyframes bump {
+        40% {
+          transform: scale(1.3);
+        }
+      }
+
+      /* end sheet */
+      .end-sum {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin: 4px 0 14px;
+      }
+      .end-sum div {
+        display: grid;
+        gap: 2px;
+        padding: 12px;
+        border-radius: 16px;
+        background: var(--sunken);
+      }
+      .end-sum dt {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .end-sum dd {
+        font-size: 20px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .warn {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 13.5px;
+        color: #7a4a00;
+        background: var(--amber-50);
+      }
+      .warn .i {
+        flex: none;
+        color: #a35f00;
+      }
+      .sheet-actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .btn .draw-check {
+        color: var(--green-300);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <div class="bar rise">
+          <a class="icon-btn" href="home.html" data-back aria-label="Voltar" id="back"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title">Cartão</h1>
+          <button class="icon-btn" type="button" id="share" aria-label="Compartilhar cartão"><span data-icon="share"></span></button>
+        </div>
+
+        <div class="head">
+          <h2 class="t-title rise" style="--d: 1" id="c-title"></h2>
+          <p class="club-line rise" style="--d: 2" id="c-sub"></p>
+        </div>
+
+        <section class="strip pop" style="--d: 3" id="strip" aria-label="Seus números"></section>
+
+        <section class="card sc-card rise" style="--d: 4" aria-labelledby="sc-cap">
+          <table class="sc-t is-intro" id="table">
+            <caption class="sr-only" id="sc-cap">Cartão de jogo, buraco a buraco. Toque em um buraco para lançar ou corrigir o placar.</caption>
+            <colgroup>
+              <col style="width: 42px" />
+              <col style="width: 34px" />
+              <col style="width: 46px" />
+              <col style="width: 36px" />
+            </colgroup>
+            <thead id="thead"></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </section>
+
+        <ul class="legend reveal" aria-label="Legenda das marcas">
+          <li class="legend__t" aria-hidden="true">Legenda</li>
+          <li id="lg-eagle"></li>
+          <li id="lg-birdie"></li>
+          <li id="lg-par"></li>
+          <li id="lg-bogey"></li>
+          <li id="lg-double"></li>
+        </ul>
+        <p class="note reveal" id="note"><span data-icon="info-circle" class="i--sm"></span><span id="note-t"></span></p>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 5" id="bb"></div>
+
+      <!-- edit one hole -->
+      <div class="sheet" id="edit-sheet" role="dialog" aria-modal="true" aria-labelledby="es-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <div>
+            <h2 class="sheet__title" id="es-title"></h2>
+            <p class="es-sub" id="es-sub"></p>
+          </div>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body">
+          <div class="ed-list" id="ed-list"></div>
+          <button class="btn btn--primary btn--block" type="button" id="ed-save"><span data-icon="tick-circle"></span>Salvar buraco</button>
+        </div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- end round -->
+      <div class="sheet" id="end-sheet" role="dialog" aria-modal="true" aria-labelledby="en-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="en-title">Encerrar a rodada?</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="en-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+      <p class="sr-only" role="status" id="announce"></p>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const $ = (id) => document.getElementById(id);
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+
+        /* ---------- round kit (same block in resumo.html; candidate for app.js) ---------- */
+        const HOLES_B = [
+          { n: 1, par: 4, m: 330, idx: 3 },
+          { n: 2, par: 3, m: 150, idx: 7 },
+          { n: 3, par: 4, m: 345, idx: 1 },
+          { n: 4, par: 4, m: 310, idx: 5 },
+          { n: 5, par: 3, m: 140, idx: 9 },
+          { n: 6, par: 5, m: 470, idx: 2 },
+          { n: 7, par: 4, m: 300, idx: 4 },
+          { n: 8, par: 3, m: 135, idx: 8 },
+          { n: 9, par: 4, m: 300, idx: 6 },
+        ];
+        const holesOf = (r) => {
+          const all = r.course === 'b' ? HOLES_B : GH.holes;
+          const start = r.start || 1;
+          return all.filter((h) => h.n >= start && h.n < start + (r.holes || all.length));
+        };
+        const lenOf = (r, h) => Math.round(h.m * GH.tee(r.tee).factor);
+        const hcpOf = (r, id) => {
+          if (GH.people[id]) return GH.people[id].hcp;
+          const g = (r.guests || []).find((x) => x.id === id);
+          return g ? g.hcp : null;
+        };
+        const shortOf = (id) => (GH.people[id] ? GH.first(id) : String(id).split(' ')[0]);
+        /* playing handicap (index rounded; half on 9 holes) spread over the holes by stroke index */
+        const received = (r, id) => {
+          const h = hcpOf(r, id);
+          if (h == null) return null;
+          const list = holesOf(r);
+          const n = list.length;
+          const ph = n === 18 ? Math.round(h) : Math.round(h / 2);
+          const map = {};
+          [...list].sort((a, b) => a.idx - b.idx).forEach((hole, k) => (map[hole.n] = Math.floor(ph / n) + (k < ph % n ? 1 : 0)));
+          return { ph, map };
+        };
+        const note = (strokes, par) => {
+          const d = strokes - par;
+          if (strokes === 1) return { k: 'eagle', label: 'Hole in one' };
+          if (d <= -3) return { k: 'eagle', label: 'Albatroz' };
+          if (d === -2) return { k: 'eagle', label: 'Eagle' };
+          if (d === -1) return { k: 'birdie', label: 'Birdie' };
+          if (d === 0) return { k: 'par', label: 'Par' };
+          if (d === 1) return { k: 'bogey', label: 'Bogey' };
+          if (d === 2) return { k: 'double', label: 'Duplo bogey' };
+          if (d === 3) return { k: 'double', label: 'Triplo bogey' };
+          return { k: 'double', label: `${d} acima do par` };
+        };
+        const stats = (r, id) => {
+          const o = { strokes: 0, par: 0, played: 0, putts: 0, puttsN: 0, fw: 0, fwN: 0, gir: 0, girN: 0, net: 0, pts: 0, counts: { eagle: 0, birdie: 0, par: 0, bogey: 0, double: 0 }, best: null };
+          const rec = received(r, id);
+          o.ph = rec ? rec.ph : null;
+          holesOf(r).forEach((h) => {
+            const s = ((r.scores || {})[h.n] || {})[id];
+            if (!s || !s.strokes) return;
+            o.played++;
+            o.strokes += s.strokes;
+            o.par += h.par;
+            if (s.putts != null) {
+              o.putts += s.putts;
+              o.puttsN++;
+              o.girN++;
+              if (s.strokes - s.putts <= h.par - 2) o.gir++;
+            }
+            if (h.par > 3 && s.fairway != null) {
+              o.fwN++;
+              if (s.fairway) o.fw++;
+            }
+            o.counts[note(s.strokes, h.par).k]++;
+            const rc = rec ? rec.map[h.n] : 0;
+            o.net += s.strokes - rc;
+            o.pts += Math.max(0, 2 + h.par + rc - s.strokes);
+            const d = s.strokes - h.par;
+            if (!o.best || d < o.best.d || (d === o.best.d && h.idx < o.best.h.idx)) o.best = { h, d, s };
+          });
+          o.toPar = o.strokes - o.par;
+          o.netToPar = o.net - o.par;
+          return o;
+        };
+        /* Demo: a complete, plausible 18 on Campo A — Pedro 84 (+12, 32 putts, 8/14 fairways, 7 greens), Caio 80, Lucas 75.
+           Hole 1 matches GH.demoRound. Deterministic; never saved. */
+        const DEMO = {
+          pedro: [[4, 5, 4, 6, 6, 3, 3, 6, 4, 5, 6, 3, 5, 6, 4, 5, 4, 5], [2, 2, 2, 3, 2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2], '10-10-11101-00-110'],
+          caio: [[4, 4, 3, 8, 5, 3, 4, 5, 5, 4, 5, 3, 5, 4, 3, 6, 4, 5], [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2], '11-01-10111-10-011'],
+          lucas: [[3, 5, 3, 5, 5, 3, 4, 3, 5, 4, 6, 3, 4, 5, 4, 5, 4, 4], [1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1], '11-11-11011-10-111'],
+        };
+        const demoFull = () => {
+          const scores = {};
+          GH.holes.forEach((h, i) => {
+            scores[h.n] = {};
+            Object.entries(DEMO).forEach(([id, [s, p, f]]) => (scores[h.n][id] = { strokes: s[i], putts: p[i], fairway: f[i] === '-' ? null : f[i] === '1' }));
+          });
+          return { id: 'demo-full', course: 'a', tee: 'branco', holes: 18, start: 1, players: Object.keys(DEMO), guests: [], cart: true, hcp: true, startedAt: GH.day(0, '07:20').toISOString(), current: 18, scores, ball: null };
+        };
+        const MARK = {
+          eagle: '<circle cx="16" cy="16" r="14" pathLength="100"/><circle cx="16" cy="16" r="10.5" pathLength="100"/>',
+          birdie: '<circle cx="16" cy="16" r="12.5" pathLength="100"/>',
+          par: '',
+          bogey: '<rect x="4.5" y="4.5" width="23" height="23" rx="2.5" pathLength="100"/>',
+          double: '<rect x="2.5" y="2.5" width="27" height="27" rx="3" pathLength="100"/><rect x="6" y="6" width="20" height="20" rx="2" pathLength="100"/>',
+        };
+        const mark = (k, v, i) =>
+          `<span class="sc sc--${k}" style="--i:${i}">${MARK[k] ? `<svg class="sc__m" viewBox="0 0 32 32" aria-hidden="true">${MARK[k]}</svg>` : ''}<b>${v}</b></span>`;
+        /* ---------- end of round kit ---------- */
+
+        /* ---------- source ---------- */
+        let mode, round;
+        const last = GH.store.get('lastRound');
+        if (q.get('demo') === 'full') {
+          round = demoFull();
+          mode = 'demo';
+        } else if (q.get('rodada') === 'ultima' && last) {
+          round = last;
+          mode = 'last';
+        } else {
+          const saved = GH.round();
+          round = saved || GH.round({ demo: true });
+          mode = saved ? 'live' : 'demo';
+        }
+        round.scores = round.scores || {};
+        const course = GH.course(round.course);
+        const holes = holesOf(round);
+        const players = (round.players || [GH.user]).slice(0, 4);
+        const showNet = round.hcp !== false;
+        const persist = () => mode === 'live' && GH.saveRound(round);
+        const score = (n, id) => ((round.scores[n] || {})[id] || null);
+        const firstOpen = () => (holes.find((h) => !score(h.n, GH.user)) || {}).n;
+
+        /* ---------- header ---------- */
+        const tee = GH.tee(round.tee);
+        $('c-title').textContent = course.name;
+        $('c-sub').innerHTML = `<span class="tee-dot" style="--c:${tee.color}" aria-hidden="true"></span><span>Tee ${tee.name.toLowerCase()} · ${holes.length} buracos · ${GH.fmt.dayLabel(round.startedAt)}, ${GH.fmt.time(round.startedAt)}</span>`;
+        if (mode === 'live') $('back').href = `performance.html?hole=${round.current || holes[0].n}`;
+        if (mode === 'last') $('back').href = 'resumo.html';
+
+        /* ---------- Pedro's strip ---------- */
+        let prevStrip = null;
+        function renderStrip(animate) {
+          const s = stats(round, GH.user);
+          const fwPct = s.fwN ? Math.round((s.fw / s.fwN) * 100) : null;
+          const cells = [
+            ['st-strokes', s.played ? s.strokes : 0, 'Tacadas'],
+            ['st-topar', s.toPar, 'vs par'],
+            ['st-putts', s.putts, 'Putts'],
+            ['st-fw', s.fw, 'Fairways'],
+          ];
+          $('strip').innerHTML =
+            GH.avatar(GH.user, { alt: true }) +
+            cells
+              .map(([id, v, k]) => `<div class="strip__cell"><span class="strip__v" id="${id}">–</span><span class="strip__k">${k}</span></div>`)
+              .join('');
+          $('strip').setAttribute(
+            'aria-label',
+            `Seus números: ${s.strokes} tacadas em ${s.played} buracos, ${GH.fmt.toPar(s.toPar)} no par, ${s.putts} putts, ${s.fw} de ${s.fwN} fairways`
+          );
+          const from = prevStrip || { strokes: 0, toPar: 0, putts: 0, fw: 0 };
+          const go = (id, to, f, fmt) => {
+            const el = $(id);
+            if (!animate || reduce) return (el.innerHTML = fmt(to));
+            GH.countUp(el, to, { from: f, dur: prevStrip ? 600 : 1300, delay: prevStrip ? 0 : 500, format: (x) => fmt(Math.round(x)) });
+          };
+          go('st-strokes', s.strokes, from.strokes, (v) => String(v));
+          go('st-topar', s.toPar, from.toPar, (v) => (s.played ? GH.fmt.toPar(v) : '–'));
+          go('st-putts', s.putts, from.putts, (v) => String(v));
+          go('st-fw', s.fw, from.fw, (v) => `${v}/${s.fwN}`);
+          /* countUp writes textContent; keep the fairway % as a quiet suffix after it settles */
+          if (fwPct != null) setTimeout(() => ($('st-fw').innerHTML = `${s.fw}<small>/${s.fwN}</small>`), animate && !reduce ? (prevStrip ? 650 : 1850) : 0);
+          prevStrip = s;
+        }
+
+        /* ---------- table ---------- */
+        function renderHead() {
+          $('thead').innerHTML = `<tr><th scope="col">Bur.</th><th scope="col">Par</th><th scope="col">m</th><th scope="col"><abbr title="Índice de dificuldade" style="text-decoration:none">Índ.</abbr></th>${players
+            .map(
+              (id) =>
+                `<th scope="col" aria-label="${GH.esc(GH.person(id).name)}"><span class="ph${id === GH.user ? ' ph--me' : ''}">${GH.avatar(id)}<span class="ph__n">${GH.esc(id === GH.user ? 'Você' : shortOf(id))}</span></span></th>`
+            )
+            .join('')}</tr>`;
+        }
+        let order = 0;
+        function cell(n, id, par, fresh) {
+          const s = score(n, id);
+          if (!s || !s.strokes) return `<td class="s"><span class="sc sc--empty" aria-hidden="true">–</span><span class="sr-only">sem placar</span></td>`;
+          const nt = note(s.strokes, par);
+          const html = mark(nt.k, s.strokes, order);
+          return `<td class="s">${fresh ? html.replace('class="sc ', 'class="sc is-new ') : html}<span class="sr-only">, ${nt.label}</span></td>`;
+        }
+        function sumRow(cls, label, list, ariaLabel) {
+          const par = list.reduce((a, h) => a + h.par, 0);
+          const m = list.reduce((a, h) => a + lenOf(round, h), 0);
+          return `<tr class="${cls}"><th scope="row"${ariaLabel ? ` aria-label="${ariaLabel}"` : ''}>${label}</th><td class="par">${par}</td><td class="m">${GH.fmt.num(m)}</td><td class="ix"></td>${players
+            .map((id) => {
+              const sub = list.reduce((a, h) => a + ((score(h.n, id) || {}).strokes || 0), 0);
+              return `<td><span class="cu" data-v="${sub}">${sub || '–'}</span></td>`;
+            })
+            .join('')}</tr>`;
+        }
+        function renderBody(freshHole) {
+          order = 0;
+          const cur = mode === 'live' || (mode === 'demo' && q.get('demo') !== 'full') ? round.current : null;
+          const rows = [];
+          const row = (h) => {
+            const html = `<tr data-hole="${h.n}"${h.n === cur ? ' class="is-current" aria-current="step"' : ''}>
+              <th scope="row"><button class="hn" type="button" data-hole="${h.n}" aria-label="Buraco ${h.n}, par ${h.par}${h.n === cur ? ', buraco atual' : ''}. Editar placar">${h.n}</button></th>
+              <td class="par">${h.par}</td><td class="m">${lenOf(round, h)}</td><td class="ix">${h.idx}</td>
+              ${players.map((id, c) => cell(h.n, id, h.par, h.n === freshHole)).join('')}</tr>`;
+            order++;
+            return html;
+          };
+          if (holes.length === 18) {
+            holes.slice(0, 9).forEach((h) => rows.push(row(h)));
+            rows.push(sumRow('is-sub', 'Ida', holes.slice(0, 9), 'Ida, buracos 1 a 9'));
+            holes.slice(9).forEach((h) => rows.push(row(h)));
+            rows.push(sumRow('is-sub', 'Volta', holes.slice(9), 'Volta, buracos 10 a 18'));
+          } else holes.forEach((h) => rows.push(row(h)));
+          rows.push(sumRow('is-total', 'Total', holes));
+          rows.push(
+            `<tr class="is-topar"><th scope="row" colspan="4">vs par</th>${players
+              .map((id) => {
+                const s = stats(round, id);
+                return `<td class="${s.played && s.toPar < 0 ? 'under' : ''}" aria-live="polite">${s.played ? GH.fmt.toPar(s.toPar) : '–'}</td>`;
+              })
+              .join('')}</tr>`
+          );
+          if (showNet)
+            rows.push(
+              `<tr class="is-net"><th scope="row" colspan="4">Net <span style="font-weight:400">· com handicap</span></th>${players
+                .map((id) => {
+                  const s = stats(round, id);
+                  return `<td title="${s.ph != null ? 'HCP de jogo ' + s.ph : 'Sem handicap'}">${s.played && s.ph != null ? s.net : '–'}</td>`;
+                })
+                .join('')}</tr>`
+            );
+          $('tbody').innerHTML = rows.join('');
+        }
+        /* totals count up after the hole marks have landed */
+        const keyOf = (el) => el.closest('tr').firstElementChild.textContent.trim() + ':' + [...el.closest('tr').children].indexOf(el.parentElement);
+        function countTotals(delay, from) {
+          document.querySelectorAll('#tbody .cu').forEach((el) => {
+            const v = +el.dataset.v;
+            if (!v) return;
+            const f = from && from[keyOf(el)];
+            if (reduce || f === v) return (el.textContent = v);
+            GH.countUp(el, v, { from: f || 0, dur: f ? 500 : 1100, delay, format: (x) => String(Math.round(x)) });
+          });
+        }
+        const totalsSnapshot = () => {
+          const o = {};
+          document.querySelectorAll('#tbody .cu').forEach((el) => (o[keyOf(el)] = +el.dataset.v));
+          return o;
+        };
+
+        /* ---------- legend + note ---------- */
+        [
+          ['eagle', 3, 'Eagle ou melhor'],
+          ['birdie', 3, 'Birdie (−1)'],
+          ['par', 4, 'Par'],
+          ['bogey', 5, 'Bogey (+1)'],
+          ['double', 6, 'Duplo ou pior'],
+        ].forEach(([k, v, l]) => ($('lg-' + k).innerHTML = `${mark(k, v, 0).replace('class="sc ', 'class="sc is-static ')}<span>${l}</span>`));
+        const marker = players[1] ? shortOf(players[1]) : null;
+        $('note-t').textContent =
+          mode === 'last'
+            ? `Rodada encerrada ${GH.fmt.dayLabel(round.finishedAt || round.startedAt).toLowerCase()}. ${marker ? `Placar enviado para ${marker} confirmar.` : ''}`
+            : `Toque em um buraco para lançar ou corrigir.${marker ? ` ${marker} é o seu marcador: ele confirma o cartão no fim.` : ''}`;
+
+        /* ---------- bottom bar ---------- */
+        function renderBar() {
+          const open = firstOpen();
+          const bb = $('bb');
+          if (mode === 'last') {
+            bb.innerHTML = `<a class="btn btn--primary btn--block" href="resumo.html">${GH.icon('chart-2')}Ver resumo da rodada</a>`;
+            return;
+          }
+          const end = `<button class="btn btn--primary btn--block" type="button" id="end">${GH.flag()}Encerrar rodada</button>`;
+          bb.innerHTML = open
+            ? `<div class="bb-2"><a class="btn btn--ghost" href="performance.html?hole=${round.current || open}">${GH.icon('map')}Buraco ${round.current || open}</a>${end}</div>`
+            : end;
+          $('end').addEventListener('click', (e) => openEnd(e.currentTarget));
+        }
+
+        /* ---------- edit sheet ---------- */
+        const es = $('edit-sheet');
+        let draft = null;
+        const resHTML = (strokes, par) => {
+          const nt = note(strokes, par);
+          return `${MARK[nt.k] ? `<span class="sc sc--${nt.k} is-new"><svg class="sc__m" viewBox="0 0 32 32" aria-hidden="true">${MARK[nt.k]}</svg><b></b></span>` : ''}<span>${nt.label}</span>`;
+        };
+        function stepper(key, label, v, min, max) {
+          return `<div class="stepper" role="group" aria-label="${GH.esc(label)}">
+            <button type="button" data-step="${key}" data-d="-1" aria-label="Diminuir ${GH.esc(label.toLowerCase())}"${v <= min ? ' disabled' : ''}>${GH.icon('minus', 'i--sm')}</button>
+            <output data-out="${key}" aria-live="polite">${v}</output>
+            <button type="button" data-step="${key}" data-d="1" aria-label="Aumentar ${GH.esc(label.toLowerCase())}"${v >= max ? ' disabled' : ''}>${GH.icon('add', 'i--sm')}</button></div>`;
+        }
+        function openEdit(n, opener) {
+          if (mode === 'last') return;
+          const h = holes.find((x) => x.n === +n);
+          if (!h) return;
+          draft = { n: h.n, par: h.par, p: {} };
+          players.forEach((id) => {
+            const s = score(h.n, id) || {};
+            draft.p[id] = { strokes: s.strokes || h.par, putts: s.putts != null ? s.putts : id === GH.user ? 2 : null, fairway: s.fairway != null ? s.fairway : null };
+          });
+          $('es-title').textContent = `Buraco ${h.n}`;
+          $('es-sub').textContent = `Par ${h.par} · ${GH.fmt.m(lenOf(round, h))} · Índice ${h.idx}`;
+          renderEdit();
+          GH.sheet.open(es, opener);
+        }
+        function renderEdit() {
+          const { par } = draft;
+          $('ed-list').innerHTML = players
+            .map((id) => {
+              const d = draft.p[id];
+              const name = id === GH.user ? 'Você' : shortOf(id);
+              let html = `<div class="ed"><div class="ed__who">${GH.avatar(id, { size: 'md' })}<div><span class="ed__name">${GH.esc(name)}</span><span class="ed__res" id="res-${players.indexOf(id)}">${resHTML(d.strokes, par)}</span></div></div>
+                ${stepper(id + '|strokes', `Tacadas de ${id === GH.user ? 'você' : name}`, d.strokes, 1, 15)}</div>`;
+              if (id === GH.user) {
+                html += `<div class="ed ed--sub"><span class="ed__lab">Putts</span>${stepper(id + '|putts', 'Putts', d.putts, 0, Math.max(0, d.strokes - 1))}</div>`;
+                if (par > 3)
+                  html += `<div class="ed ed--sub"><span class="ed__lab" id="fw-l">Fairway</span><div class="seg" role="radiogroup" aria-labelledby="fw-l">
+                    <button type="button" role="radio" data-fw="1" aria-checked="${d.fairway === true}">Acertou</button>
+                    <button type="button" role="radio" data-fw="0" aria-checked="${d.fairway === false}">Errou</button></div></div>`;
+              }
+              return html;
+            })
+            .join('');
+        }
+        $('ed-list').addEventListener('click', (e) => {
+          const st = e.target.closest('[data-step]');
+          if (st) {
+            const [id, k] = st.dataset.step.split('|');
+            const d = draft.p[id];
+            const max = k === 'strokes' ? 15 : Math.max(0, d.strokes - 1);
+            const min = k === 'strokes' ? 1 : 0;
+            d[k] = Math.min(max, Math.max(min, (d[k] || 0) + +st.dataset.d));
+            if (k === 'strokes' && d.putts != null) d.putts = Math.min(d.putts, Math.max(0, d.strokes - 1));
+            GH.haptic && GH.haptic(6);
+            /* update in place (keeps focus on the button) */
+            const grp = st.closest('.stepper');
+            const out = grp.querySelector('output');
+            out.textContent = d[k];
+            out.classList.remove('bump');
+            void out.offsetWidth;
+            out.classList.add('bump');
+            grp.querySelector('[data-d="-1"]').disabled = d[k] <= min;
+            grp.querySelector('[data-d="1"]').disabled = d[k] >= max;
+            if (k === 'strokes') {
+              $('res-' + players.indexOf(id)).innerHTML = resHTML(d.strokes, draft.par);
+              if (id === GH.user) {
+                const pg = document.querySelector('[data-out="' + id + '|putts"]');
+                if (pg) {
+                  pg.textContent = d.putts;
+                  const g = pg.closest('.stepper');
+                  g.querySelector('[data-d="1"]').disabled = d.putts >= Math.max(0, d.strokes - 1);
+                  g.querySelector('[data-d="-1"]').disabled = d.putts <= 0;
+                }
+              }
+            }
+            return;
+          }
+          const fw = e.target.closest('[data-fw]');
+          if (fw) {
+            const v = fw.dataset.fw === '1';
+            draft.p[GH.user].fairway = draft.p[GH.user].fairway === v ? null : v;
+            fw.parentElement.querySelectorAll('[data-fw]').forEach((b) => b.setAttribute('aria-checked', String(draft.p[GH.user].fairway === (b.dataset.fw === '1'))));
+          }
+        });
+        $('ed-save').addEventListener('click', () => {
+          const n = draft.n;
+          const snap = totalsSnapshot();
+          round.scores[n] = round.scores[n] || {};
+          players.forEach((id) => {
+            const d = draft.p[id];
+            round.scores[n][id] = { strokes: d.strokes, putts: d.putts, fairway: draft.par > 3 ? d.fairway : null };
+          });
+          /* scoring the hole you're on moves you to the next open one */
+          if (round.current === n) {
+            const nx = holes.find((h) => h.n > n && !score(h.n, GH.user));
+            if (nx) round.current = nx.n;
+          }
+          persist();
+          GH.sheet.close(es);
+          $('table').classList.remove('is-intro');
+          renderBody(n);
+          countTotals(250, snap);
+          renderStrip(true);
+          renderBar();
+          const tr = document.querySelector(`#tbody tr[data-hole="${n}"]`);
+          if (tr && !reduce) tr.classList.add('flash');
+          const s = score(n, GH.user);
+          GH.toast(`Buraco ${n}: ${s.strokes} tacadas · ${note(s.strokes, draft.par).label.toLowerCase()}`);
+        });
+        $('tbody').addEventListener('click', (e) => {
+          const tr = e.target.closest('tr[data-hole]');
+          if (tr) openEdit(tr.dataset.hole, tr.querySelector('.hn'));
+        });
+
+        /* ---------- end round ---------- */
+        const en = $('end-sheet');
+        function openEnd(opener) {
+          const s = stats(round, GH.user);
+          const missing = holes.length - s.played;
+          $('en-body').innerHTML = `
+            <dl class="end-sum">
+              <div><dt>Buracos</dt><dd>${s.played}<span class="t-sm t-muted" style="font-weight:500">/${holes.length}</span></dd></div>
+              <div><dt>Tacadas</dt><dd>${s.strokes || '–'}</dd></div>
+              <div><dt>vs par</dt><dd${s.toPar < 0 ? ' class="under"' : ''}>${s.played ? GH.fmt.toPar(s.toPar) : '–'}</dd></div>
+            </dl>
+            ${missing ? `<p class="warn">${GH.icon('warning-2', 'i--sm')}<span>Faltam ${GH.fmt.plural(missing, 'buraco', 'buracos')}. ${missing === 1 ? 'Ele fica' : 'Eles ficam'} em branco e a rodada não conta para o handicap.</span></p>` : ''}
+            <p class="t-sm t-muted">${marker ? `O cartão vai para ${GH.esc(marker)} confirmar como marcador. ` : ''}Você vê o resumo em seguida.</p>
+            <div class="sheet-actions">
+              <button class="btn btn--primary btn--block" type="button" id="en-ok">${GH.flag()}<span>Encerrar e ver resumo</span></button>
+              <button class="btn btn--ghost btn--block" type="button" data-sheet-close>Continuar jogando</button>
+            </div>`;
+          GH.sheet.open(en, opener);
+          $('en-ok').addEventListener('click', (e) => {
+            const btn = e.currentTarget;
+            const done = { ...JSON.parse(JSON.stringify(round)), finished: true, finishedAt: new Date().toISOString() };
+            GH.store.set('lastRound', done);
+            if (mode === 'live') GH.saveRound(done);
+            btn.disabled = true;
+            btn.innerHTML = `${GH.check()}<span>Rodada encerrada</span>`;
+            GH.haptic && GH.haptic(16);
+            setTimeout(() => (location.href = 'resumo.html'), reduce ? 200 : 900);
+          });
+        }
+
+        /* ---------- share ---------- */
+        $('share').addEventListener('click', () => GH.toast('Link do cartão copiado', 'share'));
+
+        /* ---------- first paint ---------- */
+        renderHead();
+        renderBody();
+        renderStrip(true);
+        renderBar();
+        countTotals(reduce ? 0 : 300 + holes.length * 36 + 500);
+        /* drop the intro class once the cascade is over so later re-renders stay quiet */
+        setTimeout(() => $('table').classList.remove('is-intro'), reduce ? 0 : 300 + holes.length * 36 * 2 + 1600);
+
+        /* deep links: ?demo=full · ?rodada=ultima · ?buraco=n (edit sheet) · ?sheet=encerrar */
+        const bh = q.get('buraco');
+        if (bh) setTimeout(() => openEdit(bh), 900);
+        if (q.get('sheet') === 'encerrar' && mode !== 'last') setTimeout(() => openEnd(), 900);
+      })();
+    </script>
+  </body>
+</html>

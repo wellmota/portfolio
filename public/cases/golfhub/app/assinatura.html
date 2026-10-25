@@ -1,0 +1,1830 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Minha assinatura · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma "Minha assinatura" (410:7328): title + club line, "Cartão de crédito" with the indigo Visa
+         and the dashed "Novo cartão" tile, tabs "Recibos | Configurações", receipts grouped by year.
+         Refined: a plan card, a real wallet (default card = indigo, the others = the UI kit's grey card)
+         whose cards tilt and flip to their back, a live 3D preview in the new-card form,
+         billing settings and a paper receipt. */
+      .head {
+        padding-bottom: 12px;
+      }
+      .label {
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0;
+        color: var(--ink-3);
+      }
+
+      /* ---------- wallet: horizontal scroller, room around it for the 3D flip and the indigo glow ---------- */
+      .wallet {
+        display: flex;
+        gap: 12px;
+        margin: 2px calc(var(--gutter) * -1) 0;
+        padding: 10px var(--gutter) 26px;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scroll-padding: 0 var(--gutter);
+        scrollbar-width: none;
+        overscroll-behavior-x: contain;
+      }
+      .wallet::-webkit-scrollbar {
+        display: none;
+      }
+      .wallet > li {
+        flex: none;
+        scroll-snap-align: start;
+      }
+      /* flip card: .cc (tilt target, perspective) > .cc__inner (rotates) > front + back faces */
+      .cc {
+        position: relative;
+        width: 150px;
+        height: 120px;
+        border-radius: 14px;
+        perspective: 900px;
+      }
+      .cc__inner {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        transform-style: preserve-3d;
+        transition: transform 760ms cubic-bezier(0.3, 1.25, 0.5, 1);
+      }
+      .cc.is-flipped .cc__inner {
+        transform: rotateY(180deg);
+      }
+      .cc.is-peek .cc__inner {
+        animation: peek 1100ms var(--ease) both;
+      }
+      @keyframes peek {
+        40% {
+          transform: rotateY(-24deg);
+        }
+        70% {
+          transform: rotateY(6deg);
+        }
+      }
+      .cc__face.ccard {
+        position: absolute;
+        inset: 0;
+        width: auto;
+        height: auto;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        text-align: left;
+      }
+      .cc__back.ccard {
+        transform: rotateY(180deg);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 12px 10px 10px;
+      }
+      .cc > .tilt__sheen {
+        transform: translateZ(2px);
+      }
+      /* holographic foil on the indigo card: moves with the tilt (--sx/--sy from GH.tilt), glints once on entry */
+      .holo {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background:
+          linear-gradient(
+            115deg,
+            transparent 22%,
+            rgba(255, 128, 222, 0.55) 34%,
+            rgba(128, 214, 255, 0.55) 43%,
+            rgba(160, 255, 186, 0.5) 52%,
+            rgba(255, 236, 140, 0.45) 60%,
+            transparent 72%
+          ),
+          repeating-linear-gradient(60deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 6px);
+        background-size:
+          260% 260%,
+          auto;
+        background-position:
+          var(--sx, 50%) var(--sy, 50%),
+          0 0;
+        mix-blend-mode: color-dodge;
+        opacity: 0.16;
+        transition: opacity 300ms var(--ease);
+      }
+      .is-tilting .holo {
+        opacity: 0.6;
+      }
+      .holo.is-glint {
+        animation: glint 1500ms var(--ease) 700ms both;
+      }
+      @keyframes glint {
+        0% {
+          background-position:
+            0% 0%,
+            0 0;
+          opacity: 0.16;
+        }
+        45% {
+          opacity: 0.7;
+        }
+        100% {
+          background-position:
+            100% 100%,
+            0 0;
+          opacity: 0.16;
+        }
+      }
+      .ccard__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        min-height: 22px;
+      }
+      .ccard__tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        height: 20px;
+        padding: 0 7px 0 5px;
+        border-radius: var(--r-pill);
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .ccard__tag .i {
+        width: 12px;
+        height: 12px;
+        stroke-width: 2.2;
+      }
+      .ccard__brand.is-word {
+        font-style: normal;
+        font-weight: 700;
+        letter-spacing: 0;
+        font-size: 16px;
+      }
+      .ccard .mc {
+        width: 34px;
+        height: 22px;
+      }
+      .ccard__exp {
+        font-variant-numeric: tabular-nums;
+      }
+      /* UI kit "short_card" (inactive): light grey, dark type */
+      .ccard--off {
+        color: var(--ink);
+        background: #f3f4f6;
+        box-shadow: inset 0 0 0 1px var(--line);
+      }
+      .ccard--off .ccard__num {
+        color: var(--ink-2);
+      }
+      .ccard--off .ccard__exp {
+        color: var(--ink-3);
+        opacity: 1;
+      }
+      /* back face: magnetic stripe, signature strip with the CVV, actions */
+      .cc__stripe {
+        flex: none;
+        height: 22px;
+        margin: 0 -10px;
+        background: linear-gradient(180deg, #1c1940, #2a2560);
+      }
+      .ccard--off .cc__stripe {
+        background: linear-gradient(180deg, #2b2b2b, #444);
+      }
+      .cc__sig {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 20px;
+        margin-top: 8px;
+        padding: 0 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: #3a3a3a;
+        background: repeating-linear-gradient(135deg, #fff 0 4px, #eceaf8 4px 8px);
+      }
+      .cc__acts {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        margin-top: auto;
+      }
+      .cc__manage,
+      .cc__undo {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 34px;
+        border-radius: var(--r-pill);
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+      .cc__manage {
+        flex: 1;
+        padding: 0 10px;
+        color: var(--indigo-600);
+        background: #fff;
+      }
+      .cc__undo {
+        flex: none;
+        width: 34px;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .cc__undo .i {
+        width: 17px;
+        height: 17px;
+      }
+      .cc__manage::before,
+      .cc__undo::before {
+        content: '';
+        position: absolute;
+        inset: -5px -3px;
+      }
+      .ccard--off .cc__manage {
+        color: #fff;
+        background: var(--char);
+      }
+      .ccard--off .cc__undo {
+        color: var(--ink-2);
+        background: rgba(0, 0, 0, 0.07);
+      }
+
+      /* Figma "contact_new": #F9FAFB, dashed #D6D9E4, green plus */
+      .new-card {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 10px;
+        width: 150px;
+        height: 120px;
+        border-radius: 14px;
+        border: 1.5px dashed var(--dash);
+        background: #f9fafb;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink-3);
+        transition:
+          background var(--t-fast) var(--ease),
+          transform var(--t-fast) var(--ease);
+      }
+      .new-card:hover {
+        background: var(--sunken);
+      }
+      .new-card:active {
+        transform: scale(0.97);
+      }
+      .new-card__plus {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #fff;
+        background: #10c971;
+        box-shadow: 0 8px 14px -6px rgba(16, 150, 80, 0.7);
+        transition: transform var(--t-med) var(--ease-spring);
+      }
+      .new-card:hover .new-card__plus {
+        transform: rotate(90deg);
+      }
+      .new-card__plus .i {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2.2;
+      }
+      .cc.is-new {
+        animation: pop 620ms var(--ease-spring) both;
+      }
+
+      /* ---------- plan strip: compact, so the Figma composition (cards → tabs → receipts) keeps its rhythm ---------- */
+      .plan {
+        display: grid;
+        gap: 10px;
+        margin-top: 2px;
+        padding: 14px 16px 14px;
+      }
+      .plan__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .plan__name {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .plan__k {
+        margin-top: 1px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+        white-space: nowrap;
+      }
+      .plan__k b {
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .plan__due {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+        white-space: nowrap;
+      }
+      .plan__due b {
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .plan .meter {
+        height: 4px;
+        margin-top: -4px;
+        --meter: var(--indigo-500);
+      }
+
+      /* ---------- Figma tab_bar/2: two tabs, indigo underline that slides ---------- */
+      .tabs {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 22px;
+        border-bottom: 1px solid var(--line);
+      }
+      .tabs button {
+        min-height: 48px;
+        font-size: 16px;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        color: var(--ink-3);
+        border-radius: 10px 10px 0 0;
+        transition: color var(--t-med) var(--ease);
+      }
+      .tabs button[aria-selected='true'] {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .tabs__ink {
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 50%;
+        height: 2px;
+        display: flex;
+        justify-content: center;
+        transform: translateX(calc(var(--i, 0) * 100%));
+        transition: transform 520ms var(--ease-spring);
+        pointer-events: none;
+      }
+      .tabs__ink::before {
+        content: '';
+        width: 104px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--indigo-500);
+        box-shadow: 0 2px 8px rgba(74, 58, 255, 0.45);
+      }
+      .panel {
+        padding-top: 4px;
+      }
+      .panel.is-entering {
+        animation: panel-in 420ms var(--ease) both;
+      }
+      @keyframes panel-in {
+        from {
+          opacity: 0;
+          transform: translateX(calc(var(--dir, 1) * 24px));
+        }
+      }
+      .panel:focus-visible {
+        outline-offset: 4px;
+      }
+
+      /* ---------- receipts ---------- */
+      .year__title {
+        margin: 18px 4px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: var(--ink-3);
+      }
+      .pay {
+        width: 100%;
+        text-align: left;
+        gap: 10px;
+        min-height: 62px;
+        padding: 10px 12px 10px 16px;
+      }
+      .pay .row__title {
+        font-size: 14.5px;
+        font-weight: 500;
+      }
+      .pay .row__sub {
+        font-size: 12.5px;
+      }
+      .pay .row__end {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--ink);
+      }
+      .pay .chev {
+        color: var(--ink-4);
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .pay:hover .chev {
+        transform: translateX(2px);
+      }
+      .pay__state {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: #8a5300;
+      }
+      .more {
+        margin-top: 16px;
+      }
+
+      /* ---------- settings ---------- */
+      .set .row {
+        gap: 12px;
+        padding-right: 14px;
+      }
+      .set .tile-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+      }
+      .switch::before {
+        content: '';
+        position: absolute;
+        inset: -8px -4px;
+      }
+      .due {
+        display: grid;
+        gap: 4px;
+        margin-top: 10px;
+        padding: 14px 16px 16px;
+      }
+      .due .chips {
+        margin-top: 8px;
+        gap: 6px;
+      }
+      .due .chip {
+        min-height: 44px;
+        min-width: 50px;
+        justify-content: center;
+        padding: 0 12px;
+        font-variant-numeric: tabular-nums;
+      }
+      .accepts {
+        display: grid;
+        gap: 10px;
+        margin-top: 22px;
+      }
+      .accepts ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .accepts .badge {
+        height: 32px;
+        padding: 0 12px 0 10px;
+        font-size: 13px;
+        gap: 6px;
+      }
+      .change {
+        margin-top: 22px;
+      }
+      .cancel {
+        display: block;
+        min-height: 44px;
+        margin: 8px auto 0;
+        padding: 0 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #b42318;
+      }
+
+      /* ---------- big cards (card sheet, new-card preview) ---------- */
+      .ccard--lg {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1.586;
+        padding: 20px 22px;
+        border-radius: 20px;
+      }
+      .ccard--lg .ccard__brand {
+        font-size: 22px;
+      }
+      .ccard--lg .ccard__brand.is-word {
+        font-size: 20px;
+      }
+      .ccard--lg .mc {
+        width: 46px;
+        height: 30px;
+      }
+      .ccard__full {
+        font-size: 21px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .ccard__full .is-typed {
+        display: inline-block;
+        animation: typed 260ms var(--ease) both;
+      }
+      @keyframes typed {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+      }
+      .ccard__foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+      }
+      .ccard__foot small {
+        display: block;
+        font-size: 9.5px;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 0.72;
+      }
+      .ccard__foot b {
+        display: block;
+        font-weight: 600;
+        max-width: 190px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .ccard__chip {
+        width: 34px;
+        height: 26px;
+        border-radius: 6px;
+        background:
+          linear-gradient(90deg, transparent 45%, rgba(0, 0, 0, 0.14) 45% 55%, transparent 55%),
+          linear-gradient(0deg, transparent 30%, rgba(0, 0, 0, 0.12) 30% 36%, transparent 36% 64%, rgba(0, 0, 0, 0.12) 64% 70%, transparent 70%),
+          linear-gradient(135deg, #f6dc9a, #c9a24a);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+      }
+      .sheet-card {
+        margin: 2px 6px 0;
+      }
+      .facts {
+        display: grid;
+        margin: 18px 0 16px;
+      }
+      .facts div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        min-height: 44px;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .facts div:last-child {
+        border-bottom: 0;
+      }
+      .facts dt {
+        color: var(--ink-3);
+      }
+      .facts dd {
+        font-weight: 600;
+        text-align: right;
+      }
+      .note {
+        display: flex;
+        gap: 10px;
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        border-radius: 14px;
+        font-size: 13px;
+        line-height: 1.4;
+        color: var(--ink-2);
+        background: var(--sunken);
+      }
+      .note .i {
+        width: 20px;
+        height: 20px;
+      }
+      .note--green {
+        background: var(--green-50);
+      }
+      .note--green .i {
+        color: var(--green-700);
+      }
+      .actions {
+        display: grid;
+        gap: 10px;
+      }
+      .btn--danger {
+        color: #b42318;
+        background: var(--surface);
+        box-shadow: inset 0 0 0 1.5px #f3c9c6;
+      }
+      .btn--danger.is-confirm {
+        color: #fff;
+        background: #c4322a;
+        box-shadow: 0 18px 26px -16px rgba(196, 50, 42, 0.9);
+      }
+
+      /* ---------- new card form ---------- */
+      .nc-preview {
+        padding: 4px 18px 22px;
+      }
+      .nc-cc {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1.586;
+        border-radius: 18px;
+      }
+      .nc-cc .ccard {
+        border-radius: 18px;
+        padding: 16px 20px;
+      }
+      .nc-cc .cc__back.ccard {
+        padding: 22px 0 16px;
+      }
+      .nc-cc .cc__stripe {
+        height: 40px;
+        margin: 0;
+      }
+      .nc-cc .cc__sig {
+        height: 34px;
+        margin: 16px 20px 0;
+        padding: 0 12px;
+        font-size: 15px;
+        letter-spacing: 0.14em;
+      }
+      .nc-cc .cc__sig small {
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        color: var(--ink-3);
+      }
+      .nc-cc .cc__sig.is-on {
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(255, 255, 255, 0.35);
+      }
+      .nc-cc .cc__note {
+        margin: auto 20px 0;
+        font-size: 10px;
+        line-height: 1.35;
+        opacity: 0.7;
+      }
+      .nc {
+        display: grid;
+        gap: 14px;
+      }
+      .nc-row {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 12px;
+        align-items: start;
+      }
+      .nc-row .field {
+        align-content: start;
+      }
+      .field__error[hidden] {
+        display: none;
+      }
+      .field__error:not([hidden]) {
+        animation: err-in 260ms var(--ease) both;
+      }
+      @keyframes err-in {
+        from {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+      }
+      .input.is-shake {
+        animation: shake 380ms var(--ease);
+      }
+      @keyframes shake {
+        20%,
+        60% {
+          transform: translateX(-5px);
+        }
+        40%,
+        80% {
+          transform: translateX(5px);
+        }
+      }
+      .field__error .i {
+        width: 16px;
+        height: 16px;
+        stroke-width: 2;
+      }
+      .nc-default {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 52px;
+        padding: 4px 4px 4px 2px;
+      }
+      .nc-default p {
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .nc-safe {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--ink-3);
+        text-align: center;
+      }
+      .nc-safe .i {
+        width: 15px;
+        height: 15px;
+      }
+      .spin {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #fff;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .done {
+        display: grid;
+        justify-items: center;
+        gap: 10px;
+        padding: 10px 0 4px;
+        text-align: center;
+      }
+      .done__ico {
+        display: grid;
+        place-items: center;
+        width: 76px;
+        height: 76px;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--green-grad);
+        box-shadow: 0 16px 26px -12px rgba(16, 111, 54, 0.8);
+        animation: pop 560ms var(--ease-spring) both;
+      }
+      .done__ico .i {
+        width: 40px;
+        height: 40px;
+        stroke-width: 1.8;
+      }
+      .done .btn {
+        margin-top: 8px;
+      }
+
+      /* ---------- receipt: perforated paper that prints out of the sheet ---------- */
+      #receipt-sheet {
+        background: var(--sunken);
+      }
+      .ticket {
+        position: relative;
+        margin: 4px 2px 18px;
+        padding: 20px 18px 6px;
+        border-radius: 18px 18px 0 0;
+        background: #fff;
+        filter: drop-shadow(0 10px 18px rgba(20, 30, 22, 0.08));
+        animation: print 900ms var(--ease) 120ms both;
+      }
+      @keyframes print {
+        from {
+          clip-path: inset(0 0 100% 0);
+          transform: translateY(-14px);
+        }
+        to {
+          clip-path: inset(0 0 -20px 0);
+        }
+      }
+      /* scalloped tear-off edge */
+      .ticket::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -9px;
+        height: 10px;
+        background: radial-gradient(circle at 7px 10px, transparent 5.5px, #fff 6px) 0 0 / 14px 10px repeat-x;
+      }
+      .rc__top {
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+        padding: 0 0 18px;
+        text-align: center;
+      }
+      .rc__ok {
+        display: grid;
+        place-items: center;
+        width: 54px;
+        height: 54px;
+        margin-bottom: 6px;
+        border-radius: 50%;
+        color: var(--green-700);
+        background: var(--green-50);
+      }
+      .rc__ok .i {
+        width: 30px;
+        height: 30px;
+        stroke-width: 1.8;
+      }
+      .rc__amount {
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+      }
+      /* perforation: dashed line + two punched notches the colour of the sheet */
+      .rc__perf {
+        position: relative;
+        height: 0;
+        margin: 0 -18px;
+        border-top: 2px dashed var(--dash);
+      }
+      .rc__perf::before,
+      .rc__perf::after {
+        content: '';
+        position: absolute;
+        top: -12px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--sunken);
+      }
+      .rc__perf::before {
+        left: -11px;
+      }
+      .rc__perf::after {
+        right: -11px;
+      }
+      .rc__list {
+        display: grid;
+        padding: 10px 0 8px;
+      }
+      .rc__list div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        min-height: 40px;
+        font-size: 14px;
+      }
+      .rc__list dt {
+        flex: none;
+        color: var(--ink-3);
+      }
+      .rc__list dd {
+        font-weight: 600;
+        text-align: right;
+      }
+      .rc__mono {
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.03em;
+      }
+      .rc__code {
+        display: flex;
+        justify-content: center;
+        gap: 1.5px;
+        height: 34px;
+        margin: 6px 0 14px;
+        opacity: 0.85;
+      }
+      .rc__code i {
+        width: var(--w);
+        background: var(--ink);
+        border-radius: 0.5px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ticket,
+        .holo.is-glint,
+        .cc.is-peek .cc__inner {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="top rise" data-top></header>
+
+        <div class="head">
+          <h1 class="t-display rise" style="--d: 1">Minha assinatura</h1>
+          <p class="club-line rise" style="--d: 2"><span data-icon="gps"></span><span id="club"></span></p>
+        </div>
+
+        <section class="rise" style="--d: 3" aria-labelledby="cards-title">
+          <h2 class="label" id="cards-title">Cartão de crédito</h2>
+          <ul class="wallet" id="wallet"></ul>
+        </section>
+
+        <section class="plan card rise" style="--d: 4" id="plan" aria-labelledby="plan-title"></section>
+
+        <div class="tabs rise" style="--d: 5" role="tablist" aria-label="Assinatura" id="tabs">
+          <button type="button" role="tab" id="tab-recibos" aria-controls="p-recibos" aria-selected="true">Recibos</button>
+          <button type="button" role="tab" id="tab-config" aria-controls="p-config" aria-selected="false" tabindex="-1">Configurações</button>
+          <span class="tabs__ink" aria-hidden="true"></span>
+        </div>
+
+        <section class="panel" role="tabpanel" id="p-recibos" aria-labelledby="tab-recibos" tabindex="0">
+          <div id="years"></div>
+          <button class="btn btn--ghost btn--sm btn--block more" type="button" id="more">Ver recibos anteriores</button>
+        </section>
+
+        <section class="panel" role="tabpanel" id="p-config" aria-labelledby="tab-config" tabindex="0" hidden>
+          <ul class="rows set" style="margin-top: 14px">
+            <li class="row">
+              <span class="tile-ico tile-ico--indigo"><span data-icon="card-tick"></span></span>
+              <div class="row__body">
+                <span class="row__title" id="b-auto-l">Débito automático</span>
+                <span class="row__sub" id="b-auto-s"></span>
+              </div>
+              <button class="switch" type="button" role="switch" data-set="auto" aria-labelledby="b-auto-l" aria-describedby="b-auto-s"></button>
+            </li>
+            <li class="row">
+              <span class="tile-ico tile-ico--amber"><span data-icon="notification-bing"></span></span>
+              <div class="row__body">
+                <span class="row__title" id="b-remind-l">Lembrete de cobrança</span>
+                <span class="row__sub" id="b-remind-s">Aviso 3 dias antes, no app</span>
+              </div>
+              <button class="switch" type="button" role="switch" data-set="remind" aria-labelledby="b-remind-l" aria-describedby="b-remind-s"></button>
+            </li>
+            <li class="row">
+              <span class="tile-ico tile-ico--sky"><span data-icon="sms"></span></span>
+              <div class="row__body">
+                <span class="row__title" id="b-email-l">Recibos por e-mail</span>
+                <span class="row__sub" id="b-email-s">pedro.henrique@email.com</span>
+              </div>
+              <button class="switch" type="button" role="switch" data-set="email" aria-labelledby="b-email-l" aria-describedby="b-email-s"></button>
+            </li>
+          </ul>
+
+          <div class="card due">
+            <p class="row__title" id="due-l">Dia de vencimento</p>
+            <p class="row__sub" id="due-s"></p>
+            <div class="chips" role="radiogroup" aria-labelledby="due-l" aria-describedby="due-s" id="due"></div>
+          </div>
+
+          <div class="accepts">
+            <h3 class="label">Formas de pagamento aceitas</h3>
+            <ul>
+              <li><span class="badge badge--indigo"><span data-icon="card" class="i--sm"></span>Cartão de crédito</span></li>
+              <li><span class="badge badge--green" id="pix-badge">Pix</span></li>
+              <li><span class="badge"><span data-icon="scan-barcode" class="i--sm"></span>Boleto</span></li>
+            </ul>
+          </div>
+
+          <button class="btn btn--ghost btn--block change" type="button" data-soon="Alterar plano"><span data-icon="refresh-2"></span>Alterar plano</button>
+          <button class="cancel" type="button" data-soon="Cancelar assinatura">Cancelar assinatura</button>
+        </section>
+      </main>
+
+      <!-- card details -->
+      <div class="sheet" id="card-sheet" role="dialog" aria-modal="true" aria-labelledby="cd-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="cd-title"></h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="cd-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- new card -->
+      <div class="sheet" id="new-sheet" role="dialog" aria-modal="true" aria-labelledby="nc-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="nc-title">Novo cartão</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body">
+          <form class="nc" id="nc-form" novalidate>
+            <div class="nc-preview" aria-hidden="true">
+              <div class="cc nc-cc" id="nc-cc">
+                <div class="cc__inner">
+                  <div class="ccard ccard--lg cc__face" id="nc-front"><span class="holo"></span></div>
+                  <div class="ccard ccard--lg cc__face cc__back" id="nc-back"></div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="nc-num">Número do cartão</label>
+              <input class="input num" id="nc-num" name="number" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="23" aria-describedby="nc-num-err" />
+              <p class="field__error" id="nc-num-err" hidden></p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="nc-name">Nome impresso no cartão</label>
+              <input class="input" id="nc-name" name="holder" autocomplete="cc-name" autocapitalize="characters" spellcheck="false" placeholder="Como aparece no cartão" maxlength="26" aria-describedby="nc-name-err" />
+              <p class="field__error" id="nc-name-err" hidden></p>
+            </div>
+            <div class="nc-row">
+              <div class="field">
+                <label class="field__label" for="nc-exp">Validade</label>
+                <input class="input num" id="nc-exp" name="exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxlength="5" aria-describedby="nc-exp-err" />
+                <p class="field__error" id="nc-exp-err" hidden></p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="nc-cvv">CVV</label>
+                <input class="input num" id="nc-cvv" name="cvv" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="3" aria-describedby="nc-cvv-err" />
+                <p class="field__error" id="nc-cvv-err" hidden></p>
+              </div>
+            </div>
+            <div class="nc-default">
+              <div>
+                <span class="row__title" id="nc-def-l">Usar como cartão padrão</span>
+                <p id="nc-def-s">Mensalidade e reservas passam a ser cobradas nele.</p>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" id="nc-def" aria-labelledby="nc-def-l" aria-describedby="nc-def-s"></button>
+            </div>
+            <button class="btn btn--primary btn--block" type="submit" id="nc-save">Salvar cartão</button>
+            <p class="nc-safe"><span data-icon="lock"></span>Protegido pelo gateway do clube. O número completo não fica no app.</p>
+          </form>
+          <div class="done" id="nc-done" hidden></div>
+        </div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- receipt -->
+      <div class="sheet" id="receipt-sheet" role="dialog" aria-modal="true" aria-labelledby="rc-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="rc-title">Recibo</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="rc-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      /* Pix mark (not in Iconsax): a diamond with the two inner strokes, on the 24px grid */
+      GH.icons['pix'] = '<path d="M12 2.6 21.4 12 12 21.4 2.6 12Z"/><path d="m7.6 9.2 2.6 2.8c1 1 2.6 1 3.6 0l2.6-2.8M7.6 14.8l2.6-2.8M16.4 14.8l-2.6-2.8"/>';
+      (function () {
+        const $ = (s, el = document) => el.querySelector(s);
+        const M = GH.membership;
+        const me = GH.me();
+        const brl = GH.fmt.brl;
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const still = GH.reduceMotion ? GH.reduceMotion() : false;
+        const haptic = (ms) => GH.haptic && GH.haptic(ms);
+        $('#club').textContent = GH.club.name;
+        $('#pix-badge').insertAdjacentHTML('afterbegin', GH.icon('pix', 'i--sm'));
+
+        /* ---------- cards: the membership card + gh:cards, minus gh:cardsRemoved; default = gh:defaultCard ---------- */
+        const BRANDS = { VISA: 'Visa', MASTERCARD: 'Mastercard', AMEX: 'Amex', ELO: 'Elo', HIPERCARD: 'Hipercard' };
+        const brandName = (b) => BRANDS[b] || b;
+        const cardLabel = (c) => `${brandName(c.brand)} •••• ${c.last4}`;
+        const allCards = () => {
+          const removed = GH.store.get('cardsRemoved', []) || [];
+          const seen = new Set();
+          return [M.card, ...(GH.store.get('cards', []) || [])].filter((c) => c && c.last4 && !removed.includes(c.last4) && !seen.has(c.last4) && seen.add(c.last4));
+        };
+        const defaultOf = (list = allCards()) => list.find((c) => c.last4 === GH.store.get('defaultCard')) || list[0];
+        const MC =
+          '<svg class="mc" viewBox="0 0 34 22" aria-hidden="true"><circle cx="12" cy="11" r="10" fill="#eb001b"/><circle cx="22" cy="11" r="10" fill="#f79e1b" fill-opacity=".92"/><path d="M17 2.3a10 10 0 0 1 0 17.4 10 10 0 0 1 0-17.4Z" fill="#ff5f00"/></svg>';
+        const mark = (b) => {
+          if (b === 'MASTERCARD') return MC;
+          if (b === 'VISA' || !b) return '<span class="ccard__brand">VISA</span>';
+          return `<span class="ccard__brand is-word">${b === 'ELO' ? 'elo' : b === 'AMEX' ? 'AMEX' : brandName(b)}</span>`;
+        };
+
+        const wallet = $('#wallet');
+        function cardHTML(c, isDef, isNew) {
+          const l4 = GH.esc(c.last4);
+          return `<li><div class="cc${isNew ? ' is-new' : ''}" data-cc="${l4}">
+            <div class="cc__inner">
+              <button class="ccard cc__face cc__front${isDef ? '' : ' ccard--off'}" type="button" data-flip aria-label="${GH.esc(cardLabel(c))}, vence ${GH.esc(c.exp)}${isDef ? ', cartão padrão' : ''}. Mostrar o verso">
+                ${isDef ? '<span class="holo"></span>' : ''}
+                <span class="ccard__top">${mark(c.brand)}${isDef ? `<span class="ccard__tag">${GH.icon('tick-circle')}Padrão</span>` : ''}</span>
+                <span class="ccard__num" aria-hidden="true"><span>••••</span><span>${l4}</span></span>
+                <span class="ccard__exp" aria-hidden="true">Vence ${GH.esc(c.exp)}</span>
+              </button>
+              <div class="ccard cc__face cc__back${isDef ? '' : ' ccard--off'}" inert>
+                <span class="cc__stripe"></span>
+                <span class="cc__sig" aria-hidden="true"><span>CVV</span><span>•••</span></span>
+                <span class="cc__acts">
+                  <button class="cc__manage" type="button" data-manage="${l4}" aria-haspopup="dialog" aria-label="Gerenciar ${GH.esc(cardLabel(c))}">Gerenciar</button>
+                  <button class="cc__undo" type="button" data-flip aria-label="Mostrar a frente do cartão">${GH.icon('refresh-2')}</button>
+                </span>
+              </div>
+            </div>
+          </div></li>`;
+        }
+        function renderWallet(newLast4) {
+          const list = allCards();
+          const def = defaultOf(list);
+          const sorted = [def, ...list.filter((c) => c !== def)];
+          $('#cards-title').textContent = list.length > 1 ? 'Cartões de crédito' : 'Cartão de crédito';
+          wallet.innerHTML =
+            sorted.map((c) => cardHTML(c, c === def, c.last4 === newLast4)).join('') +
+            `<li><button class="new-card" type="button" id="new-card" aria-haspopup="dialog"><span class="new-card__plus">${GH.icon('add')}</span><span>Novo cartão</span></button></li>`;
+          wallet.querySelectorAll('.cc').forEach((cc) => GH.tilt && GH.tilt(cc, { max: 9 }));
+        }
+        function setFlip(cc, on, focus) {
+          cc.classList.remove('is-peek');
+          cc.classList.toggle('is-flipped', on);
+          const front = $('.cc__front', cc),
+            back = $('.cc__back', cc);
+          front.inert = on;
+          back.inert = !on;
+          if (focus) (on ? $('[data-manage]', back) : front).focus({ preventScroll: true });
+        }
+        function flip(cc) {
+          const on = !cc.classList.contains('is-flipped');
+          wallet.querySelectorAll('.cc.is-flipped').forEach((o) => o !== cc && setFlip(o, false));
+          setFlip(cc, on, true);
+          haptic(10);
+        }
+
+        /* ---------- billing settings (gh:billing) ---------- */
+        const billing = () => ({ auto: true, remind: true, email: true, dueDay: M.dueDay, ...(GH.store.get('billing', {}) || {}) });
+        const setBilling = (patch) => GH.store.set('billing', { ...billing(), ...patch });
+
+        /* next charge: the month after the last monthly payment, on the chosen due day */
+        const lastPaid = new Date(M.history[0].date);
+        const nextCharge = () => new Date(lastPaid.getFullYear(), lastPaid.getMonth() + 1, billing().dueDay, 10, 0);
+        /* bookings charged to the member account ("Lançar na mensalidade") go on the next invoice */
+        const onAccount = () => GH.allBookings().filter((b) => b.method === 'conta');
+
+        let planFirst = true;
+        function renderPlan() {
+          const b = billing();
+          const due = nextCharge();
+          const extra = onAccount().reduce((s, x) => s + (Number(x.total) || 0), 0);
+          const def = defaultOf();
+          const cycle = Math.min(1, Math.max(0.02, (GH.now - lastPaid) / (due - lastPaid)));
+          $('#plan').innerHTML = `
+            <div class="plan__head">
+              <div><h2 class="plan__name" id="plan-title">${GH.esc(M.plan)}</h2>
+                <p class="plan__k"><b class="num" id="plan-v">${brl(M.price)}</b>/mês · ${GH.esc(M.cycle.toLowerCase())} desde ${me.since}</p></div>
+              <span class="badge badge--green">${GH.icon('tick-circle', 'i--xs')}Em dia</span>
+            </div>
+            <p class="plan__due"><span>Próxima cobrança · <b>${GH.fmt.long(due)}</b></span><span>${extra ? brl(M.price + extra) : GH.fmt.until(due)}</span></p>
+            <span class="meter" role="img" aria-label="${Math.round(cycle * 100)}% do ciclo atual, ${b.auto ? 'débito automático no ' + GH.esc(cardLabel(def)) : 'pagamento por Pix ou boleto'}"><i style="--v:${cycle.toFixed(3)}"></i></span>`;
+          if (planFirst) {
+            planFirst = false;
+            GH.countUp && GH.countUp($('#plan-v'), M.price, { dur: 1200, delay: 380, format: (v) => brl(Math.round(v)) });
+          }
+        }
+
+        /* ---------- receipts: GH.membership.history (+ older months on demand) + extras, grouped by year ---------- */
+        const since = new Date(me.since, 0, 1);
+        const monthly = (i) => {
+          if (i < M.history.length) return { ...M.history[i], date: new Date(M.history[i].date), kind: 'mensalidade' };
+          const n = GH.now;
+          const d = new Date(n.getFullYear(), n.getMonth() - i - (n.getDate() >= 20 ? 0 : 1), 20, 10, 0);
+          return d < since ? null : { id: 'pay-' + i, label: 'Mensalidade', date: d, amount: M.price, status: 'pago', kind: 'mensalidade' };
+        };
+        let shown = M.history.length;
+        const payments = () => {
+          const list = [];
+          for (let i = 0; i < shown; i++) {
+            const p = monthly(i);
+            if (p) list.push(p);
+          }
+          const oldest = list.length ? list[list.length - 1].date : GH.now;
+          M.extras.forEach((x) => {
+            const d = new Date(x.date);
+            if (d >= oldest) list.push({ ...x, date: d, kind: 'extra' });
+          });
+          return list.sort((a, b) => b.date - a.date);
+        };
+        const findPayment = (id) => {
+          const m = /^pay-(\d+)$/.exec(id || '');
+          if (m) return monthly(+m[1]);
+          const x = M.extras.find((e) => e.id === id);
+          return x ? { ...x, date: new Date(x.date), kind: 'extra' } : null;
+        };
+
+        const chev = GH.icon('arrow-right-2', 'i--sm chev');
+        const bookingTitle = (b) => {
+          if (b.kind === 'tee') return `Saída · ${GH.course(b.course).name}`;
+          if (b.kind === 'aula') return `Aula com ${GH.first(b.pro)}`;
+          if (b.kind === 'range') return 'Driving range';
+          if (b.kind === 'torneio') return (GH.tournaments.find((t) => t.id === b.ref) || {}).name || 'Torneio';
+          if (b.kind === 'evento') return (GH.events.find((t) => t.id === b.ref) || {}).name || 'Evento';
+          if (b.kind === 'loja') return 'Loja do clube';
+          return 'Lançamento';
+        };
+
+        const rendered = new Set();
+        function renderYears() {
+          const list = payments();
+          const groups = [];
+          list.forEach((p) => {
+            const y = p.date.getFullYear();
+            let g = groups.find((x) => x.y === y);
+            if (!g) groups.push((g = { y, items: [] }));
+            g.items.push(p);
+          });
+          /* only rows that weren't on screen yet rise in */
+          let k = 0;
+          const rv = (id) => (rendered.has(id) ? '' : ` class="reveal" style="--d:${Math.min(k++, 8)}"`);
+          const pending = onAccount();
+          const pendingHtml = pending.length
+            ? `<section aria-labelledby="y-next"><h3 class="year__title" id="y-next">A cobrar em ${GH.fmt.long(nextCharge())}</h3><ul class="rows">${pending
+                .map(
+                  (b) => `<li${rv('bk:' + b.id)}><a class="row pay press" href="reservas.html?id=${encodeURIComponent(b.id)}">
+                    <span class="row__body"><span class="row__title">${GH.esc(bookingTitle(b))}</span><span class="row__sub">${GH.fmt.longYear(b.date)} · lançado na mensalidade</span></span>
+                    <span class="row__end num">${brl(Number(b.total) || 0)}<span class="pay__state">A cobrar</span></span>${chev}</a></li>`
+                )
+                .join('')}</ul></section>`
+            : '';
+          $('#years').innerHTML =
+            pendingHtml +
+            groups
+              .map(
+                (g) => `<section aria-labelledby="y-${g.y}"><h3 class="year__title" id="y-${g.y}">${g.y}</h3><ul class="rows">${g.items
+                  .map(
+                    (p) => `<li${rv(p.id)}><button class="row pay press" type="button" data-pay="${p.id}" aria-haspopup="dialog">
+                      <span class="row__body"><span class="row__title">${GH.esc(p.kind === 'mensalidade' ? 'Assinatura mensal' : p.label)}</span><span class="row__sub">${GH.fmt.longYear(p.date)}</span></span>
+                      <span class="row__end num">${brl(p.amount)}<span class="sr-only">, pago. Ver recibo</span></span>${chev}</button></li>`
+                  )
+                  .join('')}</ul></section>`
+              )
+              .join('');
+          list.forEach((p) => rendered.add(p.id));
+          pending.forEach((b) => rendered.add('bk:' + b.id));
+          $('#more').hidden = !monthly(shown);
+          GH.reveal && GH.reveal($('#years'));
+        }
+        $('#more').addEventListener('click', () => {
+          const before = shown;
+          shown += 6;
+          renderYears();
+          const first = $(`[data-pay="pay-${before}"]`);
+          if (first) first.focus();
+        });
+
+        /* ---------- tabs (Figma "Recibos | Configurações"): ink slides, panel glides in from that side ---------- */
+        const tabs = [...document.querySelectorAll('[role="tab"]')];
+        const tabsEl = $('#tabs');
+        let current = 0;
+        function selectTab(i, focus) {
+          const dir = i > current ? 1 : -1;
+          tabs.forEach((t, k) => {
+            const on = k === i;
+            t.setAttribute('aria-selected', String(on));
+            t.tabIndex = on ? 0 : -1;
+            const p = document.getElementById(t.getAttribute('aria-controls'));
+            p.hidden = !on;
+            if (on && i !== current) {
+              p.style.setProperty('--dir', dir);
+              p.classList.remove('is-entering');
+              void p.offsetWidth;
+              p.classList.add('is-entering');
+            }
+          });
+          tabsEl.style.setProperty('--i', i);
+          current = i;
+          if (focus) tabs[i].focus();
+        }
+        tabs.forEach((t, i) => {
+          t.addEventListener('click', () => i !== current && (selectTab(i), haptic(6)));
+          t.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+              e.preventDefault();
+              selectTab((i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length, true);
+            }
+          });
+        });
+
+        /* ---------- settings ---------- */
+        const DAYS = [5, 10, 15, 20, 25];
+        function renderSettings() {
+          const b = billing();
+          document.querySelectorAll('[data-set]').forEach((s) => s.setAttribute('aria-checked', String(!!b[s.dataset.set])));
+          $('#b-auto-s').textContent = b.auto ? `No ${cardLabel(defaultOf())}, todo dia ${b.dueDay}` : 'Desligado: você paga por Pix ou boleto';
+          $('#due-s').textContent = b.dueDay === M.dueDay ? 'Escolha o melhor dia para a cobrança mensal.' : `Muda a partir de ${GH.fmt.month(nextCharge())}.`;
+          $('#due').innerHTML = DAYS.map(
+            (d) => `<button class="chip" type="button" role="radio" data-day="${d}" aria-checked="${d === b.dueDay}" tabindex="${d === b.dueDay ? 0 : -1}" aria-label="Dia ${d}">${d}</button>`
+          ).join('');
+        }
+        document.querySelectorAll('[data-set]').forEach((s) =>
+          s.addEventListener('click', () => {
+            const k = s.dataset.set;
+            const on = !billing()[k];
+            setBilling({ [k]: on });
+            renderSettings();
+            renderPlan();
+            haptic(8);
+            const msg = {
+              auto: on ? 'Débito automático ligado' : 'Débito automático desligado',
+              remind: on ? 'Lembrete ligado: aviso 3 dias antes' : 'Lembrete desligado',
+              email: on ? 'Recibos serão enviados por e-mail' : 'Recibos só no app',
+            }[k];
+            GH.toast(msg, on ? 'tick-circle' : 'info-circle');
+          })
+        );
+        const due = $('#due');
+        const pickDay = (d, focus) => {
+          setBilling({ dueDay: d });
+          renderSettings();
+          renderPlan();
+          renderYears();
+          haptic(6);
+          if (focus) $(`[data-day="${d}"]`).focus();
+        };
+        due.addEventListener('click', (e) => {
+          const c = e.target.closest('[data-day]');
+          if (!c) return;
+          const d = +c.dataset.day;
+          if (d === billing().dueDay) return;
+          pickDay(d, true);
+          GH.toast(`Vencimento alterado para o dia ${d}`);
+        });
+        due.addEventListener('keydown', (e) => {
+          const keys = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+          if (!(e.key in keys)) return;
+          e.preventDefault();
+          const i = DAYS.indexOf(billing().dueDay);
+          pickDay(DAYS[(i + keys[e.key] + DAYS.length) % DAYS.length], true);
+        });
+
+        /* ---------- card sheet: set as default (gh:defaultCard) / remove ---------- */
+        const cardSheet = $('#card-sheet');
+        function bigCard(c, on) {
+          return `<div class="ccard ccard--lg sheet-card${on ? '' : ' ccard--off'}" aria-hidden="true">
+            ${on ? '<span class="holo is-glint"></span>' : ''}
+            <span class="ccard__top">${mark(c.brand)}<span class="ccard__chip"></span></span>
+            <span class="ccard__full">•••• •••• •••• ${GH.esc(c.last4)}</span>
+            <span class="ccard__foot"><span><small>Titular</small><b>${GH.esc(c.holder || me.name.toUpperCase())}</b></span><span style="text-align:right"><small>Validade</small><b>${GH.esc(c.exp)}</b></span></span>
+          </div>`;
+        }
+        function openCard(last4, opener) {
+          const list = allCards();
+          const c = list.find((x) => x.last4 === last4);
+          if (!c) return;
+          const isDef = c === defaultOf(list);
+          $('#cd-title').textContent = cardLabel(c);
+          $('#cd-body').innerHTML = `
+            ${bigCard(c, isDef)}
+            <dl class="facts">
+              <div><dt>Titular</dt><dd>${GH.esc(c.holder || me.name.toUpperCase())}</dd></div>
+              <div><dt>Validade</dt><dd class="num">${GH.esc(c.exp)}</dd></div>
+              <div><dt>Uso</dt><dd>${isDef ? 'Mensalidade e reservas' : 'Reservas e loja'}</dd></div>
+            </dl>
+            ${isDef ? `<p class="note note--green">${GH.icon('tick-circle')}<span>Este é o seu cartão padrão: a mensalidade e as reservas são cobradas nele.</span></p>` : ''}
+            <div class="actions">
+              ${
+                isDef
+                  ? list.length > 1
+                    ? ''
+                    : `<button class="btn btn--primary btn--block" type="button" id="cd-add">${GH.icon('card-add')}Adicionar outro cartão</button>`
+                  : `<button class="btn btn--primary btn--block" type="button" id="cd-default">${GH.icon('tick-circle')}Usar como padrão</button>`
+              }
+              <button class="btn btn--danger btn--block" type="button" id="cd-remove" ${isDef ? 'disabled aria-describedby="cd-why"' : ''}>${GH.icon('trash')}<span>Remover cartão</span></button>
+              ${isDef ? `<p class="t-xs t-muted" id="cd-why" style="text-align:center">Para remover, escolha outro cartão como padrão.</p>` : ''}
+              <p class="sr-only" aria-live="assertive" id="cd-live"></p>
+            </div>`;
+          GH.sheet.open(cardSheet, opener);
+          GH.tilt && GH.tilt($('.sheet-card', cardSheet), { max: 7 });
+
+          const after = (msg, icon) => {
+            GH.sheet.close(cardSheet);
+            refresh();
+            wallet.scrollTo({ left: 0, behavior: still ? 'auto' : 'smooth' });
+            $('[data-flip]', wallet).focus({ preventScroll: true });
+            haptic(12);
+            GH.toast(msg, icon);
+          };
+          const setDef = $('#cd-default');
+          if (setDef)
+            setDef.addEventListener('click', () => {
+              GH.store.set('defaultCard', c.last4);
+              after(`${cardLabel(c)} agora é o padrão`);
+            });
+          const add = $('#cd-add');
+          if (add)
+            add.addEventListener('click', () => {
+              GH.sheet.close(cardSheet);
+              setTimeout(() => openNew($('#new-card')), 260);
+            });
+          const rm = $('#cd-remove');
+          if (!isDef)
+            rm.addEventListener('click', () => {
+              if (!rm.classList.contains('is-confirm')) {
+                rm.classList.add('is-confirm');
+                rm.lastElementChild.textContent = 'Confirmar remoção';
+                $('#cd-live').textContent = 'Toque de novo para confirmar a remoção.';
+                haptic(14);
+                return;
+              }
+              const extra = GH.store.get('cards', []) || [];
+              if (extra.some((x) => x.last4 === c.last4)) GH.store.set('cards', extra.filter((x) => x.last4 !== c.last4));
+              else GH.store.set('cardsRemoved', [...(GH.store.get('cardsRemoved', []) || []), c.last4]);
+              after(`${cardLabel(c)} removido`, 'trash');
+            });
+        }
+
+        /* ---------- new card: live 3D preview, formatting, brand, Luhn, expiry, CVV; saves to gh:cards ---------- */
+        const newSheet = $('#new-sheet');
+        const form = $('#nc-form');
+        const F = { num: $('#nc-num'), name: $('#nc-name'), exp: $('#nc-exp'), cvv: $('#nc-cvv') };
+        const defSwitch = $('#nc-def');
+        const ncc = $('#nc-cc');
+        const digits = (s) => s.replace(/\D/g, '');
+        const brandOf = (d) => {
+          if (/^(4011|4312|4389|4514|4576|5041|5066|5067|509|6277|6362|6363|650|6516|6550)/.test(d)) return 'ELO';
+          if (/^(606282|3841)/.test(d)) return 'HIPERCARD';
+          if (/^3[47]/.test(d)) return 'AMEX';
+          if (/^(5[1-5]|2[2-7])/.test(d)) return 'MASTERCARD';
+          if (/^4/.test(d)) return 'VISA';
+          return '';
+        };
+        const numLen = (b) => (b === 'AMEX' ? 15 : 16);
+        const cvvLen = (b) => (b === 'AMEX' ? 4 : 3);
+        const groupSizes = (b) => (b === 'AMEX' ? [4, 6, 5] : [4, 4, 4, 4, 3]);
+        const groupNum = (d, b) => {
+          const out = [];
+          let i = 0;
+          for (const n of groupSizes(b)) {
+            if (i >= d.length) break;
+            out.push(d.slice(i, i + n));
+            i += n;
+          }
+          return out.join(' ');
+        };
+        const luhn = (d) => {
+          let s = 0;
+          for (let i = d.length - 1, alt = false; i >= 0; i--, alt = !alt) {
+            let n = +d[i];
+            if (alt && (n *= 2) > 9) n -= 9;
+            s += n;
+          }
+          return s % 10 === 0;
+        };
+        const keepCaret = (input, value, digitsBefore) => {
+          input.value = value;
+          if (document.activeElement !== input) return;
+          let i = 0;
+          for (let seen = 0; i < value.length && seen < digitsBefore; i++) if (/\d/.test(value[i])) seen++;
+          input.setSelectionRange(i, i);
+        };
+
+        const check = {
+          num() {
+            const d = digits(F.num.value);
+            const b = brandOf(d);
+            if (!d) return 'Informe o número do cartão.';
+            if (d.length < numLen(b)) return 'Número incompleto.';
+            if (!luhn(d)) return 'Número inválido. Confira os dígitos.';
+            if (allCards().some((c) => c.last4 === d.slice(-4))) return `Você já tem um cartão final ${d.slice(-4)}.`;
+            return '';
+          },
+          name() {
+            const v = F.name.value.trim();
+            if (!v) return 'Informe o nome impresso no cartão.';
+            if (v.split(/\s+/).length < 2) return 'Use nome e sobrenome, como no cartão.';
+            return '';
+          },
+          exp() {
+            const m = /^(\d{2})\/(\d{2})$/.exec(F.exp.value);
+            if (!m) return 'Use o formato MM/AA.';
+            const mo = +m[1],
+              y = 2000 + +m[2];
+            if (mo < 1 || mo > 12) return 'Mês inválido.';
+            const n = GH.now;
+            if (y < n.getFullYear() || (y === n.getFullYear() && mo < n.getMonth() + 1)) return 'Cartão vencido.';
+            if (y > n.getFullYear() + 20) return 'Ano inválido.';
+            return '';
+          },
+          cvv() {
+            const need = cvvLen(brandOf(digits(F.num.value)));
+            return digits(F.cvv.value).length === need ? '' : `Use ${need} dígitos.`;
+          },
+        };
+        const touched = new Set();
+        function showError(k, force) {
+          const msg = check[k]();
+          const el = F[k];
+          const err = document.getElementById(el.id + '-err');
+          const show = !!msg && (force || touched.has(k));
+          el.setAttribute('aria-invalid', String(show));
+          err.hidden = !show;
+          err.innerHTML = show ? GH.icon('warning-2') + '<span></span>' : '';
+          if (show) err.lastChild.textContent = msg;
+          return msg;
+        }
+
+        /* the preview: digits drop in as they're typed; the brand mark swaps in when recognised */
+        let prevLen = 0;
+        function renderPreview() {
+          const d = digits(F.num.value);
+          const b = brandOf(d);
+          const len = Math.max(numLen(b), d.length);
+          const sizes = groupSizes(b);
+          let html = '',
+            i = 0;
+          for (const n of sizes) {
+            if (i >= len) break;
+            for (let j = 0; j < n && i < len; j++, i++) {
+              const ch = i < d.length ? d[i] : '•';
+              html += i < d.length && i >= prevLen - 1 && i === d.length - 1 && d.length > prevLen ? `<span class="is-typed">${ch}</span>` : ch;
+            }
+            if (i < len) html += ' ';
+          }
+          prevLen = d.length;
+          const front = $('#nc-front');
+          const holo = $('.holo', front);
+          front.innerHTML = `
+            <span class="ccard__top">${b ? mark(b) : '<span class="ccard__brand is-word" style="opacity:.75">Cartão</span>'}<span class="ccard__chip"></span></span>
+            <span class="ccard__full">${html}</span>
+            <span class="ccard__foot"><span><small>Titular</small><b>${GH.esc(F.name.value.trim().toUpperCase() || 'NOME NO CARTÃO')}</b></span><span style="text-align:right"><small>Validade</small><b>${GH.esc(F.exp.value || 'MM/AA')}</b></span></span>`;
+          if (holo) front.prepend(holo);
+          const cv = digits(F.cvv.value);
+          const need = cvvLen(b);
+          $('#nc-back').innerHTML = `<span class="cc__stripe"></span>
+            <span class="cc__sig${document.activeElement === F.cvv ? ' is-on' : ''}"><small>CVV</small><span class="num">${GH.esc(cv + '•'.repeat(Math.max(0, need - cv.length)))}</span></span>
+            <span class="cc__note">Os ${need} dígitos no verso do cartão${b === 'AMEX' ? ' (na frente, no Amex)' : ''}.</span>`;
+        }
+
+        F.num.addEventListener('input', () => {
+          const pos = F.num.selectionStart || 0;
+          const before = digits(F.num.value.slice(0, pos)).length;
+          const d0 = digits(F.num.value);
+          const b = brandOf(d0);
+          const d = d0.slice(0, b === 'ELO' || b === 'HIPERCARD' || !b ? 19 : numLen(b));
+          keepCaret(F.num, groupNum(d, b), before);
+          F.cvv.maxLength = cvvLen(b);
+          if (touched.has('num')) showError('num');
+          renderPreview();
+        });
+        F.name.addEventListener('input', () => {
+          const pos = F.name.selectionStart;
+          F.name.value = F.name.value.toUpperCase().replace(/[^A-ZÀ-Ü' .-]/g, '');
+          if (document.activeElement === F.name) F.name.setSelectionRange(pos, pos);
+          if (touched.has('name')) showError('name');
+          renderPreview();
+        });
+        F.exp.addEventListener('input', (e) => {
+          let d = digits(F.exp.value).slice(0, 4);
+          if (d.length === 1 && +d > 1) d = '0' + d;
+          const deleting = e.inputType && e.inputType.startsWith('delete');
+          F.exp.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d.length === 2 && !deleting ? d + '/' : d;
+          if (touched.has('exp')) showError('exp');
+          renderPreview();
+        });
+        F.cvv.addEventListener('input', () => {
+          F.cvv.value = digits(F.cvv.value).slice(0, F.cvv.maxLength);
+          if (touched.has('cvv')) showError('cvv');
+          renderPreview();
+        });
+        /* CVV focused → the preview turns to its back */
+        F.cvv.addEventListener('focus', () => {
+          ncc.classList.add('is-flipped');
+          renderPreview();
+        });
+        F.cvv.addEventListener('blur', () => {
+          ncc.classList.remove('is-flipped');
+          renderPreview();
+        });
+        Object.entries(F).forEach(([k, el]) =>
+          el.addEventListener('blur', () => {
+            if (el.value) touched.add(k);
+            showError(k);
+          })
+        );
+        defSwitch.addEventListener('click', () => {
+          defSwitch.setAttribute('aria-checked', String(defSwitch.getAttribute('aria-checked') !== 'true'));
+          haptic(6);
+        });
+        GH.tilt && GH.tilt(ncc, { max: 8 });
+
+        function resetNew() {
+          form.reset();
+          touched.clear();
+          prevLen = 0;
+          Object.keys(F).forEach((k) => showError(k));
+          F.cvv.maxLength = 3;
+          defSwitch.setAttribute('aria-checked', 'false');
+          form.hidden = false;
+          ncc.classList.remove('is-flipped');
+          $('#nc-done').hidden = true;
+          const save = $('#nc-save');
+          save.disabled = false;
+          save.removeAttribute('aria-busy');
+          save.textContent = 'Salvar cartão';
+          $('#nc-title').textContent = 'Novo cartão';
+          renderPreview();
+        }
+        function openNew(opener) {
+          resetNew();
+          GH.sheet.open(newSheet, opener);
+        }
+        function validateAll(shake) {
+          const bad = Object.keys(F).filter((k) => showError(k, true));
+          bad.forEach((k) => {
+            touched.add(k);
+            if (shake && !still) {
+              F[k].classList.remove('is-shake');
+              void F[k].offsetWidth;
+              F[k].classList.add('is-shake');
+            }
+          });
+          return bad;
+        }
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const bad = validateAll(true);
+          if (bad.length) {
+            haptic(30);
+            F[bad[0]].focus();
+            return;
+          }
+          const save = $('#nc-save');
+          save.disabled = true;
+          save.setAttribute('aria-busy', 'true');
+          save.innerHTML = '<span class="spin" aria-hidden="true"></span>Verificando cartão…';
+          setTimeout(() => {
+            const d = digits(F.num.value);
+            const card = { brand: brandOf(d) || 'VISA', last4: d.slice(-4), exp: F.exp.value, holder: F.name.value.trim().toUpperCase() };
+            GH.store.set('cards', [...(GH.store.get('cards', []) || []), card]);
+            const makeDefault = defSwitch.getAttribute('aria-checked') === 'true';
+            if (makeDefault) GH.store.set('defaultCard', card.last4);
+            refresh(card.last4);
+            form.hidden = true;
+            $('#nc-title').textContent = 'Cartão adicionado';
+            const done = $('#nc-done');
+            done.hidden = false;
+            done.innerHTML = `<span class="done__ico">${GH.check ? GH.check() : GH.icon('tick-circle')}</span>
+              <p class="t-h2" tabindex="-1" id="nc-ok">Pronto, cartão salvo</p>
+              <p class="t-sm t-muted">${GH.esc(cardLabel(card))} já aparece nas formas de pagamento${makeDefault ? ' e passa a pagar a mensalidade' : ''}.</p>
+              <button class="btn btn--primary btn--block" type="button" data-sheet-close>Concluir</button>`;
+            $('#nc-ok').focus();
+            haptic(20);
+            newSheet._opener = $('#new-card');
+            /* bring the new card into view behind the sheet */
+            const el = wallet.querySelector(`[data-cc="${card.last4}"]`);
+            if (el) wallet.scrollTo({ left: el.parentElement.offsetLeft - 24, behavior: still ? 'auto' : 'smooth' });
+          }, 900);
+        });
+
+        /* ---------- receipt sheet ---------- */
+        const rcSheet = $('#receipt-sheet');
+        const seedOf = (s) => [...s].reduce((a, c) => (a * 33 + c.charCodeAt(0)) >>> 0, 5381);
+        const txid = (id) => {
+          let s = seedOf('gh-' + id + '-' + me.number);
+          const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+          let out = '';
+          for (let i = 0; i < 12; i++) {
+            s = (Math.imul(s, 1103515245) + 12345) >>> 0;
+            out += A[(s >>> 16) % A.length];
+            if (i === 3 || i === 7) out += '-';
+          }
+          return out;
+        };
+        /* decorative barcode at the foot of the receipt (deterministic per transaction) */
+        const barcode = (id) => {
+          let s = seedOf(id);
+          let bars = '';
+          for (let i = 0; i < 46; i++) {
+            s = (Math.imul(s, 1103515245) + 12345) >>> 0;
+            bars += `<i style="--w:${1 + ((s >>> 16) % 3)}px"></i>`;
+          }
+          return bars;
+        };
+        function openReceipt(id, opener) {
+          const p = findPayment(id);
+          if (!p) return;
+          const ref = p.kind === 'mensalidade' ? `${cap(GH.fmt.month(p.date))} de ${p.date.getFullYear()}` : '';
+          const tx = txid(p.id);
+          $('#rc-title').textContent = p.kind === 'mensalidade' ? `Recibo de ${GH.fmt.month(p.date)}` : 'Recibo';
+          $('#rc-body').innerHTML = `
+            <article class="ticket">
+              <div class="rc__top">
+                <span class="rc__ok">${GH.check ? GH.check() : GH.icon('tick-circle')}</span>
+                <p class="rc__amount num" id="rc-amount">${brl(p.amount)}</p>
+                <p class="t-sm t-muted">Pago em ${GH.fmt.longYear(p.date)}, ${GH.fmt.time(p.date)}</p>
+              </div>
+              <div class="rc__perf" aria-hidden="true"></div>
+              <dl class="rc__list">
+                <div><dt>Item</dt><dd>${p.kind === 'mensalidade' ? `Assinatura mensal · ${GH.esc(M.plan)}` : GH.esc(p.label)}</dd></div>
+                ${ref ? `<div><dt>Referência</dt><dd>${ref}</dd></div>` : ''}
+                <div><dt>Forma de pagamento</dt><dd>${GH.esc(cardLabel(M.card))}</dd></div>
+                <div><dt>Transação</dt><dd class="rc__mono">${tx}</dd></div>
+                <div><dt>Recebedor</dt><dd>${GH.esc(GH.club.name)}</dd></div>
+                <div><dt>Status</dt><dd><span class="badge badge--green">${GH.icon('tick-circle', 'i--xs')}Pago</span></dd></div>
+              </dl>
+              <div class="rc__code" aria-hidden="true">${barcode(tx)}</div>
+            </article>
+            <div class="actions">
+              <button class="btn btn--primary btn--block" type="button" id="rc-pdf">${GH.icon('document-download')}<span>Baixar PDF</span></button>
+              <button class="btn btn--outline btn--block" type="button" id="rc-mail">${GH.icon('sms')}Enviar por e-mail</button>
+            </div>`;
+          GH.sheet.open(rcSheet, opener);
+          GH.countUp && GH.countUp($('#rc-amount'), p.amount, { dur: 900, delay: 420, format: (v) => brl(v) });
+          const pdf = $('#rc-pdf');
+          pdf.addEventListener('click', () => {
+            if (pdf.disabled) return;
+            pdf.disabled = true;
+            pdf.setAttribute('aria-busy', 'true');
+            pdf.innerHTML = '<span class="spin" aria-hidden="true"></span>Gerando PDF…';
+            setTimeout(() => {
+              pdf.disabled = false;
+              pdf.removeAttribute('aria-busy');
+              pdf.innerHTML = `${GH.icon('document-download')}<span>Baixar PDF</span>`;
+              haptic(10);
+              GH.toast(`recibo-${p.id}.pdf salvo em Downloads`, 'document-download');
+            }, 800);
+          });
+          $('#rc-mail').addEventListener('click', () => GH.toast('Recibo enviado para pedro.henrique@email.com', 'sms'));
+        }
+
+        /* ---------- wiring ---------- */
+        function refresh(newLast4) {
+          renderWallet(newLast4);
+          renderPlan();
+          renderSettings();
+        }
+        wallet.addEventListener('click', (e) => {
+          const m = e.target.closest('[data-manage]');
+          if (m) return openCard(m.dataset.manage, m);
+          const f = e.target.closest('[data-flip]');
+          if (f) return flip(f.closest('.cc'));
+          const n = e.target.closest('#new-card');
+          if (n) openNew(n);
+        });
+        $('#years').addEventListener('click', (e) => {
+          const r = e.target.closest('[data-pay]');
+          if (r) openReceipt(r.dataset.pay, r);
+        });
+
+        refresh();
+        renderYears();
+
+        /* entry: the foil glints across the default card, then it "peeks" to hint that it turns over */
+        const first = $('.cc', wallet);
+        const q = new URLSearchParams(location.search);
+        if (!still && first && !q.get('sheet')) {
+          const holo = $('.holo', first);
+          if (holo) holo.classList.add('is-glint');
+          setTimeout(() => first.classList.add('is-peek'), 1500);
+          first.addEventListener('animationend', (e) => e.animationName === 'peek' && first.classList.remove('is-peek'));
+        }
+
+        /* deep links: ?tab=config · ?sheet=novo[&fill=1|erro|cvv] · ?sheet=recibo&id=pay-0 · ?sheet=cartao&id=3849 · ?verso=1 */
+        if (q.get('tab') === 'config') selectTab(1);
+        if (q.get('verso') && first) setFlip(first, true);
+        const s = q.get('sheet');
+        if (s === 'novo')
+          setTimeout(() => {
+            openNew($('#new-card'));
+            const fill = q.get('fill');
+            const put = (el, v) => {
+              el.value = v;
+              el.dispatchEvent(new Event('input'));
+            };
+            if (fill === '1' || fill === 'cvv') {
+              put(F.num, '5555555555554444');
+              put(F.name, 'PEDRO HENRIQUE');
+              put(F.exp, '1130');
+              put(F.cvv, fill === 'cvv' ? '12' : '123');
+              if (fill === 'cvv') setTimeout(() => F.cvv.focus(), 1200);
+            } else if (fill === 'erro') {
+              put(F.num, '4111111111111112');
+              put(F.name, 'PEDRO');
+              put(F.exp, '0824');
+              put(F.cvv, '12');
+              validateAll(false);
+            }
+          }, 700);
+        if (s === 'recibo') setTimeout(() => openReceipt(q.get('id') || 'pay-0'), 700);
+        if (s === 'cartao') setTimeout(() => openCard(q.get('id') || defaultOf().last4), 700);
+      })();
+    </script>
+  </body>
+</html>

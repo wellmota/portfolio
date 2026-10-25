@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sócios · GolfHub ERP</title>
+    <link rel="icon" href="../app/assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=DM+Sans:wght@400;700&display=swap" />
+    <link rel="stylesheet" href="assets/erp.css" />
+    <script src="../app/assets/icons.js"></script>
+    <script src="../app/assets/data.js"></script>
+    <script src="assets/erp.js"></script>
+    <style>
+      /* Inferred from the deck module "CRM": member list with filters, profile drawer, payment history, reminders. */
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+      .list {
+        padding: 18px 8px 10px;
+      }
+      .tools {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 12px 16px;
+      }
+      .tools .field {
+        width: 280px;
+      }
+      .tools .field .input {
+        width: 100%;
+      }
+      .tools .select {
+        margin-left: auto;
+      }
+      .tbl th button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: inherit;
+        font-weight: inherit;
+        border-radius: 6px;
+      }
+      .tbl th button .i {
+        width: 14px;
+        height: 14px;
+        opacity: 0.4;
+        transition:
+          transform 0.3s var(--spring),
+          opacity 0.2s;
+      }
+      .tbl th[aria-sort] button .i {
+        opacity: 1;
+        color: var(--indigo);
+      }
+      .tbl th[aria-sort='descending'] button .i {
+        transform: rotate(180deg);
+      }
+      .tbl tbody tr {
+        cursor: pointer;
+      }
+      .tbl tbody tr.is-open {
+        background: var(--indigo-50);
+      }
+      .who {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+      .who__t {
+        min-width: 0;
+        text-align: left;
+      }
+      .who__t b {
+        display: block;
+        font-weight: 500;
+        font-size: 14px;
+      }
+      .who__t small {
+        display: block;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .who__btn {
+        border-radius: 6px;
+      }
+      .who__btn:hover b {
+        color: var(--indigo);
+      }
+      .tbl .av {
+        transition: transform 0.35s var(--spring);
+      }
+      .tbl tbody tr:hover .av {
+        transform: scale(1.08);
+      }
+      .cat {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .cat i {
+        width: 8px;
+        height: 8px;
+        border-radius: 3px;
+        background: var(--c);
+      }
+      .acts {
+        display: flex;
+        justify-content: flex-end;
+        gap: 2px;
+      }
+      .acts .icon-btn {
+        width: 38px;
+        height: 38px;
+      }
+      .acts .icon-btn .i {
+        width: 20px;
+        height: 20px;
+      }
+      .acts .icon-btn.is-sent {
+        color: var(--ok);
+      }
+      .foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 14px 6px;
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .none {
+        text-align: center;
+        padding: 46px 0 40px;
+        color: var(--ink-3);
+      }
+      .none .i {
+        width: 40px;
+        height: 40px;
+        color: var(--ink-4);
+      }
+      .none b {
+        display: block;
+        color: var(--ink);
+        margin: 8px 0 2px;
+      }
+
+      /* drawer */
+      .dh {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 20px 6px 28px;
+      }
+      .dh p {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .hero {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 6px 0 18px;
+      }
+      .hero h2 {
+        font-size: 21px;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+        line-height: 1.2;
+      }
+      .hero p {
+        color: var(--ink-3);
+        font-size: 13px;
+        margin: 2px 0 8px;
+      }
+      .tiles {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .tile {
+        padding: 12px;
+        border-radius: 12px;
+        background: var(--canvas);
+      }
+      .tile small {
+        display: block;
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .tile b {
+        display: block;
+        font-size: 17px;
+        font-weight: 600;
+        margin-top: 2px;
+      }
+      .dsec {
+        margin: 22px 0 10px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .plan {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #5d4fff, var(--indigo-700));
+        color: #fff;
+        box-shadow: 0 16px 30px -18px rgba(74, 58, 255, 0.9);
+      }
+      .plan__ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.16);
+        display: grid;
+        place-items: center;
+      }
+      .plan b {
+        display: block;
+        font-weight: 600;
+      }
+      .plan small {
+        display: block;
+        color: #d9d5ff;
+        font-size: 12.5px;
+      }
+      .plan__v {
+        margin-left: auto;
+        text-align: right;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .alert {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: var(--bad-bg);
+        color: var(--bad);
+        font-size: 13px;
+      }
+      .alert b {
+        display: block;
+      }
+      .alert .i {
+        flex: none;
+      }
+      .hist li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .hist li:last-child {
+        border-bottom: 0;
+      }
+      .hist__ico {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: var(--canvas);
+        color: var(--ink-3);
+      }
+      .hist__t {
+        flex: 1;
+        min-width: 0;
+      }
+      .hist__t b {
+        display: block;
+        font-weight: 500;
+        font-size: 13.5px;
+      }
+      .hist__t small {
+        display: block;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .hist__v {
+        text-align: right;
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+      .hist__v .badge {
+        height: 20px;
+        font-size: 11px;
+        margin-top: 2px;
+      }
+      .contact {
+        display: grid;
+        gap: 8px;
+      }
+      .contact a,
+      .contact span {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13.5px;
+      }
+      .contact .i {
+        color: var(--ink-3);
+        width: 18px;
+        height: 18px;
+      }
+      .contact a:hover {
+        color: var(--indigo);
+      }
+      .drawer__body > * {
+        animation: rise 0.55s var(--ease) both;
+      }
+      .drawer__body > :nth-child(2) {
+        animation-delay: 60ms;
+      }
+      .drawer__body > :nth-child(3) {
+        animation-delay: 110ms;
+      }
+      .drawer__body > :nth-child(4) {
+        animation-delay: 160ms;
+      }
+      .drawer__body > :nth-child(n + 5) {
+        animation-delay: 210ms;
+      }
+
+      @media (max-width: 1360px) {
+        .col-opt {
+          display: none;
+        }
+        .tools .field {
+          width: 220px;
+        }
+      }
+      @media (max-width: 1200px) {
+        .tbl th,
+        .tbl td {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        .who__t small {
+          display: block;
+          max-width: 160px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body data-page="socios">
+    <a class="skip" href="#main">Pular para o conteúdo</a>
+    <div class="shell">
+      <aside class="side" data-side></aside>
+      <script>
+        ERP.side(document.querySelector('[data-side]'));
+      </script>
+      <div class="frame">
+        <header class="top" data-top></header>
+        <script>
+          ERP.top(document.querySelector('[data-top]'));
+        </script>
+        <main class="main" id="main" tabindex="-1">
+          <div class="ph rise" style="--d: 0">
+            <div>
+              <h1>Sócios</h1>
+              <p>Cadastro, mensalidades e relacionamento · ${GH.club.name}</p>
+            </div>
+            <div class="ph__act">
+              <button type="button" class="btn btn--ghost" data-soon="Exportar lista"><span data-i="export"></span>Exportar</button>
+              <button type="button" class="btn btn--primary" data-soon="Novo sócio"><span data-i="user-add"></span>Novo sócio</button>
+            </div>
+          </div>
+
+          <section class="kpis" aria-label="Resumo">
+            <article class="card card--lift mk rise" style="--d: 1"><span class="kpi__ico" style="--c: #64cbf4" data-ib="profile"></span><div class="mk__t"><h2>Sócios ativos</h2><p data-count="2316"></p><small class="up"><span data-i="arrow-up"></span><b>+3,5%</b>&nbsp;no mês</small></div></article>
+            <article class="card card--lift mk rise" style="--d: 2"><span class="kpi__ico" style="--c: #52cd9f" data-ib="tick-circle"></span><div class="mk__t"><h2>Mensalidade em dia</h2><p data-count="2252"></p><small>97,2% dos ativos</small></div></article>
+            <article class="card card--lift mk rise" style="--d: 3"><span class="kpi__ico" style="--c: #6c5dd3" data-ib="clock"></span><div class="mk__t"><h2>Inadimplentes</h2><p data-count="64"></p><small>R$ 23.016 em aberto</small></div></article>
+            <article class="card card--lift mk rise" style="--d: 4"><span class="kpi__ico" style="--c: #ff9f38" data-ib="user"></span><div class="mk__t"><h2>Novos no ano</h2><p data-count="940"></p><small>Meta 1.100 · 85%</small></div></article>
+          </section>
+
+          <section class="card list rise" style="--d: 5" aria-labelledby="lt">
+            <h2 class="sr-only" id="lt">Lista de sócios</h2>
+            <div class="tools">
+              <label class="field"><span class="sr-only">Buscar por nome, nº ou e-mail</span><span data-i="search-normal-1"></span><input class="input" id="fq" type="search" placeholder="Nome, nº ou e-mail" autocomplete="off" /></label>
+              <div class="seg" id="fs" role="group" aria-label="Situação da mensalidade"><span class="seg__pill" aria-hidden="true"></span></div>
+              <label class="sr-only" for="fc">Categoria</label>
+              <select class="select" id="fc"><option value="">Todas as categorias</option></select>
+            </div>
+            <table class="tbl" aria-describedby="count">
+              <thead>
+                <tr>
+                  <th scope="col" data-sort="name"><button type="button">Sócio<span data-i="arrow-down-2"></span></button></th>
+                  <th scope="col">Nº</th>
+                  <th scope="col">Categoria</th>
+                  <th scope="col" data-sort="hcp"><button type="button">HCP<span data-i="arrow-down-2"></span></button></th>
+                  <th scope="col" data-sort="last"><button type="button">Última rodada<span data-i="arrow-down-2"></span></button></th>
+                  <th scope="col" class="col-opt">Desde</th>
+                  <th scope="col">Mensalidade</th>
+                  <th scope="col" class="r"><span class="sr-only">Ações</span></th>
+                </tr>
+              </thead>
+              <tbody id="tb"></tbody>
+            </table>
+            <div class="foot"><span id="count" aria-live="polite"></span><button type="button" class="btn btn--ghost btn--sm" id="more">Carregar mais</button></div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="scrim" id="scrim" hidden></div>
+    <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="d-name" hidden tabindex="-1">
+      <div class="dh"><p>Ficha do sócio</p><button type="button" class="icon-btn" data-close aria-label="Fechar ficha"><span data-i="close-circle"></span></button></div>
+      <div class="drawer__body" id="dbody"></div>
+      <div class="drawer__foot" id="dfoot"></div>
+    </aside>
+
+    <script>
+      (() => {
+        const F = ERP.fmt;
+        const $ = (s) => document.querySelector(s);
+        const I = (n, c = '') => ERP.icon(n, c);
+        document.querySelector('.ph p').textContent = `Cadastro, mensalidades e relacionamento · ${GH.club.name}`;
+        document.querySelectorAll('[data-i]').forEach((el) => (el.outerHTML = I(el.dataset.i)));
+        document.querySelectorAll('[data-ib]').forEach((el) => (el.innerHTML = ERP.icon(el.dataset.ib, '', true)));
+        const S = ERP.stats;
+        const CATC = { Titular: '#4a3aff', Familiar: '#52cd9f', Júnior: '#64cbf4', Sênior: '#ff9f38', Corporativo: '#e391ea' };
+        const STATUS = [
+          { id: '', label: 'Todos', n: S.ativos + S.suspensos },
+          { id: 'em-dia', label: 'Em dia', n: S.emDia },
+          { id: 'inadimplente', label: 'Inadimplentes', n: S.inadimplentes },
+          { id: 'suspenso', label: 'Suspensos', n: S.suspensos },
+        ];
+        const qs = ERP.qs;
+        const st = {
+          q: qs.get('q') || '',
+          status: STATUS.some((s) => s.id === qs.get('status')) ? qs.get('status') : '',
+          cat: Object.keys(ERP.categories).includes(qs.get('cat')) ? qs.get('cat') : '',
+          sort: null,
+          dir: 1,
+          shown: 12,
+          sent: new Set(),
+        };
+        $('#fq').value = st.q;
+        $('#fc').insertAdjacentHTML('beforeend', Object.keys(ERP.categories).map((c) => `<option${c === st.cat ? ' selected' : ''}>${c}</option>`).join(''));
+
+        /* status filter (segmented with sliding pill) */
+        const fs = $('#fs');
+        fs.insertAdjacentHTML('beforeend', STATUS.map((s) => `<button type="button" data-s="${s.id}">${s.label}<span class="count">${F.num(s.n)}</span></button>`).join(''));
+        const pill = fs.querySelector('.seg__pill');
+        const paintSeg = () =>
+          fs.querySelectorAll('button').forEach((b) => {
+            const on = b.dataset.s === st.status;
+            b.setAttribute('aria-pressed', on);
+            if (on) {
+              pill.style.width = b.offsetWidth + 'px';
+              pill.style.transform = `translateX(${b.offsetLeft - 4}px)`;
+            }
+          });
+        pill.style.left = '4px';
+        fs.addEventListener('click', (e) => {
+          const b = e.target.closest('button');
+          if (!b) return;
+          st.status = b.dataset.s;
+          st.shown = 12;
+          paintSeg();
+          render(true);
+        });
+
+        const filtered = () => {
+          const q = st.q
+            .trim()
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '');
+          let list = ERP.members.filter(
+            (m) =>
+              (!st.status || m.status === st.status) &&
+              (!st.cat || m.cat === st.cat) &&
+              (!q ||
+                (m.name + ' ' + m.number + ' ' + m.email)
+                  .toLowerCase()
+                  .normalize('NFD')
+                  .replace(/[̀-ͯ]/g, '')
+                  .includes(q)),
+          );
+          if (st.sort) {
+            const k = st.sort;
+            const val = (m) => (k === 'name' ? m.name : k === 'hcp' ? (m.hcp == null ? 99 : m.hcp) : m.last ? -m.last.getTime() : Infinity);
+            list = list.slice().sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * st.dir);
+          }
+          return list;
+        };
+        const totalFor = () => {
+          if (st.q || st.cat) return null;
+          return STATUS.find((s) => s.id === st.status).n;
+        };
+        const payBadge = (m) =>
+          m.status === 'em-dia'
+            ? `<span class="badge badge--ok">${I('tick-circle')}Em dia</span>`
+            : m.status === 'inadimplente'
+              ? `<span class="badge badge--bad">${I('warning-2')}${m.overdue.months} em atraso · ${F.brl(m.overdue.amount)}</span>`
+              : `<span class="badge badge--neutral">${I('lock')}Suspenso</span>`;
+        const rowHtml = (m, i) => `<tr data-id="${m.id}" style="--i:${i}">
+            <td><span class="who">${ERP.avatar(m, 36)}<button type="button" class="who__t who__btn" data-open="${m.id}"><b>${ERP.esc(m.name)}</b><small>${m.email}</small></button></span></td>
+            <td class="t-num">${m.number}</td>
+            <td><span class="cat"><i style="--c:${CATC[m.cat]}"></i>${m.cat}</span></td>
+            <td class="t-num">${F.hcp(m.hcp)}</td>
+            <td>${m.last ? F.ago(m.last) : '<span class="t-muted">Ainda não jogou</span>'}</td>
+            <td class="col-opt t-num">${m.since}</td>
+            <td>${payBadge(m)}</td>
+            <td class="r"><span class="acts">
+              <button type="button" class="icon-btn${st.sent.has(m.id) ? ' is-sent' : ''}" data-remind="${m.id}" aria-label="${st.sent.has(m.id) ? 'Lembrete enviado para ' : 'Enviar lembrete para '}${ERP.esc(m.name)}">${I(st.sent.has(m.id) ? 'tick-circle' : 'sms')}</button>
+              <button type="button" class="icon-btn" data-open="${m.id}" aria-label="Abrir ficha de ${ERP.esc(m.name)}">${I('arrow-right-2')}</button>
+            </span></td></tr>`;
+        const tb = $('#tb');
+        const render = (animate, from = 0) => {
+          const list = filtered();
+          const rows = list.slice(0, st.shown);
+          if (!rows.length) {
+            tb.innerHTML = `<tr><td colspan="8"><div class="none">${I('search-normal-1')}<b>Nenhum sócio encontrado</b>Tente outro nome, número ou limpe os filtros.</div></td></tr>`;
+          } else if (from) {
+            tb.insertAdjacentHTML('beforeend', rows.slice(from).map((m, i) => rowHtml(m, i)).join(''));
+          } else tb.innerHTML = rows.map(rowHtml).join('');
+          if (animate && !ERP.reduced()) [...tb.querySelectorAll('tr')].slice(from).forEach((tr) => tr.classList.add('row-in'));
+          const total = totalFor();
+          $('#count').textContent = total ? `Mostrando ${F.num(rows.length)} de ${F.num(total)} sócios` : `${F.num(list.length)} ${list.length === 1 ? 'sócio encontrado' : 'sócios encontrados'}`;
+          const more = $('#more');
+          more.hidden = !rows.length;
+          more.disabled = rows.length >= list.length;
+          more.textContent = rows.length >= list.length && total && total > rows.length ? 'Exportar lista completa' : 'Carregar mais';
+          more.dataset.soon = rows.length >= list.length && total > rows.length ? 'Exportar lista completa' : '';
+          if (more.dataset.soon) more.disabled = false;
+          else delete more.dataset.soon;
+          const u = new URLSearchParams();
+          st.q && u.set('q', st.q);
+          st.status && u.set('status', st.status);
+          st.cat && u.set('cat', st.cat);
+          openId && u.set('id', openId);
+          history.replaceState(null, '', location.pathname + (u.toString() ? '?' + u : ''));
+        };
+        $('#more').addEventListener('click', (e) => {
+          if (e.currentTarget.dataset.soon) return;
+          const from = st.shown;
+          st.shown += 12;
+          render(true, from);
+        });
+        let tq;
+        $('#fq').addEventListener('input', (e) => {
+          clearTimeout(tq);
+          tq = setTimeout(() => ((st.q = e.target.value), (st.shown = 12), render(true)), 140);
+        });
+        $('#fc').addEventListener('change', (e) => ((st.cat = e.target.value), (st.shown = 12), render(true)));
+        document.querySelectorAll('th[data-sort] button').forEach((b) =>
+          b.addEventListener('click', () => {
+            const th = b.parentNode;
+            const k = th.dataset.sort;
+            st.dir = st.sort === k ? -st.dir : 1;
+            st.sort = k;
+            document.querySelectorAll('th[data-sort]').forEach((x) => x.removeAttribute('aria-sort'));
+            th.setAttribute('aria-sort', st.dir === 1 ? 'ascending' : 'descending');
+            render(true);
+          }),
+        );
+
+        /* reminders */
+        const remind = (m, btn) => {
+          st.sent.add(m.id);
+          const late = m.status !== 'em-dia';
+          ERP.toast(late ? `Cobrança enviada para ${ERP.first(m)}: e-mail com link de Pix e push no app` : `Lembrete enviado para ${ERP.first(m)}: vencimento dia 20, por e-mail e push`, { icon: 'sms' });
+          tb.querySelectorAll(`[data-remind="${m.id}"]`).forEach((b) => {
+            b.classList.add('is-sent');
+            b.innerHTML = I('tick-circle');
+            b.setAttribute('aria-label', 'Lembrete enviado para ' + m.name);
+            b.animate && !ERP.reduced() && b.animate([{ transform: 'scale(.6)' }, { transform: 'scale(1.15)' }, { transform: 'none' }], { duration: 450, easing: 'ease-out' });
+          });
+          if (btn) {
+            btn.className = 'btn btn--done';
+            btn.innerHTML = I('tick-circle') + 'Lembrete enviado';
+            btn.setAttribute('aria-disabled', 'true');
+          }
+        };
+
+        /* drawer */
+        const drawer = $('#drawer');
+        const ov = ERP.overlay(drawer, $('#scrim'));
+        let openId = null;
+        ov.onclose = () => {
+          openId = null;
+          tb.querySelectorAll('tr.is-open').forEach((x) => x.classList.remove('is-open'));
+          const u = new URLSearchParams(location.search);
+          u.delete('id');
+          history.replaceState(null, '', location.pathname + (u.toString() ? '?' + u : ''));
+        };
+        const openDrawer = (id, from) => {
+          const m = ERP.byId[id];
+          if (!m) return;
+          openId = id;
+          tb.querySelectorAll('tr.is-open').forEach((x) => x.classList.remove('is-open'));
+          const tr = tb.querySelector(`tr[data-id="${id}"]`);
+          tr && tr.classList.add('is-open');
+          const yr = new Date().getFullYear();
+          $('#dbody').innerHTML = `
+            <div class="hero">${ERP.avatar(m, 68)}<div><h2 id="d-name">${ERP.esc(m.name)}</h2><p>Sócio ${m.cat.toLowerCase()} · nº ${m.number} · desde ${m.since}</p>${payBadge(m)}</div></div>
+            <div class="tiles">
+              <div class="tile"><small>Handicap</small><b>${F.hcp(m.hcp)}</b></div>
+              <div class="tile"><small>Rodadas em ${ERP.today.getFullYear()}</small><b>${m.rounds}</b></div>
+              <div class="tile"><small>Última rodada</small><b>${m.last ? F.ago(m.last) : '—'}</b></div>
+            </div>
+            <div><p class="dsec">Mensalidade</p>
+              <div class="plan"><span class="plan__ico">${I('crown')}</span><span><b>Plano ${m.cat}</b><small>Vence todo dia 20 · ${ERP.methodLabel(m)}</small></span><span class="plan__v"><b>${F.brl(m.fee)}</b><small>por mês</small></span></div>
+              ${m.overdue ? `<div class="alert" role="note">${I('warning-2')}<span><b>${m.overdue.months} ${m.overdue.months === 1 ? 'mensalidade' : 'mensalidades'} em atraso · ${F.brl(m.overdue.amount)}</b>${m.overdue.days} dias · inclui multa de 2% e juros de 1% ao mês${m.status === 'suspenso' ? '. Acesso ao campo suspenso.' : ''}</span></div>` : ''}
+            </div>
+            <div><p class="dsec">Histórico de pagamentos</p><ul class="hist">${m.history
+              .map(
+                (h) => `<li><span class="hist__ico">${I(h.status === 'pago' ? 'receipt-text' : 'warning-2')}</span><span class="hist__t"><b>Mensalidade de ${F.month(h.date)}</b><small>${F.ddmm(h.date)}/${h.date.getFullYear()} · ${h.via}</small></span>
+                  <span class="hist__v">${F.brl(h.amount)}<br/><span class="badge badge--${h.status === 'pago' ? 'ok' : 'bad'}">${h.status === 'pago' ? 'Pago' : 'Em atraso'}</span></span></li>`,
+              )
+              .join('')}</ul></div>
+            <div><p class="dsec">Contato</p><div class="contact"><a href="mailto:${m.email}">${I('sms')}${m.email}</a><span>${I('call')}${m.phone}</span></div></div>`;
+          const sent = st.sent.has(m.id);
+          $('#dfoot').innerHTML = `<a class="btn btn--ghost" href="agenda.html">${I('calendar')}Ver agenda</a>
+            <button type="button" class="${sent ? 'btn btn--done' : 'btn btn--primary'}" id="d-remind" ${sent ? 'aria-disabled="true"' : ''} data-autofocus>${I(sent ? 'tick-circle' : 'send-2')}${sent ? 'Lembrete enviado' : m.status === 'em-dia' ? 'Enviar lembrete' : 'Enviar cobrança'}</button>`;
+          $('#d-remind').addEventListener('click', (e) => !st.sent.has(m.id) && remind(m, e.currentTarget));
+          drawer.scrollTop = 0;
+          $('#dbody').scrollTop = 0;
+          if (!ov.isOpen()) ov.open(from);
+          const u = new URLSearchParams(location.search);
+          u.set('id', id);
+          history.replaceState(null, '', location.pathname + '?' + u);
+        };
+        tb.addEventListener('click', (e) => {
+          const r = e.target.closest('[data-remind]');
+          if (r) return !st.sent.has(r.dataset.remind) && remind(ERP.byId[r.dataset.remind]);
+          const o = e.target.closest('[data-open]');
+          if (o) return openDrawer(o.dataset.open, o);
+          const tr = e.target.closest('tr[data-id]');
+          if (tr) openDrawer(tr.dataset.id, tr.querySelector('.who__btn'));
+        });
+
+        render(true);
+        paintSeg();
+        requestAnimationFrame(paintSeg);
+        document.fonts && document.fonts.ready.then(paintSeg);
+        if (qs.get('id') && ERP.byId[qs.get('id')]) setTimeout(() => openDrawer(qs.get('id'), tb.querySelector(`[data-open="${qs.get('id')}"]`)), ERP.reduced() ? 0 : 450);
+      })();
+    </script>
+  </body>
+</html>

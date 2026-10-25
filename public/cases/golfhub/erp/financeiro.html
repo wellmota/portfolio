@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Financeiro · GolfHub ERP</title>
+    <link rel="icon" href="../app/assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=DM+Sans:wght@400;700&display=swap" />
+    <link rel="stylesheet" href="assets/erp.css" />
+    <script src="../app/assets/icons.js"></script>
+    <script src="../app/assets/data.js"></script>
+    <script src="assets/erp.js"></script>
+    <style>
+      /* Inferred from the deck modules "Gateway de pagamento", "POS e pagamentos", "E-mails automáticos", "Métricas". */
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+      }
+      .mini {
+        height: 5px;
+        border-radius: 5px;
+        background: var(--track);
+        margin-top: 7px;
+        overflow: hidden;
+        width: 100%;
+      }
+      .mini i {
+        display: block;
+        height: 100%;
+        width: calc(var(--v) * 1%);
+        background: var(--mint);
+        border-radius: inherit;
+        transform-origin: left;
+        animation: grow-x 1.3s var(--ease) 0.4s both;
+      }
+      .g2 {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        gap: var(--gap);
+        margin-bottom: var(--gap);
+        align-items: stretch;
+      }
+      .chart {
+        padding: 22px 22px 14px;
+        display: flex;
+        flex-direction: column;
+      }
+      .chart__h {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .key {
+        display: flex;
+        gap: 14px;
+        font-size: 12px;
+        color: var(--ink-3);
+        margin-top: 4px;
+      }
+      .key span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .key i {
+        width: 14px;
+        height: 3px;
+        border-radius: 3px;
+        background: var(--indigo);
+      }
+      .key i.dash {
+        background: repeating-linear-gradient(90deg, #8b8a96 0 4px, transparent 4px 7px);
+      }
+      .plot {
+        position: relative;
+        flex: 1 0 252px;
+        min-height: 252px;
+        margin-top: 10px;
+        border-radius: 10px;
+        outline-offset: 4px;
+        touch-action: pan-y;
+      }
+      .plot svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .grid line {
+        stroke: var(--line);
+        stroke-width: 1;
+      }
+      .grid text,
+      .xl text {
+        font-size: 11.5px;
+        fill: var(--ink-3);
+        font-family: Inter, sans-serif;
+      }
+      .xl text.is-on {
+        fill: var(--ink);
+        font-weight: 600;
+      }
+      .line {
+        fill: none;
+        stroke: var(--indigo);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        animation: draw 1.6s var(--ease) 0.35s both;
+      }
+      @keyframes draw {
+        from {
+          stroke-dashoffset: 1;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      .meta-l {
+        fill: none;
+        stroke: #8b8a96;
+        stroke-width: 1.5;
+        stroke-dasharray: 4 4;
+        animation: fade 0.8s ease 1.2s both;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+      }
+      .clip-r {
+        transform-origin: left;
+        animation: grow-x 1.6s var(--ease) 0.35s both;
+      }
+      .pt {
+        fill: #fff;
+        stroke: var(--indigo);
+        stroke-width: 2;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: pop-in 0.4s var(--spring) both;
+      }
+      .pt.is-last {
+        fill: var(--indigo);
+        stroke: #fff;
+        stroke-width: 3;
+      }
+      .last-l {
+        font-size: 12px;
+        font-weight: 600;
+        fill: var(--ink);
+        font-family: Inter, sans-serif;
+        paint-order: stroke;
+        stroke: #fff;
+        stroke-width: 4px;
+        stroke-linejoin: round;
+        animation: fade 0.6s ease 1.7s both;
+      }
+      .cross {
+        opacity: 0;
+        transition: opacity 0.15s;
+        pointer-events: none;
+      }
+      .plot.is-scrub .cross {
+        opacity: 1;
+      }
+      .plot.is-scrub .last-l {
+        opacity: 0.25;
+      }
+      .cross line {
+        stroke: var(--ink);
+        stroke-width: 1;
+        stroke-dasharray: 3 3;
+      }
+      .cross .c1 {
+        fill: var(--indigo);
+        stroke: #fff;
+        stroke-width: 3;
+        filter: drop-shadow(0 4px 8px rgba(74, 58, 255, 0.5));
+      }
+      .cross .c2 {
+        fill: #fff;
+        stroke: #8b8a96;
+        stroke-width: 2;
+      }
+      .cross circle {
+        transition:
+          cx 0.18s var(--ease),
+          cy 0.18s var(--ease);
+      }
+      .cross line {
+        transition:
+          x1 0.18s var(--ease),
+          x2 0.18s var(--ease);
+      }
+
+      /* sources */
+      .src {
+        padding: 22px;
+      }
+      .src__total {
+        margin-top: 14px;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      .src__total small {
+        display: block;
+        font-size: 12.5px;
+        font-weight: 400;
+        color: var(--ink-3);
+        letter-spacing: 0;
+      }
+      .stackbar {
+        display: flex;
+        gap: 2px;
+        height: 14px;
+        margin: 16px 0 14px;
+        border-radius: 7px;
+        overflow: hidden;
+      }
+      .stackbar i {
+        flex: var(--v) 0 0;
+        background: var(--c);
+        transform-origin: left;
+        animation: grow-x 1s var(--ease) both;
+        animation-delay: calc(var(--k) * 110ms + 300ms);
+        transition: opacity 0.2s;
+      }
+      .src.is-hot .stackbar i:not(.is-hot) {
+        opacity: 0.25;
+      }
+      .src ul {
+        display: grid;
+        gap: 2px;
+      }
+      .src li {
+        display: grid;
+        grid-template-columns: 12px 1fr auto 46px;
+        align-items: center;
+        gap: 10px;
+        height: 40px;
+        padding: 0 8px;
+        margin: 0 -8px;
+        border-radius: 10px;
+        transition: background 0.2s;
+        cursor: default;
+      }
+      .src li:hover,
+      .src li.is-hot {
+        background: var(--canvas);
+      }
+      .src .sw {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        background: var(--c);
+      }
+      .src li b {
+        font-weight: 500;
+      }
+      .src .v {
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+      .src .p {
+        text-align: right;
+        color: var(--ink-3);
+        font-size: 12.5px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* transactions */
+      .tx {
+        padding: 20px 8px 8px;
+      }
+      .tx .card__h {
+        padding: 0 14px 14px;
+      }
+      .tx .tbl {
+        table-layout: fixed;
+      }
+      .tx .tbl td {
+        height: 56px;
+      }
+      .tx col.c-when {
+        width: 76px;
+      }
+      .tx col.c-via {
+        width: 178px;
+      }
+      .tx col.c-st {
+        width: 128px;
+      }
+      .tx col.c-amt {
+        width: 108px;
+      }
+      .desc b,
+      .desc__who {
+        display: block;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .desc__who {
+        font-weight: 400;
+        min-width: 0;
+      }
+      .desc small {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .desc .av {
+        box-shadow: none;
+      }
+      .via {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .via__ico {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        display: grid;
+        place-items: center;
+        background: var(--canvas);
+        color: var(--ink-2);
+        flex: none;
+      }
+      .via__ico .i {
+        width: 17px;
+        height: 17px;
+      }
+      .via b {
+        display: block;
+        font-weight: 500;
+        font-size: 13px;
+      }
+      .via small {
+        display: block;
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .amt {
+        font-weight: 600;
+      }
+      .amt.neg {
+        color: var(--bad);
+      }
+      .when {
+        color: var(--ink-3);
+        font-size: 13px;
+      }
+      .when b {
+        display: block;
+        color: var(--ink);
+        font-weight: 500;
+      }
+
+      /* overdue */
+      .due {
+        padding: 20px 20px 14px;
+        scroll-margin-top: calc(var(--top) + 20px);
+      }
+      .due__sum {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .due__sum b {
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      .due__sum span {
+        color: var(--ink-3);
+        font-size: 13px;
+      }
+      .auto {
+        margin: 14px 0 6px;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+      .auto .spin {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #fff;
+        animation: spin 0.7s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .auto__note {
+        font-size: 12px;
+        color: var(--ink-3);
+        margin-bottom: 8px;
+      }
+      .due li {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .due li:last-child {
+        border-bottom: 0;
+      }
+      .due__t {
+        flex: 1;
+        min-width: 0;
+      }
+      .due__t a {
+        display: block;
+        font-weight: 500;
+        font-size: 13.5px;
+        border-radius: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .due__t a:hover {
+        color: var(--indigo);
+      }
+      .due__t small {
+        display: block;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .due__v {
+        font-weight: 600;
+        font-size: 13.5px;
+        font-variant-numeric: tabular-nums;
+      }
+      .due .btn--sm {
+        min-width: 74px;
+      }
+      .due__foot {
+        display: flex;
+        justify-content: center;
+        padding-top: 10px;
+      }
+
+      @media (max-width: 1360px) {
+        .col-opt {
+          display: none;
+        }
+        .tx .tbl th,
+        .tx .tbl td {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        .tx col.c-when {
+          width: 62px;
+        }
+        .tx col.c-via {
+          width: 133px;
+        }
+        .tx col.c-st {
+          width: 116px;
+        }
+        .tx col.c-amt {
+          width: 100px;
+        }
+        .via__ico,
+        .due li > .av {
+          display: none;
+        }
+      }
+      @media (max-width: 1200px) {
+        .g2 {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body data-page="financeiro">
+    <a class="skip" href="#main">Pular para o conteúdo</a>
+    <div class="shell">
+      <aside class="side" data-side></aside>
+      <script>
+        ERP.side(document.querySelector('[data-side]'));
+      </script>
+      <div class="frame">
+        <header class="top" data-top></header>
+        <script>
+          ERP.top(document.querySelector('[data-top]'));
+        </script>
+        <main class="main" id="main" tabindex="-1">
+          <div class="ph rise" style="--d: 0">
+            <div>
+              <h1>Financeiro</h1>
+              <p id="sub"></p>
+            </div>
+            <div class="ph__act">
+              <button type="button" class="btn btn--ghost" data-soon="Exportar relatório"><span data-i="export"></span>Exportar</button>
+              <button type="button" class="btn btn--primary" data-soon="Nova cobrança"><span data-i="add"></span>Nova cobrança</button>
+            </div>
+          </div>
+
+          <section class="kpis" aria-label="Resumo do mês" id="kpis"></section>
+
+          <div class="g2">
+            <section class="card card--lift chart rise" style="--d: 5" aria-labelledby="ch-t">
+              <div class="chart__h">
+                <div>
+                  <h2 class="card__t" id="ch-t">Receita por mês</h2>
+                  <p class="key"><span><i></i>Receita</span><span><i class="dash"></i>Meta</span><span id="ch-avg"></span></p>
+                </div>
+                <div class="seg" role="group" aria-label="Período" id="per"><span class="seg__pill" aria-hidden="true"></span><button type="button" data-n="12" aria-pressed="true">12 meses</button><button type="button" data-n="6" aria-pressed="false">6 meses</button></div>
+              </div>
+              <div class="plot" id="plot" tabindex="0" role="group" aria-label="Receita por mês" aria-describedby="plot-help">
+                <p class="sr-only" id="plot-help">Gráfico de área da receita mensal com a meta. Use as setas para percorrer os meses.</p>
+              </div>
+              <p class="sr-only" aria-live="polite" id="plot-live"></p>
+              <table class="sr-only" id="plot-table"></table>
+            </section>
+            <section class="card card--lift src rise" style="--d: 6" aria-labelledby="src-t" id="src"></section>
+          </div>
+
+          <div class="g2">
+            <section class="card tx rise" style="--d: 7" aria-labelledby="tx-t">
+              <div class="card__h">
+                <div>
+                  <h2 class="card__t" id="tx-t">Transações recentes</h2>
+                  <p class="card__s">Gateway de pagamento e mensalidade</p>
+                </div>
+                <div class="seg" role="group" aria-label="Forma de pagamento" id="txf"><span class="seg__pill" aria-hidden="true"></span></div>
+              </div>
+              <table class="tbl">
+                <colgroup><col class="c-when" /><col /><col class="c-via" /><col class="c-st" /><col class="c-amt" /></colgroup>
+                <thead>
+                  <tr>
+                    <th scope="col">Quando</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Forma</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="r">Valor</th>
+                  </tr>
+                </thead>
+                <tbody id="txb"></tbody>
+              </table>
+            </section>
+            <section class="card due rise" style="--d: 8" aria-labelledby="due-t" id="atraso"></section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const F = ERP.fmt;
+        const S = ERP.stats;
+        const $ = (s) => document.querySelector(s);
+        const I = (n, c = '') => ERP.icon(n, c);
+        document.querySelectorAll('[data-i]').forEach((el) => (el.outerHTML = I(el.dataset.i)));
+        const today = ERP.today;
+        const cap = (s) => s[0].toUpperCase() + s.slice(1);
+        $('#sub').textContent = `${cap(F.month(today))} de ${today.getFullYear()} · parcial até ${F.ddmm(today)}, ${F.time(ERP.clock)}`;
+
+        /* ---------- KPIs ---------- */
+        const rec = S.receita[11];
+        const pctMens = (S.mensalidadesRec / S.mensalidadesPrev) * 100;
+        const k = (d, c, ico, t, count, fmt, foot) =>
+          `<article class="card card--lift mk rise" style="--d:${d}"><span class="kpi__ico" style="--c:${c}">${ERP.icon(ico, '', true)}</span><div class="mk__t" style="flex:1;min-width:0"><h2>${t}</h2><p data-count="${count}" data-fmt="${fmt}"></p>${foot}</div></article>`;
+        $('#kpis').innerHTML = [
+          k(1, '#64cbf4', 'wallet-2', 'Receita do mês', rec, 'brl0', `<small class="up">${I('arrow-up')}<b>+6,1%</b>&nbsp;<span class="t-muted">vs. ${F.month(ERP.months[10])}</span></small>`),
+          k(2, '#52cd9f', 'card', 'Mensalidades', S.mensalidadesRec, 'brl0', `<small>${F.pct(pctMens, 1)} de ${F.brl0(S.mensalidadesPrev)}</small><span class="mini" role="progressbar" aria-label="Mensalidades recebidas" aria-valuenow="${pctMens.toFixed(1)}" aria-valuemin="0" aria-valuemax="100"><i style="--v:${pctMens}"></i></span>`),
+          k(3, '#6c5dd3', 'clock', 'Inadimplência', S.inadValor, 'brl0', `<small class="up">${I('arrow-down')}<b>−3%</b>&nbsp;<span class="t-muted">no mês</span></small>`),
+          k(4, '#ff9f38', 'shop', 'Ticket médio na loja', S.ticketLoja, 'brl', `<small class="up">${I('arrow-up')}<b>+${S.ticketDelta}%</b>&nbsp;<span class="t-muted">no mês</span></small>`),
+        ].join('');
+
+        /* ---------- Revenue area chart (scrub with pointer or arrow keys) ---------- */
+        const plot = $('#plot');
+        let N = 12;
+        let cur = -1;
+        const monoPath = (pts) => {
+          /* monotone cubic (Fritsch–Carlson): smooth without overshooting the data */
+          const n = pts.length;
+          const dx = [],
+            dy = [],
+            m = [],
+            t = [];
+          for (let i = 0; i < n - 1; i++) {
+            dx[i] = pts[i + 1][0] - pts[i][0];
+            dy[i] = pts[i + 1][1] - pts[i][1];
+            m[i] = dy[i] / dx[i];
+          }
+          t[0] = m[0];
+          t[n - 1] = m[n - 2];
+          for (let i = 1; i < n - 1; i++) t[i] = m[i - 1] * m[i] <= 0 ? 0 : (3 * (dx[i - 1] + dx[i])) / ((2 * dx[i] + dx[i - 1]) / m[i - 1] + (dx[i] + 2 * dx[i - 1]) / m[i]);
+          let d = `M${pts[0][0]},${pts[0][1]}`;
+          for (let i = 0; i < n - 1; i++) {
+            const h = dx[i] / 3;
+            d += `C${pts[i][0] + h},${pts[i][1] + h * t[i]} ${pts[i + 1][0] - h},${pts[i + 1][1] - h * t[i + 1]} ${pts[i + 1][0]},${pts[i + 1][1]}`;
+          }
+          return d;
+        };
+        let geo = null;
+        const drawChart = () => {
+          const w = plot.clientWidth;
+          const h = plot.clientHeight;
+          const L = 62,
+            R = 30,
+            T = 14,
+            B = 28;
+          const vals = S.receita.slice(-N);
+          const metas = S.meta.slice(-N);
+          const mons = ERP.months.slice(-N);
+          /* baseline at 600 mil: the months move within ±15%, a zero baseline flattened the line */
+          const ymin = 600000;
+          const ymax = 1000000;
+          const X = (i) => L + (i * (w - L - R)) / (N - 1);
+          const Y = (v) => T + (h - T - B) * (1 - (v - ymin) / (ymax - ymin));
+          const pts = vals.map((v, i) => [X(i), Y(v)]);
+          const mpts = metas.map((v, i) => [X(i), Y(v)]);
+          const line = monoPath(pts);
+          const area = line + `L${X(N - 1)},${Y(ymin)}L${X(0)},${Y(ymin)}Z`;
+          const ticks = [600000, 700000, 800000, 900000, 1000000];
+          geo = { X, Y, vals, metas, mons, pts, mpts, w, h, T, B };
+          const avg = vals.reduce((a, b) => a + b, 0) / N;
+          $('#ch-avg').textContent = `Média ${F.mil(avg)}/mês`;
+          plot.querySelector('svg') && plot.querySelector('svg').remove();
+          plot.insertAdjacentHTML(
+            'beforeend',
+            `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true">
+              <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3aff" stop-opacity=".28"/><stop offset="1" stop-color="#4a3aff" stop-opacity="0"/></linearGradient>
+              <clipPath id="cp"><rect class="clip-r" x="0" y="0" width="${w}" height="${h}"/></clipPath></defs>
+              <g class="grid">${ticks.map((v) => `<line x1="${L}" x2="${w - R + 10}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L - 10}" y="${Y(v) + 4}" text-anchor="end">${F.num(v / 1000)} mil</text>`).join('')}</g>
+              <g class="xl">${mons.map((m, i) => `<text x="${X(i)}" y="${h - 6}" text-anchor="middle" data-x="${i}">${F.mon(m)}</text>`).join('')}</g>
+              <path d="${area}" fill="url(#ag)" clip-path="url(#cp)"/>
+              <polyline class="meta-l" points="${mpts.map((p) => p.join(',')).join(' ')}"/>
+              <path class="line" d="${line}" pathLength="1"/>
+              ${pts.map((p, i) => `<circle class="pt${i === N - 1 ? ' is-last' : ''}" cx="${p[0]}" cy="${p[1]}" r="${i === N - 1 ? 6 : 3.5}" style="animation-delay:${400 + (i / (N - 1)) * 1500}ms"/>`).join('')}
+              <text class="last-l" x="${pts[N - 1][0]}" y="${pts[N - 1][1] + (pts[N - 2][1] < pts[N - 1][1] ? 24 : -14)}" text-anchor="end">${F.mil(vals[N - 1])} até hoje</text>
+              <g class="cross"><line x1="0" x2="0" y1="${T}" y2="${h - B}"/><circle class="c2" r="4.5" cx="0" cy="0"/><circle class="c1" r="6.5" cx="0" cy="0"/></g>
+            </svg>`,
+          );
+          $('#plot-table').innerHTML = `<caption>Receita e meta por mês</caption><tr><th>Mês</th><th>Receita</th><th>Meta</th></tr>${mons.map((m, i) => `<tr><td>${F.month(m)}</td><td>${F.brl0(vals[i])}</td><td>${F.brl0(metas[i])}</td></tr>`).join('')}`;
+        };
+        const scrub = (i, show = true) => {
+          if (!geo) return;
+          i = Math.max(0, Math.min(N - 1, i));
+          cur = i;
+          const { pts, mpts, vals, metas, mons } = geo;
+          const svg = plot.querySelector('svg');
+          const cr = svg.querySelector('.cross');
+          cr.querySelector('line').setAttribute('x1', pts[i][0]);
+          cr.querySelector('line').setAttribute('x2', pts[i][0]);
+          cr.querySelector('.c1').setAttribute('cx', pts[i][0]);
+          cr.querySelector('.c1').setAttribute('cy', pts[i][1]);
+          cr.querySelector('.c2').setAttribute('cx', mpts[i][0]);
+          cr.querySelector('.c2').setAttribute('cy', mpts[i][1]);
+          svg.querySelectorAll('.xl text').forEach((t) => t.classList.toggle('is-on', +t.dataset.x === i));
+          plot.classList.add('is-scrub');
+          const diff = ((vals[i] - metas[i]) / metas[i]) * 100;
+          const prev = i > 0 ? ((vals[i] - vals[i - 1]) / vals[i - 1]) * 100 : null;
+          const name = cap(F.month(mons[i])) + ' ' + mons[i].getFullYear() + (i === N - 1 ? ' (parcial)' : '');
+          const b = plot.getBoundingClientRect();
+          if (show)
+            ERP.tip.show(
+              `<b>${name}</b><small><span class="sw" style="background:#4a3aff"></span>Receita ${F.brl0(vals[i])}</small><small><span class="sw" style="background:#8b8a96"></span>Meta ${F.brl0(metas[i])} · ${diff >= 0 ? '+' : '−'}${F.num(Math.abs(diff), 1)}%</small>${prev != null ? `<small>${prev >= 0 ? '▲' : '▼'} ${F.num(Math.abs(prev), 1)}% vs. mês anterior</small>` : ''}`,
+              b.left + pts[i][0],
+              b.top + pts[i][1] - 6,
+            );
+          $('#plot-live').textContent = `${name}: receita ${F.brl0(vals[i])}, meta ${F.brl0(metas[i])}.`;
+        };
+        const unscrub = () => {
+          plot.classList.remove('is-scrub');
+          plot.querySelectorAll('.xl text').forEach((t) => t.classList.remove('is-on'));
+          ERP.tip.hide();
+        };
+        plot.addEventListener('pointermove', (e) => {
+          if (!geo) return;
+          const x = e.clientX - plot.getBoundingClientRect().left;
+          let best = 0;
+          geo.pts.forEach((p, i) => Math.abs(p[0] - x) < Math.abs(geo.pts[best][0] - x) && (best = i));
+          if (best !== cur || !plot.classList.contains('is-scrub')) scrub(best);
+          else scrub(best);
+        });
+        plot.addEventListener('pointerleave', () => ((cur = -1), unscrub()));
+        plot.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            scrub(cur < 0 ? N - 1 : cur + (e.key === 'ArrowRight' ? 1 : -1));
+          } else if (e.key === 'Escape') unscrub();
+        });
+        plot.addEventListener('blur', unscrub);
+        plot.addEventListener('focus', () => scrub(N - 1));
+        new ResizeObserver(() => (drawChart(), cur >= 0 && plot.classList.contains('is-scrub') && scrub(cur, false))).observe(plot);
+
+        /* period toggle */
+        const per = $('#per');
+        const pill = (seg) => {
+          const on = seg.querySelector('[aria-pressed="true"]');
+          const p = seg.querySelector('.seg__pill');
+          p.style.left = '0';
+          p.style.width = on.offsetWidth + 'px';
+          p.style.transform = `translateX(${on.offsetLeft}px)`;
+        };
+        per.addEventListener('click', (e) => {
+          const b = e.target.closest('button');
+          if (!b || b.getAttribute('aria-pressed') === 'true') return;
+          per.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+          pill(per);
+          N = +b.dataset.n;
+          drawChart();
+        });
+
+        /* ---------- Sources ---------- */
+        const total = S.fontes.reduce((a, f) => a + f.value, 0);
+        $('#src').innerHTML = `<div class="card__h"><h2 class="card__t" id="src-t">Receita por origem</h2><span class="badge badge--neutral">${cap(F.month(today))}</span></div>
+          <p class="src__total"><span data-count="${total}" data-fmt="brl0"></span><small>${S.fontes.length} fontes · mensalidades são ${F.pct((S.fontes[0].value / total) * 100)} do total</small></p>
+          <div class="stackbar" role="img" aria-label="Participação por origem: ${S.fontes.map((f) => `${f.label} ${F.pct((f.value / total) * 100, 1)}`).join(', ')}">${S.fontes.map((f, i) => `<i style="--v:${f.value};--c:${f.color};--k:${i}" data-f="${f.id}"></i>`).join('')}</div>
+          <ul>${S.fontes
+            .map(
+              (f) => `<li data-f="${f.id}"><span class="sw" style="--c:${f.color}"></span><b>${f.label}</b><span class="v">${F.brl0(f.value)}</span><span class="p">${F.pct((f.value / total) * 100, 1)}</span></li>`,
+            )
+            .join('')}</ul>`;
+        const src = $('#src');
+        const hotF = (id) => {
+          src.classList.toggle('is-hot', !!id);
+          src.querySelectorAll('[data-f]').forEach((el) => el.classList.toggle('is-hot', el.dataset.f === id));
+        };
+        src.querySelectorAll('[data-f]').forEach((el) => {
+          el.addEventListener('pointerenter', (e) => {
+            hotF(el.dataset.f);
+          });
+          el.addEventListener('pointerleave', () => (hotF(null), ERP.tip.hide()));
+        });
+        src.querySelectorAll('.stackbar i').forEach((el) =>
+          el.addEventListener('pointermove', (e) => {
+            const f = S.fontes.find((x) => x.id === el.dataset.f);
+            ERP.tip.show(`<b>${f.label}</b> · ${F.brl0(f.value)}<small>${F.pct((f.value / total) * 100, 1)} da receita do mês</small>`, e.clientX, el.getBoundingClientRect().top);
+          }),
+        );
+
+        /* ---------- Transactions ---------- */
+        const P = (id) => ERP.person(id);
+        const TX = [
+          { d: 0, t: '09:32', desc: 'Green fee de Bernardo Assis', who: 'caio', note: 'anfitrião', m: 'pix', s: 'ok', v: 280 },
+          { d: 0, t: '09:18', desc: 'Aluguel de carrinho elétrico', who: 'pedro', m: 'conta', s: 'conta', v: 120 },
+          { d: 0, t: '09:05', desc: 'Loja · Bolas Pro V1 (dúzia)', who: 'andre', m: 'card', s: 'ok', v: 189 },
+          { d: 0, t: '08:51', desc: 'Inscrição na Copa Primavera', who: 'lucas', m: 'card', s: 'ok', v: 180 },
+          { d: 0, t: '08:40', desc: 'Mensalidade de outubro', who: 'roberto', m: 'card', s: 'bad', v: 210 },
+          { d: 0, t: '08:12', desc: 'Aula com Marco Dantas', who: 'julia', m: 'pix', s: 'ok', v: 260 },
+          { d: 0, t: '07:58', desc: 'Balde de bolas × 2', who: 'vinicius', m: 'conta', s: 'conta', v: 60 },
+          { d: -1, t: '18:22', desc: 'Clínica de putt × 2', who: 'fernanda', m: 'pix', s: 'ok', v: 180 },
+          { d: -1, t: '17:05', desc: 'Estorno · aluguel de tacos', who: 'thiago', m: 'card', s: 'refund', v: -150 },
+        ];
+        const SM = { ok: ['ok', 'tick-circle', 'Aprovado'], conta: ['indigo', 'receipt-text', 'Lançado'], bad: ['bad', 'close-circle', 'Recusado'], refund: ['neutral', 'refresh-2', 'Estornado'] };
+        const next = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+        const via = (x) => {
+          const p = ERP.byId[x.who] || P(x.who);
+          if (x.m === 'card') return { ico: 'card', t: `${(p.brand || 'Visa').replace('Mastercard', 'Master')} •••• ${p.last4 || '4410'}`, s: 'Cartão · pagar.me' };
+          if (x.m === 'pix') return { ico: 'scan', t: 'Pix', s: 'Na hora' };
+          return { ico: 'receipt-text', t: 'Mensalidade', s: `Fatura de ${F.month(next)}` };
+        };
+        const txf = $('#txf');
+        const FILTERS = [
+          { id: '', l: 'Todas' },
+          { id: 'card', l: 'Cartão' },
+          { id: 'pix', l: 'Pix' },
+          { id: 'conta', l: 'Mensalidade' },
+        ];
+        txf.insertAdjacentHTML('beforeend', FILTERS.map((f, i) => `<button type="button" data-m="${f.id}" aria-pressed="${i === 0}">${f.l}</button>`).join(''));
+        const renderTx = (m, anim) => {
+          const list = TX.filter((x) => !m || x.m === m);
+          $('#txb').innerHTML = list
+            .map((x, i) => {
+              const p = P(x.who);
+              const v = via(x);
+              const [cls, ic, lbl] = SM[x.s];
+              return `<tr class="${anim ? 'row-in' : ''}" style="--i:${i}">
+                <td class="when"><b>${x.t}</b>${x.d === 0 ? 'Hoje' : 'Ontem'}</td>
+                <td class="desc"><b>${x.desc}</b><small>${ERP.avatar(p, 18)}<span class="desc__who"><a href="socios.html?id=${x.who}">${p.name}</a>${x.note ? ' · ' + x.note : ''}</span></small></td>
+                <td><span class="via"><span class="via__ico">${I(v.ico)}</span><span><b>${v.t}</b><small>${v.s}</small></span></span></td>
+                <td><span class="badge badge--${cls}">${I(ic)}${lbl}</span></td>
+                <td class="r amt t-num${x.v < 0 ? ' neg' : ''}">${F.brl(x.v)}</td></tr>`;
+            })
+            .join('');
+        };
+        txf.addEventListener('click', (e) => {
+          const b = e.target.closest('button');
+          if (!b) return;
+          txf.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+          pill(txf);
+          renderTx(b.dataset.m, !ERP.reduced());
+        });
+        renderTx('', false);
+
+        /* ---------- Overdue (cobranças em atraso) ---------- */
+        const late = ERP.members.filter((m) => m.overdue).sort((a, b) => b.overdue.amount - a.overdue.amount);
+        const shown = late.slice(0, 6);
+        const due = $('#atraso');
+        due.innerHTML = `<div class="card__h"><h2 class="card__t" id="due-t">Cobranças em atraso</h2><span class="badge badge--bad">${S.inadimplentes} sócios</span></div>
+          <p class="due__sum"><b data-count="${S.inadValor}" data-fmt="brl0"></b><span>em aberto · ${S.inadDelta < 0 ? '−' : '+'}${F.num(Math.abs(S.inadDelta))}% no mês</span></p>
+          <button type="button" class="btn btn--primary auto" id="auto">${I('sms')}<span>Cobrar via e-mail automático</span></button>
+          <p class="auto__note" id="auto-note">Régua: e-mail com Pix hoje, lembrete em 3 dias, aviso de suspensão em 30.</p>
+          <ul id="due-l">${shown
+            .map(
+              (m) => `<li>${ERP.avatar(m, 36)}<span class="due__t"><a href="socios.html?id=${m.id}">${m.name}</a><small>${m.status === 'suspenso' ? 'Suspenso' : m.overdue.months + (m.overdue.months === 1 ? ' mês' : ' meses')} · ${m.overdue.days} dias</small></span>
+                <span class="due__v">${F.brl0(m.overdue.amount)}</span><button type="button" class="btn btn--ghost btn--sm" data-charge="${m.id}" aria-label="Cobrar ${m.name}">Cobrar</button></li>`,
+            )
+            .join('')}</ul>
+          <div class="due__foot"><a class="link" href="socios.html?status=inadimplente">Ver os ${S.inadimplentes} inadimplentes${I('arrow-right')}</a></div>`;
+        const mark = (b, txt) => {
+          b.className = 'btn btn--done btn--sm';
+          b.innerHTML = I('tick-circle', 'i--xs') + txt;
+          b.setAttribute('aria-disabled', 'true');
+          !ERP.reduced() && b.animate([{ transform: 'scale(.85)' }, { transform: 'scale(1.06)' }, { transform: 'none' }], { duration: 420, easing: 'ease-out' });
+        };
+        due.addEventListener('click', (e) => {
+          const c = e.target.closest('[data-charge]');
+          if (c && !c.hasAttribute('aria-disabled')) {
+            const m = ERP.byId[c.dataset.charge];
+            mark(c, 'Enviado');
+            ERP.toast(`Cobrança enviada para ${ERP.first(m)}: e-mail com Pix de ${F.brl(m.overdue.amount)}`, { icon: 'sms' });
+          }
+          const a = e.target.closest('#auto');
+          if (a && !a.hasAttribute('aria-disabled')) {
+            a.setAttribute('aria-disabled', 'true');
+            a.innerHTML = '<span class="spin" aria-hidden="true"></span><span>Agendando cobranças…</span>';
+            setTimeout(
+              () => {
+                a.className = 'btn btn--done auto';
+                a.innerHTML = I('tick-circle') + '<span>Régua de cobrança ativa</span>';
+                $('#auto-note').textContent = `${S.inadimplentes} e-mails às ${F.time(new Date(ERP.clock.getTime() + 20 * 6e4))} · próximo lembrete em 3 dias.`;
+                [...due.querySelectorAll('[data-charge]:not([aria-disabled])')].forEach((b, i) => setTimeout(() => mark(b, 'Agendado'), ERP.reduced() ? 0 : i * 90));
+                ERP.toast(`${S.inadimplentes} cobranças agendadas por e-mail automático`, { icon: 'sms' });
+              },
+              ERP.reduced() ? 0 : 1100,
+            );
+          }
+        });
+
+        drawChart();
+        requestAnimationFrame(() => (pill(per), pill(txf)));
+        document.fonts && document.fonts.ready.then(() => (pill(per), pill(txf)));
+        if (location.hash === '#atraso') setTimeout(() => due.scrollIntoView({ behavior: ERP.reduced() ? 'auto' : 'smooth', block: 'start' }), 500);
+      })();
+    </script>
+  </body>
+</html>

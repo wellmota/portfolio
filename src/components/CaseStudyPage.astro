@@ -4,6 +4,7 @@ import type { CaseStudyContent } from '../data/cases/types';
 import WhatsAppQuote from './WhatsAppQuote.astro';
 import BeforeAfter from './BeforeAfter.astro';
 import ScreenShowcase from './ScreenShowcase.astro';
+import PrototypeEmbed from './PrototypeEmbed.astro';
 
 interface Props {
   lang: Locale;
@@ -134,11 +135,11 @@ const contactHref = getLocalePath(lang, '#contato');
 
   <!-- Stats -->
   <section class="container-page mt-14 md:mt-24">
-    <div class="grid grid-cols-2 border-l border-t border-line sm:grid-cols-3 lg:grid-cols-6">
+    <div class="grid grid-cols-2 border-l border-t border-line sm:grid-cols-3 xl:grid-cols-6">
       {
         c.stats.map((s) => (
-          <div class="border-b border-r border-line p-5 md:p-6" data-reveal data-reveal-group>
-            <span class="display block text-4xl md:text-[2.6rem]" style={`color:${c.accent}`}>
+          <div class="min-w-0 border-b border-r border-line p-5 md:p-6" data-reveal data-reveal-group>
+            <span class="display block text-4xl [overflow-wrap:break-word] md:text-[2.6rem]" style={`color:${c.accent}`}>
               {s.value}
             </span>
             <span class="mt-2 block text-[12px] leading-snug text-mist">{s.label}</span>
@@ -174,7 +175,14 @@ const contactHref = getLocalePath(lang, '#contato');
         {s.image && (
           <figure class="mt-10" data-reveal>
             <div class="overflow-hidden border border-line">
-              <img src={s.image.src} alt={s.image.alt} loading="lazy" class="w-full object-cover" />
+              <img
+                src={s.image.src}
+                alt={s.image.alt}
+                width={s.image.width}
+                height={s.image.height}
+                loading="lazy"
+                class="w-full object-cover"
+              />
             </div>
             {s.image.caption && (
               <figcaption class="mono mt-3 text-[11px] tracking-wide text-faint">
@@ -183,6 +191,8 @@ const contactHref = getLocalePath(lang, '#contato');
             )}
           </figure>
         )}
+
+        {s.prototype && <PrototypeEmbed {...s.prototype} accent={c.accent} />}
 
         {s.showcase && <ScreenShowcase items={s.showcase.items} accent={c.accent} url={s.showcase.url} start={s.showcase.start} frame={s.showcase.frame} />}
 
@@ -218,6 +228,7 @@ const contactHref = getLocalePath(lang, '#contato');
             afterLabel={s.compare.afterLabel}
             heuristicLabel={s.compare.heuristicLabel}
             caption={s.compare.caption}
+            even={s.compare.even}
           />
         )}
 
@@ -247,7 +258,7 @@ const contactHref = getLocalePath(lang, '#contato');
                 data-reveal
                 data-reveal-group
               >
-                <img src={g.src} alt={g.alt} loading="lazy" class="block w-full object-cover" />
+                <img src={g.src} alt={g.alt} width={g.width} height={g.height} loading="lazy" class="block w-full object-cover" />
                 {s.galleryBadge && (
                   <span class="mono absolute left-2 top-2 border border-line-strong bg-ink/85 px-2 py-1 text-[9.5px] uppercase tracking-widest text-mist">
                     {s.galleryBadge}

@@ -12,27 +12,61 @@ interface Props {
   afterLabel: string;
   heuristicLabel: string;
   caption?: string;
+  /** Antes e depois do mesmo tamanho, antes em cor. */
+  even?: boolean;
 }
 
-const { pairs, beforeLabel, afterLabel, heuristicLabel, caption } = Astro.props;
+const { pairs, beforeLabel, afterLabel, heuristicLabel, caption, even = false } = Astro.props;
 ---
 
 <div class="mt-12 border-t border-line">
   {
-    pairs.map((p, i) => (
+    pairs.map((p, i) => p.wide ? (
+      <article class="border-b border-line py-10 md:py-14" data-reveal>
+        <div class="grid gap-5 md:grid-cols-[1fr_1.5fr] md:gap-14">
+          <div>
+            <p class="mono text-[11px] uppercase tracking-widest" style="color: var(--color-lime)">
+              {String(i + 1).padStart(2, '0')} — {p.label}
+            </p>
+            <p class="mono mt-3 text-[11px] uppercase tracking-widest text-faint">
+              {heuristicLabel}: <span class="text-mist">{p.heuristic}</span>
+            </p>
+          </div>
+          <div class="space-y-4">
+            {p.body.map((t) => (
+              <p class="text-[15.5px] leading-relaxed text-mist md:text-base">{t}</p>
+            ))}
+          </div>
+        </div>
+        <div class="mt-8 grid gap-6 md:grid-cols-2 md:gap-5">
+          <div>
+            <span class="mono mb-2 block text-[10px] uppercase tracking-widest text-faint">{beforeLabel}</span>
+            <div class="ba-before overflow-hidden border border-line">
+              <img src={p.before.src} alt={p.before.alt} width={p.before.width} height={p.before.height} loading="lazy" class="block h-auto w-full" />
+            </div>
+          </div>
+          <div>
+            <span class="mono mb-2 block text-[10px] uppercase tracking-widest" style="color: var(--color-lime)">{afterLabel}</span>
+            <div class="overflow-hidden border border-line">
+              <img src={p.after.src} alt={p.after.alt} width={p.after.width} height={p.after.height} loading="lazy" class="block h-auto w-full" />
+            </div>
+          </div>
+        </div>
+      </article>
+    ) : (
       <article class="grid gap-6 border-b border-line py-10 md:grid-cols-2 md:items-center md:gap-14 md:py-14" data-reveal>
         <div class:list={['ba-media', i % 2 === 1 && 'md:order-2']}>
-          <div class="ba-pair">
+          <div class:list={['ba-pair', even && 'ba-pair--even']}>
             <div>
               <span class="mono mb-2 block text-[10px] uppercase tracking-widest text-faint">{beforeLabel}</span>
               <div class="ba-before overflow-hidden border border-line">
-                <img src={p.before.src} alt={p.before.alt} loading="lazy" class="block w-full" />
+                <img src={p.before.src} alt={p.before.alt} width={p.before.width} height={p.before.height} loading="lazy" class="block h-auto w-full" />
               </div>
             </div>
             <div>
               <span class="mono mb-2 block text-[10px] uppercase tracking-widest" style="color: var(--color-lime)">{afterLabel}</span>
               <div class="print-ios">
-                <img src={p.after.src} alt={p.after.alt} loading="lazy" class="block w-full" />
+                <img src={p.after.src} alt={p.after.alt} width={p.after.width} height={p.after.height} loading="lazy" class="block h-auto w-full" />
               </div>
             </div>
           </div>
@@ -71,5 +105,15 @@ const { pairs, beforeLabel, afterLabel, heuristicLabel, caption } = Astro.props;
   .ba-before img {
     filter: grayscale(1) contrast(1.02);
     opacity: 0.9;
+  }
+  .ba-pair--even {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .ba-pair--even .ba-before {
+    border-radius: 22px;
+  }
+  .ba-pair--even .ba-before img {
+    filter: none;
+    opacity: 1;
   }
 </style>

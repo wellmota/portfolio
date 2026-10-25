@@ -1,0 +1,1569 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Minhas reservas · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Minhas reservas (deck modules "Reservas", "Voucher", "Auto check-in"; inferred).
+         List: seg Próximas/Anteriores, the next booking as a boarding-pass card, rows grouped like the Figma receipts.
+         Detail (?id=): the voucher as a physical ticket — charcoal like the Figma score bar, perforation,
+         holographic foil under tilt, QR, live countdown — check-in pinned at the bottom, hold-to-confirm cancel sheet. */
+      .bar__title {
+        font-size: 17px;
+      }
+
+      /* ---------- list ---------- */
+      .seg {
+        margin: 4px 0 18px;
+      }
+      .seg__n {
+        display: inline-grid;
+        place-items: center;
+        min-width: 20px;
+        height: 20px;
+        margin-left: 6px;
+        padding: 0 6px;
+        border-radius: 10px;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--green-600);
+        vertical-align: 1px;
+      }
+      .seg button[aria-selected='false'] .seg__n {
+        color: var(--ink-2);
+        background: var(--sunken-2);
+      }
+      .group {
+        display: grid;
+        gap: 10px;
+      }
+      .group + .group {
+        margin-top: 22px;
+      }
+      .group__label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-3);
+        padding-left: 4px;
+      }
+      .row {
+        min-height: 72px;
+      }
+      .row .row__title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      /* The sub-line may take a second line (lesson topic, event place) instead of cutting mid-word. */
+      .row .row__sub {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      .row__end {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .row__end .i--sm {
+        color: var(--ink-4);
+      }
+      .row.is-cancelled .row__title {
+        color: var(--ink-3);
+        text-decoration: line-through;
+        text-decoration-color: var(--ink-4);
+      }
+      .row.is-cancelled .tile-ico {
+        filter: grayscale(1);
+        opacity: 0.6;
+      }
+      /* a row leaving after a cancel */
+      .leaving {
+        overflow: hidden;
+        transition:
+          max-height 420ms var(--ease) 380ms,
+          opacity 300ms var(--ease) 200ms,
+          transform 520ms var(--ease) 120ms,
+          margin 420ms var(--ease) 380ms;
+      }
+      .leaving.is-gone {
+        max-height: 0 !important;
+        opacity: 0;
+        transform: translateX(-40px) rotate(-2deg);
+        margin-top: -10px;
+      }
+
+      /* next booking: mini boarding pass (charcoal, stub with the QR) */
+      .pass-wrap {
+        filter: drop-shadow(0 22px 22px rgba(30, 30, 30, 0.28)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.08));
+        margin-bottom: 26px;
+      }
+      .pass {
+        --stub: 112px;
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr var(--stub);
+        min-height: 168px;
+        border-radius: 26px;
+        color: #fff;
+        background:
+          radial-gradient(120% 90% at 0% 0%, rgba(56, 235, 127, 0.16), transparent 50%),
+          linear-gradient(160deg, #3a3a3a, var(--char) 45%, #262626);
+        -webkit-mask:
+          radial-gradient(circle 11px at calc(100% - var(--stub)) 0, transparent 10.5px, #000 11px) top / 100% 51% no-repeat,
+          radial-gradient(circle 11px at calc(100% - var(--stub)) 100%, transparent 10.5px, #000 11px) bottom / 100% 51% no-repeat;
+        mask:
+          radial-gradient(circle 11px at calc(100% - var(--stub)) 0, transparent 10.5px, #000 11px) top / 100% 51% no-repeat,
+          radial-gradient(circle 11px at calc(100% - var(--stub)) 100%, transparent 10.5px, #000 11px) bottom / 100% 51% no-repeat;
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .pass:active {
+        transform: scale(0.98);
+      }
+      .pass__main {
+        display: grid;
+        align-content: space-between;
+        gap: 10px;
+        padding: 18px 16px 16px 20px;
+        min-width: 0;
+      }
+      .pass__k {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--green-300);
+      }
+      .pass__time {
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.035em;
+        font-variant-numeric: tabular-nums;
+      }
+      .pass__day {
+        display: block;
+        margin-top: 6px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .pass__place {
+        display: block;
+        margin-top: 2px;
+        font-size: 12.5px;
+        color: #b3b3b3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .pass .stack {
+        --stack-ring: var(--char);
+        --stack-bubble: #fff;
+      }
+      .pass__stub {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        gap: 8px;
+        padding: 12px;
+      }
+      .pass__stub::before {
+        content: '';
+        position: absolute;
+        left: -1px;
+        top: 16px;
+        bottom: 16px;
+        border-left: 2px dashed rgba(255, 255, 255, 0.18);
+      }
+      .pass__qr {
+        width: 80px;
+        height: 80px;
+        padding: 7px;
+        border-radius: 14px;
+        background: #fff;
+      }
+      .pass__qr svg {
+        width: 100%;
+        height: 100%;
+      }
+      .pass__code {
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: #d6d6d6;
+      }
+      .pulse {
+        position: relative;
+        flex: none;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green-300);
+      }
+      .pulse::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: var(--green-300);
+        animation: ping 1.8s var(--ease) infinite;
+      }
+      @keyframes ping {
+        to {
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+
+      .panel-in {
+        animation: panel-in 460ms var(--ease) both;
+      }
+      @keyframes panel-in {
+        from {
+          opacity: 0;
+          transform: translateX(var(--from, 16px));
+        }
+      }
+      .empty .tile-ico {
+        animation: pop 700ms var(--ease-spring) both;
+      }
+      .empty .t-h3 {
+        color: var(--ink);
+      }
+      .empty .btn {
+        margin-top: 10px;
+      }
+
+      /* ---------- detail: the voucher ticket ---------- */
+      .ticket-stage {
+        perspective: 1100px;
+        padding-top: 4px;
+      }
+      .ticket-wrap {
+        filter: drop-shadow(0 28px 26px rgba(30, 30, 30, 0.3)) drop-shadow(0 3px 4px rgba(0, 0, 0, 0.1));
+        animation: ticket-in 1000ms var(--ease) both;
+        transform-origin: 50% 0;
+      }
+      @keyframes ticket-in {
+        from {
+          opacity: 0;
+          transform: translateY(46px) rotateX(28deg) scale(0.95);
+        }
+      }
+      .ticket {
+        --cut: 260px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 28px;
+        color: #fff;
+        background:
+          radial-gradient(110% 70% at 0% 0%, rgba(56, 235, 127, 0.18), transparent 55%),
+          radial-gradient(90% 60% at 100% 100%, rgba(119, 26, 163, 0.22), transparent 60%),
+          linear-gradient(170deg, #3b3b3b, var(--char) 40%, #232323);
+        -webkit-mask:
+          radial-gradient(circle 13px at 0 var(--cut), transparent 12.5px, #000 13px) left / 51% 100% no-repeat,
+          radial-gradient(circle 13px at 100% var(--cut), transparent 12.5px, #000 13px) right / 51% 100% no-repeat;
+        mask:
+          radial-gradient(circle 13px at 0 var(--cut), transparent 12.5px, #000 13px) left / 51% 100% no-repeat,
+          radial-gradient(circle 13px at 100% var(--cut), transparent 12.5px, #000 13px) right / 51% 100% no-repeat;
+      }
+      /* fine grain, like the photo cards */
+      .ticket::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.1;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+      }
+      /* holographic sheen sweeping across; follows the pointer while tilting */
+      .ticket::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          115deg,
+          transparent 25%,
+          rgba(56, 235, 127, 0.5) 38%,
+          rgba(74, 58, 255, 0.5) 46%,
+          rgba(202, 24, 195, 0.45) 54%,
+          rgba(242, 163, 58, 0.45) 62%,
+          transparent 75%
+        );
+        background-size: 300% 100%;
+        background-position: calc(var(--hx, 0.5) * 100%) 50%;
+        mix-blend-mode: soft-light;
+        opacity: 0.55;
+        /* one pass on entry, again on each tap or tilt release (no idle loop) */
+        animation: holo-sweep 2.4s ease-in-out 1.2s backwards;
+      }
+      .ticket.is-tilting::after {
+        animation: none;
+        opacity: 0.9;
+        transition: background-position 80ms linear;
+      }
+      @keyframes holo-sweep {
+        0% {
+          background-position: 100% 50%;
+        }
+        55% {
+          background-position: 0% 50%;
+        }
+      }
+      .ticket.is-replay::after,
+      .ticket.is-replay .foil {
+        animation-delay: 0s;
+      }
+      .ticket.is-reset::after,
+      .ticket.is-reset .foil {
+        animation: none;
+      }
+      .ticket__head {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 22px 20px 0;
+      }
+      .ticket__head .tile-ico {
+        color: var(--green-300);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      }
+      .ticket__kind {
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--green-300);
+      }
+      .ticket__title {
+        margin-top: 2px;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.12;
+        letter-spacing: -0.025em;
+        color: #fff;
+      }
+      .ticket__sub {
+        margin-top: 3px;
+        font-size: 13px;
+        color: #b3b3b3;
+      }
+      /* foil seal: iridescent, turns with the pointer */
+      .foil {
+        flex: none;
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 52px;
+        height: 52px;
+        margin-left: auto;
+        border-radius: 50%;
+        background: conic-gradient(from var(--ha, 0deg), #38eb7f, #4a3aff, #ca18c3, #f2a33a, #f6e58d, #38eb7f);
+        box-shadow:
+          inset 0 0 0 3px rgba(255, 255, 255, 0.35),
+          0 8px 16px -8px rgba(0, 0, 0, 0.6);
+        animation: foil-turn 2.6s cubic-bezier(0.2, 0.7, 0.2, 1) 1.2s 1;
+      }
+      .ticket.is-tilting .foil {
+        animation: none;
+      }
+      @property --ha {
+        syntax: '<angle>';
+        inherits: true;
+        initial-value: 0deg;
+      }
+      @keyframes foil-turn {
+        to {
+          --ha: 360deg;
+        }
+      }
+      .foil::before {
+        content: '';
+        position: absolute;
+        inset: 6px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.05) 60%);
+        mix-blend-mode: soft-light;
+      }
+      .foil .flag {
+        position: relative;
+        width: 16px;
+        height: 24px;
+        color: #1f1f1f;
+      }
+      .ticket__facts {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.35fr 1fr 1fr;
+        gap: 8px;
+        margin: 18px 20px 0;
+      }
+      .ticket__facts div {
+        display: grid;
+        gap: 2px;
+      }
+      .ticket__facts dt {
+        font-size: 11.5px;
+        color: #a8a8a8;
+      }
+      .ticket__facts dd {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      /* countdown to tee time */
+      .count {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin: 16px 20px 0;
+      }
+      .count__cell {
+        display: grid;
+        justify-items: center;
+        padding: 8px 0 7px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.07);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+      }
+      .count__v {
+        display: block;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .count__v.tick {
+        animation: tick 420ms var(--ease) both;
+      }
+      @keyframes tick {
+        from {
+          transform: translateY(-45%);
+          opacity: 0.3;
+        }
+      }
+      .count__k {
+        font-size: 10.5px;
+        color: #a8a8a8;
+      }
+      .count-note {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 16px 20px 0;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 13.5px;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.07);
+      }
+      .count-note .i {
+        color: var(--green-300);
+      }
+      .ticket__cut {
+        position: relative;
+        height: 34px;
+      }
+      .ticket__cut::before {
+        content: '';
+        position: absolute;
+        left: 22px;
+        right: 22px;
+        top: 50%;
+        border-top: 2px dashed rgba(255, 255, 255, 0.16);
+      }
+      .ticket__qr {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 10px;
+        padding: 0 20px 22px;
+        text-align: center;
+      }
+      .ticket .qr {
+        position: relative;
+        width: 172px;
+        height: 172px;
+        padding: 12px;
+        border-radius: 20px;
+        box-shadow: 0 16px 30px -14px rgba(0, 0, 0, 0.7);
+        overflow: hidden;
+      }
+      .ticket .qr svg {
+        animation: print 900ms var(--ease) 650ms both;
+      }
+      @keyframes print {
+        from {
+          clip-path: inset(0 0 100% 0);
+        }
+        to {
+          clip-path: inset(0 0 0 0);
+        }
+      }
+      .ticket .qr::after {
+        /* one scan line passing over the code once it has printed */
+        content: '';
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        top: 0;
+        height: 3px;
+        border-radius: 3px;
+        background: var(--green-400);
+        box-shadow: 0 0 14px 3px rgba(56, 235, 127, 0.55);
+        opacity: 0;
+        animation: scan 1400ms var(--ease) 1500ms both;
+      }
+      @keyframes scan {
+        0% {
+          top: 6px;
+          opacity: 0;
+        }
+        15% {
+          opacity: 1;
+        }
+        85% {
+          opacity: 1;
+        }
+        100% {
+          top: calc(100% - 9px);
+          opacity: 0;
+        }
+      }
+      .qr__stamp {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--green-700);
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+      }
+      .qr__stamp .i {
+        width: 54px;
+        height: 54px;
+        stroke-width: 1.6;
+        color: var(--green-600);
+      }
+      .qr__stamp.is-void {
+        color: #b42318;
+      }
+      .ticket__code {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 44px;
+        padding: 0 6px 0 14px;
+        border-radius: 14px;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        font-variant-numeric: tabular-nums;
+        color: #fff;
+        transition: background var(--t-fast) var(--ease);
+      }
+      .ticket__code:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .ticket__code .i {
+        width: 18px;
+        height: 18px;
+        color: #a8a8a8;
+        margin-left: 4px;
+      }
+      .ticket__hint {
+        max-width: 250px;
+        margin-top: -6px;
+        font-size: 13px;
+        line-height: 1.4;
+        color: #b3b3b3;
+      }
+      .ticket.is-past .qr svg,
+      .ticket.is-void .qr svg {
+        opacity: 0.25;
+        animation: none;
+      }
+      .ticket.is-past .qr::after,
+      .ticket.is-void .qr::after {
+        display: none;
+      }
+
+      /* details card */
+      .facts-card {
+        display: grid;
+        padding: 4px 18px;
+      }
+      .fact {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 0;
+      }
+      .fact + .fact {
+        border-top: 1px solid var(--line);
+      }
+      .fact > .i {
+        margin-top: 1px;
+        color: var(--ink-3);
+      }
+      .fact__k {
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .fact__v {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .fact__s {
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .fact__players {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .fact__end {
+        margin-left: auto;
+        text-align: right;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .stats div {
+        display: grid;
+        gap: 2px;
+        padding: 12px 10px;
+        border-radius: 16px;
+        background: var(--sunken);
+      }
+      .stats dt {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .stats dd {
+        font-size: 18px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* action rows */
+      .act {
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+      }
+      .act .i--chev {
+        color: var(--ink-4);
+      }
+      .act--danger .row__title {
+        color: #b42318;
+      }
+      .act--danger .tile-ico {
+        color: #b42318;
+        background: var(--red-50);
+      }
+
+      /* bottom bar: check-in with its reason */
+      .bottom-bar .reason {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+        text-align: center;
+      }
+      .bottom-bar .reason .i {
+        width: 15px;
+        height: 15px;
+      }
+      .btn .spin {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #fff;
+        animation: spin 700ms linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .fx-pop {
+        animation: pop 520ms var(--ease-spring) both;
+      }
+      .btn.is-done {
+        color: var(--green-700);
+        background: var(--green-50);
+        box-shadow: none;
+      }
+      .btn.is-done .i {
+        color: var(--green-600);
+      }
+
+      /* ---------- cancel sheet ---------- */
+      .cx-sum {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 14px;
+        border-radius: 18px;
+        background: var(--sunken);
+      }
+      .policy {
+        display: flex;
+        gap: 12px;
+        margin-top: 14px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+      }
+      .policy > .i {
+        flex: none;
+        margin-top: 1px;
+      }
+      .policy.is-ok > .i {
+        color: var(--green-600);
+      }
+      .policy.is-late {
+        background: var(--amber-50);
+        box-shadow: none;
+      }
+      .policy.is-late > .i {
+        color: #a35f00;
+      }
+      .policy__t {
+        font-size: 14.5px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .policy__s {
+        margin-top: 3px;
+        font-size: 13.5px;
+        color: var(--ink-2);
+      }
+      .cx-note {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 14px 2px 0;
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .cx-actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      /* hold-to-confirm */
+      .hold {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 56px;
+        border-radius: var(--r-lg);
+        font-size: 16px;
+        font-weight: 600;
+        color: #b42318;
+        background: var(--red-50);
+        overflow: hidden;
+        isolation: isolate;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .hold__fill {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(90deg, #d92d20, var(--red-500));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 380ms var(--ease);
+      }
+      .hold.is-holding {
+        transform: scale(0.985);
+      }
+      .hold.is-holding .hold__fill {
+        transform: scaleX(1);
+        transition: transform var(--hold, 900ms) linear;
+      }
+      .hold.is-holding,
+      .hold.is-done {
+        color: #fff;
+        transition:
+          color 200ms var(--ease) 250ms,
+          transform var(--t-fast) var(--ease);
+      }
+      .hold.is-done .hold__fill {
+        transform: scaleX(1);
+      }
+      .hold__hint {
+        font-size: 12.5px;
+        color: var(--ink-3);
+        text-align: center;
+        margin-top: -2px;
+      }
+      .hold.shake {
+        animation: shake 360ms var(--ease);
+      }
+      @keyframes shake {
+        25% {
+          transform: translateX(-5px);
+        }
+        50% {
+          transform: translateX(4px);
+        }
+        75% {
+          transform: translateX(-2px);
+        }
+      }
+      .cx-done {
+        display: grid;
+        justify-items: center;
+        gap: 8px;
+        padding: 18px 0 12px;
+        text-align: center;
+      }
+      .cx-done .draw-check {
+        width: 76px;
+        height: 76px;
+        stroke-width: 1.4;
+        color: var(--green-600);
+      }
+      .cx-done .t-h2 {
+        animation: rise 500ms var(--ease) 300ms both;
+      }
+      .cx-done p {
+        animation: rise 500ms var(--ease) 420ms both;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pulse::after,
+        .foil,
+        .ticket::after,
+        .ticket .qr::after {
+          animation: none !important;
+        }
+        .ticket .qr svg {
+          animation: none !important;
+          clip-path: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="bar rise">
+          <a class="icon-btn" id="back" href="home.html" data-back aria-label="Voltar"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title" id="title">Minhas reservas</h1>
+          <a class="icon-btn" id="bar-act" href="reservar.html" aria-label="Nova reserva"><span data-icon="calendar-add"></span></a>
+        </header>
+        <div id="view"></div>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 5" id="bottom" hidden></div>
+
+      <!-- cancel confirmation -->
+      <div class="sheet" id="cx-sheet" role="dialog" aria-modal="true" aria-labelledby="cx-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="cx-title">Cancelar reserva?</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="cx-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const esc = GH.esc;
+        const F = GH.fmt;
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const q = new URLSearchParams(location.search);
+        const view = $('view'),
+          bottom = $('bottom');
+        const EMPTY = q.has('vazio');
+        const DEMO_TODAY = q.has('hoje');
+        const DEMO_CHECKIN = q.has('checkin');
+
+        /* ---------- data ---------- */
+        const hash = (s) => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+        const ALPHA = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+        const codeFor = (s) => {
+          let h = hash(s),
+            out = '';
+          for (let i = 0; i < 4; i++) (out += ALPHA[h % ALPHA.length]), (h = Math.floor(h / ALPHA.length) + 7919 * (i + 1));
+          return 'GH-' + out;
+        };
+        const startOfToday = () => {
+          const d = new Date();
+          d.setHours(0, 0, 0, 0);
+          return d;
+        };
+        const dayDiff = (d) => Math.round((new Date(d).setHours(0, 0, 0, 0) - startOfToday()) / 864e5);
+
+        function load() {
+          if (EMPTY) return [];
+          const seen = new Set();
+          let list = [...(GH.store.get('bookings', []) || []), ...GH.bookings]
+            .filter((b) => b && b.id && !seen.has(b.id) && seen.add(b.id))
+            .map((b) => ({ ...b, date: new Date(b.date) }));
+          /* sign-ups saved without a booking (e.g. a free event) still show up */
+          (GH.store.get('entries', []) || []).forEach((ref) => {
+            if (list.some((b) => b.ref === ref || b.id === ref)) return;
+            const t = GH.tournaments.find((x) => x.id === ref);
+            const e = GH.events.find((x) => x.id === ref);
+            const src = t || e;
+            if (src) list.push({ id: 'en-' + ref, kind: t ? 'torneio' : 'evento', ref, date: new Date(src.date), status: 'confirmada', code: codeFor(ref), total: t ? t.fee : e.fee, method: 'conta' });
+          });
+          const cx = GH.store.get('cancelled', []) || [];
+          list.forEach((b) => (b.cancelled = cx.includes(b.id)));
+          /* recent rounds = played tee times */
+          const sameDay = (a, b) => new Date(a).toDateString() === new Date(b).toDateString();
+          GH.rounds.forEach((r) =>
+            list.push({ id: r.id, kind: 'round', course: r.course, date: new Date(r.date), round: r, status: 'jogada', code: codeFor(r.id), players: [GH.user, 'caio', 'lucas'], cart: GH.membership.extras.some((x) => sameDay(x.date, r.date)) })
+          );
+          /* ?hoje=1: the opened booking happens today (so check-in is open) */
+          if (DEMO_TODAY && q.get('id')) {
+            const b = list.find((x) => x.id === q.get('id'));
+            if (b) {
+              const d = new Date();
+              d.setHours(b.date.getHours(), b.date.getMinutes(), 0, 0);
+              if (d - Date.now() < 30 * 6e4) {
+                d.setTime(Date.now() + 75 * 6e4);
+                d.setMinutes(Math.ceil(d.getMinutes() / 10) * 10, 0, 0);
+              }
+              b.date = d;
+            }
+          }
+          return list;
+        }
+        let ALL = load();
+        const checkins = () => GH.store.get('checkins', []) || [];
+        const isChecked = (b) => (DEMO_CHECKIN && b.id === q.get('id')) || checkins().includes(b.id);
+        const isUpcoming = (b) => b.kind !== 'round' && !b.cancelled && dayDiff(b.date) >= 0;
+
+        const playersOf = (b) => {
+          if (Array.isArray(b.players)) return b.players;
+          const n = Number(b.players || b.jogadores || 0);
+          return n > 1 ? [GH.user, ...Array(n - 1).fill(null)] : n === 1 ? [GH.user] : [];
+        };
+        const methodLabel = (m) => {
+          const c = GH.membership.card;
+          const last4 = GH.store.get('defaultCard') || c.last4;
+          if (m === 'pix') return 'Pix';
+          if (m === 'conta') return 'Lançado na mensalidade';
+          return `${cap(c.brand.toLowerCase())} •••• ${last4}`;
+        };
+        const refundText = (b) => {
+          if (!b.total) return 'Esta reserva não tem custo.';
+          if (b.method === 'pix') return `Devolvemos ${F.brl(b.total)} por Pix na hora.`;
+          if (b.method === 'conta') return `${F.brl(b.total)} sai da sua próxima mensalidade.`;
+          return `Estorno de ${F.brl(b.total)} no ${methodLabel('card')} em até 5 dias úteis.`;
+        };
+        const PRO_PLACE = { marco: 'Driving range · baia 1', helena: 'Putting green', rafael: 'Driving range · baia 2' };
+
+        /* what a booking is, in words */
+        function describe(b) {
+          const c = GH.course(b.course);
+          const ps = playersOf(b);
+          switch (b.kind) {
+            case 'tee':
+              return {
+                kind: 'Horário de saída', icon: 'flag', tone: '', short: 'Saída', name: c.name,
+                sub: c.kind, place: `${c.name} · saída no tee do buraco 1`, hint: 'Chegue 20 min antes para aquecer no range.',
+                detail: [ps.length && F.plural(ps.length, 'jogador', 'jogadores'), b.cart && 'carrinho'].filter(Boolean).join(' · '),
+                again: `reservar.html?campo=${c.id}`, unit: 'Saída',
+              };
+            case 'range': {
+              const n = Number(b.buckets || b.baldes || b.qty || 1);
+              return { kind: 'Driving range', icon: 'routing-2', tone: 'sky', short: 'Range', name: 'Driving range', title: 'Driving range', sub: F.plural(n, 'balde', 'baldes') + ' de 60 bolas', place: 'Driving range · baia 12', hint: 'Retire os baldes no balcão do range.', detail: F.plural(n, 'balde', 'baldes'), again: 'reservar.html?campo=range', unit: 'Horário' };
+            }
+            case 'aula': {
+              const p = GH.person(b.pro || 'marco');
+              const pro = GH.pros.find((x) => x.id === p.id) || {};
+              return { kind: 'Aula', icon: 'teacher', tone: 'violet', short: 'Aula', name: `Aula com ${p.name}`, title: `Aula · ${p.name}`, sub: `${b.topic || pro.focus || 'Aula particular'} · ${b.dur || 60} min`, place: PRO_PLACE[p.id] || 'Driving range', hint: 'Chegue 10 min antes. Tacos da escola sem custo.', detail: b.topic || pro.focus || p.name, again: `aulas.html?pro=${p.id}`, unit: 'Início', pro: p.id };
+            }
+            case 'torneio': {
+              const t = GH.tournaments.find((x) => x.id === b.ref) || GH.tournaments[0];
+              return { kind: 'Torneio', icon: 'cup', tone: 'amber', short: 'Torneio', name: t.name, sub: t.format, place: `${GH.course(t.course).name} · saída em shotgun`, hint: 'Credenciamento no clubhouse 45 min antes.', detail: t.format.split(' · ')[0], again: `torneios.html?id=${t.id}`, unit: 'Largada' };
+            }
+            case 'evento': {
+              const e = GH.events.find((x) => x.id === b.ref) || GH.events[0];
+              const n = Number(b.qty || b.qtd || 1);
+              return { kind: 'Evento', icon: 'ticket-star', tone: 'indigo', short: 'Evento', name: e.name, sub: e.host ? `com ${GH.person(e.host).name}` : e.place, place: e.place, hint: '', detail: n > 1 ? F.plural(n, 'ingresso', 'ingressos') : e.place, again: `torneios.html?id=${e.id}`, unit: 'Início', seats: n };
+            }
+            case 'loja': {
+              const items = (b.items || []).map((it) => ({ ...(GH.shop.find((s) => s.id === it.id) || { name: it.id }), qty: it.qty || 1 }));
+              const n = items.reduce((a, it) => a + it.qty, 0) || 1;
+              return { kind: 'Pedido da loja', icon: 'shop', tone: 'dark', short: 'Loja', name: 'Pedido da loja', title: 'Pedido da loja', sub: items.map((it) => `${it.qty}× ${it.name}`).join(', ') || 'Pro shop', place: 'Pro shop · retirada no balcão', hint: 'Mostre o código no balcão para retirar.', detail: F.plural(n, 'item', 'itens'), again: 'loja.html', unit: 'Pedido', items };
+            }
+            case 'round': {
+              const r = b.round;
+              return { kind: 'Rodada jogada', icon: 'flag', tone: '', short: 'Rodada', name: c.name, sub: `${r.holes} buracos · ${r.strokes} tacadas`, place: `${c.name} · tee branco`, hint: '', detail: `${r.strokes} tacadas`, again: `reservar.html?campo=${c.id}`, unit: 'Saída' };
+            }
+          }
+          return { kind: 'Reserva', icon: 'calendar-tick', tone: '', short: 'Reserva', name: 'Reserva', sub: '', place: '', detail: '', again: 'reservar.html', unit: 'Horário' };
+        }
+        const when = (d) => `${F.dayLabel(d)}, ${F.time(d)}`;
+        /* compact past date: "Sáb, 17 out" (list is already grouped by month) */
+        const shortDay = (d) => (Math.abs(dayDiff(d)) <= 1 ? F.dayLabel(d) : `${cap(F.weekdayShort(d))}, ${new Date(d).getDate()} ${F.monthShort(d)}`);
+        const countdown = (d) => {
+          let m = Math.max(0, Math.round((d - Date.now()) / 6e4));
+          const days = Math.floor(m / 1440);
+          m -= days * 1440;
+          const h = Math.floor(m / 60),
+            mi = m % 60;
+          if (days) return `em ${F.plural(days, 'dia', 'dias')}${h ? ` ${h} h` : ''}`;
+          if (h) return `em ${h} h${mi ? ` ${mi} min` : ''}`;
+          return mi ? `em ${mi} min` : 'agora';
+        };
+        const badge = (b) => {
+          if (b.cancelled) return `<span class="badge badge--red">Cancelada</span>`;
+          if (b.kind === 'round') return `<span class="badge">Jogada</span>`;
+          if (!isUpcoming(b)) return `<span class="badge">Concluída</span>`;
+          if (isChecked(b)) return `<span class="badge badge--green">${GH.icon('tick-circle', 'i--xs')}Check-in</span>`;
+          if (dayDiff(b.date) === 0) return `<span class="badge badge--dark">Hoje</span>`;
+          // Confirmed is the norm in Próximas: no badge, so title and countdown keep the full row width at 390.
+          return '';
+        };
+
+        /* ---------- list ---------- */
+        let tab = q.get('tab') === 'anteriores' ? 'anteriores' : 'proximas';
+        let leavingId = null;
+
+        function rowHTML(b, i) {
+          const d = describe(b);
+          const sub = b.kind === 'round' || !isUpcoming(b) ? `${shortDay(b.date)} · ${d.detail || F.time(b.date)}` : `${when(b.date)}${d.detail ? ' · ' + d.detail : ''}`;
+          return `<li class="reveal${b.id === leavingId ? ' leaving' : ''}" style="--d:${i}" data-id="${esc(b.id)}">
+            <a class="row press${b.cancelled ? ' is-cancelled' : ''}" href="reservas.html?id=${encodeURIComponent(b.id)}">
+              <span class="tile-ico${d.tone ? ' tile-ico--' + d.tone : ''}">${GH.icon(d.icon)}</span>
+              <span class="row__body"><span class="row__title">${esc(d.title || d.short + ' · ' + d.name)}</span><span class="row__sub">${esc(sub)}</span></span>
+              <span class="row__end">${badge(b)}${GH.icon('arrow-right-2', 'i--sm')}</span>
+            </a></li>`;
+        }
+        function passDay(date) {
+          const dl = F.dayLabel(date);
+          const wd = F.weekday(date).replace('-feira', '');
+          return dl === 'Hoje' || dl === 'Amanhã' ? `${dl}, ${wd}` : `${cap(wd)}, ${F.long(date)}`;
+        }
+        function passHTML(b) {
+          const d = describe(b);
+          const ps = playersOf(b).filter(Boolean);
+          return `<div class="pass-wrap reveal"><a class="pass" href="reservas.html?id=${encodeURIComponent(b.id)}" aria-label="Próxima reserva: ${esc(d.kind)}, ${esc(d.name)}, ${when(b.date)}. Abrir voucher">
+            <span class="pass__main">
+              <span class="pass__k"><span class="pulse" aria-hidden="true"></span><span data-until="${b.date.toISOString()}">Próxima · ${countdown(b.date)}</span></span>
+              <span>
+                <span class="pass__time">${F.time(b.date)}</span>
+                <span class="pass__day">${passDay(b.date)}</span>
+                <span class="pass__place">${esc(d.title || d.short + ' · ' + d.name)}</span>
+              </span>
+              ${ps.length > 1 ? GH.stack(ps.slice(0, 4), ps.length) : ''}
+            </span>
+            <span class="pass__stub" aria-hidden="true"><span class="pass__qr">${GH.qr(b.code)}</span><span class="pass__code">${esc(b.code)}</span></span>
+          </a></div>`;
+        }
+        function emptyHTML(which) {
+          const up = which === 'proximas';
+          return `<div class="empty">
+            <span class="tile-ico${up ? '' : ' tile-ico--indigo'}">${GH.icon(up ? 'calendar-add' : 'receipt-text', 'i--lg')}</span>
+            <p class="t-h3">${up ? 'Nenhuma reserva por vir' : 'Nada por aqui ainda'}</p>
+            <p class="t-sm">${up ? 'Reserve um horário de saída, uma baia no range ou uma aula. Tudo aparece aqui com o voucher.' : 'Suas rodadas e reservas passadas ficam guardadas aqui.'}</p>
+            <a class="btn btn--primary" href="reservar.html">${GH.icon('calendar-add')}Reservar horário</a>
+          </div>`;
+        }
+        function renderList(dir = 0) {
+          document.title = 'Minhas reservas · GolfHub';
+          $('title').textContent = 'Minhas reservas';
+          $('back').href = 'home.html';
+          $('bar-act').outerHTML = `<a class="icon-btn" id="bar-act" href="reservar.html" aria-label="Nova reserva">${GH.icon('calendar-add')}</a>`;
+
+          const up = ALL.filter(isUpcoming).sort((a, b) => a.date - b.date);
+          if (leavingId) {
+            const gone = ALL.find((b) => b.id === leavingId);
+            if (gone) {
+              const at = up.findIndex((b) => b.date > gone.date);
+              up.splice(at === -1 ? up.length : at, 0, { ...gone, cancelled: false });
+            }
+          }
+          const past = ALL.filter((b) => !isUpcoming(b)).sort((a, b) => b.date - a.date);
+          const list = tab === 'proximas' ? up : past;
+
+          let body = '';
+          if (!list.length) body = emptyHTML(tab);
+          else if (tab === 'proximas') {
+            const [first, ...rest] = list;
+            const firstIsLeaving = first.id === leavingId;
+            body = (firstIsLeaving ? '' : passHTML(first)) + `<section class="group" aria-label="Próximas reservas"><h2 class="group__label">${firstIsLeaving ? 'Próximas' : rest.length ? 'Depois' : ''}</h2><ul class="rows">${(firstIsLeaving ? list : rest).map(rowHTML).join('')}</ul></section>`;
+            if (!firstIsLeaving && !rest.length) body = passHTML(first);
+          } else {
+            const groups = [];
+            list.forEach((b) => {
+              const k = cap(F.month(b.date)) + (b.date.getFullYear() !== new Date().getFullYear() ? ' de ' + b.date.getFullYear() : '');
+              const g = groups.find((x) => x.k === k);
+              g ? g.items.push(b) : groups.push({ k, items: [b] });
+            });
+            body = groups.map((g) => `<section class="group" aria-label="${g.k}"><h2 class="group__label">${g.k}</h2><ul class="rows">${g.items.map(rowHTML).join('')}</ul></section>`).join('');
+          }
+
+          view.innerHTML = `<div class="seg rise" style="--d: 1" role="tablist" aria-label="Reservas">
+              <button type="button" role="tab" id="tab-proximas" aria-controls="panel" aria-selected="${tab === 'proximas'}">Próximas${up.length - (leavingId ? 1 : 0) ? `<span class="seg__n">${up.length - (leavingId ? 1 : 0)}</span>` : ''}</button>
+              <button type="button" role="tab" id="tab-anteriores" aria-controls="panel" aria-selected="${tab === 'anteriores'}">Anteriores</button>
+            </div>
+            <div id="panel" role="tabpanel" aria-labelledby="tab-${tab}" class="${dir ? 'panel-in' : ''}" style="--from:${dir * 18}px">${body}</div>`;
+
+          bottom.hidden = !list.length;
+          bottom.innerHTML = `<a class="btn btn--primary btn--block" href="reservar.html">${GH.icon('calendar-add')}Nova reserva</a>`;
+
+          view.querySelectorAll('[role="tab"]').forEach((t) =>
+            t.addEventListener('click', () => {
+              const next = t.id.replace('tab-', '');
+              if (next === tab) return;
+              const d = next === 'anteriores' ? 1 : -1;
+              tab = next;
+              history.replaceState(null, '', tab === 'anteriores' ? '?tab=anteriores' : 'reservas.html');
+              renderList(d);
+              $('tab-' + tab).focus();
+            })
+          );
+          view.querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
+            if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+            const other = $(tab === 'proximas' ? 'tab-anteriores' : 'tab-proximas');
+            other.click();
+          });
+          GH.reveal(view);
+
+          /* the row of a booking just cancelled slides away */
+          if (leavingId) {
+            const li = view.querySelector(`.leaving`);
+            if (li) {
+              li.classList.add('is-in');
+              li.style.maxHeight = li.offsetHeight + 'px';
+              requestAnimationFrame(() => requestAnimationFrame(() => li.classList.add('is-gone')));
+              setTimeout(() => {
+                leavingId = null;
+                renderList();
+              }, 1100);
+            } else leavingId = null;
+          }
+        }
+
+        /* ---------- detail ---------- */
+        let timer;
+        function renderDetail(b) {
+          const d = describe(b);
+          const past = !isUpcoming(b);
+          const ps = playersOf(b);
+          const named = ps.filter(Boolean);
+          const checked = isChecked(b);
+          const today = dayDiff(b.date) === 0;
+          document.title = `${d.name} · Voucher · GolfHub`;
+          $('title').textContent = b.kind === 'round' ? 'Rodada' : 'Voucher';
+          $('back').href = past ? 'reservas.html?tab=anteriores' : 'reservas.html';
+          $('bar-act').outerHTML = `<button class="icon-btn" id="bar-act" type="button" aria-label="Compartilhar voucher">${GH.icon('share')}</button>`;
+          $('bar-act').addEventListener('click', () => share(b));
+
+          const dateCell = `${cap(F.weekdayShort(b.date))}, ${b.date.getDate()} ${F.monthShort(b.date)}`;
+          const third =
+            b.kind === 'tee' || b.kind === 'round'
+              ? ['Jogadores', String(ps.length || 1)]
+              : b.kind === 'aula'
+                ? ['Duração', `${b.dur || 60} min`]
+                : b.kind === 'range'
+                  ? ['Baldes', String(b.buckets || b.baldes || b.qty || 1)]
+                  : b.kind === 'evento'
+                    ? ['Ingressos', String(d.seats || 1)]
+                    : b.kind === 'loja'
+                      ? ['Itens', String((d.items || []).reduce((a, it) => a + it.qty, 0) || 1)]
+                      : ['Buracos', ((GH.tournaments.find((t) => t.id === b.ref) || GH.tournaments[0]).format.match(/(\d+) buracos/) || [])[1] || '18'];
+
+          const status = b.cancelled ? 'is-void' : past ? 'is-past' : '';
+          const stamp = b.cancelled
+            ? `<span class="qr__stamp is-void">${GH.icon('close-circle')}Cancelado</span>`
+            : b.kind === 'round' || past
+              ? `<span class="qr__stamp">${GH.icon('tick-circle')}Utilizado</span>`
+              : checked
+                ? `<span class="qr__stamp">${GH.icon('tick-circle')}Check-in feito</span>`
+                : '';
+          const hint = b.cancelled
+            ? 'Este voucher foi cancelado e não vale mais.'
+            : past
+              ? `Usado em ${F.longYear(b.date)}.`
+              : b.kind === 'loja'
+                ? 'Mostre no balcão da loja para retirar.'
+                : 'Mostre na recepção ou faça check-in pelo app';
+
+          /* countdown cells (upcoming), or a note */
+          let timeBlock = '';
+          if (!past && !checked) {
+            timeBlock = `<div class="count" aria-hidden="true">${['dias', 'h', 'min', 's'].map((k) => `<span class="count__cell"><span class="count__v" data-c="${k}">00</span><span class="count__k">${k === 'dias' ? 'dias' : k === 'h' ? 'horas' : k === 'min' ? 'min' : 'seg'}</span></span>`).join('')}</div>
+              <p class="sr-only" id="count-sr">${d.unit} ${countdown(b.date)}</p>`;
+          } else if (checked && !past) {
+            timeBlock = `<p class="count-note">${GH.icon('location-tick')}Você está no clube. Bom jogo!</p>`;
+          } else if (b.kind === 'round') {
+            timeBlock = `<p class="count-note">${GH.icon('medal-star')}${esc(b.round.best)}</p>`;
+          }
+
+          const extras = [b.cart && ['car', 'Carrinho elétrico', GH.prices.cart], b.clubs && ['bag-2', 'Aluguel de tacos', GH.prices.clubs]].filter(Boolean);
+          const guests = Number(b.guests || b.convidados || 0);
+          const names = named.map((id) => (id === GH.user ? 'Você' : GH.first(id)));
+          const nameList = names.length > 1 ? names.slice(0, -1).join(', ') + ' e ' + names[names.length - 1] : names[0] || 'Você';
+
+          let facts = '';
+          if (ps.length && (b.kind === 'tee' || b.kind === 'round')) {
+            facts += `<div class="fact">${GH.icon('profile-2-user')}<div style="flex:1;min-width:0"><p class="fact__k">Jogadores</p><p class="fact__v">${esc(nameList)}${ps.length > named.length ? ` + ${ps.length - named.length}` : ''}</p>${guests ? `<p class="fact__s">${F.plural(guests, 'convidado', 'convidados')} · green fee ${F.brl(GH.prices.greenFeeGuest)} cada</p>` : ''}</div>${named.length > 1 ? GH.stack(named.slice(0, 4), ps.length) : ''}</div>`;
+          }
+          if (b.kind === 'aula') {
+            const p = GH.person(d.pro);
+            const pro = GH.pros.find((x) => x.id === p.id) || {};
+            facts += `<div class="fact">${GH.icon('teacher')}<div style="flex:1"><p class="fact__k">Professor</p><p class="fact__v">${esc(p.name)}</p><p class="fact__s">${esc(pro.title || '')}${pro.rating ? ' · nota ' + F.num(pro.rating, 1) : ''}</p></div>${GH.avatar(p.id, { size: 'md' })}</div>`;
+          }
+          if (b.kind === 'loja' && d.items && d.items.length) {
+            facts += `<div class="fact">${GH.icon('bag-2')}<div style="flex:1"><p class="fact__k">Itens</p>${d.items.map((it) => `<p class="fact__v">${it.qty}× ${esc(it.name)}</p>`).join('')}</div></div>`;
+          }
+          facts += `<div class="fact">${GH.icon('location')}<div><p class="fact__k">Local</p><p class="fact__v">${esc(d.place)}</p>${d.hint && !past ? `<p class="fact__s">${esc(d.hint)}</p>` : ''}</div></div>`;
+          if (b.kind === 'tee' || b.kind === 'round') {
+            facts += `<div class="fact">${GH.icon('car')}<div><p class="fact__k">Extras</p><p class="fact__v">${extras.length ? extras.map((x) => x[1]).join(' · ') : 'Sem extras'}</p>${b.kind === 'tee' ? '<p class="fact__s">Sócios não pagam green fee.</p>' : ''}</div></div>`;
+          }
+          if (b.kind !== 'round') {
+            facts += `<div class="fact">${GH.icon(b.method === 'pix' ? 'scan-barcode' : b.method === 'conta' ? 'receipt-text' : 'card')}<div><p class="fact__k">Pagamento</p><p class="fact__v">${b.total ? F.brl(b.total) : 'Sem custo'}</p><p class="fact__s">${b.total ? methodLabel(b.method) : 'Incluído na sua assinatura'}</p></div>${b.cancelled && b.total ? '<span class="badge badge--green fact__end">Estornado</span>' : ''}</div>`;
+          }
+
+          let stats = '';
+          if (b.kind === 'round') {
+            const r = b.round;
+            const par = GH.course(r.course).par;
+            stats = `<section class="section reveal"><div class="section__head"><h2 class="section__title">Sua rodada</h2><a class="link" href="cartao.html">Cartão</a></div>
+              <dl class="stats">
+                <div><dt>Tacadas</dt><dd class="num">${r.strokes}</dd></div>
+                <div><dt>Ao par</dt><dd class="num">${F.toPar(r.strokes - par)}</dd></div>
+                <div><dt>Putts</dt><dd class="num">${r.putts}</dd></div>
+                <div><dt>Fairways</dt><dd class="num">${r.fairways[0]}/${r.fairways[1]}</dd></div>
+              </dl></section>`;
+          }
+
+          const actions = [];
+          if (!past) {
+            if (b.kind !== 'loja') actions.push(['agenda', 'calendar-add', 'Adicionar à agenda', 'Lembrete 1 h antes', '']);
+            if (b.kind === 'tee' || b.kind === 'range') actions.push(['invite', 'profile-add', 'Convidar jogadores', 'Mande o link para seus parceiros', 'violet']);
+            if (b.kind === 'torneio' || b.kind === 'evento') actions.push(['invite', 'profile-add', 'Convidar amigos', 'Compartilhe o evento', 'violet']);
+            if (b.kind === 'aula') actions.push(['soon', 'message', 'Falar com o professor', 'Combine o foco da aula', 'violet']);
+            actions.push(['cancel', 'trash', b.kind === 'loja' ? 'Cancelar pedido' : 'Cancelar reserva', 'Grátis até 24 h antes', 'danger']);
+          }
+
+          view.innerHTML = `
+            <div class="ticket-stage"><div class="ticket-wrap">
+              <article class="ticket ${status}" id="ticket" aria-label="Voucher ${esc(b.code)}">
+                <div class="ticket__head">
+                  <span class="tile-ico">${GH.icon(d.icon)}</span>
+                  <div style="min-width:0">
+                    <p class="ticket__kind">${esc(d.kind)}</p>
+                    <h2 class="ticket__title">${esc(d.name)}</h2>
+                    <p class="ticket__sub">${esc(d.sub)}</p>
+                  </div>
+                  <span class="foil" aria-hidden="true">${GH.flag()}</span>
+                </div>
+                <dl class="ticket__facts">
+                  <div><dt>Data</dt><dd>${esc(dateCell)}</dd></div>
+                  <div><dt>${esc(d.unit)}</dt><dd>${F.time(b.date)}</dd></div>
+                  <div><dt>${esc(third[0])}</dt><dd>${esc(third[1])}</dd></div>
+                </dl>
+                ${timeBlock}
+                <div class="ticket__cut" id="cut" aria-hidden="true"></div>
+                <div class="ticket__qr">
+                  <div class="qr">${GH.qr(b.code, `QR do voucher ${b.code}`)}${stamp}</div>
+                  <button class="ticket__code" type="button" id="copy" aria-label="Copiar código ${esc(b.code)}">${esc(b.code)}${GH.icon('copy')}</button>
+                  <p class="ticket__hint">${esc(hint)}</p>
+                </div>
+              </article>
+            </div></div>
+            ${stats}
+            <section class="section reveal" aria-labelledby="facts-title"><h2 class="section__title" id="facts-title">Detalhes</h2><div class="card facts-card">${facts}</div></section>
+            ${
+              actions.length
+                ? `<section class="section reveal" aria-label="Ações"><ul class="rows">${actions
+                    .map(
+                      ([k, ico, label, sub, tone]) => `<li><button class="row act press${tone === 'danger' ? ' act--danger' : ''}" type="button" data-act="${k}"${k === 'soon' ? ` data-soon="Mensagens"` : ''}${k === 'cancel' ? ' aria-haspopup="dialog"' : ''}>
+                      <span class="tile-ico${tone && tone !== 'danger' ? ' tile-ico--' + tone : ''}">${GH.icon(ico)}</span>
+                      <span class="row__body"><span class="row__title">${label}</span><span class="row__sub">${sub}</span></span>${GH.icon('arrow-right-2', 'i--sm i--chev')}</button></li>`
+                    )
+                    .join('')}</ul></section>`
+                : ''
+            }`;
+
+          /* bottom bar: check-in (only on the day) or book again */
+          bottom.hidden = false;
+          if (b.cancelled || past) {
+            bottom.innerHTML = `<a class="btn btn--primary btn--block" href="${d.again}">${GH.icon('refresh-2')}${b.kind === 'aula' ? 'Marcar outra aula' : b.kind === 'loja' ? 'Voltar à loja' : 'Reservar de novo'}</a>`;
+          } else if (b.kind === 'loja') {
+            bottom.innerHTML = `<a class="btn btn--primary btn--block" href="loja.html">${GH.icon('shop')}Ver a loja</a>`;
+          } else if (checked) {
+            bottom.innerHTML = `<button class="btn btn--block is-done" type="button" disabled>${GH.icon('tick-circle')}Check-in feito</button>`;
+          } else if (today) {
+            bottom.innerHTML = `<button class="btn btn--green btn--block" type="button" id="checkin">${GH.icon('location-tick')}Fazer check-in</button>`;
+          } else {
+            bottom.innerHTML = `<button class="btn btn--block" type="button" disabled aria-describedby="ci-why">${GH.icon('lock')}Fazer check-in</button>
+              <p class="reason" id="ci-why">${GH.icon('info-circle')}Libera ${dayDiff(b.date) === 1 ? 'amanhã' : `em ${F.long(b.date)}`}, quando você chegar ao clube</p>`;
+          }
+
+          /* perforation sits where the dashed cut is */
+          const ticket = $('ticket');
+          const setCut = () => {
+            const c = $('cut');
+            ticket.style.setProperty('--cut', c.offsetTop + c.offsetHeight / 2 + 'px');
+          };
+          setCut();
+          window.addEventListener('resize', setCut);
+          if (document.fonts && document.fonts.ready) document.fonts.ready.then(setCut);
+          GH.tilt(ticket, { max: 7 });
+          // Holo sweep and foil turn play once on entry; a tap replays them right away
+          // (tilt release replays them too, because .is-tilting pauses them with animation: none).
+          ticket.addEventListener('pointerdown', () => {
+            ticket.classList.add('is-replay', 'is-reset');
+            void ticket.offsetWidth;
+            ticket.classList.remove('is-reset');
+          });
+          ticket.addEventListener('pointermove', (e) => {
+            const r = ticket.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width,
+              y = (e.clientY - r.top) / r.height;
+            ticket.style.setProperty('--hx', x.toFixed(3));
+            ticket.style.setProperty('--ha', `${Math.round((x * 0.6 + y * 0.4) * 360)}deg`);
+          });
+          GH.reveal(view);
+
+          /* live countdown */
+          clearInterval(timer);
+          const cells = [...view.querySelectorAll('[data-c]')];
+          if (cells.length) {
+            const tick = () => {
+              let s = Math.max(0, Math.floor((b.date - Date.now()) / 1000));
+              const v = { dias: Math.floor(s / 86400), h: Math.floor((s % 86400) / 3600), min: Math.floor((s % 3600) / 60), s: s % 60 };
+              cells.forEach((c) => {
+                const nv = String(v[c.dataset.c]).padStart(2, '0');
+                if (c.textContent !== nv) {
+                  c.textContent = nv;
+                  if (!GH.reduceMotion()) {
+                    c.classList.remove('tick');
+                    void c.offsetWidth;
+                    c.classList.add('tick');
+                  }
+                }
+              });
+              const sr = $('count-sr');
+              if (sr) sr.textContent = `${d.unit} ${countdown(b.date)}`;
+            };
+            tick();
+            timer = setInterval(tick, 1000);
+          }
+
+          /* actions */
+          $('copy').addEventListener('click', () => {
+            try {
+              navigator.clipboard && navigator.clipboard.writeText(b.code);
+            } catch (e) {}
+            GH.haptic();
+            GH.toast(`Código ${b.code} copiado`, 'copy');
+          });
+          view.querySelectorAll('[data-act]').forEach((el) =>
+            el.addEventListener('click', () => {
+              const k = el.dataset.act;
+              if (k === 'agenda') GH.toast(`${d.short} adicionada à agenda`, 'calendar-tick');
+              if (k === 'invite') share(b, true);
+              if (k === 'cancel') openCancel(b, el);
+            })
+          );
+          const ci = $('checkin');
+          if (ci)
+            ci.addEventListener('click', () => {
+              ci.disabled = true;
+              ci.innerHTML = '<span class="spin" aria-hidden="true"></span>Confirmando…';
+              setTimeout(() => {
+                const list = checkins();
+                if (!list.includes(b.id)) GH.store.set('checkins', [...list, b.id]);
+                if (b.kind === 'tee' || b.kind === 'range') GH.store.set('checkin', b.kind === 'range' ? 'range' : b.course || 'a');
+                GH.haptic(14);
+                ci.classList.remove('btn--green');
+                ci.classList.add('is-done');
+                ci.innerHTML = GH.check() + 'Check-in feito';
+                const qr = ticket.querySelector('.qr');
+                qr.insertAdjacentHTML('beforeend', `<span class="qr__stamp fx-pop">${GH.check()}Check-in feito</span>`);
+                const count = ticket.querySelector('.count');
+                if (count) count.outerHTML = `<p class="count-note">${GH.icon('location-tick')}Você está no clube. Bom jogo!</p>`;
+                clearInterval(timer);
+                setCut();
+                GH.toast('Check-in feito. Bom jogo!');
+              }, 700);
+            });
+        }
+
+        function share(b, invite) {
+          const d = describe(b);
+          const text = `${d.name} · ${when(b.date)} — ${GH.club.name}`;
+          try {
+            navigator.clipboard && navigator.clipboard.writeText(`${text} · golfhub.app/r/${b.code}`);
+          } catch (e) {}
+          GH.haptic();
+          GH.toast(invite ? 'Convite copiado. É só colar no WhatsApp.' : 'Link do voucher copiado', 'send-2');
+        }
+
+        /* ---------- cancel: policy + hold-to-confirm ---------- */
+        const sheet = $('cx-sheet');
+        function openCancel(b, opener) {
+          const d = describe(b);
+          const hours = (b.date - Date.now()) / 36e5;
+          const free = hours >= 24 || !b.total;
+          const others = playersOf(b).filter((id) => id && id !== GH.user);
+          $('cx-title').textContent = b.kind === 'loja' ? 'Cancelar pedido?' : 'Cancelar reserva?';
+          $('cx-body').innerHTML = `
+            <div class="cx-sum"><span class="tile-ico${d.tone ? ' tile-ico--' + d.tone : ''}">${GH.icon(d.icon)}</span>
+              <div class="row__body"><span class="row__title">${esc(d.title || d.short + ' · ' + d.name)}</span><span class="row__sub">${when(b.date)}${d.detail ? ' · ' + esc(d.detail) : ''}</span></div></div>
+            <div class="policy ${free ? 'is-ok' : 'is-late'}">${GH.icon(free ? 'tick-circle' : 'warning-2')}
+              <div><p class="policy__t">${free ? (b.total ? 'Cancelamento grátis' : 'Sem custo para cancelar') : 'Fora do prazo de cancelamento grátis'}</p>
+              <p class="policy__s">Grátis até 24 h antes do horário. ${free ? refundText(b) : `Faltam ${countdown(b.date).replace('em ', '')}: o valor de ${F.brl(b.total)} não é devolvido.`}</p></div></div>
+            ${others.length ? `<p class="cx-note">${GH.stack(others.slice(0, 3), others.length, 'xs')}${esc(others.map(GH.first).join(', '))} ${others.length > 1 ? 'recebem' : 'recebe'} um aviso no app.</p>` : ''}
+            <div class="cx-actions">
+              <button class="hold" type="button" id="hold" aria-describedby="hold-hint"><span class="hold__fill" aria-hidden="true"></span>${GH.icon('trash')}<span id="hold-label">Segure para cancelar</span></button>
+              <p class="hold__hint" id="hold-hint">Segure o botão até completar. No teclado, Enter confirma.</p>
+              <button class="btn btn--ghost btn--block" type="button" data-sheet-close>Manter ${b.kind === 'loja' ? 'pedido' : 'reserva'}</button>
+            </div>`;
+          GH.sheet.open(sheet, opener);
+          wireHold($('hold'), () => confirmCancel(b, free));
+        }
+        function wireHold(btn, done) {
+          const HOLD = 900;
+          let t = null,
+            finished = false;
+          btn.style.setProperty('--hold', HOLD + 'ms');
+          const start = (e) => {
+            if (finished || (e.button != null && e.button !== 0)) return;
+            e.preventDefault();
+            btn.classList.add('is-holding');
+            GH.haptic(6);
+            t = setTimeout(() => {
+              finished = true;
+              btn.classList.remove('is-holding');
+              btn.classList.add('is-done');
+              done();
+            }, HOLD);
+          };
+          const stop = () => {
+            if (finished || !t) return;
+            clearTimeout(t);
+            t = null;
+            if (btn.classList.contains('is-holding')) {
+              btn.classList.remove('is-holding');
+              btn.classList.remove('shake');
+              void btn.offsetWidth;
+              btn.classList.add('shake');
+              $('hold-hint').textContent = 'Quase! Segure até a barra completar.';
+            }
+          };
+          btn.addEventListener('pointerdown', start);
+          ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => btn.addEventListener(ev, stop));
+          btn.addEventListener('contextmenu', (e) => e.preventDefault());
+          /* keyboard / assistive tech: a click without a pointer confirms */
+          btn.addEventListener('click', (e) => {
+            if (e.detail === 0 && !finished) {
+              finished = true;
+              btn.classList.add('is-done');
+              done();
+            }
+          });
+        }
+        function confirmCancel(b, free) {
+          const cx = GH.store.get('cancelled', []) || [];
+          if (!cx.includes(b.id)) GH.store.set('cancelled', [...cx, b.id]);
+          if (b.ref) GH.store.set('entries', (GH.store.get('entries', []) || []).filter((x) => x !== b.ref));
+          if (b.id.startsWith('en-')) GH.store.set('entries', (GH.store.get('entries', []) || []).filter((x) => 'en-' + x !== b.id));
+          GH.store.set('checkins', checkins().filter((x) => x !== b.id));
+          GH.haptic(20);
+          setTimeout(() => {
+            $('cx-body').innerHTML = `<div class="cx-done" role="status">${GH.check()}
+              <p class="t-h2">${b.kind === 'loja' ? 'Pedido cancelado' : 'Reserva cancelada'}</p>
+              <p class="t-sm t-muted">${free ? esc(refundText(b)) : 'O horário foi liberado para outros sócios.'}</p></div>`;
+          }, 260);
+          setTimeout(() => {
+            GH.sheet.close(sheet);
+            clearInterval(timer);
+            ALL = load();
+            leavingId = b.id;
+            tab = 'proximas';
+            history.replaceState(null, '', 'reservas.html');
+            renderList();
+            $('main').scrollTop = 0;
+            GH.toast(b.kind === 'loja' ? 'Pedido cancelado' : 'Reserva cancelada', 'tick-circle');
+            $('title').setAttribute('tabindex', '-1');
+            $('title').focus({ preventScroll: true });
+          }, 1700);
+        }
+
+        /* ---------- route ---------- */
+        const id = q.get('id');
+        if (id) {
+          const b = ALL.find((x) => x.id === id);
+          if (b) {
+            renderDetail(b);
+            if (q.get('sheet') === 'cancelar' && isUpcoming(b)) setTimeout(() => openCancel(b), 700);
+          } else {
+            $('title').textContent = 'Voucher';
+            $('back').href = 'reservas.html';
+            $('bar-act').hidden = true;
+            view.innerHTML = `<div class="empty"><span class="tile-ico tile-ico--amber">${GH.icon('warning-2', 'i--lg')}</span><p class="t-h3">Reserva não encontrada</p><p class="t-sm">Ela pode ter sido cancelada ou o link expirou.</p><a class="btn btn--primary" href="reservas.html">Ver minhas reservas</a></div>`;
+          }
+        } else {
+          renderList();
+        }
+
+        /* keep "Próxima · em …" fresh on the list */
+        setInterval(() => {
+          document.querySelectorAll('[data-until]').forEach((el) => (el.textContent = `Próxima · ${countdown(new Date(el.dataset.until))}`));
+        }, 30000);
+      })();
+    </script>
+  </body>
+</html>

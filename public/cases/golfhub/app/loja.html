@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Loja e aluguel · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Loja e aluguel (deck modules "Loja online", "Ecommerce", "POS"). Aluguel / Loja tabs, illustrated product tiles
+         that tilt, add → the item flies into the cart bar and the total counts up. Cart in gh:cart → pagamento.html?tipo=loja */
+
+      .screen {
+        padding-top: 0;
+      }
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 6;
+        min-height: 64px;
+        margin: 0 calc(var(--gutter) * -1);
+        padding: 8px 10px 0;
+        background: var(--bg);
+        transition: box-shadow var(--t-med) var(--ease);
+      }
+      .bar.is-stuck {
+        box-shadow: 0 1px 0 var(--line);
+      }
+
+      /* tabs with a morphing pill */
+      .tabs {
+        position: relative;
+        isolation: isolate;
+        margin: 4px 0 16px;
+      }
+      .tabs button {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+      }
+      .tabs button[aria-selected='true'] {
+        background: transparent;
+        box-shadow: none;
+      }
+      .tabs .i {
+        width: 18px;
+        height: 18px;
+      }
+      .tabs .n {
+        display: inline-grid;
+        place-items: center;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        border-radius: 10px;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--violet-600);
+      }
+      .pill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        opacity: 0;
+        pointer-events: none;
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: var(--shadow-xs), 0 6px 14px -8px rgba(0, 0, 0, 0.25);
+      }
+
+      .note {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 14px 8px 8px;
+        border-radius: 18px;
+        background: var(--sunken);
+      }
+      .note .tile-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #fff;
+      }
+      .note b {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .note span span {
+        display: block;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .note a {
+        color: var(--green-700);
+        font-weight: 600;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 14px;
+      }
+      .item {
+        position: relative;
+        display: grid;
+        align-content: start;
+        gap: 10px;
+        padding: 8px 8px 14px;
+        border-radius: 26px;
+      }
+      .item--wide {
+        grid-column: 1 / -1;
+        grid-template-columns: 148px 1fr;
+        align-items: center;
+        gap: 14px;
+        padding: 8px 14px 8px 8px;
+      }
+      /* the illustration tile */
+      .art {
+        position: relative;
+        aspect-ratio: 1 / 0.92;
+        border-radius: 20px;
+        background:
+          radial-gradient(120% 90% at 28% 12%, #fff 0%, transparent 60%),
+          radial-gradient(90% 70% at 80% 100%, color-mix(in srgb, var(--il-acc) 26%, transparent), transparent 70%),
+          var(--il-tint);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+      }
+      .item--wide .art {
+        aspect-ratio: 1;
+      }
+      .art::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.1;
+        mix-blend-mode: multiply;
+        pointer-events: none;
+      }
+      .ill {
+        position: absolute;
+        inset: 9% 13% 13%;
+        width: 74%;
+        height: 78%;
+        overflow: visible;
+        fill: none;
+        stroke: var(--il-ink);
+        stroke-width: 2.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: transform var(--t-slow) var(--ease-spring);
+      }
+      .tilt .ill {
+        transform: translateZ(26px);
+      }
+      .art:hover .ill {
+        transform: translateZ(26px) translateY(-3px) scale(1.03);
+      }
+      .ill .w {
+        fill: #fff;
+      }
+      .ill .a {
+        fill: var(--il-acc);
+      }
+      .ill .b {
+        fill: var(--il-acc2);
+      }
+      .ill .k {
+        fill: var(--il-ink);
+      }
+      .ill .n {
+        stroke: none;
+      }
+      .ill .dot {
+        fill: var(--il-ink);
+        stroke: none;
+        opacity: 0.22;
+      }
+      .ill .sh {
+        fill: var(--il-ink);
+        stroke: none;
+        opacity: 0.13;
+      }
+      .ill .gold {
+        fill: #f2c14e;
+      }
+      .ill .t {
+        fill: var(--il-ink);
+        stroke: none;
+        font-family: var(--font);
+        font-weight: 800;
+        font-size: 11px;
+        letter-spacing: -0.02em;
+      }
+      .ill .soft {
+        opacity: 0.4;
+      }
+      .item__body {
+        display: grid;
+        gap: 2px;
+        padding: 0 6px;
+      }
+      .item--wide .item__body {
+        padding: 0;
+      }
+      .item__name {
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .item__sub {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .item__desc {
+        margin-top: 4px;
+        font-size: 12.5px;
+        line-height: 1.45;
+        color: var(--ink-2);
+      }
+      .item__price {
+        margin-top: 6px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .item__price b {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      /* add → stepper morph, sitting on the tile's corner */
+      .buy {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        height: 44px;
+        padding: 2px;
+        border-radius: var(--r-pill);
+        background: transparent;
+        transform: translateZ(40px);
+        transition:
+          background var(--t-med) var(--ease),
+          box-shadow var(--t-med) var(--ease);
+      }
+      .buy.is-on {
+        background: #fff;
+        box-shadow: 0 10px 22px -10px rgba(20, 20, 20, 0.45);
+      }
+      .buy__minus,
+      .buy__n {
+        width: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          width 380ms var(--ease),
+          opacity 200ms var(--ease),
+          visibility 0s linear 380ms;
+      }
+      .buy.is-on .buy__minus,
+      .buy.is-on .buy__n {
+        opacity: 1;
+        visibility: visible;
+        transition:
+          width 380ms var(--ease),
+          opacity 260ms var(--ease) 80ms,
+          visibility 0s;
+      }
+      .buy.is-on .buy__minus {
+        width: 40px;
+      }
+      .buy.is-on .buy__n {
+        width: 26px;
+      }
+      .buy__minus {
+        display: grid;
+        place-items: center;
+        height: 40px;
+        border-radius: 50%;
+        color: var(--ink-2);
+      }
+      .buy__n {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .buy__plus {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        flex: none;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--violet-600);
+        box-shadow: var(--shadow-violet);
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .buy__plus:active {
+        transform: scale(0.9);
+      }
+      .buy__plus:disabled {
+        background: var(--ink-4);
+        box-shadow: none;
+      }
+      .buy .i {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
+      }
+
+      /* cart bar */
+      .cartbar {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 12px;
+      }
+      /* shared .btn--primary:hover beats the aria-disabled look on an <a> */
+      #checkout[aria-disabled='true']:hover {
+        background: var(--sunken-2);
+      }
+      .cartbar__sum {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 56px;
+        min-width: 0;
+        text-align: left;
+        border-radius: 18px;
+      }
+      .cartbar__ico {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        flex: none;
+        border-radius: 16px;
+        color: var(--violet-600);
+        background: var(--violet-50);
+        transition:
+          background var(--t-med) var(--ease),
+          color var(--t-med) var(--ease);
+      }
+      .is-empty .cartbar__ico {
+        color: var(--ink-3);
+        background: var(--sunken);
+      }
+      .cartbar__n {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        display: grid;
+        place-items: center;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 11px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--violet-600);
+        box-shadow: 0 0 0 2.5px #fff;
+      }
+      .is-empty .cartbar__n {
+        display: none;
+      }
+      .cartbar__txt {
+        display: grid;
+        min-width: 0;
+        line-height: 1.25;
+      }
+      .cartbar__txt span {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .cartbar__txt b {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      .is-empty .cartbar__txt b {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0;
+        color: var(--ink-2);
+      }
+      .cartbar__txt b {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .cartbar .btn {
+        padding: 0 20px;
+      }
+
+      /* cart sheet */
+      .cs-group {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      .cs-group__head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .cs-group__head b {
+        color: var(--ink);
+        font-size: 13px;
+      }
+      .cs-group__head .i {
+        width: 16px;
+        height: 16px;
+      }
+      .line {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .line .art {
+        width: 52px;
+        height: 52px;
+        flex: none;
+        aspect-ratio: auto;
+        border-radius: 14px;
+      }
+      .line .art::after {
+        display: none;
+      }
+      .line .ill {
+        stroke-width: 3.6;
+      }
+      .line__t {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+      }
+      .line__t b {
+        font-size: 14.5px;
+        font-weight: 600;
+      }
+      .line__t span {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .line .stepper button {
+        width: 34px;
+        height: 34px;
+      }
+      .line .stepper output {
+        min-width: 26px;
+        font-size: 15px;
+      }
+      .cs-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 14px 0 16px;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+        color: var(--ink-3);
+      }
+      .cs-total b {
+        font-size: 20px;
+        color: var(--ink);
+      }
+      .cs-pay {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .cs-pay .i {
+        width: 16px;
+        height: 16px;
+        color: var(--green-600);
+      }
+      .clear {
+        display: block;
+        width: 100%;
+        min-height: 44px;
+        margin-top: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink-3);
+      }
+
+      .flyer {
+        position: absolute;
+        z-index: 90;
+        pointer-events: none;
+        filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.18));
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="bar rise" id="bar">
+          <a class="icon-btn" href="descobrir.html" data-back aria-label="Voltar"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title">Loja e aluguel</h1>
+          <span></span>
+        </header>
+        <div id="view"></div>
+      </main>
+
+      <div class="bottom-bar cartbar rise" style="--d: 6" id="bb">
+        <button class="cartbar__sum" type="button" id="open-cart" aria-haspopup="dialog">
+          <span class="cartbar__ico" id="cart-ico" aria-hidden="true"><span data-icon="bag-2"></span><span class="cartbar__n num" id="cart-n">0</span></span>
+          <span class="cartbar__txt" aria-hidden="true"><span id="cart-items"></span><b class="num" id="cart-total"></b></span>
+          <span class="sr-only" id="cart-sr"></span>
+        </button>
+        <a class="btn btn--primary" id="checkout">Ir para pagamento</a>
+        <p class="sr-only" role="status" aria-live="polite" id="cart-live"></p>
+      </div>
+
+      <div class="sheet" id="cart-sheet" role="dialog" aria-modal="true" aria-labelledby="cs-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="cs-title">Seu carrinho</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="cs-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const hash = location.hash.slice(1).split('?')[0];
+        if (location.hash.includes('shot=1')) document.documentElement.classList.add('has-status');
+        const $ = (s, el = document) => el.querySelector(s);
+        const view = document.getElementById('view');
+        const main = document.getElementById('main');
+        const bar = document.getElementById('bar');
+        const app = document.querySelector('.app');
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        main.addEventListener('scroll', () => bar.classList.toggle('is-stuck', main.scrollTop > 4), { passive: true });
+
+        /* ---------- Illustrations (96 grid, one stroke style: 2.4 round, ink outline, two tints, white) ---------- */
+        const dimples = (cx, cy, r) =>
+          [[-0.35, -0.3], [0.2, -0.4], [0.35, 0.15], [-0.15, 0.3]].map(([x, y]) => `<circle class="dot" cx="${cx + x * r}" cy="${cy + y * r}" r="${r * 0.11}"/>`).join('');
+        const ball = (cx, cy, r) => `<circle class="w" cx="${cx}" cy="${cy}" r="${r}"/>${dimples(cx, cy, r)}`;
+        const ART = {
+          /* stand bag with three head covers, a coloured band, pocket and strap */
+          clubs: `<ellipse class="sh" cx="50" cy="88" rx="26" ry="4"/>
+            <path class="a" d="M31 31V21a7 7 0 0 1 14 0v10"/><circle class="k n" cx="38" cy="12.6" r="2.6"/>
+            <path class="w" d="M53 31v-8a6 6 0 0 1 12 0v8"/><circle class="k n" cx="59" cy="15.6" r="2.4"/>
+            <path class="b" d="M42 31V15a7 7 0 0 1 14 0v16"/><path class="soft" d="M42 21.5h14M42 25.5h14"/><circle class="k n" cx="49" cy="6.6" r="2.6"/>
+            <path d="M33 70 24 85M24 85h5"/>
+            <rect class="w" x="27" y="30" width="44" height="9" rx="4"/>
+            <path class="w" d="M30 39v35a9 9 0 0 0 9 9h20a9 9 0 0 0 9-9V39"/>
+            <path class="a n" d="M30.9 46h36.2v7H30.9z"/><path d="M30 46h38M30 53h38"/>
+            <rect class="b" x="37" y="58" width="24" height="17" rx="5"/><path d="M42 63h14"/>
+            <path d="M68 41c10 7 10 27 0 34"/><path class="soft" d="M72 50v14"/>`,
+          /* electric cart, side view, bag strapped at the back */
+          cart: `<ellipse class="sh" cx="48" cy="86" rx="38" ry="4"/>
+            <path class="b" d="M10 54V37a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v17"/><path class="w" d="M11 34v-4a2.5 2.5 0 0 1 5 0v4"/>
+            <path d="M23 23v31"/><path class="b" d="M67 23l8 26h-4.5L63 23z"/><path d="M67 23l8 26"/>
+            <rect class="a" x="16" y="16" width="60" height="8" rx="4"/>
+            <path class="w" d="M30 54V42a3 3 0 0 1 3-3h9a3 3 0 0 1 3 3v12"/><rect class="a" x="29" y="49" width="22" height="6" rx="3"/>
+            <path d="M60 54l4-11"/><ellipse class="w" cx="64.5" cy="42" rx="5" ry="1.8" transform="rotate(-20 64.5 42)"/>
+            <path class="w" d="M12 54h61a9 9 0 0 1 9 9v1.5a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4z"/>
+            <path class="a n" d="M12.6 59h68.8v3.6H12.6z"/><circle class="gold" cx="79" cy="58.5" r="1.8"/>
+            <circle class="k n" cx="29" cy="71" r="10"/><circle class="w n" cx="29" cy="71" r="4"/>
+            <circle class="k n" cx="68" cy="71" r="10"/><circle class="w n" cx="68" cy="71" r="4"/>`,
+          /* bucket heaped with range balls, "60" on the band */
+          balls: `<ellipse class="sh" cx="48" cy="88" rx="26" ry="4"/>
+            <path d="M22 41C19 14 77 14 74 41"/>
+            ${ball(48, 18, 8)}${ball(39.5, 27, 8.5)}${ball(57, 27, 8.5)}${ball(30.5, 36, 9)}${ball(65.5, 36, 9)}${ball(48, 35, 9.5)}
+            <path class="a" d="M19 41h58l-6.2 39.2a6 6 0 0 1-5.9 5H31.1a6 6 0 0 1-5.9-5z"/>
+            <path class="w n" d="M21.3 55.5h53.4l-1.9 12H23.2z"/><path d="M21.3 55.5h53.4M23.2 67.5h49.6"/>
+            <text class="t" x="48" y="65.4" text-anchor="middle" style="font-size: 10.5px">60</text>
+            <rect class="w" x="16" y="37" width="64" height="7" rx="3.5"/>`,
+          /* open box of a dozen balls */
+          prov1: `<ellipse class="sh" cx="50" cy="88" rx="32" ry="4"/>
+            <path class="b" d="M30 38l5-15h38l7 15"/>
+            ${ball(35, 36, 8)}${ball(50, 34, 8)}${ball(65, 33, 8)}
+            <path class="a" d="M66 41l14-9v38l-14 11z"/><path class="k n soft" d="M66 41l14-9v38l-14 11z"/>
+            <rect class="a" x="18" y="41" width="48" height="40" rx="4"/>
+            <path d="M18 41l14-9h48"/>
+            <rect class="w" x="25" y="50" width="34" height="22" rx="4"/>
+            <text class="t" x="35" y="65.5" text-anchor="middle" style="font-size: 13px">12</text>
+            <circle class="b" cx="50.5" cy="61" r="5"/>${dimples(50.5, 61, 5)}`,
+          /* golf glove, palm view, velcro cuff with the flag logo */
+          glove: `<ellipse class="sh" cx="52" cy="89" rx="24" ry="3.6"/>
+            <rect class="w" x="31" y="19" width="10.5" height="34" rx="5.25"/>
+            <rect class="w" x="41.5" y="12" width="10.5" height="41" rx="5.25"/>
+            <rect class="w" x="52" y="15" width="10.5" height="38" rx="5.25"/>
+            <rect class="w" x="62.5" y="24" width="9.5" height="30" rx="4.75"/>
+            <circle class="dot" cx="36.2" cy="25" r="1.1"/><circle class="dot" cx="46.7" cy="18" r="1.1"/><circle class="dot" cx="57.2" cy="21" r="1.1"/><circle class="dot" cx="67.2" cy="29.5" r="1.1"/>
+            <path class="w" d="M33 62 21.5 49.6a5.4 5.4 0 0 1 8-7.2l8.5 9.2"/>
+            <path class="w" d="M31 45h41v19a12 12 0 0 1-12 12H43a12 12 0 0 1-12-12z"/>
+            <path class="soft" d="M45 52v12M58 52v12"/>
+            <rect class="a" x="35" y="73" width="34" height="12" rx="4"/>
+            <rect class="b" x="51" y="73" width="18" height="12" rx="4"/>
+            <path d="M57 76.5v6"/><path class="a" d="M57 76.5l5 1.8-5 1.8"/>`,
+          /* club cap: green crown, dark brim, white flag logo */
+          cap: `<ellipse class="sh" cx="48" cy="84" rx="32" ry="4"/>
+            <path class="a" d="M20 60C20 37 33 24 48 24s28 13 28 36z"/>
+            <path class="b n" d="M38.5 27C34 34 32 45 32 59.5h32C64 45 62 34 57.5 27c-3-1.6-16-1.6-19 0z"/>
+            <path class="soft" d="M38.5 27C34 34 32 45 32 60M57.5 27C62 34 64 45 64 60"/>
+            <path class="k n" d="M14 60h68c3 0 4.2 3.4 2 5.4C77 71 64 74 48 74S19 71 12 65.4c-2.2-2-1-5.4 2-5.4z"/>
+            <circle class="k n" cx="48" cy="23.5" r="3.2"/><circle class="k n" cx="27" cy="44" r="1.3"/><circle class="k n" cx="69" cy="44" r="1.3"/>
+            <path d="M45 38v15" style="stroke: #fff; stroke-width: 2.2"/><path d="M45 38.5l9.5 3.6-9.5 3.6z" style="fill: #fff; stroke: #fff; stroke-width: 1.4"/>`,
+        };
+        /* tile colours from the DS ramps: [tint, ink, accent, light accent] */
+        const LOOK = {
+          clubs: ['#e6f8ec', '#106f36', '#4fdc8b', '#bff1d2'],
+          cart: ['#ecebff', '#3a2be0', '#8f84ff', '#cfcaff'],
+          balls: ['#fff2de', '#8a5300', '#f2a33a', '#ffd9a1'],
+          prov1: ['#e4f2fb', '#1c5a80', '#5db7e6', '#bfe2f5'],
+          glove: ['#f5e9fa', '#5f1283', '#b673d8', '#e3c8f1'],
+          cap: ['#edf1ee', '#1f2a22', '#16984a', '#3fbf72'],
+        };
+        const UNIT = { clubs: 'rodada', cart: 'rodada', balls: 'balde' };
+        /* shorter subline where the half-width card would wrap it */
+        const SUB = { balls: '60 bolas · range' };
+        const DESC = {
+          clubs: 'Driver, madeira 3, híbrido, ferros 5 a PW, dois wedges e putter, na bolsa com tripé.',
+          prov1: 'Bolas de torneio com toque macio no green. Caixa com 4 tubos de 3.',
+        };
+        const MAX = { clubs: 4, cart: 2 };
+        const vars = (id) => {
+          const [t, k, a, b] = LOOK[id];
+          return `--il-tint:${t};--il-ink:${k};--il-acc:${a};--il-acc2:${b}`;
+        };
+        const svg = (id) => `<svg class="ill" viewBox="0 0 96 96" aria-hidden="true" focusable="false">${ART[id]}</svg>`;
+
+        /* ---------- Cart (gh:cart = [{ id, qty }]) ---------- */
+        const byId = (id) => GH.shop.find((x) => x.id === id);
+        if (q.get('cart') === 'demo')
+          GH.store.set('cart', [
+            { id: 'cart', qty: 1 },
+            { id: 'prov1', qty: 1 },
+            { id: 'balls', qty: 1 },
+          ]);
+        if (q.get('cart') === 'vazio') GH.store.set('cart', []);
+        let cart = (GH.store.get('cart', []) || []).filter((l) => byId(l.id) && l.qty > 0);
+        const qtyOf = (id) => (cart.find((l) => l.id === id) || {}).qty || 0;
+        const count = () => cart.reduce((s, l) => s + l.qty, 0);
+        const total = () => cart.reduce((s, l) => s + l.qty * byId(l.id).price, 0);
+        const save = () => GH.store.set('cart', cart);
+
+        /* ---------- Page ---------- */
+        const nb = GH.nextBooking();
+        const panels = {
+          aluguel: GH.shop.filter((x) => x.kind === 'aluguel'),
+          loja: GH.shop.filter((x) => x.kind === 'loja'),
+        };
+        const buyHtml = (it) => {
+          const n = qtyOf(it.id);
+          const max = MAX[it.id] || 10;
+          return `<div class="buy${n ? ' is-on' : ''}" role="group" aria-label="${GH.esc(it.name)}" data-buy="${it.id}">
+            <button class="buy__minus" type="button" data-minus aria-label="Remover um">${GH.icon('minus')}</button>
+            <output class="buy__n" aria-label="Quantidade">${n}</output>
+            <button class="buy__plus" type="button" data-plus aria-label="${n ? 'Adicionar mais um' : `Adicionar ${GH.esc(it.name)}`}"${n >= max ? ' disabled' : ''}>${GH.icon('add')}</button>
+          </div>`;
+        };
+        const itemHtml = (it, i) => {
+          const wide = i === 0;
+          return `<article class="item card${wide ? ' item--wide' : ''} rise" style="--d: ${3 + i}; ${vars(it.id)}" data-id="${it.id}">
+            <div class="art">${svg(it.id)}${buyHtml(it)}</div>
+            <div class="item__body">
+              <h3 class="item__name">${GH.esc(it.name)}</h3>
+              <p class="item__sub">${GH.esc((!wide && SUB[it.id]) || it.sub)}</p>
+              ${wide && DESC[it.id] ? `<p class="item__desc">${GH.esc(DESC[it.id])}</p>` : ''}
+              <p class="item__price"><b class="num">${GH.fmt.brl(it.price)}</b>${UNIT[it.id] ? ` / ${UNIT[it.id]}` : ''}</p>
+            </div>
+          </article>`;
+        };
+        const notes = {
+          aluguel: `<p class="note rise" style="--d: 2"><span class="tile-ico">${GH.icon('flag')}</span><span><b>Entregue no tee</b><span>${
+            nb ? `Na sua saída: ${GH.fmt.dayLabel(nb.date).toLowerCase()}, ${GH.fmt.time(nb.date)} · ${GH.esc(GH.course(nb.course).name)}` : `Na hora da sua saída. <a href="reservar.html">Reservar horário</a>`
+          }</span></span></p>`,
+          loja: `<p class="note rise" style="--d: 2"><span class="tile-ico tile-ico--violet">${GH.icon('shop')}</span><span><b>Retire no pro shop</b><span>Ao lado da recepção · das 7h às 19h</span></span></p>`,
+        };
+        const tabCount = (k) => panels[k].reduce((s, it) => s + qtyOf(it.id), 0);
+        view.innerHTML = `
+          <div class="seg tabs rise" style="--d: 1" role="tablist" aria-label="Loja e aluguel" id="tabs">
+            <button type="button" role="tab" id="tab-a" aria-controls="p-aluguel" data-tab="aluguel">${GH.icon('car')}Aluguel<span class="n" data-n="aluguel" hidden></span></button>
+            <button type="button" role="tab" id="tab-l" aria-controls="p-loja" data-tab="loja">${GH.icon('shop')}Loja<span class="n" data-n="loja" hidden></span></button>
+          </div>
+          ${Object.keys(panels)
+            .map(
+              (k) => `<section id="p-${k}" role="tabpanel" aria-labelledby="tab-${k === 'aluguel' ? 'a' : 'l'}"${k === 'loja' ? ' hidden' : ''}>
+                ${notes[k]}
+                <div class="grid">${panels[k].map(itemHtml).join('')}</div>
+              </section>`
+            )
+            .join('')}`;
+
+        /* tilt the illustration tiles (drop .rise first: its fill would hold the card transform) */
+        view.querySelectorAll('.art').forEach((a) => GH.tilt(a, { max: 10 }));
+        view.querySelectorAll('.item').forEach((c) => c.addEventListener('animationend', (e) => e.target === c && c.classList.remove('rise')));
+
+        /* tabs + morphing pill */
+        const tabs = $('#tabs');
+        const pillEl = document.createElement('span');
+        pillEl.className = 'pill';
+        pillEl.setAttribute('aria-hidden', 'true');
+        tabs.prepend(pillEl);
+        let cur = null;
+        const movePill = (b, instant) => {
+          const g = tabs.getBoundingClientRect();
+          const r = b.getBoundingClientRect();
+          const nx = { x: r.left - g.left, y: r.top - g.top, w: r.width, h: r.height };
+          const tf = (k) => `translate(${k.x}px, ${k.y}px)`;
+          Object.assign(pillEl.style, { width: `${nx.w}px`, height: `${nx.h}px`, transform: tf(nx), opacity: 1 });
+          if (cur && !instant && !reduce) {
+            const x = Math.min(cur.x, nx.x);
+            const w = Math.max(cur.x + cur.w, nx.x + nx.w) - x;
+            pillEl.animate(
+              [
+                { transform: tf(cur), width: `${cur.w}px` },
+                { offset: 0.45, transform: `translate(${x}px, ${nx.y + 3}px)`, width: `${w}px`, height: `${nx.h - 6}px` },
+                { transform: tf(nx), width: `${nx.w}px`, height: `${nx.h}px` },
+              ],
+              { duration: 480, easing: 'cubic-bezier(.22,1,.36,1)' }
+            );
+          }
+          cur = nx;
+        };
+        const btns = [...tabs.querySelectorAll('[role="tab"]')];
+        const select = (name, first) => {
+          btns.forEach((b) => {
+            const on = b.dataset.tab === name;
+            b.setAttribute('aria-selected', String(on));
+            b.tabIndex = on ? 0 : -1;
+            const p = document.getElementById(b.getAttribute('aria-controls'));
+            const was = !p.hidden;
+            p.hidden = !on;
+            if (on && !was && !first && !reduce) {
+              const items = [p.querySelector('.note'), ...p.querySelectorAll('.item')];
+              items.forEach((c, i) => {
+                c.classList.remove('rise');
+                c.animate([{ opacity: 0, transform: `translateX(${name === 'loja' ? 28 : -28}px)` }, { opacity: 1, transform: 'none' }], {
+                  duration: 520,
+                  delay: i * 60,
+                  easing: 'cubic-bezier(.22,1,.36,1)',
+                  fill: 'backwards',
+                });
+              });
+            }
+          });
+          movePill(btns.find((b) => b.dataset.tab === name), first);
+          if (!first) history.replaceState(null, '', `${location.pathname}${location.search}#${name}`);
+        };
+        tabs.addEventListener('click', (e) => {
+          const b = e.target.closest('[role="tab"]');
+          if (b) select(b.dataset.tab);
+        });
+        tabs.addEventListener('keydown', (e) => {
+          const i = btns.indexOf(document.activeElement);
+          if (i < 0 || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+          e.preventDefault();
+          const n = btns[(i + (e.key === 'ArrowRight' ? 1 : -1) + btns.length) % btns.length];
+          n.focus();
+          select(n.dataset.tab);
+        });
+        const startTab = hash === 'loja' || q.get('tab') === 'loja' ? 'loja' : 'aluguel';
+        select(startTab, true);
+        requestAnimationFrame(() => movePill(btns.find((b) => b.dataset.tab === startTab), true));
+        setTimeout(() => movePill(btns.find((b) => b.dataset.tab === startTab), true), 800);
+
+        /* ---------- Cart bar ---------- */
+        const bb = document.getElementById('bb');
+        const ico = document.getElementById('cart-ico');
+        const nEl = document.getElementById('cart-n');
+        const itemsEl = document.getElementById('cart-items');
+        const totalEl = document.getElementById('cart-total');
+        const checkout = document.getElementById('checkout');
+        let shownTotal = total();
+        const label = () => `${GH.fmt.plural(count(), 'item', 'itens')} · ${GH.fmt.brl(total())}`;
+        const renderBar = (opt = {}) => {
+          const n = count();
+          const t = total();
+          bb.classList.toggle('is-empty', !n);
+          nEl.textContent = n;
+          if (n) {
+            itemsEl.textContent = GH.fmt.plural(n, 'item', 'itens');
+            if (opt.animate && !reduce) GH.countUp(totalEl, t, { from: shownTotal, dur: 700, delay: opt.delay || 0, format: GH.fmt.brl });
+            else totalEl.textContent = GH.fmt.brl(t);
+            checkout.href = 'pagamento.html?tipo=loja';
+            checkout.removeAttribute('aria-disabled');
+            document.getElementById('cart-sr').textContent = `Ver carrinho: ${label()}`;
+          } else {
+            itemsEl.textContent = 'Carrinho vazio';
+            totalEl.textContent = 'Adicione itens';
+            checkout.removeAttribute('href');
+            checkout.setAttribute('aria-disabled', 'true');
+            document.getElementById('cart-sr').textContent = 'Ver carrinho: vazio';
+          }
+          shownTotal = t;
+          tabs.querySelectorAll('[data-n]').forEach((el) => {
+            const c = tabCount(el.dataset.n);
+            el.hidden = !c;
+            el.textContent = c;
+          });
+        };
+        const announce = () => (document.getElementById('cart-live').textContent = count() ? `Carrinho: ${label()}` : 'Carrinho vazio');
+        const bumpIcon = () => {
+          if (reduce) return;
+          ico.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.22) rotate(-6deg)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 480, easing: 'ease-out' });
+          nEl.animate([{ transform: 'scale(.4)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(.34,1.45,.64,1)' });
+        };
+
+        /* the illustration flies along an arc into the cart icon */
+        const fly = (art, id) => {
+          if (reduce) return 0;
+          const A = app.getBoundingClientRect();
+          const src = art.querySelector('.ill').getBoundingClientRect();
+          const dst = ico.getBoundingClientRect();
+          const el = document.createElement('div');
+          el.className = 'flyer';
+          el.setAttribute('aria-hidden', 'true');
+          el.style.cssText += `${vars(id)};left:${src.left - A.left}px;top:${src.top - A.top}px;width:${src.width}px;height:${src.height}px`;
+          el.innerHTML = svg(id).replace('class="ill"', 'class="ill" style="inset:0;width:100%;height:100%"');
+          app.appendChild(el);
+          const dx = dst.left + dst.width / 2 - (src.left + src.width / 2);
+          const dy = dst.top + dst.height / 2 - (src.top + src.height / 2);
+          const p1 = { x: dx * 0.15, y: Math.min(0, dy) - 130 };
+          const end = 26 / src.width;
+          const frames = [];
+          for (let k = 0; k <= 16; k++) {
+            const t = k / 16;
+            const x = 2 * (1 - t) * t * p1.x + t * t * dx;
+            const y = 2 * (1 - t) * t * p1.y + t * t * dy;
+            const s = 1 + (end - 1) * t * t;
+            frames.push({ transform: `translate(${x}px, ${y}px) scale(${s}) rotate(${-18 * Math.sin(Math.PI * t)}deg)`, opacity: t > 0.92 ? 0.6 : 1 });
+          }
+          const dur = 760;
+          el.animate(frames, { duration: dur, easing: 'cubic-bezier(.45,.05,.55,.95)', fill: 'forwards' }).finished.then(() => {
+            el.remove();
+            bumpIcon();
+          });
+          return dur;
+        };
+
+        const setQty = (id, n, opt = {}) => {
+          const it = byId(id);
+          const max = MAX[id] || 10;
+          n = Math.max(0, Math.min(max, n));
+          const was = qtyOf(id);
+          if (n === was) return;
+          cart = cart.filter((l) => l.id !== id);
+          if (n) {
+            const order = GH.shop.map((x) => x.id);
+            cart.push({ id, qty: n });
+            cart.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+          }
+          save();
+          /* tile control */
+          const buy = view.querySelector(`[data-buy="${id}"]`);
+          if (buy) {
+            buy.classList.toggle('is-on', n > 0);
+            buy.querySelector('output').textContent = n;
+            const plus = buy.querySelector('[data-plus]');
+            plus.disabled = n >= max;
+            plus.setAttribute('aria-label', n ? 'Adicionar mais um' : `Adicionar ${it.name}`);
+            if (!n && opt.focus) plus.focus();
+          }
+          let delay = 0;
+          if (n > was && opt.art) delay = fly(opt.art, id) * 0.8;
+          else if (n !== was) bumpIcon();
+          renderBar({ animate: true, delay });
+          announce();
+          GH.haptic(n > was ? 10 : 6);
+          if (sheet.classList.contains('is-open')) renderSheet();
+        };
+
+        view.addEventListener('click', (e) => {
+          const buy = e.target.closest('[data-buy]');
+          if (!buy) return;
+          const id = buy.dataset.buy;
+          if (e.target.closest('[data-plus]')) setQty(id, qtyOf(id) + 1, { art: buy.closest('.art') });
+          else if (e.target.closest('[data-minus]')) setQty(id, qtyOf(id) - 1, { focus: true });
+        });
+
+        /* ---------- Cart sheet ---------- */
+        const sheet = document.getElementById('cart-sheet');
+        const csBody = document.getElementById('cs-body');
+        const renderSheet = () => {
+          if (!count()) {
+            csBody.innerHTML = `<div class="empty"><span class="tile-ico tile-ico--violet">${GH.icon('bag-2', 'i--lg')}</span>
+              <p class="t-h3" style="color: var(--ink)">Seu carrinho está vazio</p>
+              <p class="t-sm">Escolha tacos, carrinho ou bolas para a próxima rodada.</p>
+              <button class="btn btn--ghost btn--sm" type="button" data-sheet-close style="margin-top: 6px">Ver itens</button></div>`;
+            return;
+          }
+          const group = (kind, icon, title, sub) => {
+            const lines = cart.filter((l) => byId(l.id).kind === kind);
+            if (!lines.length) return '';
+            return `<div class="cs-group"><p class="cs-group__head">${GH.icon(icon)}<b>${title}</b>· ${sub}</p>
+              ${lines
+                .map((l) => {
+                  const it = byId(l.id);
+                  return `<div class="line" style="${vars(l.id)}"><span class="art" aria-hidden="true">${svg(l.id)}</span>
+                    <span class="line__t"><b>${GH.esc(it.name)}</b><span class="num">${l.qty} × ${GH.fmt.brl(it.price)}</span></span>
+                    <span class="stepper" role="group" aria-label="${GH.esc(it.name)}">
+                      <button type="button" data-cs="${l.id}" data-d="-1" aria-label="Remover um">${GH.icon(l.qty === 1 ? 'trash' : 'minus', 'i--sm')}</button>
+                      <output aria-label="Quantidade">${l.qty}</output>
+                      <button type="button" data-cs="${l.id}" data-d="1" aria-label="Adicionar mais um"${l.qty >= (MAX[l.id] || 10) ? ' disabled' : ''}>${GH.icon('add', 'i--sm')}</button>
+                    </span></div>`;
+                })
+                .join('')}</div>`;
+          };
+          csBody.innerHTML = `
+            ${group('aluguel', 'flag', 'Aluguel', nb ? `entregue no tee ${GH.fmt.dayLabel(nb.date).toLowerCase()}, ${GH.fmt.time(nb.date)}` : 'entregue no tee')}
+            ${group('loja', 'shop', 'Loja', 'retire no pro shop')}
+            <p class="cs-total"><span>Total · ${GH.fmt.plural(count(), 'item', 'itens')}</span><b class="num">${GH.fmt.brl(total())}</b></p>
+            <p class="cs-pay">${GH.icon('shield-tick')}Cartão, Pix ou lançar na mensalidade</p>
+            <a class="btn btn--primary btn--block" href="pagamento.html?tipo=loja">${GH.icon('card')}Ir para pagamento</a>
+            <button class="clear" type="button" id="clear">Esvaziar carrinho</button>`;
+        };
+        csBody.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-cs]');
+          if (b) {
+            const id = b.dataset.cs;
+            setQty(id, qtyOf(id) + +b.dataset.d);
+            const again = csBody.querySelector(`[data-cs="${id}"][data-d="${b.dataset.d}"]`);
+            if (again) again.focus();
+            return;
+          }
+          if (e.target.closest('#clear')) {
+            cart.slice().forEach((l) => setQty(l.id, 0));
+            GH.toast('Carrinho esvaziado', 'trash');
+          }
+        });
+        const openSheet = () => {
+          renderSheet();
+          GH.sheet.open(sheet, document.getElementById('open-cart'));
+        };
+        document.getElementById('open-cart').addEventListener('click', openSheet);
+
+        renderBar();
+        announce();
+        if (q.get('sheet') === '1' || q.get('sheet') === 'carrinho') setTimeout(openSheet, 700);
+      })();
+    </script>
+  </body>
+</html>

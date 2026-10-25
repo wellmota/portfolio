@@ -1,0 +1,406 @@
+---
+/**
+ * Protótipo navegável dentro de um iPhone, sobre a mesma faixa clara do ScreenShowcase.
+ * O iframe roda o app em 390×844 e é escalado por CSS (`--s`); os atalhos à direita trocam a tela,
+ * e o atalho ativo acompanha a navegação feita dentro do iframe (mesma origem).
+ * "Recomeçar" apaga o estado do protótipo no localStorage (chaves com `storagePrefix`) e volta ao início.
+ * Com `autoplay`, o embed faz um tour: espera a animação de entrada da tela terminar, segura alguns
+ * segundos (a barra sob o atalho ativo mostra o tempo) e passa para a próxima. Pausa com o cursor sobre
+ * o iPhone, fora da viewport e com a aba oculta; para de vez quando a pessoa toca no app ou escolhe um atalho.
+ */
+import type { PrototypeEmbed } from '../data/cases/types';
+
+interface Props extends PrototypeEmbed {
+  accent: string;
+}
+
+const { src, title, screens, screensLabel, hint, openLabel, resetLabel, storagePrefix, caption, autoplay, accent } =
+  Astro.props;
+---
+
+<div
+  class="pe-band mt-10 md:mt-14"
+  style={`--pe-accent:${accent}`}
+  data-proto
+  data-prefix={storagePrefix}
+  data-autoplay={autoplay ? '' : undefined}
+>
+  <div class="container-page grid items-center gap-10 py-12 md:grid-cols-[auto_minmax(0,26rem)] md:justify-center md:gap-16 md:py-20 lg:gap-24">
+    <div class="pe-phone mx-auto" data-reveal>
+      <span class="pe-btn pe-btn--a" aria-hidden="true"></span>
+      <span class="pe-btn pe-btn--b" aria-hidden="true"></span>
+      <span class="pe-btn pe-btn--side" aria-hidden="true"></span>
+      <div class="pe-screen">
+        <iframe src={src} title={title} loading="lazy" data-proto-frame></iframe>
+      </div>
+    </div>
+
+    <div class="max-w-md" data-reveal>
+      <p class="mono text-[11px] uppercase tracking-widest text-pe-muted">{screensLabel}</p>
+      <ol class="mt-4 border-t border-black/10">
+        {
+          screens.map((sc, i) => (
+            <li class="border-b border-black/10">
+              <button
+                type="button"
+                class="pe-shortcut"
+                data-href={sc.href}
+                aria-current={i === 0 ? 'true' : undefined}
+              >
+                <span class="mono pe-shortcut__n">{String(i + 1).padStart(2, '0')}</span>
+                <span class="pe-shortcut__label">{sc.label}</span>
+                {sc.meta && <span class="mono pe-shortcut__meta">{sc.meta}</span>}
+                {autoplay && <span class="pe-shortcut__bar" aria-hidden="true" />}
+              </button>
+            </li>
+          ))
+        }
+      </ol>
+      {hint && <p class="mt-6 text-[14px] leading-relaxed text-pe-muted">{hint}</p>}
+      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+        {
+          autoplay && (
+            <button
+              type="button"
+              class="mono pe-link"
+              data-proto-toggle
+              data-pause={autoplay.pause}
+              data-resume={autoplay.resume}
+              hidden
+            >
+              {autoplay.pause}
+            </button>
+          )
+        }
+        <a href={src} target="_blank" rel="noopener" class="mono pe-link">{openLabel} ↗</a>
+        {resetLabel && (
+          <button type="button" class="mono pe-link" data-proto-reset>
+            {resetLabel}
+          </button>
+        )}
+      </div>
+      {caption && <p class="mono mt-8 text-[11px] leading-relaxed tracking-wide text-pe-muted">{caption}</p>}
+    </div>
+  </div>
+</div>
+
+<style>
+  .pe-band {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    background:
+      radial-gradient(70% 60% at 22% 40%, color-mix(in srgb, var(--pe-accent) 16%, #f3f3f3) 0%, transparent 60%),
+      linear-gradient(180deg, #f1f1f1 0%, #e4e4e4 100%);
+  }
+  .text-pe-muted {
+    color: #5f5f66;
+  }
+
+  /* iPhone: tela 390×844 escalada por --s; o bisel acompanha */
+  .pe-phone {
+    --s: 0.86;
+    position: relative;
+    width: fit-content;
+    padding: 11px;
+    border-radius: calc(54px * var(--s) + 11px);
+    background: linear-gradient(145deg, #1d1d1f 0%, #0a0a0a 55%, #161618 100%);
+    box-shadow:
+      0 0 0 1px #2a2a2a,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 50px 90px -20px rgba(20, 20, 40, 0.45),
+      0 14px 30px rgba(0, 0, 0, 0.2);
+  }
+  .pe-screen {
+    position: relative;
+    width: calc(390px * var(--s));
+    height: calc(844px * var(--s));
+    overflow: hidden;
+    border-radius: calc(54px * var(--s));
+    background: #f4f2ec;
+    /* Safari: recorta o iframe nos cantos arredondados */
+    isolation: isolate;
+    transform: translateZ(0);
+  }
+  .pe-screen iframe {
+    display: block;
+    width: 390px;
+    height: 844px;
+    border: 0;
+    transform: scale(var(--s));
+    transform-origin: 0 0;
+  }
+  .pe-btn {
+    position: absolute;
+    width: 3px;
+    border-radius: 2px;
+    background: #2a2a2c;
+  }
+  .pe-btn--a {
+    left: -3px;
+    top: 22%;
+    height: 7%;
+  }
+  .pe-btn--b {
+    left: -3px;
+    top: 31%;
+    height: 7%;
+  }
+  .pe-btn--side {
+    right: -3px;
+    top: 26%;
+    height: 11%;
+  }
+  @media (max-width: 420px) {
+    .pe-phone {
+      --s: 0.76;
+      padding: 9px;
+    }
+  }
+  @media (max-width: 360px) {
+    .pe-phone {
+      --s: 0.68;
+    }
+  }
+
+  .pe-shortcut {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.95rem 0;
+    text-align: left;
+    color: #141414;
+    transition: color 0.2s;
+  }
+  .pe-shortcut__n {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #8a8a90;
+  }
+  .pe-shortcut__label {
+    font-size: 15.5px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .pe-shortcut__meta {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #8a8a90;
+  }
+  .pe-shortcut:hover .pe-shortcut__label {
+    color: color-mix(in srgb, var(--pe-accent) 80%, #000);
+  }
+  .pe-shortcut[aria-current='true'] .pe-shortcut__n,
+  .pe-shortcut[aria-current='true'] .pe-shortcut__label {
+    color: color-mix(in srgb, var(--pe-accent) 85%, #000);
+  }
+  .pe-shortcut[aria-current='true'] .pe-shortcut__label::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: 0.6rem;
+    border-radius: 50%;
+    background: var(--pe-accent);
+    vertical-align: middle;
+  }
+  /* tempo restante da tela no tour, sobre a borda do item */
+  .pe-shortcut__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--pe-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    pointer-events: none;
+  }
+  .pe-shortcut:focus-visible,
+  .pe-link:focus-visible {
+    outline: 2px solid var(--pe-accent);
+    outline-offset: 3px;
+  }
+  .pe-link {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #141414;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+  .pe-link:hover {
+    border-color: #141414;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-proto]').forEach((root) => {
+    const frame = root.querySelector<HTMLIFrameElement>('[data-proto-frame]');
+    if (!frame) return;
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('.pe-shortcut')];
+    const start = frame.getAttribute('src') ?? '';
+    const urlOf = (href: string) => new URL(href, location.href);
+
+    // atalho da tela atual: primeiro o endereço exato (caminho + query), depois só o caminho.
+    // Dois atalhos na mesma página com queries diferentes (ex.: performance.html e ?tour=1) não se confundem.
+    const mark = (href: string) => {
+      const u = urlOf(href);
+      const same = (b: HTMLButtonElement, query: boolean) => {
+        const h = urlOf(b.dataset.href ?? '');
+        return h.pathname === u.pathname && (!query || h.search === u.search);
+      };
+      const hit = buttons.find((b) => same(b, true)) ?? buttons.find((b) => same(b, false));
+      if (!hit) return;
+      buttons.forEach((b) => b.removeAttribute('aria-current'));
+      hit.setAttribute('aria-current', 'true');
+    };
+
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        frame.src = b.dataset.href ?? start;
+        mark(frame.src);
+      })
+    );
+
+    // navegação dentro do iframe (mesma origem) atualiza o atalho ativo
+    frame.addEventListener('load', () => {
+      try {
+        const l = frame.contentWindow?.location;
+        if (l) mark(l.pathname + l.search);
+      } catch {
+        /* outra origem: mantém o último atalho */
+      }
+    });
+
+    // tour automático
+    const toggle = root.querySelector<HTMLButtonElement>('[data-proto-toggle]');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const HOLD = 4000; // ms na tela depois da animação de entrada
+    const SETTLE_MAX = 3500; // teto de espera pela animação de entrada
+    let playing = root.dataset.autoplay !== undefined && !reduced;
+    let hovering = false;
+    let inView = false;
+    let bar: Animation | null = null;
+    let token = 0;
+
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const held = () => hovering || !inView || document.hidden;
+    const sync = () => {
+      if (!toggle) return;
+      toggle.hidden = root.dataset.autoplay === undefined || reduced;
+      toggle.textContent = (playing ? toggle.dataset.pause : toggle.dataset.resume) ?? '';
+    };
+    const clearBar = () => {
+      bar?.cancel();
+      bar = null;
+    };
+    const current = () => buttons.findIndex((b) => b.getAttribute('aria-current') === 'true');
+
+    // espera as animações finitas da tela (entrada, reveals em cascata) terminarem
+    const settle = async () => {
+      await sleep(250);
+      let doc: Document | null = null;
+      try {
+        doc = frame.contentDocument;
+      } catch {
+        /* outra origem */
+      }
+      if (!doc) return sleep(1200);
+      const anims = doc.getAnimations().filter((a) => a.effect?.getComputedTiming().endTime !== Infinity);
+      await Promise.race([Promise.allSettled(anims.map((a) => a.finished)), sleep(SETTLE_MAX)]);
+    };
+
+    const schedule = async () => {
+      const t = ++token;
+      clearBar();
+      if (!playing) return;
+      await settle();
+      if (t !== token || !playing) return;
+      const i = current();
+      const el = buttons[i]?.querySelector<HTMLElement>('.pe-shortcut__bar');
+      if (!el) return;
+      bar = el.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: HOLD, easing: 'linear' });
+      if (held()) bar.pause();
+      bar.onfinish = () => {
+        if (t !== token || !playing) return;
+        const next = buttons[(i + 1) % buttons.length];
+        frame.src = next.dataset.href ?? start;
+        mark(frame.src);
+        clearBar();
+      };
+    };
+    const hold = () => {
+      if (!bar) return;
+      if (held()) bar.pause();
+      else bar.play();
+    };
+    const stop = () => {
+      if (!playing) return;
+      playing = false;
+      token++;
+      clearBar();
+      sync();
+    };
+
+    if (root.dataset.autoplay !== undefined) {
+      sync();
+      frame.addEventListener('load', () => {
+        if (playing) schedule();
+        // tocar ou digitar dentro do app encerra o tour
+        try {
+          const doc = frame.contentDocument;
+          ['pointerdown', 'keydown'].forEach((ev) =>
+            doc?.addEventListener(ev, stop, { once: true, passive: true })
+          );
+        } catch {
+          /* outra origem */
+        }
+      });
+      buttons.forEach((b) => b.addEventListener('click', stop));
+      toggle?.addEventListener('click', () => {
+        if (playing) return stop();
+        playing = true;
+        sync();
+        schedule();
+      });
+      const phone = root.querySelector<HTMLElement>('.pe-phone');
+      phone?.addEventListener('pointerenter', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        hovering = true;
+        hold();
+      });
+      phone?.addEventListener('pointerleave', () => {
+        hovering = false;
+        hold();
+      });
+      new IntersectionObserver(
+        ([e]) => {
+          inView = e.isIntersecting;
+          hold();
+        },
+        { threshold: 0.4 }
+      ).observe(phone ?? root);
+      document.addEventListener('visibilitychange', hold);
+    }
+
+    root.querySelector('[data-proto-reset]')?.addEventListener('click', () => {
+      const prefix = root.dataset.prefix;
+      try {
+        if (prefix)
+          Object.keys(localStorage)
+            .filter((k) => k.startsWith(prefix))
+            .forEach((k) => localStorage.removeItem(k));
+        sessionStorage.removeItem(prefix + 'shot');
+      } catch {
+        /* storage bloqueado: só volta ao início */
+      }
+      frame.src = start;
+      mark(start);
+    });
+  });
+</script>

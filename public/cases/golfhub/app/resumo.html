@@ -1,0 +1,1413 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1f3a23" />
+    <title>Resumo da rodada · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Round summary (inferred). The Figma's photo-card language at full bleed — a procedural 3D green where the
+         ball drops — then the Figma score bar, white tiles and rows. Numbers count up after the putt drops. */
+      .screen--flush {
+        padding-bottom: 36px;
+      }
+      /* once the dark hero scrolls away, the floating status bar turns ink on a frosted strip */
+      [data-status='light'] .statusbar {
+        transition:
+          color var(--t-fast) var(--ease),
+          background-color var(--t-fast) var(--ease);
+      }
+      body.is-past .statusbar {
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.86);
+        -webkit-backdrop-filter: saturate(1.4) blur(14px);
+        backdrop-filter: saturate(1.4) blur(14px);
+      }
+      .hero {
+        position: relative;
+        height: 430px;
+        overflow: hidden;
+        border-radius: 0 0 var(--r-hero) var(--r-hero);
+        background: #2c4a2e;
+        color: #fff;
+        box-shadow: var(--shadow-photo);
+        isolation: isolate;
+      }
+      .hero canvas,
+      .hero__fallback {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -3;
+        object-fit: cover;
+      }
+      .hero canvas {
+        opacity: 0;
+        transition: opacity 700ms var(--ease);
+        touch-action: pan-y;
+      }
+      .hero.is-3d canvas {
+        opacity: 1;
+      }
+      .hero__shade {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(8, 22, 11, 0.62) 0%, rgba(8, 22, 11, 0.28) 30%, transparent 50%),
+          linear-gradient(0deg, rgba(8, 22, 11, 0.45) 0%, transparent 22%);
+      }
+      .hero__shade::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.12;
+        mix-blend-mode: overlay;
+      }
+      .hero__bar {
+        position: relative;
+        margin: 0 10px;
+        padding-top: env(safe-area-inset-top);
+      }
+      .has-status .hero__bar {
+        padding-top: 50px;
+      }
+      .hero__txt {
+        position: relative;
+        display: grid;
+        gap: 6px;
+        padding: 6px var(--gutter) 0;
+        max-width: 300px;
+      }
+      .hero__k {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        justify-self: start;
+        height: 28px;
+        padding: 0 12px 0 8px;
+        border-radius: var(--r-pill);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .hero__k .flag {
+        width: 11px;
+        height: 16px;
+        color: #fff;
+      }
+      .hero__t {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        color: #fff;
+        text-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
+      }
+      .hero__s {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.86);
+      }
+      .hero__replay {
+        position: absolute;
+        right: 18px;
+        bottom: 56px;
+        z-index: 2;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.18);
+        opacity: 0;
+        transform: scale(0.8);
+        transition:
+          opacity 400ms var(--ease),
+          transform 400ms var(--ease-spring),
+          background var(--t-fast) var(--ease);
+      }
+      .hero__replay:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+      .hero.is-holed .hero__replay {
+        opacity: 1;
+        transform: none;
+      }
+      .hero__replay .i {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* Figma score bar, overlapping the hero */
+      .score {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        margin: -44px 16px 0;
+        min-height: 82px;
+        padding: 12px 6px;
+        border-radius: var(--r-lg);
+        color: #fff;
+        background: var(--char);
+        box-shadow: var(--shadow-btn);
+      }
+      .score__cell {
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        gap: 2px;
+        position: relative;
+      }
+      .score__cell + .score__cell::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 14px;
+        bottom: 14px;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .score__v {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+      }
+      .score__v {
+        min-height: 1.1em;
+        opacity: 0;
+        transform: translateY(8px);
+        transition:
+          opacity 500ms var(--ease),
+          transform 700ms var(--ease-spring);
+      }
+      .hero.is-holed + .score .score__v {
+        opacity: 1;
+        transform: none;
+      }
+      .hero.is-holed + .score .score__cell:nth-child(2) .score__v {
+        transition-delay: 90ms;
+      }
+      .hero.is-holed + .score .score__cell:nth-child(3) .score__v {
+        transition-delay: 180ms;
+      }
+      .hero.is-holed + .score .score__cell:nth-child(4) .score__v {
+        transition-delay: 270ms;
+      }
+      .score__v.is-up {
+        color: var(--green-300);
+      }
+      .score__k {
+        font-size: 11.5px;
+        color: #b3b3b3;
+      }
+
+      .pad {
+        padding: 0 var(--gutter);
+      }
+      .block {
+        display: grid;
+        gap: 12px;
+        margin-top: 26px;
+      }
+      .block__head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      /* tiles */
+      .tiles {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .tile {
+        display: grid;
+        gap: 6px;
+        align-content: start;
+        padding: 16px;
+        border-radius: var(--r-lg);
+        background: var(--surface);
+        box-shadow: var(--shadow-card);
+      }
+      .tile__k {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--ink-3);
+      }
+      .tile__k .i {
+        width: 16px;
+        height: 16px;
+        stroke-width: 1.8;
+      }
+      .tile__v {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+      }
+      .tile__v small {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink-3);
+        letter-spacing: -0.01em;
+      }
+      .tile__s {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .tile .meter {
+        height: 6px;
+        margin-top: 4px;
+      }
+      .tile--best {
+        color: #fff;
+        background: linear-gradient(160deg, #17a54f, var(--green-700));
+        box-shadow: 0 18px 28px -16px rgba(16, 111, 54, 0.75);
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .tile--best::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.16;
+        mix-blend-mode: overlay;
+      }
+      .tile--best .tile__k,
+      .tile--best .tile__s {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* breakdown: one stacked bar + the notation marks */
+      .mix {
+        display: grid;
+        gap: 16px;
+        padding: 18px 16px 16px;
+      }
+      .mix__bar {
+        display: flex;
+        gap: 2px;
+        height: 12px;
+      }
+      .mix__bar i {
+        display: block;
+        height: 100%;
+        border-radius: 4px;
+        background: var(--c);
+        transform-origin: left;
+        transform: scaleX(0);
+      }
+      .reveal.is-in .mix__bar i {
+        animation: grow-x 900ms var(--ease) both;
+        animation-delay: calc(var(--k) * 120ms + 250ms);
+      }
+      @keyframes grow-x {
+        from {
+          transform: scaleX(0);
+        }
+        to {
+          transform: scaleX(1);
+        }
+      }
+      .mix__legend {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+        text-align: center;
+      }
+      .mix__item {
+        display: grid;
+        justify-items: center;
+        gap: 2px;
+      }
+      .mix__item.is-zero {
+        opacity: 0.45;
+      }
+      .mix__n {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.2;
+        font-variant-numeric: tabular-nums;
+      }
+      .mix__l {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .sw {
+        display: block;
+        width: 22px;
+        height: 22px;
+        color: var(--c);
+      }
+      .sw * {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+      }
+      .sw--par {
+        display: grid;
+        place-items: center;
+      }
+      .sw--par::before {
+        content: '';
+        width: 12px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--ink-4);
+      }
+
+      /* score-by-hole chart */
+      .chart {
+        padding: 16px 12px 10px;
+      }
+      .chart__read {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 26px;
+        padding: 0 4px 8px;
+        font-size: 13px;
+        color: var(--ink-2);
+      }
+      .chart__read b {
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .chart__read .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        background: var(--c, var(--ink-4));
+      }
+      #chart-svg {
+        width: 100%;
+        height: auto;
+        overflow: visible;
+      }
+      #chart-svg:focus-visible {
+        outline-offset: 4px;
+      }
+      .chart .grid line {
+        stroke: var(--line);
+        stroke-width: 1;
+      }
+      .chart .grid line.zero {
+        stroke: var(--ink-5);
+      }
+      .chart .grid text,
+      .chart .xl text {
+        font-size: 9.5px;
+        fill: var(--ink-3);
+        font-family: var(--font);
+      }
+      .chart .xl text.is-on {
+        fill: var(--ink);
+        font-weight: 700;
+      }
+      .chart .nine {
+        font-size: 10px;
+        font-weight: 600;
+        fill: var(--ink-3);
+        letter-spacing: 0.04em;
+      }
+      .chart .sep {
+        stroke: var(--line-strong);
+        stroke-dasharray: 3 3;
+      }
+      .chart .b {
+        transform-box: fill-box;
+        transform: scaleY(0);
+        transition: opacity var(--t-fast) var(--ease);
+      }
+      .chart .b.up {
+        transform-origin: 50% 100%;
+      }
+      .chart .b.dn {
+        transform-origin: 50% 0%;
+      }
+      .chart.is-in .b {
+        animation: grow-y 760ms var(--ease) both;
+        animation-delay: calc(var(--i) * 45ms + 200ms);
+      }
+      @keyframes grow-y {
+        from {
+          transform: scaleY(0);
+        }
+        to {
+          transform: scaleY(1);
+        }
+      }
+      .chart.has-pick .b {
+        opacity: 0.35;
+      }
+      .chart.has-pick .b.is-on {
+        opacity: 1;
+      }
+      .chart .hit {
+        fill: transparent;
+        cursor: pointer;
+      }
+      .chart__foot {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 14px;
+        padding: 10px 4px 2px;
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .chart__foot span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .chart__foot i {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        background: var(--c);
+      }
+
+      /* insight rows */
+      .ins .row__title {
+        font-size: 15.5px;
+      }
+      .ins .row__sub {
+        line-height: 1.35;
+      }
+      .spark {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 40px;
+      }
+      .spark i {
+        display: block;
+        width: 7px;
+        border-radius: 3px;
+        background: var(--ink-5);
+        transform-origin: bottom;
+      }
+      .spark i.is-now {
+        background: var(--green-500);
+      }
+      .reveal.is-in .spark i {
+        animation: grow-y 700ms var(--ease) both;
+        animation-delay: calc(var(--k) * 90ms + 300ms);
+      }
+      .hcp-v {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-variant-numeric: tabular-nums;
+      }
+      .hcp-v .i {
+        width: 16px;
+        height: 16px;
+        color: var(--green-600);
+        stroke-width: 2;
+      }
+      .hcp-v .was {
+        color: var(--ink-3);
+        font-weight: 500;
+      }
+      .pts {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--violet-600);
+        font-variant-numeric: tabular-nums;
+      }
+      .chev {
+        color: var(--ink-4);
+      }
+
+      .bb-2 {
+        display: grid;
+        grid-template-columns: 56px 1fr;
+        gap: 10px;
+      }
+      .bb-2 .btn {
+        white-space: nowrap;
+      }
+      .bb-2 .btn--ghost {
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body data-status="light">
+    <div class="app">
+      <main class="screen screen--flush" id="main">
+        <section class="hero" id="hero" aria-labelledby="h-title">
+          <canvas id="scene" aria-hidden="true"></canvas>
+          <img class="hero__fallback" id="fallback" src="assets/img/campo-c.webp" alt="" width="736" height="552" hidden />
+          <div class="hero__shade" aria-hidden="true"></div>
+          <div class="bar bar--light hero__bar">
+            <a class="icon-btn" href="home.html" aria-label="Voltar ao início"><span data-icon="arrow-left"></span></a>
+            <span class="bar__title">Resumo</span>
+            <button class="icon-btn" type="button" data-share aria-label="Compartilhar resumo"><span data-icon="share"></span></button>
+          </div>
+          <div class="hero__txt">
+            <p class="hero__k rise" style="--d: 1"><span data-flag></span><span id="h-k">Rodada concluída</span></p>
+            <h1 class="hero__t rise" style="--d: 2" id="h-title"></h1>
+            <p class="hero__s rise" style="--d: 3" id="h-sub"></p>
+          </div>
+          <button class="glass-btn hero__replay" type="button" id="replay" aria-label="Ver a tacada de novo" tabindex="-1"><span data-icon="refresh-2"></span></button>
+        </section>
+
+        <section class="score pop" style="--d: 3" id="score" aria-label="Placar da rodada" aria-live="polite"></section>
+
+        <div class="pad">
+          <section class="block reveal" aria-labelledby="t-num">
+            <h2 class="section__title" id="t-num">Seus números</h2>
+            <div class="tiles" id="tiles"></div>
+          </section>
+
+          <section class="block reveal" aria-labelledby="t-mix">
+            <div class="block__head">
+              <h2 class="section__title" id="t-mix">Seu jogo</h2>
+              <span class="t-sm t-muted" id="mix-sub"></span>
+            </div>
+            <div class="card mix" id="mix"></div>
+          </section>
+
+          <section class="block" aria-labelledby="t-chart">
+            <div class="block__head">
+              <h2 class="section__title" id="t-chart">Buraco a buraco</h2>
+              <a class="link" id="to-card" href="cartao.html?demo=full">Ver cartão</a>
+            </div>
+            <div class="card chart reveal" id="chart"></div>
+          </section>
+
+          <section class="block reveal" aria-labelledby="t-ins">
+            <h2 class="section__title" id="t-ins">Comparado com você</h2>
+            <div class="rows ins" id="ins"></div>
+          </section>
+        </div>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 5">
+        <div class="bb-2">
+          <button class="btn btn--ghost" type="button" data-share aria-label="Compartilhar"><span data-icon="share"></span></button>
+          <a class="btn btn--primary" href="home.html"><span data-icon="home-2"></span>Voltar ao início</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const $ = (id) => document.getElementById(id);
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+
+        /* ---------- round kit (same block as cartao.html; candidate for app.js) ---------- */
+        const HOLES_B = [
+          { n: 1, par: 4, m: 330, idx: 3 },
+          { n: 2, par: 3, m: 150, idx: 7 },
+          { n: 3, par: 4, m: 345, idx: 1 },
+          { n: 4, par: 4, m: 310, idx: 5 },
+          { n: 5, par: 3, m: 140, idx: 9 },
+          { n: 6, par: 5, m: 470, idx: 2 },
+          { n: 7, par: 4, m: 300, idx: 4 },
+          { n: 8, par: 3, m: 135, idx: 8 },
+          { n: 9, par: 4, m: 300, idx: 6 },
+        ];
+        const holesOf = (r) => {
+          const all = r.course === 'b' ? HOLES_B : GH.holes;
+          const start = r.start || 1;
+          return all.filter((h) => h.n >= start && h.n < start + (r.holes || all.length));
+        };
+        const hcpOf = (r, id) => {
+          if (GH.people[id]) return GH.people[id].hcp;
+          const g = (r.guests || []).find((x) => x.id === id);
+          return g ? g.hcp : null;
+        };
+        const shortOf = (id) => (GH.people[id] ? GH.first(id) : String(id).split(' ')[0]);
+        const received = (r, id) => {
+          const h = hcpOf(r, id);
+          if (h == null) return null;
+          const list = holesOf(r);
+          const n = list.length;
+          const ph = n === 18 ? Math.round(h) : Math.round(h / 2);
+          const map = {};
+          [...list].sort((a, b) => a.idx - b.idx).forEach((hole, k) => (map[hole.n] = Math.floor(ph / n) + (k < ph % n ? 1 : 0)));
+          return { ph, map };
+        };
+        const note = (strokes, par) => {
+          const d = strokes - par;
+          if (strokes === 1) return { k: 'eagle', label: 'Hole in one' };
+          if (d <= -3) return { k: 'eagle', label: 'Albatroz' };
+          if (d === -2) return { k: 'eagle', label: 'Eagle' };
+          if (d === -1) return { k: 'birdie', label: 'Birdie' };
+          if (d === 0) return { k: 'par', label: 'Par' };
+          if (d === 1) return { k: 'bogey', label: 'Bogey' };
+          if (d === 2) return { k: 'double', label: 'Duplo bogey' };
+          if (d === 3) return { k: 'double', label: 'Triplo bogey' };
+          return { k: 'double', label: `${d} acima do par` };
+        };
+        const stats = (r, id) => {
+          const o = { strokes: 0, adj: 0, par: 0, played: 0, putts: 0, puttsN: 0, fw: 0, fwN: 0, gir: 0, girN: 0, net: 0, pts: 0, counts: { eagle: 0, birdie: 0, par: 0, bogey: 0, double: 0 }, best: null };
+          const rec = received(r, id);
+          o.ph = rec ? rec.ph : null;
+          holesOf(r).forEach((h) => {
+            const s = ((r.scores || {})[h.n] || {})[id];
+            if (!s || !s.strokes) return;
+            o.played++;
+            o.strokes += s.strokes;
+            o.par += h.par;
+            const rc = rec ? rec.map[h.n] : 0;
+            o.adj += Math.min(s.strokes, h.par + 2 + rc); /* net double bogey cap (WHS) */
+            if (s.putts != null) {
+              o.putts += s.putts;
+              o.puttsN++;
+              o.girN++;
+              if (s.strokes - s.putts <= h.par - 2) o.gir++;
+            }
+            if (h.par > 3 && s.fairway != null) {
+              o.fwN++;
+              if (s.fairway) o.fw++;
+            }
+            o.counts[note(s.strokes, h.par).k]++;
+            o.net += s.strokes - rc;
+            o.pts += Math.max(0, 2 + h.par + rc - s.strokes);
+            const d = s.strokes - h.par;
+            if (!o.best || d < o.best.d || (d === o.best.d && h.idx < o.best.h.idx)) o.best = { h, d, s };
+          });
+          o.toPar = o.strokes - o.par;
+          o.netToPar = o.net - o.par;
+          return o;
+        };
+        const DEMO = {
+          pedro: [[4, 5, 4, 6, 6, 3, 3, 6, 4, 5, 6, 3, 5, 6, 4, 5, 4, 5], [2, 2, 2, 3, 2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2], '10-10-11101-00-110'],
+          caio: [[4, 4, 3, 8, 5, 3, 4, 5, 5, 4, 5, 3, 5, 4, 3, 6, 4, 5], [2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2], '11-01-10111-10-011'],
+          lucas: [[3, 5, 3, 5, 5, 3, 4, 3, 5, 4, 6, 3, 4, 5, 4, 5, 4, 4], [1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1], '11-11-11011-10-111'],
+        };
+        const demoFull = () => {
+          const scores = {};
+          GH.holes.forEach((h, i) => {
+            scores[h.n] = {};
+            Object.entries(DEMO).forEach(([id, [s, p, f]]) => (scores[h.n][id] = { strokes: s[i], putts: p[i], fairway: f[i] === '-' ? null : f[i] === '1' }));
+          });
+          return { id: 'demo-full', course: 'a', tee: 'branco', holes: 18, start: 1, players: Object.keys(DEMO), guests: [], cart: true, hcp: true, startedAt: GH.day(0, '07:20').toISOString(), current: 18, scores, ball: null };
+        };
+        const MARK = {
+          eagle: '<circle cx="11" cy="11" r="10"/><circle cx="11" cy="11" r="6.5"/>',
+          birdie: '<circle cx="11" cy="11" r="8.5"/>',
+          bogey: '<rect x="3" y="3" width="16" height="16" rx="2"/>',
+          double: '<rect x="1.5" y="1.5" width="19" height="19" rx="2.5"/><rect x="5" y="5" width="12" height="12" rx="1.5"/>',
+        };
+        /* ---------- end of round kit ---------- */
+
+        /* course rating / slope for the HCP estimate (white tee; not in data.js — candidate for GH.courses) */
+        const RATING = { a: { cr: 71.2, slope: 128 }, b: { cr: 33.4, slope: 121 } };
+        const COL = { eagle: 'var(--green-700)', birdie: 'var(--green-400)', par: 'var(--ink-5)', bogey: 'var(--char-3)', double: 'var(--char)' };
+
+        /* ---------- source: gh:lastRound, else the demo round (?demo=1 forces it) ---------- */
+        const last = GH.store.get('lastRound');
+        const isDemo = q.has('demo') || !last;
+        const round = isDemo ? { ...demoFull(), finished: true, finishedAt: GH.day(0, '11:46').toISOString() } : last;
+        round.scores = round.scores || {};
+        const course = GH.course(round.course);
+        const holes = holesOf(round);
+        const me = GH.me();
+        const s = stats(round, GH.user);
+        const complete = s.played === holes.length && s.played > 0;
+        const showNet = round.hcp !== false && s.ph != null;
+        const marker = (round.players || [])[1] ? shortOf(round.players[1]) : null;
+        $('to-card').href = isDemo ? 'cartao.html?demo=full' : 'cartao.html?rodada=ultima';
+        $('to-card').textContent = 'Ver cartão';
+        if (course.photo) $('fallback').src = `assets/img/${course.photo}.webp`;
+
+        /* comparison with recent rounds of the same length */
+        const past = GH.rounds.filter((x) => x.holes === holes.length);
+        const avg = past.length ? past.reduce((a, x) => a + x.strokes, 0) / past.length : null;
+        const delta = avg != null ? Math.round(avg - s.strokes) : null;
+        /* HCP estimate: score differential (WHS formula, adjusted gross) nudging the index */
+        const rt = RATING[round.course] || RATING.a;
+        const diff = complete && holes.length === 18 ? ((s.adj - rt.cr) * 113) / rt.slope : null;
+        const newHcp = diff != null ? Math.round((me.hcp + (diff - me.hcp) * 0.25) * 10) / 10 : null;
+
+        /* ---------- hero copy ---------- */
+        $('h-title').innerHTML = complete ? `Boa rodada,<br/>${GH.esc(me.name.split(' ')[0])}!` : `Rodada<br/>encerrada`;
+        $('h-k').textContent = complete ? 'Rodada concluída' : `${s.played} de ${holes.length} buracos`;
+        $('h-sub').textContent = `${course.name} · Tee ${GH.tee(round.tee).name.toLowerCase()} · ${GH.fmt.dayLabel(round.finishedAt || round.startedAt).toLowerCase()}`;
+
+        /* ---------- score bar ---------- */
+        const cells = [
+          { id: 'sv-strokes', v: s.strokes, k: 'Tacadas', fmt: (v) => String(v) },
+          { id: 'sv-topar', v: s.toPar, k: 'vs par', fmt: (v) => GH.fmt.toPar(v) },
+          showNet
+            ? { id: 'sv-net', v: s.net, k: `Net · HCP ${s.ph}`, fmt: (v) => String(v), up: s.netToPar <= 0 }
+            : { id: 'sv-putts', v: s.putts, k: 'Putts', fmt: (v) => String(v) },
+          { id: 'sv-pts', v: s.pts, k: 'Pontos', fmt: (v) => String(v), up: true },
+        ];
+        $('score').innerHTML = cells
+          .map((c) => `<div class="score__cell"><span class="score__v${c.up ? ' is-up' : ''}" id="${c.id}">${c.fmt(0)}</span><span class="score__k">${c.k}</span></div>`)
+          .join('');
+        $('score').setAttribute(
+          'aria-label',
+          `Placar: ${s.strokes} tacadas, ${GH.fmt.toPar(s.toPar)} no par${showNet ? `, net ${s.net}` : ''}, ${s.pts} pontos Stableford`
+        );
+
+        /* ---------- tiles ---------- */
+        const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+        const best = s.best;
+        $('tiles').innerHTML = `
+          <div class="tile"><span class="tile__k">${GH.icon('flag-2')}Putts</span><span class="tile__v" data-cu="${s.putts}">0</span><span class="tile__s">${s.puttsN ? GH.fmt.num(s.putts / s.puttsN, 1) + ' por buraco' : 'sem putts lançados'}</span></div>
+          <div class="tile tile--best"><span class="tile__k">${GH.icon('star-1')}Melhor buraco</span><span class="tile__v">${best ? best.h.n : '–'}<small style="color:rgba(255,255,255,.8)"> · par ${best ? best.h.par : ''}</small></span><span class="tile__s">${best ? `${note(best.s.strokes, best.h.par).label} · ${best.s.strokes} tacadas` : '–'}</span></div>
+          <div class="tile"><span class="tile__k">${GH.icon('routing-2')}Fairways</span><span class="tile__v"><span data-cu="${pct(s.fw, s.fwN)}">0</span><small>%</small></span><span class="tile__s">${s.fw} de ${s.fwN} acertados</span><span class="meter"><i style="--v:${s.fwN ? s.fw / s.fwN : 0}"></i></span></div>
+          <div class="tile"><span class="tile__k">${GH.icon('gps')}Greens (GIR)</span><span class="tile__v"><span data-cu="${pct(s.gir, s.girN)}">0</span><small>%</small></span><span class="tile__s">${s.gir} de ${s.girN} em regulação</span><span class="meter" style="--meter: var(--indigo-500)"><i style="--v:${s.girN ? s.gir / s.girN : 0};--d:2"></i></span></div>`;
+
+        /* ---------- breakdown ---------- */
+        const KINDS = [
+          ['eagle', 'Eagles', 'Eagle'],
+          ['birdie', 'Birdies', 'Birdie'],
+          ['par', 'Pars', 'Par'],
+          ['bogey', 'Bogeys', 'Bogey'],
+          ['double', 'Duplos+', 'Duplo+'],
+        ];
+        $('mix-sub').textContent = `${s.played} buracos`;
+        $('mix').innerHTML = `
+          <div class="mix__bar" role="img" aria-label="${KINDS.map(([k, pl, one]) => `${s.counts[k]} ${s.counts[k] === 1 ? one.toLowerCase() : pl.toLowerCase()}`).join(', ')}">
+            ${KINDS.filter(([k]) => s.counts[k])
+              .map(([k], i) => `<i style="--c:${COL[k]};flex:${s.counts[k]};--k:${i}"></i>`)
+              .join('')}
+          </div>
+          <div class="mix__legend" aria-hidden="true">
+            ${KINDS.map(
+              ([k, pl, one]) => `<div class="mix__item${s.counts[k] ? '' : ' is-zero'}">
+                ${k === 'par' ? '<span class="sw sw--par"></span>' : `<svg class="sw" viewBox="0 0 22 22" style="--c:${k === 'birdie' ? 'var(--green-600)' : COL[k]}">${MARK[k]}</svg>`}
+                <span class="mix__n" data-cu="${s.counts[k]}">0</span><span class="mix__l">${s.counts[k] === 1 ? one : pl}</span></div>`
+            ).join('')}
+          </div>`;
+
+        /* ---------- chart: strokes against par, hole by hole (diverging bars, one axis) ---------- */
+        (function chart() {
+          const W = 330,
+            H = 168,
+            L = 26,
+            T = 16,
+            B = 22;
+          const list = holes;
+          const vals = list.map((h) => {
+            const sc = ((round.scores[h.n] || {})[GH.user] || {}).strokes;
+            return sc ? sc - h.par : null;
+          });
+          const hi = Math.max(2, ...vals.filter((v) => v != null));
+          const lo = Math.min(-1, ...vals.filter((v) => v != null));
+          const plotH = H - T - B;
+          const y = (v) => T + ((hi - v) / (hi - lo)) * plotH;
+          const step = (W - L) / list.length;
+          const bw = Math.min(14, step - 4);
+          const x = (i) => L + i * step + (step - bw) / 2;
+          const kindOf = (v) => (v <= -2 ? 'eagle' : v === -1 ? 'birdie' : v === 0 ? 'par' : v === 1 ? 'bogey' : 'double');
+          const r = 3;
+          const barPath = (i, v) => {
+            const x0 = x(i),
+              x1 = x0 + bw,
+              y0 = y(0);
+            if (v === 0) return `M${x0},${y0 - 1.5}h${bw}v3h-${bw}Z`;
+            const y1 = y(v);
+            return v > 0
+              ? `M${x0},${y0}V${y1 + r}Q${x0},${y1} ${x0 + r},${y1}H${x1 - r}Q${x1},${y1} ${x1},${y1 + r}V${y0}Z`
+              : `M${x0},${y0}V${y1 - r}Q${x0},${y1} ${x0 + r},${y1}H${x1 - r}Q${x1},${y1} ${x1},${y1 - r}V${y0}Z`;
+          };
+          let grid = '';
+          for (let v = hi; v >= lo; v--)
+            grid += `<line x1="${L}" x2="${W}" y1="${y(v)}" y2="${y(v)}"${v === 0 ? ' class="zero"' : ''}/><text x="${L - 6}" y="${y(v) + 3.2}" text-anchor="end">${v === 0 ? 'Par' : GH.fmt.toPar(v)}</text>`;
+          const bars = vals
+            .map((v, i) => (v == null ? '' : `<path class="b ${v < 0 ? 'dn' : 'up'}" d="${barPath(i, v)}" fill="${COL[kindOf(v)]}" style="--i:${i}" data-i="${i}"/>`))
+            .join('');
+          const hits = list.map((h, i) => `<rect class="hit" x="${L + i * step}" y="${T}" width="${step}" height="${plotH + B}" data-i="${i}"/>`).join('');
+          const xl = list.map((h, i) => `<text x="${x(i) + bw / 2}" y="${H - 6}" text-anchor="middle" data-i="${i}">${h.n}</text>`).join('');
+          const sep = list.length === 18 ? `<line class="sep" x1="${L + 9 * step}" x2="${L + 9 * step}" y1="${T - 12}" y2="${H - B + 2}"/><text class="nine" x="${L + 4.5 * step}" y="${T - 6}" text-anchor="middle">IDA</text><text class="nine" x="${L + 13.5 * step}" y="${T - 6}" text-anchor="middle">VOLTA</text>` : '';
+          const sum = `Tacadas contra o par, buraco a buraco. ${list.map((h, i) => (vals[i] == null ? `${h.n}: sem placar` : `${h.n}: ${note(vals[i] + h.par, h.par).label.toLowerCase()}`)).join('; ')}.`;
+          $('chart').innerHTML = `<p class="chart__read" id="read" aria-live="polite"></p>
+            <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${GH.esc(sum)}" tabindex="0" id="chart-svg">
+              <g class="grid">${grid}</g>${sep}<g>${bars}</g><g class="xl">${xl}</g><g>${hits}</g></svg>
+            <div class="chart__foot" aria-hidden="true">
+              <span><i style="--c:${COL.birdie}"></i>Abaixo do par</span><span><i style="--c:${COL.bogey}"></i>Bogey</span><span><i style="--c:${COL.double}"></i>Duplo ou pior</span>
+            </div>`;
+          const svg = $('chart-svg');
+          const box = $('chart');
+          let pick = -1;
+          const show = (i) => {
+            pick = i;
+            const h = list[i];
+            const v = vals[i];
+            box.classList.toggle('has-pick', i >= 0);
+            svg.querySelectorAll('.b, .xl text').forEach((el) => el.classList.toggle('is-on', +el.dataset.i === i));
+            if (i < 0 || !h) return readDefault();
+            $('read').innerHTML =
+              v == null
+                ? `<b>Buraco ${h.n}</b> · par ${h.par} · sem placar`
+                : `<span class="dot" style="--c:${COL[kindOf(v)]}"></span><b>Buraco ${h.n}</b> · par ${h.par} · ${v + h.par} tacadas · ${note(v + h.par, h.par).label.toLowerCase()}`;
+          };
+          const readDefault = () => {
+            const b = s.best;
+            $('read').innerHTML = b ? `${GH.icon('star-1', 'i--sm')}<span>Destaque: <b>buraco ${b.h.n}</b>, ${note(b.s.strokes, b.h.par).label.toLowerCase()}</span>` : 'Toque em um buraco';
+          };
+          readDefault();
+          svg.addEventListener('pointerover', (e) => {
+            const t = e.target.closest('[data-i]');
+            if (t) show(+t.dataset.i);
+          });
+          svg.addEventListener('pointerleave', () => show(-1));
+          svg.addEventListener('click', (e) => {
+            const t = e.target.closest('[data-i]');
+            if (t) show(+t.dataset.i);
+          });
+          svg.addEventListener('keydown', (e) => {
+            const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+            if (e.key === 'Escape') return show(-1);
+            if (!d) return;
+            e.preventDefault();
+            show(Math.max(0, Math.min(list.length - 1, (pick < 0 ? (d > 0 ? -1 : list.length) : pick) + d)));
+          });
+          svg.addEventListener('blur', () => show(-1));
+        })();
+
+        /* ---------- insights ---------- */
+        const recent = past.slice(0, 3).reverse();
+        const sparkMax = Math.max(s.strokes, ...recent.map((x) => x.strokes));
+        const sparkMin = Math.min(s.strokes, ...recent.map((x) => x.strokes)) - 6;
+        const bar = (v) => Math.round(10 + ((v - sparkMin) / (sparkMax - sparkMin)) * 30);
+        const cmp =
+          !complete
+            ? { t: 'Rodada incompleta', sub: `${s.played} de ${holes.length} buracos. Não entra na média nem no handicap.`, ico: 'info-circle', tone: 'amber' }
+            : delta == null
+              ? { t: 'Sua primeira rodada aqui', sub: 'A partir da próxima, comparamos com a sua média.', ico: 'medal-star', tone: 'indigo' }
+              : delta > 0
+                ? { t: `${GH.fmt.plural(delta, 'tacada', 'tacadas')} melhor que sua média`, sub: `Média de ${GH.fmt.num(avg)} nas últimas ${past.length} rodadas de ${holes.length} buracos`, ico: 'trend-down', tone: '' }
+                : delta < 0
+                  ? { t: `${GH.fmt.plural(-delta, 'tacada', 'tacadas')} acima da sua média`, sub: `Média de ${GH.fmt.num(avg)} nas últimas ${past.length} rodadas de ${holes.length} buracos`, ico: 'trend-up', tone: 'amber' }
+                  : { t: 'Na sua média', sub: `Média de ${GH.fmt.num(avg)} nas últimas ${past.length} rodadas`, ico: 'status', tone: 'indigo' };
+        const rk = GH.ranking.find((x) => x.id === GH.user);
+        $('ins').innerHTML = `
+          <div class="row">
+            <span class="tile-ico${cmp.tone ? ' tile-ico--' + cmp.tone : ''}">${GH.icon(cmp.ico)}</span>
+            <div class="row__body"><span class="row__title">${cmp.t}</span><span class="row__sub">${cmp.sub}</span></div>
+            ${complete && recent.length ? `<span class="spark" aria-hidden="true">${recent.map((x, i) => `<i style="height:${bar(x.strokes)}px;--k:${i}"></i>`).join('')}<i class="is-now" style="height:${bar(s.strokes)}px;--k:${recent.length}"></i></span>` : ''}
+          </div>
+          ${
+            diff != null
+              ? `<div class="row">
+            <span class="tile-ico tile-ico--indigo">${GH.icon('chart-2')}</span>
+            <div class="row__body"><span class="row__title">Handicap estimado <span class="hcp-v"><span class="was">${GH.fmt.hcp(me.hcp)}</span>${GH.icon('arrow-right')}<span id="hcp-now" data-hcp="${newHcp}">${GH.fmt.hcp(me.hcp)}</span></span></span>
+            <span class="row__sub">Diferencial da rodada ${GH.fmt.num(diff, 1)}. O índice oficial sai na revisão da federação.</span></div>
+          </div>`
+              : holes.length === 9 && complete
+                ? `<div class="row"><span class="tile-ico tile-ico--indigo">${GH.icon('chart-2')}</span><div class="row__body"><span class="row__title">Handicap</span><span class="row__sub">Rodadas de 9 buracos entram no índice quando somadas a outra de 9.</span></div></div>`
+                : ''
+          }
+          <a class="row press has-stretch" href="ranking.html">
+            <span class="tile-ico tile-ico--violet">${GH.icon('ranking')}</span>
+            <div class="row__body"><span class="row__title"><span class="pts">+<span data-cu="${s.pts}">0</span></span> pontos no ranking</span>
+            <span class="row__sub">${complete ? `Stableford net. Somam aos seus ${rk ? rk.pts : 0} do mês${marker ? ` quando ${GH.esc(marker)} confirmar o cartão` : ''}.` : 'Só rodadas completas contam para o ranking.'}</span></div>
+            ${GH.icon('arrow-right-3', 'i--sm chev')}
+          </a>`;
+
+        /* ---------- motion: numbers count up when their block comes in; hero numbers after the putt drops ---------- */
+        const countIn = (scope, delay = 0) =>
+          scope.querySelectorAll('[data-cu]').forEach((el, i) => GH.countUp(el, +el.dataset.cu, { dur: 1100, delay: delay + i * 60 }));
+        const io =
+          'IntersectionObserver' in window
+            ? new IntersectionObserver(
+                (en) =>
+                  en.forEach((e) => {
+                    if (!e.isIntersecting) return;
+                    io.unobserve(e.target);
+                    countIn(e.target, 200);
+                    const h = e.target.querySelector('#hcp-now');
+                    if (h) GH.countUp(h, +h.dataset.hcp, { from: me.hcp, dec: 1, dur: 1400, delay: 500, format: (v) => GH.fmt.hcp(Math.round(v * 10) / 10) });
+                  }),
+                { root: $('main'), threshold: 0.2 }
+              )
+            : null;
+        ['tiles', 'mix', 'ins'].forEach((id) => (io ? io.observe($(id)) : countIn($(id))));
+
+        let holed = false;
+        function onHoled() {
+          if (holed) return;
+          holed = true;
+          $('hero').classList.add('is-holed');
+          $('replay').tabIndex = 0;
+          cells.forEach((c, i) => GH.countUp($(c.id), c.v, { dur: 1200, delay: i * 90, format: (v) => c.fmt(Math.round(v)) }));
+        }
+
+        /* status bar legibility after the hero */
+        const main = $('main');
+        const pastHero = () => document.body.classList.toggle('is-past', main.scrollTop > $('hero').offsetHeight - 70);
+        main.addEventListener('scroll', pastHero, { passive: true });
+        pastHero();
+
+        /* share */
+        document.querySelectorAll('[data-share]').forEach((b) => b.addEventListener('click', () => GH.toast('Resumo pronto: link copiado', 'share')));
+
+        /* hand-off to the 3D module (below). If WebGL or the module fails, the photo stays and numbers still count. */
+        window.GHResumo = {
+          hero: $('hero'),
+          canvas: $('scene'),
+          reduce,
+          onHoled,
+          fallback() {
+            $('fallback').hidden = false;
+            $('replay').hidden = true;
+            setTimeout(onHoled, reduce ? 0 : 500);
+          },
+        };
+        /* module never ran (old browser, blocked file): keep the photo */
+        setTimeout(() => {
+          if (!window.GHResumo.started) window.GHResumo.fallback();
+        }, 6000);
+      })();
+    </script>
+    <script type="module">
+      /* Procedural 3D hero: a dimpled ball dies into the cup on a mown green, flag fluttering. No assets. */
+      import * as THREE from './assets/vendor/three.module.min.js';
+      const R = window.GHResumo;
+      try {
+        build();
+      } catch (e) {
+        console.warn('3D off:', e);
+        R.fallback();
+      }
+
+      function build() {
+        const hero = R.hero;
+        const canvas = R.canvas;
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.05;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        const scene = new THREE.Scene();
+        const FOG = new THREE.Color('#284a2c');
+        scene.background = FOG;
+        scene.fog = new THREE.Fog(FOG, 15, 30);
+
+        const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 80);
+        const CAM = new THREE.Vector3(-1.0, 5.2, 9.5);
+        const LOOK = new THREE.Vector3(0.4, 0.6, -3.2);
+
+        /* light: open sky + warm low sun for long shadows */
+        scene.add(new THREE.HemisphereLight('#f4fbff', '#3e6b35', 1.15));
+        const sun = new THREE.DirectionalLight('#fff3dc', 2.6);
+        sun.position.set(-6, 9, 3);
+        sun.castShadow = true;
+        sun.shadow.mapSize.set(1024, 1024);
+        Object.assign(sun.shadow.camera, { left: -7, right: 7, top: 7, bottom: -7, near: 1, far: 30 });
+        sun.shadow.bias = -0.0004;
+        sun.shadow.normalBias = 0.02;
+        sun.shadow.radius = 4;
+        scene.add(sun);
+
+        /* proportions are stylised: ball and cup ×8 so the putt reads on a phone */
+        const BALL_R = 0.3;
+        const CUP_R = 0.72;
+        const CUP_D = 0.95;
+        const CUP = new THREE.Vector3(1.6, 0, -1.6);
+        const SIZE = 40;
+
+        /* ---- green: one canvas texture (mown stripes, fringe, rough, grain) on a plane with a real hole ---- */
+        const N = 2048;
+        const cv = document.createElement('canvas');
+        cv.width = cv.height = N;
+        const g = cv.getContext('2d');
+        const px = (x) => (x / SIZE + 0.5) * N;
+        const pz = (z) => (z / SIZE + 0.5) * N;
+        const u = N / SIZE;
+        g.fillStyle = '#356a2f';
+        g.fillRect(0, 0, N, N);
+        const gx = px(0.4),
+          gz = pz(-0.8);
+        const ell = (rx, rz, fill) => {
+          g.beginPath();
+          g.ellipse(gx, gz, rx * u, rz * u, -0.25, 0, Math.PI * 2);
+          g.fillStyle = fill;
+          g.fill();
+        };
+        ell(12.5, 9.5, '#3f7d36'); /* fringe */
+        ell(11.6, 8.7, '#4f9a43'); /* putting surface */
+        g.save();
+        g.beginPath();
+        g.ellipse(gx, gz, 11.6 * u, 8.7 * u, -0.25, 0, Math.PI * 2);
+        g.clip();
+        g.translate(gx, gz);
+        g.rotate(0.38);
+        const band = 1.1 * u;
+        for (let k = -32; k < 32; k++) {
+          g.fillStyle = k % 2 ? 'rgba(255,255,255,0.075)' : 'rgba(0,0,0,0.06)';
+          g.fillRect(k * band, -N, band, N * 2);
+        }
+        g.restore();
+        /* soft light falloff + grain */
+        const rad = g.createRadialGradient(gx, gz, 2 * u, gx, gz, 16 * u);
+        rad.addColorStop(0, 'rgba(255,255,230,0.08)');
+        rad.addColorStop(1, 'rgba(0,0,0,0.18)');
+        g.fillStyle = rad;
+        g.fillRect(0, 0, N, N);
+        let seed = 7;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+        /* per-pixel grain straight into the pixels (fast, no 100k fillRects) */
+        const img = g.getImageData(0, 0, N, N);
+        const px8 = img.data;
+        for (let i = 0; i < px8.length; i += 4) {
+          const n = (rnd() - 0.5) * 26;
+          px8[i] += n * 0.8;
+          px8[i + 1] += n;
+          px8[i + 2] += n * 0.5;
+        }
+        g.putImageData(img, 0, 0);
+        /* micro relief for the grass under the low sun: a small tiling noise used as a bump map */
+        const bc = document.createElement('canvas');
+        bc.width = bc.height = 256;
+        const bg = bc.getContext('2d');
+        const bi = bg.createImageData(256, 256);
+        for (let i = 0; i < bi.data.length; i += 4) {
+          const v = 110 + rnd() * 120;
+          bi.data[i] = bi.data[i + 1] = bi.data[i + 2] = v;
+          bi.data[i + 3] = 255;
+        }
+        bg.putImageData(bi, 0, 0);
+        const bump = new THREE.CanvasTexture(bc);
+        bump.wrapS = bump.wrapT = THREE.RepeatWrapping;
+        bump.repeat.set(1 / 0.7, 1 / 0.7);
+        bump.anisotropy = 4;
+        const tex = new THREE.CanvasTexture(cv);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        tex.repeat.set(1 / SIZE, 1 / SIZE);
+        tex.offset.set(0.5, 0.5);
+        /* ShapeGeometry UVs are raw x/y, hence the repeat/offset above. Shape y = −world z. */
+        const shape = new THREE.Shape();
+        shape.moveTo(-SIZE / 2, -SIZE / 2);
+        shape.lineTo(SIZE / 2, -SIZE / 2);
+        shape.lineTo(SIZE / 2, SIZE / 2);
+        shape.lineTo(-SIZE / 2, SIZE / 2);
+        shape.closePath();
+        const hole = new THREE.Path();
+        hole.absarc(CUP.x, -CUP.z, CUP_R, 0, Math.PI * 2, true);
+        shape.holes.push(hole);
+        const groundGeo = new THREE.ShapeGeometry(shape, 72);
+        groundGeo.rotateX(-Math.PI / 2);
+        /* the texture was drawn with canvas y = world z; ShapeGeometry's v = −z, flipY makes them agree */
+        const ground = new THREE.Mesh(groundGeo, new THREE.MeshStandardMaterial({ map: tex, bumpMap: bump, bumpScale: 0.9, roughness: 0.92, metalness: 0 }));
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        /* cup: dark wall, white liner at the top, floor */
+        const cup = new THREE.Group();
+        cup.position.copy(CUP);
+        const wall = new THREE.Mesh(new THREE.CylinderGeometry(CUP_R, CUP_R, CUP_D, 64, 1, true), new THREE.MeshStandardMaterial({ color: '#2a2a26', roughness: 1, side: THREE.BackSide }));
+        wall.position.y = -CUP_D / 2;
+        const liner = new THREE.Mesh(new THREE.CylinderGeometry(CUP_R * 0.995, CUP_R * 0.995, 0.16, 64, 1, true), new THREE.MeshStandardMaterial({ color: '#f2f2ee', roughness: 0.6, side: THREE.BackSide }));
+        liner.position.y = -0.11;
+        const floor = new THREE.Mesh(new THREE.CircleGeometry(CUP_R, 48), new THREE.MeshStandardMaterial({ color: '#1c1c1a', roughness: 1 }));
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.y = -CUP_D;
+        wall.receiveShadow = liner.receiveShadow = floor.receiveShadow = true;
+        cup.add(wall, liner, floor);
+        scene.add(cup);
+
+        /* flagstick (Figma charcoal pole) + green pennant with a gradient, fluttering */
+        const POLE_H = 3.4;
+        const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, POLE_H + CUP_D, 16), new THREE.MeshStandardMaterial({ color: '#3a3a3a', roughness: 0.35, metalness: 0.2 }));
+        pole.position.set(CUP.x, (POLE_H - CUP_D) / 2, CUP.z);
+        pole.castShadow = true;
+        scene.add(pole);
+        const FW = 1.45,
+          FH = 0.92,
+          SX = 28,
+          SY = 8;
+        const flagGeo = new THREE.PlaneGeometry(FW, FH, SX, SY);
+        flagGeo.translate(FW / 2, -FH / 2, 0);
+        const fpos = flagGeo.attributes.position;
+        const base = Float32Array.from(fpos.array);
+        const c1 = new THREE.Color('#38eb7f'),
+          c2 = new THREE.Color('#106f36');
+        const cols = [];
+        for (let i = 0; i < fpos.count; i++) {
+          const x = base[i * 3],
+            y = base[i * 3 + 1];
+          const k = 1 - (x / FW) * 0.96; /* taper into a pennant */
+          base[i * 3 + 1] = -FH * 0.42 + (y + FH * 0.42) * k;
+          const t = Math.min(1, (x / FW) * 0.75 + (-y / FH) * 0.35);
+          const c = c1.clone().lerp(c2, t);
+          cols.push(c.r, c.g, c.b);
+        }
+        flagGeo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
+        const flag = new THREE.Mesh(flagGeo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.7, side: THREE.DoubleSide }));
+        flag.position.set(CUP.x + 0.04, POLE_H - 0.05, CUP.z);
+        flag.castShadow = true;
+        scene.add(flag);
+        let windBoost = 0;
+        const flutter = (t) => {
+          for (let i = 0; i < fpos.count; i++) {
+            const x = base[i * 3],
+              y = base[i * 3 + 1];
+            const a = x / FW;
+            const amp = (0.11 + windBoost * 0.08) * a;
+            fpos.setXYZ(i, x - a * a * 0.06, y - a * 0.05 + Math.sin(x * 2.4 - t * 5.2) * 0.02 * a, Math.sin(x * 3.1 - t * 6.4) * amp + Math.sin(x * 7 - t * 11) * 0.025 * a);
+          }
+          fpos.needsUpdate = true;
+          flagGeo.computeVertexNormals();
+        };
+
+        /* ---- the ball: sphere with ~330 real dimples (Fibonacci-distributed spherical caps pressed into the mesh) ---- */
+        function dimpled(r) {
+          const geo = new THREE.SphereGeometry(r, 160, 112);
+          const p = geo.attributes.position;
+          const M = 332,
+            ga = Math.PI * (3 - Math.sqrt(5)),
+            pts = new Float32Array(M * 3);
+          for (let i = 0; i < M; i++) {
+            const yy = 1 - (i / (M - 1)) * 2,
+              rr = Math.sqrt(1 - yy * yy),
+              th = ga * i;
+            pts[i * 3] = Math.cos(th) * rr;
+            pts[i * 3 + 1] = yy;
+            pts[i * 3 + 2] = Math.sin(th) * rr;
+          }
+          const RA = 0.088,
+            cosR = Math.cos(RA),
+            depth = r * 0.032;
+          const v = new THREE.Vector3();
+          for (let i = 0; i < p.count; i++) {
+            v.fromBufferAttribute(p, i).normalize();
+            let best = -1;
+            for (let k = 0; k < pts.length; k += 3) {
+              const d = v.x * pts[k] + v.y * pts[k + 1] + v.z * pts[k + 2];
+              if (d > best) best = d;
+            }
+            let rr = r;
+            if (best > cosR) {
+              const a = Math.acos(Math.min(1, best)) / RA;
+              rr = r - depth * (1 - a * a);
+            }
+            p.setXYZ(i, v.x * rr, v.y * rr, v.z * rr);
+          }
+          geo.computeVertexNormals();
+          return geo;
+        }
+        const ball = new THREE.Mesh(
+          dimpled(BALL_R),
+          new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.42, clearcoat: 0.7, clearcoatRoughness: 0.28, sheen: 0.2 })
+        );
+        ball.castShadow = true;
+        scene.add(ball);
+
+        /* ripple on the grass when it drops */
+        const ripple = new THREE.Mesh(new THREE.RingGeometry(CUP_R * 1.02, CUP_R * 1.1, 72), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0, depthWrite: false }));
+        ripple.rotation.x = -Math.PI / 2;
+        ripple.position.set(CUP.x, 0.012, CUP.z);
+        scene.add(ripple);
+
+        /* ---- the putt: a breaking line (quadratic Bézier) that dies at the hole ---- */
+        const P0 = new THREE.Vector3(-1.8, BALL_R, 1.7);
+        const P1 = new THREE.Vector3(-1.3, BALL_R, -1.4);
+        const END = new THREE.Vector3(CUP.x - 0.24, BALL_R, CUP.z + 0.14);
+        const bez = (t, out) =>
+          out.set(
+            (1 - t) * (1 - t) * P0.x + 2 * (1 - t) * t * P1.x + t * t * END.x,
+            BALL_R,
+            (1 - t) * (1 - t) * P0.z + 2 * (1 - t) * t * P1.z + t * t * END.z
+          );
+        /* where the ball's centre crosses the lip */
+        let tLip = 0.97;
+        const tmp = new THREE.Vector3();
+        for (let t = 0.5; t <= 1; t += 0.001) {
+          bez(t, tmp);
+          if (Math.hypot(tmp.x - CUP.x, tmp.z - CUP.z) < CUP_R - BALL_R * 0.35) {
+            tLip = t;
+            break;
+          }
+        }
+        const ROLL = 2.25,
+          DROP = 0.5,
+          DELAY = 0.35;
+        const ease = (x) => 1 - Math.pow(1 - x, 2.35);
+        const prev = new THREE.Vector3();
+        const axis = new THREE.Vector3();
+        const UP = new THREE.Vector3(0, 1, 0);
+        const qd = new THREE.Quaternion();
+        let lipPos = new THREE.Vector3();
+        let fired = false;
+
+        function placeBall(time) {
+          const t = time - DELAY;
+          if (t <= 0) {
+            bez(0, ball.position);
+            return;
+          }
+          prev.copy(ball.position);
+          if (t < ROLL) {
+            bez(ease(t / ROLL) * tLip, ball.position);
+            lipPos.copy(ball.position);
+          } else {
+            /* falls in: slides to the far wall, drops, a small rattle at the bottom */
+            const k = Math.min(1, (t - ROLL) / DROP);
+            ball.position.x = lipPos.x + (END.x - lipPos.x) * Math.min(1, k * 1.6);
+            ball.position.z = lipPos.z + (END.z - lipPos.z) * Math.min(1, k * 1.6);
+            const fall = -(CUP_D - 0.02) * Math.min(1, k * k * 1.15);
+            const rattle = k > 0.87 ? Math.sin((k - 0.87) * 48) * 0.05 * (1 - k) * 6 : 0;
+            ball.position.y = BALL_R + fall + Math.max(0, rattle);
+            if (!fired && k > 0.55) {
+              fired = true;
+              holedAt = time;
+              R.onHoled();
+            }
+          }
+          /* roll without slipping: rotate about the axis perpendicular to travel */
+          const dx = ball.position.x - prev.x,
+            dz = ball.position.z - prev.z;
+          const dist = Math.hypot(dx, dz);
+          if (dist > 1e-5) {
+            axis.set(dz, 0, -dx).normalize();
+            qd.setFromAxisAngle(axis, dist / BALL_R);
+            ball.quaternion.premultiply(qd);
+          }
+        }
+
+        /* ---- loop ---- */
+        let t0 = performance.now();
+        let holedAt = -1;
+        const ptr = new THREE.Vector2();
+        const ptrS = new THREE.Vector2();
+        const look = new THREE.Vector3();
+        let running = true;
+        let visible = true;
+        function frame(now, draw = true) {
+          const time = (now - t0) / 1000;
+          placeBall(time);
+          flutter(time);
+          /* camera: settles in, follows the putt a touch, then breathes; pointer adds parallax */
+          ptrS.lerp(ptr, 0.06);
+          const intro = Math.min(1, time / 2.4);
+          const settle = 1 - Math.pow(1 - intro, 3);
+          const sway = holedAt > 0 ? Math.sin((time - holedAt) * 0.35) * 0.35 : 0;
+          camera.position.set(CAM.x + (1 - settle) * -0.8 + sway + ptrS.x * 0.6, CAM.y + (1 - settle) * 0.5 - ptrS.y * 0.3, CAM.z + (1 - settle) * 1.4);
+          look.copy(LOOK).lerp(ball.position, holedAt > 0 ? 0 : 0.18 * (1 - Math.min(1, Math.max(0, time - DELAY) / ROLL)));
+          camera.lookAt(look);
+          if (holedAt > 0) {
+            const k = (time - holedAt) / 1.1;
+            ripple.material.opacity = k < 1 ? 0.55 * (1 - k) : 0;
+            const sc = 1 + Math.min(1, k) * 1.4;
+            ripple.scale.set(sc, sc, 1);
+            windBoost = Math.max(0, 1 - (time - holedAt) / 1.6);
+          }
+          if (draw) renderer.render(scene, camera);
+        }
+        /* once the putt has dropped only the flag and a slow sway move: ~30 fps is plenty (unless the pointer is steering) */
+        let lastDraw = 0;
+        function loop(now) {
+          if (!running) return;
+          requestAnimationFrame(loop);
+          const idle = holedAt > 0 && (now - t0) / 1000 - holedAt > 2.5 && ptr.distanceTo(ptrS) < 0.002;
+          if (idle && now - lastDraw < 32) return;
+          lastDraw = now;
+          frame(now);
+        }
+        function resize() {
+          const w = hero.clientWidth,
+            h = hero.clientHeight;
+          renderer.setSize(w, h, false);
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+        }
+        resize();
+        new ResizeObserver(resize).observe(hero);
+
+        /* leaving the page: free the GL context (kept when the page goes into the bfcache) */
+        addEventListener('pagehide', (e) => {
+          if (e.persisted) return;
+          running = false;
+          renderer.dispose();
+          renderer.forceContextLoss();
+        });
+
+        R.started = true;
+        document.getElementById('fallback').hidden = true;
+        if (R.reduce) {
+          /* still frame: the ball at the lip, flag at rest; numbers appear without the show */
+          const T = DELAY + ROLL * 0.985;
+          placeBall(T);
+          flutter(0.6);
+          camera.position.copy(CAM);
+          camera.lookAt(LOOK);
+          renderer.render(scene, camera);
+          hero.classList.add('is-3d');
+          document.getElementById('replay').hidden = true; /* nothing to replay without motion */
+          R.onHoled();
+          return;
+        }
+        hero.classList.add('is-3d');
+        /* ?t=1.8 freezes the putt at that second (portfolio stills); runs the timeline without drawing, then one frame */
+        const freeze = parseFloat(new URLSearchParams(location.search).get('t'));
+        if (isFinite(freeze)) {
+          t0 = 0;
+          for (let ms = 0; ms < freeze * 1000; ms += 1000 / 60) frame(ms, false);
+          frame(freeze * 1000);
+          /* the numbers still land (a frozen putt would leave the score bar at zero); no replay on a still */
+          document.getElementById('replay').hidden = true;
+          R.onHoled();
+          return;
+        }
+        requestAnimationFrame(loop);
+
+        /* pause off-screen / hidden tab */
+        const setRun = () => {
+          const want = visible && !document.hidden;
+          if (want && !running) {
+            running = true;
+            requestAnimationFrame(loop);
+          } else if (!want) running = false;
+        };
+        document.addEventListener('visibilitychange', setRun);
+        if ('IntersectionObserver' in window)
+          new IntersectionObserver((en) => ((visible = en[0].isIntersecting), setRun()), { root: document.getElementById('main'), threshold: 0.02 }).observe(hero);
+        hero.addEventListener('pointermove', (e) => {
+          const r = hero.getBoundingClientRect();
+          ptr.set((e.clientX - r.left) / r.width - 0.5, (e.clientY - r.top) / r.height - 0.5);
+        });
+        hero.addEventListener('pointerleave', () => ptr.set(0, 0));
+        document.getElementById('replay').addEventListener('click', () => {
+          t0 = performance.now() - 200;
+          holedAt = -1;
+          fired = false;
+          ball.quaternion.identity();
+          ripple.material.opacity = 0;
+          bez(0, ball.position);
+        });
+        window.GHScene = { renderer, scene, camera };
+      }
+    </script>
+  </body>
+</html>

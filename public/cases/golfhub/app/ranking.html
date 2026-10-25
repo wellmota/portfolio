@@ -1,0 +1,1133 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Ranking · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Tab "Ranking" (the Figma's crown tab). Inferred screen in the Figma language:
+         a CSS 3D podium built from the charcoal distance tile / score bar, white rows with the soft shadow,
+         the score bar again as the sticky "Você" bar, a photo card for the next ranking tournament. */
+      .screen {
+        padding-bottom: 120px;
+      }
+      .head {
+        padding-bottom: 12px;
+      }
+      .cap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        min-height: 20px;
+        margin: 10px 2px 0;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .cap b {
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+      .cap > span:last-child {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+      }
+      .cap .i {
+        width: 14px;
+        height: 14px;
+        color: var(--ink-4);
+      }
+
+      /* ---------- 3D podium ---------- */
+      .stage {
+        --w: 100px;
+        --dz: 64px;
+        position: relative;
+        height: 214px;
+        margin: 34px calc(var(--gutter) * -1) 0;
+        perspective: 820px;
+        perspective-origin: 50% 0%;
+        /* The camera's tilt projects the full-bleed .cam/.pod boxes ~10 px past the screen edges
+           (and further while dragging), which made the page scroll sideways. The stage is the 3D
+           viewport, so it clips horizontally; clip (not hidden) keeps the crown visible above it. */
+        overflow-x: clip;
+        touch-action: pan-y;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .stage__floor {
+        position: absolute;
+        left: 14%;
+        right: 14%;
+        bottom: -2px;
+        height: 34px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(20, 30, 22, 0.32), rgba(20, 30, 22, 0.12) 60%, transparent);
+        filter: blur(4px);
+      }
+      .cam {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+        transform: rotateX(-13deg) rotateY(var(--dry, 0deg));
+        transform-origin: 50% 80% -30px;
+        transition: transform 900ms var(--ease-spring);
+        animation: cam-in 1500ms var(--ease) 120ms backwards;
+      }
+      .cam.is-drag {
+        transition: transform 80ms linear;
+      }
+      @keyframes cam-in {
+        from {
+          transform: rotateX(-2deg) rotateY(-34deg) translateY(16px);
+        }
+      }
+      .pod {
+        position: absolute;
+        inset: 0;
+        margin: 0;
+        padding: 0;
+        transform-style: preserve-3d;
+        animation: sway 6s ease-in-out 2s 1;
+      }
+      @keyframes sway {
+        0%,
+        100% {
+          transform: rotateY(0deg);
+        }
+        25% {
+          transform: rotateY(-5deg);
+        }
+        75% {
+          transform: rotateY(5deg);
+        }
+      }
+      .stage:hover .pod,
+      .cam.is-drag .pod {
+        animation-play-state: paused;
+      }
+      .pcol {
+        position: absolute;
+        bottom: 16px;
+        left: 50%;
+        width: var(--w);
+        margin-left: calc(var(--w) / -2);
+        transform-style: preserve-3d;
+      }
+      .pcol[data-place='1'] {
+        --h: 112px;
+        transform: translateZ(10px);
+      }
+      .pcol[data-place='2'] {
+        --h: 90px;
+        left: calc(50% - var(--w) - 8px);
+      }
+      .pcol[data-place='3'] {
+        --h: 74px;
+        left: calc(50% + var(--w) + 8px);
+      }
+      /* the block: a cuboid of charcoal faces (Figma distance tile #434343 / score bar #303030) */
+      .blk {
+        position: relative;
+        width: var(--w);
+        height: var(--h);
+        transform-style: preserve-3d;
+        transform-origin: 50% 100%;
+        animation: grow 900ms var(--ease) both;
+        animation-delay: calc(260ms + var(--o) * 120ms);
+      }
+      @keyframes grow {
+        from {
+          transform: scaleY(0.02);
+        }
+      }
+      .f {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        backface-visibility: hidden;
+      }
+      .f--front {
+        width: var(--w);
+        height: var(--h);
+        margin: calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
+        transform: translateZ(calc(var(--dz) / 2));
+        display: grid;
+        align-content: start;
+        justify-items: center;
+        padding-top: 9px;
+        border-radius: 3px 3px 10px 10px;
+        color: #fff;
+        background: linear-gradient(180deg, #474747 0%, #333 46%, #2a2a2a 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      }
+      .f--back {
+        width: var(--w);
+        height: var(--h);
+        margin: calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
+        transform: rotateY(180deg) translateZ(calc(var(--dz) / 2));
+        background: #222;
+      }
+      .f--top {
+        width: var(--w);
+        height: var(--dz);
+        margin: calc(var(--dz) / -2) 0 0 calc(var(--w) / -2);
+        transform: rotateX(90deg) translateZ(calc(var(--h) / 2));
+        border-radius: 3px;
+        background: linear-gradient(0deg, #5d5d5d, #4b4b4b);
+      }
+      .pcol[data-place='1'] .f--top {
+        background:
+          radial-gradient(60% 70% at 50% 50%, rgba(56, 235, 127, 0.55), transparent 70%),
+          linear-gradient(0deg, #5d5d5d, #4b4b4b);
+      }
+      .f--l,
+      .f--r {
+        width: var(--dz);
+        height: var(--h);
+        margin: calc(var(--h) / -2) 0 0 calc(var(--dz) / -2);
+        background: linear-gradient(180deg, #2c2c2c, #1d1d1d);
+      }
+      .f--l {
+        transform: rotateY(-90deg) translateZ(calc(var(--w) / 2));
+      }
+      .f--r {
+        transform: rotateY(90deg) translateZ(calc(var(--w) / 2));
+      }
+      .pval {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .punit {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.66);
+      }
+      .pname {
+        max-width: calc(100% - 12px);
+        margin-bottom: 1px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.82);
+      }
+      /* the player standing on the block */
+      .who {
+        position: absolute;
+        left: 50%;
+        bottom: calc(var(--h) + 6px);
+        display: grid;
+        justify-items: center;
+        width: 80px;
+        margin-left: -40px;
+        padding: 0;
+        transform-style: preserve-3d;
+        transform: translateZ(6px);
+        animation: stand 820ms var(--ease-spring) both;
+        animation-delay: calc(820ms + var(--o) * 120ms);
+        border-radius: 16px;
+      }
+      @keyframes stand {
+        from {
+          opacity: 0;
+          transform: translateZ(6px) translateY(34px) scale(0.6);
+        }
+      }
+      .who__av {
+        position: relative;
+        display: grid;
+        transition: transform 260ms var(--ease);
+      }
+      .who__av .av {
+        --s: 54px;
+        box-shadow:
+          0 0 0 3px #fff,
+          0 12px 18px -8px rgba(0, 0, 0, 0.5);
+      }
+      .pcol[data-place='1'] .who__av .av {
+        --s: 64px;
+        box-shadow:
+          0 0 0 3px #fff,
+          0 0 0 5px var(--green-400),
+          0 14px 26px -6px rgba(16, 184, 83, 0.6);
+      }
+      .who__n {
+        position: absolute;
+        right: -4px;
+        bottom: -4px;
+        display: grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--ink);
+        background: #fff;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+      }
+      .pcol[data-place='1'] .who__n {
+        color: #fff;
+        background: var(--green-grad);
+      }
+      .crown {
+        position: absolute;
+        left: 50%;
+        top: -26px;
+        width: 30px;
+        height: 30px;
+        margin-left: -15px;
+        filter: drop-shadow(0 4px 6px rgba(16, 111, 54, 0.45));
+        animation: bob 2.6s ease-in-out 1.8s 2;
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-6deg);
+        }
+        50% {
+          transform: translateY(-3px) rotate(4deg);
+        }
+      }
+      .who.is-flip .who__av {
+        animation: flip 560ms var(--ease) both;
+      }
+      @keyframes flip {
+        0% {
+          transform: rotateY(0);
+        }
+        45% {
+          transform: rotateY(90deg) scale(0.9);
+        }
+        55% {
+          transform: rotateY(-90deg) scale(0.9);
+        }
+        100% {
+          transform: rotateY(0);
+        }
+      }
+
+      /* ---------- list 4…n ---------- */
+      .rk-list {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .rk {
+        position: relative;
+        border-radius: var(--r-md);
+      }
+      .rk.is-cascade {
+        animation: cascade 620ms var(--ease) both;
+        animation-delay: calc(1000ms + var(--d, 0) * 55ms);
+      }
+      @keyframes cascade {
+        from {
+          opacity: 0;
+          transform: translateY(16px) scale(0.98);
+        }
+      }
+      .rk__btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        min-height: 60px;
+        padding: 8px 14px 8px 10px;
+        border-radius: inherit;
+        text-align: left;
+        background: var(--surface);
+        box-shadow: var(--shadow-card);
+      }
+      .rk__pos {
+        flex: none;
+        width: 22px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
+      }
+      .rk__body {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+      }
+      .rk__name {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--ink);
+      }
+      .rk__you {
+        font-weight: 700;
+        color: var(--green-700);
+      }
+      .rk__sub {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .rk__val {
+        flex: none;
+        display: grid;
+        justify-items: end;
+        line-height: 1.1;
+      }
+      .rk__val b {
+        font-size: 16px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .rk__val small {
+        font-size: 11px;
+        color: var(--ink-3);
+      }
+      .trend {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1px;
+        min-width: 34px;
+        font-size: 12px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-4);
+      }
+      .trend .i {
+        width: 14px;
+        height: 14px;
+      }
+      .trend--up {
+        color: var(--green-600);
+      }
+      .trend--down {
+        color: #c2410c;
+      }
+      /* Pedro: green-tinted row with a breathing glow */
+      .rk--me .rk__btn {
+        background: linear-gradient(90deg, var(--green-50), #fff 78%);
+        box-shadow:
+          inset 0 0 0 1.5px rgba(16, 184, 83, 0.35),
+          0 10px 26px -12px rgba(16, 184, 83, 0.55);
+      }
+      .rk--me::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 19px;
+        box-shadow: 0 0 22px 2px rgba(56, 235, 127, 0.35);
+        opacity: 0;
+        pointer-events: none;
+        animation: breathe 3.2s ease-in-out 1.8s 2;
+      }
+      @keyframes breathe {
+        50% {
+          opacity: 1;
+        }
+      }
+      .rk--me .rk__pos {
+        color: var(--green-700);
+      }
+      .rk.is-ping .rk__btn {
+        animation: ping 900ms var(--ease);
+      }
+      @keyframes ping {
+        30% {
+          transform: scale(1.025);
+          box-shadow:
+            inset 0 0 0 2px var(--green-500),
+            0 14px 34px -10px rgba(16, 184, 83, 0.7);
+        }
+      }
+
+      /* ---------- next ranking tournament (Figma photo card, green glow) ---------- */
+      .tour {
+        height: 212px;
+        margin-top: 2px;
+      }
+      .tour__badge {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .tour__foot {
+        position: absolute;
+        inset: auto 20px 18px;
+        display: grid;
+        gap: 10px;
+      }
+      .tour__name {
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        color: #fff;
+      }
+      .tour__meta {
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.86);
+        margin-top: 2px;
+      }
+      .tour__row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .tour__row .stack {
+        --stack-ring: rgba(255, 255, 255, 0.9);
+        --stack-bubble: #fff;
+      }
+      .tour__spots {
+        flex: 1;
+        white-space: nowrap;
+        font-size: 11.5px;
+        line-height: 1.3;
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .tour__spots b {
+        font-weight: 600;
+        color: #fff;
+      }
+      .tour .violet-btn {
+        position: relative;
+        z-index: 2;
+      }
+      .tour .meter {
+        height: 5px;
+        background: rgba(255, 255, 255, 0.25);
+        --meter: var(--green-300);
+      }
+
+      /* ---------- sticky "Você" bar (Figma score bar) ---------- */
+      .mebar {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: 96px;
+        z-index: 25;
+        width: auto;
+        text-align: left;
+        grid-template-columns: auto 1fr auto auto;
+        min-height: 66px;
+        padding: 8px 18px 8px 10px;
+        transform: translateY(calc(100% + 40px)) scale(0.96);
+        opacity: 0;
+        transition:
+          transform 560ms var(--ease-spring),
+          opacity 300ms var(--ease);
+      }
+      .mebar.is-on {
+        transform: none;
+        opacity: 1;
+      }
+      /* white veil behind the bar so rows don't show as slivers between it and the tab bar */
+      .mefade {
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 19; /* under the tab bar (20), so its green ball stays visible */
+        height: 120px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 42%);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 300ms var(--ease);
+      }
+      .mefade.is-on {
+        opacity: 1;
+      }
+      .mebar .av {
+        --s: 46px;
+        box-shadow: 0 0 0 2px var(--green-400);
+      }
+      .mebar .scorebar__name {
+        font-size: 16px;
+      }
+      .mebar .scorebar__v {
+        font-size: 17px;
+      }
+      .mebar .scorebar__v .i {
+        display: inline-block;
+        width: 13px;
+        height: 13px;
+        vertical-align: 0;
+        margin-right: 1px;
+        color: var(--green-300);
+      }
+
+      /* ---------- player sheet ---------- */
+      .pl-head {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 4px 0 16px;
+      }
+      .pl-head .av {
+        box-shadow:
+          0 0 0 3px #fff,
+          0 10px 24px -8px rgba(0, 0, 0, 0.45);
+      }
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+      .facts div {
+        display: grid;
+        gap: 2px;
+        padding: 12px;
+        border-radius: 16px;
+        background: var(--sunken);
+      }
+      .facts dt {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .facts dd {
+        font-size: 18px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .facts div:first-child {
+        color: #fff;
+        background: var(--char);
+        box-shadow: 0 14px 18px -12px rgba(30, 30, 30, 0.8);
+      }
+      .facts div:first-child dt {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .facts div:first-child dd {
+        color: #fff;
+      }
+      .res {
+        display: grid;
+        gap: 8px;
+        margin: 10px 0 20px;
+      }
+      .res li {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 4px 12px;
+        padding: 10px 14px;
+        border-radius: 14px;
+        background: var(--sunken);
+      }
+      .res__t {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .res__s {
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .res .meter {
+        grid-column: 1 / -1;
+        height: 5px;
+        background: var(--sunken-2);
+      }
+      .res__pts {
+        grid-row: span 2;
+        font-size: 16px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+      .res__pts small {
+        display: block;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--ink-3);
+      }
+      .sheet-actions {
+        display: grid;
+        gap: 10px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pod,
+        .crown,
+        .rk--me::after {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body data-tab="ranking">
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="top rise" data-top></header>
+
+        <div class="head">
+          <h1 class="t-display rise" style="--d: 1">Ranking</h1>
+          <p class="club-line rise" style="--d: 2"><span data-icon="gps"></span><span id="club"></span></p>
+        </div>
+
+        <div class="seg rise" style="--d: 3" role="tablist" aria-label="Tipo de ranking" id="seg">
+          <button type="button" role="tab" id="tab-mes" data-seg="mes" aria-controls="board">Mês</button>
+          <button type="button" role="tab" id="tab-temporada" data-seg="temporada" aria-controls="board">Temporada</button>
+          <button type="button" role="tab" id="tab-handicap" data-seg="handicap" aria-controls="board">Handicap</button>
+        </div>
+
+        <section id="board" role="tabpanel" aria-labelledby="tab-mes">
+          <p class="cap rise" style="--d: 4"><span id="cap"></span><span><span data-icon="refresh-2"></span>há 2 h</span></p>
+          <div class="stage" id="stage">
+            <span class="stage__floor" aria-hidden="true"></span>
+            <div class="cam" id="cam">
+              <ol class="pod" id="pod" aria-label="Pódio"></ol>
+            </div>
+          </div>
+          <ol class="rk-list" id="list" start="4" aria-label="Classificação a partir do 4º lugar"></ol>
+        </section>
+
+        <section class="section reveal" aria-labelledby="tour-title">
+          <div class="section__head">
+            <h2 class="section__title" id="tour-title">Próximo torneio do ranking</h2>
+            <a class="link" href="torneios.html">Ver todos</a>
+          </div>
+          <article class="photo-card tour" id="tour"></article>
+        </section>
+      </main>
+
+      <div class="mefade" id="mefade" aria-hidden="true"></div>
+      <button class="scorebar mebar" type="button" id="mebar" inert aria-hidden="true"></button>
+
+      <div class="sheet" id="pl-sheet" role="dialog" aria-modal="true" aria-labelledby="pl-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <span></span>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="pl-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        GH.icons['caret-up'] = '<path d="M12 7.5 18 15.5H6Z" fill="currentColor"/>';
+        GH.icons['caret-down'] = '<path d="M12 16.5 6 8.5h12Z" fill="currentColor"/>';
+
+        const $ = (id) => document.getElementById(id);
+        /* haptic only after a real tap (Chrome logs an error for navigator.vibrate before any user gesture) */
+        const buzz = (ms) => {
+          if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
+          if (GH.haptic) GH.haptic(ms);
+        };
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+        const q = new URLSearchParams(location.search);
+        const main = $('main');
+        $('club').textContent = GH.club.name;
+
+        /* ---------- data: month (GH.ranking), season (derived), handicap (sorted by HCP) ---------- */
+        const hash = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+        const r1 = (v) => Math.round(v * 10) / 10;
+        const cap = (s) => s[0].toUpperCase() + s.slice(1);
+        const short = (id) => {
+          const w = GH.person(id).name.split(' ');
+          return `${w[0]} ${w[w.length - 1][0]}.`;
+        };
+        const month = cap(GH.fmt.month(GH.now));
+        const year = GH.now.getFullYear();
+        const N = GH.ranking.length;
+        const clampTrend = (list) =>
+          list.map((p, i) => {
+            const prev = i + 1 + p.trend; /* trend > 0 = moved up */
+            return { ...p, pos: i + 1, trend: prev < 1 ? -i : prev > N ? N - (i + 1) : p.trend };
+          });
+        const BOARDS = {
+          mes: () =>
+            clampTrend(GH.ranking.map((r) => ({ id: r.id, value: r.pts, trend: r.trend }))),
+          temporada: () =>
+            clampTrend(
+              GH.ranking
+                .map((r) => ({
+                  id: r.id,
+                  /* season total: ~10 months of points; recent climbers have less banked */
+                  value: Math.round(r.pts * 8.6 - r.trend * 26 + (hash(r.id + 'season') % 41) - 20),
+                  trend: (hash(r.id + 'season') % 5) - 2,
+                }))
+                .sort((a, b) => b.value - a.value)
+            ),
+          handicap: () =>
+            GH.ranking
+              .map((r) => ({ id: r.id, value: GH.person(r.id).hcp, delta: r1(-r.trend * 0.2 + ((hash(r.id + 'hcp') % 5) - 2) / 10) }))
+              .sort((a, b) => a.value - b.value)
+              .map((p, i) => ({ ...p, pos: i + 1, trend: -p.delta })),
+        };
+        const META = {
+          mes: { cap: `<b>${month}</b> · pontos Stableford líquidos`, unit: 'pontos', short: 'pts', bar: `Ranking de ${GH.fmt.month(GH.now)}`, dec: 0, k2: 'no mês' },
+          temporada: { cap: `<b>Temporada ${year}</b> · soma de janeiro a ${GH.fmt.month(GH.now)}`, unit: 'pontos', short: 'pts', bar: `Temporada ${year}`, dec: 0, k2: 'no mês' },
+          handicap: { cap: '<b>Handicap</b> · índice atual, menor é melhor', unit: 'HCP', short: 'HCP', bar: 'Handicap do clube', dec: 1, k2: 'no mês' },
+        };
+        const fmtVal = (seg, v) => (seg === 'handicap' ? GH.fmt.hcp(v) : GH.fmt.num(v));
+        const trendTxt = (seg, p) => {
+          if (seg === 'handicap') {
+            if (!p.delta) return 'manteve o handicap';
+            return `${p.delta < 0 ? 'baixou' : 'subiu'} ${GH.fmt.num(Math.abs(p.delta), 1)} no handicap`;
+          }
+          if (!p.trend) return 'manteve a posição';
+          const n = Math.abs(p.trend);
+          return `${p.trend > 0 ? 'subiu' : 'caiu'} ${n} ${n === 1 ? 'posição' : 'posições'}`;
+        };
+        const trendHTML = (seg, p) => {
+          const t = p.trend;
+          const label = seg === 'handicap' ? (p.delta ? GH.fmt.num(Math.abs(p.delta), 1) : '') : t ? Math.abs(t) : '';
+          if (!t) return `<span class="trend" aria-hidden="true">–</span>`;
+          return `<span class="trend trend--${t > 0 ? 'up' : 'down'}" aria-hidden="true">${GH.icon(t > 0 ? 'caret-up' : 'caret-down')}${label}</span>`;
+        };
+
+        /* ---------- podium ---------- */
+        const pod = $('pod');
+        const ORDER = [1, 0, 2]; /* DOM order 1st, 2nd, 3rd; CSS places them 2 · 1 · 3 */
+        pod.innerHTML = [0, 1, 2]
+          .map(
+            (i) => `<li class="pcol" data-place="${i + 1}" style="--o:${ORDER[i]}">
+              <button class="who" type="button" data-player>
+                <span class="who__av">${i === 0 ? `<svg class="crown" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#38eb7f"/><stop offset="1" stop-color="#106f36"/></linearGradient></defs><g fill="url(#cg)">${GH.iconsBold.crown || GH.icons.crown}</g></svg>` : ''}<span class="who__face"></span><span class="who__n" aria-hidden="true">${i + 1}</span></span>
+              </button>
+              <div class="blk" aria-hidden="true">
+                <span class="f f--back"></span><span class="f f--l"></span><span class="f f--r"></span><span class="f f--top"></span>
+                <span class="f f--front"><span class="pname"></span><span class="pval">0</span><span class="punit"></span></span>
+              </div>
+            </li>`
+          )
+          .join('');
+        const cols = [...pod.children];
+        let shown = []; /* ids on the podium */
+        let shownVal = [0, 0, 0];
+
+        const fillWho = (col, p, seg) => {
+          const btn = col.querySelector('.who');
+          btn.dataset.player = p.id;
+          btn.querySelector('.who__face').innerHTML = GH.avatar(p.id, { size: 'lg' });
+          col.querySelector('.pname').textContent = short(p.id);
+          btn.setAttribute('aria-label', `${p.pos}º lugar, ${GH.person(p.id).name}, ${seg === 'handicap' ? 'HCP ' + GH.fmt.hcp(p.value) : GH.fmt.num(p.value) + ' pontos'}, ${trendTxt(seg, p)}`);
+        };
+        const renderPodium = (seg, data, first) => {
+          const m = META[seg];
+          data.slice(0, 3).forEach((p, i) => {
+            const col = cols[i];
+            const btn = col.querySelector('.who');
+            if (first || reduce) fillWho(col, p, seg);
+            else if (shown[i] !== p.id) {
+              btn.classList.remove('is-flip');
+              void btn.offsetWidth;
+              btn.classList.add('is-flip');
+              setTimeout(() => fillWho(col, p, seg), 260);
+            } else fillWho(col, p, seg);
+            col.querySelector('.punit').textContent = m.unit;
+            const el = col.querySelector('.pval');
+            GH.countUp(el, p.value, { dec: m.dec, from: first ? 0 : shownVal[i], dur: first ? 1300 : 800, delay: first ? 700 + ORDER[i] * 120 : 0 });
+            shownVal[i] = p.value;
+            shown[i] = p.id;
+          });
+        };
+
+        /* ---------- list 4…n (FLIP on re-order) ---------- */
+        const list = $('list');
+        const rows = new Map();
+        const rowHTML = (seg, p) => {
+          const me = p.id === GH.user;
+          const person = GH.person(p.id);
+          const sub = (me ? '<b class="rk__you">Você</b> · ' : '') + (seg === 'handicap' ? `Média de ${Math.round(72 + person.hcp + 0.6)} tacadas` : `HCP ${GH.fmt.hcp(person.hcp)}`);
+          return `<button class="rk__btn press" type="button" data-player="${p.id}" aria-label="${p.pos}º, ${GH.esc(person.name)}${me ? ' (você)' : ''}, ${
+            seg === 'handicap' ? 'HCP ' + GH.fmt.hcp(p.value) : GH.fmt.num(p.value) + ' pontos'
+          }, ${trendTxt(seg, p)}">
+            <span class="rk__pos" aria-hidden="true">${p.pos}</span>
+            ${GH.avatar(p.id, { size: 'md' })}
+            <span class="rk__body" aria-hidden="true"><span class="rk__name">${GH.esc(person.name)}</span><span class="rk__sub">${sub}</span></span>
+            <span class="rk__val" aria-hidden="true"><b>${fmtVal(seg, p.value)}</b><small>${META[seg].short}</small></span>
+            ${trendHTML(seg, p)}
+          </button>`;
+        };
+        const renderList = (seg, data, first) => {
+          const before = new Map();
+          if (!first) rows.forEach((li, id) => before.set(id, li.getBoundingClientRect().top));
+          const keep = new Set();
+          data.slice(3).forEach((p, i) => {
+            let li = rows.get(p.id);
+            if (!li) {
+              li = document.createElement('li');
+              li.className = 'rk' + (p.id === GH.user ? ' rk--me' : '');
+              li.dataset.id = p.id;
+              li.id = 'row-' + p.id;
+              rows.set(p.id, li);
+            }
+            li.innerHTML = rowHTML(seg, p);
+            if (first && !reduce) {
+              li.classList.add('is-cascade');
+              li.style.setProperty('--d', i);
+            }
+            list.appendChild(li);
+            keep.add(p.id);
+          });
+          rows.forEach((li, id) => {
+            if (!keep.has(id)) {
+              li.remove();
+              rows.delete(id);
+            }
+          });
+          if (first || reduce) return;
+          rows.forEach((li, id) => {
+            li.classList.remove('is-cascade');
+            const top = li.getBoundingClientRect().top;
+            if (before.has(id)) {
+              const dy = before.get(id) - top;
+              if (Math.abs(dy) > 1)
+                li.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], { duration: 640, easing: 'cubic-bezier(0.34, 1.2, 0.64, 1)' });
+            } else {
+              /* came down from the podium */
+              li.animate(
+                [
+                  { opacity: 0, transform: 'translateY(-26px) scale(0.94)' },
+                  { opacity: 1, transform: 'none' },
+                ],
+                { duration: 560, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', delay: 120, fill: 'backwards' }
+              );
+            }
+          });
+        };
+
+        /* ---------- sticky "Você" bar ---------- */
+        const bar = $('mebar');
+        let current = null;
+        const renderBar = (seg, data) => {
+          const p = data.find((x) => x.id === GH.user);
+          const m = META[seg];
+          const v2 = seg === 'handicap' ? (p.delta ? `${p.delta < 0 ? '−' : '+'}${GH.fmt.num(Math.abs(p.delta), 1)}` : '0') : p.trend ? `${GH.icon(p.trend > 0 ? 'caret-up' : 'caret-down')}${Math.abs(p.trend)}` : '–';
+          bar.innerHTML = `${GH.avatar(GH.user, { size: 'md' })}
+            <span><span class="scorebar__name">Você · ${p.pos}º</span><br/><span class="scorebar__sub">${m.bar}</span></span>
+            <span class="scorebar__cell"><span class="scorebar__v">${fmtVal(seg, p.value)}</span><span class="scorebar__k">${m.unit}</span></span>
+            <span class="scorebar__cell"><span class="scorebar__v">${v2}</span><span class="scorebar__k">${seg === 'handicap' ? 'no mês' : 'posições'}</span></span>`;
+          bar.setAttribute('aria-label', `Ir para a sua posição: ${p.pos}º, ${seg === 'handicap' ? 'HCP ' + GH.fmt.hcp(p.value) : GH.fmt.num(p.value) + ' pontos'}`);
+        };
+        const placeBar = () => {
+          const tb = document.querySelector('.tabbar__bg');
+          const app = document.querySelector('.app');
+          if (!tb) return;
+          const b = app.getBoundingClientRect().bottom - tb.getBoundingClientRect().top;
+          bar.style.bottom = `${b + 24}px`;
+          $('mefade').style.bottom = `${b - 10}px`;
+        };
+        const setBar = (on) => {
+          bar.classList.toggle('is-on', on);
+          $('mefade').classList.toggle('is-on', on);
+          bar.inert = !on;
+          bar.setAttribute('aria-hidden', String(!on));
+        };
+        let io;
+        const watchMe = () => {
+          if (io) io.disconnect();
+          const li = rows.get(GH.user);
+          if (!li || !('IntersectionObserver' in window)) return;
+          io = new IntersectionObserver(([e]) => setBar(!e.isIntersecting), { root: main, threshold: 0.85 });
+          io.observe(li);
+        };
+        bar.addEventListener('click', () => {
+          const li = rows.get(GH.user);
+          li.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+          setTimeout(() => {
+            li.classList.remove('is-ping');
+            void li.offsetWidth;
+            li.classList.add('is-ping');
+            li.querySelector('button').focus({ preventScroll: true });
+          }, reduce ? 0 : 450);
+        });
+
+        /* ---------- render + seg ---------- */
+        const seg = $('seg');
+        const tabs = [...seg.querySelectorAll('[role="tab"]')];
+        const select = (key, first = false) => {
+          if (current === key) return;
+          current = key;
+          tabs.forEach((t) => {
+            const on = t.dataset.seg === key;
+            t.setAttribute('aria-selected', String(on));
+            t.tabIndex = on ? 0 : -1;
+          });
+          $('board').setAttribute('aria-labelledby', 'tab-' + key);
+          $('cap').innerHTML = META[key].cap;
+          const data = BOARDS[key]();
+          renderPodium(key, data, first);
+          renderList(key, data, first);
+          renderBar(key, data);
+          if (!first) buzz();
+        };
+        seg.addEventListener('click', (e) => {
+          const t = e.target.closest('[role="tab"]');
+          if (t) select(t.dataset.seg);
+        });
+        seg.addEventListener('keydown', (e) => {
+          const i = tabs.indexOf(document.activeElement);
+          if (i < 0 || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+          e.preventDefault();
+          const n = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+          tabs[n].focus();
+          select(tabs[n].dataset.seg);
+        });
+        const start = ['mes', 'temporada', 'handicap'].includes(q.get('seg')) ? q.get('seg') : 'mes';
+        select(start, true);
+        watchMe();
+        placeBar();
+        window.addEventListener('resize', placeBar);
+
+        /* ---------- podium: drag to turn it (and a little parallax under a mouse) ---------- */
+        const stage = $('stage');
+        const cam = $('cam');
+        if (!reduce) {
+          let d = null;
+          const set = (deg) => cam.style.setProperty('--dry', `${deg.toFixed(1)}deg`);
+          stage.addEventListener('pointerdown', (e) => {
+            d = { x: e.clientX, y: e.clientY, moved: false };
+          });
+          stage.addEventListener('pointermove', (e) => {
+            if (!d) {
+              if (e.pointerType === 'mouse') {
+                const r = stage.getBoundingClientRect();
+                set(((e.clientX - r.left) / r.width - 0.5) * 14);
+              }
+              return;
+            }
+            const dx = e.clientX - d.x;
+            if (!d.moved && Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(e.clientY - d.y)) {
+              d.moved = true;
+              cam.classList.add('is-drag');
+              try {
+                stage.setPointerCapture(e.pointerId);
+              } catch (err) {}
+            }
+            if (d.moved) set(Math.max(-32, Math.min(32, dx * 0.22)));
+          });
+          const end = () => {
+            if (d && d.moved) {
+              const swallow = (ev) => (ev.stopPropagation(), ev.preventDefault());
+              stage.addEventListener('click', swallow, { capture: true, once: true });
+              setTimeout(() => stage.removeEventListener('click', swallow, { capture: true }), 80);
+              cam.classList.remove('is-drag');
+              set(0);
+            }
+            d = null;
+          };
+          stage.addEventListener('pointerup', end);
+          stage.addEventListener('pointercancel', end);
+          stage.addEventListener('pointerleave', (e) => {
+            if (!d) set(0);
+          });
+        }
+
+        /* ---------- next ranking tournament ---------- */
+        const t = GH.tournaments.find((x) => x.id === 't-mensal') || GH.tournaments[1];
+        const tDate = new Date(t.date);
+        const left = t.spots - t.entered;
+        const tour = $('tour');
+        tour.innerHTML = `<img src="assets/img/campo-c.webp" alt="" width="736" height="552" loading="lazy" decoding="async"/>
+          <span class="badge tour__badge">${GH.icon('ranking', 'i--xs')}Vale pontos no ranking</span>
+          <div class="tour__foot">
+            <div>
+              <h3 class="tour__name"><a class="stretch" href="torneios.html?id=${t.id}">${GH.esc(t.name)}</a></h3>
+              <p class="tour__meta">${cap(GH.fmt.weekday(tDate))}, ${GH.fmt.long(tDate)} · ${GH.fmt.time(tDate)}<br/>${GH.esc(t.format)}</p>
+            </div>
+            <span class="meter" aria-hidden="true"><i style="--v:${(t.entered / t.spots).toFixed(2)}"></i></span>
+            <div class="tour__row">
+              ${GH.stack(['caio', 'lucas', 'ricardo', 'andre'], t.entered)}
+              <span class="tour__spots"><b>${t.entered} inscritos</b><br/>faltam ${GH.fmt.plural(left, 'vaga', 'vagas')}</span>
+              <span class="violet-btn" aria-hidden="true">${GH.icon('arrow-right')}</span>
+            </div>
+          </div>`;
+        GH.tilt && GH.tilt(tour, { max: 5 });
+
+        /* ---------- player sheet ---------- */
+        const sheet = $('pl-sheet');
+        const results = (id) => {
+          const p = GH.person(id);
+          if (id === GH.user)
+            return GH.rounds
+              .filter((r) => r.holes === 18)
+              .slice(0, 3)
+              .map((r) => {
+                const c = GH.course(r.course);
+                return { date: r.date, course: c.name, strokes: r.strokes, pts: 36 - (r.strokes - c.par - Math.round(p.hcp)) };
+              });
+          return [0, 1, 2].map((k) => {
+            const strokes = Math.round(72 + p.hcp + (hash(id + k) % 9) - 4);
+            return { date: GH.day(-(3 + k * 7 + (hash(id) % 3)), '08:00'), course: 'Campo A', strokes, pts: 36 - (strokes - 72 - Math.round(p.hcp)) };
+          });
+        };
+        const openPlayer = (id, opener) => {
+          const data = BOARDS[current]();
+          const p = data.find((x) => x.id === id);
+          const month = BOARDS.mes().find((x) => x.id === id);
+          const person = GH.person(id);
+          const me = id === GH.user;
+          const res = results(id);
+          const best = Math.max(...res.map((r) => r.pts));
+          $('pl-body').innerHTML = `
+            <div class="pl-head">${GH.avatar(id, { size: 'xl' })}
+              <div><h2 class="sheet__title" id="pl-title">${GH.esc(person.name)}${me ? ' <span class="badge badge--green">Você</span>' : ''}</h2>
+              <p class="t-sm t-muted">${me ? `${person.role} desde ${person.since}` : 'Sócio'} · ${trendTxt(current, p)}</p></div>
+            </div>
+            <dl class="facts">
+              <div><dt>${current === 'mes' ? 'No mês' : current === 'temporada' ? 'Na temporada' : 'No handicap'}</dt><dd>${p.pos}º</dd></div>
+              <div><dt>Pontos no mês</dt><dd>${month.value}</dd></div>
+              <div><dt>Handicap</dt><dd>${GH.fmt.hcp(person.hcp)}</dd></div>
+            </dl>
+            <h3 class="section__title">Últimos resultados</h3>
+            <ul class="res">${res
+              .map(
+                (r, i) => `<li><span><span class="res__t">${GH.fmt.ddmm(r.date)} · ${GH.esc(r.course)}</span><br/><span class="res__s">${r.strokes} tacadas${r.pts === best ? ' · melhor' : ''}</span></span>
+                <span class="res__pts">${r.pts}<small>pts</small></span>
+                <span class="meter" aria-hidden="true"><i style="--v:${Math.min(1, r.pts / 44).toFixed(2)};--d:${i};${r.pts === best ? '' : '--meter: var(--char-3)'}"></i></span></li>`
+              )
+              .join('')}</ul>
+            <div class="sheet-actions">
+              ${
+                me
+                  ? `<a class="btn btn--primary btn--block" href="perfil.html">${GH.icon('profile-circle')}Ver meu perfil</a>`
+                  : `<a class="btn btn--primary btn--block" href="reservar.html?campo=a&jogador=${id}">${GH.icon('profile-add')}Convidar para jogar</a>
+                     <button class="btn btn--ghost btn--block" type="button" data-soon="Mensagens">${GH.icon('message')}Mandar mensagem</button>`
+              }
+            </div>`;
+          GH.sheet.open(sheet, opener);
+          buzz();
+        };
+        document.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-player]');
+          if (b && b.dataset.player) openPlayer(b.dataset.player, b);
+        });
+
+        /* deep links: ?seg=mes|temporada|handicap · ?jogador=<id> (profile sheet) · ?scroll=1 (sticky bar on) */
+        const who = q.get('jogador');
+        if (who && GH.people[who] && GH.ranking.some((r) => r.id === who)) setTimeout(() => openPlayer(who), reduce ? 0 : 1600);
+        if (q.has('scroll')) setTimeout(() => main.scrollTo({ top: main.scrollHeight, behavior: 'auto' }), reduce ? 0 : 1700);
+      })();
+    </script>
+  </body>
+</html>

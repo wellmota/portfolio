@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Aulas · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Aulas com profissionais (inferred from the hamburger menu + the deck's "Reservas" / "Reserva online" modules).
+         List of pros → ?pro=id profile with duration, 7-day strip and seeded time slots → pagamento.html?tipo=aula */
+
+      /* sticky sub-screen bar (full-bleed so scrolled content never peeks at the sides) */
+      .screen {
+        padding-top: 0;
+      }
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 6;
+        min-height: 64px;
+        margin: 0 calc(var(--gutter) * -1);
+        padding: 8px 10px 0;
+        background: var(--bg);
+        transition: box-shadow var(--t-med) var(--ease);
+      }
+      .bar.is-stuck {
+        box-shadow: 0 1px 0 var(--line);
+      }
+      .first {
+        margin-top: 6px;
+      }
+
+      /* next lesson: charcoal, like the Figma score bar */
+      .lesson {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 18px 14px 14px;
+        border-radius: var(--r-lg);
+        color: #fff;
+        background: var(--char);
+        box-shadow: var(--shadow-btn);
+      }
+      .lesson .av {
+        --s: 48px;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.92);
+      }
+      .lesson__name {
+        display: block;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .lesson__sub {
+        display: block;
+        font-size: 12.5px;
+        color: #bdbdbd;
+      }
+      .lesson__when {
+        display: grid;
+        justify-items: end;
+        line-height: 1.15;
+      }
+      .lesson__day {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--green-300);
+      }
+      .lesson__time {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .none {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px 12px 12px;
+        border-radius: var(--r-md);
+        background: var(--sunken);
+        font-size: 14px;
+        color: var(--ink-2);
+      }
+      .none .tile-ico {
+        background: #fff;
+      }
+
+      /* pro cards */
+      .pros {
+        display: grid;
+        gap: 14px;
+      }
+      .pro {
+        position: relative;
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+      }
+      .pro__top {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .pro__top .av {
+        --s: 56px;
+      }
+      .pro__id {
+        flex: 1;
+        min-width: 0;
+      }
+      .pro__name {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .pro__title {
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .pro__go {
+        width: 40px;
+        height: 40px;
+      }
+      .pro__go .i {
+        width: 20px;
+        height: 20px;
+      }
+      .pro__focus {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--ink-2);
+      }
+      .pro__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--ink-3);
+      }
+      .rating b {
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .rating .i {
+        width: 16px;
+        height: 16px;
+        color: var(--amber-500);
+      }
+      .price {
+        white-space: nowrap;
+      }
+      .price b {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .pack {
+        margin-top: 18px;
+      }
+      .pack .tile-ico {
+        background: #fff;
+      }
+      .row .i--chev {
+        color: var(--ink-4);
+      }
+
+      /* profile */
+      .prof {
+        display: grid;
+        gap: 16px;
+        padding-top: 6px;
+      }
+      .prof__head {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .prof__head .av {
+        --s: 76px;
+      }
+      .prof__name {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+      .prof__title {
+        margin-top: 2px;
+        font-size: 14px;
+        color: var(--ink-3);
+      }
+      .facts3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .facts3 div {
+        display: grid;
+        align-content: start;
+        gap: 2px;
+        padding: 11px 12px;
+        border-radius: 16px;
+        background: var(--sunken);
+      }
+      .facts3 dt {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .facts3 dd {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .facts3 .i {
+        width: 16px;
+        height: 16px;
+        color: var(--amber-500);
+      }
+      .bio {
+        font-size: 14.5px;
+        line-height: 1.55;
+        color: var(--ink-2);
+      }
+      .specs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .spec {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0 12px;
+        border-radius: var(--r-pill);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--violet-700);
+        background: var(--violet-50);
+      }
+      .where {
+        display: grid;
+        gap: 8px;
+      }
+      .where li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .where .tile-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+      }
+      .where b {
+        display: block;
+        font-size: 14.5px;
+        font-weight: 600;
+      }
+      .where span span {
+        display: block;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .mine {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 56px;
+        padding: 8px 14px 8px 8px;
+        border-radius: 18px;
+        color: var(--green-800);
+        background: var(--green-50);
+        font-size: 13.5px;
+      }
+      .mine .tile-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #fff;
+      }
+      .mine b {
+        display: block;
+        font-size: 14px;
+      }
+      .mine .i--chev {
+        margin-left: auto;
+        color: var(--green-700);
+      }
+
+      /* booking */
+      .label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+      .dur button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 44px;
+      }
+      .dur small {
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--ink-3);
+      }
+      .days {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+      }
+      .day {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        gap: 1px;
+        min-height: 64px;
+        border-radius: 16px;
+        background: var(--surface);
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+        transition:
+          background var(--t-fast) var(--ease),
+          box-shadow var(--t-fast) var(--ease),
+          color var(--t-fast) var(--ease);
+      }
+      .day__w {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-3);
+      }
+      .day__n {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .day[aria-checked='true'] {
+        color: #fff;
+        background: var(--indigo-500);
+        box-shadow: 0 8px 14px -6px rgba(74, 58, 255, 0.75);
+      }
+      .day[aria-checked='true'] .day__w {
+        color: rgba(255, 255, 255, 0.82);
+      }
+      .day:disabled {
+        color: var(--ink-4);
+        background: var(--sunken);
+        box-shadow: none;
+      }
+      .day:disabled .day__w {
+        color: var(--ink-4);
+      }
+      .day:disabled::after {
+        content: '';
+        position: absolute;
+        bottom: 9px;
+        width: 10px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--ink-5);
+      }
+      .slots {
+        display: grid;
+        gap: 14px;
+      }
+      .slots__part {
+        display: grid;
+        gap: 8px;
+      }
+      .slots__label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-3);
+      }
+      .slots__label .i {
+        width: 16px;
+        height: 16px;
+      }
+      .slots__grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .slot {
+        justify-content: center;
+        min-height: 44px;
+        padding: 0;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+      .slot.is-mine:disabled {
+        color: var(--green-700);
+        background: var(--green-50);
+        box-shadow: inset 0 0 0 1.5px var(--green-500);
+        text-decoration: none;
+        font-size: 12.5px;
+      }
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .legend i {
+        width: 12px;
+        height: 12px;
+        border-radius: 4px;
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+      }
+      .legend .is-busy {
+        background: var(--sunken);
+        box-shadow: none;
+      }
+      .legend .is-sel {
+        background: var(--char);
+        box-shadow: none;
+      }
+      .noslots {
+        padding: 16px;
+        border-radius: 16px;
+        background: var(--sunken);
+        font-size: 14px;
+        color: var(--ink-3);
+        text-align: center;
+      }
+
+      /* bottom summary: the shared fade is transparent at the top, which let the
+         day strip read through the summary line — give it a solid floor instead */
+      #bb {
+        margin-top: 0;
+        padding-top: 12px;
+        background: var(--bg);
+        box-shadow: 0 -1px 0 var(--line), 0 -14px 30px -18px rgba(20, 30, 22, 0.25);
+      }
+      /* shared .btn--primary:hover beats the aria-disabled look on an <a> */
+      #cta[aria-disabled='true']:hover {
+        background: var(--sunken-2);
+      }
+      .sum {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 22px;
+        font-size: 13.5px;
+        color: var(--ink-3);
+      }
+      .sum b {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+
+      /* ---------- hi-end layer ---------- */
+      /* the expanded profile card is the tapped list card (cross-page View Transition "pro-card") */
+      .prof.card {
+        padding: 18px;
+        gap: 16px;
+        margin-top: 8px;
+      }
+      .prof__title span {
+        display: block;
+      }
+      ::view-transition-group(pro-card),
+      ::view-transition-group(pro-av),
+      ::view-transition-group(pro-name) {
+        animation-duration: 520ms;
+        animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      ::view-transition-group(pro-card) {
+        overflow: clip;
+        border-radius: var(--r-lg);
+      }
+      ::view-transition-old(pro-card),
+      ::view-transition-new(pro-card) {
+        height: 100%;
+        object-fit: none;
+        object-position: top left;
+      }
+      .tilt .tilt__sheen {
+        z-index: 3;
+      }
+      /* rating stars that fill */
+      .stars {
+        position: relative;
+        display: inline-block;
+        line-height: 0;
+        margin-top: 4px;
+      }
+      .stars__row {
+        display: flex;
+        gap: 1px;
+        color: var(--line-strong);
+      }
+      .stars__row .i {
+        width: 13px;
+        height: 13px;
+      }
+      .stars__fill {
+        position: absolute;
+        inset: 0;
+        color: var(--amber-500);
+        clip-path: inset(0 calc(100% - var(--v) * 100%) 0 0);
+        animation: stars-fill 1300ms var(--ease) 380ms both;
+      }
+      @keyframes stars-fill {
+        from {
+          clip-path: inset(0 100% 0 0);
+        }
+      }
+      /* morphing selection pill (duration, day, time): one pill per group slides and stretches to the choice */
+      .seg,
+      .days,
+      .slots {
+        position: relative;
+        isolation: isolate;
+      }
+      .pill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        opacity: 0;
+        pointer-events: none;
+        will-change: transform, width, height;
+      }
+      .pill--seg {
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: var(--shadow-xs), 0 6px 14px -8px rgba(0, 0, 0, 0.25);
+      }
+      .pill--day {
+        border-radius: 16px;
+        background: var(--indigo-500);
+        box-shadow: 0 10px 16px -8px rgba(74, 58, 255, 0.8);
+      }
+      .pill--slot {
+        border-radius: var(--r-pill);
+        background: var(--char);
+        box-shadow: 0 10px 16px -10px rgba(30, 30, 30, 0.9);
+      }
+      .seg.dur button,
+      .day,
+      .slot {
+        position: relative;
+        z-index: 1;
+      }
+      .seg.dur button[aria-checked='true'] {
+        background: transparent;
+        box-shadow: none;
+      }
+      .day,
+      .day[aria-checked='true'] {
+        background: transparent;
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+      }
+      .day[aria-checked='true'] {
+        box-shadow: none;
+        transition: color 200ms var(--ease) 90ms;
+      }
+      .slot,
+      .slot[aria-checked='true'] {
+        background: transparent;
+      }
+      .slot[aria-checked='true'] {
+        box-shadow: none;
+        transition: color 200ms var(--ease) 90ms;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .stars__fill {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="bar rise" id="bar">
+          <a class="icon-btn" href="descobrir.html" data-back aria-label="Voltar" id="back"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title" id="bar-title">Aulas</h1>
+          <span></span>
+        </header>
+        <div id="view"></div>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 6" id="bb" hidden>
+        <p class="sum" id="sum" role="status" aria-live="polite"></p>
+        <a class="btn btn--primary btn--block" id="cta"></a>
+      </div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const view = document.getElementById('view');
+        const $ = (s, el = document) => el.querySelector(s);
+        const pad = (n) => String(n).padStart(2, '0');
+        const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const toMin = (t) => t.split(':').reduce((h, m) => h * 60 + +m);
+        const hm = (m) => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`;
+        const short = (d) => `${cap(GH.fmt.weekdayShort(d))}, ${d.getDate()} ${GH.fmt.monthShort(d)}`;
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+        /* a plain filled star (the Iconsax Bold star-1 is split in two and reads oddly at 13–16 px) */
+        GH.iconsBold['star-solid'] = '<path d="m12 3.2 2.6 5.3 5.8.85-4.2 4.1 1 5.8L12 16.5l-5.2 2.75 1-5.8-4.2-4.1 5.8-.85Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>';
+        /* deterministic 0..1 from a string (FNV-1a + final mix) — seeds availability */
+        const rnd = (s) => {
+          let x = 2166136261;
+          for (let i = 0; i < s.length; i++) {
+            x ^= s.charCodeAt(i);
+            x = Math.imul(x, 16777619);
+          }
+          x ^= x >>> 13;
+          x = Math.imul(x, 0x5bd1e995);
+          x ^= x >>> 15;
+          return (x >>> 0) / 4294967296;
+        };
+
+        /* sticky bar hairline */
+        const main = document.getElementById('main');
+        const bar = document.getElementById('bar');
+        main.addEventListener('scroll', () => bar.classList.toggle('is-stuck', main.scrollTop > 4), { passive: true });
+
+        /* What each pro offers (page data: specialities, where, weekly hours; 0 = domingo) */
+        const PRO = {
+          marco: {
+            days: [0, 1, 2, 3, 4, 5, 6],
+            blocks: [['07:00', '11:00'], ['15:00', '19:00']],
+            specs: ['Swing', 'Drive', 'Ferros longos', 'Análise em vídeo', 'Radar de lançamento'],
+            where: [
+              ['location', 'Driving range', 'Baias cobertas 1 a 6, com radar'],
+              ['flag', 'Campo A', 'Aula em campo: estratégia de saída'],
+            ],
+          },
+          helena: {
+            days: [0, 2, 3, 4, 5, 6],
+            blocks: [['08:00', '12:00'], ['14:00', '18:00']],
+            specs: ['Aproximação', 'Bunker', 'Putt', 'Leitura de green'],
+            where: [
+              ['flag', 'Putting green', 'Ao lado do buraco 1'],
+              ['location', 'Chipping green e bunker', 'Junto ao driving range'],
+            ],
+          },
+          rafael: {
+            days: [0, 1, 3, 4, 5, 6],
+            blocks: [['08:00', '12:00'], ['15:00', '18:00']],
+            specs: ['Fundamentos', 'Regras e etiqueta', 'Juniores', 'Primeiro handicap'],
+            where: [
+              ['location', 'Driving range', 'Baias 7 a 12'],
+              ['flag', 'Campo B', '9 buracos, ideal para começar'],
+            ],
+          },
+        };
+        const PRICE = { 30: GH.prices.lesson30, 60: GH.prices.lesson };
+
+        /* Pedro's lessons (data + saved), as half-hour keys "pro|YYYY-MM-DD|HH:MM" */
+        const lessons = GH.allBookings().filter((b) => b.kind === 'aula');
+        const durOf = (b) => b.dur || (b.total === GH.prices.lesson30 ? 30 : 60);
+        const mine = new Set();
+        lessons.forEach((b) => {
+          const m0 = b.date.getHours() * 60 + b.date.getMinutes();
+          for (let m = m0; m < m0 + durOf(b); m += 30) mine.add(`${b.pro}|${iso(b.date)}|${hm(m)}`);
+        });
+
+        /* one half-hour: free / taken / mine (lessons usually come in hours, so busy hours cluster) */
+        const half = (pro, date, m) => {
+          const d = iso(date);
+          if (mine.has(`${pro}|${d}|${hm(m)}`)) return 'mine';
+          if (rnd(`${pro}|${d}|${Math.floor(m / 60)}`) < 0.36) return 'taken';
+          if (rnd(`${pro}|${d}|${m}|h`) < 0.14) return 'taken';
+          return 'free';
+        };
+        /* slots for a day and duration; null when the pro doesn't teach that weekday */
+        const slotsFor = (pro, date, dur) => {
+          const P = PRO[pro];
+          if (!P.days.includes(date.getDay())) return null;
+          const out = [];
+          P.blocks.forEach(([a, b]) => {
+            for (let m = toMin(a); m + dur <= toMin(b); m += dur) {
+              const st = (dur === 60 ? [m, m + 30] : [m]).map((h) => half(pro, date, h));
+              const status = st.includes('mine') ? 'mine' : st.includes('taken') ? 'taken' : 'free';
+              const start = new Date(date);
+              start.setHours(Math.floor(m / 60), m % 60, 0, 0);
+              if (start - GH.now < 90 * 6e4) continue; /* too soon / past */
+              out.push({ t: hm(m), status, pm: m >= 12 * 60 });
+            }
+          });
+          return out;
+        };
+        const dayAt = (offset) => {
+          const d = new Date(GH.now);
+          d.setHours(0, 0, 0, 0);
+          d.setDate(d.getDate() + offset);
+          return d;
+        };
+        const nextFree = (pro) => {
+          for (let i = 0; i < 14; i++) {
+            const d = dayAt(i);
+            const s = (slotsFor(pro, d, 60) || []).find((x) => x.status === 'free');
+            if (s) return { d, t: s.t };
+          }
+          return null;
+        };
+        const stars = (v) => {
+          const row = GH.icon('star-solid', '', true).repeat(5);
+          return `<span class="stars" style="--v: ${(v / 5).toFixed(3)}" aria-hidden="true"><span class="stars__row">${row}</span><span class="stars__row stars__fill">${row}</span></span>`;
+        };
+
+        /* roving radio groups (arrow keys move + select) */
+        const radios = (group, pick) => {
+          group.addEventListener('click', (e) => {
+            const b = e.target.closest('[role="radio"]');
+            if (b && !b.disabled) pick(b);
+          });
+          group.addEventListener('keydown', (e) => {
+            const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+            if (!step) return;
+            const items = [...group.querySelectorAll('[role="radio"]:not(:disabled)')];
+            const i = items.indexOf(document.activeElement);
+            if (i < 0) return;
+            e.preventDefault();
+            const n = items[(i + step + items.length) % items.length];
+            n.focus();
+            pick(n);
+          });
+        };
+        const check = (group, el) => {
+          const all = [...group.querySelectorAll('[role="radio"]')];
+          all.forEach((b) => {
+            b.setAttribute('aria-checked', String(b === el));
+            b.tabIndex = b === el ? 0 : -1;
+          });
+          if (!el) {
+            const first = all.find((b) => !b.disabled);
+            if (first) first.tabIndex = 0;
+          }
+        };
+        /* morphing selection pill: one per group; slides to the choice and stretches on the way (gooey) */
+        const pill = (group, cls) => {
+          const el = document.createElement('span');
+          el.className = `pill ${cls}`;
+          el.setAttribute('aria-hidden', 'true');
+          group.prepend(el);
+          let cur = null;
+          const tf = (k) => `translate(${k.x}px, ${k.y}px)`;
+          return {
+            el,
+            to(target, instant) {
+              if (!target) {
+                el.style.opacity = 0;
+                cur = null;
+                return;
+              }
+              const g = group.getBoundingClientRect();
+              const r = target.getBoundingClientRect();
+              const nx = { x: r.left - g.left, y: r.top - g.top, w: r.width, h: r.height };
+              Object.assign(el.style, { width: `${nx.w}px`, height: `${nx.h}px`, transform: tf(nx), opacity: 1 });
+              if (!reduce && !instant) {
+                if (cur) {
+                  const mid =
+                    Math.abs(cur.y - nx.y) < 2
+                      ? (() => {
+                          const x = Math.min(cur.x, nx.x);
+                          const w = Math.max(cur.x + cur.w, nx.x + nx.w) - x;
+                          return { x, y: nx.y + nx.h * 0.08, w, h: nx.h * 0.84 };
+                        })()
+                      : { x: (cur.x + nx.x) / 2 + nx.w * 0.1, y: (cur.y + nx.y) / 2 + nx.h * 0.1, w: nx.w * 0.8, h: nx.h * 0.8 };
+                  el.animate(
+                    [
+                      { transform: tf(cur), width: `${cur.w}px`, height: `${cur.h}px` },
+                      { offset: 0.42, transform: tf(mid), width: `${mid.w}px`, height: `${mid.h}px` },
+                      { transform: tf(nx), width: `${nx.w}px`, height: `${nx.h}px` },
+                    ],
+                    { duration: 460, easing: 'cubic-bezier(.22,1,.36,1)' }
+                  );
+                } else {
+                  el.animate([{ transform: `${tf(nx)} scale(.55)`, opacity: 0 }, { transform: tf(nx), opacity: 1 }], {
+                    duration: 380,
+                    easing: 'cubic-bezier(.34,1.45,.64,1)',
+                  });
+                }
+              }
+              cur = nx;
+            },
+          };
+        };
+        /* replace a group's items but keep its pill */
+        const fill = (group, html) => {
+          [...group.children].forEach((c) => c.classList.contains('pill') || c.remove());
+          group.insertAdjacentHTML('beforeend', html);
+        };
+
+        const proId = q.get('pro');
+        if (proId && PRO[proId] && GH.pros.find((p) => p.id === proId)) profile(proId);
+        else list();
+
+        /* ---------- List ---------- */
+        function list() {
+          const upcoming = lessons.filter((b) => b.date > GH.now);
+          const next = upcoming[0];
+          let nextHtml;
+          if (next) {
+            const p = GH.person(next.pro);
+            const pro = GH.pros.find((x) => x.id === next.pro) || {};
+            nextHtml = `<a class="lesson press" href="reservas.html?id=${encodeURIComponent(next.id)}" aria-label="Sua próxima aula: ${GH.esc(p.name)}, ${GH.fmt.dayLabel(next.date)} às ${GH.fmt.time(next.date)}. Ver reserva">
+                ${GH.avatar(next.pro)}
+                <span><span class="lesson__name">${GH.esc(p.name)}</span><span class="lesson__sub">${GH.esc(next.topic || pro.focus || 'Aula')} · ${durOf(next)} min</span></span>
+                <span class="lesson__when"><span class="lesson__day">${GH.fmt.dayLabel(next.date)}</span><span class="lesson__time num">${GH.fmt.time(next.date)}</span></span>
+              </a>`;
+          } else {
+            nextHtml = `<p class="none"><span class="tile-ico">${GH.icon('calendar')}</span>Nenhuma aula marcada. Escolha um professor abaixo.</p>`;
+          }
+
+          const cards = GH.pros
+            .map((pro, i) => {
+              const p = GH.person(pro.id);
+              const nf = nextFree(pro.id);
+              return `<li class="pro card press rise" style="--d: ${3 + i}" data-pro="${pro.id}">
+                <div class="pro__top">
+                  ${GH.avatar(pro.id)}
+                  <div class="pro__id">
+                    <h3 class="pro__name"><a class="stretch" href="aulas.html?pro=${pro.id}">${GH.esc(p.name)}</a></h3>
+                    <p class="pro__title">${GH.esc(pro.title)}${p.hcp ? ` · HCP ${GH.fmt.hcp(p.hcp)}` : ''}</p>
+                  </div>
+                  <span class="violet-btn pro__go" aria-hidden="true">${GH.icon('arrow-right')}</span>
+                </div>
+                <p class="pro__focus">${GH.esc(pro.focus)}</p>
+                ${nf ? `<p><span class="badge badge--green">${GH.icon('clock', 'i--xs')}Livre ${GH.fmt.dayLabel(nf.d).toLowerCase()}, ${nf.t}</span></p>` : ''}
+                <div class="pro__foot">
+                  <span class="rating">${GH.icon('star-solid', '', true)}<b class="num">${GH.fmt.num(pro.rating, 1)}</b> · ${GH.fmt.num(pro.lessons)} aulas</span>
+                  <span class="price"><b class="num">${GH.fmt.brlShort(GH.prices.lesson)}</b> / 60 min</span>
+                </div>
+              </li>`;
+            })
+            .join('');
+
+          view.innerHTML = `
+            <section class="section first rise" style="--d: 1" aria-labelledby="next-t">
+              <div class="section__head"><h2 class="section__title" id="next-t">Sua próxima aula</h2><a class="link" href="reservas.html">Minhas aulas${GH.icon('arrow-right-2', 'i--xs')}</a></div>
+              ${nextHtml}
+            </section>
+            <section class="section" aria-labelledby="pros-t">
+              <div class="section__head rise" style="--d: 2"><h2 class="section__title" id="pros-t">Professores</h2><span class="t-sm t-muted">${GH.pros.length} profissionais</span></div>
+              <ul class="pros">${cards}</ul>
+            </section>
+            <button class="row row--flat pack press rise" style="--d: 6; width: 100%; text-align: left" type="button" data-soon="Pacotes de aulas">
+              <span class="tile-ico tile-ico--violet">${GH.icon('ticket-star')}</span>
+              <span class="row__body"><span class="row__title">Pacote de 5 aulas</span><span class="row__sub">Economize 10% nas aulas</span></span>
+              ${GH.icon('arrow-right-2', 'i--sm i--chev')}
+            </button>`;
+
+          /* cards tilt under the finger; the tapped one becomes the profile (View Transition names) */
+          const cardsEl = [...view.querySelectorAll('.pro')];
+          cardsEl.forEach((c) => {
+            GH.tilt(c, { max: 6 });
+            /* the entry animation also drives transform: hand it over to the tilt when it ends */
+            c.addEventListener('animationend', (e) => e.target === c && c.classList.remove('rise'));
+          });
+          const tag = (card) => {
+            cardsEl.forEach((c) => {
+              c.style.viewTransitionName = '';
+              c.querySelector('.av').style.viewTransitionName = '';
+              c.querySelector('.pro__name').style.viewTransitionName = '';
+            });
+            if (!card) return;
+            card.style.viewTransitionName = 'pro-card';
+            card.querySelector('.av').style.viewTransitionName = 'pro-av';
+            card.querySelector('.pro__name').style.viewTransitionName = 'pro-name';
+          };
+          view.addEventListener('click', (e) => {
+            const card = e.target.closest('.pro');
+            if (!card) return;
+            tag(card);
+            try {
+              sessionStorage.setItem('gh:lastPro', card.dataset.pro);
+            } catch (err) {}
+          });
+          /* coming back from a profile: the profile card shrinks back into its list card */
+          try {
+            const last = sessionStorage.getItem('gh:lastPro');
+            if (last) tag(view.querySelector(`.pro[data-pro="${last}"]`));
+          } catch (err) {}
+        }
+
+        /* ---------- Profile + booking ---------- */
+        function profile(id) {
+          const pro = GH.pros.find((p) => p.id === id);
+          const p = GH.person(id);
+          const P = PRO[id];
+          document.title = `${p.name} · Aulas · GolfHub`;
+          document.getElementById('bar-title').textContent = 'Agendar aula';
+          document.getElementById('back').href = 'aulas.html';
+
+          const state = { dur: q.get('dur') === '30' ? 30 : 60, day: null, time: null };
+          const days = Array.from({ length: 7 }, (_, i) => dayAt(i));
+
+          const myNext = lessons.find((b) => b.pro === id && b.date > GH.now);
+          view.innerHTML = `
+            <section class="prof card rise" style="--d: 1; view-transition-name: pro-card" aria-labelledby="pro-name">
+              <div class="prof__head">
+                ${GH.avatar(id, { ring: true })}
+                <div>
+                  <h2 class="prof__name" id="pro-name" style="view-transition-name: pro-name">${GH.esc(p.name)}</h2>
+                  <p class="prof__title">${GH.esc(pro.title)}<span>${GH.esc(pro.focus)}</span></p>
+                </div>
+              </div>
+              <dl class="facts3">
+                <div><dt>Avaliação</dt><dd class="num"><span id="f-rate">${GH.fmt.num(pro.rating, 1)}</span><span class="sr-only"> de 5</span></dd><dd>${stars(pro.rating)}</dd></div>
+                <div><dt>Aulas dadas</dt><dd class="num" id="f-lessons">${GH.fmt.num(pro.lessons)}</dd></div>
+                <div><dt>Handicap</dt><dd class="num">${GH.fmt.hcp(p.hcp)}</dd></div>
+              </dl>
+              <p class="bio">${GH.esc(pro.bio)}</p>
+              <ul class="specs" aria-label="Especialidades">${P.specs.map((s) => `<li class="spec">${GH.esc(s)}</li>`).join('')}</ul>
+            </section>
+
+            ${
+              myNext
+                ? `<a class="mine press rise" style="--d: 2; margin-top: 22px" href="reservas.html?id=${encodeURIComponent(myNext.id)}">
+                    <span class="tile-ico">${GH.icon('calendar-tick')}</span>
+                    <span><b>Você já tem aula com ${GH.esc(GH.first(id))}</b>${GH.fmt.dayLabel(myNext.date)}, ${GH.fmt.time(myNext.date)}</span>
+                    ${GH.icon('arrow-right-2', 'i--sm i--chev')}
+                  </a>`
+                : ''
+            }
+
+            <section class="section rise" style="--d: 3" aria-labelledby="book-t">
+              <h2 class="section__title" id="book-t">Escolha dia e horário</h2>
+              <div class="seg dur" role="radiogroup" aria-label="Duração da aula" id="dur">
+                ${[30, 60].map((d) => `<button type="button" role="radio" data-dur="${d}">${d} min <small>${GH.fmt.brlShort(PRICE[d])}</small></button>`).join('')}
+              </div>
+              <div class="days" role="radiogroup" aria-label="Dia" id="days"></div>
+              <div class="slots" role="radiogroup" aria-label="Horário" id="slots"></div>
+              <p class="legend" aria-hidden="true"><span><i></i>Livre</span><span><i class="is-busy"></i>Ocupado</span><span><i class="is-sel"></i>Selecionado</span></p>
+            </section>
+
+            <section class="section rise" style="--d: 5" aria-labelledby="where-t">
+              <h2 class="section__title" id="where-t">Onde a aula acontece</h2>
+              <ul class="where">${P.where
+                .map(([ic, t, s], i) => `<li><span class="tile-ico${i ? ' tile-ico--violet' : ''}">${GH.icon(ic)}</span><span><b>${GH.esc(t)}</b><span>${GH.esc(s)}</span></span></li>`)
+                .join('')}</ul>
+            </section>`;
+
+          $('.prof__head .av').style.viewTransitionName = 'pro-av';
+          /* arriving through the card morph: the card is already on screen, so skip its entry animation */
+          window.addEventListener('pagereveal', (e) => {
+            if (e.viewTransition) $('.prof').classList.remove('rise');
+          });
+          if (!reduce) {
+            GH.countUp($('#f-rate'), pro.rating, { dec: 1, from: 3, delay: 300 });
+            GH.countUp($('#f-lessons'), pro.lessons, { delay: 300 });
+          }
+
+          const durG = $('#dur');
+          const daysG = $('#days');
+          const slotsG = $('#slots');
+          const durPill = pill(durG, 'pill--seg');
+          const dayPill = pill(daysG, 'pill--day');
+          const slotPill = pill(slotsG, 'pill--slot');
+          const bb = document.getElementById('bb');
+          const sum = document.getElementById('sum');
+          const cta = document.getElementById('cta');
+          bb.hidden = false;
+          /* "Escolha um horário" (no time yet): take the member to the slots instead of doing nothing */
+          cta.addEventListener('click', (e) => {
+            if (cta.getAttribute('aria-disabled') !== 'true') return;
+            e.preventDefault();
+            const sec = $('#book-t');
+            const top = main.scrollTop + sec.getBoundingClientRect().top - main.getBoundingClientRect().top - bar.offsetHeight - 8;
+            main.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+            const first = slotsG.querySelector('[role="radio"][tabindex="0"]:not(:disabled)') || slotsG.querySelector('[role="radio"]:not(:disabled)');
+            if (first) setTimeout(() => first.focus({ preventScroll: true }), reduce ? 0 : 420);
+            if (!reduce) slotsG.animate([{ transform: 'none' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(5px)' }, { transform: 'none' }], { duration: 420, delay: 380, easing: 'ease-in-out' });
+          });
+
+          const renderDays = () => {
+            fill(
+              daysG,
+              days
+                .map((d, i) => {
+                  const s = slotsFor(id, d, state.dur);
+                  const free = s ? s.filter((x) => x.status === 'free').length : 0;
+                  const label = `${GH.fmt.weekday(d)}, ${GH.fmt.long(d)}${free ? `, ${GH.fmt.plural(free, 'horário livre', 'horários livres')}` : ', sem horários'}`;
+                  return `<button class="day" type="button" role="radio" data-i="${i}" aria-label="${label}"${free ? '' : ' disabled'}>
+                  <span class="day__w" aria-hidden="true">${i === 0 ? 'hoje' : GH.fmt.weekdayShort(d)}</span><span class="day__n" aria-hidden="true">${d.getDate()}</span></button>`;
+                })
+                .join('')
+            );
+            const btn = state.day != null && daysG.querySelector(`[data-i="${state.day}"]:not(:disabled)`);
+            if (!btn) {
+              const first = daysG.querySelector('.day:not(:disabled)');
+              state.day = first ? +first.dataset.i : null;
+            }
+            check(daysG, state.day != null ? daysG.querySelector(`[data-i="${state.day}"]`) : null);
+          };
+
+          const renderSlots = () => {
+            if (state.day == null) {
+              fill(slotsG, `<p class="noslots">Sem horários livres nos próximos 7 dias.</p>`);
+              state.time = null;
+              return;
+            }
+            const s = slotsFor(id, days[state.day], state.dur) || [];
+            if (state.time && !s.find((x) => x.t === state.time && x.status === 'free')) state.time = null;
+            const part = (pm) => {
+              const items = s.filter((x) => x.pm === pm);
+              if (!items.length) return '';
+              return `<div class="slots__part"><p class="slots__label">${GH.icon(pm ? 'sun-1' : 'cloud-sunny')}${pm ? 'Tarde' : 'Manhã'}</p>
+                <div class="slots__grid">${items
+                  .map((x) => {
+                    if (x.status === 'mine') return `<button class="chip slot is-mine" type="button" role="radio" disabled aria-label="${x.t}, sua aula">Sua aula</button>`;
+                    const busy = x.status === 'taken';
+                    return `<button class="chip slot" type="button" role="radio" data-t="${x.t}"${busy ? ` disabled aria-label="${x.t}, ocupado"` : ''}>${x.t}</button>`;
+                  })
+                  .join('')}</div></div>`;
+            };
+            fill(slotsG, part(false) + part(true));
+            check(slotsG, state.time ? slotsG.querySelector(`[data-t="${state.time}"]`) : null);
+          };
+
+          let lastTotal = null;
+          const renderSum = () => {
+            const d = state.day != null ? days[state.day] : null;
+            const total = PRICE[state.dur];
+            const what = d && state.time ? `${short(d)} · ${state.time} · ${state.dur} min` : d ? `${short(d)} · ${state.dur} min` : 'Sem horários';
+            sum.innerHTML = `<span>${what}</span><b class="num" id="sum-total">${GH.fmt.brl(total)}</b>`;
+            if (lastTotal != null && lastTotal !== total) GH.countUp($('#sum-total'), total, { from: lastTotal, dur: 600, format: GH.fmt.brl });
+            lastTotal = total;
+            if (d && state.time) {
+              cta.href = `pagamento.html?tipo=aula&pro=${id}&data=${iso(d)}&hora=${state.time}&dur=${state.dur}`;
+              cta.removeAttribute('aria-disabled');
+              cta.innerHTML = `${GH.icon('calendar-tick')}Agendar aula`;
+            } else {
+              cta.removeAttribute('href');
+              cta.setAttribute('aria-disabled', 'true');
+              cta.textContent = 'Escolha um horário';
+            }
+          };
+          const placePills = (instant) => {
+            durPill.to(durG.querySelector('[aria-checked="true"]'), instant);
+            dayPill.to(daysG.querySelector('[aria-checked="true"]'), instant);
+            slotPill.to(slotsG.querySelector('[aria-checked="true"]'), instant);
+          };
+
+          /* deep links: &dur=30 &data=YYYY-MM-DD &hora=HH:MM */
+          const wantDay = q.get('data') ? days.findIndex((d) => iso(d) === q.get('data')) : -1;
+          if (wantDay >= 0) state.day = wantDay;
+          const wantTime = q.get('hora');
+          renderDays();
+          if (wantTime && wantDay < 0) {
+            /* first day where that time is free */
+            const i = days.findIndex((d) => (slotsFor(id, d, state.dur) || []).some((x) => x.t === wantTime && x.status === 'free'));
+            if (i >= 0) state.day = i;
+            check(daysG, daysG.querySelector(`[data-i="${state.day}"]`));
+          }
+          if (wantTime) state.time = wantTime;
+          check(durG, durG.querySelector(`[data-dur="${state.dur}"]`));
+          renderSlots();
+          renderSum();
+          /* pills land once the entry animation has settled (positions are measured) */
+          requestAnimationFrame(() => placePills(true));
+          setTimeout(() => placePills(true), 900);
+          window.addEventListener('resize', () => placePills(true));
+
+          radios(durG, (b) => {
+            state.dur = +b.dataset.dur;
+            check(durG, b);
+            durPill.to(b);
+            renderDays();
+            renderSlots();
+            dayPill.to(daysG.querySelector('[aria-checked="true"]'), true);
+            slotPill.to(slotsG.querySelector('[aria-checked="true"]'), true);
+            renderSum();
+          });
+          radios(daysG, (b) => {
+            state.day = +b.dataset.i;
+            check(daysG, b);
+            dayPill.to(b);
+            renderSlots();
+            slotPill.to(slotsG.querySelector('[aria-checked="true"]'), true);
+            renderSum();
+          });
+          radios(slotsG, (b) => {
+            state.time = b.dataset.t;
+            check(slotsG, b);
+            slotPill.to(b);
+            GH.haptic();
+            renderSum();
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

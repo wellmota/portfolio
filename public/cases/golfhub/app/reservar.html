@@ -1,0 +1,1443 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Reservar horário · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Inferred from the deck module "Reserva online": course → day → tee time → group → extras.
+         Same language as the Figma: photo cards with the green glow, indigo for the chosen day (hole chips),
+         charcoal for the chosen tee time (the "Começar rodada" button), white rows with the soft shadow. */
+      .section {
+        margin-top: 24px;
+      }
+
+      /* ---- course picker: three mini photo cards ---- */
+      .cpicks {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .cpick {
+        position: relative;
+        display: block;
+        height: 108px;
+        border-radius: 24px;
+        overflow: hidden;
+        color: #fff;
+        background: #3d5a3f;
+        isolation: isolate;
+        cursor: pointer;
+        box-shadow: 0 18px 22px -18px rgba(26, 78, 38, 0.55);
+        transition:
+          box-shadow var(--t-med) var(--ease),
+          transform var(--t-fast) var(--ease);
+      }
+      .cpick:active {
+        transform: scale(0.97);
+      }
+      .cpick img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -2;
+        transform: scale(1.02);
+        transition: transform 900ms var(--ease);
+      }
+      .cpick::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(to top, rgba(10, 28, 14, 0.82) 0%, rgba(10, 28, 14, 0.25) 55%, transparent 80%);
+      }
+      .cpick__txt {
+        position: absolute;
+        inset: auto 12px 10px;
+        display: grid;
+      }
+      .cpick__name {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+      }
+      .cpick__kind {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .cpick__tick {
+        position: absolute;
+        top: 9px;
+        right: 9px;
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--indigo-500);
+        box-shadow: 0 6px 12px -4px rgba(74, 58, 255, 0.8);
+        opacity: 0;
+        transform: scale(0.4) rotate(-40deg);
+        transition:
+          opacity var(--t-fast) var(--ease),
+          transform var(--t-med) var(--ease-spring);
+      }
+      .cpick__tick .i {
+        width: 14px;
+        height: 14px;
+        stroke-width: 2.6;
+      }
+      .cpick:has(input:checked) {
+        box-shadow:
+          0 0 0 2.5px #fff,
+          0 0 0 5px var(--indigo-500),
+          0 22px 26px -16px rgba(74, 58, 255, 0.55);
+      }
+      .cpick:has(input:checked) img {
+        transform: scale(1.12);
+        view-transition-name: gh-course-photo;
+      }
+      .cpick:has(input:checked) .cpick__tick {
+        opacity: 1;
+        transform: none;
+      }
+      .cpick:has(input:focus-visible) {
+        outline: 2.5px solid var(--indigo-500);
+        outline-offset: 7px;
+      }
+
+      /* ---- day strip: scroll-snap, the indigo pill slides between days ---- */
+      .days {
+        position: relative;
+        isolation: isolate;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        /* extra bottom padding so the selected day's indigo glow is not cut by the scroller */
+        margin: 0 calc(var(--gutter) * -1) -10px;
+        padding: 4px var(--gutter) 20px;
+        scroll-snap-type: x proximity;
+        scroll-padding: 0 var(--gutter);
+        scrollbar-width: none;
+        overscroll-behavior-x: contain;
+      }
+      .days::-webkit-scrollbar {
+        display: none;
+      }
+      .day {
+        position: relative;
+        flex: none;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        gap: 3px;
+        width: 54px;
+        height: 78px;
+        border-radius: 18px;
+        scroll-snap-align: start;
+        cursor: pointer;
+        transition: color 200ms var(--ease) 120ms;
+      }
+      .day::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        border-radius: inherit;
+        background: var(--surface);
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+      }
+      .day:active::before {
+        background: var(--sunken);
+      }
+      .day__w {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--ink-3);
+        text-transform: capitalize;
+        transition: color 200ms var(--ease) 120ms;
+      }
+      .day__n {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+      .day__bar {
+        width: 24px;
+        height: 4px;
+        margin-top: 3px;
+        border-radius: 4px;
+        background: var(--sunken-2);
+        overflow: hidden;
+        transition: background 200ms var(--ease) 120ms;
+      }
+      .day__bar i {
+        display: block;
+        height: 100%;
+        width: calc(var(--v, 0) * 100%);
+        border-radius: inherit;
+        background: var(--green-500);
+        transition:
+          width 700ms var(--ease),
+          background 200ms var(--ease);
+      }
+      .day.is-busy .day__bar i {
+        background: var(--amber-500);
+      }
+      .day:has(input:checked) {
+        color: #fff;
+      }
+      .day:has(input:checked) .day__w {
+        color: rgba(255, 255, 255, 0.82);
+      }
+      .day:has(input:checked) .day__bar {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      .day:has(input:checked) .day__bar i {
+        background: #fff;
+      }
+      .day:has(input:focus-visible) {
+        outline: 2.5px solid var(--indigo-500);
+        outline-offset: 3px;
+      }
+      .days__pill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 54px;
+        height: 78px;
+        border-radius: 18px;
+        background: linear-gradient(170deg, #5a4bff, var(--indigo-600));
+        box-shadow: 0 12px 20px -8px rgba(74, 58, 255, 0.75);
+        transition:
+          translate 560ms var(--ease-spring),
+          opacity var(--t-fast) var(--ease);
+        pointer-events: none;
+        opacity: 0;
+      }
+      .days__pill.is-on {
+        opacity: 1;
+      }
+      .legend {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: -2px;
+      }
+      .legend i {
+        display: inline-block;
+        width: 16px;
+        height: 4px;
+        border-radius: 4px;
+        background: var(--amber-500);
+      }
+      .legend i + i {
+        margin-left: -4px;
+        background: var(--green-500);
+      }
+
+      /* ---- period: segmented with a sliding white pill ---- */
+      .periods {
+        position: relative;
+        isolation: isolate;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 4px;
+        border-radius: 16px;
+        background: var(--sunken);
+      }
+      .periods__pill {
+        position: absolute;
+        top: 4px;
+        bottom: 4px;
+        left: 4px;
+        width: calc(50% - 4px);
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: var(--shadow-xs), 0 6px 14px -8px rgba(0, 0, 0, 0.25);
+        transition: translate 480ms var(--ease-spring);
+      }
+      .periods[data-p='tarde'] .periods__pill {
+        translate: 100% 0;
+      }
+      .period {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 44px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink-3);
+        cursor: pointer;
+        transition: color var(--t-med) var(--ease);
+      }
+      .period .i {
+        width: 18px;
+        height: 18px;
+      }
+      .period small {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-3);
+      }
+      .period:has(input:checked) {
+        color: var(--ink);
+      }
+      .period:has(input:focus-visible) {
+        outline: 2.5px solid var(--indigo-500);
+        outline-offset: 0;
+      }
+
+      /* ---- tee sheet: hour rows on a timeline, 10-minute slots, the charcoal pill morphs between picks ---- */
+      .teesheet {
+        position: relative;
+        isolation: isolate;
+        margin-top: 4px;
+      }
+      .teesheet__sel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 16px;
+        background: var(--char);
+        box-shadow: 0 16px 22px -12px rgba(30, 30, 30, 0.7);
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          translate 520ms var(--ease-spring),
+          width 420ms var(--ease),
+          height 420ms var(--ease),
+          opacity 220ms var(--ease);
+      }
+      .teesheet__sel.is-on {
+        opacity: 1;
+      }
+      .teesheet__sel.is-morph {
+        animation: morph 520ms var(--ease);
+      }
+      @keyframes morph {
+        30% {
+          scale: 1.08 0.9;
+          border-radius: 22px;
+        }
+        65% {
+          scale: 0.98 1.03;
+        }
+      }
+      .hour {
+        padding: 0 0 14px 22px;
+        /* the timeline rail */
+        background: linear-gradient(var(--line), var(--line)) 5px 14px / 2px 100% no-repeat;
+      }
+      .hour:last-child {
+        background-size: 2px calc(100% - 40px);
+      }
+      .hour__head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 28px;
+        margin-bottom: 6px;
+      }
+      .hour__head {
+        position: relative;
+      }
+      .hour__head::before {
+        content: '';
+        position: absolute;
+        left: -22px;
+        top: 8px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--surface);
+        box-shadow: inset 0 0 0 2.5px var(--ink-5);
+      }
+      .hour__t {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink);
+        min-width: 30px;
+      }
+      .hour__head .meter {
+        flex: 1;
+        height: 4px;
+      }
+      .hour__n {
+        font-size: 11.5px;
+        font-weight: 500;
+        color: var(--ink-3);
+        white-space: nowrap;
+      }
+      .now {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 0 12px 22px;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: #b42318;
+      }
+      .now::before {
+        content: '';
+        position: absolute;
+        left: 1px;
+        top: 4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--red-500);
+        box-shadow: 0 0 0 4px var(--red-50);
+        animation: now-pulse 2s var(--ease) infinite;
+      }
+      .now::after {
+        content: '';
+        flex: 1;
+        height: 1.5px;
+        background: linear-gradient(90deg, var(--red-500), transparent);
+        opacity: 0.6;
+      }
+      @keyframes now-pulse {
+        50% {
+          box-shadow: 0 0 0 7px rgba(229, 72, 77, 0.08);
+        }
+      }
+      .slots {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .slot {
+        position: relative;
+        display: grid;
+        align-content: center;
+        gap: 4px;
+        min-height: 62px;
+        padding: 8px 10px;
+        border-radius: 16px;
+        cursor: pointer;
+        color: var(--ink);
+        transition: color 200ms var(--ease) 160ms;
+      }
+      .slot::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        border-radius: inherit;
+        background: var(--surface);
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+        transition: background var(--t-fast) var(--ease);
+      }
+      @media (hover: hover) {
+        .slot:not(.is-off):hover::before {
+          background: var(--sunken);
+        }
+      }
+      .slot:not(.is-off):not(:has(input:checked)):active {
+        scale: 0.96;
+      }
+      .slot--in {
+        animation: slot-in 460ms var(--ease) backwards;
+        animation-delay: calc(var(--i, 0) * 16ms + 40ms);
+      }
+      @keyframes slot-in {
+        from {
+          opacity: 0;
+          translate: 0 12px;
+          scale: 0.96;
+        }
+      }
+      .slot__t {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.15;
+      }
+      .slot__s {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        min-height: 20px;
+        font-size: 11.5px;
+        font-weight: 600;
+        white-space: nowrap;
+        color: var(--ink-2);
+        transition: color 200ms var(--ease) 160ms;
+      }
+      .slot__dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green-500);
+        box-shadow: 0 0 0 3px var(--green-50);
+      }
+      .slot.is-free .slot__s {
+        color: var(--green-700);
+      }
+      .slot.is-few .slot__s {
+        color: #8a5300;
+      }
+      .slot .stack > * + * {
+        margin-left: -7px;
+      }
+      .slot .stack .av {
+        --s: 20px;
+        box-shadow: 0 0 0 1.5px var(--stack-ring, #fff);
+      }
+      .slot.is-off {
+        cursor: default;
+        color: var(--ink-3);
+      }
+      .slot.is-off::before {
+        background: var(--sunken);
+        box-shadow: none;
+      }
+      .slot.is-off .slot__s {
+        color: var(--ink-3);
+        font-weight: 500;
+      }
+      .slot.is-off .stack {
+        opacity: 0.55;
+        filter: grayscale(1);
+      }
+      .slot.is-full .slot__t {
+        text-decoration: line-through;
+        text-decoration-thickness: 1.5px;
+      }
+      .slot:has(input:checked) {
+        color: #fff;
+        --stack-ring: var(--char);
+      }
+      .slot:has(input:checked) .slot__s {
+        color: rgba(255, 255, 255, 0.82);
+      }
+      .slot:has(input:checked) .slot__dot {
+        background: var(--green-300);
+        box-shadow: 0 0 0 3px rgba(56, 235, 127, 0.18);
+      }
+      .slot:has(input:focus-visible) {
+        outline: 2.5px solid var(--indigo-500);
+        outline-offset: 2px;
+      }
+      .sheet-empty {
+        display: grid;
+        justify-items: center;
+        gap: 10px;
+        padding: 26px 16px;
+        text-align: center;
+        border-radius: 20px;
+        background: var(--sunken);
+        color: var(--ink-3);
+        font-size: 14px;
+      }
+
+      /* ---- group ---- */
+      .seats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .seat {
+        display: grid;
+        justify-items: center;
+        gap: 6px;
+        padding: 12px 4px 10px;
+        border-radius: 18px;
+        background: var(--sunken);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-2);
+        text-align: center;
+        min-width: 0;
+      }
+      .seat > span:last-child {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      button.seat {
+        cursor: pointer;
+      }
+      .seat__ghost {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        color: var(--ink-3);
+        border: 1.5px dashed var(--ink-5);
+      }
+      .seat__guest {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        color: var(--violet-600);
+        background: var(--violet-50);
+      }
+      .seat--me .av {
+        box-shadow:
+          0 0 0 2px #fff,
+          0 0 0 4px var(--green-500);
+      }
+      .friends {
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        margin: 0 calc(var(--gutter) * -1);
+        padding: 4px var(--gutter) 6px;
+        scrollbar-width: none;
+        scroll-snap-type: x proximity;
+      }
+      .friends::-webkit-scrollbar {
+        display: none;
+      }
+      .friend {
+        flex: none;
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: 5px;
+        width: 64px;
+        padding: 4px 0;
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-2);
+        scroll-snap-align: start;
+      }
+      .friend .av {
+        transition:
+          box-shadow var(--t-med) var(--ease),
+          transform var(--t-med) var(--ease-spring);
+      }
+      .friend[aria-pressed='true'] .av {
+        box-shadow:
+          0 0 0 2.5px #fff,
+          0 0 0 5px var(--indigo-500);
+        transform: scale(0.92);
+      }
+      .friend[aria-pressed='true'] {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .friend__tick {
+        position: absolute;
+        top: 0;
+        right: 6px;
+        display: grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--indigo-500);
+        box-shadow: 0 0 0 2px #fff;
+        opacity: 0;
+        transform: scale(0.3);
+        transition:
+          opacity var(--t-fast) var(--ease),
+          transform var(--t-med) var(--ease-spring);
+      }
+      .friend__tick .i {
+        width: 12px;
+        height: 12px;
+        stroke-width: 3;
+      }
+      .friend[aria-pressed='true'] .friend__tick {
+        opacity: 1;
+        transform: none;
+      }
+      .sub-k {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-2);
+        margin-top: 4px;
+      }
+      .row .stepper {
+        flex: none;
+      }
+      .row .switch {
+        cursor: pointer;
+      }
+      .row--tap {
+        cursor: pointer;
+      }
+
+      /* ---- bottom summary ---- */
+      .bottom-bar {
+        padding-top: 22px;
+        background: linear-gradient(to top, var(--bg) calc(100% - 20px), color-mix(in srgb, var(--bg) 0%, transparent));
+      }
+      .sum {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .sum__txt {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+        gap: 1px;
+      }
+      .sum__k {
+        font-size: 12.5px;
+        color: var(--ink-3);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .sum__v {
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+      }
+      .sum .btn {
+        flex: none;
+        padding: 0 22px;
+      }
+      .sum .btn .i {
+        transition: translate var(--t-med) var(--ease);
+      }
+      .sum .btn:not([aria-disabled='true']):hover .i {
+        translate: 3px 0;
+      }
+      .sum .btn.is-ready {
+        animation: ready 620ms var(--ease-spring);
+      }
+      @keyframes ready {
+        40% {
+          scale: 1.05;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .now::before {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <div class="bar rise">
+          <a class="icon-btn" href="home.html" data-back aria-label="Voltar"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title">Reservar horário</h1>
+          <a class="icon-btn" href="reservas.html" aria-label="Minhas reservas"><span data-icon="calendar-tick"></span></a>
+        </div>
+
+        <div class="cpicks pop" style="--d: 1" role="radiogroup" aria-label="Campo" id="cpicks"></div>
+
+        <section class="section rise" style="--d: 2" aria-labelledby="d-title">
+          <div class="section__head">
+            <h2 class="section__title" id="d-title">Data</h2>
+            <span class="t-sm t-muted" id="d-label"></span>
+          </div>
+          <div class="days" role="radiogroup" aria-labelledby="d-title" id="days"><span class="days__pill" id="days-pill" aria-hidden="true"></span></div>
+          <p class="legend t-xs t-muted" aria-hidden="true"><i></i><i></i>Ocupação prevista · fins de semana lotam primeiro</p>
+        </section>
+
+        <section class="section rise" style="--d: 3" aria-labelledby="t-title">
+          <div class="section__head">
+            <h2 class="section__title" id="t-title">Horário de saída</h2>
+            <span class="t-xs t-muted" id="t-hint">Saída pelo tee 1</span>
+          </div>
+          <div class="periods" role="radiogroup" aria-label="Período" id="periods" data-p="manha">
+            <span class="periods__pill" aria-hidden="true"></span>
+            <label class="period"><input class="sr-only" type="radio" name="periodo" value="manha" />Manhã <small id="n-manha"></small></label>
+            <label class="period"><input class="sr-only" type="radio" name="periodo" value="tarde" />Tarde <small id="n-tarde"></small></label>
+          </div>
+          <div class="teesheet" id="sheet" aria-labelledby="t-title">
+            <span class="teesheet__sel" id="sel" aria-hidden="true"></span>
+            <div id="sheet-body"></div>
+          </div>
+        </section>
+
+        <!-- tee time: group + extras -->
+        <section class="section reveal" id="group-sec" aria-labelledby="g-title">
+          <div class="section__head">
+            <h2 class="section__title" id="g-title">Jogadores</h2>
+            <div class="stepper" role="group" aria-label="Número de jogadores">
+              <button type="button" id="pl-minus" aria-label="Menos um jogador"><span data-icon="minus" class="i--sm"></span></button>
+              <output id="pl-out" class="num" aria-live="polite">2</output>
+              <button type="button" id="pl-plus" aria-label="Mais um jogador"><span data-icon="add" class="i--sm"></span></button>
+            </div>
+          </div>
+          <div class="seats" id="seats" role="group" aria-label="Seu grupo"></div>
+          <p class="sub-k" id="f-title">Jogue com seus amigos</p>
+          <div class="friends" id="friends" role="group" aria-labelledby="f-title"></div>
+          <div class="row">
+            <span class="tile-ico tile-ico--violet"><span data-icon="user-add"></span></span>
+            <div class="row__body">
+              <span class="row__title" id="gu-title">Convidados</span>
+              <span class="row__sub" id="gu-sub">Não sócios · green fee</span>
+            </div>
+            <div class="stepper" role="group" aria-labelledby="gu-title">
+              <button type="button" id="gu-minus" aria-label="Menos um convidado"><span data-icon="minus" class="i--sm"></span></button>
+              <output id="gu-out" class="num" aria-live="polite">0</output>
+              <button type="button" id="gu-plus" aria-label="Mais um convidado"><span data-icon="add" class="i--sm"></span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="section reveal" id="extras-sec" aria-labelledby="x-title">
+          <h2 class="section__title" id="x-title">Extras</h2>
+          <div class="rows">
+            <div class="row row--tap" data-toggle="cart">
+              <span class="tile-ico"><span data-icon="car"></span></span>
+              <div class="row__body">
+                <span class="row__title" id="cart-t">Carrinho elétrico</span>
+                <span class="row__sub" id="cart-s"></span>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="cart-t" aria-describedby="cart-s" id="sw-cart"></button>
+            </div>
+            <div class="row row--tap" data-toggle="clubs">
+              <span class="tile-ico tile-ico--sky"><span data-icon="bag-2"></span></span>
+              <div class="row__body">
+                <span class="row__title" id="clubs-t">Aluguel de tacos</span>
+                <span class="row__sub" id="clubs-s"></span>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="clubs-t" aria-describedby="clubs-s" id="sw-clubs"></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- driving range: buckets instead of players -->
+        <section class="section reveal" id="range-sec" aria-labelledby="r-title" hidden>
+          <h2 class="section__title" id="r-title">Bolas</h2>
+          <div class="row">
+            <span class="tile-ico tile-ico--amber"><span data-icon="shopping-bag"></span></span>
+            <div class="row__body">
+              <span class="row__title" id="bk-title">Baldes de bolas</span>
+              <span class="row__sub" id="bk-sub"></span>
+            </div>
+            <div class="stepper" role="group" aria-labelledby="bk-title">
+              <button type="button" id="bk-minus" aria-label="Menos um balde"><span data-icon="minus" class="i--sm"></span></button>
+              <output id="bk-out" class="num" aria-live="polite">1</output>
+              <button type="button" id="bk-plus" aria-label="Mais um balde"><span data-icon="add" class="i--sm"></span></button>
+            </div>
+          </div>
+          <p class="t-xs t-muted">A baia fica reservada por 1 hora a partir do horário escolhido. Para sócios, a baia não tem custo.</p>
+        </section>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 5">
+        <div class="sum">
+          <p class="sum__txt" aria-hidden="true"><span class="sum__k" id="sum-k">Escolha um horário</span><span class="sum__v num" id="sum-v">Sem custo</span></p>
+          <p class="sr-only" id="sum-live" aria-live="polite" aria-atomic="true"></p>
+          <a class="btn btn--primary" id="go" role="link" aria-disabled="true">Continuar<span data-icon="arrow-right" class="i--sm"></span></a>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const q = new URLSearchParams(location.search);
+        const pad = (n) => String(n).padStart(2, '0');
+        const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        const parseISO = (s) => {
+          const [y, m, d] = s.split('-').map(Number);
+          return new Date(y, m - 1, d);
+        };
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const hm = (m) => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`;
+        /* deterministic availability: FNV hash → mulberry32 */
+        const hash = (s) => [...s].reduce((a, c) => Math.imul(a ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
+        const rng = (seed) => () => {
+          seed = (seed + 0x6d2b79f5) | 0;
+          let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+        const P = GH.prices;
+        const today = new Date(GH.now);
+        today.setHours(0, 0, 0, 0);
+        const nowMin = GH.now.getHours() * 60 + GH.now.getMinutes();
+        const POOL = Object.keys(GH.people).filter((id) => id !== GH.user && !GH.people[id].pro);
+        const DAYS = Array.from({ length: 14 }, (_, i) => {
+          const d = new Date(today);
+          d.setDate(d.getDate() + i);
+          return { d, iso: iso(d), i, weekend: d.getDay() === 0 || d.getDay() === 6 };
+        });
+
+        /* ---------- availability ---------- */
+        const cache = {};
+        function slotsFor(campo, dISO) {
+          const key = campo + dISO;
+          if (cache[key]) return cache[key];
+          const range = campo === 'range';
+          const d = parseISO(dISO);
+          const we = d.getDay() === 0 || d.getDay() === 6;
+          const isToday = dISO === iso(today);
+          const step = range ? 30 : 10;
+          const end = range ? 18 * 60 + 30 : 16 * 60 + 30;
+          const out = [];
+          for (let m = 6 * 60 + 30; m <= end; m += step) {
+            const r = rng(hash(`${campo}|${dISO}|${m}`));
+            let demand = we ? 0.8 : 0.4;
+            if (m < 9 * 60) demand += 0.14;
+            else if (m >= 11 * 60 + 30 && m < 14 * 60) demand -= 0.14;
+            else if (m >= 15 * 60) demand -= 0.06;
+            if (campo === 'b') demand -= 0.1;
+            const s = { m, hm: hm(m), period: m < 12 * 60 ? 'manha' : 'tarde', past: isToday && m <= nowMin + 15 };
+            if (range) {
+              const used = Math.round(40 * clamp(demand * (0.45 + r() * 0.8), 0, 1));
+              s.cap = 40;
+              s.free = 40 - used;
+              s.occ = used / 40;
+            } else {
+              const x = r();
+              let booked = 0;
+              if (x < demand * 0.5) booked = 4;
+              else if (x < demand) booked = 1 + Math.floor(r() * 3);
+              const pool = POOL.slice();
+              s.who = Array.from({ length: booked }, () => pool.splice(Math.floor(r() * pool.length), 1)[0]);
+              s.cap = 4;
+              s.free = 4 - booked;
+              s.occ = booked / 4;
+            }
+            out.push(s);
+          }
+          return (cache[key] = out);
+        }
+        const future = (campo, dISO) => slotsFor(campo, dISO).filter((s) => !s.past);
+        const dayOcc = (campo, dISO) => {
+          const all = slotsFor(campo, dISO);
+          return all.reduce((a, s) => a + s.occ, 0) / all.length;
+        };
+
+        /* ---------- state (deep-linkable) ---------- */
+        const S = {
+          campo: ['a', 'b', 'range'].includes(q.get('campo')) ? q.get('campo') : 'a',
+          date: null,
+          period: q.get('periodo') === 'tarde' ? 'tarde' : q.get('periodo') === 'manha' ? 'manha' : null,
+          time: /^\d\d:\d\d$/.test(q.get('hora') || '') ? q.get('hora') : null,
+          players: clamp(parseInt(q.get('jogadores') || '2', 10) || 2, 1, 4),
+          guests: 0,
+          friends: [],
+          cart: q.get('carrinho') === '1',
+          clubs: q.get('tacos') === '1',
+          buckets: clamp(parseInt(q.get('baldes') || '1', 10) || 1, 1, 6),
+        };
+        S.guests = clamp(parseInt(q.get('convidados') || '0', 10) || 0, 0, S.players - 1);
+        if (q.has('amigos')) S.friends = (q.get('amigos') || '').split(',').filter((id) => GH.friends.includes(id));
+        else S.friends = q.has('jogadores') ? GH.friends.slice(0, S.players - 1 - S.guests) : ['caio'];
+        S.friends = [...new Set(S.friends)].slice(0, S.players - 1 - S.guests);
+        /* ?data=YYYY-MM-DD, or ?dia=n (n days from today) for stable deep links */
+        const qd = q.get('data') || (q.has('dia') ? (DAYS[parseInt(q.get('dia'), 10)] || {}).iso : null);
+        S.date = DAYS.some((d) => d.iso === qd) ? qd : future(S.campo, DAYS[0].iso).some((s) => s.free > 0) ? DAYS[0].iso : DAYS[1].iso;
+        const need = () => (S.campo === 'range' ? 1 : S.players);
+        const pickPeriod = () => {
+          const f = future(S.campo, S.date);
+          if (S.time) {
+            const s = f.find((x) => x.hm === S.time);
+            if (s) return s.period;
+          }
+          return f.some((s) => s.period === 'manha' && s.free >= need()) ? 'manha' : 'tarde';
+        };
+        if (!S.period) S.period = pickPeriod();
+
+        /* ---------- course picker ---------- */
+        const KIND = { a: '18 buracos', b: '9 buracos', range: '40 baias' };
+        const cpicks = $('cpicks');
+        cpicks.innerHTML = ['a', 'b', 'range']
+          .map((id) => {
+            const c = GH.course(id);
+            return `<label class="cpick">
+              <input class="sr-only" type="radio" name="campo" value="${id}" ${S.campo === id ? 'checked' : ''} aria-label="${GH.esc(c.name)}, ${GH.esc(c.kind)}"/>
+              <img src="assets/img/${c.photo}.webp" alt="" width="736" height="552" decoding="async"/>
+              <span class="cpick__txt" aria-hidden="true"><span class="cpick__name">${GH.esc(id === 'range' ? 'Driving range' : c.name)}</span><span class="cpick__kind">${KIND[id]}</span></span>
+              <span class="cpick__tick" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="m6 12.4 3.8 3.8L18 8"/></svg></span>
+            </label>`;
+          })
+          .join('');
+        cpicks.addEventListener('change', (e) => {
+          if (e.target.name !== 'campo') return;
+          S.campo = e.target.value;
+          GH.haptic();
+          const f = future(S.campo, S.date);
+          if (S.time && !f.some((s) => s.hm === S.time && s.free >= need())) S.time = null;
+          S.period = pickPeriod();
+          renderDays();
+          renderMode();
+          renderSheet(true);
+          renderSummary();
+        });
+
+        /* ---------- day strip ---------- */
+        const days = $('days');
+        const pill = $('days-pill');
+        days.insertAdjacentHTML(
+          'beforeend',
+          DAYS.map((x) => {
+            const label = x.i === 0 ? 'Hoje' : GH.fmt.weekdayShort(x.d);
+            return `<label class="day${x.weekend ? ' is-busy' : ''}">
+                <input class="sr-only" type="radio" name="dia" value="${x.iso}" aria-label="${x.i === 0 ? 'Hoje, ' : x.i === 1 ? 'Amanhã, ' : ''}${GH.fmt.weekday(x.d)}, ${GH.fmt.long(x.d)}${x.weekend ? ', movimentado' : ''}"/>
+                <span class="day__w" aria-hidden="true">${label}</span>
+                <span class="day__n num" aria-hidden="true">${x.d.getDate()}</span>
+                <span class="day__bar" aria-hidden="true"><i></i></span>
+              </label>`;
+          }).join('')
+        );
+        function placePill(instant) {
+          const inp = days.querySelector(`input[value="${S.date}"]`);
+          if (!inp) return;
+          inp.checked = true;
+          const l = inp.parentElement;
+          if (instant) pill.style.transition = 'none';
+          pill.style.translate = `${l.offsetLeft}px ${l.offsetTop}px`;
+          pill.classList.add('is-on');
+          if (instant) {
+            void pill.offsetWidth;
+            pill.style.transition = '';
+          }
+          const target = l.offsetLeft - days.clientWidth / 2 + l.offsetWidth / 2;
+          days.scrollTo({ left: Math.max(0, target), behavior: instant || GH.reduceMotion() ? 'auto' : 'smooth' });
+          const d = parseISO(S.date);
+          $('d-label').textContent = `${cap(GH.fmt.dayLabel(d) === GH.fmt.long(d) ? GH.fmt.weekday(d) : GH.fmt.dayLabel(d))}, ${GH.fmt.long(d)}`;
+        }
+        function renderDays() {
+          days.querySelectorAll('.day').forEach((l, k) => {
+            const occ = dayOcc(S.campo, DAYS[k].iso);
+            l.querySelector('.day__bar i').style.setProperty('--v', Math.max(0.12, occ).toFixed(2));
+          });
+        }
+        days.addEventListener('change', (e) => {
+          if (e.target.name !== 'dia') return;
+          S.date = e.target.value;
+          GH.haptic();
+          const f = future(S.campo, S.date);
+          if (S.time && !f.some((s) => s.hm === S.time && s.free >= need())) S.time = null;
+          S.period = pickPeriod();
+          placePill();
+          renderSheet(true);
+          renderSummary();
+        });
+
+        /* ---------- period ---------- */
+        const periods = $('periods');
+        periods.addEventListener('change', (e) => {
+          if (e.target.name !== 'periodo') return;
+          S.period = e.target.value;
+          GH.haptic();
+          renderSheet(true);
+          sync();
+        });
+
+        /* ---------- tee sheet ---------- */
+        const body = $('sheet-body');
+        const sel = $('sel');
+        let selTimer;
+        function slotHTML(s, i) {
+          const range = S.campo === 'range';
+          const full = s.free <= 0;
+          const short = !full && s.free < need();
+          const off = full || short;
+          let cls = 'slot slot--in',
+            sub,
+            aria;
+          if (range) {
+            if (full) (cls += ' is-off is-full'), (sub = 'Lotado'), (aria = 'lotado');
+            else {
+              cls += s.free <= 6 ? ' is-few' : ' is-free';
+              sub = `${s.free <= 6 ? '' : '<span class="slot__dot"></span>'}${GH.fmt.plural(s.free, 'baia', 'baias')}`;
+              aria = `${GH.fmt.plural(s.free, 'baia livre', 'baias livres')}`;
+            }
+          } else if (full) {
+            cls += ' is-off is-full';
+            sub = 'Lotado';
+            aria = 'lotado';
+          } else if (s.free === 4) {
+            cls += ' is-free';
+            sub = '<span class="slot__dot"></span>Livre';
+            aria = 'livre, 4 vagas';
+          } else {
+            cls += short ? ' is-off' : ' is-part';
+            sub = `${GH.stack(s.who, s.who.length, 'xs')}${GH.fmt.plural(s.free, 'vaga', 'vagas')}`;
+            const names = s.who.map(GH.first);
+            aria = `${GH.fmt.plural(s.free, 'vaga', 'vagas')}, com ${names.length > 1 ? names.slice(0, -1).join(', ') + ' e ' + names.slice(-1) : names[0]}${short ? `, sem lugar para ${S.players}` : ''}`;
+          }
+          const on = !off && S.time === s.hm;
+          return `<label class="${cls}" style="--i:${i}"${short ? ` title="Sem lugar para ${S.players} jogadores"` : ''}>
+            <input class="sr-only" type="radio" name="hora" value="${s.hm}" ${off ? 'disabled' : ''} ${on ? 'checked' : ''} aria-label="${s.hm}, ${aria}"/>
+            <span class="slot__t num" aria-hidden="true">${s.hm}</span>
+            <span class="slot__s" aria-hidden="true">${sub}</span>
+          </label>`;
+        }
+        function renderSheet(animate) {
+          const range = S.campo === 'range';
+          const all = future(S.campo, S.date);
+          ['manha', 'tarde'].forEach((p) => {
+            const n = all.filter((s) => s.period === p && s.free >= need()).length;
+            $('n-' + p).textContent = `· ${n} ${n === 1 ? 'livre' : 'livres'}`;
+          });
+          periods.dataset.p = S.period;
+          periods.querySelector(`input[value="${S.period}"]`).checked = true;
+          $('t-title').textContent = range ? 'Horário da baia' : 'Horário de saída';
+          $('t-hint').textContent = range ? 'Baia por 1 hora' : S.campo === 'b' ? 'Saída pelo tee 1 · 9 buracos' : 'Saída pelo tee 1';
+          const list = all.filter((s) => s.period === S.period);
+          const isToday = S.date === DAYS[0].iso;
+          let html = '';
+          if (isToday && list.length && slotsFor(S.campo, S.date).some((s) => s.period === S.period && s.past)) html += `<div class="now" aria-hidden="true">Agora · ${GH.fmt.time(GH.now)}</div>`;
+          if (!list.some((s) => s.free >= need())) {
+            const other = S.period === 'manha' ? 'tarde' : 'manha';
+            const hasOther = all.some((s) => s.period === other && s.free >= need());
+            html += `<div class="sheet-empty">${GH.icon('calendar', 'i--lg')}
+              <p>${list.length ? `Sem vagas para ${GH.fmt.plural(need(), 'jogador', 'jogadores')} ${S.period === 'manha' ? 'de manhã' : 'à tarde'}.` : `Os horários ${S.period === 'manha' ? 'da manhã' : 'da tarde'} já passaram.`}</p>
+              ${hasOther ? `<button class="btn btn--outline btn--sm" type="button" data-period="${other}">Ver ${other === 'manha' ? 'a manhã' : 'a tarde'}</button>` : `<button class="btn btn--outline btn--sm" type="button" data-next-day>Ver o próximo dia</button>`}
+            </div>`;
+          }
+          /* group by hour, each with its occupancy meter */
+          const hours = [];
+          list.forEach((s) => {
+            const h = Math.floor(s.m / 60);
+            let g = hours.find((x) => x.h === h);
+            if (!g) hours.push((g = { h, slots: [] }));
+            g.slots.push(s);
+          });
+          if (list.some((s) => s.free >= need())) {
+            let i = 0;
+            html += hours
+              .map((g) => {
+                const occ = g.slots.reduce((a, s) => a + s.occ, 0) / g.slots.length;
+                const pct = Math.round(occ * 100);
+                const color = occ >= 0.7 ? 'var(--amber-500)' : 'var(--green-500)';
+                return `<div class="hour" role="group" aria-label="${pad(g.h)} horas, ${pct}% ocupado">
+                  <div class="hour__head slot--in" style="--i:${i}" aria-hidden="true"><span class="hour__t num">${pad(g.h)}h</span><span class="meter" style="--meter:${color}"><i style="--v:${occ.toFixed(2)};--d:${Math.min(i, 10) / 2}"></i></span><span class="hour__n">${pct}% ocupado</span></div>
+                  <div class="slots">${g.slots.map((s) => slotHTML(s, i++)).join('')}</div>
+                </div>`;
+              })
+              .join('');
+          }
+          sel.classList.remove('is-on');
+          body.innerHTML = html;
+          if (!animate) {
+            body.querySelectorAll('.slot--in').forEach((x) => x.classList.remove('slot--in'));
+            body.querySelectorAll('.meter i').forEach((x) => (x.style.animation = 'none'));
+          }
+          clearTimeout(selTimer);
+          const checked = body.querySelector('input[name="hora"]:checked');
+          if (checked) {
+            const idx = +checked.parentElement.style.getPropertyValue('--i') || 0;
+            selTimer = setTimeout(() => placeSel(true), animate && !GH.reduceMotion() ? 420 + idx * 16 : 0);
+          }
+        }
+        function placeSel(instant) {
+          const inp = body.querySelector('input[name="hora"]:checked');
+          if (!inp) return sel.classList.remove('is-on');
+          const l = inp.parentElement;
+          const r = l.getBoundingClientRect(),
+            t = $('sheet').getBoundingClientRect();
+          const put = () => {
+            sel.style.width = l.offsetWidth + 'px';
+            sel.style.height = l.offsetHeight + 'px';
+            sel.style.translate = `${Math.round(r.left - t.left)}px ${Math.round(r.top - t.top)}px`;
+          };
+          if (instant || !sel.classList.contains('is-on')) {
+            sel.style.transition = 'none';
+            put();
+            void sel.offsetWidth;
+            sel.style.transition = '';
+            sel.classList.add('is-on');
+            return;
+          }
+          put();
+          sel.classList.remove('is-morph');
+          void sel.offsetWidth;
+          sel.classList.add('is-morph');
+        }
+        body.addEventListener('change', (e) => {
+          if (e.target.name !== 'hora') return;
+          const first = !S.time;
+          S.time = e.target.value;
+          GH.haptic(10);
+          placeSel(false);
+          renderSummary(first);
+        });
+        body.addEventListener('click', (e) => {
+          const p = e.target.closest('[data-period]');
+          if (p) {
+            S.period = p.dataset.period;
+            renderSheet(true);
+            return sync();
+          }
+          if (e.target.closest('[data-next-day]')) {
+            const k = DAYS.findIndex((d) => d.iso === S.date);
+            S.date = DAYS[Math.min(DAYS.length - 1, k + 1)].iso;
+            S.period = pickPeriod();
+            placePill();
+            renderSheet(true);
+            renderSummary();
+          }
+        });
+        window.addEventListener('resize', () => placeSel(true));
+
+        /* ---------- group ---------- */
+        let added = null;
+        const freeSeats = () => S.players - 1 - S.friends.length - S.guests;
+        function makeRoom() {
+          if (freeSeats() > 0) return true;
+          if (S.players < 4) {
+            S.players++;
+            return true;
+          }
+          GH.toast('O grupo já tem 4 jogadores', 'info-circle');
+          return false;
+        }
+        function renderGroup() {
+          const seats = [`<div class="seat seat--me">${GH.avatar(GH.user, { size: 'md' })}<span>Você</span></div>`];
+          S.friends.forEach((id) =>
+            seats.push(
+              `<button class="seat${added === id ? ' pop' : ''}" type="button" data-unpick="${id}" aria-label="Tirar ${GH.esc(GH.first(id))} do grupo">${GH.avatar(id, { size: 'md' })}<span>${GH.esc(GH.first(id))}</span></button>`
+            )
+          );
+          for (let k = 0; k < S.guests; k++)
+            seats.push(`<div class="seat${added === 'g' + k ? ' pop' : ''}"><span class="seat__guest">${GH.icon('user')}</span><span>Convidado</span></div>`);
+          for (let k = 0; k < freeSeats(); k++)
+            seats.push(`<div class="seat${added === 'v' + k ? ' pop' : ''}"><span class="seat__ghost">${GH.icon('add', 'i--sm')}</span><span>A definir</span></div>`);
+          $('seats').innerHTML = seats.join('');
+          $('friends').innerHTML = GH.friends
+            .map((id) => {
+              const on = S.friends.includes(id);
+              return `<button class="friend" type="button" aria-pressed="${on}" data-pick="${id}">${GH.avatar(id, { size: 'md' })}<span class="friend__tick" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="m6 12.4 3.8 3.8L18 8"/></svg></span><span>${GH.esc(GH.first(id))}</span></button>`;
+            })
+            .join('');
+          $('pl-out').textContent = S.players;
+          $('pl-minus').disabled = S.players <= 1;
+          $('pl-plus').disabled = S.players >= 4;
+          $('gu-out').textContent = S.guests;
+          $('gu-minus').disabled = S.guests <= 0;
+          $('gu-plus').disabled = S.guests >= 3;
+          $('gu-sub').innerHTML = `Não sócios<br/>${GH.fmt.brl(P.greenFeeGuest)} cada`;
+          added = null;
+        }
+        function afterGroup() {
+          renderGroup();
+          if (S.campo !== 'range') {
+            const s = future(S.campo, S.date).find((x) => x.hm === S.time);
+            if (s && s.free < S.players) {
+              GH.toast(`${S.time} tem só ${GH.fmt.plural(s.free, 'vaga', 'vagas')}. Escolha outro horário.`, 'info-circle');
+              S.time = null;
+            }
+            renderSheet(false);
+          }
+          renderSummary();
+        }
+        $('friends').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-pick]');
+          if (!b) return;
+          const id = b.dataset.pick;
+          GH.haptic();
+          if (S.friends.includes(id)) S.friends = S.friends.filter((x) => x !== id);
+          else if (makeRoom()) {
+            S.friends.push(id);
+            added = id;
+          } else return;
+          afterGroup();
+          $('friends').querySelector(`[data-pick="${id}"]`).focus({ preventScroll: true });
+        });
+        $('seats').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-unpick]');
+          if (!b) return;
+          S.friends = S.friends.filter((x) => x !== b.dataset.unpick);
+          afterGroup();
+        });
+        $('pl-plus').addEventListener('click', () => {
+          if (S.players >= 4) return;
+          S.players++;
+          added = 'v' + (freeSeats() - 1);
+          GH.haptic();
+          afterGroup();
+        });
+        $('pl-minus').addEventListener('click', () => {
+          if (S.players <= 1) return;
+          if (freeSeats() <= 0) {
+            if (S.guests) S.guests--;
+            else S.friends.pop();
+          }
+          S.players--;
+          GH.haptic();
+          afterGroup();
+        });
+        $('gu-plus').addEventListener('click', () => {
+          if (!makeRoom()) return;
+          S.guests++;
+          added = 'g' + (S.guests - 1);
+          GH.haptic();
+          afterGroup();
+        });
+        $('gu-minus').addEventListener('click', () => {
+          if (!S.guests) return;
+          S.guests--;
+          GH.haptic();
+          afterGroup();
+        });
+
+        /* ---------- extras / buckets ---------- */
+        $('cart-s').textContent = `2 lugares · ${GH.fmt.brl(P.cart)}`;
+        $('clubs-s').textContent = `14 tacos · ${GH.fmt.brl(P.clubs)}`;
+        const toggle = (k) => {
+          S[k] = !S[k];
+          $('sw-' + k).setAttribute('aria-checked', S[k]);
+          GH.haptic();
+          renderSummary();
+        };
+        document.querySelectorAll('[data-toggle]').forEach((row) =>
+          row.addEventListener('click', (e) => {
+            toggle(row.dataset.toggle);
+          })
+        );
+        function renderBuckets() {
+          $('bk-out').textContent = S.buckets;
+          $('bk-minus').disabled = S.buckets <= 1;
+          $('bk-plus').disabled = S.buckets >= 6;
+          $('bk-sub').textContent = `60 bolas cada · ${GH.fmt.brl(P.balls)}`;
+        }
+        $('bk-plus').addEventListener('click', () => {
+          S.buckets = Math.min(6, S.buckets + 1);
+          GH.haptic();
+          renderBuckets();
+          renderSummary();
+        });
+        $('bk-minus').addEventListener('click', () => {
+          S.buckets = Math.max(1, S.buckets - 1);
+          GH.haptic();
+          renderBuckets();
+          renderSummary();
+        });
+        function renderMode() {
+          const range = S.campo === 'range';
+          $('group-sec').hidden = range;
+          $('extras-sec').hidden = range;
+          $('range-sec').hidden = !range;
+          GH.reveal();
+        }
+
+        /* ---------- summary + hand-off ---------- */
+        const total = () => (S.campo === 'range' ? S.buckets * P.balls : S.guests * P.greenFeeGuest + (S.cart ? P.cart : 0) + (S.clubs ? P.clubs : 0));
+        const money = (v) => (v === 0 ? 'Sem custo' : GH.fmt.brl(v));
+        let shown = null,
+          liveT;
+        function shortDay(dISO) {
+          const d = parseISO(dISO);
+          const k = DAYS.findIndex((x) => x.iso === dISO);
+          if (k === 0) return 'Hoje';
+          if (k === 1) return 'Amanhã';
+          return `${cap(GH.fmt.weekdayShort(d))} ${GH.fmt.ddmm(d)}`;
+        }
+        const pretty = (p) => p.toString().replace(/%3A/gi, ':').replace(/%2C/gi, ',');
+        function sync() {
+          const p = new URLSearchParams();
+          p.set('campo', S.campo);
+          p.set('data', S.date);
+          p.set('periodo', S.period);
+          if (S.time) p.set('hora', S.time);
+          if (S.campo === 'range') p.set('baldes', S.buckets);
+          else {
+            p.set('jogadores', S.players);
+            p.set('convidados', S.guests);
+            p.set('amigos', S.friends.join(','));
+            p.set('carrinho', +S.cart);
+            p.set('tacos', +S.clubs);
+          }
+          if (q.has('shot')) p.set('shot', '1');
+          try {
+            history.replaceState(null, '', `${location.pathname}?${pretty(p)}`);
+          } catch (e) {}
+          return p;
+        }
+        function renderSummary(ready) {
+          const range = S.campo === 'range';
+          const t = total();
+          const who = range ? GH.fmt.plural(S.buckets, 'balde', 'baldes') : GH.fmt.plural(S.players, 'jogador', 'jogadores');
+          const k = S.time ? `${shortDay(S.date)}, ${S.time} · ${who}` : 'Escolha um horário';
+          $('sum-k').textContent = k;
+          const v = $('sum-v');
+          if (shown === null || GH.reduceMotion()) v.textContent = money(t);
+          else if (shown !== t) GH.countUp(v, t, { from: shown, dur: 650, format: (x) => (t === 0 && Math.round(x) === 0 ? 'Sem custo' : GH.fmt.brl(Math.round(x))) });
+          shown = t;
+          clearTimeout(liveT);
+          liveT = setTimeout(() => ($('sum-live').textContent = `${k} · ${money(t)}`), 500);
+          const go = $('go');
+          const p = sync();
+          if (S.time) {
+            const h = new URLSearchParams();
+            if (range) {
+              h.set('tipo', 'range');
+              h.set('data', S.date);
+              h.set('hora', S.time);
+              h.set('baldes', S.buckets);
+            } else {
+              h.set('tipo', 'tee');
+              h.set('campo', S.campo);
+              h.set('data', S.date);
+              h.set('hora', S.time);
+              h.set('jogadores', S.players);
+              h.set('convidados', S.guests);
+              h.set('carrinho', +S.cart);
+              h.set('tacos', +S.clubs);
+              h.set('amigos', S.friends.join(','));
+            }
+            go.href = `pagamento.html?${pretty(h)}`;
+            go.removeAttribute('aria-disabled');
+            go.removeAttribute('role');
+            if (ready) {
+              go.classList.remove('is-ready');
+              void go.offsetWidth;
+              go.classList.add('is-ready');
+            }
+          } else {
+            go.removeAttribute('href');
+            go.setAttribute('role', 'link');
+            go.setAttribute('aria-disabled', 'true');
+          }
+        }
+        $('go').addEventListener('click', (e) => {
+          if (!S.time) {
+            e.preventDefault();
+            GH.toast('Escolha um horário de saída', 'clock');
+          }
+        });
+
+        /* ---------- boot ---------- */
+        $('sw-cart').setAttribute('aria-checked', S.cart);
+        $('sw-clubs').setAttribute('aria-checked', S.clubs);
+        renderDays();
+        renderMode();
+        renderGroup();
+        renderBuckets();
+        renderSheet(true);
+        renderSummary();
+        requestAnimationFrame(() => placePill(true));
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => (placePill(true), placeSel(true)));
+      })();
+    </script>
+  </body>
+</html>

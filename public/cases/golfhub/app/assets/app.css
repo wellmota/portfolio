@@ -1,0 +1,1663 @@
+/* GolfHub — web prototype of the member app, rebuilt from the Figma file ("Golf Hub", Clube de Golfe de Brasília, 2023).
+   One family (Inter, as in the Figma screens), the Figma's palette consolidated into tokens:
+   charcoal CTAs (#303030), the green of the tab indicator, the club violet (#771AA3) and the selection indigo (#4A3AFF).
+   Shared by every screen. Page-specific CSS lives in each page's <style>. */
+
+/* ---------- Tokens ---------- */
+:root {
+  /* ink (Figma Gray 1/2/3, nudged to pass AA on white) */
+  --ink: #2b2b2b;
+  --ink-2: #4f4f4f;
+  --ink-3: #6b6b6b;
+  --ink-4: #a3a3a3;
+  --ink-5: #c9c9c9;
+
+  /* charcoal surfaces (Figma "Começar rodada", score bar, distance tile) */
+  --char: #303030;
+  --char-2: #434343;
+  --char-3: #5a5a5a;
+
+  /* green (Figma tab indicator #38EB7F → #106F36, flag #10B853, card glow #1A4E26) */
+  --green-50: #ecfbf2;
+  --green-100: #d2f5e0;
+  --green-300: #38eb7f;
+  --green-400: #1fd16a;
+  --green-500: #10b853;
+  --green-600: #0f9a47;
+  --green-700: #106f36;
+  --green-800: #1a4e26;
+  --green-grad: linear-gradient(180deg, var(--green-300), var(--green-700));
+
+  /* club violet (Figma location button #771AA3, distance tag #9449B7, "+11" #CA18C3 — merged into one ramp) */
+  --violet-50: #f7effb;
+  --violet-100: #eedcf6;
+  --violet-400: #9449b7;
+  --violet-500: #8a2cb6;
+  --violet-600: #771aa3;
+  --violet-700: #5f1283;
+
+  /* selection indigo (Figma hole chips, credit card, ERP primary #4A3AFF) */
+  --indigo-50: #f0eeff;
+  --indigo-100: #e1ddff;
+  --indigo-500: #4a3aff;
+  --indigo-600: #3a2be0;
+
+  --amber-500: #f2a33a;
+  --amber-50: #fff5e6;
+  --red-500: #e5484d;
+  --red-50: #fdecec;
+  --sky-500: #2f9bd6;
+  --sky-50: #e8f5fc;
+
+  /* neutrals */
+  --white: #fff;
+  --bg: #fff;
+  --surface: #fff;
+  --sunken: #f5f6f5;
+  --sunken-2: #eef0ee;
+  --line: #ebebeb;
+  --line-strong: #dedede;
+  --dash: #d6d9e4;
+
+  --text: var(--ink);
+  --muted: var(--ink-3);
+  --primary: var(--char);
+  --brand: var(--green-700);
+  --accent: var(--violet-600);
+  --select: var(--indigo-500);
+
+  /* soft, tinted drop shadows — the Figma blurs a coloured copy under each element */
+  --shadow-xs: 0 1px 2px rgba(20, 30, 22, 0.06);
+  --shadow-sm: 0 2px 8px rgba(20, 30, 22, 0.05), 0 8px 24px -10px rgba(20, 30, 22, 0.12);
+  --shadow-card: 0 4px 26px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 6px 16px rgba(20, 30, 22, 0.06), 0 22px 44px -16px rgba(20, 30, 22, 0.22);
+  --shadow-photo: 0 30px 40px -24px rgba(26, 78, 38, 0.75);
+  --shadow-btn: 0 22px 30px -16px rgba(30, 30, 30, 0.75);
+  --shadow-nav: 0 -10px 32px -6px rgba(105, 107, 106, 0.22);
+  --shadow-violet: 0 10px 22px -8px rgba(119, 26, 163, 0.7);
+  --shadow-indigo: 0 8px 14px rgba(134, 118, 251, 0.45);
+
+  --gutter: 24px;
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-hero: 40px;
+  --r-pill: 999px;
+
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --t-fast: 140ms;
+  --t-med: 260ms;
+  --t-slow: 560ms;
+
+  /* fine grain for photo and colour surfaces */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.2 -.3'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ---------- Reset ---------- */
+[hidden] {
+  display: none !important;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.45;
+  font-feature-settings: 'cv11', 'ss01';
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink);
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+}
+p {
+  text-wrap: pretty;
+}
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+:focus-visible {
+  outline: 2.5px solid var(--indigo-500);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+::selection {
+  background: var(--green-100);
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Icons (Iconsax "vuesax" Linear, 24px grid, 1.5 stroke — the Figma's set) ---------- */
+.i {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.i [fill='currentColor'] {
+  stroke: none;
+}
+.i--bold {
+  fill: currentColor;
+  stroke: none;
+}
+.i--xs {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+.i--sm {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.75;
+}
+.i--lg {
+  width: 28px;
+  height: 28px;
+}
+.i--xl {
+  width: 34px;
+  height: 34px;
+}
+
+/* ---------- App chrome ---------- */
+.app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--bg);
+  isolation: isolate;
+}
+.screen {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding: 8px var(--gutter) 32px;
+}
+.screen::-webkit-scrollbar {
+  display: none;
+}
+.screen--flush {
+  padding: 0 0 32px;
+}
+.pad {
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* Fake iOS status bar — only when framed, embedded or ?shot=1 (see app.js).
+   data-status="light" on <body>: white glyphs floating over a photo/3D header. */
+.statusbar {
+  display: none;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  padding: 6px 30px 0 34px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  position: relative;
+  z-index: 30;
+}
+.statusbar__icons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.has-status .statusbar {
+  display: flex;
+}
+[data-status='light'] .statusbar,
+[data-status='float'] .statusbar {
+  position: absolute;
+  inset: 0 0 auto;
+  background: transparent;
+}
+[data-status='light'] .statusbar {
+  color: #fff;
+}
+
+/* ---------- Tab bar (Figma "Rectangle 12" with the notch + the green sphere over the active tab) ----------
+   <body data-tab="home|ranking|descobrir|avisos">. --x is the active tab's centre; app.js slides the sphere
+   from the previous tab on arrival. */
+@property --x {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 12.5%;
+}
+.tabbar {
+  --x: 12.5%;
+  transition: --x 620ms var(--ease);
+  flex: none;
+  position: relative;
+  z-index: 20;
+  margin-top: -14px;
+  padding-top: 14px;
+  filter: drop-shadow(0 -8px 22px rgba(105, 107, 106, 0.2));
+  pointer-events: none;
+}
+.tabbar__bg {
+  position: absolute;
+  inset: 14px 0 0;
+  background: var(--surface);
+  border-radius: 6px 6px 0 0;
+  -webkit-mask: radial-gradient(circle 23px at var(--x) -4px, transparent 22px, #000 23px);
+  mask: radial-gradient(circle 23px at var(--x) -4px, transparent 22px, #000 23px);
+}
+.tabbar__ball {
+  position: absolute;
+  top: 1px;
+  left: var(--x);
+  width: 25px;
+  height: 25px;
+  margin-left: -12.5px;
+  border-radius: 50%;
+  background: var(--green-grad);
+  box-shadow:
+    0 6px 12px -2px rgba(16, 111, 54, 0.55),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.18),
+    inset 0 3px 4px rgba(255, 255, 255, 0.35);
+}
+.tabbar__ball::after {
+  /* dimples, so it reads as a golf ball in green */
+  content: '';
+  position: absolute;
+  inset: 5px 6px 9px 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.55), transparent 60%);
+}
+.tabbar__list {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 4px 8px calc(8px + env(safe-area-inset-bottom));
+  pointer-events: auto;
+}
+.has-status .tabbar__list {
+  padding-bottom: 24px;
+}
+.tabbar a {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  min-height: 54px;
+  padding-top: 6px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink-3);
+  transition: color var(--t-fast) var(--ease);
+}
+.tabbar a .i {
+  width: 25px;
+  height: 25px;
+}
+.tabbar a[aria-current='page'] {
+  color: var(--green-700);
+}
+.tabbar .is-unread .i path:first-child {
+  stroke: var(--green-500);
+  fill: var(--green-500);
+}
+.tabbar a {
+  position: relative;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tabbar__ball,
+  .tabbar__bg {
+    transition: none !important;
+  }
+}
+
+/* Desktop: show the prototype inside a phone */
+@media (min-width: 600px) {
+  html:not(.is-embedded) body {
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(900px 600px at 50% -10%, var(--green-50) 0%, transparent 60%),
+      radial-gradient(700px 500px at 90% 110%, var(--violet-50) 0%, transparent 60%),
+      var(--sunken);
+  }
+  html:not(.is-embedded) .app {
+    width: 390px;
+    height: 844px;
+    border-radius: 54px;
+    box-shadow:
+      0 0 0 11px #161816,
+      0 0 0 12px #3a3d3a,
+      0 40px 120px -20px rgba(16, 60, 30, 0.35);
+  }
+}
+
+/* ---------- Typography (Inter, the Figma scale) ---------- */
+.t-display {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+.t-title {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+.t-h2 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+.t-h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.t-body {
+  font-size: 15px;
+}
+.t-sm {
+  font-size: 13px;
+}
+.t-xs {
+  font-size: 12px;
+}
+.t-micro {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.t-muted {
+  color: var(--muted);
+}
+.t-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* ---------- Top bar (Figma: hamburger left, avatar in a ring with the online dot right) ---------- */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+  margin: 0 calc(var(--gutter) * -1 + 10px);
+}
+.top__menu,
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--ink-2);
+  transition: background var(--t-fast) var(--ease);
+}
+.top__menu:hover,
+.icon-btn:hover {
+  background: var(--sunken);
+}
+.top__menu svg {
+  width: 26px;
+  height: 16px;
+}
+.me {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 30%, #fff 55%, #f4f4f4);
+  box-shadow: var(--shadow-xs);
+}
+.me img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+}
+.me::after {
+  content: '';
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--green-500);
+  box-shadow: 0 0 0 2px #fff;
+}
+
+/* Sub-screen bar: back on the left, title centred, action on the right */
+.bar {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  min-height: 56px;
+  margin: 0 calc(var(--gutter) * -1 + 10px);
+}
+.bar__title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.bar--light {
+  color: #fff;
+}
+.bar--light .icon-btn {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Page head: big title + club line (Figma "Olá Pedro" / "Minha assinatura" + gps icon) */
+.head {
+  display: grid;
+  gap: 8px;
+  padding: 6px 0 20px;
+}
+.club-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--ink-3);
+}
+.club-line .i {
+  color: var(--ink-3);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 24px;
+  border-radius: var(--r-lg);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition:
+    transform var(--t-fast) var(--ease),
+    background var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+  user-select: none;
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+/* Figma "Começar rodada": charcoal with a soft dark shadow underneath */
+.btn--primary {
+  color: #fff;
+  background: var(--char);
+  box-shadow: var(--shadow-btn);
+}
+.btn--primary:hover:not(:disabled):not([aria-disabled='true']) {
+  background: #262626;
+}
+.btn--green {
+  color: #fff;
+  background: linear-gradient(180deg, #17a54f, var(--green-700));
+  box-shadow: 0 18px 28px -14px rgba(16, 111, 54, 0.8);
+}
+.btn--violet {
+  color: #fff;
+  background: var(--violet-600);
+  box-shadow: var(--shadow-violet);
+}
+.btn--ghost {
+  color: var(--ink);
+  background: var(--sunken);
+}
+.btn--ghost:hover:not(:disabled) {
+  background: var(--sunken-2);
+}
+.btn--outline {
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+}
+.btn--sm {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+  font-size: 14px;
+}
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  color: var(--ink-3);
+  background: var(--sunken-2);
+  box-shadow: none;
+}
+.btn .flag {
+  width: 18px;
+  height: 26px;
+  margin-top: -4px;
+}
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--green-700);
+}
+
+/* Bottom action area: pinned above the home indicator, fades the content under it */
+.bottom-bar {
+  flex: none;
+  position: relative;
+  z-index: 10;
+  display: grid;
+  gap: 10px;
+  padding: 14px var(--gutter) calc(18px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 70%, color-mix(in srgb, var(--bg) 0%, transparent));
+  margin-top: -24px;
+}
+.has-status .bottom-bar {
+  padding-bottom: 30px;
+}
+
+/* ---------- Chips ---------- */
+/* Hole chips (Figma: 25×16 pills, #E8E8E8 border, active filled indigo, done = check) */
+.holes {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 2px;
+  margin: -4px -2px;
+}
+.holes::-webkit-scrollbar {
+  display: none;
+}
+.hole-chip {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 36px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  background: var(--surface);
+  transition:
+    background var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease);
+}
+.hole-chip[aria-current='true'],
+.hole-chip[aria-pressed='true'] {
+  color: #fff;
+  background: var(--indigo-500);
+  box-shadow: 0 6px 12px -6px rgba(74, 58, 255, 0.8);
+  min-width: 44px;
+}
+.hole-chip.is-done {
+  color: var(--indigo-500);
+  box-shadow: inset 0 0 0 1.5px var(--indigo-500);
+}
+.hole-chip.is-done .i {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.2;
+}
+
+/* Choice chips (filters, tees, slots) */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  transition:
+    background var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+}
+.chip[aria-pressed='true'],
+.chip[aria-checked='true'],
+.chip[aria-selected='true'] {
+  color: #fff;
+  background: var(--char);
+  box-shadow: none;
+}
+.chip:disabled {
+  color: var(--ink-4);
+  background: var(--sunken);
+  box-shadow: none;
+  text-decoration: line-through;
+}
+
+/* Segmented control */
+.seg {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--sunken);
+}
+.seg button {
+  min-height: 40px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-3);
+  transition:
+    background var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease);
+}
+.seg button[aria-selected='true'],
+.seg button[aria-pressed='true'],
+.seg button[aria-checked='true'] {
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink-2);
+  background: var(--sunken);
+}
+.badge--green {
+  color: var(--green-700);
+  background: var(--green-50);
+}
+.badge--violet {
+  color: var(--violet-600);
+  background: var(--violet-50);
+}
+.badge--indigo {
+  color: var(--indigo-600);
+  background: var(--indigo-50);
+}
+.badge--amber {
+  color: #8a5300;
+  background: var(--amber-50);
+}
+.badge--red {
+  color: #b42318;
+  background: var(--red-50);
+}
+.badge--dark {
+  color: #fff;
+  background: var(--char);
+}
+/* Figma "120 y" tag: violet, square-ish */
+.tag-violet {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--violet-400);
+  box-shadow: var(--shadow-violet);
+}
+
+/* ---------- Avatars ---------- */
+.av {
+  --s: 40px;
+  position: relative;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  overflow: hidden;
+  font-size: calc(var(--s) * 0.38);
+  font-weight: 700;
+  color: var(--av-ink, var(--green-700));
+  background: var(--av-bg, var(--green-50));
+}
+.av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.av--xs {
+  --s: 24px;
+}
+.av--sm {
+  --s: 32px;
+}
+.av--md {
+  --s: 44px;
+}
+.av--lg {
+  --s: 52px;
+}
+.av--xl {
+  --s: 84px;
+}
+.av--ring {
+  box-shadow:
+    0 0 0 3px #fff,
+    0 6px 14px -6px rgba(0, 0, 0, 0.45);
+}
+/* Figma avatar stack: overlapping 32px photos + a white "+11" bubble */
+.stack {
+  display: flex;
+  align-items: center;
+}
+.stack > * + * {
+  margin-left: -13px;
+}
+.stack .av {
+  box-shadow: 0 0 0 2px var(--stack-ring, #fff);
+}
+.stack__more {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--violet-600);
+  background: var(--stack-bubble, var(--violet-50));
+  box-shadow: 0 0 0 2px var(--stack-ring, #fff);
+}
+.photo-card .stack {
+  --stack-bubble: #fff;
+}
+
+/* ---------- Surfaces ---------- */
+.card {
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.card--pad {
+  padding: 18px;
+}
+.card--sunken {
+  background: var(--sunken);
+  box-shadow: none;
+}
+.card--dark {
+  color: #fff;
+  background: var(--char);
+  box-shadow: var(--shadow-btn);
+}
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 26px;
+}
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.section__title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.divider {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  margin: 0;
+}
+
+/* List rows (Figma card_sent_1: white, 6px, shadow 0 4 26 / 6%) */
+.rows {
+  display: grid;
+  gap: 10px;
+}
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+.row__body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.row__title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.row__sub {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.row__end {
+  flex: none;
+  text-align: right;
+  font-weight: 600;
+}
+.row--muted {
+  opacity: 0.55;
+}
+.row--flat {
+  box-shadow: none;
+  background: var(--sunken);
+}
+.tile-ico {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  color: var(--green-700);
+  background: var(--green-50);
+}
+.tile-ico--violet {
+  color: var(--violet-600);
+  background: var(--violet-50);
+}
+.tile-ico--indigo {
+  color: var(--indigo-500);
+  background: var(--indigo-50);
+}
+.tile-ico--amber {
+  color: #a35f00;
+  background: var(--amber-50);
+}
+.tile-ico--sky {
+  color: #1c6f9c;
+  background: var(--sky-50);
+}
+.tile-ico--dark {
+  color: #fff;
+  background: var(--char);
+}
+/* the whole row/card is the link: stretch its first link over it */
+.stretch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.has-stretch {
+  position: relative;
+}
+
+/* Stat tiles (Figma "125" distance tile and the weather/length card) */
+.stat-dark {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  min-width: 86px;
+  min-height: 76px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #fff;
+  background: var(--char-2);
+  box-shadow: 0 14px 18px -12px rgba(30, 30, 30, 0.8);
+}
+.stat-dark__val {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.stat-dark__unit {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+.stat {
+  display: grid;
+  gap: 2px;
+}
+.stat__val {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.stat__label {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* Figma score bar: charcoal, avatar, name + holes, score, HCP */
+.scorebar {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+  padding: 10px 22px 10px 12px;
+  border-radius: var(--r-lg);
+  color: #fff;
+  background: var(--char);
+  box-shadow: var(--shadow-btn);
+}
+.scorebar__name {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.scorebar__sub,
+.scorebar__k {
+  font-size: 11px;
+  font-weight: 400;
+  color: #b3b3b3;
+}
+.scorebar__cell {
+  display: grid;
+  justify-items: center;
+  min-width: 44px;
+}
+.scorebar__v {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Photo card (Figma course card: 303×368, r43, green glow underneath) ---------- */
+.photo-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-hero);
+  background: #3d5a3f;
+  color: #fff;
+  box-shadow: var(--shadow-photo);
+  isolation: isolate;
+}
+.photo-card > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+.photo-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(10, 28, 14, 0.8) 0%, rgba(10, 28, 14, 0.3) 34%, transparent 56%);
+}
+.photo-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--grain);
+  background-size: 160px;
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.glass-btn {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  color: #303030;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background var(--t-fast) var(--ease);
+}
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+.violet-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--violet-600);
+  box-shadow: var(--shadow-violet);
+}
+
+/* ---------- Forms ---------- */
+.field {
+  display: grid;
+  gap: 8px;
+}
+.field__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.input {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 14px;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--sunken);
+  box-shadow: inset 0 0 0 1px transparent;
+  transition:
+    box-shadow var(--t-fast) var(--ease),
+    background var(--t-fast) var(--ease);
+}
+.input::placeholder {
+  color: var(--ink-4);
+}
+.input:focus {
+  outline: none;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 2px var(--char);
+}
+.input[aria-invalid='true'] {
+  box-shadow: inset 0 0 0 2px var(--red-500);
+}
+.field__error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #b42318;
+}
+/* switch */
+.switch {
+  position: relative;
+  flex: none;
+  width: 50px;
+  height: 30px;
+  border-radius: 30px;
+  background: var(--ink-5);
+  transition: background var(--t-fast) var(--ease);
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform var(--t-med) var(--ease-spring);
+}
+.switch[aria-checked='true'] {
+  background: var(--green-500);
+}
+.switch[aria-checked='true']::after {
+  transform: translateX(20px);
+}
+/* stepper (− 2 +) */
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--r-pill);
+  background: var(--sunken);
+}
+.stepper button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--shadow-xs);
+}
+.stepper button:disabled {
+  color: var(--ink-5);
+  box-shadow: none;
+  background: transparent;
+}
+.stepper output {
+  min-width: 36px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Credit card (Figma card/short_card-active, indigo + Visa) ---------- */
+.ccard {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  width: 150px;
+  height: 120px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 255, 255, 0.22), transparent 55%),
+    linear-gradient(160deg, #5a4bff, var(--indigo-600));
+  box-shadow: var(--shadow-indigo);
+  overflow: hidden;
+}
+.ccard__brand {
+  font-size: 17px;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.ccard__num {
+  display: flex;
+  justify-content: space-between;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+.ccard__exp {
+  font-size: 11.5px;
+  opacity: 0.8;
+}
+
+/* ---------- Bottom sheet ---------- */
+.sheet {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 60;
+  max-height: 88%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 28px 28px 0 0;
+  background: var(--surface);
+  box-shadow: 0 -20px 60px -10px rgba(0, 0, 0, 0.25);
+  transform: translateY(105%);
+  transition: transform var(--t-slow) var(--ease);
+  outline: none;
+}
+.sheet.is-open {
+  transform: none;
+}
+.sheet__grip {
+  flex: none;
+  width: 40px;
+  height: 5px;
+  margin: 10px auto 4px;
+  border-radius: 5px;
+  background: var(--line-strong);
+}
+.sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 14px 4px var(--gutter);
+}
+.sheet__title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.sheet__body {
+  overflow-y: auto;
+  padding: 8px var(--gutter) calc(26px + env(safe-area-inset-bottom));
+  scrollbar-width: none;
+}
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 55;
+  background: rgba(15, 20, 16, 0.42);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-med) var(--ease);
+}
+.sheet-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Side menu (Figma hamburger) — injected by app.js */
+.drawer {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 60;
+  width: 84%;
+  max-width: 330px;
+  display: flex;
+  flex-direction: column;
+  padding: 64px 18px 28px;
+  background: var(--surface);
+  border-radius: 0 28px 28px 0;
+  box-shadow: 20px 0 60px -10px rgba(0, 0, 0, 0.25);
+  transform: translateX(-105%);
+  transition: transform var(--t-slow) var(--ease);
+  outline: none;
+}
+.drawer.is-open {
+  transform: none;
+}
+.drawer__me {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 6px 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 10px;
+}
+.drawer__nav a,
+.drawer__nav button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 50px;
+  padding: 0 10px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  text-align: left;
+}
+.drawer__nav a:hover,
+.drawer__nav button:hover {
+  background: var(--sunken);
+}
+.drawer__nav .i {
+  color: var(--ink-3);
+}
+.drawer__foot {
+  margin-top: auto;
+  padding: 16px 10px 0;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 110px;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100% - 40px);
+  padding: 12px 18px 12px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--char);
+  box-shadow: var(--shadow-md);
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--t-med) var(--ease),
+    opacity var(--t-med) var(--ease);
+}
+.toast .i {
+  color: var(--green-300);
+}
+.toast.is-on {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* ---------- Empty state ---------- */
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--ink-3);
+}
+.empty .tile-ico {
+  width: 64px;
+  height: 64px;
+  border-radius: 22px;
+}
+
+/* ---------- QR (voucher / check-in) ---------- */
+.qr {
+  display: grid;
+  place-items: center;
+  width: 196px;
+  height: 196px;
+  padding: 14px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: var(--shadow-md);
+}
+.qr svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Entry animation (the portfolio embed waits for it before moving on) ---------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+.rise {
+  animation: rise 640ms var(--ease) both;
+  animation-delay: calc(var(--d, 0) * 70ms);
+}
+.pop {
+  animation: pop 560ms var(--ease-spring) both;
+  animation-delay: calc(var(--d, 0) * 70ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ---------- Motion kit (hi-end layer, all opt-in, all off under reduced motion) ---------- */
+/* Cross-document View Transitions: pages cross-fade and lift; status bar and tab bar stay put */
+@view-transition {
+  navigation: auto;
+}
+.statusbar {
+  view-transition-name: gh-status;
+}
+.tabbar {
+  view-transition-name: gh-tabbar;
+}
+.screen {
+  view-transition-name: gh-screen;
+}
+::view-transition-old(gh-screen) {
+  animation: vt-out 220ms var(--ease) both;
+}
+::view-transition-new(gh-screen) {
+  animation: vt-in 420ms var(--ease) both;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+/* press feedback for cards/rows/tiles that are links or buttons */
+.press {
+  transition:
+    transform var(--t-fast) var(--ease),
+    box-shadow var(--t-med) var(--ease);
+  cursor: pointer;
+}
+.press:active {
+  transform: scale(0.975);
+}
+@media (hover: hover) {
+  .press:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
+/* GH.tilt(el): pointer-driven 3D tilt with a moving sheen (photo cards, credit card, member card, voucher) */
+.tilt {
+  transform-style: preserve-3d;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 500ms var(--ease);
+  will-change: transform;
+}
+.tilt.is-tilting {
+  transition: transform 80ms linear;
+}
+.tilt__sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--sx, 50%) var(--sy, 0%), rgba(255, 255, 255, 0.32), transparent 55%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 300ms var(--ease);
+}
+.tilt.is-tilting .tilt__sheen {
+  opacity: 1;
+}
+/* GH.reveal(): items with .reveal rise in when they scroll into view inside .screen */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 600ms var(--ease),
+    transform 700ms var(--ease);
+  transition-delay: calc(var(--d, 0) * 60ms);
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+/* skeleton shimmer for loading states */
+.skeleton {
+  border-radius: 12px;
+  background: linear-gradient(100deg, var(--sunken) 30%, #fafafa 50%, var(--sunken) 70%);
+  background-size: 300% 100%;
+  animation: shimmer 1.3s linear infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: -150% 0;
+  }
+}
+/* progress bars that fill on reveal: <span class="meter"><i style="--v:.72"></i></span> */
+.meter {
+  display: block;
+  height: 8px;
+  border-radius: 8px;
+  background: var(--sunken-2);
+  overflow: hidden;
+}
+.meter i {
+  display: block;
+  height: 100%;
+  width: calc(var(--v, 0) * 100%);
+  border-radius: inherit;
+  background: var(--meter, var(--green-500));
+  transform-origin: left;
+  animation: meter-fill 1100ms var(--ease) both;
+  animation-delay: calc(var(--d, 0) * 80ms + 200ms);
+}
+@keyframes meter-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+/* sheet drag-to-dismiss (GH.sheet wires the pointer events on .sheet__grip/.sheet__head) */
+.sheet.is-dragging {
+  transition: none;
+}
+.sheet__grip {
+  cursor: grab;
+  touch-action: none;
+}
+/* success check that draws itself */
+.draw-check path,
+.draw-check circle {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw 700ms var(--ease) forwards;
+}
+.draw-check path {
+  animation-delay: 350ms;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .tilt {
+    transform: none !important;
+  }
+  .skeleton {
+    animation: none;
+  }
+}

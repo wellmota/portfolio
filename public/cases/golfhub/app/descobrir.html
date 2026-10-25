@@ -1,0 +1,1150 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Descobrir · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Tab "Descobrir" (Figma tab icon "discover"; inferred): the hub of the club's services —
+         today at the club, the deck's modules as quick actions, featured tournament, events, pros.
+         Home's language: photo cards (r40 + green glow), white rows with the soft shadow, charcoal CTAs. */
+      .head {
+        padding-bottom: 10px;
+      }
+
+      /* ---------- search (sticky, instant filter) ---------- */
+      .search-wrap {
+        position: sticky;
+        top: 0;
+        z-index: 6;
+        margin: 0 calc(var(--gutter) * -1);
+        padding: 6px var(--gutter) 12px;
+        background: linear-gradient(var(--bg) 78%, color-mix(in srgb, var(--bg) 0%, transparent));
+      }
+      .search {
+        position: relative;
+        transition: transform var(--t-med) var(--ease);
+      }
+      .search > .i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        margin-top: -10px;
+        width: 20px;
+        height: 20px;
+        color: var(--ink-3);
+        pointer-events: none;
+        transition: color var(--t-fast) var(--ease);
+      }
+      .search .input {
+        padding: 0 48px 0 46px;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .search .input::-webkit-search-cancel-button {
+        display: none;
+      }
+      .search:focus-within > .i {
+        color: var(--ink);
+      }
+      .is-stuck .search .input:not(:focus) {
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+      }
+      .search__clear {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        margin-top: -22px;
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        color: var(--ink-3);
+        animation: pop 360ms var(--ease-spring) both;
+      }
+      .search__clear .i {
+        width: 20px;
+        height: 20px;
+      }
+      .search-meta {
+        min-height: 0;
+        font-size: 13px;
+        color: var(--ink-3);
+        padding: 8px 4px 0;
+      }
+      .search-meta:empty {
+        display: none;
+      }
+
+      /* filtering motion */
+      .fx-out {
+        opacity: 0 !important;
+        transform: scale(0.96) !important;
+        transition:
+          opacity 160ms var(--ease),
+          transform 180ms var(--ease) !important;
+        pointer-events: none;
+      }
+      .fx-in {
+        animation: fx-in 420ms var(--ease) both;
+      }
+      @keyframes fx-in {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.98);
+        }
+      }
+      mark {
+        color: inherit;
+        background: linear-gradient(transparent 58%, rgba(56, 235, 127, 0.45) 58%);
+        border-radius: 2px;
+      }
+
+      /* ---------- Hoje no clube (photo card + Figma frosted weather tile) ---------- */
+      .today-wrap {
+        margin-top: 6px;
+      }
+      .today {
+        height: 258px;
+        border-radius: var(--r-hero);
+      }
+      .today > img {
+        object-position: 50% 70%;
+      }
+      .today::before {
+        background:
+          linear-gradient(180deg, rgba(8, 30, 14, 0.62) 0%, rgba(8, 30, 14, 0.18) 46%, rgba(8, 30, 14, 0.42) 100%),
+          linear-gradient(90deg, rgba(8, 30, 14, 0.35), transparent 70%);
+      }
+      .today__top {
+        position: absolute;
+        inset: 20px 18px auto 22px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .today__text {
+        display: grid;
+        gap: 3px;
+        align-content: start;
+        min-width: 0;
+      }
+      .today__live {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .pulse {
+        position: relative;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green-300);
+        box-shadow: 0 0 0 2px rgba(56, 235, 127, 0.25);
+      }
+      .pulse::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: var(--green-300);
+        animation: ping 1.8s var(--ease) infinite;
+      }
+      @keyframes ping {
+        to {
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+      .today__date {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        color: #fff;
+        margin-top: 4px;
+      }
+      .today__line {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .today__line .i {
+        width: 16px;
+        height: 16px;
+        stroke-width: 1.8;
+        color: #fff;
+      }
+
+      /* Figma Performance weather tile: frosted, sun / 24,5 °C, divider, second metric */
+      .wx {
+        flex: none;
+        display: grid;
+        justify-items: center;
+        gap: 2px;
+        width: 88px;
+        padding: 10px 6px 9px;
+        border-radius: 14px;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(14px) saturate(1.3);
+        -webkit-backdrop-filter: blur(14px) saturate(1.3);
+        box-shadow: 0 14px 24px -14px rgba(0, 0, 0, 0.55);
+      }
+      .wx svg {
+        width: 26px;
+        height: 26px;
+        fill: none;
+        stroke: var(--ink-2);
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        overflow: visible;
+      }
+      .wx__sun circle {
+        fill: #f6b44c;
+        stroke: #d98a17;
+        transform-origin: 12px 12px;
+        animation: glow 3.2s ease-in-out 3;
+      }
+      .wx__sun .rays {
+        stroke: #d98a17;
+        transform-origin: 12px 12px;
+        animation: spin 5s cubic-bezier(0.2, 0.7, 0.2, 1) 0.6s 1;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes glow {
+        50% {
+          transform: scale(1.12);
+        }
+      }
+      .wx__wind path {
+        stroke-dasharray: 72 28;
+        animation: gust 2.6s linear 3;
+      }
+      .wx__wind path:nth-child(2) {
+        animation-delay: -0.9s;
+        animation-duration: 2.2s;
+      }
+      .wx__wind path:nth-child(3) {
+        animation-delay: -1.6s;
+        animation-duration: 3s;
+      }
+      @keyframes gust {
+        to {
+          stroke-dashoffset: -100;
+        }
+      }
+      .wx__v {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .wx__k {
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--ink-3);
+        margin-top: -2px;
+      }
+      .wx hr {
+        width: 56px;
+        height: 1px;
+        margin: 5px 0 4px;
+        border: 0;
+        background: var(--line-strong);
+      }
+
+      /* course status, frosted tiles along the bottom of the card */
+      .today__status {
+        position: absolute;
+        inset: auto 12px 12px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .st {
+        position: relative;
+        display: grid;
+        gap: 1px;
+        min-height: 62px;
+        padding: 9px 11px;
+        border-radius: 16px;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.84);
+        backdrop-filter: blur(14px) saturate(1.3);
+        -webkit-backdrop-filter: blur(14px) saturate(1.3);
+        transition:
+          transform var(--t-fast) var(--ease),
+          background var(--t-fast) var(--ease);
+      }
+      .st:hover {
+        background: rgba(255, 255, 255, 0.94);
+      }
+      .st:active {
+        transform: scale(0.96);
+      }
+      .st__name {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .st__state {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--green-700);
+        white-space: nowrap;
+      }
+      .st__state::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green-500);
+        box-shadow: 0 0 0 2.5px rgba(16, 184, 83, 0.2);
+      }
+      .st__meta {
+        font-size: 11px;
+        color: var(--ink-3);
+        white-space: nowrap;
+      }
+
+      /* ---------- quick actions (deck "Sistema modular": icon + label tiles) ---------- */
+      .qa {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .qa > li {
+        display: grid;
+      }
+      .qa__tile {
+        position: relative;
+        display: grid;
+        align-content: start;
+        gap: 10px;
+        min-height: 112px;
+        padding: 14px 12px 12px;
+        border-radius: 22px;
+        background: var(--surface);
+        box-shadow: var(--shadow-card);
+      }
+      .qa__tile .tile-ico {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        transition: transform var(--t-med) var(--ease-spring);
+      }
+      .qa__tile:hover .tile-ico {
+        transform: rotate(-6deg) scale(1.06);
+      }
+      .qa__label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+      }
+      .qa__sub {
+        display: block;
+        margin-top: 3px;
+        font-size: 11.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.25;
+        color: var(--ink-3);
+      }
+
+      /* ---------- featured tournament ---------- */
+      .feat {
+        height: 384px;
+      }
+      .feat > img {
+        object-position: 60% 40%;
+      }
+      .feat::before {
+        background: linear-gradient(to top, rgba(8, 26, 12, 0.94) 0%, rgba(8, 26, 12, 0.72) 38%, rgba(8, 26, 12, 0.05) 68%, rgba(8, 26, 12, 0.25) 100%);
+      }
+      .feat__top {
+        position: absolute;
+        inset: 20px 20px auto;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+      .feat__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 30px;
+        padding: 0 12px;
+        border-radius: var(--r-pill);
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .feat__badge .i {
+        width: 16px;
+        height: 16px;
+        color: var(--green-600);
+      }
+      .cal {
+        display: grid;
+        justify-items: center;
+        width: 58px;
+        padding: 6px 0 7px;
+        border-radius: 16px;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 14px 24px -14px rgba(0, 0, 0, 0.6);
+      }
+      .cal small {
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--violet-600);
+      }
+      .cal b {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+      .cal span {
+        font-size: 11px;
+        color: var(--ink-3);
+      }
+      .feat__foot {
+        position: absolute;
+        inset: auto 20px 20px;
+        display: grid;
+        gap: 10px;
+      }
+      .feat__name {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.1;
+        color: #fff;
+      }
+      .feat__meta {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.85);
+        margin-top: -4px;
+      }
+      .feat__meta .nw {
+        white-space: nowrap;
+      }
+      .feat__spots {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.85);
+        margin-top: 2px;
+      }
+      .feat__spots b {
+        font-size: 17px;
+        font-weight: 700;
+        color: #fff;
+        font-variant-numeric: tabular-nums;
+      }
+      .feat .meter {
+        height: 7px;
+        margin-top: -4px;
+        background: rgba(255, 255, 255, 0.2);
+        --meter: linear-gradient(90deg, var(--green-400), var(--green-300));
+      }
+      .feat .meter i {
+        box-shadow: 0 0 12px rgba(56, 235, 127, 0.7);
+      }
+      .feat__row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 4px;
+      }
+      .feat__row .stack {
+        --stack-ring: rgba(255, 255, 255, 0.9);
+      }
+      .feat__who {
+        flex: 1;
+        min-width: 0;
+        font-size: 11.5px;
+        line-height: 1.3;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .feat__cta {
+        position: relative;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 46px;
+        padding: 0 16px 0 18px;
+        border-radius: var(--r-pill);
+        font-size: 14.5px;
+        font-weight: 600;
+        color: var(--ink);
+        background: #fff;
+        box-shadow: 0 14px 22px -12px rgba(0, 0, 0, 0.6);
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .feat__cta:active {
+        transform: scale(0.96);
+      }
+      .feat__cta .i {
+        width: 18px;
+        height: 18px;
+        transition: transform var(--t-med) var(--ease);
+      }
+      .feat__cta:hover .i {
+        transform: translateX(3px);
+      }
+      .feat__cta.is-in {
+        color: #fff;
+        background: var(--green-700);
+      }
+      /* fill the meter only when its section has revealed */
+      .reveal:not(.is-in) .meter i {
+        animation-play-state: paused;
+      }
+
+      /* ---------- rails with snap + edge fades ---------- */
+      /* .section is a grid: without a 0 minimum the rail's content width stretched the
+         whole section (head + "Ver todos" ended at 744 px). Candidate for app.css. */
+      .section {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .rail-fade {
+        --fl: 0px;
+        --fr: 28px;
+        margin: 0 calc(var(--gutter) * -1);
+        -webkit-mask: linear-gradient(90deg, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%);
+        mask: linear-gradient(90deg, transparent 0, #000 var(--fl), #000 calc(100% - var(--fr)), transparent 100%);
+        transition: --fl 200ms, --fr 200ms;
+      }
+      .ev-rail {
+        display: flex;
+        gap: 12px;
+        padding: 6px var(--gutter) 26px;
+        margin-bottom: -18px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 var(--gutter);
+        scrollbar-width: none;
+        overscroll-behavior-x: contain;
+      }
+      .ev-rail::-webkit-scrollbar {
+        display: none;
+      }
+      .ev {
+        flex: none;
+        width: 232px;
+        scroll-snap-align: start;
+      }
+      .ev__card {
+        position: relative;
+        display: grid;
+        gap: 12px;
+        height: 100%;
+        padding: 14px;
+        border-radius: 22px;
+        background: var(--surface);
+        box-shadow: var(--shadow-card);
+      }
+      .ev__top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+      .ev__date {
+        display: grid;
+        justify-items: center;
+        width: 50px;
+        padding: 6px 0;
+        border-radius: 14px;
+        background: var(--sunken);
+      }
+      .ev__date small {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .ev__date b {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .ev__name {
+        display: block;
+        font-size: 15.5px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        line-height: 1.25;
+        color: var(--ink);
+      }
+      .ev__meta {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 4px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .ev__meta .i {
+        width: 14px;
+        height: 14px;
+        stroke-width: 1.9;
+      }
+      .ev__meta span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .ev__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+      }
+      .ev__price {
+        font-size: 14px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ---------- pros ---------- */
+      .pros {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .pro {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        align-content: start;
+        gap: 2px;
+        height: 100%;
+        padding: 16px 6px 14px;
+        border-radius: 22px;
+        text-align: center;
+        background: var(--surface);
+        box-shadow: var(--shadow-card);
+      }
+      .pro .av {
+        margin-bottom: 8px;
+      }
+      .pro__name {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        color: var(--ink);
+      }
+      .pro__focus {
+        font-size: 11.5px;
+        line-height: 1.3;
+        color: var(--ink-3);
+      }
+      .pro__rate {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        margin-top: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .pro__rate .i {
+        width: 13px;
+        height: 13px;
+        color: var(--amber-500);
+      }
+
+      /* ---------- empty search ---------- */
+      .empty {
+        padding-top: 36px;
+      }
+      .empty .tile-ico {
+        animation: wobble 900ms var(--ease) both;
+      }
+      @keyframes wobble {
+        0% {
+          transform: scale(0.6) rotate(-12deg);
+          opacity: 0;
+        }
+        55% {
+          transform: scale(1.06) rotate(6deg);
+          opacity: 1;
+        }
+        100% {
+          transform: none;
+        }
+      }
+      .empty .t-h3 {
+        color: var(--ink);
+      }
+      .empty .chips {
+        justify-content: center;
+        margin-top: 6px;
+      }
+      .empty .chip {
+        min-height: 44px;
+      }
+
+      .screen {
+        padding-bottom: 40px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pulse::after,
+        .wx__sun circle,
+        .wx__sun .rays,
+        .wx__wind path {
+          animation: none !important;
+        }
+        .wx__wind path {
+          stroke-dasharray: none;
+        }
+      }
+    </style>
+  </head>
+  <body data-tab="descobrir">
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="top rise" data-top></header>
+
+        <div class="head">
+          <h1 class="t-display rise" style="--d: 1">Descobrir</h1>
+          <p class="club-line rise" style="--d: 2"><span data-icon="gps"></span><span id="club"></span></p>
+        </div>
+
+        <div class="search-wrap" id="search-wrap">
+          <form class="search rise" style="--d: 3" role="search" id="search-form" action="#">
+            <label class="sr-only" for="q">Buscar no clube</label>
+            <span data-icon="search-normal-1"></span>
+            <input class="input" id="q" type="search" placeholder="Buscar aulas, torneios, eventos…" autocomplete="off" enterkeyhint="search" spellcheck="false" />
+            <button class="search__clear" type="button" id="q-clear" aria-label="Limpar busca" hidden><span data-icon="close-circle"></span></button>
+          </form>
+          <p class="search-meta" id="q-meta" aria-live="polite"></p>
+        </div>
+        <span id="stuck-sentinel" aria-hidden="true"></span>
+
+        <!-- Hoje no clube -->
+        <section class="today-wrap pop" style="--d: 4" aria-labelledby="today-title" data-sec>
+          <article class="photo-card today" id="today" data-k=""></article>
+        </section>
+
+        <!-- quick actions (deck "Sistema modular") -->
+        <section class="section reveal" aria-labelledby="qa-title" data-sec>
+          <div class="section__head"><h2 class="section__title" id="qa-title">Serviços do clube</h2></div>
+          <ul class="qa" id="qa"></ul>
+        </section>
+
+        <!-- featured tournament -->
+        <section class="section reveal" aria-labelledby="feat-title" data-sec>
+          <div class="section__head">
+            <h2 class="section__title" id="feat-title">Torneio em destaque</h2>
+            <a class="link" href="torneios.html">Todos os torneios</a>
+          </div>
+          <div id="feat"></div>
+        </section>
+
+        <!-- events rail -->
+        <section class="section reveal" aria-labelledby="ev-title" data-sec>
+          <div class="section__head">
+            <h2 class="section__title" id="ev-title">Próximos eventos</h2>
+            <a class="link" href="torneios.html#eventos">Ver todos</a>
+          </div>
+          <div class="rail-fade" id="ev-fade"><ul class="ev-rail" id="events"></ul></div>
+        </section>
+
+        <!-- pros -->
+        <section class="section reveal" aria-labelledby="pros-title" data-sec>
+          <div class="section__head">
+            <h2 class="section__title" id="pros-title">Professores</h2>
+            <a class="link" href="aulas.html">Marcar aula</a>
+          </div>
+          <ul class="pros" id="pros"></ul>
+        </section>
+
+        <div class="empty" id="empty" hidden>
+          <span class="tile-ico tile-ico--indigo"><span data-icon="search-normal-1" class="i--lg"></span></span>
+          <p class="t-h3" id="empty-title">Nada encontrado</p>
+          <p class="t-sm">Tente buscar por um destes:</p>
+          <div class="chips" id="suggest">
+            <button class="chip" type="button" data-q="aula">Aula</button>
+            <button class="chip" type="button" data-q="torneio">Torneio</button>
+            <button class="chip" type="button" data-q="putt">Putt</button>
+            <button class="chip" type="button" data-q="range">Range</button>
+          </div>
+          <button class="btn btn--ghost btn--sm" type="button" id="empty-clear" style="margin-top: 8px">Limpar busca</button>
+        </div>
+      </main>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      /* extra Iconsax-style glyph: sun setting behind the horizon */
+      GH.icons['sunset'] = '<path d="M2 18h20"/><path d="M6 21.5h12"/><path d="M7 18a5 5 0 0 1 10 0"/><path d="M12 2.5v5.5"/><path d="m9.5 5.8 2.5 2.4 2.5-2.4"/><path d="m4.2 11.2 1.4 1.4M19.8 11.2l-1.4 1.4"/>';
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const esc = GH.esc;
+        const F = GH.fmt;
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const norm = (s) =>
+          String(s)
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '')
+            .toLowerCase();
+        const entries = GH.store.get('entries', []) || [];
+
+        $('club').textContent = GH.club.name;
+
+        /* sunset in Brasília (UTC−3), mid-month values interpolated by day */
+        const SUNSET = ['18:50', '18:45', '18:27', '18:05', '17:50', '17:48', '17:57', '18:04', '18:08', '18:11', '18:22', '18:39'].map((s) => {
+          const [h, m] = s.split(':').map(Number);
+          return h * 60 + m;
+        });
+        const sunset = (d) => {
+          const m = d.getMonth();
+          const t = (d.getDate() - 15) / 30;
+          const other = SUNSET[(m + (t >= 0 ? 1 : 11)) % 12];
+          const v = Math.round(SUNSET[m] + (other - SUNSET[m]) * Math.abs(t));
+          return `${String(Math.floor(v / 60)).padStart(2, '0')}:${String(v % 60).padStart(2, '0')}`;
+        };
+
+        /* ---------- Hoje no clube ---------- */
+        const w = GH.club.weather;
+        const ca = GH.course('a'),
+          cb = GH.course('b'),
+          cr = GH.course('range');
+        const speed = (c) => (c.green.split('·')[1] || '').trim();
+        const DIRS = { N: 'norte', NE: 'nordeste', L: 'leste', E: 'leste', SE: 'sudeste', S: 'sul', SO: 'sudoeste', SW: 'sudoeste', O: 'oeste', W: 'oeste', NO: 'noroeste', NW: 'noroeste' };
+        const today = $('today');
+        today.dataset.k = norm(`hoje no clube clima tempo previsao sol ceu vento temperatura umidade por do sol green velocidade status aberto campo a campo b driving range ${w.sky}`);
+        today.innerHTML = `
+          <img src="assets/img/campo-b.webp" alt="" width="736" height="491" fetchpriority="high" decoding="async"/>
+          <div class="today__top">
+            <div class="today__text">
+              <p class="today__live"><span class="pulse" aria-hidden="true"></span>Hoje no clube</p>
+              <h2 class="today__date" id="today-title">${cap(F.weekday(GH.now).replace('-feira', ''))}, ${F.long(GH.now)}</h2>
+              <p class="today__line">${esc(w.sky)} · umidade ${w.humidity}%</p>
+              <p class="today__line">${GH.icon('sunset')}Pôr do sol às ${sunset(GH.now)}</p>
+            </div>
+            <div class="wx" role="img" aria-label="Agora: ${esc(F.temp(w.temp))}, vento de ${w.wind} km/h ${DIRS[w.windDir] || w.windDir}">
+              <svg class="wx__sun" viewBox="0 0 24 24" aria-hidden="true"><g class="rays"><path d="M12 1.8v2M12 20.2v2M4.8 4.8l1.4 1.4M17.8 17.8l1.4 1.4M1.8 12h2M20.2 12h2M4.8 19.2l1.4-1.4M17.8 6.2l1.4-1.4"/></g><circle cx="12" cy="12" r="4.4"/></svg>
+              <span class="wx__v" id="wx-temp">${esc(F.temp(w.temp))}</span>
+              <hr/>
+              <svg class="wx__wind" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="100" d="M2.5 8.5h11a2.6 2.6 0 1 0-2.6-2.6"/><path pathLength="100" d="M2.5 12.5h15.5a2.6 2.6 0 1 1-2.6 2.6"/><path pathLength="100" d="M2.5 16.5h8"/></svg>
+              <span class="wx__v"><span id="wx-wind">${w.wind}</span> km/h</span>
+              <span class="wx__k">${esc(w.windDir)}</span>
+            </div>
+          </div>
+          <ul class="today__status" aria-label="Status dos campos">
+            ${[
+              [ca, 'Aberto', `Green ${speed(ca)}`],
+              [cb, 'Aberto', `Green ${speed(cb)}`],
+              [cr, cr.status.replace('Aberto ', ''), '40 baias'],
+            ]
+              .map(
+                ([c, st, meta]) => `<li><a class="st" href="reservar.html?campo=${c.id}" aria-label="${esc(c.name)}: ${esc(c.status.toLowerCase())}, ${esc(meta.toLowerCase())}. Reservar">
+                  <span class="st__name">${c.id === 'range' ? 'Range' : esc(c.name)}</span>
+                  <span class="st__state">${esc(cap(st))}</span>
+                  <span class="st__meta">${esc(meta)}</span></a></li>`
+              )
+              .join('')}
+          </ul>`;
+        GH.tilt(today, { max: 4 });
+        GH.countUp($('wx-temp'), w.temp, { dec: 1, suffix: ' °C', dur: 1500, delay: 350, from: w.temp - 6 });
+        GH.countUp($('wx-wind'), w.wind, { dur: 1300, delay: 450 });
+
+        /* ---------- quick actions ---------- */
+        const openT = GH.tournaments.filter((t) => t.status === 'aberta').length;
+        const upcomingEv = GH.events.filter((e) => e.date > GH.now).length;
+        const QA = [
+          ['reservar.html', 'calendar-add', '', 'Reservar horário', 'Campos A e B', 'reservar horario saida tee time jogar campo green fee'],
+          ['aulas.html', 'teacher', 'violet', 'Aulas', F.plural(GH.pros.length, 'professor', 'professores'), 'aulas aula professor professora swing putt jogo curto iniciantes juniores ' + GH.pros.map((p) => GH.person(p.id).name).join(' ')],
+          ['torneios.html', 'cup', 'amber', 'Torneios', `${openT} abertos`, 'torneios torneio campeonato stableford medal duplas inscricao ' + GH.tournaments.map((t) => t.name).join(' ')],
+          ['torneios.html#eventos', 'ticket-star', 'indigo', 'Eventos', `${upcomingEv} em breve`, 'eventos evento happy hour clinica social noturno ' + GH.events.map((e) => e.name).join(' ')],
+          ['loja.html', 'shop', 'sky', 'Loja e aluguel', 'Tacos e bolas', 'loja aluguel tacos carrinho bolas luva bone compras pro shop ' + GH.shop.map((s) => s.name).join(' ')],
+          ['reservar.html?campo=range', 'routing-2', 'dark', 'Driving range', cr.status.replace('Aberto até', 'Até'), 'driving range treino baia baldes bolas aquecimento'],
+        ];
+        $('qa').innerHTML = QA.map(
+          ([href, ico, tone, label, sub, k], i) => `<li data-k="${esc(norm(label + ' ' + sub + ' ' + k))}">
+            <a class="qa__tile press" href="${href}"><span class="tile-ico${tone ? ' tile-ico--' + tone : ''}">${GH.icon(ico)}</span>
+            <span><span class="qa__label" data-hl>${esc(label)}</span><span class="qa__sub">${esc(sub)}</span></span></a></li>`
+        ).join('');
+
+        /* ---------- featured tournament ---------- */
+        const t = GH.tournaments.filter((x) => x.status === 'aberta').sort((a, b) => a.date - b.date)[0];
+        const inT = entries.includes(t.id);
+        const entered = t.entered + (inT ? 1 : 0);
+        const left = t.spots - entered;
+        const faces = inT ? [GH.user, 'rodolfo', 'lucas', 'caio'] : ['rodolfo', 'lucas', 'caio', 'ricardo'];
+        const tc = GH.course(t.course);
+        $('feat').innerHTML = `<div data-k="${esc(norm(`torneio destaque ${t.name} ${t.format} ${tc.name} inscricao vagas premio ${t.prize}`))}">
+          <article class="photo-card feat" id="feat-card">
+            <img src="assets/img/campo-a.webp" alt="" width="736" height="552" loading="lazy" decoding="async"/>
+            <div class="feat__top">
+              <span class="feat__badge">${inT ? GH.icon('tick-circle') + 'Você está inscrito' : GH.icon('cup') + 'Inscrições abertas'}</span>
+              <span class="cal" aria-hidden="true"><small>${F.weekdayShort(t.date)}</small><b>${t.date.getDate()}</b><span>${F.monthShort(t.date)}</span></span>
+            </div>
+            <div class="feat__foot">
+              <div>
+                <h3 class="feat__name"><a class="stretch" href="torneios.html?id=${t.id}" data-hl>${esc(t.name)}</a></h3>
+              </div>
+              <p class="feat__meta">${esc(t.format)} · ${esc(tc.name)}<br/>${cap(F.weekday(t.date).replace('-feira', ''))}, ${F.long(t.date)} · ${F.time(t.date)} · <span class="nw">HCP até ${t.hcpMax}</span></p>
+              <div class="feat__spots"><span><b id="feat-left">${left}</b> vagas restantes</span><span class="num">${entered} de ${t.spots}</span></div>
+              <span class="meter" role="meter" aria-label="Vagas preenchidas" aria-valuemin="0" aria-valuemax="${t.spots}" aria-valuenow="${entered}" aria-valuetext="${entered} de ${t.spots} vagas preenchidas"><i style="--v: ${(entered / t.spots).toFixed(3)}"></i></span>
+              <div class="feat__row">
+                <span class="feat__who">${GH.stack(faces, entered)}<span class="sr-only">${entered} inscritos, entre eles ${inT ? 'você, ' : ''}${faces
+                  .filter((f) => f !== GH.user)
+                  .slice(0, 3)
+                  .map(GH.first)
+                  .join(', ')}</span></span>
+                ${
+                  inT
+                    ? `<a class="feat__cta is-in" href="torneios.html?id=${t.id}">${GH.icon('tick-circle')}Inscrito</a>`
+                    : `<a class="feat__cta" href="torneios.html?id=${t.id}" aria-label="Inscrever-se na ${esc(t.name)}, ${F.brl(t.fee)}">Inscrever-se${GH.icon('arrow-right')}</a>`
+                }
+              </div>
+            </div>
+          </article></div>`;
+        GH.tilt($('feat-card'), { max: 5 });
+        /* vagas count down to what's left as the card comes into view (the meter fills at the same time) */
+        if ('IntersectionObserver' in window && !GH.reduceMotion()) {
+          const io = new IntersectionObserver(
+            ([en]) => {
+              if (!en.isIntersecting) return;
+              io.disconnect();
+              GH.countUp($('feat-left'), left, { from: t.spots, dur: 1200, delay: 250 });
+            },
+            { root: document.querySelector('.screen'), threshold: 0.4 }
+          );
+          io.observe($('feat-card'));
+        }
+
+        /* ---------- events rail ---------- */
+        // Iconsax "glass" is eyeglasses; the happy hour needs a drink glass (Linear style, 24px grid).
+        GH.icons.drink = GH.icons.drink || '<path d="M4.5 3.75h15L12 12 4.5 3.75Z"/><path d="M12 12v8.25M8 20.25h8M6.75 6.25h10.5"/>';
+        const EV_ICON = { 'e-clinica': ['flag-2', 'indigo'], 'e-happy': ['drink', 'violet'], 'e-noite': ['moon', 'dark'] };
+        $('events').innerHTML = GH.events
+          .filter((e) => e.date > GH.now)
+          .sort((a, b) => a.date - b.date)
+          .map((e, i) => {
+            const [ico, tone] = EV_ICON[e.id] || ['ticket', 'indigo'];
+            const mine = entries.includes(e.id);
+            const seats = mine
+              ? `<span class="badge badge--green">${GH.icon('tick-circle', 'i--xs')}Inscrito</span>`
+              : `<span class="badge${e.left <= 5 ? ' badge--amber' : ''}">${e.left <= 5 ? 'Últimas ' : ''}${F.plural(e.left, 'vaga', 'vagas')}</span>`;
+            const host = e.host ? ` com ${GH.person(e.host).name}` : '';
+            return `<li class="ev" data-k="${esc(norm(`evento eventos ${e.name} ${e.place} ${host} ${F.weekday(e.date)}`))}">
+              <a class="ev__card press" href="torneios.html?id=${e.id}" aria-label="${esc(e.name)}, ${F.dayLabel(e.date)} às ${F.time(e.date)}, ${esc(e.place)}. ${e.fee ? F.brl(e.fee) : 'Grátis'}">
+                <span class="ev__top">
+                  <span class="ev__date" aria-hidden="true"><small>${F.weekdayShort(e.date)}</small><b>${e.date.getDate()}</b><small>${F.monthShort(e.date)}</small></span>
+                  <span class="tile-ico tile-ico--${tone}" aria-hidden="true">${GH.icon(ico)}</span>
+                </span>
+                <span>
+                  <span class="ev__name" data-hl>${esc(e.name)}</span>
+                  <span class="ev__meta">${GH.icon('clock')}<span>${F.dayLabel(e.date)}, ${F.time(e.date)}</span></span>
+                  <span class="ev__meta">${GH.icon('location')}<span>${esc(e.place)}</span></span>
+                </span>
+                <span class="ev__foot">${seats}<span class="ev__price">${e.fee ? F.brlShort(e.fee) : 'Grátis'}</span></span>
+              </a></li>`;
+          })
+          .join('');
+        /* edge fades follow the scroll position */
+        const rail = $('events'),
+          fade = $('ev-fade');
+        const edges = () => {
+          const max = rail.scrollWidth - rail.clientWidth;
+          fade.style.setProperty('--fl', rail.scrollLeft > 4 ? '28px' : '0px');
+          fade.style.setProperty('--fr', rail.scrollLeft < max - 4 ? '28px' : '0px');
+        };
+        rail.addEventListener('scroll', edges, { passive: true });
+        edges();
+
+        /* ---------- pros ---------- */
+        $('pros').innerHTML = GH.pros
+          .map((p) => {
+            const person = GH.person(p.id);
+            return `<li data-k="${esc(norm(`professor professora aula aulas ${person.name} ${p.title} ${p.focus}`))}">
+              <a class="pro press" href="aulas.html?pro=${p.id}" aria-label="${esc(person.name)}, ${esc(p.focus)}, nota ${F.num(p.rating, 1)}">
+                ${GH.avatar(p.id, { size: 'lg', ring: true })}
+                <span class="pro__name" data-hl>${esc(person.name)}</span>
+                <span class="pro__focus">${esc(p.focus)}</span>
+                <span class="pro__rate">${GH.icon('star-1', '', true)}${F.num(p.rating, 1)}</span>
+              </a></li>`;
+          })
+          .join('');
+
+        /* ---------- motion ---------- */
+        GH.reveal();
+        /* sticky search: lift it once the head scrolls away */
+        const wrap = $('search-wrap');
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(([en]) => wrap.classList.toggle('is-stuck', !en.isIntersecting && en.boundingClientRect.top < 200), {
+            root: document.querySelector('.screen'),
+          }).observe($('stuck-sentinel'));
+        }
+
+        /* ---------- search: instant filter with motion ---------- */
+        const input = $('q'),
+          clear = $('q-clear'),
+          meta = $('q-meta'),
+          empty = $('empty');
+        const sections = [...document.querySelectorAll('[data-sec]')];
+        document.querySelectorAll('[data-hl]').forEach((el) => (el.dataset.hl = el.textContent));
+        const show = (el, on) => {
+          if (on) {
+            clearTimeout(el._fx);
+            el.classList.remove('fx-out');
+            if (el.hidden) {
+              el.hidden = false;
+              el.classList.remove('fx-in');
+              void el.offsetWidth;
+              el.classList.add('fx-in');
+              el.classList.remove('pop', 'rise');
+              el.addEventListener('animationend', () => el.classList.remove('fx-in'), { once: true });
+            }
+          } else if (!el.hidden && !el.classList.contains('fx-out')) {
+            el.classList.remove('pop', 'rise');
+            el.classList.add('fx-out');
+            el._fx = setTimeout(() => {
+              el.hidden = true;
+              el.classList.remove('fx-out');
+            }, 170);
+          }
+        };
+        const mark = (text, toks) => {
+          if (!toks.length) return esc(text);
+          const n = norm(text);
+          const hits = new Array(text.length).fill(false);
+          toks.forEach((t) => {
+            let i = n.indexOf(t);
+            while (i > -1) {
+              for (let k = i; k < i + t.length; k++) hits[k] = true;
+              i = n.indexOf(t, i + 1);
+            }
+          });
+          let out = '',
+            open = false;
+          [...text].forEach((ch, i) => {
+            if (hits[i] && !open) (out += '<mark>'), (open = true);
+            if (!hits[i] && open) (out += '</mark>'), (open = false);
+            out += esc(ch);
+          });
+          return out + (open ? '</mark>' : '');
+        };
+        const apply = (q) => {
+          const toks = norm(q).trim().split(/\s+/).filter(Boolean);
+          let total = 0;
+          sections.forEach((sec) => {
+            let n = 0;
+            sec.querySelectorAll('[data-k]').forEach((it) => {
+              const ok = !toks.length || toks.every((t) => it.dataset.k.includes(t));
+              show(it, ok);
+              if (ok) n++;
+            });
+            show(sec, n > 0);
+            total += n;
+          });
+          document.querySelectorAll('[data-hl]').forEach((el) => (el.innerHTML = mark(el.dataset.hl, toks)));
+          clear.hidden = !q;
+          if (!toks.length) {
+            meta.textContent = '';
+            empty.hidden = true;
+          } else {
+            meta.textContent = total ? `${F.plural(total, 'resultado', 'resultados')} para “${q.trim()}”` : '';
+            empty.hidden = total > 0;
+            if (!total) {
+              $('empty-title').textContent = `Nada encontrado para “${q.trim()}”`;
+              meta.textContent = 'Nenhum resultado';
+            }
+          }
+          if (toks.length) {
+            /* reveal everything that matched (the observer may not have fired for it yet) */
+            document.querySelectorAll('.reveal').forEach((r) => r.classList.add('is-in'));
+          }
+        };
+        let raf;
+        input.addEventListener('input', () => {
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(() => apply(input.value));
+        });
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && input.value) {
+            e.preventDefault();
+            input.value = '';
+            apply('');
+          }
+        });
+        $('search-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          input.blur();
+        });
+        const reset = () => {
+          input.value = '';
+          apply('');
+          input.focus();
+        };
+        clear.addEventListener('click', reset);
+        $('empty-clear').addEventListener('click', reset);
+        $('suggest').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-q]');
+          if (!b) return;
+          input.value = b.dataset.q;
+          apply(input.value);
+          GH.haptic();
+        });
+
+        /* deep link: ?q=putt (filtered) · ?q=xyz (empty state) */
+        const q0 = new URLSearchParams(location.search).get('q');
+        if (q0) {
+          input.value = q0;
+          apply(q0);
+        }
+      })();
+    </script>
+  </body>
+</html>

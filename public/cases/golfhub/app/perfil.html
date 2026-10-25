@@ -1,0 +1,1093 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Meu perfil · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Meu perfil — inferred from the Figma top-bar avatar (ring + online dot) and the side menu.
+         Same language: the avatar ring scaled up, the charcoal of the score bar / distance tile for the
+         handicap card, white rows with the 0 4 26 / 6% shadow, the green of the flag for good news. */
+
+      /* hero: the Figma avatar ring, scaled up */
+      .hero {
+        display: grid;
+        justify-items: center;
+        gap: 4px;
+        padding: 6px 0 22px;
+        text-align: center;
+      }
+      .hero__ring {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 112px;
+        height: 112px;
+        margin-bottom: 10px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: radial-gradient(circle at 50% 30%, #fff 55%, #f2f2f2);
+        box-shadow: var(--shadow-sm);
+      }
+      .hero__ring img {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 12px 14px -8px rgba(0, 0, 0, 0.55);
+      }
+      .hero__dot {
+        position: absolute;
+        top: 22px;
+        right: 22px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--green-500);
+        box-shadow: 0 0 0 3px #fff;
+      }
+      .hero__dot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: var(--green-500);
+        animation: ping 2.4s var(--ease) 1.2s infinite;
+      }
+      @keyframes ping {
+        0% {
+          transform: scale(1);
+          opacity: 0.55;
+        }
+        70%,
+        100% {
+          transform: scale(2.4);
+          opacity: 0;
+        }
+      }
+      .hero__name {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+      }
+      .hero__meta {
+        font-size: 14px;
+        color: var(--ink-3);
+      }
+
+      /* handicap card: charcoal like the Figma score bar and distance tile */
+      .hcp {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        padding: 18px 18px 0;
+        border-radius: var(--r-lg);
+        color: #fff;
+        background:
+          radial-gradient(120% 90% at 100% 0%, rgba(56, 235, 127, 0.13), transparent 55%),
+          var(--char);
+        box-shadow: var(--shadow-btn);
+      }
+      .hcp::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.1;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+      }
+      .hcp__top {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .hcp__k {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #b3b3b3;
+      }
+      .hcp__k .flag {
+        width: 12px;
+        height: 18px;
+        color: #d9d9d9;
+      }
+      .hcp__v {
+        margin-top: 4px;
+        font-size: 46px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.035em;
+        font-variant-numeric: tabular-nums;
+      }
+      .hcp__trend {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 24px;
+        margin-top: 10px;
+        padding: 0 9px 0 6px;
+        border-radius: var(--r-pill);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--green-300);
+        background: rgba(56, 235, 127, 0.12);
+      }
+      .hcp__trend .i {
+        width: 16px;
+        height: 16px;
+        stroke-width: 2;
+      }
+      .hcp__chart {
+        flex: none;
+        width: 156px;
+        margin-bottom: 2px;
+      }
+      .hcp__chart svg {
+        width: 156px;
+        height: 76px;
+        overflow: visible;
+      }
+      .hcp__cap {
+        margin-top: 6px;
+        font-size: 11px;
+        color: #b3b3b3;
+        text-align: right;
+      }
+      .spark-line {
+        fill: none;
+        stroke: var(--green-300);
+        stroke-width: 2.4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        animation: draw 1400ms var(--ease) 500ms forwards;
+        filter: drop-shadow(0 4px 6px rgba(56, 235, 127, 0.35));
+      }
+      .spark-area {
+        opacity: 0;
+        animation: fade-in 900ms var(--ease) 1200ms forwards;
+      }
+      .spark-dot {
+        fill: var(--char);
+        stroke: var(--green-300);
+        stroke-width: 2;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: pop 520ms var(--ease-spring) both;
+        animation-delay: calc(600ms + var(--d, 0) * 260ms);
+      }
+      .spark-dot.is-last {
+        fill: var(--green-300);
+        stroke: none;
+      }
+      .spark-halo {
+        fill: var(--green-300);
+        transform-box: fill-box;
+        transform-origin: center;
+        opacity: 0;
+        animation: halo 2.4s var(--ease) 2s infinite;
+      }
+      .spark-tip {
+        font-size: 10.5px;
+        font-weight: 700;
+        fill: var(--green-300);
+        opacity: 0;
+        animation: fade-in 500ms var(--ease) 1700ms forwards;
+      }
+      @keyframes fade-in {
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes halo {
+        0% {
+          transform: scale(1);
+          opacity: 0.45;
+        }
+        70%,
+        100% {
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+      .hcp__foot {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 52px;
+        margin: 16px -18px 0;
+        padding: 0 16px 0 18px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 13.5px;
+        color: rgba(255, 255, 255, 0.88);
+        transition: background var(--t-fast) var(--ease);
+      }
+      .hcp__foot:hover {
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .hcp__foot .i {
+        color: #d9d9d9;
+      }
+      .hcp__foot b {
+        color: #fff;
+      }
+      .hcp__foot .chev {
+        margin-left: auto;
+        color: #9a9a9a;
+      }
+      .hcp__up {
+        color: var(--green-300);
+        font-weight: 600;
+      }
+
+      /* stats */
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .stile {
+        display: grid;
+        align-content: start;
+        gap: 2px;
+        padding: 14px 14px 13px;
+        border-radius: var(--r-lg);
+        background: var(--surface);
+        box-shadow: var(--shadow-card);
+      }
+      .stile .tile-ico {
+        width: 34px;
+        height: 34px;
+        margin-bottom: 10px;
+        border-radius: 11px;
+      }
+      .stile .tile-ico .i {
+        width: 18px;
+        height: 18px;
+        stroke-width: 1.75;
+      }
+      .stile__v {
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.025em;
+        font-variant-numeric: tabular-nums;
+      }
+      .stile__k {
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--ink-2);
+      }
+      .stile__s {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .prec {
+        display: grid;
+        gap: 14px;
+        margin-top: 12px;
+        padding: 16px;
+      }
+      .prec:not(.is-in) .meter i {
+        animation-play-state: paused;
+      }
+      .prec__row {
+        display: grid;
+        gap: 8px;
+      }
+      .prec__head {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        color: var(--ink-2);
+      }
+      .prec__head b {
+        font-variant-numeric: tabular-nums;
+        color: var(--ink);
+      }
+
+      /* last rounds */
+      .date-tile {
+        flex: none;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        width: 46px;
+        height: 50px;
+        border-radius: 14px;
+        line-height: 1;
+        background: var(--sunken);
+      }
+      .date-tile b {
+        font-size: 18px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .date-tile small {
+        margin-top: 4px;
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .round__end {
+        display: grid;
+        justify-items: end;
+        gap: 3px;
+      }
+      .round__strokes {
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .row .chev {
+        flex: none;
+        color: var(--ink-4);
+      }
+      .row__end .badge {
+        height: 22px;
+        padding: 0 8px;
+      }
+
+      /* shortcuts */
+      .links .row {
+        min-height: 62px;
+        padding: 10px 12px 10px 12px;
+      }
+      .links .tile-ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+      }
+      .links button.row {
+        width: 100%;
+        text-align: left;
+      }
+      .row__count {
+        display: inline-grid;
+        place-items: center;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 11px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--green-600);
+      }
+      .tile-ico--red {
+        color: #b42318;
+        background: var(--red-50);
+      }
+      .out .row__title {
+        color: #b42318;
+      }
+      .app-foot {
+        margin-top: 22px;
+        font-size: 12px;
+        color: var(--ink-3);
+        text-align: center;
+      }
+
+      /* ---------- member card (carteirinha): premium 3D card that turns over to the entry QR ---------- */
+      .mcard {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1.586;
+        border-radius: 22px;
+        perspective: 1100px;
+        margin: 4px 0 6px;
+      }
+      .mcard__inner {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        transform-style: preserve-3d;
+        transition: transform 820ms cubic-bezier(0.3, 1.25, 0.5, 1);
+      }
+      .mcard.is-flipped .mcard__inner {
+        transform: rotateY(180deg);
+      }
+      .mcard > .tilt__sheen {
+        transform: translateZ(2px);
+      }
+      .mface {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: inherit;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        isolation: isolate;
+      }
+      .mface--front {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 18px 20px 18px;
+        text-align: left;
+        color: #fff;
+        background: #0f2f19;
+        box-shadow: var(--shadow-photo);
+      }
+      .mface--front > img {
+        position: absolute;
+        inset: 0;
+        z-index: -3;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.6;
+      }
+      .mface--front::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        background:
+          linear-gradient(140deg, rgba(8, 34, 17, 0.94) 10%, rgba(16, 111, 54, 0.5) 58%, rgba(8, 34, 17, 0.9) 100%),
+          radial-gradient(90% 70% at 100% 0%, rgba(56, 235, 127, 0.28), transparent 60%);
+      }
+      .mface--front::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.16;
+        mix-blend-mode: overlay;
+      }
+      .mface__contour {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .holo {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background: linear-gradient(115deg, transparent 22%, rgba(255, 128, 222, 0.5) 34%, rgba(128, 214, 255, 0.5) 43%, rgba(160, 255, 186, 0.45) 52%, rgba(255, 236, 140, 0.4) 60%, transparent 72%);
+        background-size: 260% 260%;
+        background-position: var(--sx, 50%) var(--sy, 50%);
+        mix-blend-mode: color-dodge;
+        opacity: 0.12;
+        transition: opacity 300ms var(--ease);
+      }
+      .is-tilting .holo {
+        opacity: 0.5;
+      }
+      .holo.is-glint {
+        animation: glint 1600ms var(--ease) 600ms both;
+      }
+      @keyframes glint {
+        0% {
+          background-position: 0% 0%;
+          opacity: 0.12;
+        }
+        45% {
+          opacity: 0.6;
+        }
+        100% {
+          background-position: 100% 100%;
+          opacity: 0.12;
+        }
+      }
+      .mface__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .mface__brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .mface__brand .flag {
+        width: 14px;
+        height: 22px;
+        color: #fff;
+      }
+      .mface__club {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.78);
+      }
+      .mface__tag {
+        display: inline-flex;
+        align-items: center;
+        height: 24px;
+        padding: 0 10px;
+        border-radius: var(--r-pill);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+      .mface__bottom {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .mface__who {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+      .mface__who .av {
+        box-shadow:
+          0 0 0 2px rgba(255, 255, 255, 0.9),
+          0 8px 14px -6px rgba(0, 0, 0, 0.6);
+      }
+      .mface__name {
+        display: block;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .mface__no {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        color: rgba(255, 255, 255, 0.82);
+        font-variant-numeric: tabular-nums;
+      }
+      .mface__hcp {
+        flex: none;
+        text-align: right;
+      }
+      .mface__hcp small {
+        display: block;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .mface__hcp b {
+        font-size: 22px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .mface--back {
+        transform: rotateY(180deg);
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 16px 16px 18px;
+        background: #fff;
+        box-shadow:
+          inset 0 0 0 1px var(--line),
+          var(--shadow-md);
+      }
+      .mqr {
+        width: 150px;
+        height: 150px;
+        padding: 8px;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: inset 0 0 0 1px var(--line);
+      }
+      .mqr svg {
+        width: 100%;
+        height: 100%;
+      }
+      .mqr.is-swap svg {
+        animation: pop 420ms var(--ease-spring) both;
+      }
+      .mback__info {
+        display: grid;
+        gap: 4px;
+        align-content: center;
+        min-width: 0;
+      }
+      .mback__k {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .mback__s {
+        font-size: 11.5px;
+        line-height: 1.35;
+        color: var(--ink-3);
+      }
+      .mback__no {
+        margin-top: 4px;
+        font-size: 22px;
+        line-height: 1.2;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        font-variant-numeric: tabular-nums;
+      }
+      .qbar {
+        display: block;
+        height: 4px;
+        margin-top: 6px;
+        border-radius: 4px;
+        overflow: hidden;
+        background: var(--sunken-2);
+      }
+      .qbar i {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--green-500);
+        transform-origin: left;
+      }
+      .mcard.is-flipped .qbar i {
+        animation: qbar 30s linear infinite;
+      }
+      @keyframes qbar {
+        from {
+          transform: scaleX(1);
+        }
+        to {
+          transform: scaleX(0);
+        }
+      }
+      .mface__undo {
+        justify-self: start;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 44px;
+        margin: 2px 0 -8px -6px;
+        padding: 0 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--green-700);
+      }
+      .mface__undo .i {
+        width: 18px;
+        height: 18px;
+      }
+      .mc-hint {
+        margin: 12px 0 18px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+        text-align: center;
+      }
+      .mc-actions {
+        display: grid;
+        gap: 10px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hero__dot::after,
+        .spark-halo,
+        .holo.is-glint {
+          animation: none;
+        }
+        .spark-line {
+          stroke-dashoffset: 0;
+        }
+        .spark-area,
+        .spark-tip {
+          opacity: 1;
+        }
+        .mcard.is-flipped .qbar i {
+          animation-name: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <nav class="bar rise" aria-label="Navegação">
+          <a class="icon-btn" href="home.html" data-back aria-label="Voltar"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title">Meu perfil</h1>
+          <button class="icon-btn" type="button" data-soon="Editar perfil" aria-label="Editar perfil"><span data-icon="edit-2"></span></button>
+        </nav>
+
+        <section class="hero" aria-labelledby="me-name">
+          <span class="hero__ring pop" style="--d: 1">
+            <img id="me-photo" alt="" width="136" height="136" />
+            <span class="hero__dot" role="img" aria-label="Online"></span>
+          </span>
+          <h2 class="hero__name rise" style="--d: 2" id="me-name"></h2>
+          <p class="hero__meta rise" style="--d: 3" id="me-meta"></p>
+        </section>
+
+        <section class="hcp rise" style="--d: 4" aria-labelledby="hcp-k">
+          <div class="hcp__top">
+            <div>
+              <p class="hcp__k" id="hcp-k"><span data-flag></span>Handicap (HCP)</p>
+              <p class="hcp__v" id="hcp-v" aria-describedby="hcp-trend"></p>
+              <p class="hcp__trend" id="hcp-trend"></p>
+            </div>
+            <figure class="hcp__chart" id="spark"></figure>
+          </div>
+          <a class="hcp__foot" href="ranking.html" id="rank"></a>
+        </section>
+
+        <section aria-labelledby="stats-title">
+          <h2 class="sr-only" id="stats-title">Estatísticas</h2>
+          <div class="stats" id="stats"></div>
+          <div class="card prec reveal" id="prec"></div>
+        </section>
+
+        <section class="section" aria-labelledby="rounds-title">
+          <div class="section__head">
+            <h2 class="section__title" id="rounds-title">Últimas rodadas</h2>
+            <a class="link" href="rodada.html">Nova rodada</a>
+          </div>
+          <ul class="rows" id="rounds"></ul>
+        </section>
+
+        <section class="section" aria-labelledby="links-title">
+          <h2 class="section__title" id="links-title">Conta</h2>
+          <ul class="rows links" id="links"></ul>
+        </section>
+
+        <p class="app-foot" id="app-foot"></p>
+      </main>
+
+      <!-- member card (carteirinha) -->
+      <div class="sheet" id="member-sheet" role="dialog" aria-modal="true" aria-labelledby="mc-title" tabindex="-1" hidden>
+        <div class="sheet__grip"></div>
+        <div class="sheet__head">
+          <h2 class="sheet__title" id="mc-title">Cartão de sócio</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="close-circle"></span></button>
+        </div>
+        <div class="sheet__body" id="mc-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (s, el = document) => el.querySelector(s);
+        const me = GH.me();
+        const still = GH.reduceMotion ? GH.reduceMotion() : false;
+        const haptic = (ms) => GH.haptic && GH.haptic(ms);
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const chev = GH.icon('arrow-right-2', 'i--sm chev');
+
+        /* ---------- hero ---------- */
+        const photo = $('#me-photo');
+        photo.src = `assets/img/av/${me.photo}.webp`;
+        $('#me-name').textContent = me.name;
+        $('#me-meta').textContent = `${me.role} · nº ${me.number} · desde ${me.since}`;
+
+        /* ---------- rounds: GH.rounds + the last finished round saved by the app (gh:lastRound) ---------- */
+        const rounds = GH.rounds.map((r) => ({ ...r, date: new Date(r.date), par: GH.course(r.course).par, href: 'resumo.html?demo=1' }));
+        const last = GH.store.get('lastRound');
+        if (last && last.finished) {
+          const t = GH.tally(last);
+          if (t.played)
+            rounds.unshift({
+              id: last.id,
+              date: new Date(last.finishedAt || last.startedAt),
+              course: last.course,
+              holes: t.played,
+              strokes: t.strokes,
+              putts: t.putts,
+              par: t.par,
+              href: 'resumo.html',
+              best: 'Sua rodada mais recente',
+            });
+        }
+        rounds.sort((a, b) => b.date - a.date);
+        const per18 = (r, v) => (v * 18) / r.holes;
+        const full = rounds.filter((r) => r.holes === 18);
+        const year = GH.now.getFullYear();
+
+        /* ---------- handicap card ---------- */
+        const hcpTrend = -0.6;
+        $('#hcp-trend').innerHTML = `${GH.icon('trend-down')}<span aria-hidden="true">−${GH.fmt.num(Math.abs(hcpTrend), 1)} este mês</span><span class="sr-only">Caiu ${GH.fmt.num(
+          Math.abs(hcpTrend),
+          1
+        )} ponto este mês</span>`;
+        const hv = $('#hcp-v');
+        if (GH.countUp) GH.countUp(hv, me.hcp, { dec: 1, dur: 1500, delay: 300 });
+        else hv.textContent = GH.fmt.hcp(me.hcp);
+
+        /* sparkline: strokes over par (per 18 holes) in the last rounds, oldest → newest; lower is better */
+        (function spark() {
+          const pts = rounds
+            .slice(0, 5)
+            .reverse()
+            .map((r) => Math.round(per18(r, r.strokes - r.par)));
+          const W = 156,
+            H = 62,
+            pad = 7;
+          const lo = Math.min(...pts) - 1,
+            hi = Math.max(...pts) + 1;
+          const xy = pts.map((v, i) => [pad + (i * (W - pad * 2)) / Math.max(1, pts.length - 1), pad + ((hi - v) / (hi - lo)) * (H - pad * 2)]);
+          /* smooth curve through the points (Catmull-Rom → cubic Bézier) */
+          let d = `M${xy[0][0]},${xy[0][1]}`;
+          for (let i = 0; i < xy.length - 1; i++) {
+            const p0 = xy[i - 1] || xy[i],
+              p1 = xy[i],
+              p2 = xy[i + 1],
+              p3 = xy[i + 2] || p2;
+            const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+            const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+            d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+          }
+          const lastP = xy[xy.length - 1];
+          const label = `Tacadas acima do par nas últimas ${pts.length} rodadas, da mais antiga à mais recente: ${pts.map((v) => GH.fmt.toPar(v)).join(', ')}`;
+          $('#spark').innerHTML = `<svg viewBox="0 0 ${W} ${H + 14}" role="img" aria-label="${label}">
+              <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#38eb7f" stop-opacity=".32"/><stop offset="1" stop-color="#38eb7f" stop-opacity="0"/></linearGradient></defs>
+              <path class="spark-area" d="${d} L${lastP[0]},${H} L${xy[0][0]},${H} Z" fill="url(#sg)"/>
+              <path class="spark-line" d="${d}" pathLength="100"/>
+              <circle class="spark-halo" cx="${lastP[0]}" cy="${lastP[1]}" r="4"/>
+              ${xy.map(([x, y], i) => `<circle class="spark-dot${i === xy.length - 1 ? ' is-last' : ''}" style="--d:${i}" cx="${x}" cy="${y}" r="${i === xy.length - 1 ? 4.5 : 3}"/>`).join('')}
+              <text class="spark-tip num" x="${lastP[0]}" y="${lastP[1] - 10}" text-anchor="end">${GH.fmt.toPar(pts[pts.length - 1])}</text>
+            </svg>
+            <figcaption class="hcp__cap">Acima do par · últimas ${pts.length}</figcaption>`;
+        })();
+
+        const pos = GH.ranking.findIndex((r) => r.id === GH.user);
+        const rk = GH.ranking[pos];
+        $('#rank').innerHTML = `${GH.icon('crown', 'i--sm')}<span><b>${pos + 1}º</b> no ranking do mês · ${rk.pts} pts${rk.trend > 0 ? ` <span class="hcp__up">↑${rk.trend}</span><span class="sr-only"> (subiu ${rk.trend})</span>` : ''}</span>${chev}`;
+
+        /* ---------- stats (count up when they scroll into view) ---------- */
+        const inYear = rounds.filter((r) => r.date.getFullYear() === year);
+        const avg = full.length ? full.reduce((s, r) => s + r.strokes, 0) / full.length : 0;
+        const best = full.reduce((b, r) => (!b || r.strokes < b.strokes ? r : b), null);
+        const putts = rounds.length ? rounds.reduce((s, r) => s + per18(r, r.putts), 0) / rounds.length : 0;
+        const STATS = [
+          { ico: 'flag', tone: '', v: inYear.length, dec: 0, k: `Rodadas em ${year}`, s: `${rounds.filter((r) => GH.now - r.date < 30 * 864e5).length} nos últimos 30 dias` },
+          { ico: 'chart', tone: ' tile-ico--indigo', v: avg, dec: 0, k: 'Média de tacadas', s: '18 buracos' },
+          { ico: 'medal-star', tone: ' tile-ico--violet', v: best ? best.strokes : 0, dec: 0, k: 'Melhor rodada', s: best ? `${GH.course(best.course).name} · ${GH.fmt.ddmm(best.date)}` : '—' },
+          { ico: 'activity', tone: ' tile-ico--sky', v: putts, dec: 1, k: 'Putts por rodada', s: `${GH.fmt.num(putts / 18, 1)} por buraco` },
+        ];
+        $('#stats').innerHTML = STATS.map(
+          (x, i) => `<div class="stile reveal" style="--d:${i}">
+            <span class="tile-ico${x.tone}">${GH.icon(x.ico)}</span>
+            <span class="stile__v" data-count="${x.v}" data-dec="${x.dec}">${GH.fmt.num(x.v, x.dec)}</span>
+            <span class="stile__k">${x.k}</span>
+            <span class="stile__s">${GH.esc(x.s)}</span>
+          </div>`
+        ).join('');
+        const known = rounds.filter((r) => r.fairways && r.greens);
+        const sum = (f) => known.reduce((a, r) => [a[0] + r[f][0], a[1] + r[f][1]], [0, 0]);
+        const fw = sum('fairways'),
+          gr = sum('greens');
+        const pct = ([a, b]) => (b ? a / b : 0);
+        if (known.length) {
+          $('#prec').innerHTML = [
+            ['Fairways no alvo', pct(fw), `${fw[0]} de ${fw[1]}`],
+            ['Greens em regulação', pct(gr), `${gr[0]} de ${gr[1]}`],
+          ]
+            .map(
+              ([k, v, of], i) => `<div class="prec__row">
+                <div class="prec__head"><span>${k} <span class="t-muted t-xs">· ${of}</span></span><b data-count="${Math.round(v * 100)}" data-suffix="%">${Math.round(v * 100)}%</b></div>
+                <span class="meter" role="img" aria-label="${k}: ${Math.round(v * 100)}%"><i style="--v:${v.toFixed(3)};--d:${i}${i ? ';--meter:var(--indigo-500)' : ''}"></i></span>
+              </div>`
+            )
+            .join('');
+        } else $('#prec').remove();
+
+        /* number roll when a stat enters the screen */
+        const counters = [...document.querySelectorAll('[data-count]')];
+        const roll = (el) => {
+          if (el._done) return;
+          el._done = true;
+          if (GH.countUp) GH.countUp(el, +el.dataset.count, { dec: +(el.dataset.dec || 0), suffix: el.dataset.suffix || '', dur: 1100 });
+        };
+        if ('IntersectionObserver' in window && !still) {
+          const io = new IntersectionObserver(
+            (ens) =>
+              ens.forEach((en) => {
+                if (en.isIntersecting) {
+                  roll(en.target);
+                  io.unobserve(en.target);
+                }
+              }),
+            { root: $('.screen'), threshold: 0.6 }
+          );
+          counters.forEach((c) => io.observe(c));
+        }
+
+        /* ---------- last rounds ---------- */
+        /* "Buraco 7 — birdie" → "birdie no 7"; falls back to how long ago */
+        const highlight = (r) => {
+          const m = /Buraco (\d+)\s*—\s*(.+)/.exec(r.best || '');
+          return m ? `${m[2]} no ${m[1]}` : GH.fmt.ago(r.date);
+        };
+        $('#rounds').innerHTML = rounds
+          .slice(0, 4)
+          .map((r, i) => {
+            const c = GH.course(r.course);
+            const tp = r.strokes - r.par;
+            return `<li class="reveal" style="--d:${i}"><a class="row press" href="${r.href}">
+              <span class="date-tile" aria-hidden="true"><b>${r.date.getDate()}</b><small>${GH.fmt.monthShort(r.date)}</small></span>
+              <span class="row__body">
+                <span class="row__title">${GH.esc(c.name)}</span>
+                <span class="row__sub">${r.holes} buracos · ${GH.esc(highlight(r))}</span>
+              </span>
+              <span class="row__end round__end">
+                <span class="round__strokes">${r.strokes}<span class="sr-only"> tacadas</span></span>
+                <span class="badge${tp < 0 ? ' badge--green' : tp === 0 ? ' badge--indigo' : ''}"><span aria-hidden="true">${GH.fmt.toPar(tp)}</span><span class="sr-only">${
+                  tp === 0 ? 'no par' : `${Math.abs(tp)} ${tp > 0 ? 'acima' : 'abaixo'} do par`
+                }</span></span>
+              </span>${chev}</a></li>`;
+          })
+          .join('');
+
+        /* ---------- shortcuts ---------- */
+        const upcoming = GH.allBookings().filter((b) => b.date > GH.now).length;
+        const unread = GH.unread();
+        const billing = GH.store.get('billing', {}) || {};
+        const LINKS = [
+          { href: 'assinatura.html', ico: 'card', tone: ' tile-ico--indigo', t: 'Minha assinatura', s: `${GH.membership.cycle} · em dia${billing.auto === false ? ' · Pix ou boleto' : ''}` },
+          { href: 'reservas.html', ico: 'calendar-tick', tone: '', t: 'Minhas reservas', s: upcoming ? GH.fmt.plural(upcoming, 'reserva próxima', 'reservas próximas') : 'Nenhuma reserva próxima' },
+          { btn: 'carteirinha', ico: 'personalcard', tone: ' tile-ico--dark', t: 'Cartão de sócio', s: 'Entrada no clube com QR' },
+          { href: 'avisos.html', ico: 'notification', tone: ' tile-ico--amber', t: 'Notificações', s: unread ? GH.fmt.plural(unread, 'aviso não lido', 'avisos não lidos') : 'Tudo lido', count: unread },
+          { soon: 'Privacidade e segurança', ico: 'shield-tick', tone: ' tile-ico--sky', t: 'Privacidade e segurança', s: 'Senha, Face ID e dados' },
+        ];
+        const inner = (x) => `<span class="tile-ico${x.tone}">${GH.icon(x.ico)}</span>
+          <span class="row__body"><span class="row__title">${x.t}</span><span class="row__sub">${GH.esc(x.s)}</span></span>
+          ${x.count ? `<span class="row__count" aria-hidden="true">${x.count}</span>` : ''}${chev}`;
+        $('#links').innerHTML =
+          LINKS.map((x, i) => {
+            const d = ` class="reveal" style="--d:${i}"`;
+            if (x.btn) return `<li${d}><button class="row press" type="button" data-open="${x.btn}" aria-haspopup="dialog">${inner(x)}</button></li>`;
+            if (x.soon) return `<li${d}><button class="row press" type="button" data-soon="${x.soon}">${inner(x)}</button></li>`;
+            return `<li${d}><a class="row press" href="${x.href}">${inner(x)}</a></li>`;
+          }).join('') +
+          `<li class="reveal out" style="--d:${LINKS.length}"><a class="row press" href="index.html"><span class="tile-ico tile-ico--red">${GH.icon('logout')}</span><span class="row__body"><span class="row__title">Sair</span><span class="row__sub">Você volta para a tela de entrada</span></span></a></li>`;
+        $('#app-foot').textContent = `GolfHub · ${GH.club.name}`;
+
+        GH.reveal && GH.reveal();
+
+        /* ---------- member card sheet ---------- */
+        const sheet = $('#member-sheet');
+        const contour = (() => {
+          /* topographic lines, like the contours of a green on a yardage book */
+          let g = '';
+          for (let i = 0; i < 9; i++) {
+            const rx = 26 + i * 24,
+              ry = rx * 0.62;
+            g += `<ellipse cx="282" cy="58" rx="${rx}" ry="${ry}" transform="rotate(-16 282 58)"/>`;
+          }
+          return `<svg class="mface__contour" viewBox="0 0 340 214" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1">${g}</g></svg>`;
+        })();
+        let qrTimer = null;
+        const qrCode = () => `socio-${me.number}-${Math.floor(Date.now() / 30000)}`;
+        const paintQR = (swap) => {
+          const q = $('#mqr');
+          if (!q) return;
+          q.innerHTML = GH.qr(qrCode(), `Código de entrada do sócio nº ${me.number}`);
+          if (swap) {
+            q.classList.remove('is-swap');
+            void q.offsetWidth;
+            q.classList.add('is-swap');
+          }
+        };
+        function setSide(qr, focus, user) {
+          const card = $('#mcard');
+          card.classList.toggle('is-flipped', qr);
+          $('.mface--front', card).inert = qr;
+          $('.mface--back', card).inert = !qr;
+          const t = $('#mc-toggle');
+          t.innerHTML = qr ? `${GH.icon('personalcard')}Ver a frente` : `${GH.icon('scan-barcode')}Mostrar código de entrada`;
+          t.setAttribute('aria-pressed', String(qr));
+          clearInterval(qrTimer);
+          if (qr) {
+            paintQR(false);
+            /* restart the countdown bar and refresh the code every 30 s */
+            const bar = $('.qbar i', card);
+            bar.style.animation = 'none';
+            void bar.offsetWidth;
+            bar.style.animation = '';
+            qrTimer = setInterval(() => paintQR(true), 30000);
+          }
+          if (focus) (qr ? $('.mface__undo', card) : $('.mface--front', card)).focus({ preventScroll: true });
+          if (user) haptic(10);
+        }
+        function openMember(opener, qr) {
+          $('#mc-body').innerHTML = `
+            <div class="mcard" id="mcard">
+              <div class="mcard__inner">
+                <button class="mface mface--front" type="button" data-side aria-label="Cartão de sócio de ${GH.esc(me.name)}, ${GH.esc(me.role)}, nº ${me.number}. Mostrar o código de entrada">
+                  <img src="assets/img/campo-a.webp" alt="" width="736" height="552" decoding="async"/>
+                  ${contour}
+                  <span class="holo is-glint"></span>
+                  <span class="mface__top">
+                    <span><span class="mface__brand">${GH.flag()}GolfHub</span><span class="mface__club">${GH.esc(GH.club.name)}</span></span>
+                    <span class="mface__tag">${GH.esc(me.role.replace('Sócio ', ''))}</span>
+                  </span>
+                  <span class="mface__bottom">
+                    <span class="mface__who">${GH.avatar(GH.user, { size: 'md' })}<span><span class="mface__name">${GH.esc(me.name)}</span><span class="mface__no">Sócio nº ${me.number} · desde ${me.since}</span></span></span>
+                    <span class="mface__hcp"><small>HCP</small><b>${GH.fmt.hcp(me.hcp)}</b></span>
+                  </span>
+                </button>
+                <div class="mface mface--back" inert>
+                  <div class="mqr" id="mqr"></div>
+                  <div class="mback__info">
+                    <p class="mback__k">Entrada no clube</p>
+                    <p class="mback__s">Aponte para o leitor da portaria.</p>
+                    <p class="mback__no">nº ${me.number}</p>
+                    <span class="qbar" aria-hidden="true"><i></i></span>
+                    <p class="mback__s">Renova a cada 30 s</p>
+                    <button class="mface__undo" type="button" data-side>${GH.icon('refresh-2')}Ver a frente</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="mc-hint">Toque no cartão para virar. Válido para você e seus convidados do dia.</p>
+            <div class="mc-actions">
+              <button class="btn btn--primary btn--block" type="button" id="mc-toggle" aria-pressed="false"></button>
+              <button class="btn btn--ghost btn--block" type="button" data-soon="Adicionar à Carteira">${GH.icon('wallet-2')}Adicionar à Carteira</button>
+            </div>`;
+          const card = $('#mcard');
+          GH.tilt && GH.tilt(card, { max: 9 });
+          card.addEventListener('click', (e) => e.target.closest('[data-side]') && setSide(!card.classList.contains('is-flipped'), true, true));
+          $('#mc-toggle').addEventListener('click', () => setSide(!card.classList.contains('is-flipped'), false, true));
+          setSide(!!qr, false);
+          GH.sheet.open(sheet, opener);
+        }
+        /* stop refreshing the code once the sheet closes */
+        new MutationObserver(() => sheet.hidden && clearInterval(qrTimer)).observe(sheet, { attributes: true, attributeFilter: ['hidden'] });
+
+        $('#links').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-open="carteirinha"]');
+          if (b) openMember(b);
+        });
+
+        /* deep links: ?sheet=carteirinha[&lado=qr] */
+        const q = new URLSearchParams(location.search);
+        if (q.get('sheet') === 'carteirinha') setTimeout(() => openMember($('[data-open="carteirinha"]'), q.get('lado') === 'qr'), 700);
+      })();
+    </script>
+  </body>
+</html>

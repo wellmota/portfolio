@@ -1,0 +1,1614 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Torneios e eventos · GolfHub</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Torneios e eventos (deck modules "Torneios" and "Eventos"). List with Torneios / Eventos tabs (#eventos),
+         ?id= detail: parallax photo header, live countdown, vagas meter, entrants, 3D trophy (three.js), rules, CTA. */
+
+      .screen {
+        padding-top: 0;
+      }
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 6;
+        min-height: 64px;
+        margin: 0 calc(var(--gutter) * -1);
+        padding: 8px 10px 0;
+        background: var(--bg);
+        transition: box-shadow var(--t-med) var(--ease);
+      }
+      .bar.is-stuck {
+        box-shadow: 0 1px 0 var(--line);
+      }
+
+      /* tabs with a morphing pill */
+      .tabs {
+        position: relative;
+        isolation: isolate;
+        margin: 4px 0 18px;
+      }
+      .tabs button {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 44px;
+      }
+      .tabs button[aria-selected='true'] {
+        background: transparent;
+        box-shadow: none;
+      }
+      .tabs .i {
+        width: 18px;
+        height: 18px;
+      }
+      .pill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 0;
+        opacity: 0;
+        pointer-events: none;
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: var(--shadow-xs), 0 6px 14px -8px rgba(0, 0, 0, 0.25);
+      }
+      .panel {
+        display: grid;
+        gap: 14px;
+      }
+      .panel__label {
+        margin-top: 12px;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+      }
+
+      /* glass status badge with a live dot */
+      .gbadge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        height: 30px;
+        padding: 0 12px;
+        border-radius: var(--r-pill);
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #fff;
+        background: rgba(20, 30, 22, 0.32);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      }
+      .live {
+        position: relative;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green-300);
+      }
+      .live::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: var(--green-300);
+        animation: live 1.8s var(--ease) infinite;
+      }
+      .live--amber,
+      .live--amber::after {
+        background: var(--amber-500);
+      }
+      .live--violet,
+      .live--violet::after {
+        background: #d39af0;
+      }
+      @keyframes live {
+        to {
+          transform: scale(2.8);
+          opacity: 0;
+        }
+      }
+
+      /* featured tournament: the Figma photo card */
+      .feat {
+        height: 384px;
+      }
+      .feat::before,
+      .hero::before {
+        background: linear-gradient(to top, rgba(8, 22, 12, 0.88) 0%, rgba(8, 22, 12, 0.55) 36%, rgba(8, 22, 12, 0.08) 66%, transparent 80%);
+      }
+      .feat__foot,
+      .hero__foot {
+        text-shadow: 0 1px 12px rgba(0, 0, 0, 0.25);
+      }
+      .feat > img,
+      .hero > img {
+        transform: scale(1.14);
+        will-change: transform;
+      }
+      .feat__top {
+        position: absolute;
+        inset: 20px 20px auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .datechip {
+        display: grid;
+        justify-items: center;
+        min-width: 52px;
+        padding: 7px 8px 6px;
+        border-radius: 16px;
+        line-height: 1.05;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .datechip b {
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      .datechip span {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--violet-600);
+      }
+      .feat__foot {
+        position: absolute;
+        inset: auto 20px 20px;
+        display: grid;
+        gap: 10px;
+      }
+      .feat__when {
+        font-size: 12.5px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .feat__name {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.025em;
+        color: #fff;
+      }
+      .feat__fmt {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .feat .meter {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.25);
+      }
+      .feat .meter i {
+        background: linear-gradient(90deg, var(--green-300), #a6f7c6);
+      }
+      .feat__vagas {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11.5px;
+        color: rgba(255, 255, 255, 0.9);
+        margin-top: -4px;
+      }
+      .feat__row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .feat__who {
+        flex: 1;
+        font-size: 11.5px;
+        line-height: 1.3;
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .feat .stack {
+        --stack-ring: rgba(255, 255, 255, 0.9);
+      }
+      .feat .violet-btn {
+        position: relative;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      /* tournament cards */
+      .tcard {
+        position: relative;
+        display: grid;
+        gap: 14px;
+        padding: 16px;
+      }
+      .tcard__top {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .datebox {
+        flex: none;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        width: 52px;
+        height: 56px;
+        border-radius: 16px;
+        line-height: 1.05;
+        background: var(--sunken);
+      }
+      .datebox b {
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      .datebox span {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--violet-600);
+      }
+      .tcard__id {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+        gap: 3px;
+      }
+      .tcard__name {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .tcard__sub {
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .tcard__vagas {
+        display: grid;
+        gap: 7px;
+      }
+      .tcard__vagas p {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 26px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .tcard__vagas b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .meter--full i {
+        background: linear-gradient(90deg, var(--violet-400), var(--violet-600));
+      }
+      .tcard__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .tcard__foot .who {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+      .who__names {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .wait {
+        flex: none;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 600;
+        color: var(--violet-600);
+      }
+
+      /* event cards */
+      .ecard {
+        position: relative;
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        gap: 14px;
+        padding: 10px 14px 10px 10px;
+      }
+      .ph {
+        position: relative;
+        overflow: hidden;
+        border-radius: 18px;
+        background: #3d5a3f;
+        isolation: isolate;
+      }
+      .ph img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -2;
+      }
+      .ph::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.16;
+        mix-blend-mode: overlay;
+      }
+      .ecard .ph {
+        min-height: 112px;
+      }
+      .ecard .datechip {
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        min-width: 42px;
+        padding: 5px 6px 4px;
+        border-radius: 12px;
+      }
+      .ecard .datechip b {
+        font-size: 16px;
+      }
+      .ecard .datechip span {
+        font-size: 9.5px;
+      }
+      .ecard__body {
+        display: grid;
+        align-content: center;
+        gap: 4px;
+        min-width: 0;
+      }
+      .ecard__name {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .ecard__meta {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .ecard__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .fee {
+        font-size: 15px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      /* photo moods for events */
+      .is-night img {
+        filter: brightness(0.42) saturate(0.55) contrast(1.1);
+      }
+      .is-night::before {
+        background:
+          radial-gradient(circle at 30% 70%, rgba(56, 235, 127, 0.55) 0 2px, transparent 7px),
+          radial-gradient(circle at 62% 58%, rgba(56, 235, 127, 0.5) 0 2px, transparent 7px),
+          radial-gradient(circle at 78% 76%, rgba(211, 154, 240, 0.55) 0 2px, transparent 7px),
+          linear-gradient(180deg, rgba(12, 18, 52, 0.55), rgba(8, 14, 30, 0.75)) !important;
+      }
+      .ph.is-night::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+      }
+      .is-dusk img {
+        filter: sepia(0.35) saturate(1.25) brightness(0.92) hue-rotate(-12deg);
+      }
+      .ph.is-dusk::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(200deg, rgba(255, 170, 80, 0.45), transparent 60%);
+      }
+
+      /* ---------- Detail ---------- */
+      .hero {
+        height: 286px;
+        margin-top: 4px;
+      }
+      .hero__top {
+        position: absolute;
+        inset: 18px 18px auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .hero__foot {
+        position: absolute;
+        inset: auto 22px 22px;
+        display: grid;
+        gap: 6px;
+      }
+      .hero__eyebrow {
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.86);
+      }
+      .hero__name {
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        color: #fff;
+      }
+      .hero__fmt {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .hero .glass-btn {
+        width: 44px;
+        height: 44px;
+        color: #fff;
+        background: rgba(20, 30, 22, 0.3);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      }
+      .hero .glass-btn .i {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* countdown: four Figma "125" charcoal tiles */
+      .count {
+        display: grid;
+        gap: 10px;
+        margin-top: 22px;
+      }
+      .count__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        color: var(--ink-3);
+      }
+      .count__head b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .count__tiles {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .count .stat-dark {
+        min-width: 0;
+        min-height: 70px;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .count .stat-dark__val {
+        display: block;
+        font-size: 26px;
+        line-height: 1.1;
+      }
+      .count__tiles > :last-child {
+        background: linear-gradient(180deg, #17a54f, var(--green-700));
+        box-shadow: 0 14px 18px -12px rgba(16, 111, 54, 0.9);
+      }
+
+      /* vagas meter */
+      .vagas {
+        display: grid;
+        gap: 14px;
+        margin-top: 18px;
+        padding: 18px;
+      }
+      .vagas__head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .vagas__big {
+        font-size: 44px;
+        font-weight: 800;
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+      }
+      .vagas__of {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--ink-3);
+        letter-spacing: -0.02em;
+      }
+      .vagas__label {
+        display: block;
+        margin-top: 4px;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .vagas__left {
+        text-align: right;
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+      .vagas__left b {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--violet-600);
+      }
+      .vagas .meter {
+        position: relative;
+        height: 14px;
+        border-radius: 14px;
+      }
+      .vagas .meter i {
+        position: relative;
+        background: linear-gradient(90deg, var(--green-300), var(--green-600));
+        box-shadow: 0 4px 12px -2px rgba(16, 184, 83, 0.55);
+        overflow: hidden;
+      }
+      #v-bar {
+        transition: width 800ms var(--ease);
+      }
+      .vagas .meter--full i {
+        background: linear-gradient(90deg, var(--violet-400), var(--violet-600));
+        box-shadow: 0 4px 12px -2px rgba(119, 26, 163, 0.5);
+      }
+      .vagas .meter i::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+        transform: translateX(-100%);
+        animation: sheen 2.6s var(--ease) 1.4s 2; /* two passes, then still */
+      }
+      @keyframes sheen {
+        60%,
+        100% {
+          transform: translateX(100%);
+        }
+      }
+      .who-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+        font-size: 13px;
+        color: var(--ink-2);
+      }
+      /* no lone "jogar" on the second line at 430 */
+      #who-txt {
+        text-wrap: balance;
+      }
+      .cascade {
+        display: flex;
+        align-items: center;
+      }
+      .cascade > * + * {
+        margin-left: -12px;
+      }
+      .cascade .av,
+      .cascade .stack__more {
+        box-shadow: 0 0 0 2.5px #fff;
+        animation: drop 700ms var(--ease-spring) both;
+        animation-delay: calc(var(--i) * 80ms + 650ms);
+      }
+      @keyframes drop {
+        from {
+          opacity: 0;
+          transform: translateY(-18px) scale(0.4);
+        }
+      }
+
+      /* facts grid */
+      .facts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 22px;
+      }
+      .facts div {
+        display: grid;
+        align-content: center;
+        grid-template-columns: auto 1fr;
+        column-gap: 10px;
+        align-items: center;
+        padding: 12px;
+        border-radius: 16px;
+        background: var(--sunken);
+      }
+      .facts .i {
+        grid-row: span 2;
+        width: 22px;
+        height: 22px;
+        color: var(--ink-3);
+      }
+      .facts dt {
+        font-size: 11.5px;
+        color: var(--ink-3);
+      }
+      .facts dd {
+        font-size: 14.5px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.3;
+        min-width: 0;
+      }
+      .ok {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        padding: 10px 14px;
+        border-radius: 14px;
+        font-size: 13px;
+        color: var(--green-800);
+        background: var(--green-50);
+      }
+      .ok .i {
+        color: var(--green-600);
+      }
+      .ok--warn {
+        color: #7a4a00;
+        background: var(--amber-50);
+      }
+      .ok--warn .i {
+        color: #a35f00;
+      }
+
+      /* prize showcase with the 3D trophy */
+      .prize {
+        position: relative;
+        display: grid;
+        grid-template-columns: 132px 1fr;
+        align-items: center;
+        gap: 6px;
+        margin-top: 26px;
+        padding: 6px 18px 6px 4px;
+        border-radius: 26px;
+        color: #fff;
+        background:
+          radial-gradient(160px 160px at 70px 58%, rgba(56, 235, 127, 0.3), transparent 70%),
+          radial-gradient(240px 140px at 100% 0%, rgba(119, 26, 163, 0.35), transparent 70%),
+          var(--char);
+        box-shadow: var(--shadow-btn);
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .prize::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 160px;
+        opacity: 0.12;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+      }
+      .prize__stage {
+        position: relative;
+        width: 132px;
+        height: 164px;
+        cursor: grab;
+        touch-action: pan-y;
+      }
+      .prize__stage:active {
+        cursor: grabbing;
+      }
+      .prize__stage canvas {
+        width: 100%;
+        height: 100%;
+      }
+      .prize__fallback {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: #f2c14e;
+      }
+      .prize__fallback .i {
+        width: 64px;
+        height: 64px;
+        stroke-width: 1.2;
+      }
+      .prize__k {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--green-300);
+      }
+      .prize__v {
+        margin-top: 4px;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+      }
+      .prize__s {
+        margin-top: 6px;
+        font-size: 12.5px;
+        color: #bdbdbd;
+      }
+      .prize__hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 10px;
+        font-size: 11px;
+        color: #9a9a9a;
+      }
+      .prize__hint .i {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* about + rules */
+      .about {
+        font-size: 14.5px;
+        line-height: 1.55;
+        color: var(--ink-2);
+      }
+      .rules {
+        display: grid;
+        gap: 8px;
+      }
+      .rule {
+        border-radius: 16px;
+        background: var(--sunken);
+        interpolate-size: allow-keywords;
+      }
+      .rule summary {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 54px;
+        padding: 0 14px;
+        font-size: 14.5px;
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+      }
+      .rule summary::-webkit-details-marker {
+        display: none;
+      }
+      .rule summary > .i:first-child {
+        color: var(--ink-3);
+      }
+      .rule summary .i--chev {
+        margin-left: auto;
+        color: var(--ink-4);
+        transition: transform var(--t-med) var(--ease);
+      }
+      .rule[open] summary .i--chev {
+        transform: rotate(90deg);
+      }
+      .rule p {
+        padding: 0 16px 16px 50px;
+        font-size: 13.5px;
+        line-height: 1.55;
+        color: var(--ink-2);
+      }
+      .rule::details-content {
+        height: 0;
+        overflow: clip;
+        transition:
+          height var(--t-med) var(--ease),
+          content-visibility var(--t-med) allow-discrete;
+      }
+      .rule[open]::details-content {
+        height: auto;
+      }
+
+      /* quantity */
+      .qty {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 22px;
+        padding: 14px 14px 14px 16px;
+      }
+      .qty__t {
+        flex: 1;
+        display: grid;
+        gap: 2px;
+      }
+      .qty__t b {
+        font-size: 15px;
+      }
+      .qty__t span {
+        font-size: 12.5px;
+        color: var(--ink-3);
+      }
+
+      /* bottom bar states */
+      /* a bottom bar that carries a status line gets a solid backdrop (no fade over the content) */
+      .bottom-bar.has-state {
+        margin-top: 0;
+        padding-top: 12px;
+        background: var(--bg);
+        box-shadow: 0 -1px 0 var(--line), 0 -14px 30px -18px rgba(20, 30, 22, 0.25);
+      }
+      .state {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: var(--ink-2);
+      }
+      .state b {
+        color: var(--ink);
+      }
+      .state .i {
+        width: 26px;
+        height: 26px;
+        color: var(--green-600);
+      }
+      .state--wait .i {
+        color: var(--violet-600);
+      }
+      .empty-tab {
+        padding: 32px 16px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .live::after,
+        .vagas .meter i::after {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="bar rise" id="bar">
+          <a class="icon-btn" href="descobrir.html" data-back aria-label="Voltar" id="back"><span data-icon="arrow-left"></span></a>
+          <h1 class="bar__title" id="bar-title">Torneios e eventos</h1>
+          <span id="bar-act"></span>
+        </header>
+        <div id="view"></div>
+      </main>
+
+      <div class="bottom-bar rise" style="--d: 7" id="bb" hidden></div>
+    </div>
+
+    <script src="assets/icons.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const q = new URLSearchParams(location.search);
+        const hash = location.hash.slice(1).split('?')[0];
+        /* shot.cjs appends ?shot=1 after a #hash: honour it here too */
+        if (location.hash.includes('shot=1')) document.documentElement.classList.add('has-status');
+        const view = document.getElementById('view');
+        const bb = document.getElementById('bb');
+        const main = document.getElementById('main');
+        const bar = document.getElementById('bar');
+        const $ = (s, el = document) => el.querySelector(s);
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const reduce = GH.reduceMotion ? GH.reduceMotion() : false;
+        main.addEventListener('scroll', () => bar.classList.toggle('is-stuck', main.scrollTop > 4), { passive: true });
+        /* tilt, once the entry animation (which also animates transform) has finished */
+        const tilt = (el, max) => {
+          GH.tilt(el, { max });
+          el.addEventListener('animationend', (e) => e.target === el && el.classList.remove('rise'));
+        };
+
+        /* page data: who signed up (friends first), event copy and photo moods */
+        const WHO = {
+          't-primavera': ['caio', 'lucas', 'rodolfo', 'julia', 'ricardo', 'beatriz', 'andre', 'thiago'],
+          't-mensal': ['andre', 'thiago', 'gustavo', 'vinicius', 'roberto', 'fernanda'],
+          't-duplas': ['rodolfo', 'lucas', 'caio', 'ricardo', 'beatriz', 'julia', 'gustavo'],
+          'e-clinica': ['julia', 'beatriz', 'fernanda', 'roberto'],
+          'e-happy': ['caio', 'andre', 'thiago', 'julia', 'lucas', 'ricardo'],
+          'e-noite': ['lucas', 'caio', 'gustavo', 'vinicius', 'rodolfo'],
+        };
+        const ABOUT = {
+          'e-clinica': 'Uma hora no putting green com a Helena: leitura de green, controle de distância e uma rotina de putt para levar ao campo. Traga seu putter; as bolas são por conta do clube.',
+          'e-happy': 'Fim de tarde no terraço com música ao vivo, petiscos e o pôr do sol sobre o buraco 18. Sócios podem trazer convidados.',
+          'e-noite': 'Três buracos iluminados, bolas de LED e bandeiras que brilham no escuro. Termina com um caldo no clubhouse.',
+        };
+        const LOOK = { 'e-clinica': ['campo-c', ''], 'e-happy': ['campo-b', 'is-dusk'], 'e-noite': ['campo-a', 'is-night'] };
+        const RULES = {
+          Stableford: 'Stableford com 100% do handicap: 1 ponto pelo bogey, 2 pelo par, 3 pelo birdie e 4 pelo eagle, sempre líquidos. Vence quem somar mais pontos.',
+          'Stroke play': 'Stroke play com handicap: conta cada tacada nos 18 buracos e vence o menor resultado líquido. O melhor gross também é premiado.',
+          'Four-ball': 'Four-ball em duplas: em cada buraco vale a melhor bola da dupla, com 85% do handicap de cada jogador.',
+        };
+
+        const entries = () => GH.store.get('entries', []) || [];
+        const waitlist = () => GH.store.get('waitlist', []) || [];
+        const bookingFor = (id) => GH.allBookings().find((b) => b.ref === id);
+        const isIn = (id) => entries().includes(id) || (q.get('id') === id && q.get('inscrito') === '1');
+        const isTour = (id) => GH.tournaments.some((t) => t.id === id);
+        const full = (t) => t.status === 'lotada' || t.entered >= t.spots;
+        const dateLine = (d) => `${cap(GH.fmt.weekday(d))}, ${GH.fmt.long(d)}`;
+        const shortDate = (d) => `${cap(GH.fmt.weekdayShort(d))}, ${d.getDate()} ${GH.fmt.monthShort(d)}`;
+        const friendsLine = (ids, total) => {
+          const f = [...(ids[0] === GH.user ? ['Você'] : []), ...ids.filter((x) => GH.friends.includes(x)).map(GH.first)].slice(0, 2);
+          const rest = total - f.length;
+          if (!f.length) return `${GH.fmt.plural(total, 'inscrito', 'inscritos')}`;
+          return `${f.join(', ')}${rest > 0 ? ` e mais ${rest}` : ''}`;
+        };
+        const faces = (ids) => [...ids].sort((a, b) => (GH.person(b).photo ? 1 : 0) - (GH.person(a).photo ? 1 : 0));
+        const people = (id) => {
+          const base = WHO[id] || [];
+          return isIn(id) ? [GH.user, ...base] : base;
+        };
+
+        /* parallax: photos drift slower than the scroll */
+        const parallax = () => {
+          const imgs = [...document.querySelectorAll('[data-parallax]')];
+          if (!imgs.length || reduce) return;
+          let raf = 0;
+          const run = () => {
+            const vh = main.clientHeight;
+            imgs.forEach((img) => {
+              const r = img.parentElement.getBoundingClientRect();
+              const m = main.getBoundingClientRect();
+              const off = (r.top - m.top + r.height / 2 - vh / 2) * -0.12;
+              img.style.transform = `translate3d(0, ${off.toFixed(1)}px, 0) scale(1.14)`;
+            });
+          };
+          main.addEventListener('scroll', () => {
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(run);
+          }, { passive: true });
+          run();
+        };
+
+        const id = q.get('id');
+        const t = GH.tournaments.find((x) => x.id === id);
+        const ev = GH.events.find((x) => x.id === id);
+        if (t) tournament(t);
+        else if (ev) event(ev);
+        else list();
+        parallax();
+
+        /* ---------- List ---------- */
+        function list() {
+          const tours = [...GH.tournaments].sort((a, b) => a.date - b.date);
+          const featured = tours.find((x) => !full(x)) || tours[0];
+          const rest = tours.filter((x) => x !== featured);
+          const events = [...GH.events].sort((a, b) => a.date - b.date);
+
+          const featHtml = (x) => {
+            const c = GH.course(x.course);
+            const n = x.entered + (isIn(x.id) ? 1 : 0);
+            const ids = people(x.id);
+            return `<article class="photo-card feat rise" style="--d: 2" data-tilt>
+              <img src="assets/img/${c.photo}.webp" alt="" width="736" height="552" data-parallax fetchpriority="high" decoding="async"/>
+              <div class="feat__top">
+                ${isIn(x.id) ? `<span class="gbadge">${GH.icon('tick-circle', 'i--xs')}Você está inscrito</span>` : `<span class="gbadge"><span class="live" aria-hidden="true"></span>Inscrições abertas</span>`}
+                <span class="datechip" aria-hidden="true"><b>${x.date.getDate()}</b><span>${GH.fmt.monthShort(x.date)}</span></span>
+              </div>
+              <div class="feat__foot">
+                <p class="feat__when">${dateLine(x.date)} · ${GH.fmt.time(x.date)}</p>
+                <h3 class="feat__name"><a class="stretch" href="torneios.html?id=${x.id}">${GH.esc(x.name)}</a></h3>
+                <p class="feat__fmt">${GH.esc(x.format)} · ${GH.esc(c.name)} · HCP até ${x.hcpMax}</p>
+                <span class="meter" role="progressbar" aria-label="Vagas preenchidas" aria-valuemin="0" aria-valuemax="${x.spots}" aria-valuenow="${n}" aria-valuetext="${n} de ${x.spots} vagas preenchidas"><i style="--v: ${(n / x.spots).toFixed(3)}; --d: 4"></i></span>
+                <p class="feat__vagas num" aria-hidden="true"><span>${n} de ${x.spots} vagas</span><span>faltam ${x.spots - n}</span></p>
+                <div class="feat__row">
+                  ${GH.stack(faces(ids).slice(0, 3), n)}
+                  <span class="feat__who">${friendsLine(ids, n)}<br/>vão jogar</span>
+                  <span class="violet-btn" aria-hidden="true">${GH.icon('arrow-right')}</span>
+                </div>
+              </div>
+            </article>`;
+          };
+
+          const cardHtml = (x, i) => {
+            const c = GH.course(x.course);
+            const isFull = full(x);
+            const inn = isIn(x.id);
+            const n = Math.min(x.spots, x.entered + (inn ? 1 : 0));
+            const ids = people(x.id);
+            const badge = inn
+              ? `<span class="badge badge--indigo">${GH.icon('tick-circle', 'i--xs')}Inscrito</span>`
+              : isFull
+                ? `<span class="badge badge--amber">Lotado</span>`
+                : `<span class="badge badge--green">Aberta</span>`;
+            return `<article class="tcard card press rise" style="--d: ${3 + i}" data-tilt>
+              <div class="tcard__top">
+                <span class="datebox" aria-hidden="true"><b>${x.date.getDate()}</b><span>${GH.fmt.monthShort(x.date)}</span></span>
+                <div class="tcard__id">
+                  <h3 class="tcard__name"><a class="stretch" href="torneios.html?id=${x.id}">${GH.esc(x.name)}</a></h3>
+                  <p class="tcard__sub">${GH.esc(x.format)}</p>
+                  <p class="tcard__sub">${cap(GH.fmt.weekdayShort(x.date))}, ${GH.fmt.time(x.date)} · ${GH.esc(c.name)} · HCP até ${x.hcpMax}</p>
+                </div>
+              </div>
+              <div class="tcard__vagas">
+                <span class="meter${isFull ? ' meter--full' : ''}" role="progressbar" aria-label="Vagas preenchidas" aria-valuemin="0" aria-valuemax="${x.spots}" aria-valuenow="${n}" aria-valuetext="${n} de ${x.spots} vagas preenchidas"><i style="--v: ${(n / x.spots).toFixed(3)}; --d: ${5 + i}"></i></span>
+                <p class="num"><span aria-hidden="true"><b>${n}</b> de ${x.spots} vagas</span>${inn || isFull ? badge : `<span aria-hidden="true">faltam ${x.spots - n}</span>`}</p>
+              </div>
+              <div class="tcard__foot">
+                <span class="who">${GH.stack(faces(ids).slice(0, 3), n)}<span class="who__names">${ids.filter((p) => GH.friends.includes(p)).slice(0, isFull && !inn ? 1 : 2).map(GH.first).join(' e ')}</span></span>
+                ${isFull && !inn ? `<span class="wait">Lista de espera${GH.icon('arrow-right-2', 'i--xs')}</span>` : `<span class="fee num">${GH.fmt.brl(x.fee)}</span>`}
+              </div>
+            </article>`;
+          };
+
+          const eventHtml = (x, i) => {
+            const [photo, mood] = LOOK[x.id] || ['campo-a', ''];
+            const inn = isIn(x.id);
+            const host = x.host ? `com ${GH.esc(GH.person(x.host).name)} · ` : '';
+            const few = x.left <= 5;
+            return `<article class="ecard card press rise" style="--d: ${3 + i}" data-tilt>
+              <div class="ph ${mood}"><img src="assets/img/${photo}.webp" alt="" width="736" height="491" loading="lazy" decoding="async"/>
+                <span class="datechip" aria-hidden="true"><b>${x.date.getDate()}</b><span>${GH.fmt.monthShort(x.date)}</span></span></div>
+              <div class="ecard__body">
+                <h3 class="ecard__name"><a class="stretch" href="torneios.html?id=${x.id}">${GH.esc(x.name)}</a></h3>
+                <p class="ecard__meta">${shortDate(x.date)} · ${GH.fmt.time(x.date)}</p>
+                <p class="ecard__meta">${host}${GH.esc(x.place)}</p>
+                <div class="ecard__foot">
+                  ${inn ? `<span class="badge badge--indigo">${GH.icon('tick-circle', 'i--xs')}Você vai</span>` : `<span class="badge ${few ? 'badge--amber' : ''}">${few ? 'Só ' : ''}${GH.fmt.plural(x.left, 'lugar', 'lugares')}</span>`}
+                  ${x.fee ? `<span class="fee num">${GH.fmt.brl(x.fee)}</span>` : `<span class="badge badge--green">Gratuito</span>`}
+                </div>
+              </div>
+            </article>`;
+          };
+
+          view.innerHTML = `
+            <div class="seg tabs rise" style="--d: 1" role="tablist" aria-label="Torneios e eventos" id="tabs">
+              <button type="button" role="tab" id="tab-t" aria-controls="p-t" data-tab="torneios">${GH.icon('cup')}Torneios</button>
+              <button type="button" role="tab" id="tab-e" aria-controls="p-e" data-tab="eventos">${GH.icon('ticket-star')}Eventos</button>
+            </div>
+            <section class="panel" id="p-t" role="tabpanel" aria-labelledby="tab-t">
+              ${featHtml(featured)}
+              <h2 class="panel__label rise" style="--d: 3">Próximos torneios</h2>
+              ${rest.map(cardHtml).join('')}
+            </section>
+            <section class="panel" id="p-e" role="tabpanel" aria-labelledby="tab-e" hidden>
+              ${events.map(eventHtml).join('')}
+            </section>`;
+
+          const tabs = $('#tabs');
+          const pillEl = document.createElement('span');
+          pillEl.className = 'pill';
+          pillEl.setAttribute('aria-hidden', 'true');
+          tabs.prepend(pillEl);
+          let cur = null;
+          const movePill = (b, instant) => {
+            const g = tabs.getBoundingClientRect();
+            const r = b.getBoundingClientRect();
+            const nx = { x: r.left - g.left, y: r.top - g.top, w: r.width, h: r.height };
+            const tf = (k) => `translate(${k.x}px, ${k.y}px)`;
+            Object.assign(pillEl.style, { width: `${nx.w}px`, height: `${nx.h}px`, transform: tf(nx), opacity: 1 });
+            if (cur && !instant && !reduce) {
+              const x = Math.min(cur.x, nx.x);
+              const w = Math.max(cur.x + cur.w, nx.x + nx.w) - x;
+              pillEl.animate(
+                [
+                  { transform: tf(cur), width: `${cur.w}px` },
+                  { offset: 0.45, transform: `translate(${x}px, ${nx.y + 3}px)`, width: `${w}px`, height: `${nx.h - 6}px` },
+                  { transform: tf(nx), width: `${nx.w}px`, height: `${nx.h}px` },
+                ],
+                { duration: 480, easing: 'cubic-bezier(.22,1,.36,1)' }
+              );
+            }
+            cur = nx;
+          };
+          const btns = [...tabs.querySelectorAll('[role="tab"]')];
+          const select = (name, opt = {}) => {
+            btns.forEach((b) => {
+              const on = b.dataset.tab === name;
+              b.setAttribute('aria-selected', String(on));
+              b.tabIndex = on ? 0 : -1;
+              const p = document.getElementById(b.getAttribute('aria-controls'));
+              const was = !p.hidden;
+              p.hidden = !on;
+              if (on && !was && !opt.first && !reduce) {
+                [...p.children].forEach((c, i) => {
+                  c.classList.remove('rise');
+                  c.animate([{ opacity: 0, transform: `translateX(${name === 'eventos' ? 28 : -28}px)` }, { opacity: 1, transform: 'none' }], {
+                    duration: 520,
+                    delay: i * 60,
+                    easing: 'cubic-bezier(.22,1,.36,1)',
+                    fill: 'backwards',
+                  });
+                });
+              }
+            });
+            movePill(btns.find((b) => b.dataset.tab === name), opt.first);
+            if (!opt.first) history.replaceState(null, '', `${location.pathname}${location.search}#${name}`);
+          };
+          tabs.addEventListener('click', (e) => {
+            const b = e.target.closest('[role="tab"]');
+            if (b) select(b.dataset.tab);
+          });
+          tabs.addEventListener('keydown', (e) => {
+            const i = btns.indexOf(document.activeElement);
+            if (i < 0 || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+            e.preventDefault();
+            const n = btns[(i + (e.key === 'ArrowRight' ? 1 : -1) + btns.length) % btns.length];
+            n.focus();
+            select(n.dataset.tab);
+          });
+          const start = hash === 'eventos' || q.get('tab') === 'eventos' ? 'eventos' : 'torneios';
+          select(start, { first: true });
+          requestAnimationFrame(() => movePill(btns.find((b) => b.dataset.tab === start), true));
+          setTimeout(() => movePill(btns.find((b) => b.dataset.tab === start), true), 800);
+          view.querySelectorAll('[data-tilt]').forEach((el) => tilt(el, el.classList.contains('feat') ? 7 : 4));
+        }
+
+        /* ---------- shared detail blocks ---------- */
+        function heroHtml({ photo, mood, badge, eyebrow, name, sub }) {
+          return `<header class="photo-card hero ${mood || ''} rise" style="--d: 1" data-tilt>
+            <img src="assets/img/${photo}.webp" alt="" width="736" height="552" data-parallax fetchpriority="high" decoding="async"/>
+            <div class="hero__top">${badge}<button class="glass-btn" type="button" data-soon="Compartilhar" aria-label="Compartilhar">${GH.icon('share')}</button></div>
+            <div class="hero__foot">
+              <p class="hero__eyebrow">${eyebrow}</p>
+              <h2 class="hero__name">${GH.esc(name)}</h2>
+              <p class="hero__fmt">${sub}</p>
+            </div>
+          </header>`;
+        }
+        function countdownHtml(label, when, aside) {
+          return `<section class="count rise" style="--d: 2" aria-labelledby="count-t">
+            <div class="count__head"><h2 class="sr-only" id="count-t">Contagem regressiva</h2><span>${label}</span><b class="num">${aside}</b></div>
+            <div class="count__tiles" role="timer" aria-label="Tempo até o início">
+              ${['dias', 'horas', 'min', 'seg'].map((u) => `<div class="stat-dark"><span class="stat-dark__val num" data-u="${u}">00</span><span class="stat-dark__unit">${u}</span></div>`).join('')}
+            </div>
+          </section>`;
+        }
+        function startCountdown(when) {
+          const cells = [...document.querySelectorAll('[data-u]')];
+          const tick = () => {
+            if (document.hidden && cells[0].dataset.ready) return;
+            let s = Math.max(0, Math.floor((when - Date.now()) / 1000));
+            const v = [Math.floor(s / 86400), Math.floor((s % 86400) / 3600), Math.floor((s % 3600) / 60), s % 60];
+            cells.forEach((c, i) => {
+              const txt = String(v[i]).padStart(2, '0');
+              if (c.textContent === txt) return;
+              c.textContent = txt;
+              if (!reduce && c.dataset.ready)
+                c.animate([{ transform: 'translateY(-38%)', opacity: 0.25 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.22,1,.36,1)' });
+              c.dataset.ready = '1';
+            });
+          };
+          tick();
+          setInterval(tick, 1000);
+        }
+        function meterHtml({ n, of, label, leftLabel, isFull, ids, who }) {
+          /* monograms get clipped under the next face, so the cascade keeps to photos when it has two or more */
+          const fs = faces(ids);
+          const ph = fs.filter((p) => GH.person(p).photo);
+          const shown = (ph.length >= 2 ? ph : fs).slice(0, 7);
+          return `<section class="vagas card rise" style="--d: 3" aria-labelledby="vagas-t">
+            <h2 class="sr-only" id="vagas-t">${label}</h2>
+            <div class="vagas__head">
+              <p><span class="vagas__big num" id="v-n">${n}</span><span class="vagas__of num">/${of}</span><span class="vagas__label">${label}</span></p>
+              <p class="vagas__left">${isFull ? `<b>Lotado</b>lista de espera aberta` : `<b class="num" id="v-left">${of - n}</b>${leftLabel}`}</p>
+            </div>
+            <span class="meter${isFull ? ' meter--full' : ''}" role="progressbar" aria-label="${label}" aria-valuemin="0" aria-valuemax="${of}" aria-valuenow="${n}" aria-valuetext="${n} de ${of}"><i id="v-bar" style="--v: ${(n / of).toFixed(3)}; --d: 4"></i></span>
+            <div class="who-row">
+              <span class="cascade" id="cascade" aria-hidden="true">${shown.map((p, i) => GH.avatar(p, { size: 'sm' }).replace('<span class="av', `<span style="--i: ${i}" class="av`)).join('')}${n > shown.length ? `<span class="stack__more" style="--i: ${shown.length}">+${n - shown.length}</span>` : ''}</span>
+              <span id="who-txt">${who}</span>
+            </div>
+          </section>`;
+        }
+        function factsHtml(items) {
+          return `<dl class="facts rise" style="--d: 4">${items.map(([ic, k, v]) => `<div>${GH.icon(ic)}<dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+        }
+        function rulesHtml(items) {
+          return `<section class="section rise" style="--d: 6" aria-labelledby="rules-t">
+            <h2 class="section__title" id="rules-t">Regulamento</h2>
+            <div class="rules">${items
+              .map(([ic, k, v], i) => `<details class="rule"${i === 0 ? ' open' : ''}><summary>${GH.icon(ic)}${k}${GH.icon('arrow-right-2', 'i--sm i--chev')}</summary><p>${v}</p></details>`)
+              .join('')}</div>
+          </section>`;
+        }
+        function bump(n, of) {
+          const big = $('#v-n');
+          if (big) GH.countUp(big, n, { from: n - 1, dur: 600 });
+          const left = $('#v-left');
+          if (left) left.textContent = of - n;
+          const bar = $('#v-bar');
+          if (bar) bar.style.setProperty('--v', (n / of).toFixed(3));
+          const cas = $('#cascade');
+          if (cas && !cas.querySelector('[data-me]')) {
+            cas.insertAdjacentHTML('afterbegin', GH.avatar(GH.user, { size: 'sm' }).replace('<span class="av', '<span data-me style="--i: 0" class="av'));
+          }
+        }
+
+        /* ---------- Tournament ---------- */
+        function tournament(t) {
+          const c = GH.course(t.course);
+          const [fmt] = t.format.split(" · ");
+          const me = GH.me();
+          document.title = `${t.name} · Torneios · GolfHub`;
+          $('#bar-title').textContent = 'Torneio';
+          $('#back').href = 'torneios.html';
+          const isFull = full(t);
+          const inn = isIn(t.id);
+          const n = Math.min(t.spots, t.entered + (inn ? 1 : 0));
+          const ids = people(t.id);
+          const okHcp = me.hcp <= t.hcpMax;
+          const badge = inn
+            ? `<span class="gbadge">${GH.icon('tick-circle', 'i--xs')}Você está inscrito</span>`
+            : isFull
+              ? `<span class="gbadge"><span class="live live--amber" aria-hidden="true"></span>Lotado</span>`
+              : `<span class="gbadge"><span class="live" aria-hidden="true"></span>Inscrições abertas</span>`;
+
+          view.innerHTML = `
+            ${heroHtml({ photo: c.photo, badge, eyebrow: `${dateLine(t.date)} · ${GH.fmt.time(t.date)}`, name: t.name, sub: `${GH.esc(t.format)} · ${GH.esc(c.name)}` })}
+            ${countdownHtml('Faltam para a saída', t.date, `Check-in até ${GH.fmt.time(new Date(t.date - 40 * 6e4))}`)}
+            ${meterHtml({ n, of: t.spots, label: 'vagas preenchidas', leftLabel: 'vagas restantes', isFull, ids, who: `${friendsLine(ids, n)} ${n === 1 ? 'vai' : 'vão'} jogar` })}
+            ${factsHtml([
+              ['calendar', 'Data', `${GH.fmt.long(t.date)}`],
+              ['clock', 'Saída', `${GH.fmt.time(t.date)} · shotgun`],
+              ['flag', 'Campo', GH.esc(c.name)],
+              ['medal-star', 'Formato', GH.esc(fmt)],
+              ['ranking', 'Handicap', `até ${t.hcpMax}`],
+              ['ticket', 'Inscrição', `${GH.fmt.brl(t.fee)}`],
+            ])}
+            <p class="ok ${okHcp ? '' : 'ok--warn'} rise" style="--d: 4">${GH.icon(okHcp ? 'tick-circle' : 'warning-2')}${okHcp ? `Com HCP ${GH.fmt.hcp(me.hcp)}, você pode jogar.` : `Seu HCP ${GH.fmt.hcp(me.hcp)} passa do limite de ${t.hcpMax}.`}</p>
+
+            <section class="prize rise" style="--d: 5" aria-labelledby="prize-t">
+              <div class="prize__stage" id="trophy-stage">
+                <canvas id="trophy" aria-hidden="true"></canvas>
+                <span class="prize__fallback" id="trophy-fallback" hidden>${GH.icon('cup')}</span>
+              </div>
+              <div>
+                <h2 class="prize__k" id="prize-t">Premiação</h2>
+                <p class="prize__v">${GH.esc(t.prize)}</p>
+                <p class="prize__s">Do 1º ao 3º lugar líquido, entregue no clubhouse depois da rodada.</p>
+                <p class="prize__hint" aria-hidden="true">${GH.icon('refresh-2')}Arraste para girar</p>
+              </div>
+            </section>
+
+            ${rulesHtml([
+              ['profile-2-user', 'Quem pode jogar', `Sócios e convidados com handicap até ${t.hcpMax} ativo na CBG. Convidados pagam green fee de ${GH.fmt.brl(GH.prices.greenFeeGuest)} à parte.`],
+              ['medal-star', 'Formato', RULES[fmt] || GH.esc(t.format)],
+              ['clock', 'Saída e check-in', `Shotgun às ${GH.fmt.time(t.date)}: cada grupo começa em um buraco diferente, todos ao mesmo tempo. Homens saem do tee branco e mulheres do vermelho. Faça o check-in no app até 40 min antes.`],
+              ['ranking', 'Desempate', 'Vence o melhor resultado nos últimos 9, 6, 3 e 1 buracos, nessa ordem.'],
+              ['receipt-text', 'Cancelamento', 'Reembolso integral até 48 h antes. Depois disso, o valor vira crédito no pro shop.'],
+            ])}`;
+
+          renderTourBar(t);
+          startCountdown(t.date);
+          if (!reduce) GH.countUp($('#v-n'), n, { delay: 350, dur: 1200 });
+          view.querySelectorAll('[data-tilt]').forEach((el) => tilt(el, 4));
+        }
+
+        function renderTourBar(t) {
+          const isFull = full(t);
+          const inn = isIn(t.id);
+          const onList = waitlist().includes(t.id);
+          bb.hidden = false;
+          bb.classList.toggle('has-state', inn || isFull);
+          if (inn) {
+            const b = bookingFor(t.id);
+            bb.innerHTML = `<p class="state" role="status">${GH.check()}<span><b>Você está inscrito.</b> Bom jogo!</span></p>
+              <a class="btn btn--ghost btn--block" href="${b ? `reservas.html?id=${encodeURIComponent(b.id)}` : 'reservas.html'}">${GH.icon('calendar-tick')}Ver em Minhas reservas</a>`;
+          } else if (isFull && onList) {
+            bb.innerHTML = `<p class="state state--wait" role="status">${GH.icon('timer-1')}<span><b>Você é o 4º da lista de espera.</b> Avisamos se abrir vaga.</span></p>
+              <button class="btn btn--ghost btn--block" type="button" id="leave">Sair da lista de espera</button>`;
+            $('#leave').addEventListener('click', () => {
+              GH.store.set('waitlist', waitlist().filter((x) => x !== t.id));
+              GH.toast('Você saiu da lista de espera', 'info-circle');
+              renderTourBar(t);
+            });
+          } else if (isFull) {
+            bb.innerHTML = `<p class="state state--wait">${GH.icon('people')}<span><b>Sem vagas.</b> Entre na fila e avisamos se abrir vaga.</span></p>
+              <button class="btn btn--primary btn--block" type="button" id="join">${GH.icon('timer-1')}Entrar na lista de espera</button>`;
+            $('#join').addEventListener('click', () => {
+              GH.store.set('waitlist', [...new Set([...waitlist(), t.id])]);
+              GH.haptic(12);
+              GH.toast('Você entrou na lista de espera');
+              renderTourBar(t);
+            });
+          } else {
+            bb.innerHTML = `<a class="btn btn--primary btn--block" href="pagamento.html?tipo=torneio&id=${t.id}"><span data-flag></span>Inscrever-se · ${GH.fmt.brl(t.fee)}</a>`;
+            GH.hydrate(bb);
+          }
+        }
+
+        /* ---------- Event ---------- */
+        function event(e) {
+          const [photo, mood] = LOOK[e.id] || ['campo-a', ''];
+          document.title = `${e.name} · Eventos · GolfHub`;
+          $('#bar-title').textContent = 'Evento';
+          $('#back').href = 'torneios.html#eventos';
+          const inn = isIn(e.id);
+          const b = bookingFor(e.id);
+          /* pagamento.html saves { qty }, the free RSVP here saves { guests } */
+          const mineQty = inn ? (b && (b.qty || (b.guests ? b.guests + 1 : 0))) || 1 : 0;
+          const taken = e.seats - e.left + mineQty;
+          const ids = people(e.id);
+          const host = e.host ? GH.person(e.host) : null;
+          const max = Math.max(1, Math.min(4, e.left));
+          const state = { qty: Math.min(max, Math.max(1, +q.get('qtd') || 1)) };
+
+          view.innerHTML = `
+            ${heroHtml({
+              photo,
+              mood,
+              badge: inn ? `<span class="gbadge">${GH.icon('tick-circle', 'i--xs')}Você vai</span>` : `<span class="gbadge"><span class="live${e.left <= 5 ? ' live--amber' : ''}" aria-hidden="true"></span>${e.left <= 5 ? 'Últimos lugares' : 'Lugares disponíveis'}</span>`,
+              eyebrow: `${dateLine(e.date)} · ${GH.fmt.time(e.date)}`,
+              name: e.name,
+              sub: `${GH.esc(e.place)}${host ? ` · com ${GH.esc(GH.first(e.host))}` : ''}`,
+            })}
+            ${countdownHtml('Faltam para começar', e.date, GH.esc(e.place))}
+            ${meterHtml({ n: taken, of: e.seats, label: 'lugares ocupados', leftLabel: 'lugares livres', isFull: taken >= e.seats, ids, who: `${friendsLine(ids, taken)} já ${taken === 1 ? 'confirmou' : 'confirmaram'}` })}
+            ${factsHtml([
+              ['calendar', 'Data', GH.fmt.long(e.date)],
+              ['clock', 'Horário', GH.fmt.time(e.date)],
+              ['location', 'Local', GH.esc(e.place)],
+              ['ticket', e.fee ? 'Por pessoa' : 'Valor', e.fee ? GH.fmt.brl(e.fee) : 'Gratuito'],
+            ])}
+            <section class="section rise" style="--d: 5" aria-labelledby="about-t">
+              <h2 class="section__title" id="about-t">Sobre</h2>
+              <p class="about">${GH.esc(ABOUT[e.id] || '')}</p>
+              ${host ? `<div class="row row--flat">${GH.avatar(e.host)}<span class="row__body"><span class="row__title">${GH.esc(host.name)}</span><span class="row__sub">Professora · HCP ${GH.fmt.hcp(host.hcp)}</span></span><a class="link" href="aulas.html?pro=${e.host}">Ver perfil</a></div>` : ''}
+            </section>
+            ${
+              inn
+                ? ''
+                : `<div class="qty card rise" style="--d: 6">
+                    <span class="qty__t"><b>Quantas pessoas?</b><span>${max > 1 ? `Você e até ${max - 1} ${max - 1 === 1 ? 'convidado' : 'convidados'}` : 'Último lugar disponível'}</span></span>
+                    <span class="stepper" role="group" aria-label="Quantidade de pessoas">
+                      <button type="button" id="minus" aria-label="Menos uma pessoa">${GH.icon('minus', 'i--sm')}</button>
+                      <output id="qty" aria-live="polite">${state.qty}</output>
+                      <button type="button" id="plus" aria-label="Mais uma pessoa">${GH.icon('add', 'i--sm')}</button>
+                    </span>
+                  </div>`
+            }`;
+
+          const render = (justJoined) => {
+            const inNow = isIn(e.id);
+            bb.hidden = false;
+            bb.classList.toggle('has-state', inNow);
+            if (inNow) {
+              const bk = bookingFor(e.id);
+              bb.innerHTML = `<p class="state" role="status">${GH.check()}<span><b>${justJoined ? 'Presença confirmada.' : 'Você está inscrito.'}</b> Te esperamos lá!</span></p>
+                <a class="btn btn--ghost btn--block" href="${bk ? `reservas.html?id=${encodeURIComponent(bk.id)}` : 'reservas.html'}">${GH.icon('calendar-tick')}Ver em Minhas reservas</a>`;
+              const qc = $('.qty');
+              if (qc) qc.remove();
+              return;
+            }
+            const total = state.qty * e.fee;
+            const who = state.qty === 1 ? '' : ` ${state.qty} ${e.fee ? 'lugares' : 'presenças'}`;
+            if (e.fee) {
+              bb.innerHTML = `<a class="btn btn--primary btn--block" id="cta" href="pagamento.html?tipo=evento&id=${e.id}&qtd=${state.qty}">${GH.icon('ticket')}<span>Garantir${who || ' lugar'} · <span class="num" id="cta-total">${GH.fmt.brl(total)}</span></span></a>`;
+            } else {
+              bb.innerHTML = `<button class="btn btn--green btn--block" type="button" id="cta">${GH.icon('tick-circle')}Confirmar${who || ' presença'}</button>`;
+              $('#cta').addEventListener('click', confirmFree);
+            }
+          };
+          let lastTotal = state.qty * e.fee;
+          const setQty = (n) => {
+            state.qty = Math.max(1, Math.min(max, n));
+            $('#qty').textContent = state.qty;
+            $('#minus').disabled = state.qty <= 1;
+            $('#plus').disabled = state.qty >= max;
+            render();
+            const tot = state.qty * e.fee;
+            if (e.fee && tot !== lastTotal) GH.countUp($('#cta-total'), tot, { from: lastTotal, dur: 500, format: GH.fmt.brl });
+            lastTotal = tot;
+            GH.haptic();
+          };
+          const confirmFree = () => {
+            GH.store.set('entries', [...new Set([...entries(), e.id])]);
+            const code = 'GH-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+            const booking = { id: `bk-${e.id}-${Date.now().toString(36)}`, kind: 'evento', ref: e.id, date: e.date.toISOString(), guests: state.qty - 1, status: 'confirmada', code, total: 0, method: 'conta' };
+            GH.store.set('bookings', [booking, ...(GH.store.get('bookings', []) || [])]);
+            GH.haptic(14);
+            GH.toast(state.qty > 1 ? `Presença confirmada para ${state.qty} pessoas` : 'Presença confirmada. Te esperamos!');
+            bump(taken + state.qty, e.seats);
+            render(true);
+          };
+          render();
+          if (!inn) {
+            $('#minus').addEventListener('click', () => setQty(state.qty - 1));
+            $('#plus').addEventListener('click', () => setQty(state.qty + 1));
+            $('#minus').disabled = state.qty <= 1;
+            $('#plus').disabled = state.qty >= max;
+          }
+          startCountdown(e.date);
+          if (!reduce) GH.countUp($('#v-n'), taken, { delay: 350, dur: 1100 });
+          view.querySelectorAll('[data-tilt]').forEach((el) => tilt(el, 4));
+        }
+      })();
+    </script>
+    <script type="module">
+      /* 3D trophy for the prize card: procedural (lathe cup, torus handles, plinth, a golf ball in the cup),
+         lit by a tiny generated studio environment so the gold reads as metal. Slowly spins; drag to turn it.
+         Renders only while visible; static under prefers-reduced-motion; falls back to the cup icon without WebGL. */
+      const canvas = document.getElementById('trophy');
+      if (canvas) build(canvas).catch(() => fallback());
+      function fallback() {
+        canvas.hidden = true;
+        document.getElementById('trophy-fallback').hidden = false;
+      }
+      async function build(canvas) {
+        const THREE = await import('./assets/vendor/three.module.min.js');
+        const stage = document.getElementById('trophy-stage');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const W = stage.clientWidth;
+        const H = stage.clientHeight;
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
+        renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+        renderer.setSize(W, H, false);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.05;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(28, W / H, 0.1, 50);
+        camera.position.set(0, 1.3, 5.7);
+        camera.lookAt(0, 1.0, 0);
+
+        /* studio environment: dim room + bright soft panels (one warm, one club-green) */
+        const env = new THREE.Scene();
+        env.add(new THREE.Mesh(new THREE.BoxGeometry(12, 12, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.16, 0.16, 0.17), side: THREE.BackSide })));
+        const panel = (w, h, rgb, pos) => {
+          const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(...rgb), side: THREE.DoubleSide }));
+          m.position.set(...pos);
+          m.lookAt(0, 0, 0);
+          env.add(m);
+        };
+        panel(7, 2.2, [7, 7, 7], [0, 5.5, 1]);
+        panel(2.6, 4, [6, 5.2, 4.2], [5, 1.5, 2.5]);
+        panel(2.6, 4, [0.6, 3.2, 1.4], [-5, 0.5, 1.5]);
+        panel(5, 2, [2.2, 2.2, 2.4], [0, 1, -5.5]);
+        panel(3, 1.2, [3, 3, 3], [0, -4, 3]);
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmrem.fromScene(env, 0.035).texture;
+
+        const gold = new THREE.MeshStandardMaterial({ color: 0xe9b949, metalness: 1, roughness: 0.2 });
+        const goldSatin = new THREE.MeshStandardMaterial({ color: 0xd9a63a, metalness: 1, roughness: 0.42 });
+        const stone = new THREE.MeshStandardMaterial({ color: 0x232323, metalness: 0.35, roughness: 0.38 });
+        const green = new THREE.MeshStandardMaterial({ color: 0x1fd16a, metalness: 0.2, roughness: 0.35, emissive: 0x0f9a47, emissiveIntensity: 0.35 });
+
+        const trophy = new THREE.Group();
+        /* cup: outside up, lip, inside down (one lathe = hollow cup) */
+        const P = [
+          [0, 0.42], [0.2, 0.42], [0.2, 0.47], [0.12, 0.52], [0.075, 0.62], [0.065, 0.82], [0.12, 0.87], [0.12, 0.9], [0.07, 0.95],
+          [0.08, 1.05], [0.2, 1.13], [0.36, 1.22], [0.47, 1.36], [0.53, 1.54], [0.56, 1.74], [0.58, 1.8], [0.545, 1.8], [0.515, 1.62], [0.43, 1.4], [0.28, 1.24], [0, 1.18],
+        ].map(([x, y]) => new THREE.Vector2(x, y));
+        const cup = new THREE.Mesh(new THREE.LatheGeometry(P, 96), gold);
+        cup.material.side = THREE.DoubleSide;
+        trophy.add(cup);
+        /* handles */
+        [1, -1].forEach((s) => {
+          const h = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.034, 16, 48, Math.PI * 1.15), gold);
+          h.position.set(0.5 * s, 1.5, 0);
+          h.rotation.z = s > 0 ? -Math.PI * 0.575 : Math.PI * 0.425;
+          trophy.add(h);
+        });
+        /* plinth with a club-green ring and a gold plate */
+        const plinth = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.5, 0.4, 64), stone);
+        plinth.position.y = 0.2;
+        trophy.add(plinth);
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.43, 0.014, 12, 96), green);
+        ring.rotation.x = Math.PI / 2;
+        ring.position.y = 0.33;
+        trophy.add(ring);
+        const plate = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.12, 0.02), goldSatin);
+        plate.position.set(0, 0.17, 0.465);
+        plate.rotation.x = -0.2;
+        trophy.add(plate);
+        /* golf ball resting in the cup, dimpled with a generated bump map */
+        const dots = document.createElement('canvas');
+        dots.width = 256;
+        dots.height = 128;
+        const g = dots.getContext('2d');
+        g.fillStyle = '#fff';
+        g.fillRect(0, 0, 256, 128);
+        g.fillStyle = '#9a9a9a';
+        for (let y = 6; y < 128; y += 11) for (let x = (y / 11) % 2 ? 5 : 10; x < 256; x += 11) g.beginPath(), g.arc(x, y, 3.2, 0, Math.PI * 2), g.fill();
+        const bump = new THREE.CanvasTexture(dots);
+        const ball = new THREE.Mesh(new THREE.SphereGeometry(0.2, 48, 32), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.45, metalness: 0, bumpMap: bump, bumpScale: 0.6 }));
+        ball.position.set(0.08, 1.8, 0.05);
+        trophy.add(ball);
+        scene.add(trophy);
+
+        /* soft contact shadow */
+        const sh = document.createElement('canvas');
+        sh.width = sh.height = 128;
+        const sg = sh.getContext('2d');
+        const grad = sg.createRadialGradient(64, 64, 4, 64, 64, 62);
+        grad.addColorStop(0, 'rgba(0,0,0,.55)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        sg.fillStyle = grad;
+        sg.fillRect(0, 0, 128, 128);
+        const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.6), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sh), transparent: true, depthWrite: false }));
+        shadow.rotation.x = -Math.PI / 2;
+        shadow.position.y = 0.002;
+        scene.add(shadow);
+
+        /* spin + drag with inertia */
+        let angle = -0.5,
+          vel = reduce ? 0 : 0.5,
+          dragging = false,
+          lastX = 0,
+          lastT = 0,
+          visible = true,
+          onScreen = true,
+          raf = 0,
+          prev = performance.now();
+        const frame = (now) => {
+          const dt = Math.min(0.05, (now - prev) / 1000);
+          prev = now;
+          if (!dragging) {
+            const idle = reduce ? 0 : 0.5;
+            vel += (idle - vel) * Math.min(1, dt * 1.6);
+            angle += vel * dt;
+          }
+          trophy.rotation.y = angle;
+          trophy.position.y = reduce ? 0 : Math.sin(now / 900) * 0.025;
+          renderer.render(scene, camera);
+          if (visible && (!reduce || dragging || Math.abs(vel) > 0.01)) raf = requestAnimationFrame(frame);
+          else raf = 0;
+        };
+        const kick = () => {
+          if (!raf) {
+            prev = performance.now();
+            raf = requestAnimationFrame(frame);
+          }
+        };
+        stage.addEventListener('pointerdown', (e) => {
+          dragging = true;
+          lastX = e.clientX;
+          lastT = performance.now();
+          stage.setPointerCapture(e.pointerId);
+          kick();
+        });
+        stage.addEventListener('pointermove', (e) => {
+          if (!dragging) return;
+          const now = performance.now();
+          const dx = e.clientX - lastX;
+          angle += dx * 0.018;
+          vel = (dx * 0.018) / Math.max(0.008, (now - lastT) / 1000);
+          lastX = e.clientX;
+          lastT = now;
+        });
+        const up = () => {
+          dragging = false;
+          vel = Math.max(-12, Math.min(12, vel));
+          kick();
+        };
+        stage.addEventListener('pointerup', up);
+        stage.addEventListener('pointercancel', up);
+        new IntersectionObserver(
+          ([en]) => {
+            onScreen = en.isIntersecting;
+            visible = onScreen && !document.hidden;
+            if (visible) kick();
+          },
+          { root: document.getElementById('main') }
+        ).observe(stage);
+        document.addEventListener('visibilitychange', () => {
+          visible = onScreen && !document.hidden;
+          if (visible) kick();
+        });
+        renderer.render(scene, camera);
+        kick();
+      }
+    </script>
+  </body>
+</html>
