@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fef3e7" />
+    <title>Sleep Pathway · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: Sleep Pathway (848:17514). Cream header with the night badge (art.js), then a checklist:
+         check circles on a rail, white tiles (40px icon circle, title, line of copy). */
+
+      /* ---------- Header ---------- */
+      .pw-hero {
+        padding: 0 var(--gutter) 54px;
+        background: var(--pw-hero, var(--cream));
+      }
+      .pw-hero .h1 {
+        margin-top: 6px;
+        padding: 0 84px 0 8px;
+      }
+      .pw-hero .hero__sub {
+        margin-top: 16px;
+        padding: 0 8px;
+        font-weight: 500;
+        letter-spacing: 0.012em;
+        color: var(--pw-ink, #785a39);
+      }
+      .pw-art {
+        position: absolute;
+        top: 18px;
+        right: 28.7px;
+        pointer-events: none;
+      }
+
+      /* ---------- Steps ---------- */
+      .pw-steps {
+        display: grid;
+        gap: 8px;
+        padding: 8px var(--gutter) 24px;
+      }
+      .pw-step {
+        position: relative;
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        align-items: center;
+        gap: 8px;
+      }
+      /* rail: 1px #d9d9d9, 8px clear of each circle (Figma "Col") */
+      .pw-step::before,
+      .pw-step::after {
+        content: '';
+        position: absolute;
+        left: 11.5px;
+        width: 1px;
+        background: #d9d9d9;
+      }
+      .pw-step::before {
+        top: -4px;
+        bottom: calc(50% + 20px);
+      }
+      .pw-step::after {
+        top: calc(50% + 20px);
+        bottom: -4px;
+      }
+      .pw-step:first-child::before,
+      .pw-step:last-child::after {
+        display: none;
+      }
+
+      .pw-check {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .pw-check::after {
+        /* 44px hit area */
+        content: '';
+        position: absolute;
+        inset: -10px;
+      }
+      .pw-check:active {
+        transform: scale(0.9);
+      }
+      .pw-check img {
+        width: 24px;
+        height: 24px;
+      }
+      .pw-check .is-done,
+      .pw-step.is-done .pw-check .is-todo {
+        display: none;
+      }
+      .pw-step.is-done .pw-check .is-done {
+        display: block;
+        animation: pop 320ms var(--ease-spring);
+      }
+      @keyframes pop {
+        from {
+          transform: scale(0.6);
+        }
+      }
+
+      /* tile (Figma "tiles"): 10px radius, 16/8 padding, 16px gap, shadow #edeefb */
+      .pw-tile {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 8px;
+        border-radius: var(--r-sm);
+        background: var(--surface);
+        box-shadow: 0 15px 20px #edeefb;
+        transition:
+          background-color var(--t-med) var(--ease),
+          box-shadow var(--t-med) var(--ease),
+          transform var(--t-fast) var(--ease);
+      }
+      .pw-tile:hover {
+        box-shadow:
+          0 15px 20px #edeefb,
+          inset 0 0 0 1px var(--line);
+      }
+      .pw-tile:active {
+        transform: scale(0.985);
+      }
+      .pw-step.is-done .pw-tile {
+        background: #f4f4f6;
+        box-shadow: none;
+      }
+      .pw-ico {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        flex: none;
+        border-radius: 100px;
+        background: #f5f6ff;
+        color: #323232;
+      }
+      .pw-ico .i {
+        width: 22px;
+        height: 22px;
+        stroke-width: 2;
+      }
+      .pw-step.is-done .pw-ico img,
+      .pw-step.is-done .pw-ico .i {
+        opacity: 0.7;
+      }
+      .pw-txt {
+        display: grid;
+        gap: 4px;
+        min-width: 0;
+        flex: 1;
+        line-height: 1.5;
+        color: var(--deep);
+      }
+      .pw-title {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.012em;
+      }
+      .pw-sub {
+        font-size: 12px;
+        letter-spacing: 0.012em;
+      }
+      .pw-step.is-done .pw-sub {
+        color: #596272;
+      }
+    </style>
+  </head>
+  <body data-tab="resources" style="--status-bg: var(--cream)">
+    <div class="app">
+      <main class="screen screen--flush" id="main">
+        <header class="hero pw-hero" id="hero">
+          <div class="wash" data-wash="cream" data-glow="#pw-art" aria-hidden="true"></div>
+          <a class="back rise" href="tools.html?tab=in-depth" data-back><span class="long-arrow" aria-hidden="true"></span>Resilience Pathways</a>
+          <h1 class="h1 rise" style="--d: 1" id="pw-title">Sleep Pathway</h1>
+          <p class="hero__sub rise" style="--d: 1" id="pw-sub"></p>
+          <span class="pw-art art art--round art--ring rise" style="--d: 2; --w: 76px; --h: 76px" id="pw-art" aria-hidden="true"></span>
+        </header>
+
+        <ol class="pw-steps" id="steps" aria-labelledby="pw-title"></ol>
+        <p class="sr-only" id="live" aria-live="polite"></p>
+      </main>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const params = new URLSearchParams(location.search);
+
+        /* Header copy, tone and art.js badge per pathway. Sleep is the Figma frame;
+           the others reuse its layout with the tone of their Suggested Tools card.
+           Contentedness and Demand vs Capacity are not in data.js yet: their steps live here. */
+        const PW = {
+          sleep: {
+            title: 'Sleep Pathway',
+            sub: 'Suggested tools and resources to enhance and support your restful sleep experience',
+            hero: 'var(--cream)', ink: '#785a39', theme: '#fef3e7',
+            art: 'badge-sleep',
+          },
+          energy: {
+            title: 'Energy Pathway',
+            sub: 'Suggested tools and resources to learn what fills your battery, and what drains it',
+            hero: 'var(--sky-light)', ink: '#2f5866', theme: '#d0f1ff',
+            art: 'badge-energy',
+          },
+          content: {
+            title: 'Contentedness Pathway',
+            sub: 'Suggested tools and resources to find more satisfaction and peace in your day',
+            hero: 'var(--mint)', ink: '#3e6b4f', theme: '#e7fee7',
+            art: 'badge-content',
+            steps: ['walking-mindfully', 'body-scan', 'find-autonomy', 'resilience-enablers'],
+          },
+          dvc: {
+            title: 'Demand vs Capacity Pathway',
+            sub: 'Suggested tools and resources to match what is asked of you with what you have to give',
+            hero: 'var(--violet-light)', ink: '#4a4b8f', theme: '#d0d1ff',
+            art: 'badge-demand',
+            steps: ['prioritisation', 'top-barriers', 'taking-responsibility', 'resilience-resources'],
+          },
+        };
+        const id = PW[params.get('id')] ? params.get('id') : 'sleep';
+        const pw = PW[id];
+        const steps = (RD.PATHWAYS[id] && RD.PATHWAYS[id].steps) || pw.steps;
+
+        /* One line under each step: Figma copy for the six sleep steps, the tool summary otherwise */
+        const LINE = {
+          'good-sleep': 'Do you know what quality sleep does for you, and how to get it?',
+          'improve-sleep': 'If you want to improve your sleep, consider these top tips.',
+          'taking-responsibility': 'Understand the importance of taking and also giving responsibility.',
+          'resilience-resources': 'Explore your resources and how you can better equip yourself.',
+          'resilience-dynamic': 'Understand the levels of your resilience and how this can change.',
+          'top-barriers': 'Find out what can get in the way of your resilience.',
+        };
+        /* Figma tile icons: videocam, list_alt, text_snippet (exact per step in the frame, by type elsewhere) */
+        const ICON_FOR = {
+          'good-sleep': 'videocam', 'improve-sleep': 'list-alt', 'taking-responsibility': 'text-snippet',
+          'resilience-resources': 'text-snippet', 'resilience-dynamic': 'list-alt', 'top-barriers': 'list-alt',
+        };
+        const BY_KIND = { video: 'videocam', read: 'list-alt', exercise: 'text-snippet' };
+        const icon = (t) => {
+          const f = ICON_FOR[t.id] || BY_KIND[t.kind];
+          return f ? `<img src="assets/fig/icon-${f}.svg" width="24" height="24" alt="" />` : RD.icon(RD.KINDS[t.kind].icon);
+        };
+
+        /* ---------- Header ---------- */
+        document.title = `${pw.title} · Resilience Dynamic`;
+        document.body.style.setProperty('--status-bg', pw.hero);
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', pw.theme);
+        const hero = $('hero');
+        hero.style.setProperty('--pw-hero', pw.hero);
+        hero.style.setProperty('--pw-ink', pw.ink);
+        hero.querySelector('.wash').dataset.wash = { sleep: 'cream', energy: 'sky', content: 'mint', dvc: 'violet' }[id];
+        $('pw-title').textContent = pw.title;
+        $('pw-sub').textContent = pw.sub;
+        $('pw-art').innerHTML = RD.art(pw.art);
+
+        /* ---------- Steps (done state persists per pathway) ---------- */
+        const KEY = 'pathway:' + id;
+        const DEFAULT_DONE = { sleep: ['good-sleep'] }; // as in the frame: step 1 done
+        const stored = RD.store.get(KEY, DEFAULT_DONE[id] || []);
+        const done = new Set(Array.isArray(stored) ? stored : []);
+        const tools = steps.map(RD.tool).filter(Boolean);
+        const list = $('steps');
+
+        list.innerHTML = tools
+          .map((t, i) => {
+            const line = LINE[t.id] || t.summary;
+            return `<li class="pw-step rise" style="--d:${Math.min(i + 2, 8)}" data-id="${t.id}">
+                <button type="button" class="pw-check" aria-pressed="false" aria-label="Step ${i + 1}, ${RD.esc(t.title)}: mark as done">
+                  <img class="is-todo" src="assets/fig/icon-checkbox-empty.svg" width="24" height="24" alt="" />
+                  <img class="is-done" src="assets/fig/icon-checkbox-full.svg" width="24" height="24" alt="" />
+                </button>
+                <a class="pw-tile" href="tool.html?id=${encodeURIComponent(t.id)}&amp;pathway=${id}">
+                  <span class="pw-ico" aria-hidden="true">${icon(t)}</span>
+                  <span class="pw-txt">
+                    <span class="pw-title">${RD.esc(t.title)}</span>
+                    <span class="pw-sub">${RD.esc(line)}</span>
+                    <span class="sr-only" data-state></span>
+                  </span>
+                </a>
+              </li>`;
+          })
+          .join('');
+
+        const items = [...list.children];
+        function paint() {
+          items.forEach((li, i) => {
+            const on = done.has(li.dataset.id);
+            const t = tools[i];
+            li.classList.toggle('is-done', on);
+            const btn = li.querySelector('.pw-check');
+            btn.setAttribute('aria-pressed', String(on));
+            btn.setAttribute('aria-label', `Step ${i + 1}, ${t.title}: ${on ? 'done' : 'mark as done'}`);
+            li.querySelector('[data-state]').textContent = on ? ' (done)' : '';
+          });
+          list.setAttribute('aria-label', `${pw.title}, ${done.size} of ${items.length} steps done`);
+        }
+        list.addEventListener('click', (e) => {
+          const btn = e.target.closest('.pw-check');
+          if (!btn) return;
+          const li = btn.closest('.pw-step');
+          const tid = li.dataset.id;
+          if (done.has(tid)) done.delete(tid);
+          else done.add(tid);
+          RD.store.set(KEY, [...done]);
+          paint();
+          const n = done.size;
+          $('live').textContent = `${RD.tool(tid).title} ${done.has(tid) ? 'marked as done' : 'marked as not done'}. ${n} of ${items.length} done.`;
+          if (n === items.length && done.has(tid)) RD.toast('Pathway complete. Well done.', 'sparkles');
+        });
+        paint();
+
+        /* Coming back from a tool (bfcache): pick up steps finished there */
+        window.addEventListener('pageshow', (e) => {
+          if (!e.persisted) return;
+          const s = RD.store.get(KEY, DEFAULT_DONE[id] || []);
+          done.clear();
+          (Array.isArray(s) ? s : []).forEach((x) => done.add(x));
+          paint();
+        });
+      })();
+    </script>
+  </body>
+</html>

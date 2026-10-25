@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Perfil · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma 3.0 Perfil: logo + close, avatar with crown, name, level, meter, "Editar cadastro",
+         "Meus cartões" rail with the dashed "Adicionar novo cartão", "Gerenciar sua conta", "Informações". */
+      .head {
+        display: grid;
+        grid-template-columns: 44px 1fr 44px;
+        align-items: center;
+        min-height: 56px;
+        margin: 0 -10px;
+      }
+      .head .logo {
+        grid-column: 2;
+        justify-self: center;
+        width: 84px;
+        color: var(--violet-600);
+      }
+      .head .icon-btn {
+        grid-column: 3;
+        color: var(--ink-3);
+      }
+
+      .who {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-top: 14px;
+      }
+      .who .av {
+        box-shadow:
+          0 0 0 4px var(--bg),
+          0 0 0 6px var(--violet-100);
+      }
+      .who .av__crown {
+        box-shadow: 0 0 0 3px var(--bg);
+      }
+      .who__name {
+        font-size: 21px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        color: var(--heading);
+      }
+      .who__level {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 6px;
+      }
+      .who .meter {
+        margin-top: 10px;
+      }
+      .who__caption {
+        margin-top: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .who .link {
+        margin: 4px 0 -6px;
+        min-height: 36px;
+      }
+      .who .link .i {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* payment cards: small cozy gradient cards (theme mesh + grain) */
+      .pay {
+        position: relative;
+        isolation: isolate;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 150px;
+        height: 96px;
+        padding: 12px 14px 11px;
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        color: #fff;
+        text-align: left;
+        background:
+          radial-gradient(90% 110% at 100% 0%, var(--glow) 0%, transparent 58%),
+          radial-gradient(80% 90% at 0% 100%, var(--glow2) 0%, transparent 62%),
+          linear-gradient(140deg, var(--g1), var(--g2));
+        box-shadow: 0 14px 26px -16px color-mix(in srgb, var(--g2) 70%, transparent);
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .pay::before {
+        /* a soft arc, like the consórcio card's wave */
+        content: '';
+        position: absolute;
+        right: -40px;
+        bottom: -70px;
+        z-index: -1;
+        width: 170px;
+        height: 150px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .pay::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 180px;
+        mix-blend-mode: soft-light;
+        opacity: 0.9;
+        pointer-events: none;
+      }
+      .pay:active {
+        transform: scale(0.97);
+      }
+      .pay__brand {
+        height: 26px;
+        display: flex;
+        align-items: center;
+      }
+      .visa {
+        font-size: 19px;
+        font-weight: 800;
+        font-style: italic;
+        letter-spacing: -0.02em;
+        line-height: 1;
+      }
+      /* the Mastercard circles, cropped from the Figma export (the wordmark below them is hidden) */
+      .mc {
+        position: relative;
+        width: 42px;
+        height: 26px;
+        overflow: hidden;
+      }
+      .mc img {
+        position: absolute;
+        left: -5px;
+        top: -5px;
+        width: 52px;
+        max-width: none;
+      }
+      .pay__other {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .pay__num {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        font-size: 15.5px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.06em;
+      }
+      .pay__num small {
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        opacity: 0.85;
+      }
+      .add-card {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 6px;
+        width: 116px;
+        height: 96px;
+        border-radius: var(--r-lg);
+        border: 1.5px dashed var(--line-strong);
+        font-size: 12.5px;
+        font-weight: 700;
+        line-height: 1.25;
+        color: var(--ink-2);
+        text-align: center;
+        transition: background var(--t-fast) var(--ease);
+      }
+      .add-card:hover {
+        background: var(--green-50);
+      }
+      .add-card__plus {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(180deg, var(--green-400), var(--green-600));
+        box-shadow: 0 8px 18px -8px rgba(14, 163, 93, 0.7);
+      }
+      .add-card__plus .i {
+        stroke-width: 2.4;
+      }
+
+      .section-head {
+        margin-top: 22px;
+      }
+      .rail + .section-head {
+        margin-top: 6px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 26px;
+        padding: 0 10px 0 7px;
+        border-radius: var(--r-pill);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--green-700);
+        background: var(--green-50);
+      }
+      .badge .i {
+        width: 14px;
+        height: 14px;
+        stroke-width: 2.6;
+      }
+      .row__main > span {
+        display: block;
+      }
+      .row__ico--out {
+        color: var(--red-600);
+        background: var(--red-50);
+      }
+
+      /* sheet contents */
+      .sheet__lead {
+        margin-top: 6px;
+        font-size: 15px;
+        line-height: 1.45;
+        color: var(--ink-2);
+      }
+      .checks {
+        display: grid;
+        gap: 2px;
+        margin-top: 14px;
+      }
+      .checks li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 48px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--heading);
+      }
+      .checks .tick {
+        color: #fff;
+        background: var(--green-500);
+        box-shadow: none;
+      }
+      .info {
+        margin-top: 12px;
+      }
+      .info div {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 0;
+        border-top: 1px solid var(--line);
+      }
+      .info div:first-child {
+        border-top: 0;
+      }
+      .info dt {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .info dd {
+        font-size: 14.5px;
+        font-weight: 600;
+        color: var(--heading);
+        text-align: right;
+      }
+      .bank {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        flex: none;
+        border-radius: 50%;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: #fff;
+        background: radial-gradient(circle at 30% 25%, #a23ee6, #820ad1 60%, #6a08ab);
+      }
+      .actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .uses {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      /* add-card form */
+      .preview {
+        display: flex;
+        justify-content: center;
+        margin: 6px 0 18px;
+      }
+      .preview .pay {
+        width: 220px;
+        height: 138px;
+        padding: 18px 20px 16px;
+      }
+      .preview .pay__num {
+        font-size: 19px;
+      }
+      .form {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+      }
+      .form .grid2 {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 12px;
+      }
+      .form label.t-label {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--ink-2);
+      }
+      .form .input {
+        padding-right: 16px;
+      }
+      .form .input input {
+        width: 0; /* let flex size it; the intrinsic input width (size=20) was pushing the grid past the sheet */
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em;
+      }
+      .form .input .i {
+        color: var(--ink-3);
+      }
+    </style>
+  </head>
+  <body data-tab="perfil">
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="head rise">
+          <span class="logo" role="img" aria-label="Finby"></span>
+          <a class="icon-btn" href="home.html" aria-label="Fechar perfil e voltar ao início"><span data-icon="x"></span></a>
+        </header>
+
+        <section class="who rise" style="--d: 1" aria-labelledby="who-name">
+          <span data-av="alana" data-size="xl" data-crown></span>
+          <div class="grow">
+            <h1 class="who__name" id="who-name"></h1>
+            <div class="who__level" id="who-level"></div>
+            <div class="meter" id="meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-labelledby="who-caption">
+              <div class="meter__bar"></div>
+            </div>
+            <p class="who__caption" id="who-caption"></p>
+            <button class="link" type="button" data-open="info">Editar cadastro<span data-icon="pencil"></span></button>
+          </div>
+        </section>
+
+        <section aria-labelledby="cards-h" class="rise" style="--d: 2">
+          <div class="section-head">
+            <h2 id="cards-h">Meus cartões</h2>
+          </div>
+          <div class="rail" id="cards"></div>
+        </section>
+
+        <section aria-labelledby="acc-h" class="rise" style="--d: 3">
+          <div class="section-head">
+            <h2 id="acc-h">Gerenciar sua conta</h2>
+          </div>
+          <ul class="list--divided">
+            <li>
+              <button class="row" type="button" data-open="verify">
+                <span class="row__ico"><span data-icon="shield-check"></span></span>
+                <span class="row__main"><span class="row__title">Verificar perfil</span></span>
+                <span class="badge"><span data-icon="check"></span>Verificado</span>
+              </button>
+            </li>
+            <li>
+              <button class="row" type="button" data-open="bank">
+                <span class="row__ico"><span data-icon="landmark"></span></span>
+                <span class="row__main"><span class="row__title">Contas bancárias</span><span class="row__sub" id="bank-sub"></span></span>
+                <span data-icon="chevron-right" class="chev"></span>
+              </button>
+            </li>
+            <li>
+              <button class="row" type="button" data-open="info">
+                <span class="row__ico"><span data-icon="user"></span></span>
+                <span class="row__main"><span class="row__title">Informações pessoais</span><span class="row__sub">Nome, e-mail e celular</span></span>
+                <span data-icon="chevron-right" class="chev"></span>
+              </button>
+            </li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="info-h" class="rise" style="--d: 4">
+          <div class="section-head">
+            <h2 id="info-h">Informações</h2>
+          </div>
+          <ul class="list--divided">
+            <li>
+              <button class="row" type="button" data-soon="Termos e condições">
+                <span class="row__ico"><span data-icon="file-text"></span></span>
+                <span class="row__main"><span class="row__title">Termos e condições</span></span>
+                <span data-icon="chevron-right" class="chev"></span>
+              </button>
+            </li>
+            <li>
+              <button class="row" type="button" data-open="logout">
+                <span class="row__ico row__ico--out"><span data-icon="log-out"></span></span>
+                <span class="row__main"><span class="row__title">Logout</span></span>
+              </button>
+            </li>
+          </ul>
+        </section>
+      </main>
+
+      <!-- generic sheet: verify / bank / info / card / logout -->
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="sheet-h"></h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <div id="sheet-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- add a card -->
+      <div class="sheet" id="add" role="dialog" aria-modal="true" aria-labelledby="add-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="add-h">Novo cartão</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <div class="preview" id="preview" aria-hidden="true"></div>
+        <form class="form" id="add-form" novalidate>
+          <div>
+            <label class="t-label" for="cc-num">Número do cartão</label>
+            <div class="input" id="cc-num-box">
+              <input id="cc-num" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="19" aria-describedby="cc-num-hint" />
+              <span data-icon="credit-card"></span>
+            </div>
+            <p class="hint danger" id="cc-num-hint" hidden></p>
+          </div>
+          <div class="grid2">
+            <div>
+              <label class="t-label" for="cc-exp">Validade</label>
+              <div class="input" id="cc-exp-box">
+                <input id="cc-exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxlength="5" aria-describedby="cc-exp-hint" />
+              </div>
+              <p class="hint danger" id="cc-exp-hint" hidden></p>
+            </div>
+            <div>
+              <label class="t-label" for="cc-cvv">CVV</label>
+              <div class="input" id="cc-cvv-box">
+                <input id="cc-cvv" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" aria-describedby="cc-cvv-hint" />
+                <span data-icon="lock"></span>
+              </div>
+              <p class="hint danger" id="cc-cvv-hint" hidden></p>
+            </div>
+          </div>
+          <button class="btn mt-8" type="submit">Adicionar cartão</button>
+        </form>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const { esc, user } = FB;
+        const $ = (id) => document.getElementById(id);
+        const me = FB.person(FB.me);
+
+        /* profile block */
+        $('who-name').textContent = me.name;
+        $('who-level').innerHTML = `<span class="t-label">Nível</span>${FB.levelChip(user.level)}`;
+        const pct = Math.round(user.levelProgress * 100);
+        const meter = $('meter');
+        meter.setAttribute('aria-valuenow', pct);
+        meter.setAttribute('aria-valuetext', `${user.onTime.done} de ${user.onTime.of} pagamentos em dia`);
+        requestAnimationFrame(() => requestAnimationFrame(() => meter.firstElementChild.style.setProperty('--p', pct + '%')));
+        $('who-caption').textContent = `${user.onTime.done} de ${user.onTime.of} pagamentos em dia`;
+        $('bank-sub').textContent = `${user.bank.short} · conta ${user.bank.account}`;
+
+        /* cards: the user's two + any added during this visit */
+        const cards = user.cards.map((c) => ({ ...c }));
+        const BRAND = { visa: 'Visa', master: 'Mastercard', other: 'Cartão' };
+        const brandMark = (b) =>
+          b === 'visa'
+            ? '<span class="visa">VISA</span>'
+            : b === 'master'
+              ? '<span class="mc"><img src="assets/img/mastercard.png" alt="" width="52" height="43" /></span>'
+              : `<span class="pay__other">${FB.icon('credit-card', 'i--sm')}Cartão</span>`;
+        const payCard = (c, tag = 'button') =>
+          `<${tag} class="pay theme-${c.theme}"${tag === 'button' ? ` type="button" data-card="${c.id}" aria-label="${BRAND[c.brand]} final ${c.last4}"` : ''}>
+            <span class="pay__brand">${brandMark(c.brand)}</span>
+            <span class="pay__num"><span>•••• ${esc(c.last4)}</span>${c.exp ? `<small>${esc(c.exp)}</small>` : ''}</span>
+          </${tag}>`;
+        const rail = $('cards');
+        function renderCards() {
+          rail.innerHTML =
+            cards.map((c) => payCard(c)).join('') +
+            `<button class="add-card" type="button" data-open-add><span class="add-card__plus">${FB.icon('plus')}</span>Adicionar<br />novo cartão</button>`;
+        }
+        renderCards();
+        /* start like the Figma frame: last card in full, the "add" tile beside it */
+        rail.scrollLeft = rail.scrollWidth;
+
+        /* generic sheet */
+        const sheet = $('sheet');
+        const title = $('sheet-h');
+        const body = $('sheet-body');
+        const mine = FB.mine();
+        const SHEETS = {
+          verify: () => ({
+            title: 'Perfil verificado',
+            html: `<p class="sheet__lead">Seus dados foram confirmados. Isso dá segurança para quem participa dos consórcios com você.</p>
+              <ul class="checks">
+                ${['CPF confirmado', 'Selfie com documento', 'Celular verificado'].map((t) => `<li><span class="tick">${FB.icon('check')}</span>${t}</li>`).join('')}
+              </ul>
+              <div class="actions"><button class="btn" type="button" data-sheet-close>Entendi</button></div>`,
+          }),
+          bank: () => ({
+            title: 'Contas bancárias',
+            html: `<p class="sheet__lead">É para esta conta que vão os seus resgates.</p>
+              <div class="card card--line mt-16"><div class="row">
+                <span class="bank" aria-hidden="true">nu</span>
+                <span class="row__main"><span class="row__title">${esc(user.bank.name)}</span><span class="row__sub">Ag. ${user.bank.agency} · Conta ${user.bank.account}</span></span>
+                <span class="badge">${FB.icon('check')}Principal</span>
+              </div></div>
+              <div class="actions">
+                <a class="btn" href="saque.html">${FB.icon('arrow-down-to-line')}Resgatar saldo</a>
+                <button class="btn btn--outline" type="button" data-soon="Adicionar conta bancária">${FB.icon('plus')}Adicionar conta</button>
+              </div>`,
+          }),
+          info: () => ({
+            title: 'Informações pessoais',
+            html: `<dl class="info">
+                <div><dt>Nome</dt><dd>${esc(me.name)}</dd></div>
+                <div><dt>CPF</dt><dd class="num">•••.982.247-••</dd></div>
+                <div><dt>E-mail</dt><dd>alana.oliveira@email.com</dd></div>
+                <div><dt>Celular</dt><dd class="num">(11) 9 8765-4321</dd></div>
+              </dl>
+              <div class="actions"><button class="btn" type="button" data-soon="Editar cadastro">${FB.icon('pencil')}Editar cadastro</button></div>`,
+          }),
+          logout: () => ({
+            title: 'Sair da sua conta?',
+            html: `<p class="sheet__lead">Você vai precisar do CPF e da senha para entrar de novo.</p>
+              <div class="actions">
+                <a class="btn" href="login.html" id="do-logout">${FB.icon('log-out')}Sair</a>
+                <button class="btn btn--outline" type="button" data-sheet-close>Cancelar</button>
+              </div>`,
+          }),
+          card: (id) => {
+            const c = cards.find((k) => k.id === id);
+            const using = mine.filter((x) => x.payment === c.id);
+            return {
+              title: `${BRAND[c.brand]} •••• ${c.last4}`,
+              html: `<p class="sheet__lead">${using.length ? `Paga as parcelas de ${FB.fmt.plural(using.length, 'consórcio', 'consórcios')}:` : 'Ainda não paga nenhum consórcio. Escolha este cartão ao entrar em um.'}</p>
+                ${using.length ? `<ul class="uses">${using.map((x) => `<li class="card card--line"><a class="row" href="consorcio.html?id=${encodeURIComponent(x.id)}"><span class="row__ico">${FB.icon('wallet')}</span><span class="row__main"><span class="row__title">${esc(x.name)}</span><span class="row__sub">Parcela de ${FB.fmt.brl(x.installment)}</span></span>${FB.icon('chevron-right', 'chev')}</a></li>`).join('')}</ul>` : ''}
+                <div class="actions"><button class="btn btn--outline" type="button" data-soon="Remover cartão">Remover cartão</button></div>`,
+            };
+          },
+        };
+        function open(kind, opener, arg) {
+          const s = SHEETS[kind](arg);
+          title.textContent = s.title;
+          body.innerHTML = s.html;
+          FB.sheet.open(sheet, opener);
+        }
+
+        document.addEventListener('click', (e) => {
+          const o = e.target.closest('[data-open]');
+          if (o) return open(o.dataset.open, o);
+          const c = e.target.closest('[data-card]');
+          if (c) return open('card', c, c.dataset.card);
+          if (e.target.closest('[data-open-add]')) return openAdd(e.target.closest('[data-open-add]'));
+          const s = e.target.closest('[data-soon]');
+          if (s) FB.toast(`${s.dataset.soon}: em breve`, 'clock');
+        });
+
+        /* add-card sheet: light validation, live preview, adds a card for this visit */
+        const add = $('add');
+        const num = $('cc-num');
+        const exp = $('cc-exp');
+        const cvv = $('cc-cvv');
+        const only = (s, n) => s.replace(/\D/g, '').slice(0, n);
+        const brandOf = (d) => (/^4/.test(d) ? 'visa' : /^(5[1-5]|2[2-7])/.test(d) ? 'master' : 'other');
+        const THEMES = ['ocean', 'coral', 'mint', 'amber'];
+        function draft() {
+          const d = only(num.value, 16);
+          return { id: 'new', brand: d ? brandOf(d) : 'visa', last4: (d.slice(-4) || '').padStart(4, '•'), theme: THEMES[(cards.length - 2) % THEMES.length], exp: exp.value.length === 5 ? exp.value : '' };
+        }
+        const preview = $('preview');
+        const renderPreview = () => (preview.innerHTML = payCard(draft(), 'div'));
+        function setErr(id, msg) {
+          $(id + '-box').classList.toggle('is-invalid', !!msg);
+          $(id).setAttribute('aria-invalid', msg ? 'true' : 'false');
+          const h = $(id + '-hint');
+          h.hidden = !msg;
+          h.textContent = msg;
+        }
+        num.addEventListener('input', () => {
+          num.value = only(num.value, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
+          if (only(num.value, 16).length === 16) setErr('cc-num', '');
+          renderPreview();
+        });
+        exp.addEventListener('input', (e) => {
+          let d = only(exp.value, 4);
+          if (d.length === 1 && +d > 1) d = '0' + d;
+          exp.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d.length === 2 && e.inputType !== 'deleteContentBackward' ? d + '/' : d;
+          if (expErr() === '') setErr('cc-exp', '');
+          renderPreview();
+        });
+        cvv.addEventListener('input', () => {
+          cvv.value = only(cvv.value, 4);
+          if (cvv.value.length >= 3) setErr('cc-cvv', '');
+        });
+        const numErr = () => (only(num.value, 16).length === 16 ? '' : 'O número tem 16 dígitos.');
+        function expErr() {
+          const m = exp.value.match(/^(\d{2})\/(\d{2})$/);
+          if (!m) return 'Use o formato MM/AA.';
+          const mm = +m[1];
+          const yy = 2000 + +m[2];
+          if (mm < 1 || mm > 12) return 'Mês inválido.';
+          const nowY = FB.now.getFullYear();
+          const nowM = FB.now.getMonth() + 1;
+          if (yy < nowY || (yy === nowY && mm < nowM)) return 'Cartão vencido.';
+          return '';
+        }
+        const cvvErr = () => (cvv.value.length >= 3 ? '' : '3 ou 4 dígitos.');
+        num.addEventListener('blur', () => num.value && setErr('cc-num', numErr()));
+        exp.addEventListener('blur', () => exp.value && setErr('cc-exp', expErr()));
+        cvv.addEventListener('blur', () => cvv.value && setErr('cc-cvv', cvvErr()));
+
+        function openAdd(opener) {
+          $('add-form').reset();
+          ['cc-num', 'cc-exp', 'cc-cvv'].forEach((id) => setErr(id, ''));
+          renderPreview();
+          FB.sheet.open(add, opener);
+        }
+        $('add-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const errs = [
+            ['cc-num', numErr()],
+            ['cc-exp', expErr()],
+            ['cc-cvv', cvvErr()],
+          ];
+          errs.forEach(([id, m]) => setErr(id, m));
+          const bad = errs.find(([, m]) => m);
+          if (bad) return $(bad[0]).focus();
+          const c = { ...draft(), id: 'c' + (cards.length + 1) };
+          cards.push(c);
+          renderCards();
+        /* start like the Figma frame: last card in full, the "add" tile beside it */
+        rail.scrollLeft = rail.scrollWidth;
+          add._opener = rail.querySelector(`[data-card="${c.id}"]`);
+          FB.sheet.close(add);
+          FB.toast(`Cartão final ${c.last4} adicionado`);
+          const el = add._opener;
+          setTimeout(() => rail.scrollTo({ left: el.offsetLeft - 20, behavior: 'smooth' }), 200);
+        });
+
+        /* deep links: ?sheet=add|verify|bank|info|logout|card */
+        const q = new URLSearchParams(location.search).get('sheet');
+        if (q === 'add') openAdd(rail.querySelector('[data-open-add]'));
+        else if (q === 'card') open('card', rail.querySelector('[data-card]'), cards[0].id);
+        else if (q && SHEETS[q]) open(q, document.querySelector(`[data-open="${q}"]`));
+      })();
+    </script>
+  </body>
+</html>

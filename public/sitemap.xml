@@ -141,4 +141,40 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/golfhub/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/golfhub/" />
   </url>
+  <url>
+    <loc>https://userexperience.com.br/work/resilience-engine/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/resilience-engine/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/resilience-engine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/resilience-engine/" />
+  </url>
+  <url>
+    <loc>https://userexperience.com.br/pt/work/resilience-engine/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/resilience-engine/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/resilience-engine/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/resilience-engine/" />
+  </url>
+  <url>
+    <loc>https://userexperience.com.br/work/finby/</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/finby/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/finby/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/finby/" />
+  </url>
+  <url>
+    <loc>https://userexperience.com.br/pt/work/finby/</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://userexperience.com.br/work/finby/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/work/finby/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/work/finby/" />
+  </url>
 </urlset>

@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Ordem dos premiados · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma 4.2 Detalhe → "Ordem dos premiados" (2028:236) and its drag frame (2028:662):
+         grip, "1º - Name", level on the right, "(Você)" in violet; the dragged row lifts with a shadow
+         and leaves a gap. Added here: the month each position receives, keyboard reordering, save/undo. */
+
+      .hero {
+        padding-bottom: 26px;
+      }
+      .hero__kicker {
+        margin-top: 4px;
+        font-size: 15px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .hero__title {
+        margin-top: 2px;
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+      .statusbar {
+        transition:
+          background var(--t-med) var(--ease),
+          color var(--t-med) var(--ease);
+      }
+      [data-status='light'].is-scrolled .statusbar {
+        color: var(--ink);
+        background: color-mix(in srgb, var(--bg) 90%, transparent);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+
+      .intro {
+        margin-top: 22px;
+        font-size: 16px;
+        line-height: 1.45;
+        color: var(--ink-2);
+      }
+      .intro-sub {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-top: 10px;
+        font-size: 13.5px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+      .intro-sub .i {
+        width: 17px;
+        height: 17px;
+        margin-top: 1px;
+        color: var(--violet-500);
+      }
+      .intro-sub strong {
+        font-weight: 700;
+        color: var(--ink-2);
+      }
+      .note {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin-top: 16px;
+        padding: 12px 14px;
+        border-radius: var(--r-md);
+        background: var(--sunken);
+        font-size: 13.5px;
+        line-height: 1.45;
+        color: var(--ink-2);
+      }
+      .note .i {
+        width: 18px;
+        height: 18px;
+        margin-top: 1px;
+        color: var(--violet-600);
+      }
+      .section-head h2 .n {
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      /* ---- the sortable list ---- */
+      .olist-wrap {
+        position: relative;
+        margin-top: 18px;
+      }
+      .olist {
+        position: relative;
+        display: grid;
+        gap: 8px;
+      }
+      .orow {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 64px;
+        padding: 8px 16px 8px 4px;
+        border-radius: var(--r-md);
+        background: var(--surface);
+        box-shadow: var(--shadow-xs), inset 0 0 0 1px var(--line);
+        scroll-margin: 64px 0 16px;
+        -webkit-user-select: none;
+        user-select: none;
+        transition:
+          translate 220ms var(--ease),
+          scale 180ms var(--ease),
+          box-shadow 180ms var(--ease);
+      }
+      .olist--static .orow {
+        padding-left: 16px;
+      }
+      .is-editable .orow {
+        cursor: grab;
+      }
+      .grip {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 48px;
+        flex: none;
+        border-radius: var(--r-sm);
+        color: var(--ink-4);
+        cursor: grab;
+        touch-action: none;
+        transition:
+          color var(--t-fast) var(--ease),
+          background var(--t-fast) var(--ease);
+      }
+      .grip:hover {
+        color: var(--ink-2);
+        background: var(--sunken);
+      }
+      .grip .i {
+        width: 22px;
+        height: 22px;
+      }
+      .orow__pos {
+        width: 32px;
+        flex: none;
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: var(--violet-600);
+        font-variant-numeric: tabular-nums;
+      }
+      .orow__main {
+        flex: 1;
+        min-width: 0;
+      }
+      .orow__name {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 15.5px;
+        font-weight: 600;
+        line-height: 1.3;
+        color: var(--heading);
+      }
+      .orow--me .orow__name {
+        color: var(--violet-600);
+      }
+      .orow__when {
+        display: block;
+        font-size: 12.5px;
+        font-weight: 500;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+      .orow__lvl {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        flex: none;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-3);
+      }
+      .orow__lvl svg {
+        width: 14px;
+        height: 14px;
+      }
+      .orow__lvl--none {
+        color: var(--ink-4);
+        font-weight: 500;
+      }
+      /* already contemplated: quiet, with a tick where the grip would be */
+      .orow--done {
+        background: var(--sunken);
+        box-shadow: none;
+      }
+      .orow--done .orow__pos {
+        color: var(--green-700);
+      }
+      .orow--done .orow__when {
+        color: var(--green-700);
+      }
+      .done-ico {
+        display: grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        margin-right: 8px;
+        flex: none;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--green-500);
+      }
+      .done-ico .i {
+        width: 14px;
+        height: 14px;
+        stroke-width: 3;
+      }
+      .orow--more {
+        padding: 8px 16px;
+        background: transparent;
+        box-shadow: none;
+        border: 1.5px dashed var(--line-strong);
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      /* lifted (pointer) and picked (keyboard): the Figma drag frame, a row floating over the list */
+      .orow.is-lifted,
+      .orow.is-picked {
+        z-index: 5;
+        scale: 1.03;
+        box-shadow:
+          0 22px 40px -16px rgba(42, 25, 90, 0.38),
+          0 6px 14px -6px rgba(42, 25, 90, 0.16),
+          inset 0 0 0 1.5px var(--violet-300);
+      }
+      .orow.is-lifted {
+        cursor: grabbing;
+        transition:
+          scale 180ms var(--ease),
+          box-shadow 180ms var(--ease);
+      }
+      .orow.is-lifted .grip,
+      .orow.is-picked .grip {
+        color: var(--violet-600);
+        background: var(--violet-50);
+      }
+      .orow:has(.grip:focus-visible) {
+        box-shadow:
+          var(--shadow-xs),
+          inset 0 0 0 2px var(--violet-400);
+      }
+      .orow:has(.grip:focus-visible) .grip:focus-visible {
+        outline-offset: -2px;
+      }
+      .olist__ph {
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 0;
+        border-radius: var(--r-md);
+        background: var(--violet-50);
+        box-shadow: inset 0 0 0 1.5px var(--violet-200);
+        background-image: repeating-linear-gradient(-45deg, transparent 0 8px, rgba(97, 62, 234, 0.05) 8px 16px);
+        transition: top 220ms var(--ease);
+      }
+      .is-sorting,
+      .is-sorting * {
+        cursor: grabbing !important;
+      }
+
+      /* bottom bar: undo + save */
+      .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .undo {
+        min-height: 56px;
+        padding: 0 12px 0 6px;
+        font-size: 15px;
+      }
+      .undo .i {
+        width: 18px;
+        height: 18px;
+      }
+      .undo:disabled {
+        color: var(--ink-4);
+        cursor: default;
+      }
+      .bar-row .btn {
+        flex: 1;
+        width: auto;
+      }
+    </style>
+  </head>
+  <body data-status="light">
+    <div class="app">
+      <main class="screen screen--flush" id="main">
+        <header class="hero" id="hero">
+          <div class="topbar">
+            <a class="icon-btn" id="back" href="consorcios.html" data-back aria-label="Voltar"><span data-icon="arrow-left"></span></a>
+          </div>
+          <p class="hero__kicker rise" id="kicker"></p>
+          <h1 class="hero__title rise" style="--d: 1">Ordem dos premiados</h1>
+        </header>
+
+        <div class="pad" id="content"></div>
+      </main>
+
+      <div class="bottom-bar" id="bar" hidden>
+        <div class="bar-row">
+          <button class="link undo" type="button" id="undo" disabled><span data-icon="undo-2"></span>Desfazer</button>
+          <button class="btn" type="button" id="save" disabled>Salvar ordem</button>
+        </div>
+      </div>
+
+      <p class="sr-only" id="kbd-hint">Para mover com o teclado: Espaço ou Enter pega a pessoa, as setas para cima e para baixo mudam a posição, Espaço ou Enter solta e Esc cancela.</p>
+      <p class="sr-only" id="live" aria-live="assertive" aria-atomic="true"></p>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        FB.icons['undo-2'] = '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/>';
+
+        const { esc, fmt } = FB;
+        const params = new URLSearchParams(location.search);
+        const id = params.get('id') || 'reveillon';
+        const c = FB.get(id);
+        const hero = document.getElementById('hero');
+        const content = document.getElementById('content');
+        const main = document.getElementById('main');
+        const live = document.getElementById('live');
+
+        main.addEventListener(
+          'scroll',
+          () => document.body.classList.toggle('is-scrolled', main.scrollTop > hero.offsetHeight - 56),
+          { passive: true }
+        );
+
+        if (!c) {
+          hero.classList.add('theme-violet');
+          document.getElementById('kicker').textContent = 'Finby';
+          content.innerHTML = `<div class="empty rise" style="--d: 2">
+            <div class="empty__art" data-art="empty"></div>
+            <p class="t-h3">Consórcio não encontrado</p>
+            <p class="t-body2">Ele pode ter sido encerrado ou o link está incompleto.</p>
+            <a class="btn btn--sm mt-8" href="consorcios.html">Ver meus consórcios</a>
+          </div>`;
+          FB.hydrate(content);
+          return;
+        }
+
+        hero.classList.add('theme-' + (c.theme || 'violet'));
+        const backHref = `consorcio.html?id=${encodeURIComponent(c.id)}`;
+        document.getElementById('back').href = backHref;
+        document.getElementById('kicker').textContent = c.name;
+        document.title = `Ordem dos premiados · ${c.name} · Finby`;
+
+        /* Random draw: nothing to order */
+        if (c.draw !== 'order') {
+          content.innerHTML = `<p class="intro rise" style="--d: 2">Neste consórcio o contemplado de cada mês é <strong>sorteado</strong>, então não existe uma ordem definida.</p>
+            <p class="note rise" style="--d: 3">${FB.icon('shuffle')}O sorteio acontece todo mês, entre quem ainda não recebeu.</p>
+            <a class="btn btn--outline mt-24 rise" style="--d: 4" href="${backHref}">Voltar ao consórcio</a>`;
+          return;
+        }
+
+        /* ---------- data ---------- */
+        const asDate = (x) => (x ? new Date(x) : null);
+        const isAdmin = c.role === 'admin';
+        const winners = (c.winners || []).map((w) => ({ ...w, date: new Date(w.date) })).sort((a, b) => a.date - b.date);
+        const wonIds = winners.map((w) => w.id);
+        const waitingIds = (c.waiting || []).map((w) => (typeof w === 'string' ? w : w.id));
+        const initial = [...new Set([...(c.order || []), ...(c.members || []), ...waitingIds])].filter((p) => !wonIds.includes(p));
+        let order = initial.slice();
+        const offset = wonIds.length;
+        const extra = Math.max(0, (c.memberCount || 0) - (c.members || []).length);
+        const editable = isAdmin && initial.length > 1;
+        /* first draw still to come; each next position receives one month later */
+        const first = asDate(c.nextDraw) || asDate(c.start) || FB.monthDay(10);
+        const monthAt = (k) => new Date(first.getFullYear(), first.getMonth() + k, 1);
+        const monthLabel = (d) => fmt.month(d) + (d.getFullYear() !== FB.now.getFullYear() ? ` de ${d.getFullYear()}` : '');
+
+        const lvl = (level) =>
+          level ? `<span class="orow__lvl">${FB.crown(level)}${FB.LEVELS[level]}</span>` : `<span class="orow__lvl orow__lvl--none">Novo</span>`;
+        const nameOf = (pid) => FB.person(pid).name;
+        const rowHTML = (pid, k) => {
+          const me = pid === FB.me;
+          return `<li class="orow${me ? ' orow--me' : ''} rise" style="--d:${Math.min(k + 4, 13)}" data-id="${esc(pid)}">
+            ${editable ? `<button class="grip" type="button" aria-describedby="kbd-hint">${FB.icon('grip')}</button>` : ''}
+            <span class="orow__pos"></span>
+            <span class="orow__main"><span class="orow__name">${esc(nameOf(pid))}${me ? ' (Você)' : ''}</span><span class="orow__when"></span></span>
+            ${lvl(FB.person(pid).level)}
+          </li>`;
+        };
+
+        /* ---------- markup ---------- */
+        let html = editable
+          ? `<p class="intro rise" style="--d: 2">Arraste e solte para alterar a ordem de contemplação</p>`
+          : `<p class="intro rise" style="--d: 2">Esta é a ordem de contemplação do grupo.</p>
+             <p class="note rise" style="--d: 2">${FB.icon('lock')}Só quem criou o consórcio pode mudar a ordem.</p>`;
+        html += `<p class="intro-sub rise" style="--d: 3">${FB.icon('calendar')}<span>${offset ? 'O próximo da fila' : 'O 1º'} recebe <strong>${fmt.brlShort(c.prize)}</strong> em ${monthLabel(first)}; depois, um por mês.</span></p>`;
+        if (offset) {
+          html += `<section aria-labelledby="done-h">
+            <div class="section-head rise" style="--d: 3"><h2 id="done-h">Já receberam <span class="n">· ${offset}</span></h2></div>
+            <ol class="olist olist--static">
+              ${winners
+                .map(
+                  (w, k) => `<li class="orow orow--done rise" style="--d:${k + 3}">
+                    <span class="done-ico">${FB.icon('check')}</span>
+                    <span class="orow__pos">${k + 1}º</span>
+                    <span class="orow__main"><span class="orow__name">${esc(nameOf(w.id))}${w.id === FB.me ? ' (Você)' : ''}</span><span class="orow__when">Recebeu em ${monthLabel(w.date)}</span></span>
+                    ${lvl(FB.person(w.id).level)}
+                  </li>`
+                )
+                .join('')}
+            </ol>
+          </section>
+          <div class="section-head rise" style="--d: 4"><h2 id="next-h">Próximos <span class="n">· ${initial.length + extra}</span></h2></div>`;
+        }
+        html += `<div class="olist-wrap${editable ? ' is-editable' : ''}">
+            <div class="olist__ph" id="ph" hidden></div>
+            <ol class="olist${editable ? '' : ' olist--static'}" id="olist" start="${offset + 1}"${offset ? ' aria-labelledby="next-h"' : ' aria-label="Ordem dos premiados"'}>
+              ${initial.map(rowHTML).join('')}
+            </ol>
+          </div>`;
+        if (extra)
+          html += `<div class="orow orow--more mt-8 rise" style="--d: 13">+ ${fmt.plural(extra, 'outro participante', 'outros participantes')} depois</div>`;
+        content.innerHTML = html;
+
+        const list = document.getElementById('olist');
+        const ph = document.getElementById('ph');
+        const rowsNow = () => [...list.children];
+        /* moving a node restarts its CSS animation: drop the entry animation once it has played (or before any reorder) */
+        const settle = () => rowsNow().forEach((r) => r.classList.remove('rise'));
+        list.addEventListener('animationend', (e) => e.target.parentElement === list && e.target.classList.remove('rise'));
+        const rowOf = (pid) => list.querySelector(`[data-id="${CSS.escape(pid)}"]`);
+        const posOf = (row) => offset + rowsNow().indexOf(row) + 1;
+
+        function relabel(rows) {
+          const total = offset + rows.length;
+          rows.forEach((r, k) => {
+            const pos = offset + k + 1;
+            r.querySelector('.orow__pos').textContent = pos + 'º';
+            r.querySelector('.orow__when').textContent = 'Recebe em ' + monthLabel(monthAt(k));
+            const g = r.querySelector('.grip');
+            if (g) g.setAttribute('aria-label', `Mover ${nameOf(r.dataset.id)}, ${pos}º de ${total}`);
+          });
+        }
+        relabel(rowsNow());
+
+        let sayT = 0;
+        function say(msg) {
+          clearTimeout(sayT);
+          live.textContent = '';
+          sayT = setTimeout(() => (live.textContent = msg), 40);
+        }
+
+        if (!editable) return;
+
+        /* ---------- save / undo ---------- */
+        const bar = document.getElementById('bar');
+        const save = document.getElementById('save');
+        const undo = document.getElementById('undo');
+        bar.hidden = false;
+        function sync() {
+          const changed = order.join() !== initial.join();
+          save.disabled = !changed;
+          undo.disabled = !changed;
+        }
+        save.addEventListener('click', () => {
+          FB.store.set('order:' + c.id, [...wonIds, ...order]);
+          save.disabled = undo.disabled = true;
+          FB.toast('Ordem salva');
+          setTimeout(() => location.replace(backHref), 1100);
+        });
+        undo.addEventListener('click', () => {
+          if (picked) drop(true);
+          applyOrder(initial.map(rowOf));
+          say('Ordem original restaurada');
+          save.focus({ preventScroll: true });
+        });
+
+        /* Reorder the DOM and slide every row from where it was (FLIP). Keeps focus where it is. */
+        let moving = false;
+        function applyOrder(newRows) {
+          settle();
+          const rows = rowsNow();
+          const before = new Map(rows.map((r) => [r, r.offsetTop]));
+          const active = document.activeElement;
+          moving = true;
+          newRows.forEach((r) => list.appendChild(r));
+          if (active && list.contains(active) && document.activeElement !== active) active.focus({ preventScroll: true });
+          moving = false;
+          rows.forEach((r) => {
+            const d = before.get(r) - r.offsetTop;
+            if (!d) return;
+            r.style.transition = 'none';
+            r.style.translate = `0 ${d}px`;
+          });
+          void list.offsetHeight;
+          rows.forEach((r) => {
+            r.style.transition = '';
+            r.style.translate = '';
+          });
+          order = newRows.map((r) => r.dataset.id);
+          relabel(newRows);
+          sync();
+        }
+
+        /* ---------- pointer drag (mouse anywhere on the row, touch/pen on the grip) ---------- */
+        let drag = null;
+        let raf = 0;
+        let suppressUntil = 0;
+        const statusH = () => (document.documentElement.classList.contains('has-status') ? 50 : 0);
+
+        list.addEventListener('pointerdown', (e) => {
+          if (drag && drag.demo) finish(false);
+          if (drag || (e.pointerType === 'mouse' && e.button !== 0)) return;
+          const row = e.target.closest('.orow');
+          if (!row) return;
+          const onGrip = !!e.target.closest('.grip');
+          if (!onGrip && e.pointerType !== 'mouse') return; // touch scrolls the list unless it starts on the grip
+          if (picked) drop(true);
+          e.preventDefault();
+          drag = { row, pid: e.pointerId, y0: e.clientY, y: e.clientY, started: false };
+          document.addEventListener('pointermove', onMove);
+          document.addEventListener('pointerup', onUp);
+          document.addEventListener('pointercancel', onUp);
+        });
+        function onMove(e) {
+          if (!drag || e.pointerId !== drag.pid) return;
+          drag.y = e.clientY;
+          if (!drag.started && Math.abs(drag.y - drag.y0) > 4) begin();
+        }
+        function onUp(e) {
+          if (!drag || e.pointerId !== drag.pid) return;
+          finish(e.type === 'pointerup');
+        }
+
+        function begin() {
+          const d = drag;
+          d.started = true;
+          settle();
+          try {
+            list.setPointerCapture(d.pid);
+          } catch (err) {}
+          d.rows = rowsNow();
+          d.from = d.to = d.rows.indexOf(d.row);
+          d.tops = d.rows.map((r) => r.offsetTop);
+          d.hs = d.rows.map((r) => r.offsetHeight);
+          d.h = d.hs[d.from];
+          d.step = d.h + (parseFloat(getComputedStyle(list).rowGap) || 0);
+          d.grab = d.y0 - list.getBoundingClientRect().top - d.tops[d.from];
+          d.ty = 0;
+          list.parentElement.classList.add('is-sorting');
+          d.row.classList.add('is-lifted');
+          ph.style.height = d.h + 'px';
+          ph.style.transition = 'none';
+          ph.style.top = d.tops[d.from] + 'px';
+          ph.hidden = false;
+          void ph.offsetWidth;
+          ph.style.transition = '';
+          raf = requestAnimationFrame(frame);
+        }
+
+        function frame() {
+          const d = drag;
+          if (!d) return;
+          /* auto-scroll when the finger nears the top (under the status bar) or the bottom bar */
+          const mr = main.getBoundingClientRect();
+          const zone = 76;
+          const top = mr.top + statusH();
+          let v = 0;
+          if (d.y < top + zone) v = -((top + zone - d.y) / zone) * 16;
+          else if (d.y > mr.bottom - zone) v = ((d.y - (mr.bottom - zone)) / zone) * 16;
+          if (v) main.scrollTop += Math.max(-16, Math.min(16, Math.round(v)));
+
+          const last = d.rows.length - 1;
+          let y = d.y - list.getBoundingClientRect().top - d.grab;
+          y = Math.max(d.tops[0] - 12, Math.min(y, d.tops[last] + d.hs[last] - d.h + 12));
+          d.ty = y - d.tops[d.from];
+          d.row.style.translate = `0 ${d.ty}px`;
+
+          const mid = y + d.h / 2;
+          let to = 0;
+          d.rows.forEach((r, i) => {
+            if (i !== d.from && d.tops[i] + d.hs[i] / 2 < mid) to++;
+          });
+          if (to !== d.to) {
+            d.to = to;
+            layout();
+          }
+          raf = requestAnimationFrame(frame);
+        }
+
+        /* siblings make room; the placeholder marks the slot; numbers follow live */
+        function layout() {
+          const d = drag;
+          d.rows.forEach((r, i) => {
+            if (i === d.from) return;
+            let s = 0;
+            if (d.from < d.to && i > d.from && i <= d.to) s = -d.step;
+            else if (d.to < d.from && i >= d.to && i < d.from) s = d.step;
+            r.style.translate = s ? `0 ${s}px` : '';
+          });
+          ph.style.top = (d.to <= d.from ? d.tops[d.to] : d.tops[d.to] + d.hs[d.to] - d.h) + 'px';
+          const visual = d.rows.filter((r) => r !== d.row);
+          visual.splice(d.to, 0, d.row);
+          relabel(visual);
+        }
+
+        function finish(commit) {
+          const d = drag;
+          drag = null;
+          document.removeEventListener('pointermove', onMove);
+          document.removeEventListener('pointerup', onUp);
+          document.removeEventListener('pointercancel', onUp);
+          if (!d || !d.started) return;
+          cancelAnimationFrame(raf);
+          suppressUntil = performance.now() + 350;
+          try {
+            list.releasePointerCapture(d.pid);
+          } catch (err) {}
+          const to = commit ? d.to : d.from;
+          const visualTop = d.tops[d.from] + d.ty;
+          const next = d.rows.filter((r) => r !== d.row);
+          next.splice(to, 0, d.row);
+          /* drop: rows snap to their new DOM slots, the lifted one glides from where the finger left it */
+          d.rows.forEach((r) => {
+            r.style.transition = 'none';
+            r.style.translate = '';
+          });
+          next.forEach((r) => list.appendChild(r));
+          d.row.style.translate = `0 ${visualTop - d.row.offsetTop}px`;
+          void list.offsetHeight;
+          d.rows.forEach((r) => (r.style.transition = ''));
+          list.parentElement.classList.remove('is-sorting');
+          d.row.classList.remove('is-lifted');
+          d.row.style.translate = '';
+          ph.hidden = true;
+          order = next.map((r) => r.dataset.id);
+          relabel(next);
+          sync();
+          if (to !== d.from) say(`${nameOf(d.row.dataset.id)}, agora em ${offset + to + 1}º`);
+        }
+
+        /* ---------- keyboard: Space/Enter picks up, ↑/↓ (Home/End) moves, Space/Enter drops, Esc cancels ---------- */
+        let picked = null;
+        function pick(row) {
+          picked = { row, start: order.slice() };
+          row.classList.add('is-picked');
+          say(`${nameOf(row.dataset.id)} selecionado, ${posOf(row)}º de ${offset + order.length}. Use as setas para mover e Espaço para soltar.`);
+        }
+        function drop(silent) {
+          if (!picked) return;
+          const row = picked.row;
+          row.classList.remove('is-picked');
+          picked = null;
+          if (!silent) say(`${nameOf(row.dataset.id)} solto em ${posOf(row)}º.`);
+        }
+        function cancelPick() {
+          const { row, start } = picked;
+          applyOrder(start.map(rowOf));
+          row.classList.remove('is-picked');
+          picked = null;
+          say(`Cancelado. ${nameOf(row.dataset.id)} voltou para ${posOf(row)}º.`);
+        }
+
+        list.addEventListener('click', (e) => {
+          const g = e.target.closest('.grip');
+          if (!g || performance.now() < suppressUntil) return;
+          const row = g.closest('.orow');
+          /* detail 0 = activated by keyboard or a screen reader, not a pointer */
+          if (e.detail === 0) {
+            if (picked && picked.row === row) drop();
+            else {
+              if (picked) drop(true);
+              pick(row);
+            }
+            return;
+          }
+          FB.toast('Segure e arraste para mudar a posição', 'grip');
+        });
+
+        list.addEventListener('keydown', (e) => {
+          const g = e.target.closest('.grip');
+          if (!g) return;
+          const row = g.closest('.orow');
+          const rows = rowsNow();
+          const i = rows.indexOf(row);
+          if (!picked || picked.row !== row) {
+            /* not holding anything: arrows just walk between handles */
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              const n = rows[i + (e.key === 'ArrowDown' ? 1 : -1)];
+              if (n) n.querySelector('.grip').focus();
+            }
+            return;
+          }
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            e.stopPropagation();
+            cancelPick();
+            return;
+          }
+          const to = { ArrowUp: i - 1, ArrowDown: i + 1, Home: 0, End: rows.length - 1 }[e.key];
+          if (to === undefined) return;
+          e.preventDefault();
+          if (to < 0 || to >= rows.length || to === i) return;
+          const next = rows.filter((r) => r !== row);
+          next.splice(to, 0, row);
+          applyOrder(next);
+          row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          say(`${nameOf(row.dataset.id)}, agora em ${offset + to + 1}º`);
+        });
+        list.addEventListener('focusout', (e) => {
+          if (moving || !picked) return;
+          if (e.target === picked.row.querySelector('.grip')) drop(true);
+        });
+
+        /* ---------- deep links ----------
+           ?demo=drag    freezes a drag like the Figma frame (3rd row lifted over the 2nd)
+           ?demo=changed shows an edited order, so Salvar/Desfazer are on */
+        const demo = params.get('demo');
+        if (demo === 'changed') {
+          const rows = rowsNow();
+          if (rows.length > 2) {
+            const next = rows.slice();
+            next.splice(1, 0, next.splice(2, 1)[0]);
+            next.forEach((r) => list.appendChild(r));
+            order = next.map((r) => r.dataset.id);
+            relabel(next);
+            sync();
+          }
+        }
+        if (demo === 'drag')
+          setTimeout(() => {
+            const row = rowsNow()[2];
+            if (!row || drag) return;
+            const r = row.getBoundingClientRect();
+            drag = { row, pid: -1, y0: r.top + r.height / 2, y: r.top + r.height / 2, started: false, demo: true };
+            begin();
+            drag.y -= r.height * 0.72;
+          }, 700);
+      })();
+    </script>
+  </body>
+</html>

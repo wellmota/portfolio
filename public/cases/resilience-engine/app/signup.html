@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#d0d1ff" />
+    <title>Create account · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma "Create account" (848:15775) is a placeholder frame, so this screen is composed from the DS:
+         the onboarding panel + sheet, the onboarding 13 illustration, Text fields (default / active /
+         success / error), the primary button with the long arrow, and a text link. */
+      body {
+        --status-bg: transparent;
+      }
+      /* the status bar floats over the scene, so the picture runs up to the very top */
+      .statusbar {
+        position: absolute;
+        inset: 0 0 auto;
+        z-index: 4;
+      }
+      .has-status .su-panel {
+        min-height: 252px;
+        padding-top: 50px;
+      }
+      .su {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        background: var(--violet-light);
+      }
+      .su-panel {
+        position: relative;
+        flex: 1 0 auto;
+        min-height: 202px;
+      }
+      .su-top {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 17px 24px 0 15px;
+      }
+      .su-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 8px;
+        border-radius: var(--r-md);
+        color: #3c3c3c;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.3;
+      }
+      .su-back img {
+        transform: rotate(180deg);
+      }
+      .su-back:hover {
+        color: var(--deep);
+      }
+      .su-logo {
+        width: 110px;
+        height: 44px;
+      }
+      /* the ready scene fills the whole lilac top, full bleed and unframed: from behind the status bar
+         to 40px under the sheet, so the sheet's round corners sit on the picture */
+      .su-art {
+        position: absolute;
+        z-index: 0;
+        inset: 0 0 -40px;
+        border-radius: 0;
+        background: var(--violet-light);
+        pointer-events: none;
+      }
+
+      .su-sheet {
+        position: relative;
+        z-index: 1;
+        flex: none;
+        padding: 28px var(--gutter) 24px;
+        border-radius: 40px 40px 0 0;
+        background: var(--white);
+      }
+      .su-title {
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: 0.002em;
+        color: var(--deep);
+      }
+      .su-sub {
+        margin-top: 8px;
+        font-size: 16px;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+      .su-form {
+        display: grid;
+        gap: 14px;
+        margin-top: 24px;
+      }
+      .su-form .field[hidden] {
+        display: none;
+      }
+      .su .input input {
+        font-size: 16px; /* 16px keeps mobile browsers from zooming in on focus */
+      }
+      .su .field.is-error .input .i:first-child,
+      .su .field.is-valid .input .i:first-child {
+        color: var(--ink-3);
+      }
+      .su .field__status--err .i {
+        width: 20px;
+        height: 20px;
+        transform: rotate(180deg); /* the info glyph turned over reads as “!” (DS error state) */
+      }
+      .field__hint {
+        font-size: 12px;
+        line-height: 1.5;
+        color: var(--ink-3);
+      }
+      .field.is-error .field__hint {
+        display: none;
+      }
+      .field__msg {
+        line-height: 1.5;
+      }
+
+      /* Show / hide password */
+      .eye {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        margin-right: -10px;
+        border-radius: var(--r-sm);
+        color: var(--ink-3);
+      }
+      .eye:hover {
+        color: var(--deep);
+      }
+      .eye .i {
+        width: 20px;
+        height: 20px;
+      }
+      .eye::after {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 1.75px;
+        border-radius: 1px;
+        background: currentColor;
+        transform: rotate(-45deg) scaleX(1);
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .eye[aria-pressed='true']::after {
+        transform: rotate(-45deg) scaleX(0);
+      }
+      .field.is-valid .eye,
+      .field.is-error .eye {
+        margin-right: 0;
+      }
+
+      .su-submit {
+        margin-top: 14px;
+      }
+      .su-submit[aria-busy='true'] {
+        pointer-events: none;
+        opacity: 0.85;
+      }
+      .su-switch {
+        margin-top: 16px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--ink-3);
+        text-align: center;
+      }
+      .su-switch .text-link {
+        font-size: 14px;
+        min-height: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen su" id="main">
+        <div class="su-panel">
+          <div class="su-top">
+            <a class="su-back" href="index.html?step=10" data-back>
+              <img src="assets/fig/icon-arrow-big-dark.svg" width="28.25" height="28" alt="" />Back
+            </a>
+            <img class="su-logo" src="assets/fig/logo.png" width="110" height="44" alt="Resilience Dynamic" />
+          </div>
+          <div class="su-art art" data-art="ready-top"></div>
+        </div>
+
+        <section class="su-sheet" aria-labelledby="su-title">
+          <h1 class="su-title" id="su-title" data-title>Create account</h1>
+          <p class="su-sub" data-sub>Start tracking your resilience today.</p>
+
+          <form class="su-form" novalidate data-form>
+            <div class="field" data-field="name">
+              <label class="field__label" for="name">Name</label>
+              <div class="input">
+                <span data-icon="user"></span>
+                <input id="name" name="name" type="text" autocomplete="given-name" placeholder="Your first name" aria-describedby="name-msg" required />
+                <span class="field__status field__status--ok"><span data-icon="check"></span></span>
+                <span class="field__status field__status--err"><span data-icon="info"></span></span>
+              </div>
+              <p class="field__msg" id="name-msg" data-msg></p>
+            </div>
+
+            <div class="field" data-field="email">
+              <label class="field__label" for="email">Work email</label>
+              <div class="input">
+                <span data-icon="mail"></span>
+                <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="name@company.com" aria-describedby="email-msg" required />
+                <span class="field__status field__status--ok"><span data-icon="check"></span></span>
+                <span class="field__status field__status--err"><span data-icon="info"></span></span>
+              </div>
+              <p class="field__msg" id="email-msg" data-msg></p>
+            </div>
+
+            <div class="field" data-field="password">
+              <label class="field__label" for="password">Password</label>
+              <div class="input">
+                <span data-icon="lock"></span>
+                <input id="password" name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" aria-describedby="password-hint password-msg" required minlength="8" />
+                <span class="field__status field__status--ok"><span data-icon="check"></span></span>
+                <span class="field__status field__status--err"><span data-icon="info"></span></span>
+                <button class="eye" type="button" aria-label="Show password" aria-pressed="false" aria-controls="password" data-eye>
+                  <span data-icon="eye"></span>
+                </button>
+              </div>
+              <p class="field__hint" id="password-hint" data-hint>Use 8 or more characters.</p>
+              <p class="field__msg" id="password-msg" data-msg></p>
+            </div>
+
+            <button class="btn btn--primary btn--block btn--arrow su-submit" type="submit" data-submit>
+              <span data-label>Create account</span><span class="long-arrow btn__arrow" aria-hidden="true"></span>
+            </button>
+          </form>
+
+          <p class="su-switch">
+            <span data-switch-text>Already have an account?</span>
+            <a class="text-link" href="signup.html?mode=signin" data-switch>Sign in</a>
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const params = new URLSearchParams(location.search);
+        const next = (params.get('next') || 'home').replace(/[^a-z-]/gi, '');
+        const form = document.querySelector('[data-form]');
+        const submit = form.querySelector('[data-submit]');
+        const fields = {
+          name: form.querySelector('[data-field="name"]'),
+          email: form.querySelector('[data-field="email"]'),
+          password: form.querySelector('[data-field="password"]'),
+        };
+        const input = (k) => fields[k].querySelector('input');
+        const touched = new Set();
+        let mode = params.get('mode') === 'signin' ? 'signin' : 'signup';
+
+        const RULES = {
+          name: (v) => (v.trim().length >= 2 ? '' : v.trim() ? 'Please enter at least 2 letters.' : 'Please enter your name.'),
+          email: (v) =>
+            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())
+              ? ''
+              : v.trim()
+                ? 'Enter a valid email, like name@company.com.'
+                : 'Please enter your work email.',
+          password: (v) =>
+            mode === 'signin'
+              ? v ? '' : 'Please enter your password.'
+              : v.length >= 8 ? '' : v ? 'Use 8 or more characters.' : 'Please choose a password.',
+        };
+
+        // DS states: Success (turquoise + check) and Error (alert border + “!” + instructions)
+        function check(k, show) {
+          const f = fields[k];
+          const el = input(k);
+          const err = RULES[k](el.value);
+          if (show) {
+            f.classList.toggle('is-error', !!err);
+            f.classList.toggle('is-valid', !err);
+            el.setAttribute('aria-invalid', err ? 'true' : 'false');
+            f.querySelector('[data-msg]').textContent = err;
+          }
+          return !err;
+        }
+        function clear(k) {
+          const f = fields[k];
+          f.classList.remove('is-error', 'is-valid');
+          input(k).removeAttribute('aria-invalid');
+          f.querySelector('[data-msg]').textContent = '';
+        }
+
+        Object.keys(fields).forEach((k) => {
+          const el = input(k);
+          el.addEventListener('blur', () => {
+            if (!el.value && !touched.has(k)) return; // don't flag a field the person only tabbed through
+            touched.add(k);
+            check(k, true);
+          });
+          el.addEventListener('input', () => {
+            if (touched.has(k)) check(k, true);
+            else if (k === 'password' && RULES.password(el.value) === '' && mode === 'signup') check(k, true);
+          });
+        });
+
+        // Show / hide password
+        const eye = form.querySelector('[data-eye]');
+        eye.addEventListener('click', () => {
+          const pw = input('password');
+          const show = pw.type === 'password';
+          pw.type = show ? 'text' : 'password';
+          eye.setAttribute('aria-pressed', String(show));
+          eye.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        });
+
+        // Create account ⇄ Sign in (same screen, only email + password when signing in)
+        const T = {
+          signup: {
+            title: 'Create account',
+            sub: 'Start tracking your resilience today.',
+            button: 'Create account',
+            ask: 'Already have an account?',
+            link: 'Sign in',
+            doc: 'Create account',
+          },
+          signin: {
+            title: 'Welcome back',
+            sub: 'Sign in to pick up where you left off.',
+            button: 'Sign in',
+            ask: 'New to Resilience Dynamic?',
+            link: 'Create account',
+            doc: 'Sign in',
+          },
+        };
+        function setMode(m, push) {
+          mode = m;
+          const t = T[m];
+          document.querySelector('[data-title]').textContent = t.title;
+          document.querySelector('[data-sub]').textContent = t.sub;
+          submit.querySelector('[data-label]').textContent = t.button;
+          document.querySelector('[data-switch-text]').textContent = t.ask;
+          const sw = document.querySelector('[data-switch]');
+          sw.textContent = t.link;
+          sw.href = 'signup.html?' + (m === 'signup' ? 'mode=signin&' : '') + 'next=' + next;
+          document.title = t.doc + ' · Resilience Dynamic';
+          fields.name.hidden = m === 'signin';
+          input('name').disabled = m === 'signin';
+          const pw = input('password');
+          pw.autocomplete = m === 'signin' ? 'current-password' : 'new-password';
+          pw.placeholder = m === 'signin' ? 'Your password' : 'At least 8 characters';
+          fields.password.querySelector('[data-hint]').hidden = m === 'signin';
+          pw.setAttribute('aria-describedby', (m === 'signin' ? '' : 'password-hint ') + 'password-msg');
+          Object.keys(fields).forEach(clear);
+          touched.clear();
+          if (push) {
+            const url = new URL(location.href);
+            if (m === 'signin') url.searchParams.set('mode', 'signin');
+            else url.searchParams.delete('mode');
+            history.replaceState(null, '', url);
+          }
+        }
+        document.querySelector('[data-switch]').addEventListener('click', (e) => {
+          e.preventDefault();
+          setMode(mode === 'signup' ? 'signin' : 'signup', true);
+          (mode === 'signin' ? input('email') : input('name')).focus();
+        });
+        setMode(mode, false);
+
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const keys = Object.keys(fields).filter((k) => !fields[k].hidden);
+          keys.forEach((k) => touched.add(k));
+          const bad = keys.filter((k) => !check(k, true));
+          if (bad.length) {
+            input(bad[0]).focus();
+            return;
+          }
+          const email = input('email').value.trim();
+          const saved = RD.store.get('user') || {};
+          const name = mode === 'signup' ? input('name').value.trim() : saved.name || RD.user.name;
+          RD.store.set('user', { ...saved, name, email });
+          submit.setAttribute('aria-busy', 'true');
+          submit.querySelector('[data-label]').textContent = mode === 'signup' ? 'Creating account…' : 'Signing in…';
+          const dest =
+            mode === 'signup'
+              ? 'settings.html?next=' + next
+              : next === 'checkin'
+                ? 'checkin.html'
+                : 'home.html';
+          setTimeout(() => location.assign(dest), 450);
+        });
+      })();
+    </script>
+  </body>
+</html>

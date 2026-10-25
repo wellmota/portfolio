@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Consórcio · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma 4.2 Detalhe (member) and the admin "forming" variant: gradient header, prize band,
+         participants, next draw, payment, past winners / order, waiting list */
+
+      /* ---------- Header ---------- */
+      .hero {
+        padding-bottom: 28px;
+      }
+      .hero::before {
+        /* the soft wave of the consórcio cards */
+        content: '';
+        position: absolute;
+        inset: auto -10% -40% -10%;
+        height: 72%;
+        z-index: -1;
+        background: radial-gradient(120% 100% at 30% 0%, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.03) 60%, transparent 61%);
+        border-radius: 50% 50% 0 0 / 34% 46% 0 0;
+        transform: rotate(-4deg);
+        pointer-events: none;
+      }
+      .hero__body {
+        position: relative;
+      }
+      .hero--center .hero__body {
+        padding-top: 2px;
+        text-align: center;
+      }
+      .hero__name {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0;
+        color: #fff;
+        text-shadow: 0 1px 10px rgba(20, 10, 50, 0.2);
+      }
+      .hero__pot {
+        margin-top: 2px;
+        font-size: 56px;
+        line-height: 1.08;
+        color: #fff;
+        text-shadow: 0 4px 30px rgba(20, 10, 50, 0.22);
+      }
+      .hero__pot .money {
+        gap: 0;
+        letter-spacing: -0.035em;
+      }
+      .hero__pot .money__cur {
+        margin-right: 0.22em;
+      }
+      .hero__yield {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 14px;
+        padding: 7px 14px 7px 11px;
+        border-radius: var(--r-pill);
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        background: rgba(20, 10, 50, 0.22);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .hero__yield strong {
+        font-weight: 800;
+      }
+      /* admin, forming: left aligned like Figma, with a collapsible start block */
+      .hero--admin .hero__name {
+        font-size: 14.5px;
+      }
+      .hero--admin .hero__pot {
+        font-size: 44px;
+      }
+      .hero__note {
+        margin-top: 2px;
+        font-size: 15.5px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.94);
+      }
+      .collapse {
+        display: grid;
+        grid-template-rows: 1fr;
+        transition: grid-template-rows var(--t-med) var(--ease);
+      }
+      .collapse.is-closed {
+        grid-template-rows: 0fr;
+      }
+      .collapse__inner {
+        min-height: 0;
+        overflow: hidden;
+        transition: opacity var(--t-med) var(--ease);
+      }
+      .collapse.is-closed .collapse__inner {
+        opacity: 0;
+      }
+      .hero__rule {
+        height: 1px;
+        margin: 18px 0 16px;
+        background: rgba(255, 255, 255, 0.24);
+      }
+      .hero__label {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .hero__start {
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+      .hero__left {
+        margin-top: 2px;
+        font-size: 15.5px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.94);
+      }
+      .hero__fill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+        font-size: 13px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .hero__fill .meter {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .hero__fill .meter__bar {
+        background: #fff;
+      }
+      .hero__toggle {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        margin: 6px auto -18px;
+        border-radius: 50%;
+        color: #fff;
+        transition: background var(--t-fast) var(--ease);
+      }
+      .hero__toggle:hover {
+        background: rgba(255, 255, 255, 0.16);
+      }
+      .hero__toggle .i {
+        transition: transform var(--t-med) var(--ease);
+      }
+      .hero__toggle[aria-expanded='false'] .i {
+        transform: rotate(180deg);
+      }
+      /* status bar gets a frosted backing once the header scrolls away */
+      .statusbar {
+        transition:
+          background var(--t-med) var(--ease),
+          color var(--t-med) var(--ease);
+      }
+      body.is-scrolled[data-status='light'] .statusbar {
+        color: var(--ink);
+        background: color-mix(in srgb, var(--bg) 86%, transparent);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 1px 0 var(--line);
+      }
+
+      /* ---------- Sections ---------- */
+      .section-head .count {
+        margin-left: 2px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .section-head .link .i {
+        width: 15px;
+        height: 15px;
+      }
+
+      /* Participantes: avatar rail (member) */
+      .people {
+        display: flex;
+        gap: 12px;
+        margin: 0 calc(var(--gutter) * -1);
+        padding: 6px var(--gutter) 4px;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        scroll-padding: 0 var(--gutter);
+        scrollbar-width: none;
+      }
+      .people::-webkit-scrollbar {
+        display: none;
+      }
+      .person {
+        position: relative;
+        flex: none;
+        display: grid;
+        justify-items: center;
+        gap: 7px;
+        width: 60px;
+        scroll-snap-align: start;
+      }
+      .person .av {
+        box-shadow: 0 0 0 2.5px var(--bg);
+      }
+      .person.is-won .av {
+        box-shadow:
+          0 0 0 2.5px var(--bg),
+          0 0 0 4.5px var(--green-500);
+      }
+      .person__name {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+      a.person:hover .person__name {
+        color: var(--violet-700);
+      }
+      .more-bubble {
+        font-size: 15px;
+        color: var(--violet-700);
+        background: var(--violet-50);
+        box-shadow: inset 0 0 0 1.5px var(--violet-200) !important;
+      }
+      .legend {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 10px;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .legend__dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 2.5px var(--green-500);
+      }
+
+      /* Participantes: rows (admin) */
+      .rows {
+        display: grid;
+        gap: 8px;
+      }
+      .member {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 60px;
+        padding: 10px 14px 10px 12px;
+        border-radius: var(--r-md);
+        background: var(--surface);
+        box-shadow:
+          var(--shadow-xs),
+          inset 0 0 0 1px var(--line);
+      }
+      .member__name {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--heading);
+      }
+      .you {
+        color: var(--violet-600);
+      }
+
+      /* Próximo sorteio (Figma card: draw icon, prize, weekday + date) */
+      .draw {
+        margin-top: 24px;
+        padding: 16px;
+      }
+      .draw__main {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .draw__ico {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        flex: none;
+        border-radius: 50%;
+        color: var(--green-600);
+        background: var(--green-50);
+      }
+      .draw__title {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--heading);
+      }
+      .draw__sub {
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .draw__sub strong {
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--green-700);
+      }
+      .draw__date {
+        flex: none;
+        text-align: right;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+      .draw__date strong {
+        display: block;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--heading);
+      }
+      .draw__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .draw__foot > span:first-child {
+        min-width: 0;
+      }
+      .draw__foot strong {
+        white-space: nowrap;
+        font-weight: 700;
+        color: var(--ink-2);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        flex: none;
+        height: 26px;
+        padding: 0 10px 0 8px;
+        border-radius: var(--r-pill);
+        font-size: 12.5px;
+        font-weight: 700;
+        white-space: nowrap;
+        color: var(--violet-700);
+        background: var(--violet-50);
+      }
+
+      /* Forma de pagamento + parcelas */
+      .pay {
+        overflow: hidden;
+      }
+      .pay__method {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 8px 14px 16px;
+      }
+      .brand {
+        display: grid;
+        place-items: center;
+        width: 54px;
+        height: 38px;
+        flex: none;
+        border-radius: 9px;
+        background: #fff;
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+      }
+      .brand img {
+        width: 38px;
+        height: auto;
+      }
+      .visa {
+        font-size: 16px;
+        font-weight: 800;
+        font-style: italic;
+        letter-spacing: 0.04em;
+        color: #1a1f71;
+      }
+      .pay__name {
+        display: block;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--heading);
+      }
+      .pay__sub {
+        display: block;
+        font-size: 13.5px;
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+      }
+      .pay__change {
+        min-height: 44px;
+        padding: 0 12px;
+      }
+      .pay__parcel {
+        padding: 14px 16px 16px;
+        border-top: 1px solid var(--line);
+      }
+      .pay__parcel .spread {
+        margin-bottom: 10px;
+      }
+      .pay__title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--heading);
+      }
+      .pay__amount {
+        font-size: 15px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--heading);
+      }
+      .pay__amount span {
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .pay__note {
+        margin-top: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .meter--violet .meter__bar {
+        background: linear-gradient(90deg, var(--violet-400), var(--violet-600));
+      }
+
+      /* Contemplados anteriores (Figma sunken rows) */
+      #contemplados {
+        scroll-margin-top: 60px;
+      }
+      .won {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 68px;
+        padding: 12px 16px 12px 12px;
+        border-radius: var(--r-lg);
+        background: var(--sunken);
+      }
+      .won__name {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--heading);
+      }
+      .won__date {
+        display: block;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .won__amount {
+        flex: none;
+        font-size: 15.5px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-2);
+      }
+      .won--last {
+        background: linear-gradient(120deg, var(--green-50), #f3fbf6);
+        box-shadow: inset 0 0 0 1px rgba(16, 201, 113, 0.22);
+      }
+      .won--last .won__amount {
+        color: var(--green-700);
+      }
+      .note {
+        padding: 16px;
+        border-radius: var(--r-lg);
+        font-size: 14px;
+        line-height: 1.45;
+        color: var(--muted);
+        background: var(--sunken);
+      }
+
+      /* Ordem dos premiados */
+      .order {
+        padding: 6px 16px;
+        counter-reset: none;
+      }
+      .order li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 40px;
+        font-size: 15px;
+      }
+      .order__n {
+        width: 30px;
+        flex: none;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        color: var(--violet-600);
+      }
+      .order__name {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 500;
+        color: var(--ink);
+      }
+      .order__name .i {
+        display: inline-block;
+        vertical-align: -2px;
+        margin-left: 4px;
+        color: var(--faint);
+      }
+      .order .is-me .order__name {
+        font-weight: 700;
+        color: var(--violet-600);
+      }
+      .lvl {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        flex: none;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .lvl svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* Aguardando (Figma sunken rows + "Reenviar convite") */
+      .wait {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 64px;
+        padding: 10px 10px 10px 12px;
+        border-radius: var(--r-md);
+        background: var(--sunken);
+      }
+      .wait__name {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--heading);
+      }
+      .wait__status {
+        display: block;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .wait__status.danger {
+        color: var(--red-600);
+      }
+      .resend {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex: none;
+        min-height: 44px;
+        padding: 0 12px;
+        border-radius: var(--r-sm);
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--violet-700);
+        background: var(--surface);
+        box-shadow: inset 0 0 0 1.5px var(--violet-200);
+        transition:
+          background var(--t-fast) var(--ease),
+          color var(--t-fast) var(--ease);
+      }
+      .resend:hover {
+        background: var(--violet-50);
+      }
+      .resend:disabled {
+        color: var(--green-700);
+        background: transparent;
+        box-shadow: none;
+        cursor: default;
+      }
+      .resend .i {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Condições (preview of a public consórcio you are not in) */
+      .facts {
+        padding: 4px 16px;
+      }
+      .facts > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 46px;
+      }
+      .facts > div + div {
+        border-top: 1px solid var(--line);
+      }
+      .facts dt {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .facts dd {
+        font-size: 14.5px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--heading);
+      }
+
+      /* sheets */
+      .row__title,
+      .row__sub {
+        display: block;
+      }
+      .row__ico--wa {
+        color: var(--green-700);
+        background: var(--green-50);
+      }
+      .link-preview {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .rules {
+        display: grid;
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .rules li {
+        display: flex;
+        gap: 12px;
+        font-size: 14.5px;
+        line-height: 1.45;
+        color: var(--ink-2);
+      }
+      .rules strong {
+        color: var(--ink);
+      }
+      .rules .row__ico {
+        width: 36px;
+        height: 36px;
+      }
+      .option .brand {
+        width: 50px;
+        height: 34px;
+      }
+      .section-head .link {
+        min-height: 44px;
+        margin: -6px 0;
+      }
+      .toast {
+        width: max-content;
+      }
+    </style>
+  </head>
+  <body data-status="light">
+    <div class="app">
+      <main class="screen screen--flush" id="main"></main>
+
+      <div class="bottom-bar" id="bottom" hidden></div>
+
+      <!-- "…" options -->
+      <div class="sheet" id="opcoes" role="dialog" aria-modal="true" aria-labelledby="opcoes-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="opcoes-h">Opções</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <div class="list list--divided mt-12" id="opcoes-list"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- Indicar para amigos -->
+      <div class="sheet" id="share" role="dialog" aria-modal="true" aria-labelledby="share-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="share-h">Indicar para amigos</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <p class="muted t-body2" id="share-sub"></p>
+        <div class="list list--divided mt-16">
+          <button class="row" type="button" data-channel="whatsapp">
+            <span class="row__ico row__ico--wa"><span data-icon="whatsapp"></span></span>
+            <span class="row__main"><span class="row__title">WhatsApp</span><span class="row__sub">Mande o convite numa conversa</span></span>
+            <span data-icon="chevron-right" class="chev"></span>
+          </button>
+          <button class="row" type="button" data-channel="copy">
+            <span class="row__ico"><span data-icon="link"></span></span>
+            <span class="row__main"><span class="row__title">Copiar link</span><span class="row__sub link-preview" id="share-link"></span></span>
+            <span data-icon="copy" class="chev"></span>
+          </button>
+        </div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- Regras -->
+      <div class="sheet" id="regras" role="dialog" aria-modal="true" aria-labelledby="regras-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="regras-h">Regras do consórcio</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <ul class="rules" id="regras-list"></ul>
+        <button class="btn mt-24" type="button" data-sheet-close>Entendi</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- Trocar forma de pagamento -->
+      <div class="sheet" id="pagamento" role="dialog" aria-modal="true" aria-labelledby="pagamento-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="pagamento-h">Forma de pagamento</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <p class="muted t-body2" id="pagamento-sub"></p>
+        <div class="options mt-16" role="radiogroup" aria-labelledby="pagamento-h" id="cards"></div>
+        <button class="btn btn--outline mt-12" type="button" id="add-card"><span data-icon="plus"></span>Adicionar cartão</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const { fmt, esc } = FB;
+        FB.icons['link'] =
+          '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>';
+        FB.icons['book-open'] =
+          '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>';
+
+        const params = new URLSearchParams(location.search);
+        const id = params.get('id');
+        const enc = encodeURIComponent;
+        const main = document.getElementById('main');
+        const D = (x) => (x == null ? null : x instanceof Date ? x : new Date(x));
+        const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        const brandName = (k) => (k.brand === 'master' ? 'Master' : 'Visa');
+        const brandLogo = (k) =>
+          k.brand === 'master'
+            ? `<span class="brand"><img src="assets/img/mastercard.png" alt="" width="38" height="31" /></span>`
+            : `<span class="brand"><span class="visa">VISA</span></span>`;
+        /* scroll the screen only: scrollIntoView would also move the page that embeds the prototype */
+        const scrollToEl = (el, behavior = 'auto') =>
+          main.scrollTo({ top: main.scrollTop + el.getBoundingClientRect().top - main.getBoundingClientRect().top - 56, behavior });
+
+        const raw = id ? FB.get(id) : null;
+        if (!raw) {
+          /* Unknown id: friendly dead end with a way back */
+          document.body.removeAttribute('data-status');
+          main.className = 'screen';
+          main.innerHTML = `
+            <div class="topbar"><a class="icon-btn" href="consorcios.html" data-back aria-label="Voltar">${FB.icon('arrow-left')}</a></div>
+            <div class="empty rise" style="margin-top: 40px">
+              <div class="empty__art" data-art="empty"></div>
+              <h1 class="t-h2">Consórcio não encontrado</h1>
+              <p class="t-body2">O link pode estar incompleto ou o consórcio já foi encerrado.</p>
+              <a class="btn btn--sm mt-8" href="consorcios.html">Ver meus consórcios</a>
+            </div>`;
+          return;
+        }
+
+        const c = { ...raw, start: D(raw.start), nextDraw: D(raw.nextDraw), winners: (raw.winners || []).map((w) => ({ ...w, date: D(w.date) })) };
+        const admin = c.role === 'admin';
+        const forming = c.status === 'forming';
+        const preview = !c.role; // public consórcio you are not in (opened from a shared link)
+        const joined = (FB.store.get('joined', []) || []).includes(c.id);
+        const added = c.role === 'member' && !c.members.includes(FB.me);
+        const members = added ? [FB.me, ...c.members] : c.members.slice();
+        const total = (c.memberCount || c.members.length) + (added ? 1 : 0);
+        const pot = c.pot != null ? c.pot : c.prize;
+        const href = (page, hash = '') => `${page}?id=${enc(c.id)}${hash}`;
+        document.title = `${c.name} · Finby`;
+
+        /* ---------- Header ---------- */
+        const money = (v) => `<span class="sr-only">${fmt.brl(v)}</span><span aria-hidden="true">${FB.money(v)}</span>`;
+        const topbar = `<div class="topbar">
+            <a class="icon-btn" href="consorcios.html" data-back aria-label="Voltar">${FB.icon('arrow-left')}</a>
+            <button class="icon-btn" type="button" id="more" aria-haspopup="dialog" aria-controls="opcoes" aria-label="Mais opções">${FB.icon('more')}</button>
+          </div>`;
+        let hero;
+        if (admin && forming) {
+          const left = c.months - c.members.length;
+          const pct = Math.round((c.members.length / c.months) * 100);
+          hero = `<header class="hero theme-${c.theme} hero--admin">
+            ${topbar}
+            <div class="hero__body">
+              <h1 class="hero__name rise">${esc(c.name)}</h1>
+              <p class="hero__pot pop" style="--d:1">${money(pot)}</p>
+              <p class="hero__note rise" style="--d:2">Seu saldo vai render 100% do CDI</p>
+              <div class="collapse${params.get('hero') === 'closed' ? ' is-closed' : ''}" id="hero-more">
+                <div class="collapse__inner">
+                  <div class="hero__rule"></div>
+                  <p class="hero__label rise" style="--d:3">Início do consórcio</p>
+                  <p class="hero__start rise" style="--d:3">${fmt.long(c.start)}</p>
+                  <p class="hero__left rise" style="--d:4">${left > 0 ? (left === 1 ? 'Falta 1 participante' : `Faltam ${left} participantes`) : 'Grupo completo!'}</p>
+                  <div class="hero__fill rise" style="--d:4">
+                    <div class="meter" role="progressbar" aria-label="Participantes confirmados" aria-valuemin="0" aria-valuemax="${c.months}" aria-valuenow="${c.members.length}"><div class="meter__bar" data-p="${pct}%"></div></div>
+                    <span>${c.members.length} de ${c.months} confirmados</span>
+                  </div>
+                </div>
+              </div>
+              <button class="hero__toggle" type="button" id="hero-toggle" aria-controls="hero-more" aria-expanded="true">${FB.icon('chevron-up')}<span class="sr-only">Detalhes do início</span></button>
+            </div>
+          </header>`;
+        } else {
+          hero = `<header class="hero theme-${c.theme} hero--center">
+            ${topbar}
+            <div class="hero__body">
+              <h1 class="hero__name rise">${esc(c.name)}</h1>
+              <p class="hero__pot pop" style="--d:1">${money(pot)}</p>
+              <p class="hero__yield rise" style="--d:2">${FB.icon('trend-up', 'i--sm')}<span>${preview ? 'O saldo do grupo rende' : 'Seu saldo está rendendo'} <strong>100% do CDI</strong></span></p>
+            </div>
+          </header>`;
+        }
+        const band = `<p class="band rise" style="--d:3">${FB.icon('gift')}<span>Prêmio <span class="num">${fmt.brl(c.prize)}</span></span></p>`;
+
+        /* ---------- Blocks ---------- */
+        const won = new Set(c.winners.map((w) => w.id));
+        let d = 4;
+        const sec = (label, id, body, link = '', extra = '') =>
+          `<section class="rise" style="--d:${d++}" aria-labelledby="${id}-h"${extra}>
+            <div class="section-head"><h2 id="${id}-h">${label}</h2>${link}</div>
+            ${body}
+          </section>`;
+        const levelText = (lv) => (lv ? `<span class="lvl">${FB.crown(lv)}${FB.LEVELS[lv]}</span>` : `<span class="lvl" aria-label="Sem nível ainda">—</span>`);
+
+        /* Participantes: avatar rail with names; green ring = already received the prize */
+        function peopleRail() {
+          const list = members.includes(FB.me) ? [FB.me, ...members.filter((m) => m !== FB.me)] : members;
+          const extra = total - list.length;
+          const items = list.map((pid) => {
+            const p = FB.person(pid);
+            const me = pid === FB.me;
+            const label = [me ? 'Você' : p.name, p.level ? `nível ${FB.LEVELS[p.level]}` : '', won.has(pid) ? 'já recebeu o prêmio' : ''].filter(Boolean).join(', ');
+            return `<li class="person${won.has(pid) ? ' is-won' : ''}">${FB.avatar(pid, { size: 'lg', crown: true })}<span class="person__name" aria-hidden="true">${me ? 'Você' : esc(FB.first(pid))}</span><span class="sr-only">${esc(label)}</span></li>`;
+          });
+          if (extra > 0)
+            items.push(
+              `<li><a class="person" href="${href('participantes.html')}"><span class="av av--lg more-bubble">+${extra}</span><span class="person__name">Ver todos</span></a></li>`
+            );
+          return (
+            `<ul class="people">${items.join('')}</ul>` +
+            (won.size ? `<p class="legend"><span class="legend__dot" aria-hidden="true"></span>Já receberam o prêmio</p>` : '')
+          );
+        }
+
+        /* Participantes: rows with level (admin) */
+        function memberRows() {
+          return `<ul class="rows">${c.members
+            .slice(0, 5)
+            .map((pid) => {
+              const p = FB.person(pid);
+              return `<li class="member">${FB.avatar(pid)}<span class="member__name">${esc(p.name)}${pid === FB.me ? ' <span class="you">(Você)</span>' : ''}</span>${FB.levelChip(p.level)}</li>`;
+            })
+            .join('')}</ul>`;
+        }
+
+        /* Próximo sorteio */
+        function drawCard() {
+          const random = c.draw === 'random';
+          let foot = random ? 'Sorteio aleatório entre quem ainda não recebeu' : 'Segue a ordem combinada pelo grupo';
+          if (!random && c.order && c.order.length) {
+            const next = c.order.find((x) => !won.has(x));
+            if (next) foot = `Próximo da ordem: <strong>${next === FB.me ? 'você' : esc(FB.person(next).name)}</strong>`;
+          }
+          return `<section class="card draw rise" style="--d:${d++}" aria-labelledby="draw-h">
+            <div class="draw__main">
+              <span class="draw__ico" title="${random ? 'Aleatório' : 'Predefinido'}">${FB.icon(random ? 'shuffle' : 'list-ordered')}</span>
+              <div class="grow">
+                <h2 class="draw__title" id="draw-h">Próximo sorteio</h2>
+                <p class="draw__sub">Prêmio <span aria-hidden="true">|</span> <strong>${fmt.brl(c.prize)}</strong></p>
+              </div>
+              <p class="draw__date"><span>${cap(fmt.weekday(c.nextDraw))}</span><strong>${fmt.long(c.nextDraw)}</strong></p>
+            </div>
+            <div class="draw__foot"><span>${foot}</span><span class="pill">${FB.icon('clock', 'i--xs')}${fmt.until(c.nextDraw)}</span></div>
+          </section>`;
+        }
+
+        /* Forma de pagamento + parcel progress */
+        let payId = FB.store.get('payment:' + c.id) || c.payment || FB.user.cards[0].id;
+        const methodHTML = () => {
+          const k = FB.cardOf(payId);
+          return `${brandLogo(k)}<p class="grow"><span class="pay__name">${brandName(k)}</span><span class="pay__sub">Final ${k.last4}</span></p>`;
+        };
+        function payCard() {
+          const paid = joined ? 0 : c.paid || 0;
+          const rest = c.months - paid;
+          const due = /^todo/i.test(c.due) ? c.due : `No ${c.due}`;
+          return `<div class="card pay">
+              <div class="pay__method">
+                <div class="hstack grow" id="pay-method" aria-live="polite" style="--gap:14px">${methodHTML()}</div>
+                <button class="link pay__change" type="button" id="pay-change" aria-haspopup="dialog" aria-controls="pagamento">Trocar<span class="sr-only"> forma de pagamento</span></button>
+              </div>
+              <div class="pay__parcel">
+                <div class="spread">
+                  <p class="pay__title">${paid ? `Parcela ${paid} de ${c.months}` : 'Nenhuma parcela paga ainda'}</p>
+                  <p class="pay__amount">${fmt.brl(c.installment)}<span>/mês</span></p>
+                </div>
+                <div class="meter meter--violet" role="progressbar" aria-label="Parcelas pagas" aria-valuemin="0" aria-valuemax="${c.months}" aria-valuenow="${paid}"><div class="meter__bar" data-p="${Math.round((paid / c.months) * 100)}%"></div></div>
+                <p class="pay__note">${due} · ${rest > 0 ? (rest === 1 ? 'falta 1 parcela' : `faltam ${rest} parcelas`) : 'tudo pago'}</p>
+              </div>
+            </div>`;
+        }
+
+        /* Contemplados anteriores */
+        function winners() {
+          if (!c.winners.length)
+            return `<p class="note">Ninguém recebeu o prêmio ainda. O primeiro sorteio é ${fmt.until(c.nextDraw)}, ${fmt.long(c.nextDraw)}.</p>`;
+          return `<ul class="list">${c.winners
+            .map((w, i) => {
+              const p = FB.person(w.id);
+              return `<li class="won${i === 0 ? ' won--last' : ''}">${FB.avatar(w.id)}
+                <p class="grow"><span class="won__name">${w.id === FB.me ? 'Você' : esc(p.name)}</span><span class="won__date">${fmt.longYear(w.date)}</span></p>
+                <p class="won__amount">${fmt.brl(w.amount)}</p>
+              </li>`;
+            })
+            .join('')}</ul>`;
+        }
+
+        /* Ordem dos premiados (admin) */
+        function orderList() {
+          const waitingIds = new Set((c.waiting || []).map((w) => w.id));
+          const order = c.order && c.order.length ? c.order : [...c.members, ...waitingIds];
+          return `<ol class="card order">${order
+            .map((pid, i) => {
+              const p = FB.person(pid);
+              const me = pid === FB.me;
+              const wait = waitingIds.has(pid) ? `${FB.icon('hourglass', 'i--xs')}<span class="sr-only">, convite pendente</span>` : '';
+              return `<li${me ? ' class="is-me"' : ''}><span class="order__n">${i + 1}º</span><span class="order__name">${esc(p.name)}${me ? ' (Você)' : ''}${wait}</span>${levelText(p.level)}</li>`;
+            })
+            .join('')}</ol>`;
+        }
+
+        /* Aguardando (admin) */
+        function waitingRows() {
+          const w = (c.waiting || []).slice(0, 3);
+          if (!w.length) return `<p class="note">Todo mundo que você convidou já aceitou. 🎉</p>`;
+          return `<ul class="rows">${w
+            .map((x) => {
+              const p = FB.person(x.id);
+              const signup = x.pending === 'signup';
+              return `<li class="wait">${FB.avatar(x.id)}
+                <p class="grow" style="min-width:0"><span class="wait__name">${esc(p.name)}</span><span class="wait__status${signup ? ' danger' : ''}">${signup ? 'Cadastro pendente' : 'Aceite pendente'}</span></p>
+                <button class="resend" type="button" data-resend="${esc(x.id)}">${FB.icon('send')}<span>Reenviar convite</span></button>
+              </li>`;
+            })
+            .join('')}</ul>`;
+        }
+
+        /* Condições (preview) */
+        function facts() {
+          return `<dl class="card facts">${[
+            ['Parcela mensal', fmt.brl(c.installment)],
+            ['Duração', fmt.plural(c.months, 'mês', 'meses')],
+            ['Nível mínimo', FB.levelChip(c.minLevel)],
+            ['Vagas', fmt.plural(c.spots || 0, 'vaga', 'vagas')],
+          ]
+            .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)
+            .join('')}</dl>`;
+        }
+
+        /* ---------- Compose ---------- */
+        const ver = (h, label = 'Ver todos') => `<a class="link" href="${h}">${label}</a>`;
+        let body = '';
+        if (admin && forming) {
+          body += sec(`Participantes <span class="count">${c.members.length} de ${c.months}</span>`, 'ppl', memberRows(), ver(href('participantes.html')));
+          body += drawCard();
+          body += sec('Ordem dos premiados', 'ord', orderList(), `<a class="link" href="${href('ordem.html')}">${FB.icon('pencil')}Editar</a>`);
+          body += sec(
+            `Aguardando <span class="count">${(c.waiting || []).length}</span>`,
+            'wait',
+            waitingRows(),
+            (c.waiting || []).length ? ver(href('participantes.html', '#aguardando')) : ''
+          );
+        } else {
+          body += sec(`Participantes <span class="count">${total}</span>`, 'ppl', peopleRail(), ver(href('participantes.html')));
+          body += drawCard();
+          if (preview) {
+            body += sec('Condições', 'cond', facts());
+          } else {
+            body += sec('Forma de pagamento', 'pay', payCard());
+          }
+          if (!preview || c.winners.length) body += sec('Contemplados anteriores', 'won', winners(), '', ' id="contemplados"');
+        }
+        main.innerHTML = hero + band + `<div class="pad">${body}</div>`;
+
+        if (preview) {
+          const bottom = document.getElementById('bottom');
+          bottom.innerHTML = `<a class="btn" href="consorcios.html?tab=descubra&amp;join=${enc(c.id)}">${FB.icon('user-plus')}Participar</a>`;
+          bottom.hidden = false;
+        }
+
+        /* meters fill in after the entry animation starts */
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => main.querySelectorAll('.meter__bar[data-p]').forEach((b) => b.style.setProperty('--p', b.dataset.p)))
+        );
+
+        /* status bar backing once the header has scrolled away */
+        const heroEl = main.querySelector('.hero');
+        main.addEventListener('scroll', () => document.body.classList.toggle('is-scrolled', main.scrollTop > heroEl.offsetHeight - 50), { passive: true });
+
+        /* ---------- Collapsible header (admin) ---------- */
+        const toggle = document.getElementById('hero-toggle');
+        if (toggle) {
+          const box = document.getElementById('hero-more');
+          const set = (open) => {
+            box.classList.toggle('is-closed', !open);
+            box.firstElementChild.setAttribute('aria-hidden', !open);
+            toggle.setAttribute('aria-expanded', open);
+          };
+          set(!box.classList.contains('is-closed'));
+          toggle.addEventListener('click', () => set(toggle.getAttribute('aria-expanded') !== 'true'));
+        }
+
+        /* ---------- Reenviar convite ---------- */
+        main.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-resend]');
+          if (!b) return;
+          b.disabled = true;
+          b.innerHTML = `${FB.icon('check')}<span>Enviado</span>`;
+          FB.toast(`Convite reenviado para ${FB.first(b.dataset.resend)}`, 'send');
+        });
+
+        /* ---------- Sheets ---------- */
+        const $ = (s) => document.getElementById(s);
+        const sheets = { opcoes: $('opcoes'), share: $('share'), regras: $('regras'), pagamento: $('pagamento') };
+        const link = new URL(href('consorcio.html'), location.href).href;
+        const chain = (name, opener) => {
+          FB.sheet.close(sheets.opcoes);
+          setTimeout(() => FB.sheet.open(sheets[name], opener || $('more')), 200);
+        };
+        async function copyLink() {
+          try {
+            await navigator.clipboard.writeText(link);
+          } catch (err) {}
+          FB.toast('Link copiado');
+        }
+
+        /* "…" options */
+        $('opcoes-h').textContent = c.name;
+        const opt = (act, ico, label, sub = '') =>
+          `<button class="row" type="button" data-act="${act}"><span class="row__ico">${FB.icon(ico)}</span><span class="row__main"><span class="row__title">${label}</span>${sub ? `<span class="row__sub">${sub}</span>` : ''}</span>${FB.icon('chevron-right', 'chev')}</button>`;
+        $('opcoes-list').innerHTML =
+          opt('share', 'user-plus', 'Indicar para amigos', 'WhatsApp ou link') +
+          opt('copy', 'link', 'Copiar link') +
+          opt('rules', 'book-open', 'Ver regras') +
+          (admin
+            ? `<a class="row" href="${href('ordem.html')}"><span class="row__ico">${FB.icon('list-ordered')}</span><span class="row__main"><span class="row__title">Editar ordem</span><span class="row__sub">Quem recebe o prêmio em cada mês</span></span>${FB.icon('chevron-right', 'chev')}</a>`
+            : '');
+        $('more').addEventListener('click', (e) => FB.sheet.open(sheets.opcoes, e.currentTarget));
+        $('opcoes-list').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-act]');
+          if (!b) return;
+          if (b.dataset.act === 'copy') {
+            FB.sheet.close(sheets.opcoes);
+            return copyLink();
+          }
+          chain(b.dataset.act === 'share' ? 'share' : 'regras');
+        });
+
+        /* Indicar para amigos */
+        $('share-sub').innerHTML = `Chame quem você confia para o <strong>${esc(c.name)}</strong>.`;
+        $('share-link').textContent = link.replace(/^https?:\/\//, '');
+        sheets.share.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-channel]');
+          if (!b) return;
+          FB.sheet.close(sheets.share);
+          if (b.dataset.channel === 'copy') copyLink();
+          else FB.toast(`Convite de ${c.name} enviado pelo WhatsApp`, 'whatsapp');
+        });
+
+        /* Regras */
+        const random = c.draw === 'random';
+        const dueText = /^todo/i.test(c.due) ? c.due.toLowerCase() : `no ${c.due}`;
+        $('regras-list').innerHTML = [
+          ['calendar', `Cada pessoa paga <strong>${fmt.brl(c.installment)} por mês</strong>, ${esc(dueText)}, durante ${fmt.plural(c.months, 'mês', 'meses')}.`],
+          random
+            ? ['shuffle', `Todo mês um <strong>sorteio aleatório</strong> escolhe quem recebe o prêmio de ${fmt.brl(c.prize)}. Quem já recebeu não entra de novo.`]
+            : ['list-ordered', `O prêmio de ${fmt.brl(c.prize)} segue uma <strong>ordem predefinida</strong>. O administrador pode ajustá-la antes do início.`],
+          ['trend-up', `Enquanto espera, o dinheiro do grupo <strong>rende 100% do CDI</strong>.`],
+          ['crown', `Pagar em dia mantém seu <strong>nível</strong> (Gold, Silver ou Bronze). Atrasos fazem o nível cair.`],
+          ['shield-check', `Quem já recebeu continua pagando até o fim. No final, <strong>todo mundo é contemplado uma vez</strong>.`],
+        ]
+          .map(([ico, t]) => `<li><span class="row__ico">${FB.icon(ico, 'i--sm')}</span><p>${t}</p></li>`)
+          .join('');
+
+        /* Trocar forma de pagamento: radio group of the user's cards, saved per consórcio */
+        const cardsEl = $('cards');
+        $('pagamento-sub').innerHTML = `As parcelas de <strong>${esc(c.name)}</strong> são cobradas neste cartão.`;
+        function renderCards() {
+          cardsEl.innerHTML = FB.user.cards
+            .map((k) => {
+              const on = k.id === payId;
+              return `<button class="option" type="button" role="radio" aria-checked="${on}" tabindex="${on ? 0 : -1}" data-card="${k.id}">
+                ${brandLogo(k)}
+                <span class="option__body"><span class="option__title">${brandName(k)}</span><span class="option__desc">Crédito · final ${k.last4}</span></span>
+                <span class="radio" aria-hidden="true"></span>
+              </button>`;
+            })
+            .join('');
+        }
+        function choose(cid) {
+          if (cid === payId) return FB.sheet.close(sheets.pagamento);
+          payId = cid;
+          FB.store.set('payment:' + c.id, cid);
+          renderCards();
+          cardsEl.querySelector(`[data-card="${cid}"]`).focus();
+          const m = $('pay-method');
+          if (m) m.innerHTML = methodHTML();
+          const k = FB.cardOf(cid);
+          setTimeout(() => {
+            FB.sheet.close(sheets.pagamento);
+            FB.toast(`Pagamento alterado para ${brandName(k)} final ${k.last4}`);
+          }, 280);
+        }
+        renderCards();
+        cardsEl.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-card]');
+          if (b) choose(b.dataset.card);
+        });
+        cardsEl.addEventListener('keydown', (e) => {
+          const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+          if (!(e.key in keys)) return;
+          e.preventDefault();
+          const ids = FB.user.cards.map((k) => k.id);
+          const i = ids.indexOf(e.target.closest('[data-card]').dataset.card);
+          const next = ids[(i + keys[e.key] + ids.length) % ids.length];
+          payId = next;
+          FB.store.set('payment:' + c.id, next);
+          renderCards();
+          cardsEl.querySelector(`[data-card="${next}"]`).focus();
+          const m = $('pay-method');
+          if (m) m.innerHTML = methodHTML();
+        });
+        $('add-card').addEventListener('click', () => FB.toast('Em breve: adicionar cartão', 'info'));
+        const change = $('pay-change');
+        if (change) change.addEventListener('click', (e) => FB.sheet.open(sheets.pagamento, e.currentTarget));
+
+        /* ---------- Deep links: #opcoes #indicar #regras #pagamento #contemplados ---------- */
+        const hash = location.hash.slice(1).split(/[&?]/)[0];
+        const map = { opcoes: 'opcoes', indicar: 'share', regras: 'regras', pagamento: 'pagamento' };
+        if (map[hash] && (hash !== 'pagamento' || change)) {
+          setTimeout(() => FB.sheet.open(sheets[map[hash]], $('more')), 300);
+          history.replaceState(null, '', location.pathname + location.search);
+        }
+        if (hash === 'contemplados' && $('contemplados')) {
+          requestAnimationFrame(() => scrollToEl($('contemplados')));
+        }
+      })();
+    </script>
+  </body>
+</html>

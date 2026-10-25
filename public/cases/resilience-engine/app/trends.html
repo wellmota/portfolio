@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#99d7db" />
+    <title>Productivity &amp; Wellbeing · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: home screen 848:15857 (Productivity & Wellbeing), sheets 848:15936 / 848:16026,
+         multi-line chart style from Data Inputs 848:16137 / 848:16575 */
+
+      /* Teal header: back link + two-line title */
+      .pw-hero {
+        padding: 0 var(--gutter) 29px;
+      }
+      .pw-hero .back {
+        margin-top: -2px;
+      }
+      .pw-hero .h1 {
+        margin-top: 6px;
+        padding: 0 8px;
+        text-wrap: wrap; /* Figma breaks after the ampersand */
+      }
+
+      /* Controls: segmented period + two dropdowns */
+      .controls {
+        display: grid;
+        gap: 8px;
+        margin-top: 11px;
+      }
+      .seg button {
+        color: #767676; /* Figma Gray 3 (#828282), nudged to 4.5:1 on white */
+      }
+      .seg button:not([aria-pressed='true']):hover {
+        color: var(--ink);
+      }
+      .dd-row {
+        padding: 0 8px;
+      }
+      .dd {
+        min-height: 44px;
+        margin: -4px -8px;
+        white-space: nowrap;
+      }
+      .dd:first-child {
+        flex: none;
+      }
+      .dd:last-child {
+        min-width: 0;
+      }
+      .dd > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .dd img {
+        flex: none;
+      }
+      .dd[aria-disabled='true'] {
+        color: var(--ink-3);
+        cursor: default;
+      }
+      .dd[aria-disabled='true'] img {
+        opacity: 0;
+      }
+
+      /* Chart cards */
+      .graphs {
+        display: grid;
+        gap: 16px;
+        margin-top: 16px;
+      }
+      .chart-card {
+        padding: 8px;
+        border-radius: 10px;
+        box-shadow: 0 15px 20px #edeefb;
+      }
+      .chart-card[hidden] {
+        display: none;
+      }
+      .chart-card__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px;
+      }
+      .chart-card__title {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.5;
+        color: var(--ink);
+      }
+      .chart-card .text-link {
+        min-height: 32px;
+        margin: -6px -4px;
+        padding: 0 4px;
+        letter-spacing: 0.012em;
+      }
+      .chart {
+        display: block;
+        width: 100%;
+        max-width: 311px;
+        height: auto;
+        margin: 0 auto;
+        overflow: visible;
+      }
+      .chart .ax {
+        fill: var(--ink-3);
+        font-family: var(--font);
+      }
+      .chart .ln {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        transition: stroke-dashoffset 1100ms var(--ease);
+      }
+      .chart .dots {
+        opacity: 0;
+        transition: opacity 400ms var(--ease) 650ms;
+      }
+      .chart.is-drawn .ln {
+        stroke-dashoffset: 0;
+      }
+      .chart.is-drawn .dots {
+        opacity: 1;
+      }
+
+      /* Legend: 33×3 line over the label */
+      .legend {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 8px;
+      }
+      .legend--3 {
+        padding: 8px 40px;
+      }
+      .legend--1 {
+        justify-content: center;
+      }
+      .legend li {
+        display: grid;
+        justify-items: center;
+        gap: 1px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--deep);
+        white-space: nowrap;
+      }
+      .legend li::before {
+        content: '';
+        width: 33px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--c);
+      }
+
+      /* Bottom sheets (Figma: dimmed, blurred backdrop) */
+      .sheet-backdrop {
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8.5px);
+        -webkit-backdrop-filter: blur(8.5px);
+      }
+      .sheet {
+        visibility: hidden;
+        transition:
+          transform 380ms var(--ease),
+          visibility 0s linear 380ms;
+      }
+      .sheet.is-open {
+        visibility: visible;
+        transition:
+          transform 380ms var(--ease),
+          visibility 0s;
+      }
+      .sheet .btn--select {
+        width: calc(100% + 32px);
+        margin: 0 -16px;
+        box-shadow: none;
+      }
+
+      /* Period picker (848:15936): Last week · This week · Custom */
+      .picker {
+        gap: 8px;
+        margin: 56px calc(var(--gutter) * -1) 40px;
+      }
+      .picker button {
+        min-height: 42px;
+        font-size: 20px;
+        line-height: 1.3;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+      .picker button[aria-checked='true'] {
+        font-weight: 700;
+      }
+      .picker button:focus-visible {
+        outline-offset: -3px;
+      }
+
+      /* Key areas sheet (848:16026): Productivity | Wellbeing tabs, radio list */
+      .ka-tabs {
+        margin: 0 calc(var(--gutter) * -1);
+        border-bottom-color: #d9d9d9;
+      }
+      .ka-tabs button {
+        min-height: 52px;
+        letter-spacing: 0.012em;
+      }
+      .ka-tabs button[aria-selected='true']::after {
+        height: 2px;
+      }
+      .ka-panel {
+        display: grid;
+        gap: 8px;
+        margin: 28px 0 32px;
+      }
+      .ka-panel[hidden] {
+        display: none;
+      }
+      .ka-radio {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 48px;
+        padding: 8px 8px 8px 24px;
+        border-radius: var(--r-md);
+        font-size: 20px;
+        line-height: 1.3;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+        text-align: left;
+      }
+      .ka-radio[aria-checked='true'] {
+        font-weight: 700;
+      }
+      .ka-box {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        flex: none;
+      }
+      .ka-box img {
+        position: absolute;
+        inset: 0;
+      }
+      .ka-radio .ka-on,
+      .ka-radio[aria-checked='true'] .ka-off {
+        opacity: 0;
+      }
+      .ka-radio[aria-checked='true'] .ka-on {
+        opacity: 1;
+      }
+      .ka-box img {
+        transition: opacity var(--t-fast) var(--ease);
+      }
+    </style>
+  </head>
+  <body data-tab="reports" style="--status-bg: var(--water)">
+    <div class="app">
+      <main class="screen screen--flush" id="main">
+        <header class="hero hero--teal pw-hero">
+          <div class="wash" data-wash="water" data-hills="36" aria-hidden="true"></div>
+          <a class="back rise" href="home.html" data-back><span class="long-arrow" aria-hidden="true"></span>Home</a>
+          <h1 class="h1 rise" style="--d: 1">Productivity &amp; Wellbeing</h1>
+        </header>
+
+        <div class="pad">
+          <div class="controls rise" style="--d: 2">
+            <div class="seg" role="group" aria-label="Period" data-seg>
+              <button type="button" data-period="weekly" aria-pressed="true">Weekly</button>
+              <button type="button" data-period="monthly" aria-pressed="false">Monthly</button>
+              <button type="button" data-period="yearly" aria-pressed="false">Yearly</button>
+              <button type="button" data-period="all" aria-pressed="false">All</button>
+            </div>
+            <div class="dd-row">
+              <button class="dd" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet-range" data-open="sheet-range">
+                <span data-range-label>This week</span>
+                <img src="assets/fig/icon-arrow-down.svg" width="18" height="18" alt="" />
+              </button>
+              <button class="dd" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet-areas" data-open="sheet-areas">
+                <span>Key areas: <span data-area-label>All</span></span>
+                <img src="assets/fig/icon-arrow-down.svg" width="18" height="18" alt="" />
+              </button>
+            </div>
+          </div>
+
+          <div class="graphs" data-graphs></div>
+          <p class="sr-only" role="status" data-live></p>
+        </div>
+      </main>
+
+      <!-- Period sheet -->
+      <div class="sheet" id="sheet-range" role="dialog" aria-modal="true" aria-labelledby="sheet-range-t">
+        <h2 class="sr-only" id="sheet-range-t">Time range</h2>
+        <div class="picker" role="radiogroup" aria-labelledby="sheet-range-t" data-range-group></div>
+        <button class="btn btn--primary btn--select" type="button" data-range-apply>Select</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- Key areas sheet -->
+      <div class="sheet" id="sheet-areas" role="dialog" aria-modal="true" aria-labelledby="sheet-areas-t">
+        <h2 class="sr-only" id="sheet-areas-t">Key areas</h2>
+        <div class="utabs ka-tabs" role="tablist" aria-label="Key area group" data-ka-tabs>
+          <button type="button" role="tab" id="ka-tab-productivity" aria-controls="ka-panel-productivity" aria-selected="true" data-group="productivity">Productivity</button>
+          <button type="button" role="tab" id="ka-tab-wellbeing" aria-controls="ka-panel-wellbeing" aria-selected="false" tabindex="-1" data-group="wellbeing">Wellbeing</button>
+        </div>
+        <div class="ka-panel" id="ka-panel-productivity" role="tabpanel" aria-labelledby="ka-tab-productivity" data-panel="productivity">
+          <div class="radio-list" role="radiogroup" aria-label="Productivity key areas" data-ka-group></div>
+        </div>
+        <div class="ka-panel" id="ka-panel-wellbeing" role="tabpanel" aria-labelledby="ka-tab-wellbeing" data-panel="wellbeing" hidden>
+          <div class="radio-list" role="radiogroup" aria-label="Wellbeing key areas" data-ka-group></div>
+        </div>
+        <button class="btn btn--primary btn--select" type="button" data-area-apply>Select</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        /* ---------- State (deep-linkable: ?period=monthly&range=last&area=capacity) ---------- */
+        const qs = new URLSearchParams(location.search);
+        const PERIODS = ['weekly', 'monthly', 'yearly', 'all'];
+        const UNIT = { weekly: 'week', monthly: 'month', yearly: 'year' };
+        const state = {
+          period: PERIODS.includes(qs.get('period')) ? qs.get('period') : 'weekly',
+          range: qs.get('range') === 'last' ? 'last' : 'this',
+          area: RD.area(qs.get('area')) ? qs.get('area') : 'all',
+        };
+
+        /* Series colours and weights from the Figma charts */
+        const COLOR = {
+          demand: '#A1A3F6', capacity: '#B168A1', energy: '#5EBED0',
+          sleep: '#A1A3F6', stress: '#B168A1', wellbeing: '#5EBED0', content: '#868B92',
+        };
+        const DOT = { demand: '#BDBFF9', sleep: '#BDBFF9' };
+        const GROUPS = ['productivity', 'wellbeing'];
+        const groupAreas = (g) => RD.AREAS.filter((a) => a.group === g);
+        /* pathway.html has four pathways: sleep, energy, content, dvc */
+        const PATHWAY = { demand: 'dvc', capacity: 'dvc', energy: 'energy', sleep: 'sleep', stress: 'dvc', wellbeing: 'content', content: 'content' };
+        const pathwayHref = (g) =>
+          'pathway.html?id=' + (state.area !== 'all' ? PATHWAY[state.area] : g === 'productivity' ? 'dvc' : 'sleep');
+
+        const $ = (s) => document.querySelector(s);
+        const graphs = $('[data-graphs]');
+        const live = $('[data-live]');
+
+        /* ---------- Data ---------- */
+        function windowDays() {
+          const n = RD.PERIODS[state.period];
+          if (state.period === 'all' || state.range === 'this') return RD.history(n);
+          return RD.history(n * 2).slice(0, n);
+        }
+        const mean = (arr) => arr.reduce((s, v) => s + v, 0) / arr.length;
+        /* One point per day for week / month; monthly buckets for year (12) and all (18) */
+        function series() {
+          const days = windowDays();
+          const keys = RD.AREAS.map((a) => a.key);
+          let points;
+          if (state.period === 'weekly') {
+            points = days.map((d) => ({ date: d.date, values: d.scores }));
+          } else if (state.period === 'monthly') {
+            // 30 daily check-ins read as a trend: centred 3-day average (as the Figma month view)
+            points = days.map((d, i) => {
+              const win = days.slice(Math.max(0, i - 1), i + 2);
+              const values = {};
+              keys.forEach((k) => (values[k] = mean(win.map((x) => x.scores[k]))));
+              return { date: d.date, values };
+            });
+          } else {
+            const n = state.period === 'yearly' ? 12 : 18;
+            const size = days.length / n;
+            points = Array.from({ length: n }, (_, i) => {
+              const chunk = days.slice(Math.round(i * size), Math.round((i + 1) * size));
+              const values = {};
+              keys.forEach((k) => (values[k] = mean(chunk.map((d) => d.scores[k]))));
+              return { date: chunk[Math.floor(chunk.length / 2)].date, values, from: chunk[0].date, to: chunk[chunk.length - 1].date };
+            });
+          }
+          return points;
+        }
+        function tickLabel(p, i, n) {
+          if (state.period === 'weekly') return p.date.toLocaleDateString('en-GB', { weekday: 'narrow' });
+          if (state.period === 'monthly') return (n - 1 - i) % 5 === 0 ? String(p.date.getDate()) : '';
+          return p.date.toLocaleDateString('en-GB', { month: 'narrow' });
+        }
+        function rowLabel(p) {
+          if (state.period === 'weekly' || state.period === 'monthly')
+            return p.date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+          return p.date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+        }
+
+        /* ---------- Chart (SVG built from the data; geometry from Figma "chart B", 311×151) ---------- */
+        const W = 311, H = 151, X0 = 30.5, X1 = 302.5, YT = 13, YB = 117;
+        const yOf = (v) => YB - ((v - 1) / 5) * (YB - YT);
+        /* Monotone cubic (Fritsch–Carlson): smooth like the Figma curves, never overshoots 1–6 */
+        function smooth(pts) {
+          const n = pts.length;
+          if (n < 2) return '';
+          const d = [], m = [];
+          for (let i = 0; i < n - 1; i++) d.push((pts[i + 1][1] - pts[i][1]) / (pts[i + 1][0] - pts[i][0]));
+          m[0] = d[0];
+          m[n - 1] = d[n - 2];
+          for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+          for (let i = 0; i < n - 1; i++) {
+            if (d[i] === 0) { m[i] = m[i + 1] = 0; continue; }
+            const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+            if (s > 9) { const t = 3 / Math.sqrt(s); m[i] = t * a * d[i]; m[i + 1] = t * b * d[i]; }
+          }
+          let p = `M${pts[0][0].toFixed(2)} ${pts[0][1].toFixed(2)}`;
+          for (let i = 0; i < n - 1; i++) {
+            const h = (pts[i + 1][0] - pts[i][0]) / 3;
+            p += ` C${(pts[i][0] + h).toFixed(2)} ${(pts[i][1] + m[i] * h).toFixed(2)} ${(pts[i + 1][0] - h).toFixed(2)} ${(pts[i + 1][1] - m[i + 1] * h).toFixed(2)} ${pts[i + 1][0].toFixed(2)} ${pts[i + 1][1].toFixed(2)}`;
+          }
+          return p;
+        }
+        function chartSVG(points, keys, single) {
+          const n = points.length;
+          const xOf = (i) => (n === 1 ? (X0 + X1) / 2 : X0 + (i * (X1 - X0)) / (n - 1));
+          // gridlines: days + midpoints for short ranges (13 for a week, as in Figma), one per point otherwise
+          const grid = [];
+          const gN = n <= 12 ? n * 2 - 1 : n;
+          for (let i = 0; i < gN; i++) {
+            const x = X0 + (i * (X1 - X0)) / (gN - 1);
+            grid.push(`<path d="M${x.toFixed(2)} 8V121" stroke="#F2F2F2"/>`);
+          }
+          const yTicks = [6, 5, 4, 3, 2, 1]
+            .map((v) => `<text class="ax" x="4" y="${(yOf(v) + 2.9).toFixed(1)}" font-size="8" font-weight="600" text-anchor="middle">${v}</text>`)
+            .join('');
+          const xTicks = points
+            .map((p, i) => {
+              const t = tickLabel(p, i, n);
+              return t ? `<text class="ax" x="${xOf(i).toFixed(2)}" y="141.5" font-size="9" font-weight="500" text-anchor="middle" letter-spacing=".1">${t}</text>` : '';
+            })
+            .join('');
+          const big = single && n <= 12; // the Figma single-series style: thick line, hollow dots
+          /* coincident series are nudged apart by 1.5px so a hidden line stays visible */
+          const nudge = (j) => (single ? 0 : (j - (keys.length - 1) / 2) * 1.5);
+          const lines = keys
+            .map((k, j) => {
+              const pts = points.map((p, i) => [xOf(i), yOf(p.values[k]) + nudge(j)]);
+              const c = COLOR[k];
+              const sw = single ? (n <= 12 ? 4.2 : 3) : n <= 12 ? 2.2 : 1.6;
+              const op = single ? 0.7 : k === 'demand' || k === 'sleep' ? 0.9 : 1;
+              const dots = pts
+                .map(([x, y]) =>
+                  big
+                    ? `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="4.5" fill="#fff" stroke="${c}" stroke-opacity=".75" stroke-width="4"/>`
+                    : single
+                    ? `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="2.6" fill="#fff" stroke="${c}" stroke-width="2"/>`
+                    : `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${n <= 12 ? 2.5 : 1.8}" fill="${DOT[k] || c}"/>`
+                )
+                .join('');
+              return `<g><path class="ln" d="${smooth(pts)}" pathLength="1" stroke="${c}" stroke-opacity="${op}" stroke-width="${sw}"/><g class="dots">${dots}</g></g>`;
+            })
+            .join('');
+          return `<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true" focusable="false">
+            <g>${grid.join('')}</g>${yTicks}${xTicks}${lines}</svg>`;
+        }
+        function srTable(title, points, keys) {
+          const head = keys.map((k) => `<th scope="col">${RD.area(k).name}</th>`).join('');
+          const unit = state.period === 'yearly' || state.period === 'all' ? 'monthly average' : state.period === 'monthly' ? '3-day average' : 'daily score';
+          const rows = points
+            .map((p) => `<tr><th scope="row">${rowLabel(p)}</th>${keys.map((k) => `<td>${RD.fmt.score(p.values[k])}</td>`).join('')}</tr>`)
+            .join('');
+          return `<div class="sr-only" data-allow-overflow><table><caption>${title}, ${rangeText().toLowerCase()}, ${unit} out of 6</caption><thead><tr><th scope="col">${state.period === 'yearly' || state.period === 'all' ? 'Month' : 'Day'}</th>${head}</tr></thead><tbody>${rows}</tbody></table></div>`;
+        }
+
+        function render(animate = true) {
+          const points = series();
+          const html = GROUPS.map((g) => {
+            const all = groupAreas(g);
+            const single = state.area !== 'all';
+            if (single && RD.area(state.area).group !== g) return '';
+            const keys = single ? [state.area] : all.map((a) => a.key);
+            const title = RD.GROUPS[g];
+            return `<section class="card chart-card" aria-labelledby="h-${g}">
+              <div class="chart-card__head">
+                <h2 class="chart-card__title" id="h-${g}">${title}</h2>
+                <a class="text-link" href="${pathwayHref(g)}">Learn more<span class="sr-only"> about ${single ? RD.area(state.area).name : title}</span></a>
+              </div>
+              ${chartSVG(points, keys, single)}
+              ${srTable(single ? RD.area(state.area).name : title, points, keys)}
+              <ul class="legend legend--${keys.length}" aria-label="Legend">${keys
+                .map((k) => `<li style="--c:${COLOR[k]}">${RD.area(k).name}</li>`)
+                .join('')}</ul>
+            </section>`;
+          }).join('');
+          graphs.innerHTML = html;
+          const charts = graphs.querySelectorAll('.chart');
+          if (!animate) charts.forEach((c) => c.classList.add('is-drawn'));
+          else requestAnimationFrame(() => requestAnimationFrame(() => charts.forEach((c) => c.classList.add('is-drawn'))));
+        }
+
+        /* ---------- Labels, URL ---------- */
+        function rangeText(range = state.range) {
+          if (state.period === 'all') return 'All time';
+          return (range === 'last' ? 'Last ' : 'This ') + UNIT[state.period];
+        }
+        function sync() {
+          document.querySelectorAll('[data-period]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.period === state.period)));
+          $('[data-range-label]').textContent = rangeText();
+          const rangeBtn = $('[data-open="sheet-range"]');
+          rangeBtn.setAttribute('aria-disabled', String(state.period === 'all'));
+          $('[data-area-label]').textContent = state.area === 'all' ? 'All' : RD.area(state.area).name;
+          const p = new URLSearchParams();
+          if (state.period !== 'weekly') p.set('period', state.period);
+          if (state.range !== 'this' && state.period !== 'all') p.set('range', state.range);
+          if (state.area !== 'all') p.set('area', state.area);
+          const q = p.toString();
+          history.replaceState(null, '', location.pathname + (q ? '?' + q : ''));
+        }
+        function announce() {
+          live.textContent = `Showing ${state.area === 'all' ? 'all key areas' : RD.area(state.area).name}, ${rangeText().toLowerCase()}.`;
+        }
+
+        /* ---------- Segmented period ---------- */
+        $('[data-seg]').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-period]');
+          if (!b || b.dataset.period === state.period) return;
+          state.period = b.dataset.period;
+          state.range = 'this';
+          sync();
+          render();
+          announce();
+        });
+
+        /* ---------- Sheets: openers, focus trap, aria-expanded ---------- */
+        document.querySelectorAll('[data-open]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            if (btn.getAttribute('aria-disabled') === 'true') return;
+            const sheet = document.getElementById(btn.dataset.open);
+            if (sheet.id === 'sheet-range') prepRange();
+            else prepAreas();
+            btn.setAttribute('aria-expanded', 'true');
+            RD.sheet.open(sheet, btn);
+          });
+        });
+        document.querySelectorAll('.sheet').forEach((sheet) => {
+          new MutationObserver(() => {
+            if (!sheet.classList.contains('is-open') && sheet._opener) sheet._opener.setAttribute('aria-expanded', 'false');
+          }).observe(sheet, { attributes: true, attributeFilter: ['class'] });
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Tab') return;
+          const sheet = document.querySelector('.sheet.is-open');
+          if (!sheet) return;
+          const f = [...sheet.querySelectorAll('button, [href], input')].filter((el) => el.tabIndex >= 0 && !el.closest('[hidden]'));
+          if (!f.length) return;
+          const first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && (document.activeElement === first || !sheet.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && (document.activeElement === last || !sheet.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
+        });
+        /* Radios with roving focus (arrow keys move and select) */
+        function radios(root, onPick) {
+          root.addEventListener('click', (e) => {
+            const r = e.target.closest('[role="radio"]');
+            if (r) onPick(r.dataset.value);
+          });
+          root.addEventListener('keydown', (e) => {
+            const group = e.target.closest('[role="radiogroup"]');
+            if (!group) return;
+            const list = [...group.querySelectorAll('[role="radio"]')];
+            const i = list.indexOf(e.target);
+            if (i < 0) return;
+            const step = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+            if (!step) return;
+            e.preventDefault();
+            const next = list[(i + step + list.length) % list.length];
+            onPick(next.dataset.value);
+            next.focus();
+          });
+        }
+        function markRadios(root, value) {
+          root.querySelectorAll('[role="radiogroup"]').forEach((g) => {
+            const list = [...g.querySelectorAll('[role="radio"]')];
+            const hit = list.find((r) => r.dataset.value === value);
+            list.forEach((r) => {
+              r.setAttribute('aria-checked', String(r === hit));
+              r.tabIndex = r === hit || (!hit && r === list[0]) ? 0 : -1;
+            });
+          });
+        }
+
+        /* ---------- Period sheet: Last · This · Custom ---------- */
+        const rangeSheet = $('#sheet-range');
+        const rangeGroup = $('[data-range-group]');
+        let pendingRange = state.range;
+        function prepRange() {
+          pendingRange = state.range;
+          rangeGroup.innerHTML = ['last', 'this', 'custom']
+            .map((v) => `<button type="button" role="radio" data-value="${v}">${v === 'custom' ? 'Custom' : rangeText(v)}</button>`)
+            .join('');
+          markRadios(rangeSheet, pendingRange);
+        }
+        radios(rangeSheet, (v) => {
+          pendingRange = v;
+          markRadios(rangeSheet, v);
+        });
+        $('[data-range-apply]').addEventListener('click', () => {
+          RD.sheet.close(rangeSheet);
+          if (pendingRange === 'custom') {
+            RD.toast('Custom ranges aren’t part of this prototype', 'calendar');
+            return;
+          }
+          if (pendingRange === state.range) return;
+          state.range = pendingRange;
+          sync();
+          render();
+          announce();
+        });
+
+        /* ---------- Key areas sheet: Productivity | Wellbeing ---------- */
+        const areaSheet = $('#sheet-areas');
+        const tabs = [...document.querySelectorAll('[data-ka-tabs] [role="tab"]')];
+        let pendingArea = state.area;
+        const radioRow = (value, label) =>
+          `<button class="ka-radio" type="button" role="radio" data-value="${value}">
+            <span class="ka-box" aria-hidden="true"><img class="ka-off" src="assets/fig/icon-checkbox-empty-32.svg" width="32" height="32" alt="" /><img class="ka-on" src="assets/fig/icon-checkbox-full.svg" width="32" height="32" alt="" /></span>${label}</button>`;
+        document.querySelectorAll('[data-panel]').forEach((panel) => {
+          const g = panel.dataset.panel;
+          panel.querySelector('[data-ka-group]').innerHTML =
+            radioRow('all', 'All key areas') + groupAreas(g).map((a) => radioRow(a.key, a.name)).join('');
+        });
+        function showTab(g, focus) {
+          tabs.forEach((t) => {
+            const on = t.dataset.group === g;
+            t.setAttribute('aria-selected', String(on));
+            t.tabIndex = on ? 0 : -1;
+            if (on && focus) t.focus();
+          });
+          document.querySelectorAll('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== g));
+        }
+        tabs.forEach((t) => t.addEventListener('click', () => showTab(t.dataset.group)));
+        $('[data-ka-tabs]').addEventListener('keydown', (e) => {
+          if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+          e.preventDefault();
+          const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+          showTab(tabs[(i + 1) % tabs.length].dataset.group, true);
+        });
+        function prepAreas() {
+          pendingArea = state.area;
+          showTab(state.area === 'all' ? 'productivity' : RD.area(state.area).group);
+          markRadios(areaSheet, pendingArea);
+        }
+        radios(areaSheet, (v) => {
+          pendingArea = v;
+          markRadios(areaSheet, v);
+        });
+        $('[data-area-apply]').addEventListener('click', () => {
+          RD.sheet.close(areaSheet);
+          if (pendingArea === state.area) return;
+          state.area = pendingArea;
+          sync();
+          render();
+          announce();
+        });
+
+        sync();
+        render();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fafaff" />
+    <title>Your Data · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: Red Flag Data — RAG list 848:17089 (+ 917:15294 / 15466 / 15640 / 15818),
+         polar view 848:16983 / 848:18998; sheets as Productivity & Wellbeing 848:15936 / 848:16026 */
+
+      /* Header: "⟵ Score overview", then the icon tile + "Your Data" */
+      .yd-back {
+        display: flex;
+        width: fit-content;
+        margin: -10px 0;
+      }
+      .yd-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .yd-title h1 {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--deep);
+      }
+
+      /* Controls: segmented period + two dropdowns (same as Productivity & Wellbeing) */
+      .controls {
+        display: grid;
+        gap: 8px;
+        margin-top: 32px;
+      }
+      .seg button {
+        color: #767676; /* Figma Gray 3 (#828282), nudged to 4.5:1 on white */
+      }
+      .seg button:not([aria-pressed='true']):hover {
+        color: var(--ink);
+      }
+      .dd-row {
+        padding: 0 8px;
+      }
+      .dd {
+        min-height: 44px;
+        margin: -4px -8px;
+        white-space: nowrap;
+      }
+      .dd:first-child {
+        flex: none;
+      }
+      .dd:last-child {
+        min-width: 0;
+      }
+      .dd > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .dd img {
+        flex: none;
+      }
+      .dd[aria-disabled='true'] {
+        color: var(--ink-3);
+        cursor: default;
+      }
+      .dd[aria-disabled='true'] img {
+        opacity: 0;
+      }
+      .view[hidden] {
+        display: none;
+      }
+      .view.is-in {
+        animation: rise 420ms var(--ease) both;
+      }
+
+      /* ---------- RAG list: icon + name, stacked bar, hairline ---------- */
+      .rag-list {
+        margin-top: 20px;
+      }
+      .rag-list li + li {
+        position: relative;
+        margin-top: 11px;
+        padding-top: 13px;
+      }
+      .rag-list li + li::before {
+        /* Figma divider: 1px #EEEEEE over 1px white, inset 3px */
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 3px;
+        right: 3px;
+        height: 2px;
+        background: linear-gradient(#eee 0 1px, #fff 1px 2px);
+      }
+      .rag-row {
+        display: grid;
+        gap: 8px;
+        width: 100%;
+        border-radius: var(--r-md);
+        text-align: left;
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .rag-row:active {
+        transform: scale(0.985);
+      }
+      .rag-row__head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 0;
+      }
+      .rag-row__name {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: #3a3a3a;
+        transition: color var(--t-fast) var(--ease);
+      }
+      .rag-row:hover .rag-row__name {
+        color: var(--plum);
+      }
+      .rag-row .rag__seg {
+        font-size: 14px;
+      }
+      /* 32px white box with a hairline around the 24px Material glyph */
+      .area-box {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        flex: none;
+        border: 1px solid #f1f1f1;
+        border-radius: 5px;
+        background: #fff;
+      }
+      .area-box .g24 {
+        position: relative;
+        width: 24px;
+        height: 24px;
+      }
+      .area-box .g24 img {
+        position: absolute;
+        inset: 0;
+      }
+      .area-box .g24 img.moon {
+        /* bedtime glyph sits inside the 24px Material box */
+        inset: 8.37% auto auto 8.33%;
+      }
+
+      /* ---------- Polar view ---------- */
+      .polar__head {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 4px 12px;
+        margin-top: 26px;
+        padding: 0 8px;
+      }
+      .polar__title {
+        white-space: nowrap;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--ink);
+      }
+      .polar__fig {
+        margin-top: 10px;
+      }
+      .polar-svg {
+        display: block;
+        width: 100%;
+        max-width: 342px;
+        height: auto;
+        margin: 0 auto;
+        overflow: visible;
+      }
+      .polar-svg .wg {
+        cursor: pointer;
+        transition: transform 460ms var(--ease);
+      }
+      .polar-svg .wg path {
+        stroke-linejoin: round;
+        transition:
+          opacity 420ms var(--ease),
+          fill 420ms var(--ease),
+          stroke 420ms var(--ease);
+      }
+
+      /* Legend card: 2 × 3 key areas, the selected one in plum */
+      .polar-legend {
+        position: relative;
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        grid-template-rows: repeat(3, 37px);
+        grid-auto-flow: column;
+        column-gap: 15px;
+        width: min(335px, 100%);
+        margin: -10px auto 0;
+        padding: 16px;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow:
+          0 1.85px 3.15px rgba(0, 0, 0, 0.016),
+          0 8.15px 6.52px rgba(0, 0, 0, 0.027),
+          0 20px 13px rgba(0, 0, 0, 0.035),
+          0 38.5px 25.5px rgba(0, 0, 0, 0.043),
+          0 64.8px 46.85px rgba(0, 0, 0, 0.055),
+          0 100px 80px rgba(0, 0, 0, 0.07);
+      }
+      .lg-box .g17 {
+        position: relative;
+        width: 17px;
+        height: 17px;
+      }
+      .lg-box .moon {
+        position: absolute;
+        left: 8.33%;
+        top: 8.37%;
+      }
+      .lg-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        height: 37px;
+        margin-left: -7px;
+        padding: 6px 6px 6px 7px;
+        border-radius: 6px;
+        font-size: 14px;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+        white-space: nowrap;
+        text-align: left;
+        transition:
+          background-color var(--t-med) var(--ease),
+          color var(--t-med) var(--ease);
+      }
+      .lg-item:hover {
+        background: var(--lilac-dark);
+      }
+      .lg-item[aria-pressed='true'] {
+        background: var(--plum);
+        color: #fff;
+        font-weight: 500;
+      }
+      .lg-box {
+        display: grid;
+        place-items: center;
+        width: 25px;
+        height: 25px;
+        flex: none;
+        border: 1px solid #f1f1f1;
+        border-radius: 5px;
+        background: #fff;
+      }
+
+      /* ---------- Sheets (Figma: dimmed, blurred backdrop) ---------- */
+      .sheet-backdrop {
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8.5px);
+        -webkit-backdrop-filter: blur(8.5px);
+      }
+      .sheet {
+        visibility: hidden;
+        transition:
+          transform 380ms var(--ease),
+          visibility 0s linear 380ms;
+      }
+      .sheet.is-open {
+        visibility: visible;
+        transition:
+          transform 380ms var(--ease),
+          visibility 0s;
+      }
+      .sheet .btn--select {
+        width: calc(100% + 32px);
+        margin: 0 -16px;
+        box-shadow: none;
+      }
+      .picker {
+        gap: 8px;
+        margin: 56px calc(var(--gutter) * -1) 40px;
+      }
+      .picker button {
+        min-height: 42px;
+        font-size: 20px;
+        line-height: 1.3;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+      .picker button[aria-checked='true'] {
+        font-weight: 700;
+      }
+      .picker button:focus-visible {
+        outline-offset: -3px;
+      }
+      .ka-tabs {
+        margin: 0 calc(var(--gutter) * -1);
+        border-bottom-color: #d9d9d9;
+      }
+      .ka-tabs button {
+        min-height: 52px;
+        letter-spacing: 0.012em;
+      }
+      .ka-tabs button[aria-selected='true']::after {
+        height: 2px;
+      }
+      .ka-panel {
+        display: grid;
+        gap: 8px;
+        margin: 28px 0 32px;
+      }
+      .ka-panel[hidden] {
+        display: none;
+      }
+      .ka-radio {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 48px;
+        padding: 8px 8px 8px 24px;
+        border-radius: var(--r-md);
+        font-size: 20px;
+        line-height: 1.3;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+        text-align: left;
+      }
+      .ka-radio[aria-checked='true'] {
+        font-weight: 700;
+      }
+      .ka-box {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        flex: none;
+      }
+      .ka-box img {
+        position: absolute;
+        inset: 0;
+        transition: opacity var(--t-fast) var(--ease);
+      }
+      .ka-radio .ka-on,
+      .ka-radio[aria-checked='true'] .ka-off {
+        opacity: 0;
+      }
+      .ka-radio[aria-checked='true'] .ka-on {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body data-tab="reports">
+    <div class="app">
+      <main class="screen" id="main">
+        <a class="back back--plum yd-back rise" href="overview.html" data-back><span class="long-arrow" aria-hidden="true"></span>Score overview</a>
+        <div class="yd-title rise" style="--d: 1">
+          <span class="tile-icon" aria-hidden="true"><img src="assets/fig/icon-bar-chart.svg" width="28" height="28" alt="" /></span>
+          <h1>Your Data</h1>
+        </div>
+
+        <div class="controls rise" style="--d: 2">
+          <div class="seg" role="group" aria-label="Period" data-seg>
+            <button type="button" data-period="weekly" aria-pressed="true">Weekly</button>
+            <button type="button" data-period="monthly" aria-pressed="false">Monthly</button>
+            <button type="button" data-period="yearly" aria-pressed="false">Yearly</button>
+            <button type="button" data-period="all" aria-pressed="false">All</button>
+          </div>
+          <div class="dd-row">
+            <button class="dd" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet-range" data-open="sheet-range">
+              <span data-range-label>This week</span>
+              <img src="assets/fig/icon-arrow-down.svg" width="18" height="18" alt="" />
+            </button>
+            <button class="dd" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet-areas" data-open="sheet-areas">
+              <span>Key areas: <span data-area-label>All</span></span>
+              <img src="assets/fig/icon-arrow-down.svg" width="18" height="18" alt="" />
+            </button>
+          </div>
+        </div>
+
+        <!-- All key areas: share of days in each zone -->
+        <section class="view rise" style="--d: 3" aria-label="Share of days in each zone, by key area" data-view="list">
+          <ul class="rag-list" data-list></ul>
+        </section>
+
+        <!-- One key area: polar chart + legend switcher -->
+        <section class="view" aria-labelledby="polar-t" data-view="polar" hidden>
+          <div class="polar__head">
+            <h2 class="polar__title" id="polar-t" data-polar-title>Contentedness</h2>
+            <span data-polar-chip></span>
+          </div>
+          <div class="polar__fig" data-polar></div>
+          <div class="polar-legend" role="group" aria-label="Key area" data-legend></div>
+        </section>
+
+        <p class="sr-only" role="status" data-live></p>
+      </main>
+
+      <!-- Period sheet -->
+      <div class="sheet" id="sheet-range" role="dialog" aria-modal="true" aria-labelledby="sheet-range-t">
+        <h2 class="sr-only" id="sheet-range-t">Time range</h2>
+        <div class="picker" role="radiogroup" aria-labelledby="sheet-range-t" data-range-group></div>
+        <button class="btn btn--primary btn--select" type="button" data-range-apply>Select</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- Key areas sheet -->
+      <div class="sheet" id="sheet-areas" role="dialog" aria-modal="true" aria-labelledby="sheet-areas-t">
+        <h2 class="sr-only" id="sheet-areas-t">Key areas</h2>
+        <div class="utabs ka-tabs" role="tablist" aria-label="Key area group" data-ka-tabs>
+          <button type="button" role="tab" id="ka-tab-productivity" aria-controls="ka-panel-productivity" aria-selected="true" data-group="productivity">Productivity</button>
+          <button type="button" role="tab" id="ka-tab-wellbeing" aria-controls="ka-panel-wellbeing" aria-selected="false" tabindex="-1" data-group="wellbeing">Wellbeing</button>
+        </div>
+        <div class="ka-panel" id="ka-panel-productivity" role="tabpanel" aria-labelledby="ka-tab-productivity" data-panel="productivity">
+          <div class="radio-list" role="radiogroup" aria-label="Productivity key areas" data-ka-group></div>
+        </div>
+        <div class="ka-panel" id="ka-panel-wellbeing" role="tabpanel" aria-labelledby="ka-tab-wellbeing" data-panel="wellbeing" hidden>
+          <div class="radio-list" role="radiogroup" aria-label="Wellbeing key areas" data-ka-group></div>
+        </div>
+        <button class="btn btn--primary btn--select" type="button" data-area-apply>Select</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        /* ---------- State (deep-linkable: ?period=monthly&range=last&area=content) ---------- */
+        const qs = new URLSearchParams(location.search);
+        const PERIODS = ['weekly', 'monthly', 'yearly', 'all'];
+        const UNIT = { weekly: 'week', monthly: 'month', yearly: 'year' };
+        /* Figma order: alphabetical list; clockwise round the polar from the top */
+        const ORDER = ['content', 'dvc', 'energy', 'sleep', 'stress', 'wellbeing'];
+        const state = {
+          period: PERIODS.includes(qs.get('period')) ? qs.get('period') : 'weekly',
+          range: qs.get('range') === 'last' ? 'last' : 'this',
+          area: RD.keyArea(qs.get('area')) ? qs.get('area') : 'all',
+        };
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const $ = (s) => document.querySelector(s);
+        const live = $('[data-live]');
+        const ka = (k) => RD.keyArea(k);
+
+        /* ---------- Data ---------- */
+        function windowDays() {
+          const n = RD.PERIODS[state.period];
+          if (state.period === 'all' || state.range === 'this') return RD.history(n);
+          return RD.history(n * 2).slice(0, n);
+        }
+        function distribution(key, days) {
+          if (state.period === 'all' || state.range === 'this') return RD.distribution(key, RD.PERIODS[state.period]);
+          const n = { red: 0, amber: 0, green: 0 };
+          days.forEach((d) => (n[RD.zone(RD.keyScore(ka(key), d.scores))] += 1));
+          const pct = { red: Math.round((n.red / days.length) * 100), amber: Math.round((n.amber / days.length) * 100) };
+          pct.green = 100 - pct.red - pct.amber;
+          return pct;
+        }
+        const average = (key, days) => days.reduce((s, d) => s + RD.keyScore(ka(key), d.scores), 0) / days.length;
+
+        /* ---------- Area glyphs (Figma Material icons, exact assets) ---------- */
+        const glyph24 = (k) =>
+          k === 'sleep'
+            ? `<span class="g24"><img class="moon" src="assets/fig/icon-area-sleep.svg" width="18.66" height="19.99" alt="" /></span>`
+            : `<span class="g24"><img src="assets/fig/icon-area-${k}.svg" width="24" height="24" alt="" /></span>`;
+        /* legend glyphs are the same Material icons at 17px (the moon is the bedtime group, scaled with its box) */
+        const glyph17 = (k) =>
+          k === 'sleep'
+            ? `<span class="g17"><img class="moon" src="assets/fig/icon-area-sleep.svg" width="13.22" height="14.16" alt="" /></span>`
+            : `<img src="assets/fig/icon-legend-${k}.svg" width="17" height="17" alt="" />`;
+
+        /* ---------- RAG list ---------- */
+        function renderList(days) {
+          $('[data-list]').innerHTML = ORDER.map((k) => {
+            const d = distribution(k, days);
+            const name = ka(k).name;
+            return `<li><button class="rag-row" type="button" data-key="${k}" aria-label="${name}: ${d.red}% red, ${d.amber}% amber, ${d.green}% green. Show detail">
+                <span class="rag-row__head"><span class="area-box" aria-hidden="true">${glyph24(k)}</span><span class="rag-row__name">${name}</span></span>
+                <span aria-hidden="true">${RD.rag(d)}</span>
+              </button></li>`;
+          }).join('');
+        }
+        $('[data-list]').addEventListener('click', (e) => {
+          const row = e.target.closest('[data-key]');
+          if (!row) return;
+          setArea(row.dataset.key, true);
+        });
+
+        /* ---------- Polar chart (geometry measured from the Figma "bg" group, 342 × 338) ---------- */
+        const CX = 171, CY = 169;
+        const RINGS = [[17.8, 37.5], [40.6, 62.4], [66.4, 88.5], [91.6, 116], [118.3, 145.1]];
+        const RING_MIN = [1, 3, 3.75, 4.5, 5.25]; // ring n lights up once the average reaches it (RAG: red < 3 ≤ amber < 4.5 ≤ green)
+        const FILL_ON = ['#F2B0B0', '#F2C859', '#F2D382', '#58C6CD', '#58C6CD'];
+        const FILL_BG = ['#EEC1C1', '#F2D382', '#F2D382', '#58C6CD', '#58C6CD'];
+        const POP = 12;
+        const rad = (deg) => (deg * Math.PI) / 180;
+        const pt = (r, clock) => [CX + r * Math.sin(rad(clock)), CY - r * Math.cos(rad(clock))];
+        const f = (n) => n.toFixed(2);
+        /* Annular sector with a constant 5px channel between wedges; rounded by a 3.5px round-join stroke */
+        function sector(r0, r1, a0, a1) {
+          const k = 1.75, gap = 2.5 + k;
+          const ri = r0 + k, ro = r1 - k;
+          const di = (Math.asin(gap / ri) * 180) / Math.PI, dO = (Math.asin(gap / ro) * 180) / Math.PI;
+          const [x1, y1] = pt(ro, a0 + dO), [x2, y2] = pt(ro, a1 - dO), [x3, y3] = pt(ri, a1 - di), [x4, y4] = pt(ri, a0 + di);
+          return `M${f(x1)} ${f(y1)}A${ro} ${ro} 0 0 1 ${f(x2)} ${f(y2)}L${f(x3)} ${f(y3)}A${ri} ${ri} 0 0 0 ${f(x4)} ${f(y4)}Z`;
+        }
+        let averages = {};
+        function renderPolar(days, entering) {
+          averages = Object.fromEntries(ORDER.map((k) => [k, average(k, days)]));
+          const wedges = ORDER.map((k, i) => {
+            const c = -27 + 60 * i;
+            const rings = RINGS.map(([r0, r1], j) => `<path d="${sector(r0, r1, c - 30, c + 30)}" stroke-width="3.5" data-ring="${j}"/>`).join('');
+            return `<g class="wg" data-key="${k}" data-angle="${c}">${rings}</g>`;
+          }).join('');
+          const desc = ORDER.map((k) => `${ka(k).name} ${RD.fmt.score(averages[k])} (${RD.ZONES[RD.zone(averages[k])].label})`).join(', ');
+          $('[data-polar]').innerHTML = `<svg class="polar-svg" viewBox="0 0 342 338" width="342" height="338" role="img" aria-labelledby="polar-svg-t polar-svg-d">
+              <title id="polar-svg-t"></title>
+              <desc id="polar-svg-d">Average score out of 6 for each key area, ${rangeText().toLowerCase()}: ${desc}. Rings fill outward from red to amber to green as the average rises.</desc>
+              <defs><filter id="pop-shadow" x="-40%" y="-40%" width="180%" height="180%"><feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#0f2851" flood-opacity=".18"/></filter></defs>
+              ${wedges}
+            </svg>`;
+          $('[data-polar]').querySelectorAll('.wg').forEach((g) => g.addEventListener('click', () => setArea(g.dataset.key)));
+          paintPolar(entering);
+        }
+        /* Selected wedge: full colour, popped out with a soft shadow; the rest stay faded (Figma) */
+        function paintPolar(entering) {
+          const svg = $('[data-polar] svg');
+          if (!svg) return;
+          svg.querySelector('title').textContent = `${ka(state.area).name}: average ${RD.fmt.score(averages[state.area])} out of 6`;
+          svg.querySelectorAll('.wg').forEach((g) => {
+            const on = g.dataset.key === state.area;
+            const avg = averages[g.dataset.key];
+            const c = +g.dataset.angle;
+            g.style.transform = on ? `translate(${f(POP * Math.sin(rad(c)))}px, ${f(-POP * Math.cos(rad(c)))}px)` : 'translate(0px, 0px)';
+            if (on) g.setAttribute('filter', 'url(#pop-shadow)');
+            else g.removeAttribute('filter');
+            g.querySelectorAll('path').forEach((p) => {
+              const j = +p.dataset.ring;
+              const reached = avg >= RING_MIN[j];
+              const fill = on && reached ? FILL_ON[j] : FILL_BG[j];
+              const op = on ? (reached ? 1 : 0.42) : reached ? 0.42 : 0.24;
+              p.style.fill = fill;
+              p.style.stroke = fill;
+              if (entering && !reduced) {
+                p.style.opacity = 0;
+                p.style.transitionDelay = `${j * 70}ms`;
+                p._op = op;
+              } else p.style.opacity = op;
+            });
+          });
+          if (entering && !reduced) {
+            requestAnimationFrame(() =>
+              requestAnimationFrame(() => {
+                svg.querySelectorAll('path').forEach((p) => (p.style.opacity = p._op));
+                setTimeout(() => svg.querySelectorAll('path').forEach((p) => (p.style.transitionDelay = '0ms')), 800);
+              })
+            );
+          }
+          // header + legend
+          $('[data-polar-title]').textContent = ka(state.area).name;
+          const avg = averages[state.area];
+          $('[data-polar-chip]').innerHTML = RD.zoneChip(RD.zone(avg), `<span class="sr-only">Average </span>${RD.fmt.score(avg)} · ${RD.ZONES[RD.zone(avg)].label}`);
+          document.querySelectorAll('[data-legend] [data-key]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.key === state.area)));
+        }
+        $('[data-legend]').innerHTML = ORDER.map(
+          (k) => `<button class="lg-item" type="button" aria-pressed="false" data-key="${k}"><span class="lg-box" aria-hidden="true">${glyph17(k)}</span>${ka(k).name}</button>`
+        ).join('');
+        $('[data-legend]').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-key]');
+          if (b) setArea(b.dataset.key);
+        });
+
+        /* ---------- Render ---------- */
+        let shown = null;
+        function render() {
+          const days = windowDays();
+          const view = state.area === 'all' ? 'list' : 'polar';
+          if (view === 'list') renderList(days);
+          else renderPolar(days, true);
+          document.querySelectorAll('[data-view]').forEach((v) => {
+            const on = v.dataset.view === view;
+            v.hidden = !on;
+            if (on && shown && shown !== view) {
+              v.classList.remove('is-in', 'rise');
+              void v.offsetWidth;
+              v.classList.add('is-in');
+            }
+          });
+          shown = view;
+        }
+        function setArea(key, focusLegend) {
+          if (key === state.area) return;
+          const wasPolar = state.area !== 'all';
+          state.area = key;
+          sync();
+          if (wasPolar && key !== 'all') paintPolar(false);
+          else render();
+          announce();
+          if (focusLegend) {
+            const b = document.querySelector(`[data-legend] [data-key="${key}"]`);
+            if (b) b.focus({ preventScroll: true });
+          }
+        }
+
+        /* ---------- Labels, URL ---------- */
+        function rangeText(range = state.range) {
+          if (state.period === 'all') return 'All time';
+          return (range === 'last' ? 'Last ' : 'This ') + UNIT[state.period];
+        }
+        function sync() {
+          document.querySelectorAll('[data-period]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.period === state.period)));
+          $('[data-range-label]').textContent = rangeText();
+          $('[data-open="sheet-range"]').setAttribute('aria-disabled', String(state.period === 'all'));
+          $('[data-area-label]').textContent = state.area === 'all' ? 'All' : ka(state.area).name;
+          const p = new URLSearchParams();
+          if (state.period !== 'weekly') p.set('period', state.period);
+          if (state.range !== 'this' && state.period !== 'all') p.set('range', state.range);
+          if (state.area !== 'all') p.set('area', state.area);
+          const q = p.toString();
+          history.replaceState(null, '', location.pathname + (q ? '?' + q : ''));
+        }
+        function announce() {
+          if (state.area === 'all') live.textContent = `Showing all key areas, ${rangeText().toLowerCase()}.`;
+          else {
+            const avg = averages[state.area];
+            live.textContent = `${ka(state.area).name}, ${rangeText().toLowerCase()}: average ${RD.fmt.score(avg)} out of 6, ${RD.ZONES[RD.zone(avg)].label}.`;
+          }
+        }
+
+        /* ---------- Segmented period ---------- */
+        $('[data-seg]').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-period]');
+          if (!b || b.dataset.period === state.period) return;
+          state.period = b.dataset.period;
+          state.range = 'this';
+          sync();
+          render();
+          announce();
+        });
+
+        /* ---------- Sheets: openers, focus trap, aria-expanded ---------- */
+        document.querySelectorAll('[data-open]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            if (btn.getAttribute('aria-disabled') === 'true') return;
+            const sheet = document.getElementById(btn.dataset.open);
+            if (sheet.id === 'sheet-range') prepRange();
+            else prepAreas();
+            btn.setAttribute('aria-expanded', 'true');
+            RD.sheet.open(sheet, btn);
+          });
+        });
+        document.querySelectorAll('.sheet').forEach((sheet) => {
+          new MutationObserver(() => {
+            if (!sheet.classList.contains('is-open') && sheet._opener) sheet._opener.setAttribute('aria-expanded', 'false');
+          }).observe(sheet, { attributes: true, attributeFilter: ['class'] });
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Tab') return;
+          const sheet = document.querySelector('.sheet.is-open');
+          if (!sheet) return;
+          const f = [...sheet.querySelectorAll('button, [href], input')].filter((el) => el.tabIndex >= 0 && !el.closest('[hidden]'));
+          if (!f.length) return;
+          const first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && (document.activeElement === first || !sheet.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && (document.activeElement === last || !sheet.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
+        });
+        /* Radios with roving focus (arrow keys move and select) */
+        function radios(root, onPick) {
+          root.addEventListener('click', (e) => {
+            const r = e.target.closest('[role="radio"]');
+            if (r) onPick(r.dataset.value);
+          });
+          root.addEventListener('keydown', (e) => {
+            const group = e.target.closest('[role="radiogroup"]');
+            if (!group) return;
+            const list = [...group.querySelectorAll('[role="radio"]')];
+            const i = list.indexOf(e.target);
+            if (i < 0) return;
+            const step = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+            if (!step) return;
+            e.preventDefault();
+            const next = list[(i + step + list.length) % list.length];
+            onPick(next.dataset.value);
+            next.focus();
+          });
+        }
+        function markRadios(root, value) {
+          root.querySelectorAll('[role="radiogroup"]').forEach((g) => {
+            const list = [...g.querySelectorAll('[role="radio"]')];
+            const hit = list.find((r) => r.dataset.value === value);
+            list.forEach((r) => {
+              r.setAttribute('aria-checked', String(r === hit));
+              r.tabIndex = r === hit || (!hit && r === list[0]) ? 0 : -1;
+            });
+          });
+        }
+
+        /* ---------- Period sheet: Last · This · Custom ---------- */
+        const rangeSheet = $('#sheet-range');
+        const rangeGroup = $('[data-range-group]');
+        let pendingRange = state.range;
+        function prepRange() {
+          pendingRange = state.range;
+          rangeGroup.innerHTML = ['last', 'this', 'custom']
+            .map((v) => `<button type="button" role="radio" data-value="${v}">${v === 'custom' ? 'Custom' : rangeText(v)}</button>`)
+            .join('');
+          markRadios(rangeSheet, pendingRange);
+        }
+        radios(rangeSheet, (v) => {
+          pendingRange = v;
+          markRadios(rangeSheet, v);
+        });
+        $('[data-range-apply]').addEventListener('click', () => {
+          RD.sheet.close(rangeSheet);
+          if (pendingRange === 'custom') {
+            RD.toast('Custom ranges aren’t part of this prototype', 'calendar');
+            return;
+          }
+          if (pendingRange === state.range) return;
+          state.range = pendingRange;
+          sync();
+          render();
+          announce();
+        });
+
+        /* ---------- Key areas sheet: Productivity | Wellbeing ---------- */
+        const areaSheet = $('#sheet-areas');
+        const tabs = [...document.querySelectorAll('[data-ka-tabs] [role="tab"]')];
+        let pendingArea = state.area;
+        const radioRow = (value, label) =>
+          `<button class="ka-radio" type="button" role="radio" data-value="${value}">
+            <span class="ka-box" aria-hidden="true"><img class="ka-off" src="assets/fig/icon-checkbox-empty-32.svg" width="32" height="32" alt="" /><img class="ka-on" src="assets/fig/icon-checkbox-full.svg" width="32" height="32" alt="" /></span>${label}</button>`;
+        document.querySelectorAll('[data-panel]').forEach((panel) => {
+          const g = panel.dataset.panel;
+          panel.querySelector('[data-ka-group]').innerHTML =
+            radioRow('all', 'All key areas') + RD.KEY_AREAS.filter((a) => a.group === g).map((a) => radioRow(a.key, a.name)).join('');
+        });
+        function showTab(g, focus) {
+          tabs.forEach((t) => {
+            const on = t.dataset.group === g;
+            t.setAttribute('aria-selected', String(on));
+            t.tabIndex = on ? 0 : -1;
+            if (on && focus) t.focus();
+          });
+          document.querySelectorAll('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== g));
+        }
+        tabs.forEach((t) => t.addEventListener('click', () => showTab(t.dataset.group)));
+        $('[data-ka-tabs]').addEventListener('keydown', (e) => {
+          if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+          e.preventDefault();
+          const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+          showTab(tabs[(i + 1) % tabs.length].dataset.group, true);
+        });
+        function prepAreas() {
+          pendingArea = state.area;
+          showTab(state.area === 'all' ? 'productivity' : ka(state.area).group);
+          markRadios(areaSheet, pendingArea);
+        }
+        radios(areaSheet, (v) => {
+          pendingArea = v;
+          markRadios(areaSheet, v);
+        });
+        $('[data-area-apply]').addEventListener('click', () => {
+          RD.sheet.close(areaSheet);
+          setArea(pendingArea);
+        });
+
+        sync();
+        render();
+      })();
+    </script>
+  </body>
+</html>

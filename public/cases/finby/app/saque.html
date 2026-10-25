@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Resgatar saldo · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma 5. Saque (4 frames): "Quanto você quer resgatar?", big R$ amount typed on an iOS-style keypad,
+         green "Saldo disponível" band, "Conta bancária destino" (Nubank), "Solicitar transferência", then "Legal!".
+         Refined: quick chips, an over-balance state, a confirm sheet, mint band with dark ink (AA). */
+      .ask {
+        margin-top: 6px;
+        font-size: 17px;
+        font-weight: 500;
+        color: var(--ink-2);
+        text-align: center;
+      }
+      .amount {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 72px;
+        margin-top: 2px;
+        font-size: 54px;
+        line-height: 1;
+        color: var(--heading);
+        transition: color var(--t-fast) var(--ease);
+      }
+      .amount.is-zero {
+        color: var(--ink-3);
+      }
+      .amount.is-over {
+        color: var(--red-600);
+      }
+      .amount .money__cur {
+        font-size: 0.42em;
+        font-weight: 600;
+        margin-right: 0.26em;
+      }
+      .amount .money__cents {
+        font-size: 1em;
+        font-weight: 800;
+        opacity: 1;
+      }
+      /* a blinking caret: the amount is the field the keypad types into */
+      .caret {
+        width: 3px;
+        height: 0.78em;
+        margin-left: 6px;
+        border-radius: 2px;
+        background: var(--violet-500);
+        animation: blink 1.05s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      .amount.is-bump .money {
+        animation: bump 220ms var(--ease);
+      }
+      @keyframes bump {
+        40% {
+          transform: scale(1.03);
+        }
+      }
+
+      .band {
+        margin-top: 14px;
+        transition:
+          background var(--t-med) var(--ease),
+          color var(--t-med) var(--ease);
+      }
+      .band strong {
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      .band.is-over {
+        color: var(--red-600);
+        background: linear-gradient(90deg, var(--red-50), #fbdde1 50%, var(--red-50));
+      }
+
+      .chips {
+        justify-content: center;
+        margin-top: 16px;
+      }
+      .chip {
+        min-width: 84px;
+      }
+
+      .dest {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 16px;
+        padding: 12px 8px 12px 14px;
+      }
+      .bank {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        flex: none;
+        border-radius: 50%;
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: #fff;
+        background: radial-gradient(circle at 30% 25%, #a23ee6, #820ad1 60%, #6a08ab);
+        box-shadow: 0 6px 14px -6px rgba(130, 10, 209, 0.6);
+      }
+      .dest__label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .dest__name {
+        font-size: 15.5px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--heading);
+      }
+      .dest__acc {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--green-700);
+        font-variant-numeric: tabular-nums;
+      }
+      .dest .link {
+        min-height: 44px;
+        padding: 0 10px;
+      }
+
+      /* action + keypad (Figma iOS number pad, warmed up) */
+      .dock {
+        flex: none;
+        position: relative;
+        z-index: 5;
+      }
+      .dock__action {
+        padding: 10px var(--gutter) 12px;
+        background: linear-gradient(180deg, transparent, var(--bg) 30%);
+      }
+      .keypad {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+        padding: 8px 7px calc(10px + env(safe-area-inset-bottom));
+        background: var(--sand-100);
+      }
+      .has-status .keypad {
+        padding-bottom: 30px;
+      }
+      .key {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        height: 50px;
+        border-radius: 10px;
+        font-size: 25px;
+        font-weight: 500;
+        line-height: 1;
+        color: var(--ink);
+        background: var(--surface);
+        box-shadow: 0 1px 0 rgba(90, 70, 50, 0.22);
+        transition:
+          background 90ms var(--ease),
+          transform 90ms var(--ease);
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .key small {
+        margin-top: 1px;
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        color: var(--ink-2);
+      }
+      .key:active,
+      .key.is-down {
+        background: var(--sand-200);
+        transform: scale(0.97);
+      }
+      .key--fn {
+        background: transparent;
+        box-shadow: none;
+      }
+      .key--fn:active,
+      .key--fn.is-down {
+        background: rgba(27, 23, 48, 0.07);
+      }
+      .key--fn .i {
+        width: 26px;
+        height: 26px;
+      }
+      .key:focus-visible {
+        outline-offset: -2px;
+      }
+
+      /* confirm sheet */
+      .sheet__lead {
+        margin-top: 6px;
+        font-size: 15px;
+        line-height: 1.45;
+        color: var(--ink-2);
+      }
+      .actions {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .summary {
+        margin-top: 16px;
+        padding: 4px 14px;
+      }
+      .summary div {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 0;
+      }
+      .summary div + div {
+        border-top: 1px solid var(--line);
+      }
+      .summary dt {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .summary dd {
+        font-size: 14.5px;
+        font-weight: 700;
+        color: var(--heading);
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+      }
+      .btn .spin {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #fff;
+        animation: spin 700ms linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .option .bank {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      /* success (Figma "Legal!") */
+      .screen:has(.done) {
+        padding: 0;
+      }
+      .done {
+        padding: 72px 28px 28px;
+      }
+      .has-status .done {
+        padding-bottom: 36px;
+      }
+      .done__body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .done__receipt {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        align-self: center;
+        margin-top: 18px;
+        padding: 8px 14px 8px 8px;
+        border-radius: var(--r-pill);
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.14);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(6px);
+      }
+      .done__receipt .bank {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+        box-shadow: none;
+      }
+      .done__receipt .i {
+        width: 16px;
+        height: 16px;
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen" id="main">
+        <div id="form-view">
+          <nav class="topbar rise" aria-label="Navegação">
+            <a class="icon-btn" href="consorcios.html" data-back aria-label="Voltar"><span data-icon="arrow-left"></span></a>
+            <button class="icon-btn" type="button" id="more" aria-label="Mais opções"><span data-icon="more"></span></button>
+          </nav>
+
+          <h1 class="ask rise" style="--d: 1" id="ask">Quanto você quer resgatar?</h1>
+          <p class="amount rise is-zero" style="--d: 1" id="amount" aria-live="polite" aria-atomic="true" aria-describedby="ask"></p>
+
+          <p class="band full-bleed rise" style="--d: 2" id="band" aria-live="polite"></p>
+
+          <div class="chips rise" style="--d: 3" role="group" aria-label="Valores rápidos" id="chips">
+            <button class="chip" type="button" data-v="100">R$ 100</button>
+            <button class="chip" type="button" data-v="500">R$ 500</button>
+            <button class="chip" type="button" data-v="all">Tudo</button>
+          </div>
+
+          <section class="card dest rise" style="--d: 4" aria-labelledby="dest-h">
+            <span class="bank" aria-hidden="true">nu</span>
+            <div class="grow">
+              <h2 class="dest__label" id="dest-h">Conta bancária destino</h2>
+              <p class="dest__name" id="dest-name"></p>
+              <p class="dest__acc" id="dest-acc"></p>
+            </div>
+            <button class="link" type="button" id="change" aria-label="Alterar conta bancária destino">Alterar</button>
+          </section>
+        </div>
+      </main>
+
+      <div class="dock" id="dock">
+        <div class="dock__action">
+          <button class="btn" type="button" id="submit" disabled>Solicitar transferência</button>
+        </div>
+        <div class="keypad" id="keypad" role="group" aria-label="Teclado numérico">
+          <button class="key" type="button" data-key="1">1<small aria-hidden="true">&nbsp;</small></button>
+          <button class="key" type="button" data-key="2">2<small aria-hidden="true">ABC</small></button>
+          <button class="key" type="button" data-key="3">3<small aria-hidden="true">DEF</small></button>
+          <button class="key" type="button" data-key="4">4<small aria-hidden="true">GHI</small></button>
+          <button class="key" type="button" data-key="5">5<small aria-hidden="true">JKL</small></button>
+          <button class="key" type="button" data-key="6">6<small aria-hidden="true">MNO</small></button>
+          <button class="key" type="button" data-key="7">7<small aria-hidden="true">PQRS</small></button>
+          <button class="key" type="button" data-key="8">8<small aria-hidden="true">TUV</small></button>
+          <button class="key" type="button" data-key="9">9<small aria-hidden="true">WXYZ</small></button>
+          <span aria-hidden="true"></span>
+          <button class="key" type="button" data-key="0">0</button>
+          <button class="key key--fn" type="button" data-key="back" aria-label="Apagar"><span data-icon="backspace"></span></button>
+        </div>
+      </div>
+
+      <!-- "…" -->
+      <div class="sheet" id="more-sheet" role="dialog" aria-modal="true" aria-labelledby="more-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="more-h">Saques</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <ul class="list--divided mt-12">
+          <li>
+            <button class="row" type="button" id="history">
+              <span class="row__ico"><span data-icon="clock"></span></span>
+              <span class="row__main"><span class="row__title">Histórico de saques</span><span class="row__sub">Tudo o que você já resgatou</span></span>
+              <span data-icon="chevron-right" class="chev"></span>
+            </button>
+          </li>
+        </ul>
+        <p class="t-small muted mt-16 hstack" style="--gap: 8px"><span data-icon="info" class="i--sm"></span>Saques chegam em até 3 dias úteis, sem taxa.</p>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- "Alterar" -->
+      <div class="sheet" id="bank-sheet" role="dialog" aria-modal="true" aria-labelledby="bank-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="bank-h">Conta bancária destino</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <div class="options mt-12" role="radiogroup" aria-labelledby="bank-h" id="bank-options"></div>
+        <div class="actions">
+          <button class="btn btn--outline" type="button" id="add-bank"><span data-icon="plus"></span>Adicionar conta</button>
+        </div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- confirm -->
+      <div class="sheet" id="confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="confirm-h"></h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Cancelar"><span data-icon="x"></span></button>
+        </div>
+        <p class="sheet__lead">Chega em até 3 dias úteis.</p>
+        <dl class="card card--sunken summary" id="summary"></dl>
+        <div class="actions">
+          <button class="btn" type="button" id="confirm-btn">Confirmar</button>
+          <button class="btn btn--outline" type="button" data-sheet-close>Cancelar</button>
+        </div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const { fmt, user, esc } = FB;
+        const $ = (id) => document.getElementById(id);
+        const q = new URLSearchParams(location.search);
+        const bank = user.bank;
+
+        /* ---------- success step: ?step=done&v=500 ---------- */
+        if (q.get('step') === 'done') {
+          const v = Math.max(0, parseFloat(q.get('v')) || 0);
+          document.body.dataset.status = 'light';
+          document.title = 'Resgate solicitado · Finby';
+          $('dock').remove();
+          $('main').classList.add('screen--flush');
+          $('main').innerHTML = `
+            <section class="done" aria-labelledby="done-h">
+              <div class="done__body">
+                <div class="done__art pop" data-art="payout"></div>
+                <h1 class="done__title rise" style="--d: 3" id="done-h"><strong>Legal!</strong> Seu dinheiro já está indo para sua conta bancária.</h1>
+                ${v ? `<p class="done__receipt rise" style="--d: 4"><span class="bank" aria-hidden="true">nu</span><span class="num">${fmt.brl(v)}</span>${FB.icon('arrow-right')}<span>${esc(bank.short)}</span></p>` : ''}
+                <p class="done__text rise" style="--d: 5">Em até 3 dias úteis você poderá verificar os valores em seu saldo.</p>
+              </div>
+              <a class="btn btn--white rise" style="--d: 6" href="consorcios.html">Fechar</a>
+            </section>`;
+          FB.hydrate($('main'));
+          return;
+        }
+
+        /* ---------- amount, typed from the cents ---------- */
+        const balance = FB.balance();
+        const MAX = 99999999; // R$ 999.999,99
+        let cents = 0;
+        const amountEl = $('amount');
+        const band = $('band');
+        const submit = $('submit');
+
+        function render(bump) {
+          const v = cents / 100;
+          const over = v > balance;
+          amountEl.innerHTML = FB.money(v) + '<span class="caret" aria-hidden="true"></span>';
+          amountEl.classList.toggle('is-zero', !cents);
+          amountEl.classList.toggle('is-over', over);
+          if (bump) {
+            amountEl.classList.remove('is-bump');
+            void amountEl.offsetWidth;
+            amountEl.classList.add('is-bump');
+          }
+          band.classList.toggle('is-over', over);
+          band.innerHTML = over
+            ? `${FB.icon('alert')}<span>Valor acima do saldo disponível: <strong>${fmt.brl(balance)}</strong></span>`
+            : `${FB.icon('wallet')}<span>Saldo disponível para saque: <strong>${fmt.brl(balance)}</strong></span>`;
+          submit.disabled = !(cents > 0 && !over);
+          document.querySelectorAll('#chips [data-v]').forEach((c) => {
+            const t = c.dataset.v === 'all' ? Math.round(balance * 100) : +c.dataset.v * 100;
+            c.setAttribute('aria-pressed', String(!!cents && cents === t));
+            c.disabled = t > Math.round(balance * 100) || t <= 0;
+          });
+        }
+        function press(k) {
+          if (k === 'back') cents = Math.floor(cents / 10);
+          else if (k === 'clear') cents = 0;
+          else {
+            const next = cents * 10 + +k;
+            if (next > MAX) return;
+            cents = next;
+          }
+          render(true);
+        }
+
+        /* on-screen keypad */
+        $('keypad').addEventListener('click', (e) => {
+          const k = e.target.closest('[data-key]');
+          if (k) press(k.dataset.key);
+        });
+        /* like a real keypad, a mouse/touch press doesn't take focus, so a physical Enter afterwards still
+           opens the confirmation instead of re-pressing the last key (Tab + Enter/Space still works) */
+        $('keypad').addEventListener('mousedown', (e) => {
+          if (e.target.closest('[data-key]')) e.preventDefault();
+        });
+        /* physical keyboard: digits, Backspace, Delete (clear), Enter */
+        const flash = (k) => {
+          const el = document.querySelector(`[data-key="${k}"]`);
+          if (!el) return;
+          el.classList.add('is-down');
+          setTimeout(() => el.classList.remove('is-down'), 120);
+        };
+        document.addEventListener('keydown', (e) => {
+          if (document.querySelector('.sheet.is-open') || e.metaKey || e.ctrlKey || e.altKey) return;
+          if (/^[0-9]$/.test(e.key)) {
+            e.preventDefault();
+            press(e.key);
+            flash(e.key);
+          } else if (e.key === 'Backspace') {
+            e.preventDefault();
+            press('back');
+            flash('back');
+          } else if (e.key === 'Delete') {
+            press('clear');
+          } else if (e.key === 'Enter' && !e.target.closest('button, a') && !submit.disabled) {
+            e.preventDefault();
+            openConfirm(submit);
+          }
+        });
+
+        /* quick chips */
+        $('chips').addEventListener('click', (e) => {
+          const c = e.target.closest('[data-v]');
+          if (!c) return;
+          cents = c.dataset.v === 'all' ? Math.round(balance * 100) : +c.dataset.v * 100;
+          render(true);
+        });
+
+        /* destination */
+        $('dest-name').textContent = bank.name;
+        $('dest-acc').textContent = `Ag. ${bank.agency} · Conta ${bank.account}`;
+        const bankSheet = $('bank-sheet');
+        $('bank-options').innerHTML = `<button class="option" type="button" role="radio" aria-checked="true" data-sheet-close>
+            <span class="bank" aria-hidden="true">nu</span>
+            <span class="option__body"><span class="option__title">${esc(bank.name)}</span><span class="option__desc">Ag. ${bank.agency} · Conta ${bank.account}</span></span>
+            <span class="radio" aria-hidden="true"></span>
+          </button>`;
+        $('change').addEventListener('click', (e) => FB.sheet.open(bankSheet, e.currentTarget));
+        $('add-bank').addEventListener('click', () => FB.toast('Adicionar conta: em breve', 'clock'));
+
+        /* "…" */
+        const more = $('more-sheet');
+        $('more').addEventListener('click', (e) => FB.sheet.open(more, e.currentTarget));
+        $('history').addEventListener('click', () => FB.toast('Histórico de saques: em breve', 'clock'));
+
+        /* confirm → save balance → success */
+        const confirm = $('confirm');
+        function openConfirm(opener) {
+          const v = cents / 100;
+          $('confirm-h').textContent = `Transferir ${fmt.brl(v)} para ${bank.short}?`;
+          $('summary').innerHTML = `
+            <div><dt>Conta</dt><dd>Ag. ${bank.agency} · ${bank.account}</dd></div>
+            <div><dt>Taxa</dt><dd class="positive">Grátis</dd></div>
+            <div><dt>Saldo depois</dt><dd>${fmt.brl(balance - v)}</dd></div>`;
+          FB.sheet.open(confirm, opener);
+        }
+        submit.addEventListener('click', (e) => openConfirm(e.currentTarget));
+        $('confirm-btn').addEventListener('click', (e) => {
+          const b = e.currentTarget;
+          if (b.getAttribute('aria-busy') === 'true') return;
+          const v = cents / 100;
+          b.setAttribute('aria-busy', 'true');
+          b.innerHTML = '<span class="spin" aria-hidden="true"></span><span>Transferindo…</span>';
+          FB.store.set('balance', Math.round((balance - v) * 100) / 100);
+          setTimeout(() => location.replace(`saque.html?step=done&v=${v}`), 650);
+        });
+
+        /* deep links: ?demo=500 pre-fills the amount (?demo=15000 shows the over-balance state); ?sheet=confirm|bank|more */
+        const demo = parseFloat(q.get('demo'));
+        if (demo > 0) cents = Math.min(MAX, Math.round(demo * 100));
+        render(false);
+        const s = q.get('sheet');
+        if (s === 'confirm' && !submit.disabled) openConfirm(submit);
+        else if (s === 'bank') FB.sheet.open(bankSheet, $('change'));
+        else if (s === 'more') FB.sheet.open(more, $('more'));
+      })();
+    </script>
+  </body>
+</html>

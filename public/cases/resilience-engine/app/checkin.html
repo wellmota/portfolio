@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#d0d1ff" />
+    <title>Tracker · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Tracker (Figma 848:15781 is a placeholder): built in the onboarding language of Design Loop 2 —
+         lavender top, white sheet with rounded top, Headline 1 + subtitle + divider + body,
+         88px step buttons (ghost back / plum next) and the steps pagination. */
+      .ci {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 0;
+        background: var(--violet-light);
+      }
+
+      /* ---------- Lavender top ---------- */
+      .ci-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 4px var(--gutter) 0;
+      }
+      .ci-count {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--deep);
+      }
+      .ci-count span {
+        font-weight: 400;
+        color: var(--ink-2);
+      }
+      .ci-close {
+        background: var(--surface);
+        box-shadow: none;
+      }
+      .ci-close img {
+        width: 24px;
+        height: 24px;
+      }
+      .ci-hero {
+        display: grid;
+        place-items: center;
+        padding: 8px 0 60px;
+      }
+      .ci-badge {
+        display: grid;
+        place-items: center;
+        width: 104px;
+        height: 104px;
+        border-radius: 50%;
+        background: var(--surface);
+        box-shadow:
+          inset 0 0 0 4px var(--violet),
+          0 0 0 4px var(--surface),
+          0 22px 40px -12px rgba(88, 92, 229, 0.45);
+        color: var(--plum);
+      }
+      /* Figma key-area icons (Your Data / Red Flags), recoloured Purple Plum with a mask */
+      .ci-badge__ico {
+        width: 48px;
+        height: 48px;
+        background: currentColor;
+        -webkit-mask: var(--m) center / contain no-repeat;
+        mask: var(--m) center / contain no-repeat;
+      }
+
+      /* ---------- White sheet ---------- */
+      .ci-sheet {
+        position: relative; /* above the printed top it overlaps */
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin-top: -36px;
+        padding: 32px var(--gutter) 20px;
+        border-radius: 36px 36px 0 0;
+        background: var(--surface);
+      }
+      .ci-step .h1:focus {
+        outline: none;
+      }
+      .ci-sub {
+        margin-top: 4px;
+        font-size: 16px;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+      .ci-step .divider {
+        margin: 16px 0;
+      }
+      .ci-q {
+        font-size: 16px;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+
+      /* 1–6 scale: six large options, one row */
+      .ci-scale {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+        margin-top: 24px;
+      }
+      .ci-opt {
+        display: grid;
+        place-items: center;
+        min-height: 56px;
+        border-radius: var(--r-lg);
+        background: var(--surface);
+        box-shadow: inset 0 0 0 1px var(--line);
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--deep);
+        font-variant-numeric: tabular-nums;
+        transition:
+          background-color var(--t-fast) var(--ease),
+          box-shadow var(--t-med) var(--ease),
+          color var(--t-fast),
+          transform var(--t-fast) var(--ease);
+      }
+      .ci-opt:hover {
+        background: var(--lilac);
+        box-shadow: inset 0 0 0 1px var(--violet);
+      }
+      .ci-opt:active {
+        transform: scale(0.95);
+      }
+      .ci-opt[aria-checked='true'] {
+        background: var(--plum);
+        box-shadow: 0 14px 22px -10px rgba(88, 92, 229, 0.7);
+        color: #fff;
+      }
+      .ci-opt.is-picked {
+        animation: ci-pop 320ms var(--ease-spring);
+      }
+      @keyframes ci-pop {
+        40% {
+          transform: scale(1.08);
+        }
+      }
+      .ci-ends {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 10px;
+        font-size: 12px;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink-3);
+      }
+      .ci-ends span:last-child {
+        text-align: right;
+      }
+
+      /* Step buttons + pagination, pinned to the bottom of the sheet */
+      .ci-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: auto;
+        padding: 28px 16px 0;
+      }
+      /* On the first question the back button keeps its slot, so next stays on the right */
+      .ci-nav .step-btn[data-placeholder] {
+        visibility: hidden;
+      }
+      .ci-nav .step-btn:disabled {
+        background: var(--dust);
+        box-shadow: none;
+        transform: none;
+      }
+      .ci-nav .step-btn__arrow {
+        width: 40px;
+        height: 40px;
+      }
+      .ci-back-arrow {
+        transform: scaleX(-1);
+      }
+      /* Last step: the plum step button widens into "See my results ⟶" */
+      .ci-finish {
+        flex: 1;
+        width: auto;
+        max-width: 218px;
+        display: flex;
+        gap: 12px;
+        padding: 0 24px;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.012em;
+      }
+      .ci-finish .step-btn__arrow {
+        width: 24px;
+        height: 24px;
+      }
+      .ci-dots {
+        margin-top: 24px;
+      }
+      .ci-dots span {
+        width: 32px;
+      }
+    </style>
+  </head>
+  <body data-tab="track" style="--status-bg: var(--violet-light)">
+    <div class="app">
+      <main class="screen screen--flush ci" id="main">
+        <div class="ci-top">
+          <p class="ci-count" id="count" aria-hidden="true">1 of 7</p>
+          <a class="icon-btn ci-close" href="home.html" aria-label="Close the tracker">
+            <img src="assets/fig/icon-close-x.svg" width="24" height="24" alt="" />
+          </a>
+        </div>
+        <div class="ci-hero" aria-hidden="true">
+          <div class="wash" data-wash="violet" data-glow="#badge" data-hills="100"></div>
+          <span class="ci-badge" id="badge"></span>
+        </div>
+
+        <section class="ci-sheet" aria-label="Tracker">
+          <div class="ci-step" id="stage"></div>
+
+          <div class="ci-nav" id="nav"></div>
+          <div
+            class="dots ci-dots"
+            id="dots"
+            role="progressbar"
+            aria-label="Tracker progress"
+            aria-valuemin="1"
+            aria-valuemax="7"
+            aria-valuenow="1"
+          ></div>
+          <p class="sr-only" aria-live="polite" id="live"></p>
+        </section>
+      </main>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const AREAS = RD.AREAS;
+        const N = AREAS.length;
+        const params = new URLSearchParams(location.search);
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const stage = $('stage');
+        const nav = $('nav');
+        // Demand and Capacity share the "Demand vs Capacity" icon, as in the Figma reports
+        const ICON = { demand: 'dvc', capacity: 'dvc', energy: 'energy', sleep: 'sleep', stress: 'stress', wellbeing: 'wellbeing', content: 'content' };
+        const ARROW = '<img class="step-btn__arrow" src="assets/fig/icon-arrow-big-right.svg" width="40" height="40" alt="" />';
+
+        /* Answers: today's saved check-in when re-tracking, everything in the ?demo=1 walkthrough, else empty */
+        const answers = {};
+        if (RD.checkedInToday()) Object.assign(answers, RD.todayScores());
+        if (params.has('demo')) Object.assign(answers, RD.DEFAULT_TODAY);
+        let step = 0;
+        let timer = 0;
+        const firstOpen = () => AREAS.findIndex((a) => answers[a.key] == null);
+
+        $('dots').innerHTML = AREAS.map(() => '<span></span>').join('');
+        const dashes = [...$('dots').children];
+
+        /* ---------- One question ---------- */
+        function render() {
+          const a = AREAS[step];
+          const v = answers[a.key];
+          $('count').innerHTML = `${step + 1} of ${N} <span>· ${RD.GROUPS[a.group]}</span>`;
+          $('badge').innerHTML = `<span class="ci-badge__ico" style="--m:url('assets/fig/icon-area-${ICON[a.key]}.svg')"></span>`;
+          stage.innerHTML = `
+            <h1 class="h1" id="q-title" tabindex="-1"><span class="sr-only">Question ${step + 1} of ${N}: </span>${a.name}</h1>
+            <p class="ci-sub">${a.sub}</p>
+            <div class="divider"></div>
+            <p class="ci-q" id="q-text">${a.q}</p>
+            <div class="ci-scale" role="radiogroup" aria-labelledby="q-text" aria-describedby="q-ends">
+              ${[1, 2, 3, 4, 5, 6]
+                .map((n) => {
+                  const end = n === 1 ? `, ${a.low}` : n === 6 ? `, ${a.high}` : '';
+                  const on = v === n;
+                  const tab = on || (v == null && n === 1) ? 0 : -1;
+                  return `<button class="ci-opt" type="button" role="radio" aria-checked="${on}" tabindex="${tab}" data-v="${n}" aria-label="${n} of 6${end}">${n}</button>`;
+                })
+                .join('')}
+            </div>
+            <p class="ci-ends" id="q-ends"><span>1 · ${a.low}</span><span>${a.high} · 6</span></p>`;
+
+          const last = step === N - 1;
+          nav.innerHTML = `
+            <button class="step-btn step-btn--ghost" type="button" id="back" aria-label="Previous question"${step === 0 ? ' data-placeholder inert aria-hidden="true"' : ''}>
+              <img class="step-btn__arrow ci-back-arrow" src="assets/fig/icon-arrow-big-grey.svg" width="40" height="40" alt="" />
+            </button>
+            ${
+              last
+                ? `<button class="step-btn ci-finish" type="button" id="next"${v == null ? ' disabled' : ''}>See my results ${ARROW.replace('width="40" height="40"', 'width="24" height="24"')}</button>`
+                : `<button class="step-btn" type="button" id="next" aria-label="Next question"${v == null ? ' disabled' : ''}>${ARROW}</button>`
+            }`;
+          $('back').onclick = () => go(step - 1, -1);
+          $('next').onclick = () => (last ? save() : go(step + 1, 1));
+
+          dashes.forEach((d, i) => d.classList.toggle('is-on', i <= step));
+          $('dots').setAttribute('aria-valuenow', String(step + 1));
+          $('dots').setAttribute('aria-valuetext', `Question ${step + 1} of ${N}`);
+
+          const group = stage.querySelector('.ci-scale');
+          group.addEventListener('click', (e) => {
+            const b = e.target.closest('[data-v]');
+            if (b) pick(+b.dataset.v, true);
+          });
+          group.addEventListener('keydown', (e) => {
+            const cur = answers[a.key];
+            const n = {
+              ArrowRight: Math.min(6, (cur || 0) + 1),
+              ArrowDown: Math.min(6, (cur || 0) + 1),
+              ArrowLeft: Math.max(1, (cur || 2) - 1),
+              ArrowUp: Math.max(1, (cur || 2) - 1),
+              Home: 1,
+              End: 6,
+            }[e.key];
+            if (n == null) return;
+            e.preventDefault();
+            pick(n, false); // arrows move the choice; a click, Space, Enter or a number key confirms and moves on
+          });
+        }
+
+        /* ---------- Picking ---------- */
+        function pick(n, advance) {
+          const a = AREAS[step];
+          answers[a.key] = n;
+          stage.querySelectorAll('.ci-opt').forEach((b) => {
+            const on = +b.dataset.v === n;
+            b.setAttribute('aria-checked', String(on));
+            b.tabIndex = on ? 0 : -1;
+            b.classList.remove('is-picked');
+            if (on) {
+              void b.offsetWidth; // restart the pop
+              b.classList.add('is-picked');
+              b.focus({ preventScroll: true });
+            }
+          });
+          const next = $('next');
+          next.disabled = false;
+          clearTimeout(timer);
+          if (!advance) return;
+          if (step < N - 1) timer = setTimeout(() => go(step + 1, 1), 380);
+          else next.focus({ preventScroll: true });
+        }
+
+        /* ---------- Moving between questions (slide + fade, no reload) ---------- */
+        function go(to, dir, initial) {
+          clearTimeout(timer);
+          if (to < 0 || to >= N) return;
+          step = to;
+          render();
+          if (!initial) {
+            if (!reduce) {
+              const els = [$('badge'), ...stage.children];
+              els.forEach((el, k) =>
+                el.animate(
+                  [
+                    { opacity: 0, transform: `translateX(${24 * dir}px)` },
+                    { opacity: 1, transform: 'none' },
+                  ],
+                  { duration: 420, delay: k * 40, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' }
+                )
+              );
+            }
+            // keep keyboard and screen-reader users on the answer
+            const target = stage.querySelector('.ci-opt[tabindex="0"]');
+            if (target) target.focus({ preventScroll: true });
+          }
+          $('main').scrollTop = 0;
+          const a = AREAS[step];
+          $('live').textContent = initial ? '' : `Question ${step + 1} of ${N}, ${a.name}. ${a.q}`;
+        }
+
+        /* Number keys 1–6 answer from anywhere */
+        document.addEventListener('keydown', (e) => {
+          if (e.metaKey || e.ctrlKey || e.altKey) return;
+          if (e.target.closest && e.target.closest('input, textarea')) return;
+          if (/^[1-6]$/.test(e.key)) {
+            e.preventDefault();
+            pick(+e.key, true);
+          }
+        });
+
+        function save() {
+          const open = firstOpen();
+          if (open > -1) return go(open, -1);
+          const scores = {};
+          AREAS.forEach((a) => (scores[a.key] = answers[a.key]));
+          RD.store.set('checkin', { day: new Date().toDateString(), scores, note: '' });
+          const b = $('next');
+          b.setAttribute('aria-disabled', 'true');
+          b.style.pointerEvents = 'none';
+          b.innerHTML = `${RD.icon('check')} Saved`;
+          setTimeout(() => (location.href = 'result.html?new=1'), reduce ? 0 : 260);
+        }
+
+        /* ?step=1..7 opens a given question (demos and screenshots) */
+        const want = parseInt(params.get('step'), 10);
+        go(Number.isFinite(want) ? Math.max(0, Math.min(N - 1, want - 1)) : 0, 1, true);
+      })();
+    </script>
+  </body>
+</html>

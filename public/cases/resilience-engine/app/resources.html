@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#99d7db" />
+    <title>Resources · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: Resources · Being Present (848:15328): teal header, pastel cards with a 44px icon tile,
+         small line + title + long arrow, faint logo mark behind. The hub (no ?c=) lists the categories
+         from the "Daily Resilience Practices" screens (Resilience River, Being Present, Energy, …) in the same cards. */
+      .res {
+        position: relative;
+        isolation: isolate;
+      }
+      .res-mark {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .res-mark img {
+        position: absolute;
+        left: 36.5px;
+        top: 280px;
+        width: 493px;
+        height: 740px;
+        max-width: none;
+      }
+
+      /* ---------- Header ---------- */
+      .res-hero {
+        padding: 0 var(--gutter) 24px;
+        background: var(--res-hero, var(--water));
+      }
+      .res-hero .h1 {
+        margin-top: 14px;
+        padding: 0 8px;
+      }
+      .res-hero .back[hidden] {
+        display: none;
+      }
+      .res-hero--root {
+        padding-top: 24px;
+      }
+      .res-hero--root .h1 {
+        margin-top: 0;
+      }
+      .res-hero .hero__kicker {
+        margin-top: 8px;
+        padding: 0 8px;
+        font-size: 14px;
+        letter-spacing: 0.012em;
+      }
+
+      /* ---------- Cards (Figma "Card": 16px radius, 12/16 padding, 16px gap, shadow #edeefb) ---------- */
+      .res-list {
+        display: grid;
+        gap: 16px;
+        padding: 32px var(--gutter) 32px;
+      }
+      .res-card {
+        display: grid;
+        gap: 16px;
+        padding: 12px 16px;
+        border-radius: var(--r-lg);
+        background: var(--tone);
+        box-shadow: 0 15px 40px #edeefb;
+        transition:
+          transform var(--t-fast) var(--ease),
+          box-shadow var(--t-med) var(--ease);
+      }
+      .res-card:hover {
+        box-shadow: 0 15px 40px #e1e3f7;
+      }
+      .res-card:hover .long-arrow {
+        transform: translateX(3px);
+      }
+      .res-card:active {
+        transform: scale(0.985);
+      }
+      .res-tile {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: var(--r-md);
+        background: var(--tile);
+        color: var(--glyph);
+      }
+      .res-tile .i {
+        width: 28px;
+        height: 28px;
+        stroke-width: 1.5;
+      }
+      .res-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .res-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .res-sub {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+      .res-title {
+        display: block;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.5;
+        color: var(--deep);
+      }
+      .res-card .long-arrow {
+        color: var(--deep);
+        transition: transform var(--t-fast) var(--ease);
+      }
+      /* tones: card fill / tile fill / glyph colour */
+      .t-violet {
+        --tone: var(--violet-light);
+        --tile: var(--violet);
+        --glyph: #5154ca;
+      }
+      .t-water {
+        --tone: var(--water-light);
+        --tile: var(--water);
+        --glyph: #fff;
+      }
+      .t-sun {
+        --tone: var(--sun-light);
+        --tile: var(--sun);
+        --glyph: #7a5a10;
+      }
+      .t-blue {
+        --tone: var(--baby-light);
+        --tile: var(--baby);
+        --glyph: #2d55e6;
+      }
+      .t-pink {
+        --tone: var(--pink-light);
+        --tile: var(--peach);
+        --glyph: #9c3d62;
+      }
+    </style>
+  </head>
+  <body data-tab="resources" style="--status-bg: var(--water)">
+    <div class="app">
+      <main class="screen screen--flush res" id="main">
+        <div class="res-mark" aria-hidden="true">
+          <img src="assets/fig/logo-watermark.png" width="493" height="740" alt="" />
+        </div>
+        <header class="hero res-hero" id="hero">
+          <div class="wash" data-wash="water" data-hills="40" aria-hidden="true"></div>
+          <a class="back rise" href="resources.html" data-back id="back" hidden><span class="long-arrow" aria-hidden="true"></span>Resources</a>
+          <h1 class="h1 rise" style="--d: 1" id="title">Resources</h1>
+          <p class="hero__kicker rise" style="--d: 1" id="kicker">Daily Resilience Practices</p>
+        </header>
+        <ul class="res-list" id="list" aria-labelledby="title"></ul>
+      </main>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const params = new URLSearchParams(location.search);
+        const col = RD.collection(params.get('c'));
+
+        const HERO = { water: 'var(--water)', violet: 'var(--violet-light)', sun: 'var(--sun-light)', blue: 'var(--baby-light)', pink: 'var(--pink-light)' };
+        const THEME = { water: '#99d7db', violet: '#d0d1ff', sun: '#fbecc4', blue: '#cfebff', pink: '#fcddec' };
+
+        /* Figma tile icons where the frame has them; DS line icons otherwise */
+        const FIG = {
+          'walking-mindfully': '<img src="assets/fig/icon-running.svg" width="28" height="28" alt="" />',
+          'body-scan': '<img src="assets/fig/icon-temperature.svg" width="32" height="32" alt="" />',
+          'being-present': '<img src="assets/fig/icon-running.svg" width="28" height="28" alt="" />',
+        };
+        const CAT_ICON = { 'resilience-river': 'waves', energy: 'battery-bolt', sleep: 'moon', develop: 'sparkles' };
+
+        function card({ href, tone, ico, sub, title }) {
+          return `<li><a class="res-card t-${tone} rise" href="${href}">
+              <span class="res-tile" aria-hidden="true">${ico}</span>
+              <span class="res-row">
+                <span class="res-info"><span class="res-sub">${RD.esc(sub)}</span><span class="res-title">${RD.esc(title)}</span></span>
+                <span class="long-arrow" aria-hidden="true"></span>
+              </span>
+            </a></li>`;
+        }
+
+        const list = $('list');
+        if (col) {
+          /* ---------- One collection (the Being Present frame) ---------- */
+          document.title = `${col.title} · Resources · Resilience Dynamic`;
+          document.body.style.setProperty('--status-bg', HERO[col.tone] || HERO.water);
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', THEME[col.tone] || THEME.water);
+          $('hero').style.setProperty('--res-hero', HERO[col.tone] || HERO.water);
+          $('hero').querySelector('.wash').dataset.wash = HERO[col.tone] ? col.tone : 'water';
+          $('back').hidden = false;
+          $('title').textContent = col.title;
+          $('kicker').textContent = col.sub;
+          // cards alternate Violet / Water as in the frame
+          list.innerHTML = col.tools
+            .map(RD.tool)
+            .filter(Boolean)
+            .map((t, i) =>
+              card({
+                href: `tool.html?id=${encodeURIComponent(t.id)}`,
+                tone: i % 2 ? 'water' : 'violet',
+                ico: FIG[t.id] || RD.icon(RD.KINDS[t.kind].icon),
+                sub: t.tagline || `${RD.KINDS[t.kind].label} · ${RD.fmt.mins(t.mins)}`,
+                title: t.title,
+              })
+            )
+            .join('');
+        } else {
+          /* ---------- Hub: the categories (Daily Resilience Practices) ---------- */
+          $('hero').classList.add('res-hero--root');
+          const ORDER = ['resilience-river', 'being-present', 'energy', 'sleep', 'develop'];
+          const cols = [...RD.COLLECTIONS].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
+          list.innerHTML = cols
+            .map((c) =>
+              card({
+                href: `resources.html?c=${c.id}`,
+                tone: c.tone,
+                ico: FIG[c.id] || RD.icon(CAT_ICON[c.id] || 'layers'),
+                sub: `${c.sub} · ${c.tools.length} ${c.tools.length === 1 ? 'tool' : 'tools'}`,
+                title: c.title,
+              })
+            )
+            .join('');
+        }
+        [...list.querySelectorAll('.rise')].forEach((el, i) => el.style.setProperty('--d', Math.min(i + 2, 8)));
+      })();
+    </script>
+  </body>
+</html>

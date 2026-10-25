@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1c1430" />
+    <title>Entrar · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <link rel="prefetch" href="home.html" />
+    <style>
+      /* Figma 0.1 login: the beach photo, white logo, two glass fields, "Entrar", "Ou", Facebook, two links.
+         Refined: a violet → night gradient over the photo instead of a flat dim (keeps every line AA),
+         floating labels, a CPF mask with a calm error, show/hide password, a loading state and a demo shortcut. */
+      .login {
+        position: relative;
+        isolation: isolate;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        padding: 0 24px calc(18px + env(safe-area-inset-bottom));
+        color: #fff;
+        background: #1c1430;
+      }
+      .has-status .login {
+        padding-top: 50px;
+        padding-bottom: 30px;
+      }
+      .screen:has(.login) {
+        padding: 0;
+        background: #1c1430;
+      }
+      .login__bg {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+      }
+      .login__bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 18%;
+        transform: translateY(-11%) scale(1.18);
+        transform-origin: 50% 30%;
+        animation: drift 18s ease-in-out infinite alternate;
+      }
+      @keyframes drift {
+        to {
+          transform: translateY(-11.6%) scale(1.22);
+        }
+      }
+      /* the cozy overlay: violet haze on the sky, deepening to night where the form sits */
+      .login__bg::before,
+      .login__bg::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
+      .login__bg::before {
+        background:
+          radial-gradient(90% 50% at 50% 38%, rgba(255, 170, 120, 0.12), transparent 70%),
+          linear-gradient(180deg, rgba(58, 30, 160, 0.5) 0%, rgba(52, 26, 140, 0.4) 24%, rgba(40, 22, 104, 0.52) 38%, rgba(28, 16, 70, 0.72) 50%, rgba(20, 13, 44, 0.88) 68%, rgba(16, 11, 34, 0.94) 100%);
+      }
+      .login__bg::after {
+        background: var(--grain);
+        background-size: 180px;
+        mix-blend-mode: soft-light;
+        opacity: 0.8;
+      }
+
+      .login__brand {
+        flex: 1;
+        display: grid;
+        place-items: end center;
+        min-height: 130px;
+        padding: 12px 0 44px;
+        color: #fff;
+      }
+      .login__brand .logo {
+        width: 158px;
+        filter: drop-shadow(0 8px 24px rgba(10, 4, 40, 0.45));
+      }
+
+      .login__form {
+        display: grid;
+        gap: 12px;
+      }
+      /* floating label inside the glass field */
+      .float {
+        position: relative;
+        padding-left: 18px;
+      }
+      .float input {
+        height: 56px;
+        padding-top: 18px;
+        font-size: 16.5px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      .float label {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        font-size: 16.5px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.86);
+        transform: translateY(-50%);
+        transform-origin: 0 0;
+        pointer-events: none;
+        transition:
+          transform var(--t-med) var(--ease),
+          color var(--t-fast) var(--ease);
+      }
+      .float input:focus + label,
+      .float input:not(:placeholder-shown) + label {
+        color: rgba(255, 255, 255, 0.8);
+        transform: translateY(-21px) scale(0.74);
+        font-weight: 600;
+      }
+      .float input::placeholder {
+        color: transparent;
+      }
+      .float input:focus::placeholder {
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .input--glass {
+        background: rgba(18, 12, 40, 0.42);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+      }
+      .input--glass .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      /* calm error on the photo: rose ring + light rose text (AA on the night overlay) */
+      .input--glass.is-invalid {
+        box-shadow: inset 0 0 0 2px #ff9db0;
+      }
+      .login .hint {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 6px 2px 0;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #ffd3dc;
+        text-shadow: 0 1px 10px rgba(12, 6, 32, 0.7);
+      }
+      .login .hint .i {
+        width: 16px;
+        height: 16px;
+      }
+
+      .btn .spin {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #fff;
+        animation: spin 700ms linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .btn[aria-busy='true'] {
+        pointer-events: none;
+      }
+      .login .btn:not(.btn--dark) {
+        margin-top: 4px;
+      }
+      .btn--dark {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+      }
+      .btn--dark:hover {
+        background: rgba(255, 255, 255, 0.16);
+      }
+      .btn--dark .i {
+        fill: currentColor;
+        stroke: none;
+      }
+
+      .or {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 2px 22px;
+        font-size: 14.5px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.86);
+      }
+      .or::before,
+      .or::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .demo {
+        justify-self: center;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 44px;
+        padding: 0 16px;
+        margin-top: 2px;
+        border-radius: var(--r-pill);
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        transition: background var(--t-fast) var(--ease);
+      }
+      .demo .i {
+        width: 18px;
+        height: 18px;
+        color: var(--orange-400);
+      }
+      .demo:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .demo span {
+        text-decoration: underline;
+        text-decoration-color: rgba(255, 255, 255, 0.45);
+        text-underline-offset: 3px;
+      }
+
+      .login__foot {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px -8px 0;
+      }
+      .login__foot button {
+        min-height: 44px;
+        padding: 0 8px;
+        border-radius: 8px;
+        font-size: 14.5px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .login__foot button:hover {
+        color: #fff;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .login :focus-visible {
+        outline-color: #fff;
+      }
+      .toast {
+        bottom: 120px;
+      }
+    </style>
+  </head>
+  <body data-status="light">
+    <div class="app">
+      <main class="screen" id="main">
+        <div class="login">
+          <div class="login__bg" aria-hidden="true">
+            <img src="assets/img/login.jpg" alt="" width="900" height="1350" fetchpriority="high" />
+          </div>
+
+          <h1 class="login__brand pop"><span class="logo" aria-hidden="true"></span><span class="sr-only">Finby — entrar</span></h1>
+
+          <form class="login__form" id="form" novalidate>
+            <div class="rise" style="--d: 2">
+              <div class="input input--glass float" id="cpf-box">
+                <input id="cpf" name="cpf" type="text" inputmode="numeric" autocomplete="username" maxlength="14" placeholder="000.000.000-00" aria-describedby="cpf-hint" />
+                <label for="cpf">CPF</label>
+              </div>
+              <p class="hint" id="cpf-hint" hidden></p>
+            </div>
+
+            <div class="rise" style="--d: 3">
+              <div class="input input--glass float" id="pwd-box">
+                <input id="pwd" name="senha" type="password" autocomplete="current-password" placeholder="Sua senha" aria-describedby="pwd-hint" />
+                <label for="pwd">Senha</label>
+                <button class="icon-btn" type="button" id="eye" aria-pressed="false" aria-label="Mostrar senha"><span data-icon="eye"></span></button>
+              </div>
+              <p class="hint" id="pwd-hint" hidden></p>
+            </div>
+
+            <button class="btn rise" style="--d: 4" type="submit" id="submit">Entrar</button>
+
+            <p class="or rise" style="--d: 5" aria-hidden="true">Ou</p>
+
+            <button class="btn btn--dark rise" style="--d: 6" type="button" id="facebook"><span data-icon="facebook"></span>Continuar com Facebook</button>
+
+            <button class="demo rise" style="--d: 7" type="button" id="demo"><span data-icon="sparkles"></span><span>Entrar com a conta demo</span></button>
+          </form>
+
+          <nav class="login__foot rise" style="--d: 8" aria-label="Ajuda com a conta">
+            <button type="button" data-soon="Recuperar senha">Esqueci minha senha</button>
+            <button type="button" data-soon="Criar conta">Criar minha conta</button>
+          </nav>
+        </div>
+      </main>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const form = $('form');
+        const cpf = $('cpf');
+        const pwd = $('pwd');
+        const submit = $('submit');
+        const DEMO = { cpf: '529.982.247-25', pwd: 'finby2026' };
+
+        /* CPF mask: 000.000.000-00 */
+        const digits = (s) => s.replace(/\D/g, '').slice(0, 11);
+        const mask = (d) =>
+          d
+            .replace(/^(\d{3})(\d)/, '$1.$2')
+            .replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+            .replace(/\.(\d{3})(\d{1,2})$/, '.$1-$2');
+        cpf.addEventListener('input', () => {
+          const atEnd = cpf.selectionStart === cpf.value.length;
+          cpf.value = mask(digits(cpf.value));
+          if (atEnd) cpf.setSelectionRange(cpf.value.length, cpf.value.length);
+          if (digits(cpf.value).length === 11) setError('cpf', '');
+        });
+
+        /* errors: calm hint under the field, ring on the field, aria-invalid on the input */
+        function setError(id, msg) {
+          const box = $(id + '-box');
+          const hint = $(id + '-hint');
+          const input = $(id);
+          box.classList.toggle('is-invalid', !!msg);
+          input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+          hint.hidden = !msg;
+          hint.innerHTML = msg ? FB.icon('alert') + '<span></span>' : '';
+          if (msg) hint.lastChild.textContent = msg;
+        }
+        const cpfError = () => {
+          const n = digits(cpf.value).length;
+          if (!n) return 'Digite seu CPF.';
+          if (n < 11) return 'O CPF tem 11 números. Confira e tente de novo.';
+          return '';
+        };
+        const pwdError = () => (pwd.value.length >= 4 ? '' : pwd.value ? 'A senha tem pelo menos 4 caracteres.' : 'Digite sua senha.');
+        cpf.addEventListener('blur', () => {
+          if (cpf.value) setError('cpf', cpfError());
+        });
+        pwd.addEventListener('input', () => {
+          if (pwd.value.length >= 4) setError('pwd', '');
+        });
+
+        /* show / hide password */
+        const eye = $('eye');
+        eye.addEventListener('click', () => {
+          const show = pwd.type === 'password';
+          pwd.type = show ? 'text' : 'password';
+          eye.setAttribute('aria-pressed', show);
+          eye.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha');
+          eye.innerHTML = FB.icon(show ? 'eye-off' : 'eye');
+        });
+
+        /* sign in: short loading state, then home */
+        function busy(btn, label) {
+          btn.setAttribute('aria-busy', 'true');
+          btn.innerHTML = `<span class="spin" aria-hidden="true"></span><span>${label}</span>`;
+          document.querySelectorAll('.login button, .login input').forEach((el) => el !== btn && (el.disabled = true));
+          setTimeout(() => (location.href = 'home.html'), 950);
+        }
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (submit.getAttribute('aria-busy') === 'true') return;
+          const ce = cpfError();
+          const pe = pwdError();
+          setError('cpf', ce);
+          setError('pwd', pe);
+          if (ce) return cpf.focus();
+          if (pe) return pwd.focus();
+          busy(submit, 'Entrando…');
+        });
+
+        /* portfolio shortcut: fill the demo account and sign in */
+        function fillDemo() {
+          cpf.value = DEMO.cpf;
+          pwd.value = DEMO.pwd;
+          setError('cpf', '');
+          setError('pwd', '');
+        }
+        $('demo').addEventListener('click', () => {
+          fillDemo();
+          form.requestSubmit ? form.requestSubmit(submit) : submit.click();
+        });
+
+        $('facebook').addEventListener('click', (e) => busy(e.currentTarget, 'Conectando ao Facebook…'));
+
+        document.querySelectorAll('[data-soon]').forEach((b) => b.addEventListener('click', () => FB.toast(`${b.dataset.soon}: em breve`, 'clock')));
+
+        /* deep links: ?demo=1 fills the demo account; ?error=1 shows the CPF error state */
+        const q = new URLSearchParams(location.search);
+        if (q.has('demo')) fillDemo();
+        if (q.has('error')) {
+          cpf.value = '529.982.2';
+          pwd.value = '12';
+          setError('cpf', cpfError());
+          setError('pwd', pwdError());
+        }
+      })();
+    </script>
+  </body>
+</html>

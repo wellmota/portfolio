@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fafaff" />
+    <title>Home · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: home screen (848:15785) — top area, greeting row, feature cards; river card added on top */
+      .home {
+        padding: 0 var(--gutter) 24px;
+      }
+      .home-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0 8px 0;
+        margin: 0 -8px 0 -12px;
+      }
+      .home-top .logo {
+        width: 143px;
+        height: 57px;
+        margin-left: 4px;
+      }
+      .bell {
+        background-image: url('assets/fig/icon-bell-new.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 24px;
+      }
+      .hello {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 16px;
+      }
+      .hello__name {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--deep);
+      }
+      .hello__last {
+        font-size: 12px;
+        color: var(--ink-2);
+      }
+      .cards {
+        display: grid;
+        gap: 8px;
+      }
+
+      /* River card: the level at a glance (kept from the first round, restyled in the DS) */
+      .river-card {
+        padding: 20px 20px 16px;
+      }
+      .river-card__top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .river-card__label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-3);
+      }
+      .river-card__level {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        margin-top: 2px;
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: var(--deep);
+      }
+      .river-card__of {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--ink-3);
+      }
+      .river-card .river {
+        height: 128px;
+        margin-top: 14px;
+      }
+      .river-card__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .river-card__say {
+        font-size: 12px;
+        color: var(--ink-2);
+        max-width: 160px;
+      }
+
+      /* Feature cards: Figma sizes (342 wide, ~150 tall), art bleeds and is clipped */
+      .feature {
+        min-height: 150px;
+      }
+      .feature__title {
+        position: relative;
+      }
+      .feature__art {
+        top: 20px;
+        right: 20px;
+      }
+      .row2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .row2 .feature {
+        min-height: 132px;
+      }
+      .row2 .feature__title {
+        max-width: none;
+      }
+      .track {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 12px;
+        padding: 24px 16px;
+        border-radius: var(--r-lg);
+        background: var(--baby-light);
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .track:active {
+        transform: scale(0.98);
+      }
+      .track__plus {
+        display: grid;
+        place-items: center;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: var(--lilac);
+      }
+      .track__label {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--deep);
+      }
+    </style>
+  </head>
+  <body data-tab="home">
+    <div class="app">
+      <main class="screen home" id="main">
+        <header class="home-top rise">
+          <img class="logo" src="assets/fig/logo.png" width="143" height="57" alt="Resilience Dynamic" />
+          <a class="icon-btn bell" href="practices.html" aria-label="Notifications, 3 new"></a>
+        </header>
+
+        <div class="hello rise" style="--d: 1">
+          <h1 class="hello__name">Hi <span data-name>Calum</span>!</h1>
+          <p class="hello__last" data-last>Last checkin: Yesterday</p>
+        </div>
+
+        <div class="cards">
+          <section class="card river-card rise" style="--d: 2" aria-labelledby="river-t">
+            <div class="river-card__top">
+              <div>
+                <h2 class="river-card__label" id="river-t">Your river today</h2>
+                <p class="river-card__level num"><span data-level>3.4</span><span class="river-card__of">/ 6</span></p>
+              </div>
+              <span data-chip></span>
+            </div>
+            <div class="river" data-river-el></div>
+            <div class="river-card__foot">
+              <p class="river-card__say" data-say></p>
+              <a class="btn btn--primary btn--sm" href="checkin.html" data-cta>Check in · 2 min</a>
+            </div>
+          </section>
+
+          <a class="feature tone-water pw rise" style="--d: 3" href="trends.html">
+            <span class="feature__art"><span class="art art--arch art--ring" data-art="growth" style="--w: 120px; --h: 160px"></span></span>
+            <h2 class="feature__title">Productivity &amp; Wellbeing</h2>
+            <p class="feature__sub">Discover your balance</p>
+            <span class="btn btn--tint">Check <span class="long-arrow"></span></span>
+          </a>
+
+          <a class="feature tone-violet dp rise" style="--d: 4" href="practices.html">
+            <span class="feature__art"><span class="art art--arch art--ring" data-art="practice" style="--w: 120px; --h: 160px"></span></span>
+            <h2 class="feature__title">Daily Practices</h2>
+            <p class="feature__sub">Daily Resilience Practices</p>
+            <span class="btn btn--tint on-plum">Start</span>
+          </a>
+
+          <div class="row2 rise" style="--d: 5">
+            <a class="feature tone-water" href="resources.html">
+              <h2 class="feature__title">Develop your Resilience</h2>
+              <span class="btn btn--tint">GO <span class="long-arrow"></span></span>
+            </a>
+            <a class="track" href="checkin.html" data-track>
+              <span class="track__plus"><img src="assets/fig/icon-add-teal.svg" width="48" height="48" alt="" /></span>
+              <span class="track__label">Track now</span>
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const done = RD.checkedInToday();
+        // Before today's check-in the card shows yesterday's level; after it, today's.
+        const hist = RD.history(2);
+        const day = done ? hist[1] : hist[0];
+        const level = day.level;
+        const zone = RD.zone(level);
+        const firstTime = !RD.store.get('settings');
+        const trackHref = firstTime ? 'settings.html?next=checkin' : 'checkin.html';
+
+        document.querySelector('[data-name]').textContent = RD.user.name;
+        document.querySelector('[data-last]').textContent = done ? 'Last checkin: Today' : 'Last checkin: Yesterday';
+        document.querySelector('[data-level]').textContent = RD.fmt.score(level);
+        document.querySelector('[data-chip]').innerHTML = RD.zoneChip(zone);
+        document.querySelector('[data-say]').textContent = done
+          ? RD.ZONES[zone].desc
+          : 'Yesterday’s level. Check in to see where it is today.';
+        const cta = document.querySelector('[data-cta]');
+        if (done) {
+          cta.textContent = 'See results';
+          cta.href = 'result.html';
+        } else cta.href = trackHref;
+        document.querySelector('[data-track]').href = trackHref;
+        RD.renderRiver(document.querySelector('[data-river-el]'), level);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Meus consórcios · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma 1.0.0 home (1805:993): title + avatar, card carousel, "Contemplado do mês", "Atividades" */
+      .me {
+        display: block;
+        border-radius: 50%;
+      }
+      .rail .cc {
+        width: 300px;
+      }
+      /* "create" tile at the end of the rail (Figma components/buttons/contact_new) */
+      .new-tile {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 10px;
+        width: 150px;
+        border-radius: var(--r-xl);
+        border: 1.5px dashed var(--violet-200);
+        color: var(--violet-700);
+        font-size: 14px;
+        font-weight: 700;
+        text-align: center;
+        transition: background var(--t-fast) var(--ease);
+      }
+      .new-tile:hover {
+        background: var(--violet-50);
+      }
+      .new-tile__plus {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(180deg, var(--violet-500), var(--violet-600));
+        box-shadow: var(--shadow-btn);
+      }
+      .dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: -10px;
+      }
+      .dots span {
+        width: 6px;
+        height: 6px;
+        border-radius: 6px;
+        background: var(--sand-200);
+        transition:
+          width var(--t-med) var(--ease),
+          background var(--t-med) var(--ease);
+      }
+      .dots span.is-on {
+        width: 18px;
+        background: var(--violet-600);
+      }
+
+      /* Contemplado do mês: the Figma green card, now mint with dark ink (AA) and a trophy glow */
+      .spot {
+        position: relative;
+        isolation: isolate;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px 14px 14px;
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        background:
+          radial-gradient(70% 140% at 100% 0%, rgba(214, 245, 122, 0.55), transparent 60%),
+          linear-gradient(120deg, var(--green-50), var(--green-100));
+        box-shadow: inset 0 0 0 1px rgba(16, 201, 113, 0.22);
+      }
+      .spot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 180px;
+        mix-blend-mode: soft-light;
+        opacity: 0.7;
+      }
+      .spot .av {
+        box-shadow: 0 0 0 2.5px #fff;
+      }
+      .spot__name {
+        font-size: 15.5px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .spot__sub {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--green-700);
+      }
+      .spot__amount {
+        margin-left: auto;
+        text-align: right;
+        white-space: nowrap;
+        font-size: 16.5px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.01em;
+        color: var(--green-700);
+      }
+      .spot__amount small {
+        display: block;
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      /* Activity feed (Figma components/cards/timeline-card) */
+      .feed {
+        display: grid;
+        gap: 10px;
+      }
+      .post {
+        padding: 14px 14px 10px;
+      }
+      .post__head {
+        display: flex;
+        gap: 12px;
+      }
+      .post__text {
+        flex: 1;
+        min-width: 0;
+        font-size: 15px;
+        line-height: 1.4;
+        color: var(--ink-2);
+      }
+      .post__text strong,
+      .post__text a {
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .post__text a:hover {
+        color: var(--violet-700);
+      }
+      .post__detail {
+        display: block;
+        margin-top: 2px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .post__amount {
+        font-weight: 700;
+        color: var(--green-700);
+      }
+      .post__foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+        padding-left: 52px;
+      }
+      .post__time {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .post__actions {
+        display: flex;
+        gap: 2px;
+        margin-right: -6px;
+      }
+      .react {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        min-width: 44px;
+        height: 36px;
+        padding: 0 8px;
+        border-radius: var(--r-pill);
+        font-size: 13px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        color: var(--ink-3);
+        transition:
+          background var(--t-fast) var(--ease),
+          color var(--t-fast) var(--ease);
+      }
+      .react:hover {
+        background: var(--sunken);
+      }
+      .react .i {
+        width: 19px;
+        height: 19px;
+      }
+      .react[aria-pressed='true'] {
+        color: var(--rose-500);
+      }
+      .react[aria-pressed='true'] .i {
+        fill: currentColor;
+        animation: beat 420ms var(--ease-spring);
+      }
+      @keyframes beat {
+        40% {
+          transform: scale(1.3);
+        }
+      }
+      /* system posts (payment) sit on the sunken surface, as in Figma */
+      .post--system {
+        background: var(--sunken);
+        box-shadow: none;
+      }
+      .post__ico {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        flex: none;
+        border-radius: 50%;
+        color: var(--violet-600);
+        background: #fff;
+        box-shadow: var(--shadow-xs);
+      }
+      .post__ico--win {
+        color: var(--gold-3);
+        background: var(--gold-1);
+      }
+
+      /* comments sheet */
+      .comment {
+        display: flex;
+        gap: 10px;
+        padding: 10px 0;
+      }
+      .comment p {
+        font-size: 14.5px;
+        line-height: 1.4;
+        color: var(--ink-2);
+      }
+      .comment strong {
+        color: var(--ink);
+      }
+      .compose {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 12px;
+      }
+      .compose .search {
+        flex: 1;
+        background: var(--sunken);
+      }
+    </style>
+  </head>
+  <body data-tab="home">
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="appbar rise">
+          <h1 class="t-title">Meus consórcios</h1>
+          <a class="me" href="perfil.html" aria-label="Seu perfil, Alana Oliveira, nível Gold">
+            <span data-av="alana" data-size="lg" data-crown></span>
+          </a>
+        </header>
+
+        <section aria-label="Seus consórcios">
+          <div class="rail" id="rail"></div>
+          <div class="dots" id="dots" aria-hidden="true"></div>
+        </section>
+
+        <section aria-labelledby="spot-h" class="rise" style="--d: 3">
+          <div class="section-head">
+            <h2 id="spot-h">Contemplado do mês</h2>
+            <a class="link" id="history" href="consorcio.html?id=turma-d#contemplados">Ver histórico</a>
+          </div>
+          <div id="spot"></div>
+        </section>
+
+        <section aria-labelledby="feed-h" class="rise" style="--d: 4">
+          <div class="section-head">
+            <h2 id="feed-h">Atividades</h2>
+          </div>
+          <div class="feed" id="feed"></div>
+        </section>
+      </main>
+
+      <div class="sheet" id="comments" role="dialog" aria-modal="true" aria-labelledby="comments-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="comments-h">Comentários</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <div id="comments-list" class="mt-8"></div>
+        <form class="compose" id="compose">
+          <label class="search">
+            <span class="sr-only">Escreva um comentário</span>
+            <input id="compose-input" type="text" placeholder="Escreva um comentário…" autocomplete="off" />
+          </label>
+          <button class="icon-btn" type="submit" aria-label="Enviar comentário" style="color: var(--violet-600)"><span data-icon="send"></span></button>
+        </form>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const { fmt, esc } = FB;
+
+        /* Carousel: my consórcios, then the "create" tile */
+        const mine = FB.mine();
+        const rail = document.getElementById('rail');
+        rail.innerHTML =
+          mine.map((c, i) => `<div class="pop" style="--d:${i + 1}">${FB.card(c)}</div>`).join('') +
+          `<a class="new-tile pop" style="--d:${mine.length + 1}" href="criar.html"><span class="new-tile__plus">${FB.icon('plus')}</span>Criar novo<br />consórcio</a>`;
+        const dots = document.getElementById('dots');
+        dots.innerHTML = mine.map((_, i) => `<span${i ? '' : ' class="is-on"'}></span>`).join('');
+        rail.addEventListener(
+          'scroll',
+          () => {
+            const i = Math.min(mine.length - 1, Math.round(rail.scrollLeft / 312));
+            [...dots.children].forEach((d, k) => d.classList.toggle('is-on', k === i));
+          },
+          { passive: true }
+        );
+        rail.addEventListener('click', (e) => {
+          const b = e.target.closest('[data-more]');
+          if (b) location.href = `consorcio.html?id=${encodeURIComponent(b.dataset.more)}#opcoes`;
+        });
+
+        /* Contemplado do mês */
+        const s = FB.spotlight;
+        const sc = FB.get(s.target);
+        document.getElementById('spot').innerHTML = `
+          <a class="spot" href="consorcio.html?id=${s.target}#contemplados">
+            ${FB.avatar(s.who, { size: 'lg' })}
+            <div class="grow">
+              <p class="spot__name">${esc(FB.person(s.who).name)}</p>
+              <p class="spot__sub">${esc(sc.name)}</p>
+            </div>
+            <p class="spot__amount">${fmt.brl(s.amount)}<small>em ${fmt.ddmm(s.date)}</small></p>
+          </a>`;
+
+        /* Activity feed */
+        const likes = FB.store.get('likes', {});
+        const name = (id) => esc(FB.person(id).name);
+        const link = (id) => `<a href="consorcio.html?id=${id}">${esc(FB.get(id).name)}</a>`;
+        const foot = (a) => {
+          const liked = !!likes[a.id];
+          const n = a.likes + (liked ? 1 : 0);
+          return `<div class="post__foot">
+            <span class="post__time">${FB.icon('clock', 'i--xs')}${fmt.ago(a.when)}</span>
+            <span class="post__actions">
+              <button class="react" type="button" data-comments="${a.id}" aria-label="${a.comments} comentários">${FB.icon('message-circle')}${a.comments}</button>
+              <button class="react" type="button" data-like="${a.id}" aria-pressed="${liked}" aria-label="Curtir, ${n} curtidas"><span>${FB.icon('heart')}</span><span class="n">${n}</span></button>
+            </span>
+          </div>`;
+        };
+        const post = (a) => {
+          if (a.type === 'payment')
+            return `<article class="card post post--system">
+              <div class="post__head">
+                <span class="post__ico">${FB.icon('banknote')}</span>
+                <p class="post__text"><strong>Você efetuou um pagamento</strong>
+                  <span class="post__detail">Parcela ${a.installment} de ${a.of} · ${link(a.target)}</span>
+                  <span class="post__detail"><span class="post__amount">${fmt.brl(a.amount)}</span> · ${fmt.ago(a.when)}</span>
+                </p>
+              </div>
+            </article>`;
+          const text =
+            a.type === 'joined'
+              ? `<strong>${name(a.who)}</strong> aderiu ao consórcio ${link(a.target)}`
+              : a.type === 'accepted'
+                ? `<strong>${name(a.who)}</strong> aceitou seu convite para ${link(a.target)}`
+                : `<strong>${name(a.who)}</strong> foi contemplada em ${link(a.target)} <span class="post__detail"><span class="post__amount">${fmt.brl(a.amount)}</span></span>`;
+          return `<article class="card post">
+            <div class="post__head">${FB.avatar(a.who)}<p class="post__text">${text}</p></div>
+            ${foot(a)}
+          </article>`;
+        };
+        const feed = document.getElementById('feed');
+        feed.innerHTML = FB.activity.map(post).join('');
+
+        feed.addEventListener('click', (e) => {
+          const like = e.target.closest('[data-like]');
+          if (like) {
+            const a = FB.activity.find((x) => x.id === like.dataset.like);
+            likes[a.id] = !likes[a.id];
+            FB.store.set('likes', likes);
+            const n = a.likes + (likes[a.id] ? 1 : 0);
+            like.setAttribute('aria-pressed', likes[a.id]);
+            like.setAttribute('aria-label', `Curtir, ${n} curtidas`);
+            like.querySelector('.n').textContent = n;
+            return;
+          }
+          const c = e.target.closest('[data-comments]');
+          if (c) openComments(c.dataset.comments, c);
+        });
+
+        /* Comments sheet: a few lines per post, plus whatever you type (kept for this visit) */
+        const THREADS = {
+          a1: [
+            ['mario', 'Bem-vindo, Franz! Agora a turma tá completa.'],
+            ['maria-helena', 'Ebaaa, mais um pra dividir a formatura 🎓'],
+          ],
+          a3: [],
+          a4: [
+            ['franz', 'Parabéns, Maria! Merecido.'],
+            ['juliana', 'Já sabe o que vai fazer com o prêmio?'],
+            ['maria-helena', 'Vai virar o jaleco novo e a viagem de formatura!'],
+            ['pedro-paulo', 'Próximo mês é minha vez 🤞'],
+            ['ana-maria', 'Que demais!'],
+          ],
+        };
+        const sheet = document.getElementById('comments');
+        const list = document.getElementById('comments-list');
+        let current = null;
+        function render() {
+          const rows = THREADS[current] || [];
+          list.innerHTML = rows.length
+            ? rows.map(([who, text]) => `<div class="comment">${FB.avatar(who, { size: 'sm' })}<p><strong>${name(who)}</strong> ${esc(text)}</p></div>`).join('')
+            : `<p class="muted t-body2" style="padding: 12px 0">Ninguém comentou ainda. Que tal começar?</p>`;
+        }
+        function openComments(id, opener) {
+          current = id;
+          render();
+          FB.sheet.open(sheet, opener);
+        }
+        document.getElementById('compose').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const input = document.getElementById('compose-input');
+          const text = input.value.trim();
+          if (!text) return;
+          (THREADS[current] = THREADS[current] || []).push([FB.me, text]);
+          input.value = '';
+          render();
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fcddec" />
+    <title>Suggested Tools · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: Red Flags - Suggested Tools (848:17281 Quick Tools, 848:17398 In-depth).
+         Pink header with the flag badge, search + filter, Quick Tools | In-depth, pastel tool cards. */
+
+      /* ---------- Pink header ---------- */
+      .st-hero {
+        padding: 0 var(--gutter) 54px;
+      }
+      .st-hero .h1 {
+        margin-top: 6px;
+        padding: 0 8px;
+        padding-right: 72px;
+      }
+      .st-hero .hero__sub {
+        margin-top: 16px;
+        padding: 0 8px;
+        font-weight: 500;
+        letter-spacing: 0.012em;
+        color: #784d62;
+      }
+      /* Flag badge (Figma 848:17395): 54px circle, the red flag on its hill */
+      .flag-badge {
+        top: 0;
+        right: 25px;
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0));
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+      .flag-badge > .art {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+      }
+
+      /* ---------- Search + filter (overlaps the header, as in the frame) ---------- */
+      .st-body {
+        padding: 0 var(--gutter);
+      }
+      .hero + .st-body {
+        margin-top: -17px;
+      }
+      .st-body .search {
+        position: relative;
+        gap: 8px;
+        padding: 0 4px 0 12px;
+        box-shadow: none;
+        border: 1px solid var(--line);
+      }
+      .st-body .search:focus-within {
+        border-color: var(--plum);
+      }
+      .st-body .search input {
+        height: 38px;
+      }
+      .st-body .search input::placeholder {
+        color: var(--dust);
+      }
+      .st-body .search input::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+      }
+      .search__clear {
+        display: none;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        flex: none;
+        border-radius: 50%;
+        color: var(--ink-3);
+      }
+      .search__clear .i {
+        width: 18px;
+        height: 18px;
+      }
+      .search.has-value .search__clear {
+        display: grid;
+      }
+      .st-body .round-btn {
+        position: relative;
+        box-shadow: none;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+      .st-body .round-btn[aria-expanded='true'],
+      .st-body .round-btn.is-active {
+        border-color: var(--plum);
+      }
+      .round-btn.is-active::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--plum);
+        box-shadow: 0 0 0 2px var(--surface);
+      }
+      .st-toggle {
+        margin-top: 16px;
+      }
+      .st-toggle button {
+        min-height: 40px;
+        font-weight: 500;
+      }
+      .st-toggle button[aria-selected='true'] {
+        font-weight: 700;
+      }
+
+      /* Active filter chip */
+      .st-filter {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 12px;
+        font-size: 12px;
+        color: var(--ink-2);
+      }
+      .st-filter[hidden] {
+        display: none;
+      }
+      .st-filter button {
+        min-height: 32px;
+        padding: 0 4px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--plum);
+      }
+
+      /* ---------- Tool cards (Figma "card": 342×131, text at 20/23, icon slot centred at x≈278) ---------- */
+      .st-list {
+        display: grid;
+        gap: 16px;
+        margin-top: 16px;
+      }
+      .st-list .tool-card {
+        align-items: center;
+        gap: 12px;
+        min-height: 131px;
+        padding: 23px 24px 18px 20px;
+        box-shadow: 0 0 0 0 transparent;
+        transition:
+          transform var(--t-fast) var(--ease),
+          box-shadow var(--t-med) var(--ease);
+      }
+      .st-list .tool-card:hover {
+        box-shadow: 0 12px 28px -14px rgba(15, 40, 81, 0.28);
+      }
+      .tool-card__text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+        flex: 1;
+      }
+      .st-list .tool-card__title {
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1.35;
+        color: rgba(0, 0, 0, 0.8);
+      }
+      .st-list .tool-card__sub {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.35;
+        color: rgba(0, 0, 0, 0.8);
+        opacity: 0.9;
+      }
+      .st-list .tool-card__cta {
+        margin: 0;
+        padding: 4px 0 13px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+      .tool-card__ico {
+        display: grid;
+        place-items: center;
+        width: 80px;
+        height: 72px;
+        margin-left: auto;
+      }
+
+      /* Empty state */
+      .st-empty {
+        display: grid;
+        justify-items: center;
+        gap: 8px;
+        padding: 40px 16px 24px;
+        text-align: center;
+      }
+      .st-empty p {
+        font-size: 14px;
+        color: var(--ink-2);
+      }
+      .st-empty .h3 {
+        color: var(--deep);
+      }
+
+      /* ---------- Filter sheet ---------- */
+      .sheet[hidden] {
+        display: none;
+      }
+      .st-sheet .radio-list {
+        margin: 4px 0 20px;
+      }
+      .st-sheet .radio {
+        width: 100%;
+        padding: 0 4px;
+        border-radius: var(--r-sm);
+      }
+      .st-sheet .radio .i {
+        color: var(--ink-3);
+      }
+      .st-sheet .radio__count {
+        margin-left: auto;
+        font-size: 12px;
+        color: var(--ink-3);
+      }
+    </style>
+  </head>
+  <body data-tab="resources" style="--status-bg: var(--pink-light)">
+    <div class="app">
+      <main class="screen screen--flush" id="main">
+        <header class="hero hero--pink st-hero">
+          <div class="wash" data-wash="pink" data-glow=".flag-badge" aria-hidden="true"></div>
+          <a class="back rise" href="result.html" data-back><span class="long-arrow" aria-hidden="true"></span>Red Flags</a>
+          <h1 class="h1 rise" style="--d: 1">Suggested Tools</h1>
+          <p class="hero__sub rise" style="--d: 1">Here are some tools for you, based on your red flags. Take a look below.</p>
+          <span class="hero__corner flag-badge rise" style="--d: 2" aria-hidden="true">
+            <span class="art" data-art="flag-badge"></span>
+          </span>
+        </header>
+
+        <div class="st-body">
+          <div class="search-row rise" style="--d: 2" role="search">
+            <div class="search" id="search">
+              <img src="assets/fig/icon-search.svg" width="24" height="24" alt="" />
+              <input type="search" id="q" aria-label="Search tools" placeholder="Search tools" autocomplete="off" enterkeyhint="search" />
+              <button type="button" class="search__clear" id="clear" aria-label="Clear search"><span data-icon="x"></span></button>
+            </div>
+            <button type="button" class="round-btn" id="filter" aria-haspopup="dialog" aria-expanded="false" aria-controls="filter-sheet" aria-label="Filter by type">
+              <img src="assets/fig/icon-filter-list.svg" width="24" height="24" alt="" />
+            </button>
+          </div>
+
+          <div class="toggle2 st-toggle rise" style="--d: 3" role="tablist" aria-label="Tool depth">
+            <button type="button" role="tab" id="t-quick" aria-controls="panel" aria-selected="true">Quick Tools</button>
+            <button type="button" role="tab" id="t-deep" aria-controls="panel" aria-selected="false" tabindex="-1">In-depth</button>
+          </div>
+
+          <p class="st-filter" id="filter-note" hidden>
+            <span id="filter-text"></span>
+            <button type="button" id="filter-reset">Clear filter</button>
+          </p>
+
+          <div id="panel" role="tabpanel" aria-labelledby="t-quick">
+            <ul class="st-list" id="list"></ul>
+          </div>
+          <p class="sr-only" id="count" aria-live="polite"></p>
+        </div>
+      </main>
+
+      <div class="sheet st-sheet" id="filter-sheet" role="dialog" aria-modal="true" aria-labelledby="filter-title" hidden>
+        <h2 class="sheet__title" id="filter-title">Filter by type</h2>
+        <div class="radio-list" role="radiogroup" aria-labelledby="filter-title" id="kinds"></div>
+        <button type="button" class="btn btn--primary btn--block" data-sheet-close id="filter-done">Show tools</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const params = new URLSearchParams(location.search);
+
+        /* art.js badge per key area, in the slot of the Figma line icon */
+        const badge = (key) =>
+          `<span class="tool-card__ico" aria-hidden="true"><span class="art art--round art--ring" style="--w: 68px; --h: 68px">${RD.art('badge-' + key)}</span></span>`;
+        /* Every area the library covers → card tone + icon + display name */
+        const AREA = {
+          sleep: { tone: 'cream', icon: 'sleep', name: 'Sleep' },
+          content: { tone: 'mint', icon: 'content', name: 'Contentedness' },
+          wellbeing: { tone: 'mint', icon: 'content', name: 'Wellbeing' },
+          stress: { tone: 'violet', icon: 'demand', name: 'Stress' },
+          dvc: { tone: 'violet', icon: 'demand', name: 'Demand vs Capacity' },
+          demand: { tone: 'violet', icon: 'demand', name: 'Demand vs Capacity' },
+          capacity: { tone: 'violet', icon: 'demand', name: 'Demand vs Capacity' },
+          energy: { tone: 'sky', icon: 'energy', name: 'Energy' },
+        };
+
+        /* In-depth: one pathway per flagged area (Sleep and Energy come from data.js;
+           Contentedness and Demand vs Capacity mirror the fallbacks in pathway.html) */
+        const EXTRA_PATHWAYS = {
+          content: { steps: ['walking-mindfully', 'body-scan', 'find-autonomy', 'resilience-enablers'] },
+          dvc: { steps: ['prioritisation', 'top-barriers', 'taking-responsibility', 'resilience-resources'] },
+        };
+        const pathway = (id) => RD.PATHWAYS[id] || EXTRA_PATHWAYS[id];
+        const DEEP = [
+          { id: 'sleep', area: 'sleep', title: 'Sleep', name: 'Sleep Pathway' },
+          { id: 'content', area: 'content', title: 'Contentedness', name: 'Contentedness Pathway' },
+          { id: 'dvc', area: 'dvc', title: 'Demand vs Capacity', name: 'Demand vs Capacity Pathway' },
+          { id: 'energy', area: 'energy', title: 'Energy', name: 'Energy Pathway' },
+        ].map((d) => ({ ...d, steps: pathway(d.id).steps }));
+
+        const state = {
+          tab: params.get('tab') === 'in-depth' ? 'deep' : 'quick',
+          q: '',
+          kind: null,
+        };
+
+        /* ---------- Card ---------- */
+        function card({ href, area, title, sub, label }) {
+          const a = AREA[area] || AREA.content;
+          return `<li><a class="tool-card tone-${a.tone}" href="${href}"${label ? ` aria-label="${RD.esc(label)}"` : ''}>
+              <span class="tool-card__text">
+                <span class="tool-card__title">${RD.esc(title)}</span>
+                <span class="tool-card__sub">${RD.esc(sub)}</span>
+                <span class="tool-card__cta">Access now</span>
+              </span>
+              ${badge(a.icon)}
+            </a></li>`;
+        }
+
+        /* ---------- Data for each view ---------- */
+        const norm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+        const matches = (q, ...fields) => fields.some((f) => f && norm(f).includes(q));
+
+        function quickItems() {
+          const q = norm(state.q.trim());
+          // No search and no filter: the four suggestions from the red flags (Figma)
+          if (!q && !state.kind) {
+            return RD.QUICK_TOOLS.map((s) => {
+              const t = RD.tool(s.tool);
+              return {
+                href: `tool.html?id=${encodeURIComponent(s.tool)}`,
+                area: s.area,
+                title: s.title,
+                sub: s.sub,
+                label: `${s.title}: ${t ? t.title : s.sub}. Access now`,
+              };
+            });
+          }
+          // Otherwise search the whole library, keeping the card language: area on top, tool below
+          return RD.TOOLS.filter((t) => !state.kind || t.kind === state.kind)
+            .filter((t) => {
+              const a = AREA[t.area];
+              return !q || matches(q, t.title, t.tagline, t.summary, t.collection, a && a.name, RD.KINDS[t.kind].label);
+            })
+            .map((t) => {
+              const a = AREA[t.area] || AREA.content;
+              return {
+                href: `tool.html?id=${encodeURIComponent(t.id)}`,
+                area: t.area,
+                title: a.name,
+                sub: `${t.title} · ${RD.KINDS[t.kind].label}, ${RD.fmt.mins(t.mins)}`,
+                label: `${a.name}: ${t.title}, ${RD.KINDS[t.kind].label}, ${t.mins} minutes. Access now`,
+              };
+            });
+        }
+
+        function deepItems() {
+          const q = norm(state.q.trim());
+          return DEEP.filter((p) => {
+            const tools = p.steps.map(RD.tool).filter(Boolean);
+            if (state.kind && !tools.some((t) => t.kind === state.kind)) return false;
+            return !q || matches(q, p.title, p.name, ...tools.map((t) => t.title));
+          }).map((p) => ({
+            href: `pathway.html?id=${p.id}`,
+            area: p.area,
+            title: p.title,
+            sub: `Pathway · ${p.steps.length} steps`,
+            label: `${p.title}: ${p.name}, ${p.steps.length} steps. Access now`,
+          }));
+        }
+
+        /* ---------- Render ---------- */
+        const list = $('list');
+        const count = $('count');
+        function render() {
+          const items = state.tab === 'quick' ? quickItems() : deepItems();
+          const what = state.tab === 'quick' ? 'tool' : 'pathway';
+          if (!items.length) {
+            list.innerHTML = `<li class="st-empty">
+                <p class="h3">Nothing matches${state.q.trim() ? ` “${RD.esc(state.q.trim())}”` : ''}</p>
+                <p>Try another word, or clear the search and filter.</p>
+                <button type="button" class="btn btn--secondary btn--sm" id="reset-all">Clear search</button>
+              </li>`;
+            $('reset-all').addEventListener('click', () => {
+              setQuery('');
+              setKind(null);
+              $('q').focus();
+            });
+          } else {
+            list.innerHTML = items.map(card).join('');
+          }
+          const filtered = state.q.trim() || state.kind;
+          count.textContent = filtered ? `${items.length} ${what}${items.length === 1 ? '' : 's'} found` : '';
+        }
+
+        /* ---------- Quick Tools | In-depth (tabs, arrow keys move between them) ---------- */
+        const tabs = [$('t-quick'), $('t-deep')];
+        function setTab(tab, focus) {
+          state.tab = tab;
+          tabs.forEach((b) => {
+            const on = (b.id === 't-quick') === (tab === 'quick');
+            b.setAttribute('aria-selected', String(on));
+            b.tabIndex = on ? 0 : -1;
+            if (on && focus) b.focus();
+          });
+          $('panel').setAttribute('aria-labelledby', tab === 'quick' ? 't-quick' : 't-deep');
+          // keep the view in the URL, so Back from a pathway lands on In-depth again
+          const url = new URL(location.href);
+          if (tab === 'deep') url.searchParams.set('tab', 'in-depth');
+          else url.searchParams.delete('tab');
+          history.replaceState(null, '', url);
+          render();
+        }
+        tabs.forEach((b) => {
+          b.addEventListener('click', () => setTab(b.id === 't-quick' ? 'quick' : 'deep'));
+          b.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'Home' || e.key === 'End') {
+              e.preventDefault();
+              const next = e.key === 'Home' ? 'quick' : e.key === 'End' ? 'deep' : state.tab === 'quick' ? 'deep' : 'quick';
+              setTab(next, true);
+            }
+          });
+        });
+
+        /* ---------- Search ---------- */
+        const q = $('q');
+        const search = $('search');
+        function setQuery(v) {
+          state.q = v;
+          q.value = v;
+          search.classList.toggle('has-value', !!v);
+          render();
+        }
+        q.addEventListener('input', () => setQuery(q.value));
+        search.addEventListener('click', (e) => {
+          if (e.target === search || e.target.tagName === 'IMG') q.focus();
+        });
+        q.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && q.value) {
+            e.preventDefault();
+            setQuery('');
+          }
+        });
+        $('clear').addEventListener('click', () => {
+          setQuery('');
+          q.focus();
+        });
+
+        /* ---------- Filter by type (bottom sheet) ---------- */
+        const sheet = $('filter-sheet');
+        const filterBtn = $('filter');
+        const kinds = $('kinds');
+        const KIND_ORDER = ['audio', 'video', 'exercise', 'read'];
+        function paintKinds() {
+          const opts = [[null, 'All types', 'layers', RD.TOOLS.length]].concat(
+            KIND_ORDER.map((k) => [k, RD.KINDS[k].label, RD.KINDS[k].icon, RD.TOOLS.filter((t) => t.kind === k).length])
+          );
+          kinds.innerHTML = opts
+            .map(
+              ([k, label, icon, n]) => `<button type="button" class="radio" role="radio" data-kind="${k || ''}" aria-checked="${String(state.kind === k)}" tabindex="${state.kind === k ? 0 : -1}">
+                <span class="check">${RD.icon('check')}</span>${RD.icon(icon)}<span>${label}</span><span class="radio__count">${n}</span></button>`
+            )
+            .join('');
+        }
+        function setKind(k) {
+          state.kind = k || null;
+          const label = state.kind ? RD.KINDS[state.kind].label : '';
+          filterBtn.classList.toggle('is-active', !!state.kind);
+          filterBtn.setAttribute('aria-label', state.kind ? `Filter by type: ${label}` : 'Filter by type');
+          $('filter-note').hidden = !state.kind;
+          $('filter-text').textContent = state.kind ? `Showing ${label.toLowerCase()} tools` : '';
+          paintKinds();
+          render();
+        }
+        kinds.addEventListener('click', (e) => {
+          const b = e.target.closest('[role="radio"]');
+          if (!b) return;
+          setKind(b.dataset.kind || null);
+          kinds.querySelector('[aria-checked="true"]').focus();
+        });
+        kinds.addEventListener('keydown', (e) => {
+          const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+          if (!step) return;
+          e.preventDefault();
+          const radios = [...kinds.querySelectorAll('[role="radio"]')];
+          const i = radios.indexOf(document.activeElement);
+          const next = radios[(i + step + radios.length) % radios.length];
+          setKind(next.dataset.kind || null);
+          kinds.querySelector('[aria-checked="true"]').focus();
+        });
+        filterBtn.addEventListener('click', () => {
+          paintKinds();
+          filterBtn.setAttribute('aria-expanded', 'true');
+          RD.sheet.open(sheet, filterBtn);
+        });
+        $('filter-reset').addEventListener('click', () => {
+          setKind(null);
+          filterBtn.focus();
+        });
+        // RD.sheet.close leaves the sheet in the tab order; hide it once it has slid away
+        new MutationObserver(() => {
+          if (sheet.classList.contains('is-open')) return;
+          filterBtn.setAttribute('aria-expanded', 'false');
+          setTimeout(() => {
+            if (!sheet.classList.contains('is-open')) sheet.hidden = true;
+          }, 400);
+        }).observe(sheet, { attributes: true, attributeFilter: ['class'] });
+
+        setKind(null);
+        setTab(state.tab);
+      })();
+    </script>
+  </body>
+</html>

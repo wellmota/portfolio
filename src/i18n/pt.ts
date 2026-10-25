@@ -228,6 +228,28 @@ const pt: SiteData = {
       accent: '#1E8FD5',
       href: '/pt/work/carecloud',
     },
+    {
+      title: 'Resilience Dynamic',
+      meta: 'Bem-estar · Case Study',
+      categories: ['Product', 'UX', 'Prototype'],
+      description:
+        'Desenhei o app de resiliência de uma consultoria de Edimburgo, e ele foi lançado. Depois levei o meu arquivo do Figma a um protótipo de 15 telas que se usa, com as telas que faltavam desenhadas. Ver case study →',
+      image: '/cases/resilience-engine/card-pt.webp',
+      accent: '#7C7FF2',
+      highlight: 'App lançado, protótipo navegável',
+      href: '/pt/work/resilience-engine',
+    },
+    {
+      title: 'Finby',
+      meta: 'Fintech · Case Study',
+      categories: ['Product', 'UI', 'Prototype'],
+      description:
+        'Consórcio entre amigos, sem ninguém cobrando no grupo. Levei o app que desenhei do Figma a um protótipo que se usa no celular: 12 telas navegáveis, do convite ao saque, feito sozinho e em dias. Ver case study →',
+      image: '/cases/finby/card-pt.webp',
+      accent: '#7552F5',
+      highlight: 'Protótipo navegável, do convite ao saque',
+      href: '/pt/work/finby',
+    },
     /* Case studies em espera — descomente para publicar
     {
       title: 'HyperGestor',

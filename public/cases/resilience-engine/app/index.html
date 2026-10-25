@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#d0d1ff" />
+    <title>Welcome · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: onboarding 3 → 13 (848:20140 … 848:21095), 360×800 frames.
+         Lavender panel with the illustration, white sheet (40px top corners) with the copy,
+         steps buttons 64px above the bottom, steps pagination 20px above the bottom.
+         Illustrations keep their Figma size and sit at their Figma offset from the centre line. */
+      body {
+        --status-bg: var(--violet-light);
+      }
+      .ob {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        background: var(--violet-light);
+      }
+
+      /* Sheet top per step (Figma y), set from the script as --sheet-top */
+      .ob-panel {
+        flex: none;
+        height: var(--sheet-top, 415px);
+      }
+      .ob.is-ready .ob-panel {
+        transition: height 560ms var(--ease);
+      }
+
+      /* Top row: "Previous step" (last step only) · "Skip intro" */
+      .ob-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 4;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 17px 24px 0 23px;
+        pointer-events: none;
+      }
+      .ob-top > * {
+        pointer-events: auto;
+      }
+      .ob-prev {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 8px;
+        border-radius: var(--r-md);
+        color: #3c3c3c;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 1.3;
+      }
+      .ob-prev img {
+        transform: rotate(180deg);
+      }
+      .ob-prev:hover {
+        color: var(--deep);
+      }
+      .ob .skip {
+        position: relative;
+        margin: 3px 0 0 auto;
+        background: transparent;
+        transition: background-color var(--t-fast);
+      }
+      .ob .skip:hover {
+        background: rgba(255, 255, 255, 0.45);
+      }
+      /* 44px hit area around the 32px pill */
+      .ob .skip::after {
+        content: '';
+        position: absolute;
+        inset: -6px -4px;
+      }
+
+      /* Illustrations: absolute in the screen, above the sheet (the butterfly overlaps it) */
+      .ob-art {
+        position: absolute;
+        z-index: 2;
+        top: var(--y);
+        left: calc(50% + var(--x));
+        pointer-events: none;
+      }
+      .ob-art[hidden] {
+        display: none;
+      }
+      .art-welcome {
+        --x: -120px;
+        --y: 96px;
+      }
+      .art-butterfly {
+        --x: -130px;
+        --y: 72px;
+      }
+      .art-butterfly .art {
+        box-shadow:
+          0 0 0 5px #fff,
+          0 18px 40px -18px rgba(43, 44, 148, 0.45);
+      }
+      .art-video {
+        --x: -165.5px;
+        --y: 120px;
+        pointer-events: auto;
+      }
+      .art-video button {
+        position: relative;
+        display: block;
+        border-radius: 13px;
+        overflow: hidden;
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .art-video button:active {
+        transform: scale(0.985);
+      }
+      .art-video .art {
+        --w: 331px;
+        --h: 186px;
+        border-radius: 13px;
+      }
+      /* Play disc over the river scene */
+      .art-video .play {
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        display: grid;
+        place-items: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--deep);
+        box-shadow: 0 10px 24px -10px rgba(19, 21, 43, 0.5);
+      }
+      .art-video .play svg {
+        width: 22px;
+        height: 22px;
+      }
+      .art-features {
+        --x: -104px;
+        --y: 72px;
+      }
+      .art-tracker {
+        --x: -138px;
+        --y: 70px;
+      }
+      .art-lights {
+        --x: -102px;
+        --y: 82px;
+      }
+      .art-ready {
+        --x: -125px;
+        --y: 112px;
+      }
+
+      /* White sheet */
+      .ob-sheet {
+        position: relative;
+        z-index: 1;
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+        padding: 0 var(--gutter) 20px;
+        border-radius: 40px 40px 0 0;
+        background: var(--white);
+      }
+      .ob-copies {
+        position: relative;
+      }
+      .ob-copy {
+        padding-top: var(--pt, 24px);
+      }
+      .ob-copy.is-leaving {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        pointer-events: none;
+      }
+      .ob-title {
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: 0.002em;
+        color: var(--deep);
+        text-wrap: pretty;
+      }
+      .ob-sub {
+        margin-top: 8px;
+        font-size: 16px;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+      .ob-rule {
+        height: 1px;
+        margin: 16px 0;
+        border: 0;
+        background: #f0f0f0;
+      }
+      .ob-text {
+        font-size: 16px;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+      .ob-text + .ob-text {
+        margin-top: 9px;
+      }
+      .ob-text b {
+        font-weight: 700;
+      }
+      /* Step 1 is centred */
+      .ob-copy--center {
+        text-align: center;
+      }
+      .ob-copy--center .ob-text {
+        margin-top: 8px;
+      }
+      .ob-copy--center .ob-text + .ob-text {
+        margin-top: 16px;
+      }
+      /* Step 10 */
+      .ob-ask {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.3;
+        letter-spacing: 0.012em;
+        color: var(--deep);
+        text-align: center;
+        text-wrap: pretty;
+      }
+      .ob-start {
+        margin-top: 52px;
+      }
+
+      /* Steps buttons: back 40px from the left edge, next 40px from the right */
+      .ob-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        padding: 12px 16px 0;
+      }
+      .ob-nav.is-first {
+        justify-content: center;
+      }
+      /* Last step: no steps buttons, the pagination stays at the bottom */
+      .ob-nav.is-last {
+        display: none;
+      }
+      .ob-nav.is-last + .ob-dots {
+        margin-top: auto;
+        padding-top: 40px;
+      }
+      .ob-nav .step-btn--ghost img {
+        transform: rotate(180deg);
+      }
+      .ob-nav .step-btn:focus-visible {
+        outline-offset: 4px;
+      }
+      .ob-dots {
+        gap: 12px;
+        margin-top: 40px;
+      }
+      .nowrap {
+        white-space: nowrap;
+      }
+      .ob [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <main class="screen ob" id="main" style="--sheet-top: 415px">
+        <div class="ob-top">
+          <button class="ob-prev" type="button" data-prev hidden>
+            <img src="assets/fig/icon-arrow-big-dark.svg" width="28.25" height="28" alt="" />Previous step
+          </button>
+          <a class="skip" href="signup.html">Skip intro</a>
+        </div>
+
+        <!-- Illustrations, one per step (art.js scenes in the Figma slots) -->
+        <div class="ob-art art-welcome" data-art-step="1">
+          <div class="art art--arch art--lift" data-art="welcome" style="--w: 240px; --h: 280px"></div>
+        </div>
+        <div class="ob-art art-butterfly" data-art-step="2" hidden>
+          <div class="art art--round" data-art="butterfly" style="--w: 260px; --h: 260px" role="img" aria-label="A butterfly resting on a flower in a meadow"></div>
+        </div>
+        <div class="ob-art art-video" data-art-step="3" hidden>
+          <button type="button" data-video aria-label="Play the Resilience River video">
+            <span class="art art--card" data-art="river"></span>
+            <span class="play"><span data-icon="play"></span></span>
+          </button>
+        </div>
+        <div class="ob-art art-features" data-art-step="4" hidden>
+          <div class="art art--arch art--lift" data-art="features" style="--w: 208px; --h: 260px"></div>
+        </div>
+        <div class="ob-art art-tracker" data-art-step="5" hidden>
+          <div class="art art--card art--lift" data-art="rhythm" style="--w: 276px; --h: 180px"></div>
+        </div>
+        <div class="ob-art art-lights" data-art-step="6" data-fade hidden>
+          <div class="art art--arch art--lift" data-art="lights" style="--w: 204px; --h: 243px"></div>
+        </div>
+        <div class="ob-art art-lights" data-art-step="7" data-fade hidden>
+          <div class="art art--arch art--lift" data-art="lights-green" style="--w: 204px; --h: 243px" role="img" aria-label="A traffic light with the green light on"></div>
+        </div>
+        <div class="ob-art art-lights" data-art-step="8" data-fade hidden>
+          <div class="art art--arch art--lift" data-art="lights-amber" style="--w: 204px; --h: 243px" role="img" aria-label="A traffic light with the amber light on"></div>
+        </div>
+        <div class="ob-art art-lights" data-art-step="9" data-fade hidden>
+          <div class="art art--arch art--lift" data-art="lights-red" style="--w: 204px; --h: 243px" role="img" aria-label="A traffic light with the red light on"></div>
+        </div>
+        <div class="ob-art art-ready" data-art-step="10" hidden>
+          <div class="art art--arch art--lift" data-art="ready" style="--w: 250px; --h: 310px"></div>
+        </div>
+
+        <div class="ob-panel" aria-hidden="true"></div>
+
+        <div class="ob-sheet">
+          <div class="ob-copies">
+            <section class="ob-copy ob-copy--center" data-step="1" aria-labelledby="t1">
+              <h1 class="ob-title" id="t1">Welcome</h1>
+              <p class="ob-text">You’ve taken the first step towards optimising your resilience!</p>
+              <p class="ob-text">Start tracking today to unlock content tailored to your goals.</p>
+            </section>
+
+            <section class="ob-copy" data-step="2" aria-labelledby="t2" style="--pt: 76px" hidden>
+              <h1 class="ob-title" id="t2">Let’s first understand what resilience is…</h1>
+              <p class="ob-sub">Resilience is your capacity for change.</p>
+              <hr class="ob-rule" />
+              <p class="ob-text">
+                Workforce resilience is key to reducing stress, adapting to change, boosting your business, and
+                re-energising your whole team. The Resilience Dynamic offers a window into this.
+              </p>
+            </section>
+
+            <section class="ob-copy" data-step="3" aria-labelledby="t3" hidden>
+              <h1 class="ob-title" id="t3">Next, let’s understand your starting point</h1>
+              <hr class="ob-rule" />
+              <p class="ob-text">
+                The Resilience River is a great way to check in with your resilience. Take a few minutes to watch
+                our Resilience River video and understand how your resilience is today.
+              </p>
+            </section>
+
+            <section class="ob-copy" data-step="4" aria-labelledby="t4" hidden>
+              <h1 class="ob-title" id="t4">Features</h1>
+              <hr class="ob-rule" />
+              <p class="ob-text">Track your resilience, daily or weekly, with our <b>Resilience Tracker</b>.</p>
+              <p class="ob-text">
+                Put in place habits to practice your resilience regularly, with our <b>Daily Resilience Practices</b>.
+              </p>
+              <p class="ob-text">Extend your knowledge of resilience and wellbeing with <b>Develop Your Resilience</b>.</p>
+            </section>
+
+            <section class="ob-copy" data-step="5" aria-labelledby="t5" hidden>
+              <h1 class="ob-title" id="t5">Features</h1>
+              <hr class="ob-rule" />
+              <p class="ob-text">
+                Track and assess your resilience with 7 questions covering productivity and wellbeing. Rate each
+                question on a <span class="nowrap">1-6 scale</span>.
+              </p>
+              <p class="ob-text">Choose daily or weekly tracking based on your lifestyle.</p>
+              <p class="ob-text">
+                After completing the tracker, view your performance using the RAG method (Red/Amber/Green) and
+                receive tools for resilience enhancement.
+              </p>
+            </section>
+
+            <section class="ob-copy" data-step="6" aria-labelledby="t6" hidden>
+              <h1 class="ob-title" id="t6">Red, Amber &amp; Green Zones</h1>
+              <hr class="ob-rule" />
+              <p class="ob-text">
+                This app will identify your strengths and weaknesses, based on your tracking data. This will be
+                represented via Red, Amber &amp; Green zones. Here are definitions for each zone:
+              </p>
+            </section>
+
+            <section class="ob-copy" data-step="7" aria-labelledby="t7" hidden>
+              <h1 class="ob-title" id="t7">Green</h1>
+              <p class="ob-sub">Red, Amber &amp; Green Zones</p>
+              <hr class="ob-rule" />
+              <p class="ob-text">The sweet spot is where there is no concern.</p>
+            </section>
+
+            <section class="ob-copy" data-step="8" aria-labelledby="t8" hidden>
+              <h1 class="ob-title" id="t8">Amber</h1>
+              <p class="ob-sub">Red, Amber &amp; Green Zones</p>
+              <hr class="ob-rule" />
+              <p class="ob-text">The warning zone highlights the potential risk of overstretch and capacity for change.</p>
+            </section>
+
+            <section class="ob-copy" data-step="9" aria-labelledby="t9" hidden>
+              <h1 class="ob-title" id="t9">Red</h1>
+              <p class="ob-sub">Red, Amber &amp; Green Zones</p>
+              <hr class="ob-rule" />
+              <p class="ob-text">
+                The danger zone highlights immediate resilience danger where quick action needs to be taken.
+              </p>
+            </section>
+
+            <section class="ob-copy" data-step="10" aria-labelledby="t10" style="--pt: 44px" hidden>
+              <h1 class="ob-ask" id="t10">Are you ready to start seeing, understanding and optimising your resilience?</h1>
+              <a class="btn btn--primary btn--block btn--arrow ob-start" href="signup.html" data-start>
+                <span>Let’s start</span><span class="long-arrow btn__arrow" aria-hidden="true"></span>
+              </a>
+            </section>
+          </div>
+
+          <div class="ob-nav is-first">
+            <button class="step-btn step-btn--ghost" type="button" data-prev aria-label="Previous step" hidden>
+              <img class="step-btn__arrow" src="assets/fig/icon-arrow-big-grey.svg" width="40" height="40" alt="" />
+            </button>
+            <button class="step-btn" type="button" data-next aria-label="Next step">
+              <img class="step-btn__arrow" src="assets/fig/icon-arrow-big-right.svg" width="40" height="40" alt="" />
+            </button>
+          </div>
+
+          <div class="dots ob-dots" aria-hidden="true"><span class="is-on"></span><span></span><span></span></div>
+          <p class="sr-only" aria-live="polite" data-status></p>
+        </div>
+      </main>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const TOTAL = 10;
+        // Figma y of the white sheet, per step (onboarding 3, 5, 6, 7, 8, 9, 10, 11, 12, 13)
+        const SHEET_TOP = [415, 275, 350, 350, 267, 356, 393, 393, 393, 453];
+        // Steps pagination (DS: 1, 2 or 3 of 3 on): intro · features · zones & start
+        const PHASE = [1, 1, 1, 2, 2, 3, 3, 3, 3, 3];
+        const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+        const main = document.getElementById('main');
+        const copies = [...main.querySelectorAll('.ob-copy')];
+        const arts = [...main.querySelectorAll('.ob-art')];
+        const nav = main.querySelector('.ob-nav');
+        const ghost = nav.querySelector('[data-prev]');
+        const next = nav.querySelector('[data-next]');
+        const topPrev = main.querySelector('.ob-top [data-prev]');
+        const start = main.querySelector('[data-start]');
+        const dots = [...main.querySelectorAll('.ob-dots span')];
+        const status = main.querySelector('[data-status]');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let cur = 0;
+        let z = 3;
+
+        const stop = (el) => {
+          el.getAnimations().forEach((a) => a.cancel());
+          el.classList.remove('is-leaving');
+        };
+        function enter(el, from) {
+          stop(el);
+          el.hidden = false;
+          el.inert = false;
+          if (reduce.matches || !from) return;
+          el.animate([{ opacity: 0, transform: from }, { opacity: 1, transform: 'none' }], {
+            duration: 480,
+            delay: 80,
+            easing: EASE,
+            fill: 'backwards',
+          });
+        }
+        function leave(el, to, opts) {
+          stop(el);
+          el.inert = true;
+          if (reduce.matches) {
+            el.hidden = true;
+            return;
+          }
+          if (el.classList.contains('ob-copy')) el.classList.add('is-leaving');
+          const a = el.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: to }], {
+            duration: 220,
+            easing: 'cubic-bezier(0.4, 0, 1, 1)',
+            fill: 'forwards',
+            ...opts,
+          });
+          a.onfinish = () => {
+            el.hidden = true;
+            el.classList.remove('is-leaving');
+            a.cancel();
+          };
+        }
+
+        function go(n, opts = {}) {
+          n = Math.max(1, Math.min(TOTAL, n));
+          if (n === cur) return;
+          const prev = cur;
+          const dir = n > prev ? 1 : -1;
+          const animate = prev > 0;
+          const hadFocus = document.activeElement;
+          const nextX = animate ? next.getBoundingClientRect().left : 0;
+          cur = n;
+
+          main.style.setProperty('--sheet-top', SHEET_TOP[n - 1] + 'px');
+
+          // Copy: slide in the direction of travel
+          copies.forEach((c) => {
+            const s = +c.dataset.step;
+            if (s === n) enter(c, animate ? `translateX(${dir * 24}px)` : null);
+            else if (s === prev) leave(c, `translateX(${dir * -24}px)`);
+            else if (!c.hidden) {
+              stop(c);
+              c.hidden = true;
+            }
+          });
+
+          // Illustration: rise in; the traffic lights cross-fade in place
+          arts.forEach((a) => {
+            const s = +a.dataset.artStep;
+            const still = a.hasAttribute('data-fade');
+            if (s === n) {
+              a.style.zIndex = ++z;
+              enter(a, animate ? (still ? 'none' : 'translateY(12px)') : null);
+            } else if (s === prev) {
+              const both = still && arts.some((b) => +b.dataset.artStep === n && b.hasAttribute('data-fade'));
+              // Leaving art drops behind the sheet, so the moving sheet tucks it away cleanly
+              if (!both) a.style.zIndex = 0;
+              leave(a, still ? 'none' : 'translateY(-8px)', both ? { delay: 260, duration: 240 } : {});
+            } else if (!a.hidden) {
+              stop(a);
+              a.hidden = true;
+            }
+          });
+
+          // Steps buttons
+          ghost.hidden = n === 1;
+          nav.classList.toggle('is-first', n === 1);
+          nav.classList.toggle('is-last', n === TOTAL);
+          topPrev.hidden = n !== TOTAL;
+          next.setAttribute('aria-label', 'Next step');
+          if (animate && !reduce.matches && n !== TOTAL && prev !== TOTAL) {
+            const dx = nextX - next.getBoundingClientRect().left;
+            if (Math.abs(dx) > 1)
+              next.animate([{ transform: `translateX(${dx}px)` }, { transform: 'none' }], { duration: 460, easing: EASE });
+            if (prev === 1 && n === 2)
+              ghost.animate([{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'none' }], {
+                duration: 360,
+                delay: 120,
+                easing: EASE,
+                fill: 'backwards',
+              });
+          }
+
+          dots.forEach((d, i) => d.classList.toggle('is-on', i < PHASE[n - 1]));
+
+          // Keep focus somewhere sensible when the focused button disappears
+          if (hadFocus && hadFocus !== document.body && hadFocus.closest('#main')) {
+            if (n === TOTAL && (hadFocus === next || hadFocus === ghost)) start.focus({ preventScroll: true });
+            else if (n === 1 && hadFocus === ghost) next.focus({ preventScroll: true });
+            else if (hadFocus === topPrev) ghost.focus({ preventScroll: true });
+            else if (hadFocus.closest('.ob-copy, .ob-art') && hadFocus.closest('[hidden], .is-leaving, [inert]'))
+              (n === TOTAL ? start : next).focus({ preventScroll: true });
+          }
+
+          if (animate) {
+            const title = copies[n - 1].querySelector('h1').textContent.trim();
+            status.textContent = `Step ${n} of ${TOTAL}: ${title}`;
+            main.scrollTo({ top: 0, behavior: reduce.matches ? 'auto' : 'smooth' });
+          }
+
+          if (!opts.silent) {
+            try {
+              const url = new URL(location.href);
+              url.searchParams.set('step', n);
+              url.hash = '';
+              history.replaceState(null, '', url);
+            } catch (e) {}
+          }
+        }
+
+        // Deep link: ?step=N, #N or #step-N
+        function fromUrl() {
+          const q = new URLSearchParams(location.search).get('step');
+          const h = location.hash.replace(/^#(step-?)?/i, '');
+          const n = parseInt(q || h, 10);
+          return n >= 1 && n <= TOTAL ? n : 1;
+        }
+
+        main.addEventListener('click', (e) => {
+          if (e.target.closest('[data-next]')) go(cur + 1);
+          else if (e.target.closest('[data-prev]')) go(cur - 1);
+          else if (e.target.closest('[data-video]')) RD.toast('The Resilience River video plays here', 'play');
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+          if (e.target.closest('input, textarea, select, [contenteditable]')) return;
+          if (e.key === 'ArrowRight' && cur < TOTAL) {
+            e.preventDefault();
+            go(cur + 1);
+          } else if (e.key === 'ArrowLeft' && cur > 1) {
+            e.preventDefault();
+            go(cur - 1);
+          }
+        });
+
+        // Touch swipe on the illustration panel and copy
+        let sx = null;
+        let sy = 0;
+        main.addEventListener('pointerdown', (e) => {
+          if (e.pointerType !== 'touch' || e.target.closest('a, button')) return;
+          sx = e.clientX;
+          sy = e.clientY;
+        });
+        main.addEventListener('pointerup', (e) => {
+          if (sx == null) return;
+          const dx = e.clientX - sx;
+          const dy = e.clientY - sy;
+          sx = null;
+          if (Math.abs(dx) > 50 && Math.abs(dy) < 60) go(cur + (dx < 0 ? 1 : -1));
+        });
+        main.addEventListener('pointercancel', () => (sx = null));
+
+        window.addEventListener('hashchange', () => go(fromUrl()));
+
+        go(fromUrl(), { silent: !/[?&]step=|#/.test(location.href) });
+        requestAnimationFrame(() => requestAnimationFrame(() => main.classList.add('is-ready')));
+      })();
+    </script>
+  </body>
+</html>

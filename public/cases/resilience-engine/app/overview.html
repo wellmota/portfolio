@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#99d7db" />
+    <title>Score Overview · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: Score overview 848:15394 (Resilience Pathways) + 848:15352 (Recommended Tools), stacked */
+
+      /* Teal header: close, title, "Progress Checkup" */
+      .so-hero {
+        padding: 0 19px 32px var(--gutter);
+      }
+      .so-top {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 8px;
+      }
+      .so-close img {
+        display: block;
+      }
+      .so-hero .h1 {
+        margin-top: 16px;
+        padding-left: 8px;
+      }
+      .so-kicker {
+        margin-top: 8px;
+        padding-left: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+        color: var(--deep);
+      }
+
+      /* Data Insights card (DS .insight, Figma spacing) */
+      .so-body {
+        margin-top: 24px;
+      }
+      .so-insight {
+        row-gap: 16px;
+        padding: 12px 16px;
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .so-insight:active {
+        transform: scale(0.985);
+      }
+      .so-insight .insight__label {
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+      }
+      .so-insight .insight__title {
+        line-height: 1.5;
+      }
+      .so-insight .long-arrow {
+        align-self: center;
+        margin: 0;
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .so-insight:hover .long-arrow {
+        transform: translateX(3px);
+      }
+
+      /* Section header: title + search + filter over a hairline */
+      .sec {
+        margin-top: 32px;
+      }
+      .sec-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        height: 40px;
+        padding-top: 4px;
+        border-bottom: 1px solid var(--line);
+      }
+      .sec-head h2 {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.5;
+        color: var(--deep);
+      }
+      .sec-tools {
+        display: flex;
+        gap: 8px;
+      }
+      .sec-btn {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+      }
+      .sec-btn::after {
+        /* 40px hit area around the 24px Figma icon */
+        content: '';
+        position: absolute;
+        inset: -8px -4px;
+      }
+      .sec-btn img {
+        display: block;
+        transition: transform var(--t-fast) var(--ease);
+      }
+      .sec-btn:hover img,
+      .sec-btn[aria-expanded='true'] img {
+        transform: scale(1.08);
+      }
+      .sec-btn[aria-expanded='true'] {
+        background: var(--lilac-dark);
+      }
+      .sec-dot {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 8px;
+        height: 8px;
+        border: 2px solid var(--bg);
+        border-radius: 50%;
+        background: var(--plum);
+      }
+      .sec-dot[hidden] {
+        display: none;
+      }
+      .sec-search {
+        margin-top: 16px;
+      }
+      .sec-search[hidden] {
+        display: none;
+      }
+      .sec-search .i {
+        width: 18px;
+        height: 18px;
+        flex: none;
+      }
+      .sec-search input::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+      }
+      .sec-clear {
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        margin-right: -8px;
+        border-radius: 50%;
+        color: var(--ink-3);
+      }
+      .sec-clear[hidden] {
+        display: none;
+      }
+      .sec-clear .i {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* ---------- Resilience Pathways: pastel cards (Figma "card" 342×131) ---------- */
+      .pw-list {
+        display: grid;
+        gap: 32px;
+        margin-top: 32px;
+      }
+      .pw-list .tool-card {
+        gap: 12px;
+        min-height: 131px;
+        padding: 23px 24px 18px 20px;
+        transition:
+          transform var(--t-fast) var(--ease),
+          box-shadow var(--t-med) var(--ease);
+      }
+      .pw-list .tool-card:hover {
+        box-shadow: 0 12px 28px -14px rgba(15, 40, 81, 0.28);
+      }
+      .tool-card__text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+        flex: 1;
+      }
+      .pw-list .tool-card__title {
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1.35;
+        color: rgba(0, 0, 0, 0.8);
+      }
+      .pw-list .tool-card__sub {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.35;
+        color: rgba(0, 0, 0, 0.8);
+      }
+      .pw-list .tool-card__cta {
+        margin: 0;
+        padding: 4px 0 13px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+      .pw-list .tool-card__ico {
+        display: grid;
+        place-items: center;
+        width: 80px;
+        height: 72px;
+        margin-left: auto;
+      }
+
+      /* ---------- Recommended Tools: 2 × 2 grid (Figma "Rectangle 5902", 159 wide) ---------- */
+      .rt-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 24px;
+      }
+      .rt-card {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        height: 100%;
+        border-radius: var(--r-lg);
+      }
+      .rt-art {
+        height: 136px;
+        flex: none;
+      }
+      .rt-art > svg {
+        transition: transform var(--t-slow) var(--ease);
+      }
+      .rt-card:hover .rt-art > svg {
+        transform: scale(1.04);
+      }
+      .rt-card:active .rt-art {
+        transform: scale(0.98);
+      }
+      .rt-text {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 0 8px;
+        color: var(--deep);
+        font-size: 12px;
+        letter-spacing: 0.012em;
+      }
+      .rt-title {
+        font-weight: 700;
+        line-height: 1.36;
+      }
+      .rt-sub {
+        line-height: 1.5;
+      }
+      .rt-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .rt-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        border-radius: 100px;
+        background: #f1f1f1;
+        color: #6b6b6b; /* Figma #777, nudged to 4.5:1 on the chip */
+        font-size: 10px;
+        line-height: 1.5;
+        white-space: nowrap;
+      }
+      .rt-chip img,
+      .rt-chip .i {
+        flex: none;
+        width: 13px;
+        height: 13px;
+      }
+      .rt-chip .i {
+        color: #afafb3;
+        stroke-width: 1.6;
+      }
+
+      /* Empty state (search / filter) */
+      .empty {
+        display: grid;
+        justify-items: center;
+        gap: 8px;
+        padding: 32px 16px 8px;
+        text-align: center;
+        grid-column: 1 / -1;
+      }
+      .empty p {
+        font-size: 14px;
+        color: var(--ink-2);
+      }
+
+      /* ---------- Filter sheet (same language as the Key areas sheet) ---------- */
+      .sheet-backdrop {
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(8.5px);
+        -webkit-backdrop-filter: blur(8.5px);
+      }
+      .sheet {
+        visibility: hidden;
+        transition:
+          transform 380ms var(--ease),
+          visibility 0s linear 380ms;
+      }
+      .sheet.is-open {
+        visibility: visible;
+        transition:
+          transform 380ms var(--ease),
+          visibility 0s;
+      }
+      .sheet .btn--select {
+        width: calc(100% + 32px);
+        margin: 0 -16px;
+        box-shadow: none;
+      }
+      .sheet__title {
+        margin: 4px 0 0;
+        font-size: 17px;
+      }
+      .ka-panel {
+        display: grid;
+        gap: 8px;
+        margin: 20px 0 32px;
+      }
+      .ka-radio {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 48px;
+        padding: 8px 8px 8px 24px;
+        border-radius: var(--r-md);
+        font-size: 20px;
+        line-height: 1.3;
+        letter-spacing: 0.012em;
+        color: var(--ink);
+        text-align: left;
+      }
+      .ka-radio[aria-checked='true'] {
+        font-weight: 700;
+      }
+      .ka-count {
+        margin-left: auto;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--ink-3);
+      }
+      .ka-box {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        flex: none;
+      }
+      .ka-box img {
+        position: absolute;
+        inset: 0;
+        transition: opacity var(--t-fast) var(--ease);
+      }
+      .ka-radio .ka-on,
+      .ka-radio[aria-checked='true'] .ka-off {
+        opacity: 0;
+      }
+      .ka-radio[aria-checked='true'] .ka-on {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body data-tab="reports" style="--status-bg: var(--water)">
+    <div class="app">
+      <main class="screen screen--flush" id="main">
+        <header class="hero hero--teal so-hero">
+          <div class="wash" data-wash="water" data-hills="44" aria-hidden="true"></div>
+          <div class="so-top">
+            <a class="icon-btn icon-btn--soft so-close rise" href="home.html" data-back aria-label="Close"><img src="assets/fig/icon-close-x.svg" width="24" height="24" alt="" /></a>
+          </div>
+          <h1 class="h1 rise" style="--d: 1">Score Overview</h1>
+          <p class="so-kicker rise" style="--d: 1">Progress Checkup</p>
+        </header>
+
+        <div class="pad so-body">
+          <a class="insight insight--violet so-insight rise" style="--d: 2" href="data.html">
+            <span class="tile-icon" aria-hidden="true"><img src="assets/fig/icon-bar-chart.svg" width="28" height="28" alt="" /></span>
+            <span>
+              <span class="insight__label" style="display: block">Data Insights</span>
+              <span class="insight__title" style="display: block">See my Data</span>
+            </span>
+            <span class="long-arrow" aria-hidden="true"></span>
+          </a>
+
+          <!-- Resilience Pathways (848:15394) -->
+          <section class="sec rise" style="--d: 3" aria-labelledby="pw-t" data-sec="pw">
+            <div class="sec-head">
+              <h2 id="pw-t">Resilience Pathways</h2>
+              <div class="sec-tools">
+                <button class="sec-btn" type="button" aria-expanded="false" aria-controls="pw-search" aria-label="Search pathways" data-search>
+                  <img src="assets/fig/icon-search.svg" width="24" height="24" alt="" />
+                </button>
+                <button class="sec-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet-filter" aria-label="Filter pathways" data-filter>
+                  <img src="assets/fig/icon-filter-list.svg" width="24" height="24" alt="" /><span class="sec-dot" hidden></span>
+                </button>
+              </div>
+            </div>
+            <div class="search sec-search" id="pw-search" role="search" hidden>
+              <span data-icon="search"></span>
+              <input type="search" placeholder="Search pathways" aria-label="Search pathways" autocomplete="off" />
+              <button class="sec-clear" type="button" aria-label="Clear search" hidden><span data-icon="x"></span></button>
+            </div>
+            <ul class="pw-list" data-list></ul>
+            <p class="sr-only" role="status" data-count></p>
+          </section>
+
+          <!-- Recommended Tools (848:15352) -->
+          <section class="sec rise" style="--d: 4" aria-labelledby="rt-t" data-sec="rt">
+            <div class="sec-head">
+              <h2 id="rt-t">Recommended Tools</h2>
+              <div class="sec-tools">
+                <button class="sec-btn" type="button" aria-expanded="false" aria-controls="rt-search" aria-label="Search tools" data-search>
+                  <img src="assets/fig/icon-search.svg" width="24" height="24" alt="" />
+                </button>
+                <button class="sec-btn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet-filter" aria-label="Filter tools" data-filter>
+                  <img src="assets/fig/icon-filter-list.svg" width="24" height="24" alt="" /><span class="sec-dot" hidden></span>
+                </button>
+              </div>
+            </div>
+            <div class="search sec-search" id="rt-search" role="search" hidden>
+              <span data-icon="search"></span>
+              <input type="search" placeholder="Search all tools" aria-label="Search all tools" autocomplete="off" />
+              <button class="sec-clear" type="button" aria-label="Clear search" hidden><span data-icon="x"></span></button>
+            </div>
+            <ul class="rt-grid" data-list></ul>
+            <p class="sr-only" role="status" data-count></p>
+          </section>
+        </div>
+      </main>
+
+      <!-- Filter sheet (shared by both sections) -->
+      <div class="sheet" id="sheet-filter" role="dialog" aria-modal="true" aria-labelledby="sheet-filter-t">
+        <h2 class="sheet__title" id="sheet-filter-t">Filter</h2>
+        <div class="ka-panel">
+          <div class="radio-list" role="radiogroup" aria-labelledby="sheet-filter-t" data-filter-group></div>
+        </div>
+        <button class="btn btn--primary btn--select" type="button" data-filter-apply>Select</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (s, root = document) => root.querySelector(s);
+        const norm = (s) => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+        /* ---------- Resilience Pathways: the four Figma cards (pathway.html has all four) ---------- */
+        /* art.js badge per pathway, in the slot of the Figma line icon */
+        const BADGE = { sleep: 'badge-sleep', content: 'badge-content', dvc: 'badge-demand', energy: 'badge-energy' };
+        const PATHWAYS = RD.QUICK_TOOLS.map((q) => ({
+          id: q.area,
+          title: q.title,
+          sub: q.sub,
+          tone: q.tone,
+          group: RD.keyArea(q.area).group,
+          tool: RD.tool(q.tool),
+        }));
+
+        /* ---------- Recommended Tools: the four Figma tiles ---------- */
+        const RECOMMENDED = ['resilience-river', 'resilience-enablers', 'find-autonomy', 'taking-responsibility'];
+
+        const FILTERS = {
+          pw: { title: 'Filter pathways', all: 'All pathways', options: Object.entries(RD.GROUPS).map(([v, label]) => ({ v, label })) },
+          rt: { title: 'Filter tools by type', all: 'All types', options: Object.entries(RD.KINDS).map(([v, k]) => ({ v, label: k.label })) },
+        };
+        const state = { pw: { q: '', f: null }, rt: { q: '', f: null } };
+
+        function pathwayItems() {
+          const { q, f } = state.pw;
+          const n = norm(q.trim());
+          return PATHWAYS.filter((p) => !f || p.group === f).filter(
+            (p) => !n || [p.title, p.sub, p.tool && p.tool.title].some((x) => x && norm(x).includes(n))
+          );
+        }
+        function toolItems() {
+          const { q, f } = state.rt;
+          const n = norm(q.trim());
+          // Nothing typed or filtered: the four recommendations. Otherwise search the whole library.
+          const pool = !n && !f ? RECOMMENDED.map(RD.tool) : RD.TOOLS;
+          return pool
+            .filter((t) => !f || t.kind === f)
+            .filter((t) => !n || [t.title, t.tagline, t.summary, t.collection, RD.KINDS[t.kind].label].some((x) => x && norm(x).includes(n)));
+        }
+
+        const pathwayCard = (p) => {
+          return `<li><a class="tool-card tone-${p.tone}" href="pathway.html?id=${p.id}">
+              <span class="tool-card__text">
+                <span class="tool-card__title">${p.title}</span>
+                <span class="tool-card__sub">${RD.esc(p.sub)}</span>
+                <span class="tool-card__cta">Access now<span class="sr-only">: ${p.title} pathway</span></span>
+              </span>
+              <span class="tool-card__ico" aria-hidden="true"><span class="art art--round art--ring" style="--w: 68px; --h: 68px">${RD.art(BADGE[p.id])}</span></span>
+            </a></li>`;
+        };
+        const kindChip = (t) =>
+          t.kind === 'video'
+            ? `<span class="rt-chip"><img src="assets/fig/icon-video-13.svg" width="13" height="13" alt="" />Video</span>`
+            : `<span class="rt-chip">${RD.icon(RD.KINDS[t.kind].icon)}${RD.KINDS[t.kind].label}</span>`;
+        const toolCard = (t) => `<li><a class="rt-card" href="tool.html?id=${encodeURIComponent(t.id)}">
+              <span class="art rt-art" data-art="${t.art}" aria-hidden="true"></span>
+              <span class="rt-text">
+                <span><span class="rt-title" style="display: block">${t.title}</span><span class="rt-sub" style="display: block">${RD.esc(t.tagline || t.summary)}</span></span>
+                <span class="rt-chips"><span class="rt-chip">${RD.fmt.mins(t.mins)}</span>${kindChip(t)}</span>
+              </span>
+            </a></li>`;
+
+        function render(key) {
+          const sec = $(`[data-sec="${key}"]`);
+          const items = key === 'pw' ? pathwayItems() : toolItems();
+          const list = $('[data-list]', sec);
+          const { q, f } = state[key];
+          const what = key === 'pw' ? ['pathway', 'pathways'] : ['tool', 'tools'];
+          if (!items.length) {
+            list.innerHTML = `<li class="empty">
+                <p class="h3">Nothing matches${q.trim() ? ` “${RD.esc(q.trim())}”` : ''}</p>
+                <p>Try another word, or clear the search and filter.</p>
+                <button type="button" class="btn btn--secondary btn--sm" data-reset>Clear search and filter</button>
+              </li>`;
+          } else list.innerHTML = items.map(key === 'pw' ? pathwayCard : toolCard).join('');
+          RD.hydrate(list);
+          $('[data-count]', sec).textContent = q.trim() || f ? `${items.length} ${items.length === 1 ? what[0] : what[1]} found` : '';
+          const dot = $('.sec-dot', sec);
+          dot.hidden = !f;
+          $('[data-filter]', sec).setAttribute(
+            'aria-label',
+            `Filter ${what[1]}${f ? `, showing ${(FILTERS[key].options.find((o) => o.v === f) || {}).label}` : ''}`
+          );
+        }
+
+        /* ---------- Search (toggle under each header) ---------- */
+        document.querySelectorAll('[data-sec]').forEach((sec) => {
+          const key = sec.dataset.sec;
+          const btn = $('[data-search]', sec);
+          const box = $('.sec-search', sec);
+          const input = $('input', box);
+          const clear = $('.sec-clear', box);
+          const setQ = (v) => {
+            state[key].q = v;
+            input.value = v;
+            clear.hidden = !v;
+            render(key);
+          };
+          btn.addEventListener('click', () => {
+            const open = box.hidden;
+            box.hidden = !open;
+            btn.setAttribute('aria-expanded', String(open));
+            if (open) input.focus();
+            else if (state[key].q) setQ('');
+          });
+          input.addEventListener('input', () => setQ(input.value));
+          input.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            e.stopPropagation();
+            if (input.value) setQ('');
+            else {
+              box.hidden = true;
+              btn.setAttribute('aria-expanded', 'false');
+              btn.focus();
+            }
+          });
+          clear.addEventListener('click', () => {
+            setQ('');
+            input.focus();
+          });
+          sec.addEventListener('click', (e) => {
+            if (!e.target.closest('[data-reset]')) return;
+            state[key].f = null;
+            setQ('');
+            if (!box.hidden) input.focus();
+            else btn.focus();
+          });
+        });
+
+        /* ---------- Filter sheet ---------- */
+        const sheet = $('#sheet-filter');
+        const group = $('[data-filter-group]');
+        let current = 'pw';
+        let pending = null;
+        const radioRow = (value, label, count) =>
+          `<button class="ka-radio" type="button" role="radio" data-value="${value}">
+            <span class="ka-box" aria-hidden="true"><img class="ka-off" src="assets/fig/icon-checkbox-empty-32.svg" width="32" height="32" alt="" /><img class="ka-on" src="assets/fig/icon-checkbox-full.svg" width="32" height="32" alt="" /></span>${label}<span class="ka-count"><span class="sr-only">, </span>${count}</span></button>`;
+        function mark(value) {
+          const list = [...group.querySelectorAll('[role="radio"]')];
+          list.forEach((r) => {
+            const on = r.dataset.value === value;
+            r.setAttribute('aria-checked', String(on));
+            r.tabIndex = on ? 0 : -1;
+          });
+        }
+        function counts(key, v) {
+          if (key === 'pw') return PATHWAYS.filter((p) => !v || p.group === v).length;
+          return (v ? RD.TOOLS.filter((t) => t.kind === v) : RD.TOOLS).length;
+        }
+        document.querySelectorAll('[data-filter]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            current = btn.closest('[data-sec]').dataset.sec;
+            const F = FILTERS[current];
+            $('#sheet-filter-t').textContent = F.title;
+            pending = state[current].f || 'all';
+            group.innerHTML =
+              radioRow('all', F.all, counts(current, null)) + F.options.map((o) => radioRow(o.v, o.label, counts(current, o.v))).join('');
+            mark(pending);
+            btn.setAttribute('aria-expanded', 'true');
+            RD.sheet.open(sheet, btn);
+          });
+        });
+        new MutationObserver(() => {
+          if (!sheet.classList.contains('is-open') && sheet._opener) sheet._opener.setAttribute('aria-expanded', 'false');
+        }).observe(sheet, { attributes: true, attributeFilter: ['class'] });
+        group.addEventListener('click', (e) => {
+          const r = e.target.closest('[role="radio"]');
+          if (!r) return;
+          pending = r.dataset.value;
+          mark(pending);
+        });
+        group.addEventListener('keydown', (e) => {
+          const list = [...group.querySelectorAll('[role="radio"]')];
+          const i = list.indexOf(e.target);
+          const step = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+          if (i < 0 || !step) return;
+          e.preventDefault();
+          const next = list[(i + step + list.length) % list.length];
+          pending = next.dataset.value;
+          mark(pending);
+          next.focus();
+        });
+        $('[data-filter-apply]').addEventListener('click', () => {
+          RD.sheet.close(sheet);
+          state[current].f = pending === 'all' ? null : pending;
+          render(current);
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Tab' || !sheet.classList.contains('is-open')) return;
+          const f = [...sheet.querySelectorAll('button')].filter((el) => el.tabIndex >= 0);
+          const first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && (document.activeElement === first || !sheet.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && (document.activeElement === last || !sheet.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
+        });
+
+        render('pw');
+        render('rt');
+      })();
+    </script>
+  </body>
+</html>

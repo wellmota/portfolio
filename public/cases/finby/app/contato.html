@@ -1,0 +1,1106 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Novo contato · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma "Adicionar um novo contato" (inside "Quem vai participar?").
+         canal → e-mail: nome → e-mail → Yeaaah!   ·   WhatsApp / iMessage: system alert → contact picker → Yeaaah!
+         Messenger: nome → Yeaaah!   ·   ?step=canal|nome|email|contatos|enviado (&channel=…&demo=1&from=criar|amigos) */
+
+      /* ---------- chrome: back · close ---------- */
+      .wiz-top {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 56px;
+        padding: 0 10px;
+        position: relative;
+        z-index: 6;
+        background: var(--bg);
+      }
+      .wiz-top .icon-btn {
+        color: var(--ink-2);
+      }
+      .wiz-top .icon-btn.is-off {
+        visibility: hidden;
+      }
+
+      .step {
+        padding-top: 4px;
+      }
+      .step__head {
+        margin: 10px 0 26px;
+      }
+      .step__head:focus,
+      .done__title:focus,
+      .step--picker h1:focus {
+        outline: none;
+      }
+
+      /* ---------- canal ---------- */
+      .channels .row {
+        min-height: 68px;
+        padding: 12px 14px 12px 16px;
+      }
+      .channels .row__title {
+        font-size: 16px;
+      }
+      .channels .row__ico .i {
+        width: 22px;
+        height: 22px;
+      }
+      .channels .row .chev {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* ---------- nome / e-mail ---------- */
+      .big-input[aria-invalid='true'] {
+        border-bottom-color: var(--red-600);
+      }
+      .hint {
+        display: flex;
+        gap: 6px;
+        align-items: flex-start;
+        margin-top: 12px;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      .hint .i {
+        width: 17px;
+        height: 17px;
+        margin-top: 1px;
+        flex: none;
+      }
+      .hint strong {
+        color: var(--ink-2);
+      }
+      .hint.danger strong {
+        color: inherit;
+      }
+      .done__text {
+        text-wrap: balance;
+      }
+      .hint .link {
+        font-size: 14px;
+      }
+      #email-step .big-input {
+        font-size: 24px;
+      }
+
+      /* send loading */
+      .spin {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #fff;
+        animation: spin 700ms linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ---------- iOS system alert (Figma: “Finby” deseja abrir “WhatsApp”) ---------- */
+      .ios-alert {
+        position: absolute;
+        inset: 0;
+        z-index: 90;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: rgba(0, 0, 0, 0.4);
+        animation: fade 200ms ease-out both;
+      }
+      .ios-alert[hidden] {
+        display: none;
+      }
+      .ios-alert__box {
+        width: 270px;
+        border-radius: 14px;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Helvetica Neue', sans-serif;
+        text-align: center;
+        background: rgba(242, 242, 247, 0.94);
+        backdrop-filter: blur(24px) saturate(1.6);
+        -webkit-backdrop-filter: blur(24px) saturate(1.6);
+        animation: alert-in 260ms cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+      }
+      .ios-alert__box:focus {
+        outline: none;
+      }
+      .ios-alert__title {
+        padding: 19px 16px 18px;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+        color: #000;
+      }
+      .ios-alert__btns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-top: 0.5px solid rgba(60, 60, 67, 0.36);
+      }
+      .ios-alert__btns button {
+        min-height: 44px;
+        font-family: inherit;
+        font-size: 17px;
+        letter-spacing: -0.02em;
+        color: #007aff;
+      }
+      .ios-alert__btns button + button {
+        border-left: 0.5px solid rgba(60, 60, 67, 0.36);
+        font-weight: 600;
+      }
+      .ios-alert__btns button:active {
+        background: rgba(0, 0, 0, 0.06);
+      }
+      .ios-alert__btns button:focus-visible {
+        outline: 2px solid #007aff;
+        outline-offset: -3px;
+        border-radius: 4px;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+      }
+      @keyframes alert-in {
+        from {
+          opacity: 0;
+          transform: scale(1.12);
+        }
+      }
+
+      /* ---------- iOS contact picker (WhatsApp / Mensagens) ---------- */
+      .app.is-picker {
+        background: #fff;
+      }
+      .is-picker .screen {
+        padding: 0 0 120px;
+      }
+      .step--picker {
+        padding-top: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Helvetica Neue', sans-serif;
+        letter-spacing: -0.01em;
+        color: #000;
+      }
+      .ios-head {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 16px 10px 8px;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      .ios-link {
+        min-height: 44px;
+        padding: 0 8px;
+        font-family: inherit;
+        font-size: 17px;
+        color: #007aff;
+        border-radius: 8px;
+      }
+      .ios-link--strong {
+        font-weight: 600;
+      }
+      .ios-link:active {
+        opacity: 0.4;
+      }
+      .ios-search {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 36px;
+        padding: 0 8px;
+        border-radius: 10px;
+        color: rgba(60, 60, 67, 0.6);
+        background: rgba(118, 118, 128, 0.12);
+      }
+      .ios-search .i {
+        width: 17px;
+        height: 17px;
+        flex: none;
+      }
+      .ios-search input {
+        flex: 1;
+        width: 0;
+        min-width: 0;
+        height: 34px;
+        border: 0;
+        outline: 0;
+        background: none;
+        font-family: inherit;
+        font-size: 17px;
+        color: #000;
+      }
+      .ios-search input::placeholder {
+        color: rgba(60, 60, 67, 0.6);
+      }
+      .ios-search input::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+      }
+      .ios-search:focus-within {
+        box-shadow: inset 0 0 0 2px rgba(0, 122, 255, 0.5);
+      }
+      .ios-sec__h {
+        padding: 22px 16px 7px;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        color: rgba(60, 60, 67, 0.6);
+        background: #f2f2f7;
+      }
+      .ios-list li + li .ios-row::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 64px;
+        right: 0;
+        border-top: 0.5px solid rgba(60, 60, 67, 0.29);
+      }
+      .ios-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        min-height: 54px;
+        padding: 8px 16px;
+        font-family: inherit;
+        text-align: left;
+        background: #fff;
+        transition: background 120ms ease;
+      }
+      .ios-row:active {
+        background: #e5e5ea;
+      }
+      .ios-row:focus-visible {
+        outline: 2px solid #007aff;
+        outline-offset: -2px;
+        border-radius: 0;
+      }
+      .ios-row .av {
+        --s: 36px;
+      }
+      .ios-row__name {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 17px;
+        color: #000;
+      }
+      .ios-radio {
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        flex: none;
+        border-radius: 50%;
+        color: #fff;
+        box-shadow: inset 0 0 0 1.5px #c7c7cc;
+        transition:
+          background 160ms ease,
+          box-shadow 160ms ease;
+      }
+      .ios-radio .i {
+        width: 15px;
+        height: 15px;
+        stroke-width: 3;
+        transform: scale(0);
+        transition: transform 220ms var(--ease-spring);
+      }
+      .ios-row[aria-pressed='true'] .ios-radio {
+        background: #007aff;
+        box-shadow: none;
+      }
+      .ios-row[aria-pressed='true'] .ios-radio .i {
+        transform: scale(1);
+      }
+      .ios-empty {
+        padding: 40px 24px;
+        font-size: 15px;
+        text-align: center;
+        color: rgba(60, 60, 67, 0.6);
+      }
+      .ios-empty .link {
+        display: inline-flex;
+        margin-top: 10px;
+        font-family: 'Sarabun', sans-serif;
+      }
+      /* the send bar slides up once someone is picked (Figma: "Débora Vasconcelos   Enviar") */
+      .pick-bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 8;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px calc(10px + env(safe-area-inset-bottom)) 20px;
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Helvetica Neue', sans-serif;
+        background: rgba(247, 247, 247, 0.94);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 0.5px solid rgba(60, 60, 67, 0.29);
+        transform: translateY(100%);
+        visibility: hidden;
+        transition:
+          transform 300ms var(--ease),
+          visibility 0s linear 300ms;
+      }
+      .pick-bar.is-on {
+        transform: none;
+        visibility: visible;
+        transition: transform 300ms var(--ease);
+      }
+      .has-status .pick-bar {
+        padding-bottom: 30px;
+      }
+      .pick-bar__name {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 15px;
+        color: rgba(60, 60, 67, 0.75);
+      }
+      .pick-bar .ios-link[aria-busy='true'] {
+        opacity: 0.5;
+      }
+
+      /* ---------- enviado (Figma violet "Yeaaah!") ---------- */
+      .step--done {
+        display: flex;
+        min-height: 100%;
+        padding-top: 0;
+      }
+      .step--done[hidden] {
+        display: none;
+      }
+      .done {
+        flex: 1;
+        padding: 64px 28px 24px;
+      }
+      .has-status .done {
+        padding-top: 90px;
+      }
+      .done__body {
+        margin: auto 0;
+      }
+      .done__meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 100%;
+        margin-top: 20px;
+        padding: 5px 14px 5px 5px;
+        border-radius: var(--r-pill);
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.14);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      }
+      .done__meta .av {
+        --s: 28px;
+      }
+      .done__meta .i {
+        width: 15px;
+        height: 15px;
+        flex: none;
+      }
+      .done__meta span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .done__close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        min-height: 44px;
+        min-width: 88px;
+        margin-top: 24px;
+        padding: 0 16px;
+        font-size: 15.5px;
+        font-weight: 600;
+        color: #fff;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        border-radius: 10px;
+      }
+      .done__close:focus-visible {
+        outline-color: #fff;
+      }
+      .is-done .screen {
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="wiz-top" id="top">
+        <button class="icon-btn" type="button" id="back" aria-label="Voltar"><span data-icon="arrow-left"></span></button>
+        <button class="icon-btn" type="button" id="close" aria-label="Fechar"><span data-icon="x"></span></button>
+      </header>
+
+      <main class="screen" id="main">
+        <!-- 1 · por onde -->
+        <section class="step" data-step="canal" aria-labelledby="h-canal" hidden>
+          <h1 class="t-question step__head" id="h-canal" tabindex="-1"><strong>Por onde</strong> você quer adicionar o novo contato?</h1>
+          <ul class="list--divided channels" aria-labelledby="h-canal">
+            <li>
+              <button class="row" type="button" data-channel="email">
+                <span class="row__ico"><span data-icon="mail"></span></span>
+                <span class="row__main"><span class="row__title">E-mail</span><span class="row__sub">Digite o nome e o e-mail</span></span>
+                <span data-icon="chevron-right" class="chev"></span>
+              </button>
+            </li>
+            <li>
+              <button class="row" type="button" data-channel="whatsapp">
+                <span class="row__ico"><span data-icon="whatsapp"></span></span>
+                <span class="row__main"><span class="row__title">WhatsApp</span><span class="row__sub">Escolha alguém dos seus contatos</span></span>
+                <span data-icon="chevron-right" class="chev"></span>
+              </button>
+            </li>
+            <li>
+              <button class="row" type="button" data-channel="messenger">
+                <span class="row__ico"><span data-icon="messenger"></span></span>
+                <span class="row__main"><span class="row__title">Facebook Messenger</span><span class="row__sub">Mande o convite por mensagem</span></span>
+                <span data-icon="chevron-right" class="chev"></span>
+              </button>
+            </li>
+            <li>
+              <button class="row" type="button" data-channel="imessage">
+                <span class="row__ico"><span data-icon="message-square"></span></span>
+                <span class="row__main"><span class="row__title">iMessage</span><span class="row__sub">Escolha alguém dos seus contatos</span></span>
+                <span data-icon="chevron-right" class="chev"></span>
+              </button>
+            </li>
+          </ul>
+        </section>
+
+        <!-- 2 · nome -->
+        <section class="step" data-step="nome" aria-labelledby="h-nome" hidden>
+          <h1 class="t-question step__head" id="h-nome" tabindex="-1"><strong>Qual o nome</strong> do novo contato?</h1>
+          <input class="big-input" id="name" type="text" maxlength="40" autocomplete="off" autocapitalize="words" enterkeyhint="next" placeholder="Ex.: Ronaldo Fonseca" aria-labelledby="h-nome" aria-describedby="name-hint" />
+          <p class="hint" id="name-hint" aria-live="polite"></p>
+        </section>
+
+        <!-- 3 · e-mail -->
+        <section class="step" data-step="email" id="email-step" aria-labelledby="h-email" hidden>
+          <h1 class="t-question step__head" id="h-email" tabindex="-1"><strong>Qual o e-mail</strong> do novo contato?</h1>
+          <input class="big-input" id="email" type="email" maxlength="80" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="send" placeholder="nome@email.com" aria-labelledby="h-email" aria-describedby="email-hint" />
+          <p class="hint" id="email-hint" aria-live="polite"></p>
+        </section>
+
+        <!-- 4 · contatos do celular (depois do alerta do sistema) -->
+        <section class="step step--picker" data-step="contatos" aria-labelledby="h-contatos" hidden>
+          <h1 class="sr-only" id="h-contatos" tabindex="-1">Escolha um contato</h1>
+          <div class="ios-head">
+            <button class="ios-link" type="button" id="pick-cancel">Cancelar</button>
+            <label class="ios-search">
+              <span data-icon="search"></span>
+              <span class="sr-only">Buscar contatos</span>
+              <input id="pick-q" type="search" placeholder="Buscar" autocomplete="off" enterkeyhint="search" />
+            </label>
+          </div>
+          <div id="pick-lists"></div>
+          <p class="ios-empty" id="pick-empty" hidden></p>
+        </section>
+
+        <!-- 5 · enviado -->
+        <section class="step step--done" data-step="enviado" aria-labelledby="h-enviado" hidden>
+          <div class="done">
+            <div class="done__body">
+              <div class="done__art pop" data-art="invite"></div>
+              <h1 class="done__title" id="h-enviado" tabindex="-1"><strong>Yeaaah!</strong> Um convite foi enviado para seu contato.</h1>
+              <p class="done__text" id="sent-text"></p>
+              <p id="sent-meta"></p>
+            </div>
+            <a class="done__close" id="sent-close" href="amigos.html">Fechar</a>
+          </div>
+        </section>
+      </main>
+
+      <div class="bottom-bar" id="bar" hidden>
+        <button class="btn" type="button" id="next">Avançar</button>
+      </div>
+
+      <div class="pick-bar" id="pick-bar">
+        <span class="pick-bar__name" id="pick-name"></span>
+        <button class="ios-link ios-link--strong" type="button" id="pick-send">Enviar</button>
+      </div>
+
+      <div class="ios-alert" id="alert" hidden>
+        <div class="ios-alert__box" id="alert-box" role="alertdialog" aria-modal="true" aria-labelledby="alert-t" tabindex="-1">
+          <p class="ios-alert__title" id="alert-t"></p>
+          <div class="ios-alert__btns">
+            <button type="button" id="alert-no">Cancelar</button>
+            <button type="button" id="alert-yes">Abrir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const { esc } = FB;
+        const $ = (id) => document.getElementById(id);
+        const qs = new URLSearchParams(location.search);
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const norm = (s) =>
+          String(s || '')
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '')
+            .toLowerCase()
+            .replace(/\s+/g, ' ')
+            .trim();
+        const first = (name) => String(name).trim().split(/\s+/)[0];
+
+        const CHANNELS = {
+          email: { label: 'E-mail', icon: 'mail' },
+          whatsapp: { label: 'WhatsApp', icon: 'whatsapp', app: 'WhatsApp' },
+          messenger: { label: 'Messenger', icon: 'messenger' },
+          imessage: { label: 'iMessage', icon: 'message-square', app: 'Mensagens' },
+        };
+        /* phone numbers for the fake address book */
+        const PHONES = { ronaldo: '+55 11 98765-4321', debora: '+55 21 99812-3344', otavio: '+55 31 98877-1020', wagner: '+55 11 97654-2211', danielly: '+55 85 99123-4567' };
+
+        /* ---------- where we came from / go back to ---------- */
+        const from = qs.get('from') === 'criar' ? 'criar' : qs.get('from') === 'amigos' ? 'amigos' : null;
+        const exitUrl = (id) => (from === 'criar' ? `criar.html?step=quem${id ? `&added=${encodeURIComponent(id)}` : ''}` : 'amigos.html');
+        const exit = (id) => location.replace(exitUrl(id));
+
+        /* ---------- state (sessionStorage, so a reload mid-flow keeps what was typed) ---------- */
+        const DRAFT = 'fb:contato-draft';
+        const blank = () => ({ channel: null, name: '', email: '', contact: null, sent: null });
+        let S = blank();
+        const ss = {
+          get() {
+            try {
+              return JSON.parse(sessionStorage.getItem(DRAFT));
+            } catch (e) {
+              return null;
+            }
+          },
+          set(v) {
+            try {
+              sessionStorage.setItem(DRAFT, JSON.stringify(v));
+            } catch (e) {}
+          },
+          clear() {
+            try {
+              sessionStorage.removeItem(DRAFT);
+            } catch (e) {}
+          },
+        };
+        const stepQ = qs.get('step');
+        if (stepQ && stepQ !== 'canal') Object.assign(S, ss.get() || {});
+        else ss.clear();
+        const save = () => ss.set(S);
+
+        if (qs.get('channel') && CHANNELS[qs.get('channel')]) S.channel = qs.get('channel');
+        if (qs.get('name')) S.name = qs.get('name').slice(0, 40);
+        const demo = qs.get('demo');
+        if (demo) {
+          if (!S.channel) S.channel = stepQ === 'nome' || stepQ === 'email' ? 'email' : 'whatsapp';
+          if (S.channel === 'email' || S.channel === 'messenger') {
+            S.name = 'Ronaldo Fonseca';
+            S.email = qs.get('error') ? 'ronaldo.fonseca@gmail' : 'ronaldo.fonseca@gmail.com';
+          } else {
+            S.contact = 'debora';
+            S.name = FB.person('debora').name;
+          }
+        }
+
+        /* ---------- people lookups ---------- */
+        const ME = FB.me;
+        /* someone already in the app with this name (Ronaldo Fonseca → 'ronaldo'); phone-book entries don't count */
+        const known = (name) => {
+          const k = norm(name);
+          if (!k) return null;
+          const id = Object.keys(FB.people).find((p) => !FB.people[p].contact && norm(FB.people[p].name) === k);
+          if (id) return id;
+          const inv = (FB.store.get('invites', []) || []).find((i) => norm(i.name) === k);
+          return inv ? inv.id : null;
+        };
+        const isMe = (name) => norm(name) === norm(FB.person(ME).name);
+
+        /* ---------- steps ---------- */
+        const main = $('main');
+        const app = $('app');
+        const sections = {};
+        document.querySelectorAll('.step').forEach((s) => (sections[s.dataset.step] = s));
+        const flow = () => {
+          if (S.channel === 'email') return ['canal', 'nome', 'email'];
+          if (S.channel === 'messenger') return ['canal', 'nome'];
+          return ['canal', 'contatos'];
+        };
+        const emailOk = (v) => /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[a-z]{2,}$/i.test(String(v).trim());
+        const valid = {
+          canal: () => !!S.channel,
+          nome: () => S.name.trim().length >= 2 && !isMe(S.name),
+          email: () => emailOk(S.email),
+          contatos: () => !!S.contact,
+        };
+        const TITLES = { canal: 'Por onde', nome: 'Nome', email: 'E-mail', contatos: 'Contatos', enviado: 'Convite enviado' };
+
+        let current = null;
+        let navToken = 0;
+
+        function show(step, dir = 1, opt = {}) {
+          const prev = current ? sections[current] : null;
+          const next = sections[step];
+          current = step;
+          const token = ++navToken;
+          (RENDER[step] || (() => {}))();
+          chrome();
+          document.title = `${TITLES[step]} · Novo contato · Finby`;
+          const reveal = () => {
+            if (token !== navToken) return;
+            Object.values(sections).forEach((s) => (s.hidden = s !== next));
+            main.scrollTop = 0;
+            if (prev && prev !== next && !reduce && !opt.enter) {
+              next.animate(
+                [
+                  { opacity: 0, transform: `translateX(${28 * dir}px)` },
+                  { opacity: 1, transform: 'none' },
+                ],
+                { duration: 300, easing: 'cubic-bezier(.22,1,.36,1)' }
+              );
+            } else if (opt.enter && !reduce && step !== 'enviado') {
+              [...next.children].forEach((c, i) => c.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 520, delay: i * 55, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' }));
+            }
+            focusStep(step, opt.enter);
+          };
+          if (prev && prev !== next && !reduce && !opt.enter) {
+            prev.animate(
+              [
+                { opacity: 1, transform: 'none' },
+                { opacity: 0, transform: `translateX(${-20 * dir}px)` },
+              ],
+              { duration: 130, easing: 'ease-in', fill: 'forwards' }
+            ).onfinish = (e) => {
+              e.target.cancel();
+              reveal();
+            };
+          } else reveal();
+        }
+        function focusStep(step, initial) {
+          const input = { nome: $('name'), email: $('email') }[step];
+          if (input && !(initial && qs.get('error'))) {
+            input.focus({ preventScroll: true });
+            if (input.type === 'text') input.setSelectionRange(input.value.length, input.value.length); // type=email has no selection API
+            return;
+          }
+          if (initial && step !== 'enviado') return; // a deep link lands quietly; moves between steps announce the heading
+          const h = sections[step].querySelector('h1');
+          if (h) h.focus({ preventScroll: true });
+        }
+
+        /* top bar + bottom bar per step */
+        const nextBtn = $('next');
+        function chrome() {
+          const done = current === 'enviado';
+          const picker = current === 'contatos';
+          app.classList.toggle('is-done', done);
+          app.classList.toggle('is-picker', picker);
+          $('top').hidden = done || picker;
+          $('back').classList.toggle('is-off', current === 'canal');
+          $('bar').hidden = !(current === 'nome' || current === 'email');
+          $('pick-bar').hidden = !picker;
+          if (done) document.body.dataset.status = 'light';
+          else delete document.body.dataset.status;
+          refreshNext();
+        }
+        function refreshNext() {
+          if (current !== 'nome' && current !== 'email') return;
+          const last = flow().slice(-1)[0] === current;
+          nextBtn.setAttribute('aria-disabled', String(current === 'nome' ? !valid.nome() : !S.email.trim()));
+          if (!nextBtn.hasAttribute('aria-busy')) nextBtn.textContent = last ? 'Enviar convite' : 'Avançar';
+        }
+
+        /* history: forward pushes, the arrow goes to the previous step */
+        const urlFor = (step) => {
+          const p = new URLSearchParams({ step });
+          if (S.channel && step !== 'canal') p.set('channel', S.channel);
+          if (step === 'enviado' && S.sent) p.set('id', S.sent);
+          if (demo && step !== 'enviado') p.set('demo', demo);
+          if (from) p.set('from', from);
+          return `contato.html?${p}`;
+        };
+        const depth = () => (history.state && history.state.fbDepth) || 0;
+        function go(step, { push = true, dir = 1 } = {}) {
+          if (push) history.pushState({ fbStep: step, fbDepth: depth() + 1 }, '', urlFor(step));
+          else history.replaceState({ fbStep: step, fbDepth: depth() }, '', urlFor(step));
+          show(step, dir);
+        }
+        window.addEventListener('popstate', (e) => {
+          const st = e.state && e.state.fbStep;
+          if (!st) return;
+          if (current === 'enviado') return exit(S.sent); // the invite is out; going back leaves the flow
+          closeAlert(false);
+          const f = flow();
+          const target = f.includes(st) ? st : 'canal';
+          show(target, f.indexOf(target) < f.indexOf(current) ? -1 : 1);
+        });
+        function back() {
+          const f = flow();
+          const i = f.indexOf(current);
+          if (depth() > 0) history.back();
+          else if (i > 0) go(f[i - 1], { push: false, dir: -1 });
+          else exit();
+        }
+        $('back').addEventListener('click', back);
+        $('close').addEventListener('click', () => {
+          ss.clear();
+          exit();
+        });
+
+        /* ---------- 1 · canal ---------- */
+        document.querySelector('.channels').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-channel]');
+          if (!b) return;
+          const ch = b.dataset.channel;
+          if (ch !== S.channel) {
+            if (S.contact) S.name = ''; // a name picked from the phone book doesn't carry over to another channel
+            S.contact = null;
+            S.email = '';
+          }
+          S.channel = ch;
+          save();
+          if (CHANNELS[ch].app) openAlert(b);
+          else go('nome');
+        });
+
+        /* ---------- system alert ---------- */
+        const alertEl = $('alert');
+        let alertOpener = null;
+        function openAlert(opener) {
+          alertOpener = opener || document.activeElement;
+          $('alert-t').textContent = `“Finby” deseja abrir “${CHANNELS[S.channel].app}”`;
+          alertEl.hidden = false;
+          main.inert = true;
+          $('top').inert = true;
+          requestAnimationFrame(() => $('alert-box').focus()); // the title is read; Tab reaches Cancelar / Abrir
+        }
+        function closeAlert(restore = true) {
+          if (alertEl.hidden) return;
+          alertEl.hidden = true;
+          main.inert = false;
+          $('top').inert = false;
+          if (restore && alertOpener) alertOpener.focus({ preventScroll: true });
+        }
+        $('alert-no').addEventListener('click', () => closeAlert());
+        $('alert-yes').addEventListener('click', () => {
+          closeAlert(false);
+          go('contatos');
+        });
+        alertEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            closeAlert();
+          }
+          if (e.key === 'Tab') {
+            e.preventDefault();
+            (document.activeElement === $('alert-yes') ? $('alert-no') : $('alert-yes')).focus();
+          }
+        });
+        alertEl.addEventListener('click', (e) => {
+          if (e.target === alertEl) $('alert-no').focus(); // iOS alerts don't dismiss on outside taps
+        });
+
+        /* ---------- 2 · nome ---------- */
+        const nameIn = $('name');
+        function nameHint() {
+          const h = $('name-hint');
+          const v = S.name.trim();
+          h.classList.remove('danger');
+          if (isMe(v)) {
+            h.classList.add('danger');
+            h.innerHTML = FB.icon('alert') + '<span>Esse nome é o seu. Convide outra pessoa.</span>';
+            return;
+          }
+          const id = v.length >= 2 ? known(v) : null;
+          const p = id ? FB.person(id) : null;
+          if (p && p.pending !== 'signup' && FB.friends.includes(id)) {
+            const href = from === 'criar' ? exitUrl(id) : 'amigos.html';
+            h.innerHTML = FB.icon('user-check') + `<span><strong>${esc(p.name)}</strong> já está no Finby. <a class="link" href="${href}">${from === 'criar' ? 'Adicionar direto' : 'Ver amigos'}</a></span>`;
+            return;
+          }
+          if (p) {
+            h.innerHTML = FB.icon('info') + `<span><strong>${esc(first(p.name))}</strong> já tem um convite. Vamos mandar um lembrete.</span>`;
+            return;
+          }
+          h.innerHTML = `<span>${S.channel === 'messenger' ? 'Vamos abrir o Messenger com o convite pronto.' : 'É o nome que vai aparecer na lista do consórcio.'}</span>`;
+        }
+        nameIn.addEventListener('input', () => {
+          S.name = nameIn.value;
+          save();
+          nameHint();
+          refreshNext();
+        });
+        nameIn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            advance();
+          }
+        });
+
+        /* ---------- 3 · e-mail ---------- */
+        const mailIn = $('email');
+        function emailHint(error) {
+          const h = $('email-hint');
+          mailIn.setAttribute('aria-invalid', String(!!error));
+          h.classList.toggle('danger', !!error);
+          h.innerHTML = error
+            ? FB.icon('alert') + `<span>${S.email.includes('@') ? 'Falta o final do e-mail, tipo <strong>.com</strong> ou <strong>.com.br</strong>.' : 'Falta o <strong>@</strong> no e-mail.'}</span>`
+            : `<span>Vamos mandar um convite para <strong>${esc(first(S.name) || 'seu contato')}</strong> baixar o Finby.</span>`;
+        }
+        mailIn.addEventListener('input', () => {
+          S.email = mailIn.value;
+          save();
+          if (mailIn.getAttribute('aria-invalid') === 'true' && emailOk(S.email)) emailHint(false);
+          refreshNext();
+        });
+        mailIn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            advance();
+          }
+        });
+
+        function advance() {
+          if (nextBtn.hasAttribute('aria-busy')) return;
+          if (current === 'nome' && !valid.nome()) {
+            nameIn.focus();
+            if (!isMe(S.name)) FB.toast('Digite o nome com pelo menos 2 letras', 'info');
+            return;
+          }
+          if (current === 'email' && !valid.email()) {
+            emailHint(true);
+            mailIn.focus();
+            return;
+          }
+          const f = flow();
+          const i = f.indexOf(current);
+          if (i < f.length - 1) return go(f[i + 1]);
+          send(nextBtn);
+        }
+        nextBtn.addEventListener('click', advance);
+
+        /* ---------- 4 · contatos ---------- */
+        const SECS = [
+          ['frequent', 'Contatos frequentes'],
+          ['recent', 'Conversas recentes'],
+        ];
+        $('pick-lists').innerHTML = SECS.map(
+          ([k, t]) => `<section class="ios-sec" aria-labelledby="sec-${k}">
+            <h2 class="ios-sec__h" id="sec-${k}">${t}</h2>
+            <ul class="ios-list">${FB.contacts[k]
+              .map((id) => {
+                const p = FB.person(id);
+                return `<li data-name="${esc(norm(p.name))}"><button class="ios-row" type="button" aria-pressed="false" data-id="${esc(id)}">${FB.avatar(id)}<span class="ios-row__name">${esc(p.name)}</span><span class="ios-radio" aria-hidden="true">${FB.icon('check')}</span></button></li>`;
+              })
+              .join('')}</ul>
+          </section>`
+        ).join('');
+        function paintPick() {
+          document.querySelectorAll('.ios-row').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === S.contact)));
+          const on = !!S.contact && current === 'contatos';
+          $('pick-bar').classList.toggle('is-on', on);
+          if (S.contact) $('pick-name').textContent = FB.person(S.contact).name;
+          $('pick-send').setAttribute('aria-label', S.contact ? `Enviar convite para ${FB.person(S.contact).name}` : 'Enviar');
+        }
+        $('pick-lists').addEventListener('click', (e) => {
+          const b = e.target.closest('.ios-row');
+          if (!b) return;
+          S.contact = S.contact === b.dataset.id ? null : b.dataset.id;
+          S.name = S.contact ? FB.person(S.contact).name : '';
+          save();
+          paintPick();
+        });
+        const pickQ = $('pick-q');
+        function pickFilter() {
+          const q = norm(pickQ.value);
+          let any = 0;
+          document.querySelectorAll('.ios-sec').forEach((sec) => {
+            let shown = 0;
+            sec.querySelectorAll('li').forEach((li) => {
+              const hit = !q || li.dataset.name.includes(q);
+              li.hidden = !hit;
+              shown += hit;
+            });
+            sec.hidden = !shown;
+            any += shown;
+          });
+          const em = $('pick-empty');
+          em.hidden = any > 0;
+          if (!any) em.innerHTML = `Nenhum contato com “${esc(pickQ.value.trim())}”.<br /><button class="link" type="button" id="pick-mail">${FB.icon('mail', 'i--sm')}Convidar por e-mail</button>`;
+        }
+        pickQ.addEventListener('input', pickFilter);
+        $('pick-empty').addEventListener('click', (e) => {
+          if (!e.target.closest('#pick-mail')) return;
+          S.channel = 'email';
+          S.contact = null;
+          S.name = pickQ.value.trim();
+          save();
+          go('nome');
+        });
+        $('pick-cancel').addEventListener('click', back);
+        $('pick-send').addEventListener('click', (e) => {
+          if (!S.contact) return;
+          send(e.currentTarget);
+        });
+
+        /* ---------- send → fb:invites ---------- */
+        function record() {
+          const name = S.name.trim();
+          const hit = known(name);
+          const list = FB.store.get('invites', []) || [];
+          if (hit && !hit.startsWith('inv-')) return { id: hit, stored: false }; // already in the app (e.g. Ronaldo, cadastro pendente)
+          const rec = { id: hit || `inv-${Date.now()}`, name, channel: S.channel };
+          if (S.channel === 'email') rec.email = S.email.trim();
+          if (S.contact && PHONES[S.contact]) rec.phone = PHONES[S.contact];
+          return { id: rec.id, rec, list, stored: false };
+        }
+        function store(r) {
+          if (!r.rec || r.stored) return r.id;
+          const list = FB.store.get('invites', []) || [];
+          const i = list.findIndex((x) => x.id === r.rec.id);
+          FB.store.set('invites', i < 0 ? [...list, r.rec] : list.map((x) => (x.id === r.rec.id ? { ...x, ...r.rec } : x)));
+          r.stored = true;
+          return r.id;
+        }
+        let preview = null; // demo deep link: shown, saved only when the user taps Fechar
+        function send(btn) {
+          if (btn.hasAttribute('aria-busy')) return;
+          btn.setAttribute('aria-busy', 'true');
+          const label = btn.textContent;
+          if (btn === nextBtn) btn.innerHTML = '<span class="spin" aria-hidden="true"></span><span class="sr-only">Enviando convite…</span>';
+          else btn.textContent = 'Enviando…';
+          setTimeout(
+            () => {
+              const r = record();
+              S.sent = store(r);
+              preview = null;
+              save();
+              btn.removeAttribute('aria-busy');
+              btn.textContent = label;
+              history.replaceState({ fbStep: 'enviado', fbDepth: depth() }, '', urlFor('enviado'));
+              show('enviado');
+            },
+            reduce ? 150 : 700
+          );
+        }
+
+        /* ---------- 5 · enviado ---------- */
+        function renderEnviado() {
+          let id = S.sent;
+          let p = id ? FB.person(id) : null;
+          if (!id || p.name === id) {
+            preview = preview || record();
+            id = preview.id;
+            p = preview.rec || FB.person(id);
+          }
+          const ch = CHANNELS[p.channel || S.channel] || CHANNELS.whatsapp;
+          const av = p.photo || FB.people[id] ? FB.avatar(id) : FB.avatar({ name: p.name });
+          $('sent-text').innerHTML = `Você já pode adicionar <strong>${esc(first(p.name))}</strong> em um <strong>consórcio</strong>.`;
+          $('sent-meta').innerHTML = `<span class="done__meta">${av}<span>${esc(p.name)}</span>${FB.icon(ch.icon)}</span>`;
+          $('sent-meta').firstChild.setAttribute('aria-label', `${p.name}, convite por ${ch.label}`);
+          $('sent-meta').firstChild.setAttribute('role', 'img');
+          $('sent-close').href = exitUrl(id);
+        }
+        $('sent-close').addEventListener('click', (e) => {
+          e.preventDefault();
+          const id = preview ? store(preview) : S.sent;
+          ss.clear();
+          exit(id);
+        });
+
+        const RENDER = {
+          nome() {
+            nameIn.value = S.name;
+            nameHint();
+          },
+          email() {
+            mailIn.value = S.email;
+            emailHint(!!qs.get('error') && !emailOk(S.email));
+          },
+          contatos() {
+            if (!pickQ.value && S.name && !S.contact) {
+              const k = norm(S.name);
+              if (Object.values(FB.contacts).flat().some((id) => norm(FB.person(id).name).includes(k))) pickQ.value = S.name;
+            }
+            pickFilter();
+            paintPick();
+          },
+          enviado: renderEnviado,
+        };
+
+        /* keep the bottom bar above the on-screen keyboard (phones; the desktop frame has a fixed size) */
+        if (window.visualViewport && !document.documentElement.classList.contains('is-embedded') && matchMedia('(max-width: 599px)').matches) {
+          const vv = window.visualViewport;
+          vv.addEventListener('resize', () => {
+            const kb = window.innerHeight - vv.height > 120;
+            app.style.height = kb ? `${vv.height}px` : '';
+            if (kb) window.scrollTo(0, 0);
+          });
+        }
+
+        /* ---------- boot: deep link, but never past an unfinished step ---------- */
+        let step = stepQ || 'canal';
+        if (step === 'enviado') {
+          const id = qs.get('id');
+          if (id && FB.person(id).name !== id) S.sent = id;
+          else if (!demo) step = 'canal';
+        }
+        if (step !== 'enviado') {
+          if (step !== 'canal' && !S.channel) S.channel = step === 'contatos' ? 'whatsapp' : 'email';
+          const f = flow();
+          if (!f.includes(step)) step = 'canal';
+          const gap = f.slice(0, f.indexOf(step)).find((s) => !valid[s]());
+          if (gap) step = gap;
+        }
+        save();
+        history.replaceState({ fbStep: step, fbDepth: 0 }, '', urlFor(step) + (qs.get('error') && step === 'email' ? '&error=1' : ''));
+        show(step, 1, { enter: true });
+        const al = qs.get('alert');
+        if (step === 'canal' && (al === 'whatsapp' || al === 'imessage')) {
+          S.channel = al;
+          openAlert(document.querySelector(`[data-channel="${al}"]`));
+        }
+      })();
+    </script>
+  </body>
+</html>

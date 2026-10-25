@@ -1,0 +1,1753 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Novo consórcio · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma 2.x "Criar consórcio" (private flow "Convidados por mim") + 6.x (public flow, adds "nível mínimo").
+         One wizard, one step visible at a time: ?step=nome|sorteio|criterio|nivel|quem|valor|resumo|pronto (&demo=1). */
+
+      /* ---------- chrome: back · progress · close (stays put while steps slide) ---------- */
+      .wiz-top {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 56px;
+        padding: 0 10px;
+        position: relative;
+        z-index: 6;
+        background: var(--bg);
+      }
+      .wiz-top .progress {
+        flex: none;
+        width: 112px;
+      }
+      .wiz-top .icon-btn {
+        color: var(--ink-2);
+      }
+      .toast {
+        bottom: calc(var(--bb, 96px) + 10px);
+      }
+
+      /* ---------- steps ---------- */
+      .step {
+        padding-top: 4px;
+      }
+      .step__head {
+        margin: 10px 0 26px;
+      }
+      .step__head:focus,
+      .done__title:focus {
+        outline: none;
+      }
+      .step__lede {
+        margin-top: 8px;
+        font-size: 15px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+      .is-entering > * {
+        animation: rise 520ms var(--ease) both;
+        animation-delay: calc(var(--i, 0) * 55ms);
+      }
+
+      /* nome */
+      .name-hint {
+        margin-top: 12px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      /* option rows get a quiet icon tile on the right */
+      .option__ico {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        flex: none;
+        border-radius: var(--r-sm);
+        color: var(--violet-600);
+        background: var(--violet-50);
+        transition: background var(--t-fast) var(--ease);
+      }
+      .option[aria-checked='true'] .option__ico {
+        background: #fff;
+      }
+      .option {
+        min-height: 72px;
+      }
+
+      /* nível mínimo: three crown discs (Figma 6.2.0), refined with a one-line meaning */
+      .levels {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .lvl {
+        display: grid;
+        justify-items: center;
+        align-content: start;
+        gap: 4px;
+        padding: 14px 4px 14px;
+        border-radius: var(--r-lg);
+        text-align: center;
+        transition: background var(--t-fast) var(--ease);
+      }
+      .lvl:hover {
+        background: rgba(97, 62, 234, 0.04);
+      }
+      .lvl__disc {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 84px;
+        height: 84px;
+        margin-bottom: 8px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 32% 26%, #6f6985, #4d4762 70%);
+        box-shadow:
+          inset 0 -8px 16px rgba(20, 14, 40, 0.28),
+          0 12px 22px -14px rgba(27, 23, 48, 0.7);
+        transition:
+          transform var(--t-med) var(--ease-spring),
+          box-shadow var(--t-med) var(--ease),
+          background var(--t-med) var(--ease);
+      }
+      .lvl__disc svg {
+        width: 44px;
+        height: 44px;
+        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+      }
+      .lvl[aria-checked='true'] .lvl__disc {
+        background: radial-gradient(circle at 32% 26%, #3a3356, var(--ink) 72%);
+        box-shadow:
+          0 0 0 3px var(--bg),
+          0 0 0 5.5px var(--violet-500),
+          0 16px 26px -14px rgba(27, 23, 48, 0.8);
+        transform: scale(1.05);
+      }
+      .lvl__check {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--green-500);
+        box-shadow: 0 0 0 3px var(--bg);
+        transform: scale(0);
+        transition: transform var(--t-med) var(--ease-spring);
+      }
+      .lvl__check .i {
+        width: 17px;
+        height: 17px;
+        stroke-width: 3;
+      }
+      .lvl[aria-checked='true'] .lvl__check {
+        transform: scale(1);
+      }
+      .lvl__name {
+        font-size: 16.5px;
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+      .lvl[aria-checked='true'] .lvl__name {
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .lvl__desc {
+        font-size: 12.5px;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+      .lvl-note {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        margin-top: 18px;
+        padding: 12px 14px;
+        border-radius: var(--r-md);
+        font-size: 14px;
+        line-height: 1.4;
+        color: var(--ink-2);
+        background: var(--sunken);
+      }
+      .lvl-note .i {
+        width: 18px;
+        height: 18px;
+        margin-top: 1px;
+        color: var(--violet-600);
+      }
+
+      /* quem vai participar */
+      a.add-row {
+        display: flex;
+        border-radius: var(--r-md);
+      }
+      .add-row .row__title,
+      .add-row .row__sub {
+        display: block;
+      }
+      .add-row .row__title {
+        font-weight: 600;
+      }
+      .you-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 32px;
+        padding: 0 10px 0 3px;
+        border-radius: var(--r-pill);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--violet-800);
+        background: var(--violet-50);
+        box-shadow: inset 0 0 0 1px var(--violet-100);
+        white-space: nowrap;
+      }
+      .you-chip .av {
+        --s: 26px;
+      }
+      .you-chip small {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--violet-600);
+      }
+      .friend__lvl {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .friend__lvl svg {
+        width: 13px;
+        height: 13px;
+      }
+      .friend__name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .no-match {
+        padding: 22px 8px 6px;
+        text-align: center;
+        font-size: 14.5px;
+        color: var(--muted);
+      }
+      .picked {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 32px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: var(--ink-2);
+      }
+      .picked strong {
+        color: var(--ink);
+      }
+      .picked .av-stack .av {
+        --s: 30px;
+      }
+      .picked .av-stack .av + .av {
+        margin-left: -7px;
+      }
+      .picked .av-stack .more {
+        --av-bg: var(--violet-100);
+        --av-ink: var(--violet-800);
+        font-size: 11px;
+      }
+
+      /* valor do prêmio */
+      .amount {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        padding-bottom: 6px;
+        border-bottom: 2px solid var(--line);
+        color: var(--heading);
+        transition: border-color var(--t-fast) var(--ease);
+      }
+      .amount:focus-within {
+        border-bottom-color: var(--violet-500);
+      }
+      .amount__cur {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--ink-2);
+      }
+      .amount__field {
+        display: inline-grid;
+        min-width: 0;
+        max-width: 100%;
+      }
+      .amount__field > * {
+        grid-area: 1 / 1;
+        min-width: 0;
+        font: inherit;
+        font-size: 44px;
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+      }
+      .amount__mirror {
+        visibility: hidden;
+        white-space: pre;
+        padding-right: 2px;
+      }
+      .amount input {
+        width: 100%;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        background: none;
+        color: var(--heading);
+        caret-color: var(--violet-600);
+      }
+      .amount input::placeholder {
+        color: var(--heading);
+      }
+      .amount__cents {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--ink-3);
+        margin-left: -10px; /* anula o gap e a folga do cursor: "6.000,00" colado */
+      }
+      .nudges {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .nudges .chip {
+        min-height: 44px;
+      }
+      .parcel {
+        margin-top: 22px;
+        padding: 18px 18px 16px;
+      }
+      .parcel__label {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ink-2);
+      }
+      .parcel__value {
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        margin-top: 2px;
+        font-size: 32px;
+        color: var(--violet-600);
+      }
+      .parcel__value .money {
+        font-weight: 700;
+      }
+      .parcel__per {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0;
+        color: var(--muted);
+      }
+      .parcel__people {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .parcel__people .kv dd {
+        font-size: 18px;
+      }
+      .parcel__note {
+        margin-top: 2px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .stepper {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        border-radius: var(--r-pill);
+        background: var(--sunken);
+      }
+      .stepper .icon-btn {
+        color: var(--violet-700);
+      }
+      .stepper .icon-btn:disabled {
+        color: var(--ink-4);
+        cursor: not-allowed;
+      }
+      .stepper output {
+        min-width: 26px;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      .due {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+      }
+      .due__head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .due__value {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--heading);
+      }
+      .due__first {
+        margin-top: 2px;
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .due__first strong {
+        color: var(--ink-2);
+        font-weight: 700;
+      }
+      .due .chips {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 10px;
+      }
+      .due .chip {
+        min-height: 44px;
+      }
+      .link--btn {
+        min-height: 44px;
+        margin: -6px -8px -6px 0;
+        padding: 0 8px;
+      }
+
+      /* resumo */
+      .sum {
+        padding: 18px 18px 16px;
+      }
+      .sum__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .sum__name {
+        min-width: 0;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ink-2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        flex: none;
+        height: 26px;
+        padding: 0 10px 0 8px;
+        border-radius: var(--r-pill);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--violet-700);
+        background: var(--violet-50);
+        white-space: nowrap;
+      }
+      .tag svg {
+        width: 14px;
+        height: 14px;
+      }
+      .sum__label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .sum__prize {
+        margin-top: 2px;
+        font-size: 38px;
+        color: var(--violet-600);
+      }
+      .sum__row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+      }
+      .sum__value {
+        font-size: 17px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--heading);
+      }
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        min-height: 72px;
+        margin-top: 12px;
+        padding: 14px 16px 14px 18px;
+        border-radius: var(--r-lg);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+        text-align: left;
+      }
+      .toggle-row__title {
+        display: block;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--heading);
+      }
+      .toggle-row__sub {
+        display: block;
+        margin-top: 1px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .toggle-row .switch {
+        margin-left: auto;
+      }
+      /* the switch is drawn by the button's own state (role=switch lives on the whole row) */
+      .toggle-row[aria-checked='true'] .switch {
+        background: var(--green-500);
+      }
+      .toggle-row[aria-checked='true'] .switch::after {
+        transform: translateX(20px);
+      }
+      .plist-head {
+        margin: 26px 0 10px;
+      }
+      .plist-head h2 {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink-2);
+      }
+      .plist-head p {
+        margin-top: 2px;
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .prow {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 56px;
+        padding: 6px 14px;
+        background: var(--surface);
+      }
+      .prow__pos {
+        flex: none;
+        min-width: 24px;
+        font-size: 15px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        color: var(--violet-600);
+      }
+      .prow__name {
+        flex: 1;
+        min-width: 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--heading);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .prow__name small {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--violet-600);
+      }
+      .prow__lvl {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .prow__lvl svg {
+        width: 14px;
+        height: 14px;
+      }
+      .prow__lvl.danger {
+        color: var(--red-600);
+      }
+      .prow--open .prow__name {
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .grip {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 44px;
+        margin-left: -8px;
+        flex: none;
+        border-radius: 10px;
+        color: var(--ink-4);
+        cursor: grab;
+        touch-action: none;
+      }
+      .grip:hover {
+        color: var(--ink-2);
+        background: var(--sunken);
+      }
+      .plist--order .prow {
+        transition: transform 200ms var(--ease);
+      }
+      .plist--order .prow.is-dragging {
+        z-index: 3;
+        transition: none;
+        border-radius: var(--r-md);
+        box-shadow: var(--shadow-md), inset 0 0 0 1.5px var(--violet-300);
+        cursor: grabbing;
+      }
+      .plist--order .prow.is-dragging .grip {
+        cursor: grabbing;
+        color: var(--violet-600);
+      }
+      .plist.no-anim .prow {
+        transition: none;
+      }
+      .plist.is-sorting {
+        overflow: visible;
+      }
+
+      /* publish loading */
+      .spin {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #fff;
+        animation: spin 700ms linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* pronto (Figma 2.5.0 "Uhuuuul!") */
+      .step--done {
+        display: flex;
+        min-height: 100%;
+        padding-top: 0;
+      }
+      .step--done[hidden] {
+        display: none;
+      }
+      .done {
+        flex: 1;
+        padding: 64px 28px 24px;
+      }
+      .has-status .done {
+        padding-top: 90px;
+      }
+      .done__body {
+        margin: auto 0;
+      }
+      .done__body .btn {
+        margin-top: 28px;
+      }
+      .done__close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        min-height: 44px;
+        min-width: 88px;
+        margin-top: 24px;
+        padding: 0 16px;
+        font-size: 15.5px;
+        font-weight: 600;
+        color: #fff;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        border-radius: 10px;
+      }
+      .done__close:focus-visible {
+        outline-color: #fff;
+      }
+      .done .btn:focus-visible {
+        outline-color: #fff;
+      }
+      .done__meta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 16px;
+        padding: 6px 12px;
+        border-radius: var(--r-pill);
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.14);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      }
+      .done__meta .i {
+        width: 15px;
+        height: 15px;
+      }
+      .is-done .screen {
+        padding: 0;
+      }
+
+      /* discard sheet */
+      .btn--danger {
+        color: var(--red-600);
+        background: var(--red-50);
+        box-shadow: none;
+      }
+      .btn--danger:hover {
+        background: #fbdde1;
+      }
+      .has-status .sheet {
+        padding-bottom: 36px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="wiz-top" id="top">
+        <button class="icon-btn" type="button" id="back" aria-label="Voltar"><span data-icon="arrow-left"></span></button>
+        <div class="progress" id="progress" role="progressbar" aria-label="Progresso da criação" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1" aria-valuetext="Passo 1 de 6">
+          <div class="progress__bar" id="progress-bar"></div>
+        </div>
+        <button class="icon-btn" type="button" id="close" aria-label="Fechar e descartar"><span data-icon="x"></span></button>
+      </header>
+
+      <main class="screen" id="main">
+        <!-- 1 · nome -->
+        <section class="step" data-step="nome" aria-labelledby="h-nome" hidden>
+          <h1 class="t-question step__head" id="h-nome" tabindex="-1"><strong>Qual o nome</strong> você quer dar para esse consórcio?</h1>
+          <input class="big-input" id="name" type="text" maxlength="40" autocomplete="off" autocapitalize="words" enterkeyhint="next" placeholder="Ex.: Viagem Chapada" aria-labelledby="h-nome" aria-describedby="name-hint" />
+          <p class="name-hint" id="name-hint">Pode ser o objetivo do grupo: uma viagem, a formatura, um carro novo…</p>
+        </section>
+
+        <!-- 2 · sorteio -->
+        <section class="step" data-step="sorteio" aria-labelledby="h-sorteio" hidden>
+          <h1 class="t-question step__head" id="h-sorteio" tabindex="-1"><strong>Os prêmios</strong> mensais serão pagos de forma…</h1>
+          <div class="options" role="radiogroup" aria-labelledby="h-sorteio" id="g-sorteio">
+            <button class="option" type="button" role="radio" aria-checked="false" data-value="random">
+              <span class="radio" aria-hidden="true"></span>
+              <span class="option__body"><span class="option__title">Aleatório</span><span class="option__desc">Sorteio automático todo mês</span></span>
+              <span class="option__ico" aria-hidden="true"><span data-icon="shuffle"></span></span>
+            </button>
+            <button class="option" type="button" role="radio" aria-checked="false" data-value="order">
+              <span class="radio" aria-hidden="true"></span>
+              <span class="option__body"><span class="option__title">Predefinido</span><span class="option__desc">Você define a ordem de quem recebe</span></span>
+              <span class="option__ico" aria-hidden="true"><span data-icon="list-ordered"></span></span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 3 · critério -->
+        <section class="step" data-step="criterio" aria-labelledby="h-criterio" hidden>
+          <h1 class="t-question step__head" id="h-criterio" tabindex="-1"><strong>Defina os</strong> critérios de participação</h1>
+          <div class="options" role="radiogroup" aria-labelledby="h-criterio" id="g-criterio">
+            <button class="option" type="button" role="radio" aria-checked="false" data-value="public">
+              <span class="radio" aria-hidden="true"></span>
+              <span class="option__body"><span class="option__title">Qualquer pessoa pode participar</span><span class="option__desc">Aparece em “Descubra mais” para a comunidade</span></span>
+              <span class="option__ico" aria-hidden="true"><span data-icon="globe"></span></span>
+            </button>
+            <button class="option" type="button" role="radio" aria-checked="false" data-value="invited">
+              <span class="radio" aria-hidden="true"></span>
+              <span class="option__body"><span class="option__title">Somente convidados por mim</span><span class="option__desc">Só entra quem você chamar</span></span>
+              <span class="option__ico" aria-hidden="true"><span data-icon="lock"></span></span>
+            </button>
+            <button class="option" type="button" role="radio" aria-checked="false" data-value="friends">
+              <span class="radio" aria-hidden="true"></span>
+              <span class="option__body"><span class="option__title">Amigos podem convidar amigos</span><span class="option__desc">Seus convidados também podem chamar gente</span></span>
+              <span class="option__ico" aria-hidden="true"><span data-icon="users"></span></span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 4 · nível mínimo (só no público) -->
+        <section class="step" data-step="nivel" aria-labelledby="h-nivel" hidden>
+          <h1 class="t-question step__head" id="h-nivel" tabindex="-1"><strong>Defina o</strong> nível mínimo dos participantes</h1>
+          <div class="levels" role="radiogroup" aria-labelledby="h-nivel" id="g-nivel"></div>
+          <p class="lvl-note" id="lvl-note" aria-live="polite"></p>
+        </section>
+
+        <!-- 5 · quem -->
+        <section class="step" data-step="quem" aria-labelledby="h-quem" hidden>
+          <h1 class="t-question step__head" id="h-quem" tabindex="-1"><strong>Quem</strong> vai participar?</h1>
+          <label class="search">
+            <span class="sr-only">Pesquisar amigos</span>
+            <input id="search" type="search" placeholder="Pesquisar…" autocomplete="off" enterkeyhint="search" />
+            <span data-icon="search"></span>
+          </label>
+          <a class="card row add-row mt-12" href="contato.html?from=criar" id="add-contact">
+            <span class="row__ico"><span data-icon="user-plus"></span></span>
+            <span class="row__main"><span class="row__title">Adicionar um novo contato</span><span class="row__sub">Convide alguém que ainda não usa o Finby</span></span>
+            <span data-icon="chevron-right" class="chev"></span>
+          </a>
+          <div class="section-head">
+            <h2 id="friends-h">Amigos no Finby</h2>
+            <span class="you-chip" id="you-chip"></span>
+          </div>
+          <ul class="list" id="friends" aria-labelledby="friends-h"></ul>
+          <p class="no-match" id="no-match" hidden></p>
+        </section>
+
+        <!-- 6 · valor -->
+        <section class="step" data-step="valor" aria-labelledby="h-valor" hidden>
+          <h1 class="t-question step__head" id="h-valor" tabindex="-1"><strong>Qual</strong> o valor do prêmio?</h1>
+          <div class="amount">
+            <span class="amount__cur" aria-hidden="true">R$</span>
+            <span class="amount__field">
+              <span class="amount__mirror" id="amount-mirror" aria-hidden="true">0</span>
+              <input id="amount" type="text" size="1" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="0" aria-label="Valor do prêmio, em reais" />
+            </span>
+            <span class="amount__cents" id="amount-cents" aria-hidden="true">,00</span>
+          </div>
+          <div class="nudges" role="group" aria-label="Ajustar o valor" id="nudges">
+            <button class="chip" type="button" data-n="50" aria-label="Somar R$ 50">+ 50</button>
+            <button class="chip" type="button" data-n="100" aria-label="Somar R$ 100">+ 100</button>
+            <button class="chip" type="button" data-n="1000" aria-label="Somar R$ 1.000">+ 1.000</button>
+            <button class="chip chip--minus" type="button" data-n="-50" aria-label="Subtrair R$ 50">− 50</button>
+            <button class="chip chip--minus" type="button" data-n="-100" aria-label="Subtrair R$ 100">− 100</button>
+            <button class="chip chip--minus" type="button" data-n="-1000" aria-label="Subtrair R$ 1.000">− 1.000</button>
+          </div>
+
+          <section class="card parcel" aria-labelledby="parcel-h">
+            <h2 class="parcel__label" id="parcel-h">Valor da primeira parcela</h2>
+            <p class="parcel__value"><span id="inst"></span><span class="parcel__per">/mês</span></p>
+            <div class="parcel__people">
+              <dl class="kv">
+                <dt>Participantes</dt>
+                <dd id="people-n"></dd>
+              </dl>
+              <div class="stepper" id="stepper" role="group" aria-label="Número de participantes" hidden>
+                <button class="icon-btn" type="button" id="size-minus" aria-label="Menos uma vaga"><span data-icon="minus"></span></button>
+                <output id="size-out" aria-live="polite"></output>
+                <button class="icon-btn" type="button" id="size-plus" aria-label="Mais uma vaga"><span data-icon="plus"></span></button>
+              </div>
+            </div>
+            <p class="parcel__note" id="people-note"></p>
+
+            <div class="due">
+              <div class="due__head">
+                <div>
+                  <p class="sum__label" id="due-h">Vencimento</p>
+                  <p class="due__value" id="due-value">Definir para</p>
+                  <p class="due__first" id="due-first" hidden></p>
+                </div>
+                <button class="link link--btn" type="button" id="due-change" hidden aria-label="Alterar vencimento">Alterar</button>
+              </div>
+              <div class="chips" role="group" aria-labelledby="due-h" id="due-chips"></div>
+            </div>
+          </section>
+          <p class="sr-only" id="valor-live" aria-live="polite" aria-atomic="true"></p>
+        </section>
+
+        <!-- 7 · resumo -->
+        <section class="step" data-step="resumo" aria-labelledby="h-resumo" hidden>
+          <h1 class="t-question step__head" id="h-resumo" tabindex="-1"><strong>Resumo</strong> do seu consórcio</h1>
+          <section class="card sum" aria-label="Valores">
+            <div class="sum__top">
+              <p class="sum__name" id="sum-name"></p>
+              <span class="tag" id="sum-access"></span>
+            </div>
+            <p class="sum__label">Valor do prêmio</p>
+            <p class="sum__prize" id="sum-prize"></p>
+            <div class="sum__row">
+              <div>
+                <p class="sum__label">Parcelas</p>
+                <p class="sum__value" id="sum-parcels"></p>
+              </div>
+              <button class="link link--btn" type="button" data-goto="valor" aria-label="Alterar parcelas">Alterar</button>
+            </div>
+            <div class="sum__row">
+              <div>
+                <p class="sum__label">Vencimento</p>
+                <p class="sum__value" id="sum-due"></p>
+                <p class="due__first" id="sum-first"></p>
+              </div>
+              <button class="link link--btn" type="button" data-goto="valor" data-due aria-label="Alterar vencimento">Alterar</button>
+            </div>
+          </section>
+
+          <button class="toggle-row" type="button" role="switch" aria-checked="true" id="auto">
+            <span class="grow">
+              <span class="toggle-row__title">Sorteio automático</span>
+              <span class="toggle-row__sub" id="auto-sub"></span>
+            </span>
+            <span class="switch" aria-hidden="true"></span>
+          </button>
+
+          <div class="plist-head">
+            <h2 id="plist-h">Participantes</h2>
+            <p id="plist-help" hidden>Arraste e solte para definir a ordem de contemplação</p>
+          </div>
+          <ul class="list--divided plist" id="plist" aria-labelledby="plist-h"></ul>
+          <p class="sr-only" id="order-keys">Arraste, ou use as setas para cima e para baixo para mudar a posição.</p>
+          <p class="sr-only" id="order-live" aria-live="assertive" aria-atomic="true"></p>
+        </section>
+
+        <!-- 8 · pronto -->
+        <section class="step step--done" data-step="pronto" aria-labelledby="h-pronto" hidden>
+          <div class="done">
+            <div class="done__body">
+              <div class="done__art pop" data-art="celebrate"></div>
+              <h1 class="done__title" id="h-pronto" tabindex="-1"><strong>Uhuuuul!</strong> Seu consórcio foi publicado com sucesso</h1>
+              <p class="done__text" id="done-text"></p>
+              <p id="done-meta"></p>
+              <a class="btn btn--white" id="done-view" href="consorcio.html">Visualizar consórcio</a>
+            </div>
+            <a class="done__close" href="home.html">Fechar</a>
+          </div>
+        </section>
+      </main>
+
+      <div class="bottom-bar" id="bar">
+        <div class="picked" id="picked" aria-live="polite" hidden></div>
+        <button class="btn" type="button" id="next">Avançar</button>
+      </div>
+
+      <!-- close → confirm -->
+      <div class="sheet" id="discard" role="dialog" aria-modal="true" aria-labelledby="discard-h" aria-describedby="discard-d" tabindex="-1" hidden>
+        <h2 class="sheet__title" id="discard-h">Descartar este consórcio?</h2>
+        <p class="t-body2 muted mt-8" id="discard-d">O que você preencheu até aqui vai ser apagado, e ninguém recebe convite.</p>
+        <div class="stack mt-24">
+          <button class="btn" type="button" data-sheet-close>Continuar criando</button>
+          <button class="btn btn--danger" type="button" id="discard-yes">Descartar</button>
+        </div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const { fmt, esc } = FB;
+        const $ = (id) => document.getElementById(id);
+        const ME = FB.me;
+        const qs = new URLSearchParams(location.search);
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const norm = (s) =>
+          String(s)
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '')
+            .toLowerCase()
+            .trim();
+
+        FB.icons.globe = '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>';
+
+        /* ---------- state (kept in sessionStorage so the "novo contato" detour comes back intact) ---------- */
+        const DRAFT = 'fb:criar-draft';
+        const blank = () => ({ name: '', draw: null, access: null, minLevel: null, selected: [], prize: 0, due: null, size: null, order: [] });
+        let S = blank();
+        const ss = {
+          get() {
+            try {
+              return JSON.parse(sessionStorage.getItem(DRAFT));
+            } catch (e) {
+              return null;
+            }
+          },
+          set(v) {
+            try {
+              sessionStorage.setItem(DRAFT, JSON.stringify(v));
+            } catch (e) {}
+          },
+          clear() {
+            try {
+              sessionStorage.removeItem(DRAFT);
+            } catch (e) {}
+          },
+        };
+        /* plain criar.html starts fresh; a ?step= link (deep link or coming back) resumes the draft */
+        if (qs.has('step')) Object.assign(S, ss.get() || {});
+        else ss.clear();
+        const save = () => ss.set(S);
+
+        const demo = qs.get('demo');
+        if (demo) {
+          const pub = demo === 'public' || qs.get('step') === 'nivel';
+          Object.assign(S, {
+            name: 'Viagem Chapada',
+            draw: qs.get('draw') === 'order' ? 'order' : 'random',
+            access: pub ? 'public' : 'invited',
+            minLevel: pub ? 'silver' : null,
+            selected: ['ronaldo', 'roberto', 'mario', 'maria-helena', 'pedro-paulo'],
+            prize: 6000,
+            due: qs.get('due') === 'none' ? null : 'Todo dia 10',
+            size: pub ? 10 : null,
+            order: [],
+          });
+        }
+        /* a contact invited from contato.html?from=criar comes back already selected */
+        const added = qs.get('added');
+        if (added && !S.selected.includes(added)) S.selected.unshift(added);
+
+        /* ---------- derived ---------- */
+        const isPublic = () => S.access === 'public';
+        const minSize = () => Math.max(2, S.selected.length + 1);
+        const count = () => (isPublic() ? Math.max(S.size || 10, minSize()) : S.selected.length + 1);
+        const installment = () => (S.prize > 0 ? Math.ceil((S.prize * 100) / count()) / 100 : 0);
+        const participants = () => [ME, ...S.selected];
+        const pendingOf = (id) => (id.startsWith('inv-') || FB.person(id).pending === 'signup' ? 'signup' : 'accept');
+        function syncOrder() {
+          const p = participants();
+          S.order = [...(S.order || []).filter((id) => p.includes(id)), ...p.filter((id) => !(S.order || []).includes(id))];
+        }
+        const startDate = () => new Date(FB.now.getFullYear(), FB.now.getMonth() + 1, 1, 12);
+        function firstCharge(due, start = startDate()) {
+          if (!due) return null;
+          if (/útil/.test(due)) {
+            const d = new Date(start);
+            let n = 0;
+            for (;;) {
+              const wd = d.getDay();
+              if (wd !== 0 && wd !== 6 && ++n === 5) return d;
+              d.setDate(d.getDate() + 1);
+            }
+          }
+          return new Date(start.getFullYear(), start.getMonth(), parseInt(due.match(/\d+/)[0], 10), 12);
+        }
+        const dmy = (d) => `${fmt.ddmm(d)}/${d.getFullYear()}`;
+        const dueLabel = (due) => (/útil/.test(due) ? `Todo ${due}` : due);
+        const DUES = ['5º dia útil', 'Todo dia 10', 'Todo dia 15', 'Todo dia 20'];
+        const ACCESS = {
+          public: ['globe', 'Público'],
+          invited: ['lock', 'Só convidados'],
+          friends: ['users', 'Amigos de amigos'],
+        };
+        const levelText = (id) => {
+          const p = FB.person(id);
+          if (p.pending === 'signup') return '<span class="prow__lvl danger">Cadastro pendente</span>';
+          return `<span class="prow__lvl">${p.level ? FB.crown(p.level) + FB.LEVELS[p.level] : 'Novo'}</span>`;
+        };
+
+        /* ---------- steps ---------- */
+        const main = $('main');
+        const app = $('app');
+        const sections = {};
+        document.querySelectorAll('.step').forEach((s) => (sections[s.dataset.step] = s));
+        const flow = () => ['nome', 'sorteio', 'criterio', ...(isPublic() ? ['nivel'] : []), 'quem', 'valor', 'resumo'];
+        const valid = {
+          nome: () => S.name.trim().length >= 2,
+          sorteio: () => !!S.draw,
+          criterio: () => !!S.access,
+          nivel: () => !!S.minLevel,
+          quem: () => S.selected.length > 0 || isPublic(),
+          valor: () => S.prize > 0 && !!S.due,
+          resumo: () => true,
+        };
+        const why = {
+          nome: 'Dê um nome com pelo menos 2 letras',
+          sorteio: 'Escolha como os prêmios serão pagos',
+          criterio: 'Escolha quem pode participar',
+          nivel: 'Escolha o nível mínimo',
+          quem: 'Escolha pelo menos 1 amigo',
+          valor: () => (S.prize > 0 ? 'Escolha o dia do vencimento' : 'Defina o valor do prêmio'),
+        };
+        const TITLES = { nome: 'Nome', sorteio: 'Prêmios', criterio: 'Critérios', nivel: 'Nível mínimo', quem: 'Participantes', valor: 'Valor', resumo: 'Resumo', pronto: 'Publicado' };
+
+        let current = null;
+        let navToken = 0;
+        let published = null;
+
+        function show(step, dir = 1, opt = {}) {
+          const prev = current ? sections[current] : null;
+          const next = sections[step];
+          current = step;
+          const token = ++navToken;
+          (RENDER[step] || (() => {}))();
+          chrome();
+          document.title = `${TITLES[step]} · Novo consórcio · Finby`;
+          const reveal = () => {
+            if (token !== navToken) return;
+            Object.values(sections).forEach((s) => (s.hidden = s !== next));
+            main.scrollTop = 0;
+            if (opt.enter) {
+              [...next.children].forEach((c, i) => c.style.setProperty('--i', i));
+              next.classList.add('is-entering');
+              setTimeout(() => next.classList.remove('is-entering'), 900);
+            } else if (prev && !reduce) {
+              next.animate(
+                [
+                  { opacity: 0, transform: `translateX(${28 * dir}px)` },
+                  { opacity: 1, transform: 'none' },
+                ],
+                { duration: 300, easing: 'cubic-bezier(.22,1,.36,1)' }
+              );
+            }
+            focusStep(step, opt.enter);
+          };
+          if (prev && prev !== next && !reduce && !opt.enter) {
+            prev.animate(
+              [
+                { opacity: 1, transform: 'none' },
+                { opacity: 0, transform: `translateX(${-20 * dir}px)` },
+              ],
+              { duration: 130, easing: 'ease-in', fill: 'forwards' }
+            ).onfinish = (e) => {
+              e.target.cancel();
+              reveal();
+            };
+          } else reveal();
+        }
+        function focusStep(step, initial) {
+          if (step === 'nome') {
+            const input = $('name');
+            input.focus({ preventScroll: true });
+            input.setSelectionRange(input.value.length, input.value.length);
+            return;
+          }
+          if (initial && step !== 'pronto') return; // a deep link lands quietly; moves between steps announce the heading
+          const h = sections[step].querySelector('h1');
+          if (h) h.focus({ preventScroll: true });
+        }
+
+        /* top bar, progress, bottom bar */
+        const nextBtn = $('next');
+        function chrome() {
+          const done = current === 'pronto';
+          app.classList.toggle('is-done', done);
+          $('top').hidden = done;
+          $('bar').hidden = done;
+          if (done) document.body.dataset.status = 'light';
+          else delete document.body.dataset.status;
+          if (done) return;
+          const f = flow();
+          const n = f.indexOf(current) + 1;
+          const p = $('progress');
+          p.setAttribute('aria-valuemax', f.length);
+          p.setAttribute('aria-valuenow', n);
+          p.setAttribute('aria-valuetext', `Passo ${n} de ${f.length}`);
+          $('progress-bar').style.setProperty('--p', `${Math.round((n / f.length) * 100)}%`);
+          $('picked').hidden = current !== 'quem';
+          refreshNext();
+        }
+        function refreshNext() {
+          if (current === 'pronto') return;
+          const ok = valid[current]();
+          nextBtn.setAttribute('aria-disabled', String(!ok));
+          let label = 'Avançar';
+          if (current === 'resumo') label = 'Publicar';
+          if (current === 'quem' && isPublic() && !S.selected.length) label = 'Pular, deixar aberto';
+          if (!nextBtn.hasAttribute('aria-busy')) nextBtn.textContent = label;
+        }
+
+        /* history: forward pushes, the arrow goes to the previous step */
+        const urlFor = (step) => `criar.html?step=${step}${demo ? `&demo=${demo}` : ''}${step === 'pronto' && published ? `&id=${encodeURIComponent(published)}` : ''}`;
+        const depth = () => (history.state && history.state.fbDepth) || 0;
+        function go(step, { push = true, dir = 1 } = {}) {
+          if (push) history.pushState({ fbStep: step, fbDepth: depth() + 1 }, '', urlFor(step));
+          else history.replaceState({ fbStep: step, fbDepth: depth() }, '', urlFor(step));
+          show(step, dir);
+        }
+        window.addEventListener('popstate', (e) => {
+          const st = e.state && e.state.fbStep;
+          if (!st) return;
+          if (published) {
+            location.href = 'home.html';
+            return;
+          }
+          const f = flow();
+          const target = f.includes(st) ? st : f[Math.max(0, f.indexOf('criterio'))];
+          show(target, f.indexOf(target) < f.indexOf(current) ? -1 : 1);
+        });
+        function leave() {
+          const same = document.referrer && new URL(document.referrer).origin === location.origin;
+          if (same && history.length > 1) history.back();
+          else location.href = 'home.html';
+        }
+        $('back').addEventListener('click', () => {
+          const f = flow();
+          const i = f.indexOf(current);
+          if (depth() > 0) history.back();
+          else if (i > 0) go(f[i - 1], { push: false, dir: -1 });
+          else leave();
+        });
+        function advance() {
+          if (nextBtn.hasAttribute('aria-busy')) return;
+          if (!valid[current]()) {
+            const w = why[current];
+            FB.toast(typeof w === 'function' ? w() : w, 'info');
+            if (current === 'nome') $('name').focus();
+            if (current === 'valor') (S.prize > 0 ? $('due-chips').querySelector('button') : $('amount'))?.focus();
+            return;
+          }
+          if (current === 'resumo') return publish();
+          const f = flow();
+          go(f[f.indexOf(current) + 1]);
+        }
+        nextBtn.addEventListener('click', advance);
+
+        /* close → confirm (straight out if nothing was filled) */
+        const dirty = () => !!(S.name || S.draw || S.access || S.selected.length || S.prize);
+        $('close').addEventListener('click', (e) => {
+          if (!dirty()) return leave();
+          FB.sheet.open($('discard'), e.currentTarget);
+        });
+        $('discard-yes').addEventListener('click', () => {
+          ss.clear();
+          location.href = 'home.html';
+        });
+
+        /* keep the bar's height for the toast offset */
+        if ('ResizeObserver' in window)
+          new ResizeObserver(([e]) => app.style.setProperty('--bb', `${Math.round(e.target.offsetHeight)}px`)).observe($('bar'));
+
+        /* keep the bottom bar above the on-screen keyboard (phones; the desktop frame has a fixed size) */
+        if (window.visualViewport && !document.documentElement.classList.contains('is-embedded') && matchMedia('(max-width: 599px)').matches) {
+          const vv = window.visualViewport;
+          const fit = () => {
+            const kb = window.innerHeight - vv.height > 120;
+            app.style.height = kb ? `${vv.height}px` : '';
+            if (kb) window.scrollTo(0, 0);
+          };
+          vv.addEventListener('resize', fit);
+        }
+
+        /* ---------- radio groups (roving focus, arrows select) ---------- */
+        function radioGroup(el, get, set) {
+          const items = () => [...el.querySelectorAll('[role="radio"]')];
+          const paint = () => {
+            const v = get();
+            items().forEach((b, i) => {
+              const on = b.dataset.value === v;
+              b.setAttribute('aria-checked', String(on));
+              b.tabIndex = on || (!v && i === 0) ? 0 : -1;
+            });
+          };
+          el.addEventListener('click', (e) => {
+            const b = e.target.closest('[role="radio"]');
+            if (!b) return;
+            set(b.dataset.value);
+            paint();
+            save();
+            refreshNext();
+          });
+          el.addEventListener('keydown', (e) => {
+            const list = items();
+            const i = list.indexOf(document.activeElement);
+            if (i < 0) return;
+            const k = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+            if (!k) return;
+            e.preventDefault();
+            const b = list[(i + k + list.length) % list.length];
+            b.focus();
+            b.click();
+          });
+          return paint;
+        }
+
+        /* ---------- 1 · nome ---------- */
+        const nameIn = $('name');
+        nameIn.addEventListener('input', () => {
+          S.name = nameIn.value;
+          save();
+          refreshNext();
+        });
+        nameIn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            advance();
+          }
+        });
+
+        /* ---------- 2 · sorteio / 3 · critério ---------- */
+        const paintSorteio = radioGroup($('g-sorteio'), () => S.draw, (v) => (S.draw = v));
+        const paintCriterio = radioGroup(
+          $('g-criterio'),
+          () => S.access,
+          (v) => {
+            S.access = v;
+            if (v !== 'public') S.minLevel = null;
+            chrome();
+          }
+        );
+
+        /* ---------- 4 · nível ---------- */
+        const LV = [
+          ['gold', 'Pagamentos sempre em dia'],
+          ['silver', 'Bom histórico de pagamentos'],
+          ['bronze', 'Começando a construir histórico'],
+        ];
+        $('g-nivel').innerHTML = LV.map(
+          ([k, d]) => `<button class="lvl" type="button" role="radio" aria-checked="false" data-value="${k}">
+            <span class="lvl__disc" aria-hidden="true">${FB.crown(k)}<span class="lvl__check">${FB.icon('check')}</span></span>
+            <span class="lvl__name">${FB.LEVELS[k]}</span>
+            <span class="lvl__desc">${d}</span>
+          </button>`
+        ).join('');
+        const paintNivel = radioGroup(
+          $('g-nivel'),
+          () => S.minLevel,
+          (v) => {
+            S.minLevel = v;
+            noteNivel();
+          }
+        );
+        function noteNivel() {
+          const t = {
+            gold: 'Só membros <strong>Gold</strong> podem entrar.',
+            silver: 'Membros <strong>Silver</strong> e <strong>Gold</strong> podem entrar.',
+            bronze: 'Membros <strong>Bronze</strong>, <strong>Silver</strong> e <strong>Gold</strong> podem entrar.',
+          }[S.minLevel];
+          $('lvl-note').innerHTML = FB.icon('info') + `<span>${t || 'O nível vem dos pagamentos em dia. Quanto mais alto, mais pontual o grupo.'}</span>`;
+        }
+
+        /* ---------- 5 · quem ---------- */
+        $('you-chip').innerHTML = `${FB.avatar(ME)}Você <small>· admin</small>`;
+        function friendIds() {
+          const inv = (FB.store.get('invites', []) || []).map((i) => i.id).reverse();
+          const all = [...inv, ...FB.friends.filter((id) => id !== ME && !inv.includes(id))];
+          S.selected.forEach((id) => !all.includes(id) && all.unshift(id));
+          const pend = all.filter((id) => FB.person(id).pending === 'signup');
+          return [...pend, ...all.filter((id) => !pend.includes(id))];
+        }
+        function renderQuem() {
+          $('friends').innerHTML = friendIds()
+            .map((id) => {
+              const p = FB.person(id);
+              const sub =
+                p.pending === 'signup'
+                  ? '<span class="friend__sub danger">Cadastro pendente</span>'
+                  : `<span class="friend__sub friend__lvl">${p.level ? FB.crown(p.level) + FB.LEVELS[p.level] : 'Novo no Finby'}</span>`;
+              return `<li data-name="${esc(norm(p.name))}"><button class="friend" type="button" aria-pressed="${S.selected.includes(id)}" data-id="${esc(id)}">
+                ${FB.avatar(id)}<span class="friend__name">${esc(p.name)}${sub}</span><span class="tick" aria-hidden="true">${FB.icon('check')}</span>
+              </button></li>`;
+            })
+            .join('');
+          filter();
+          picked();
+        }
+        function picked() {
+          const n = S.selected.length;
+          const stack = [ME, ...S.selected.slice(0, 3)].map((id) => FB.avatar(id)).join('') + (n > 3 ? `<span class="av more" aria-hidden="true">+${n - 3}</span>` : '');
+          $('picked').innerHTML = n
+            ? `<span class="av-stack" aria-hidden="true">${stack}</span><span><strong>${fmt.plural(n, 'selecionado', 'selecionados')}</strong> · ${n + 1} com você</span>`
+            : `<span class="av-stack" aria-hidden="true">${FB.avatar(ME)}</span><span>${isPublic() ? 'Ninguém ainda · as vagas ficam abertas' : 'Só você por enquanto'}</span>`;
+        }
+        $('friends').addEventListener('click', (e) => {
+          const b = e.target.closest('.friend');
+          if (!b) return;
+          const id = b.dataset.id;
+          const on = !S.selected.includes(id);
+          S.selected = on ? [...S.selected, id] : S.selected.filter((x) => x !== id);
+          b.setAttribute('aria-pressed', String(on));
+          syncOrder();
+          save();
+          picked();
+          refreshNext();
+        });
+        const search = $('search');
+        function filter() {
+          const q = norm(search.value);
+          let shown = 0;
+          $('friends')
+            .querySelectorAll('li')
+            .forEach((li) => {
+              const hit = !q || li.dataset.name.includes(q);
+              li.hidden = !hit;
+              shown += hit;
+            });
+          const nm = $('no-match');
+          nm.hidden = shown > 0;
+          if (!shown)
+            nm.innerHTML = `Ninguém com “${esc(search.value.trim())}” na sua lista.<br /><a class="link" href="contato.html?from=criar&name=${encodeURIComponent(search.value.trim())}">${FB.icon('user-plus', 'i--sm')}Convidar para o Finby</a>`;
+        }
+        search.addEventListener('input', filter);
+
+        /* ---------- 6 · valor ---------- */
+        const amt = $('amount');
+        const int0 = new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 });
+        const MAX = 9999999;
+        let liveT;
+        function paintAmount(text, typedComma) {
+          amt.value = text;
+          $('amount-mirror').textContent = text || amt.placeholder;
+          $('amount-cents').hidden = typedComma;
+        }
+        function fromPrize() {
+          const v = S.prize;
+          const i = Math.floor(v + 1e-9);
+          const c = Math.round((v - i) * 100);
+          paintAmount(v ? int0.format(i) + (c ? ',' + String(c).padStart(2, '0') : '') : '', !!c);
+        }
+        amt.addEventListener('input', () => {
+          const raw = amt.value.replace(/[^\d,]/g, '');
+          const ci = raw.indexOf(',');
+          let int = (ci < 0 ? raw : raw.slice(0, ci)).replace(/^0+(?=\d)/, '').slice(0, 7);
+          const dec = ci < 0 ? null : raw.slice(ci + 1).replace(/,/g, '').slice(0, 2);
+          if (dec !== null && !int) int = '0';
+          S.prize = Math.min(MAX, Number(int || 0) + (dec ? Number(dec.padEnd(2, '0')) / 100 : 0));
+          paintAmount((int ? int0.format(Number(int)) : '') + (dec !== null ? ',' + dec : ''), dec !== null);
+          valorChanged();
+        });
+        amt.addEventListener('blur', fromPrize);
+        amt.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            amt.blur();
+            if (valid.valor()) advance();
+            else if (!S.due) $('due-chips').querySelector('button')?.focus();
+          }
+        });
+        $('nudges').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-n]');
+          if (!b || b.disabled) return;
+          S.prize = Math.min(MAX, Math.max(0, Math.round((S.prize + Number(b.dataset.n)) * 100) / 100));
+          fromPrize();
+          valorChanged();
+        });
+        $('size-minus').addEventListener('click', () => {
+          S.size = Math.max(minSize(), count() - 1);
+          valorChanged();
+        });
+        $('size-plus').addEventListener('click', () => {
+          S.size = Math.min(30, count() + 1);
+          valorChanged();
+        });
+        $('due-chips').innerHTML = DUES.map((d) => `<button class="chip" type="button" aria-pressed="false" data-due="${d}">${d}</button>`).join('');
+        let dueOpen = false;
+        $('due-chips').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-due]');
+          if (!b) return;
+          S.due = b.dataset.due;
+          dueOpen = false;
+          valorChanged();
+          $('due-change').focus();
+        });
+        $('due-change').addEventListener('click', () => {
+          dueOpen = true;
+          paintDue();
+          ($('due-chips').querySelector('[aria-pressed="true"]') || $('due-chips').querySelector('button')).focus();
+        });
+        function paintDue() {
+          const chosen = !!S.due && !dueOpen;
+          $('due-chips').hidden = chosen;
+          $('due-change').hidden = !chosen;
+          $('due-chips')
+            .querySelectorAll('[data-due]')
+            .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.due === S.due)));
+          $('due-value').textContent = chosen ? dueLabel(S.due) : 'Definir para';
+          const first = firstCharge(S.due);
+          $('due-first').hidden = !first;
+          if (first) $('due-first').innerHTML = `Primeira cobrança dia <strong class="num">${dmy(first)}</strong>`;
+        }
+        function valorChanged() {
+          const n = count();
+          $('inst').innerHTML = FB.money(installment());
+          $('people-n').textContent = n;
+          const pub = isPublic();
+          $('stepper').hidden = !pub;
+          $('people-n').hidden = pub;
+          $('size-out').textContent = n;
+          $('size-minus').disabled = n <= minSize();
+          $('size-plus').disabled = n >= 30;
+          const open = n - 1 - S.selected.length;
+          $('people-note').textContent = pub
+            ? `Você${S.selected.length ? ` + ${fmt.plural(S.selected.length, 'convidado', 'convidados')}` : ''} · ${fmt.plural(open, 'vaga aberta', 'vagas abertas')} · ${n} meses`
+            : `Você e ${fmt.plural(S.selected.length, 'amigo', 'amigos')} · ${n} meses, um prêmio por mês`;
+          $('nudges')
+            .querySelectorAll('[data-n]')
+            .forEach((b) => (b.disabled = S.prize + Number(b.dataset.n) < 0));
+          paintDue();
+          refreshNext();
+          save();
+          clearTimeout(liveT);
+          liveT = setTimeout(() => {
+            $('valor-live').textContent = S.prize
+              ? `Parcela de ${fmt.brl(installment())} por mês, ${n} participantes.${S.due ? ` Vencimento: ${dueLabel(S.due)}.` : ''}`
+              : 'Prêmio de zero reais.';
+          }, 700);
+        }
+
+        /* ---------- 7 · resumo ---------- */
+        function renderResumo() {
+          syncOrder();
+          const n = count();
+          $('sum-name').textContent = S.name.trim();
+          const [ico, label] = ACCESS[S.access] || ACCESS.invited;
+          $('sum-access').innerHTML =
+            FB.icon(ico) + label + (isPublic() && S.minLevel ? ` · ${FB.LEVELS[S.minLevel]}+` : '');
+          $('sum-access').setAttribute(
+            'aria-label',
+            isPublic() ? `Público, nível mínimo ${FB.LEVELS[S.minLevel] || ''}` : label
+          );
+          $('sum-prize').innerHTML = FB.money(S.prize);
+          $('sum-parcels').innerHTML = `<span aria-hidden="true">${n} x ${fmt.brl(installment())}</span><span class="sr-only">${n} parcelas de ${fmt.brl(installment())}</span>`;
+          $('sum-due').textContent = S.due ? dueLabel(S.due) : '—';
+          const first = firstCharge(S.due);
+          $('sum-first').innerHTML = first ? `Primeira cobrança dia <strong class="num">${dmy(first)}</strong>` : '';
+          paintAuto();
+        }
+        function paintAuto() {
+          const auto = S.draw !== 'order';
+          $('auto').setAttribute('aria-checked', String(auto));
+          $('auto-sub').textContent = auto ? 'Todo mês, o Finby sorteia quem recebe' : 'Você define a ordem de quem recebe';
+          $('plist-help').hidden = auto;
+          renderPlist();
+        }
+        $('auto').addEventListener('click', () => {
+          S.draw = S.draw === 'order' ? 'random' : 'order';
+          save();
+          paintAuto();
+        });
+        $('sum-prize').closest('.sum').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-goto]');
+          if (!b) return;
+          if (b.hasAttribute('data-due')) dueOpen = true;
+          go(b.dataset.goto, { dir: -1 });
+        });
+        const plist = $('plist');
+        function renderPlist(focusId) {
+          const auto = S.draw !== 'order';
+          const ids = auto ? participants() : S.order;
+          plist.classList.toggle('plist--order', !auto);
+          const name = (id) => (id === ME ? `${esc(FB.person(id).name)} <small>(você)</small>` : esc(FB.person(id).name));
+          let html = ids
+            .map((id, i) =>
+              auto
+                ? `<li class="prow">${FB.avatar(id, { size: 'sm' })}<span class="prow__name">${name(id)}</span>${levelText(id)}</li>`
+                : `<li class="prow" data-id="${esc(id)}">
+                    <button class="grip" type="button" aria-label="Mover ${esc(FB.person(id).name)}, ${i + 1}º de ${ids.length}" aria-describedby="order-keys">${FB.icon('grip')}</button>
+                    <span class="prow__pos">${i + 1}º</span>${FB.avatar(id, { size: 'sm' })}<span class="prow__name">${name(id)}</span>${levelText(id)}
+                  </li>`
+            )
+            .join('');
+          const open = count() - ids.length;
+          if (open > 0)
+            html += `<li class="prow prow--open"><span class="av av--sm" style="--av-bg:var(--sunken);--av-ink:var(--ink-3)" aria-hidden="true">${FB.icon('plus', 'i--sm')}</span><span class="prow__name">${fmt.plural(open, 'vaga aberta', 'vagas abertas')} para a comunidade</span><span class="prow__lvl">${S.minLevel ? FB.crown(S.minLevel) + FB.LEVELS[S.minLevel] + '+' : ''}</span></li>`;
+          plist.innerHTML = html;
+          if (focusId) plist.querySelector(`[data-id="${CSS.escape(focusId)}"] .grip`)?.focus();
+        }
+        function move(id, to) {
+          const from = S.order.indexOf(id);
+          to = Math.max(0, Math.min(S.order.length - 1, to));
+          if (from < 0 || to === from) return;
+          S.order.splice(to, 0, S.order.splice(from, 1)[0]);
+          save();
+          renderPlist(id);
+          $('order-live').textContent = `${FB.person(id).name} agora é o ${to + 1}º de ${S.order.length}.`;
+        }
+        plist.addEventListener('keydown', (e) => {
+          const g = e.target.closest('.grip');
+          if (!g) return;
+          const id = g.closest('.prow').dataset.id;
+          const i = S.order.indexOf(id);
+          const to = { ArrowUp: i - 1, ArrowDown: i + 1, Home: 0, End: S.order.length - 1 }[e.key];
+          if (to === undefined) return;
+          e.preventDefault();
+          move(id, to);
+        });
+        /* pointer drag on the grip: rows slide out of the way, drop reorders */
+        plist.addEventListener('pointerdown', (e) => {
+          const g = e.target.closest('.grip');
+          if (!g || e.button > 0) return;
+          e.preventDefault();
+          const row = g.closest('.prow');
+          const rows = [...plist.querySelectorAll('.prow[data-id]')];
+          const from = rows.indexOf(row);
+          const tops = rows.map((r) => r.offsetTop);
+          const h = row.offsetHeight;
+          const y0 = e.clientY;
+          const s0 = main.scrollTop;
+          let y = y0;
+          let to = from;
+          let raf;
+          g.setPointerCapture(e.pointerId);
+          row.classList.add('is-dragging');
+          plist.classList.add('is-sorting');
+          const layout = () => {
+            const dy = Math.max(tops[0] - tops[from], Math.min(tops[rows.length - 1] - tops[from], y - y0 + main.scrollTop - s0));
+            row.style.transform = `translateY(${dy}px)`;
+            const center = tops[from] + h / 2 + dy;
+            to = 0;
+            rows.forEach((r, i) => i !== from && tops[i] + r.offsetHeight / 2 < center && to++);
+            rows.forEach((r, i) => {
+              if (r === row) return;
+              const shift = from < to && i > from && i <= to ? -h : from > to && i < from && i >= to ? h : 0;
+              r.style.transform = shift ? `translateY(${shift}px)` : '';
+            });
+          };
+          const tick = () => {
+            const box = main.getBoundingClientRect();
+            if (y > box.bottom - 56) main.scrollTop += 6;
+            else if (y < box.top + 56) main.scrollTop -= 6;
+            layout();
+            raf = requestAnimationFrame(tick);
+          };
+          raf = requestAnimationFrame(tick);
+          const moveH = (ev) => {
+            y = ev.clientY;
+          };
+          const up = () => {
+            cancelAnimationFrame(raf);
+            g.removeEventListener('pointermove', moveH);
+            g.removeEventListener('pointerup', up);
+            g.removeEventListener('pointercancel', up);
+            plist.classList.add('no-anim');
+            rows.forEach((r) => (r.style.transform = ''));
+            row.classList.remove('is-dragging');
+            plist.classList.remove('is-sorting');
+            if (to !== from) move(row.dataset.id, to);
+            requestAnimationFrame(() => plist.classList.remove('no-anim'));
+          };
+          g.addEventListener('pointermove', moveH);
+          g.addEventListener('pointerup', up);
+          g.addEventListener('pointercancel', up);
+        });
+
+        /* ---------- publish → 8 · pronto ---------- */
+        const slug = (s) =>
+          norm(s)
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '')
+            .slice(0, 32) || 'consorcio';
+        function guessArt(name) {
+          const n = norm(name);
+          if (/reveillon|ano novo|virada/.test(n)) return 'fireworks';
+          if (/formatura|turma|faculdade|medicina|escola|colacao/.test(n)) return 'graduation';
+          if (/viage|ferias|praia|trip|chapada|bahia|europa|disney/.test(n)) return 'beach';
+          if (/\btv\b|cinema|filme|som|video ?game|playstation/.test(n)) return 'cinema';
+          if (/acampa|camping|fogueira|sitio/.test(n)) return 'campfire';
+          return 'path';
+        }
+        /* the consórcio as stored in fb:created (dates as ISO strings, per the brief) */
+        function buildItem() {
+          syncOrder();
+          const created = FB.store.get('created', []) || [];
+          const ids = new Set([...created, ...FB.consorcios].map((c) => c.id));
+          let id = slug(S.name);
+          while (ids.has(id)) id = `${slug(S.name)}-${Math.random().toString(36).slice(2, 6)}`;
+          const themes = ['violet', 'ocean', 'mint', 'coral', 'amber', 'night'];
+          const start = startDate();
+          const n = count();
+          const pub = isPublic();
+          const item = {
+            id,
+            name: S.name.trim(),
+            theme: themes[created.length % themes.length],
+            art: guessArt(S.name),
+            role: 'admin',
+            status: 'forming',
+            draw: S.draw === 'order' ? 'order' : 'random',
+            prize: S.prize,
+            installment: installment(),
+            months: n,
+            paid: 0,
+            pot: 0,
+            due: S.due,
+            start: start.toISOString(),
+            nextDraw: firstCharge(S.due, start).toISOString(),
+            members: [ME],
+            waiting: S.selected.map((x) => ({ id: x, pending: pendingOf(x) })),
+            order: S.draw === 'order' ? [...S.order] : participants(),
+            payment: 'c2',
+            winners: [],
+            public: pub,
+            minLevel: pub ? S.minLevel : null,
+            access: S.access,
+            owner: ME,
+            createdAt: new Date().toISOString(),
+          };
+          if (pub) item.spots = Math.max(0, n - 1 - S.selected.length);
+          return item;
+        }
+        function store(item) {
+          FB.store.set('created', [item, ...(FB.store.get('created', []) || [])]);
+        }
+        function publish() {
+          nextBtn.setAttribute('aria-busy', 'true');
+          nextBtn.innerHTML = '<span class="spin" aria-hidden="true"></span>Publicando…';
+          setTimeout(
+            () => {
+              const item = buildItem();
+              store(item);
+              published = item.id;
+              preview = null;
+              ss.clear();
+              nextBtn.removeAttribute('aria-busy');
+              history.replaceState({ fbStep: 'pronto', fbDepth: depth() }, '', urlFor('pronto'));
+              show('pronto');
+            },
+            reduce ? 150 : 800
+          );
+        }
+        /* demo deep link with nothing published yet: show the demo draft without writing anything;
+           "Visualizar consórcio" stores it first, so the detail page has something real to open */
+        let preview = null;
+        $('done-view').addEventListener('click', (e) => {
+          if (!preview) return;
+          e.preventDefault();
+          store(preview);
+          location.href = `consorcio.html?id=${encodeURIComponent(preview.id)}`;
+        });
+        function renderPronto() {
+          const c = FB.get(published) || (preview = preview || buildItem());
+          $('done-view').href = `consorcio.html?id=${encodeURIComponent(c.id)}`;
+          const waiting = (c.waiting || []).length;
+          const start = new Date(c.start);
+          $('done-text').innerHTML = c.public
+            ? `<strong>${esc(c.name)}</strong> já aparece em “Descubra mais”${c.minLevel ? ` para membros ${FB.LEVELS[c.minLevel]} ou acima` : ''}.${waiting ? ` E ${fmt.plural(waiting, 'convite foi enviado', 'convites foram enviados')}.` : ''}`
+            : `Enviamos ${fmt.plural(waiting, 'convite', 'convites')} para <strong>${esc(c.name)}</strong>. Quando todo mundo aceitar, é só começar.`;
+          $('done-meta').innerHTML = `<span class="done__meta">${FB.icon('calendar')}Começa em ${fmt.ddmm(start)} · ${fmt.brl(c.installment)}/mês</span>`;
+        }
+
+        const RENDER = {
+          nome: () => (nameIn.value = S.name),
+          sorteio: () => paintSorteio(),
+          criterio: () => paintCriterio(),
+          nivel: () => (paintNivel(), noteNivel()),
+          quem: () => renderQuem(),
+          valor: () => (fromPrize(), valorChanged()),
+          resumo: () => renderResumo(),
+          pronto: () => renderPronto(),
+        };
+
+        /* ---------- boot: deep link, but never past an unfinished step ---------- */
+        let step = qs.get('step') || 'nome';
+        if (step === 'pronto') {
+          published = qs.get('id') && FB.get(qs.get('id')) ? qs.get('id') : null;
+          if (!published && !demo) step = 'nome';
+        }
+        if (step !== 'pronto') {
+          const f = flow();
+          if (!f.includes(step)) step = 'nome';
+          const gap = f.slice(0, f.indexOf(step)).find((s) => !valid[s]());
+          if (gap) step = gap;
+        }
+        syncOrder();
+        save();
+        history.replaceState({ fbStep: step, fbDepth: 0 }, '', urlFor(step));
+        show(step, 1, { enter: true });
+      })();
+    </script>
+  </body>
+</html>

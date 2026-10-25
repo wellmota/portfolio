@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Consórcios · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma 4.0 / 4.1 Consórcios (Meus consórcios, Descubra mais): title, "Saldo em conta" field, tabs, cards */
+
+      /* Saldo em conta (Figma components/textfield/currency) */
+      .balance {
+        margin-top: 12px;
+      }
+      .balance .field {
+        min-height: 66px;
+        padding-right: 8px;
+      }
+      .balance__value {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        font-variant-numeric: tabular-nums;
+        color: var(--heading);
+        white-space: nowrap;
+      }
+      .balance__cur {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .redeem {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 48px;
+        padding: 0 4px 0 10px;
+        border-radius: var(--r-sm);
+        font-size: 14.5px;
+        font-weight: 600;
+        color: var(--ink-2);
+        transition: background var(--t-fast) var(--ease);
+      }
+      .redeem:hover {
+        background: var(--violet-50);
+      }
+      .redeem__ico {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 11px;
+        color: var(--violet-600);
+        background: var(--violet-50);
+      }
+      .yield {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 8px 0 0 4px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--green-700);
+      }
+
+      .tabs {
+        margin-top: 22px;
+      }
+      .panel {
+        padding-top: 18px;
+      }
+      .panel:focus-visible {
+        outline-offset: 4px;
+      }
+      .cards {
+        display: grid;
+        gap: 12px;
+      }
+
+      /* "Criar novo consórcio" (Figma dashed tile, + in a violet circle) */
+      .new-tile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        width: 100%;
+        min-height: 84px;
+        border-radius: var(--r-xl);
+        border: 1.5px dashed var(--violet-200);
+        font-size: 15.5px;
+        font-weight: 700;
+        color: var(--violet-700);
+        transition: background var(--t-fast) var(--ease);
+      }
+      .new-tile:hover {
+        background: var(--violet-50);
+      }
+      .new-tile__plus {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(180deg, var(--violet-500), var(--violet-600));
+        box-shadow: var(--shadow-btn);
+      }
+
+      /* White card with an action footer (Figma "Criado por você" + "Descubra mais" cards) */
+      .xcard {
+        position: relative;
+        border-radius: var(--r-xl);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+      .xcard__body {
+        position: relative;
+        padding: 16px 16px 16px 18px;
+      }
+      .xcard__head {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .xcard__eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 2px;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--violet-600);
+      }
+      .xcard__name {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        color: var(--heading);
+      }
+      .xcard__name a:hover {
+        color: var(--violet-700);
+      }
+      .xcard .stretch:focus-visible::after {
+        outline: 2.5px solid var(--violet-500);
+        outline-offset: -4px;
+      }
+      .xcard__terms {
+        margin-top: 3px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .xcard__art {
+        width: 64px;
+        height: 64px;
+        flex: none;
+        border-radius: 18px;
+        overflow: hidden;
+        background: var(--violet-100);
+        box-shadow: 0 6px 16px -8px rgba(42, 25, 90, 0.35);
+      }
+      .xcard__tags {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        margin-top: 10px;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 22px;
+        padding: 0 9px 0 7px;
+        border-radius: var(--r-pill);
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        color: var(--ink-2);
+        background: var(--sunken);
+      }
+      .pill--hot {
+        color: var(--orange-700);
+        background: var(--orange-50);
+      }
+      .xcard__meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .xcard__meta dt {
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .xcard__meta dd {
+        font-size: 16.5px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--heading);
+      }
+      .xcard__meta dd.violet {
+        color: var(--violet-600);
+      }
+      .xcard__meta div:last-child {
+        text-align: right;
+      }
+      .xcard__fill {
+        margin-top: 12px;
+      }
+      .xcard__fill .spread {
+        font-size: 12.5px;
+        margin-bottom: 6px;
+      }
+      .meter--violet .meter__bar {
+        background: linear-gradient(90deg, var(--violet-400), var(--violet-600));
+      }
+      .xcard__actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-top: 1px solid var(--line);
+      }
+      .xcard__actions > * {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 52px;
+        padding: 0 8px;
+        font-size: 14.5px;
+        font-weight: 600;
+        color: var(--ink-3);
+        transition:
+          background var(--t-fast) var(--ease),
+          color var(--t-fast) var(--ease);
+      }
+      .xcard__actions > * + * {
+        border-left: 1px solid var(--line);
+      }
+      .xcard__actions > *:hover {
+        color: var(--ink);
+        background: var(--sunken);
+      }
+      .xcard__actions .is-primary {
+        font-weight: 700;
+        color: var(--violet-600);
+      }
+      .xcard__actions .is-primary:hover {
+        color: var(--violet-800);
+        background: var(--violet-50);
+      }
+      .xcard__actions :focus-visible {
+        outline-offset: -4px;
+      }
+      /* the card you just joined */
+      .is-new > * {
+        animation: glow 1600ms var(--ease) 200ms;
+      }
+      @keyframes glow {
+        30% {
+          box-shadow:
+            0 0 0 3px var(--bg),
+            0 0 0 6px var(--violet-300);
+        }
+      }
+
+      .discover-intro {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 0 2px 14px;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+
+      /* sheets */
+      .row__title,
+      .row__sub {
+        display: block;
+      }
+      .row__ico--wa {
+        color: var(--green-700);
+        background: var(--green-50);
+      }
+      .link-preview {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .join-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .join-head .xcard__art {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+      }
+      .terms {
+        margin-top: 16px;
+        border-radius: var(--r-lg);
+        background: var(--sunken);
+        padding: 4px 16px;
+      }
+      .terms > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-height: 44px;
+      }
+      .terms > div + div {
+        border-top: 1px solid var(--line-strong);
+      }
+      .terms dt {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .terms dd {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14.5px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        color: var(--heading);
+        text-align: right;
+      }
+      .terms dd .i {
+        color: var(--violet-600);
+      }
+      .notice {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 12px;
+        padding: 12px 14px;
+        border-radius: var(--r-md);
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: var(--green-700);
+        background: var(--green-50);
+      }
+      .notice strong {
+        font-weight: 700;
+      }
+      .notice--bad {
+        color: var(--red-600);
+        background: var(--red-50);
+      }
+      .sheet .btn + .btn {
+        margin-top: 8px;
+      }
+      .btn--ghost {
+        color: var(--ink-2);
+        background: none;
+        box-shadow: none;
+      }
+      .btn--ghost:hover {
+        background: var(--sunken);
+      }
+      /* toast is centred with left:50%, so it would shrink to half the screen and wrap */
+      .section-head .link {
+        min-height: 44px;
+        margin: -6px 0;
+      }
+      .toast {
+        width: max-content;
+      }
+    </style>
+  </head>
+  <body data-tab="consorcios">
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="appbar rise">
+          <h1 class="t-title">Consórcios</h1>
+        </header>
+
+        <section class="balance rise" style="--d: 1" aria-label="Saldo em conta">
+          <div class="field">
+            <span class="field__label" id="bal-l">Saldo em conta</span>
+            <p class="balance__value" aria-labelledby="bal-l bal-v" id="bal-v"></p>
+            <a class="redeem" href="saque.html">Resgatar<span class="redeem__ico"><span data-icon="arrow-down-to-line" class="i--sm"></span></span></a>
+          </div>
+          <p class="yield"><span data-icon="trend-up" class="i--xs"></span>Rendendo 100% do CDI</p>
+        </section>
+
+        <div class="tabs rise" style="--d: 2" role="tablist" aria-label="Consórcios">
+          <button type="button" role="tab" id="tab-meus" data-tab="meus" aria-controls="panel-meus" aria-selected="true">Meus consórcios</button>
+          <button type="button" role="tab" id="tab-descubra" data-tab="descubra" aria-controls="panel-descubra" aria-selected="false" tabindex="-1">Descubra mais</button>
+        </div>
+
+        <section class="panel" id="panel-meus" role="tabpanel" aria-labelledby="tab-meus" tabindex="0">
+          <div class="cards" id="mine"></div>
+        </section>
+        <section class="panel" id="panel-descubra" role="tabpanel" aria-labelledby="tab-descubra" tabindex="0" hidden>
+          <div id="discover"></div>
+        </section>
+      </main>
+
+      <!-- Indicar para amigos -->
+      <div class="sheet" id="share" role="dialog" aria-modal="true" aria-labelledby="share-h" tabindex="-1" hidden>
+        <div class="spread">
+          <h2 class="sheet__title" id="share-h">Indicar para amigos</h2>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <p class="muted t-body2" id="share-sub"></p>
+        <div class="list list--divided mt-16">
+          <button class="row" type="button" data-channel="whatsapp">
+            <span class="row__ico row__ico--wa"><span data-icon="whatsapp"></span></span>
+            <span class="row__main"><span class="row__title">WhatsApp</span><span class="row__sub">Mande o convite numa conversa</span></span>
+            <span data-icon="chevron-right" class="chev"></span>
+          </button>
+          <button class="row" type="button" data-channel="copy">
+            <span class="row__ico"><span data-icon="link"></span></span>
+            <span class="row__main"><span class="row__title">Copiar link</span><span class="row__sub link-preview" id="share-link"></span></span>
+            <span data-icon="copy" class="chev"></span>
+          </button>
+        </div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+
+      <!-- Participar (confirmação) -->
+      <div class="sheet" id="join" role="dialog" aria-modal="true" aria-labelledby="join-h" tabindex="-1" hidden>
+        <div class="join-head">
+          <span class="xcard__art" id="join-art" aria-hidden="true"></span>
+          <div class="grow">
+            <p class="t-label">Participar de</p>
+            <h2 class="sheet__title" id="join-h"></h2>
+          </div>
+          <button class="icon-btn" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        </div>
+        <dl class="terms" id="join-terms"></dl>
+        <p class="notice" id="join-check" role="status"></p>
+        <button class="btn mt-16" type="button" id="join-ok">Confirmar participação</button>
+        <button class="btn btn--ghost" type="button" data-sheet-close>Agora não</button>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const { fmt, esc } = FB;
+        FB.icons['link'] =
+          '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>';
+        FB.icons['handshake'] =
+          '<path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>';
+
+        const params = new URLSearchParams(location.search);
+        const demoEmpty = params.get('demo') === 'empty';
+        const enc = encodeURIComponent;
+        /* items saved by the wizard keep their dates as ISO strings */
+        const D = (x) => (x == null ? null : x instanceof Date ? x : new Date(x));
+        const norm = (c) => ({ ...c, start: D(c.start), nextDraw: D(c.nextDraw), winners: (c.winners || []).map((w) => ({ ...w, date: D(w.date) })) });
+        const RANK = { bronze: 1, silver: 2, gold: 3 };
+        const DRAW = { random: 'Aleatório', order: 'Predefinido' };
+        const linkTo = (id) => new URL(`consorcio.html?id=${enc(id)}`, location.href).href;
+
+        /* Saldo em conta */
+        const [cur, val] = fmt.brl(FB.balance()).split(' ');
+        document.getElementById('bal-v').innerHTML = `<span class="balance__cur">${cur}</span><span>${val}</span>`;
+
+        /* ---------- Tabs (Meus consórcios | Descubra mais) ---------- */
+        const tabs = [...document.querySelectorAll('[role="tab"]')];
+        function select(name, focus) {
+          tabs.forEach((t) => {
+            const on = t.dataset.tab === name;
+            t.setAttribute('aria-selected', on);
+            t.tabIndex = on ? 0 : -1;
+            document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+            if (on && focus) t.focus();
+          });
+          const u = new URL(location.href);
+          if (name === 'descubra') u.searchParams.set('tab', 'descubra');
+          else u.searchParams.delete('tab');
+          history.replaceState(null, '', u);
+        }
+        tabs.forEach((t, i) => {
+          t.addEventListener('click', () => select(t.dataset.tab));
+          t.addEventListener('keydown', (e) => {
+            let k = null;
+            if (e.key === 'ArrowRight') k = (i + 1) % tabs.length;
+            if (e.key === 'ArrowLeft') k = (i - 1 + tabs.length) % tabs.length;
+            if (e.key === 'Home') k = 0;
+            if (e.key === 'End') k = tabs.length - 1;
+            if (k == null) return;
+            e.preventDefault();
+            select(tabs[k].dataset.tab, true);
+          });
+        });
+
+        /* ---------- Meus consórcios ---------- */
+        const actions = (c, primary) => `<div class="xcard__actions">
+            <button type="button" data-share="${esc(c.id)}">${FB.icon('user-plus', 'i--sm')}Indicar para amigos</button>
+            ${primary}
+          </div>`;
+
+        /* "Criado por você" (Figma 4.0 created state): white card, prize in violet, Indicar | Gerenciar */
+        function ownCard(c) {
+          const forming = c.status === 'forming';
+          const waiting = (c.waiting || []).length;
+          const href = `consorcio.html?id=${enc(c.id)}`;
+          return `<article class="xcard">
+            <div class="xcard__body">
+              <div class="xcard__head">
+                <div class="grow">
+                  <p class="xcard__eyebrow">${FB.icon('sparkles', 'i--xs')}Criado por você</p>
+                  <h3 class="xcard__name"><a class="stretch" href="${href}">${esc(c.name)}</a></h3>
+                  ${forming && waiting ? `<p class="xcard__tags"><span class="pill">${FB.icon('hourglass', 'i--xs')}Aguardando ${fmt.plural(waiting, 'pessoa', 'pessoas')}</span></p>` : ''}
+                </div>
+                <span class="xcard__art" data-art="${esc(c.art || 'celebrate')}" aria-hidden="true"></span>
+              </div>
+              <dl class="xcard__meta">
+                <div><dt>${forming ? 'Prêmio' : 'Prêmio atual'}</dt><dd class="violet">${fmt.brl(c.prize)}</dd></div>
+                <div><dt>${forming ? 'Começa em' : 'Próximo sorteio'}</dt><dd>${fmt.ddmm(forming ? c.start : c.nextDraw)}</dd></div>
+              </dl>
+              ${
+                forming
+                  ? `<div class="xcard__fill">
+                      <div class="spread"><span class="muted">Confirmados</span><span class="t-bold num">${c.members.length} de ${c.months}</span></div>
+                      <div class="meter meter--violet" role="progressbar" aria-label="Participantes confirmados" aria-valuemin="0" aria-valuemax="${c.months}" aria-valuenow="${c.members.length}"><div class="meter__bar" style="--p:${Math.round((c.members.length / c.months) * 100)}%"></div></div>
+                    </div>`
+                  : ''
+              }
+            </div>
+            ${actions(c, `<a class="is-primary" href="${href}">${FB.icon('settings', 'i--sm')}Gerenciar</a>`)}
+          </article>`;
+        }
+
+        const mineEl = document.getElementById('mine');
+        function renderMine(fresh) {
+          const mine = FB.mine().map(norm);
+          const own = mine.filter((c) => c.role === 'admin');
+          const rest = mine.filter((c) => c.role !== 'admin');
+          let d = 1;
+          mineEl.innerHTML =
+            `<a class="new-tile pop" style="--d:${d++}" href="criar.html"><span class="new-tile__plus">${FB.icon('plus')}</span>Criar novo consórcio</a>` +
+            own.map((c) => `<div class="pop" style="--d:${d++}" data-id="${esc(c.id)}">${ownCard(c)}</div>`).join('') +
+            rest
+              .map((c) => `<div class="pop${c.id === fresh ? ' is-new' : ''}" style="--d:${d++}" data-id="${esc(c.id)}">${FB.card(c, { compact: true })}</div>`)
+              .join('') +
+            (mine.length ? '' : `<p class="muted t-body2 center mt-8">Você ainda não participa de nenhum consórcio.</p>`);
+          FB.hydrate(mineEl);
+        }
+        mineEl.addEventListener('click', (e) => {
+          const more = e.target.closest('[data-more]');
+          if (more) location.href = `consorcio.html?id=${enc(more.dataset.more)}#opcoes`;
+        });
+
+        /* ---------- Descubra mais (Figma 4.1): public consórcios ---------- */
+        const discEl = document.getElementById('discover');
+        function discoverCard(c) {
+          const last = c.spots <= 2;
+          return `<article class="xcard">
+            <div class="xcard__body">
+              <div class="xcard__head">
+                <div class="grow">
+                  <h3 class="xcard__name"><a class="stretch" href="consorcio.html?id=${enc(c.id)}">${esc(c.name)}</a></h3>
+                  <p class="xcard__terms"><span class="num">${fmt.brlShort(c.installment)}</span>/mês · ${c.months} meses · ${DRAW[c.draw]}</p>
+                  <p class="xcard__tags">
+                    <span>A partir de</span>${FB.levelChip(c.minLevel)}
+                    <span class="pill${last ? ' pill--hot' : ''}">${FB.icon('users', 'i--xs')}${last ? `Últimas ${c.spots} vagas` : fmt.plural(c.spots, 'vaga', 'vagas')}</span>
+                  </p>
+                </div>
+                <span class="xcard__art" data-art="${esc(c.art)}" aria-hidden="true"></span>
+              </div>
+              <dl class="xcard__meta">
+                <div><dt>Prêmio atual</dt><dd class="violet">${fmt.brl(c.prize)}</dd></div>
+                <div><dt>Próximo sorteio</dt><dd>${fmt.ddmm(c.nextDraw)}</dd></div>
+              </dl>
+            </div>
+            ${actions(c, `<button class="is-primary" type="button" data-join="${esc(c.id)}" aria-haspopup="dialog">${FB.icon('handshake', 'i--sm')}Participar</button>`)}
+          </article>`;
+        }
+        function renderDiscover() {
+          const list = demoEmpty ? [] : FB.discover().map(norm);
+          discEl.innerHTML = list.length
+            ? `<p class="discover-intro rise">Abertos para o seu nível ${FB.levelChip(FB.user.level)}</p>
+               <div class="cards">${list.map((c, i) => `<div class="pop" style="--d:${i + 1}">${discoverCard(c)}</div>`).join('')}</div>`
+            : `<div class="empty rise">
+                 <div class="empty__art" data-art="empty"></div>
+                 <h3 class="t-h3">Você já está em todos!</h3>
+                 <p class="t-body2">Novos consórcios públicos aparecem aqui. Enquanto isso, que tal juntar seus amigos?</p>
+                 <a class="btn btn--sm mt-8" href="criar.html">${FB.icon('plus')}Criar consórcio</a>
+               </div>`;
+          FB.hydrate(discEl);
+        }
+
+        /* ---------- Indicar para amigos ---------- */
+        const share = document.getElementById('share');
+        let shareId = null;
+        function openShare(id, opener) {
+          const c = FB.get(id);
+          if (!c) return;
+          shareId = id;
+          document.getElementById('share-sub').innerHTML = `Chame quem você confia para o <strong>${esc(c.name)}</strong>.`;
+          document.getElementById('share-link').textContent = linkTo(id).replace(/^https?:\/\//, '');
+          FB.sheet.open(share, opener);
+        }
+        share.addEventListener('click', async (e) => {
+          const b = e.target.closest('[data-channel]');
+          if (!b) return;
+          const c = FB.get(shareId);
+          if (b.dataset.channel === 'copy') {
+            try {
+              await navigator.clipboard.writeText(linkTo(shareId));
+            } catch (err) {}
+            FB.toast('Link copiado');
+          } else {
+            FB.toast(`Convite de ${c.name} enviado pelo WhatsApp`, 'whatsapp');
+          }
+          FB.sheet.close(share);
+        });
+
+        /* ---------- Participar ---------- */
+        const join = document.getElementById('join');
+        const okBtn = document.getElementById('join-ok');
+        let joinId = null;
+        function openJoin(id, opener) {
+          const c = FB.get(id);
+          if (!c || c.role) return;
+          const n = norm(c);
+          joinId = id;
+          const card = FB.cardOf(FB.store.get('payment:' + id) || FB.user.cards[1].id);
+          const ok = (RANK[FB.user.level] || 0) >= (RANK[c.minLevel] || 0);
+          document.getElementById('join-h').textContent = c.name;
+          const art = document.getElementById('join-art');
+          art.innerHTML = FB.art ? FB.art(c.art) : '';
+          document.getElementById('join-terms').innerHTML = [
+            ['Parcela mensal', `<span class="num">${fmt.brl(c.installment)}</span>`],
+            ['Duração', fmt.plural(c.months, 'mês', 'meses')],
+            ['Prêmio', `<span class="num positive">${fmt.brl(c.prize)}</span>`],
+            ['Sorteio', `${FB.icon(c.draw === 'random' ? 'shuffle' : 'list-ordered', 'i--sm')}${DRAW[c.draw]}`],
+            ['Próximo sorteio', `${fmt.long(n.nextDraw)}`],
+            ['Nível mínimo', FB.levelChip(c.minLevel)],
+            ['Pagamento', `<span class="num">${card.brand === 'master' ? 'Master' : 'Visa'} final ${card.last4}</span>`],
+          ]
+            .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)
+            .join('');
+          const check = document.getElementById('join-check');
+          check.className = 'notice' + (ok ? '' : ' notice--bad');
+          check.innerHTML = ok
+            ? `${FB.icon('shield-check', 'i--sm')}<span>Seu nível é <strong>${FB.LEVELS[FB.user.level]}</strong>, então você pode entrar. As parcelas vencem ${esc(/^todo/i.test(c.due) ? c.due.toLowerCase() : 'no ' + c.due)}.</span>`
+            : `${FB.icon('alert', 'i--sm')}<span>Este consórcio pede nível <strong>${FB.LEVELS[c.minLevel]}</strong>. Pague em dia para subir de nível.</span>`;
+          okBtn.disabled = !ok;
+          FB.sheet.open(join, opener);
+        }
+        okBtn.addEventListener('click', () => {
+          const c = FB.get(joinId);
+          if (!c) return;
+          const joined = FB.store.get('joined', []) || [];
+          if (!joined.includes(c.id)) joined.push(c.id);
+          FB.store.set('joined', joined);
+          FB.sheet.close(join);
+          renderMine(c.id);
+          renderDiscover();
+          select('meus');
+          FB.toast(`Você entrou em ${c.name}`);
+          const fresh = mineEl.querySelector(`[data-id="${CSS.escape(c.id)}"]`);
+          if (fresh) {
+            const a = fresh.querySelector('a.stretch');
+            if (a) a.focus({ preventScroll: true });
+            /* scroll the screen only (scrollIntoView would also scroll the page embedding the prototype) */
+            const main = document.getElementById('main');
+            setTimeout(() => {
+              const top = main.scrollTop + fresh.getBoundingClientRect().top - main.getBoundingClientRect().top;
+              main.scrollTo({ top: top - (main.clientHeight - fresh.offsetHeight) / 2, behavior: 'smooth' });
+            }, 120);
+          }
+        });
+
+        document.getElementById('main').addEventListener('click', (e) => {
+          const s = e.target.closest('[data-share]');
+          if (s) return openShare(s.dataset.share, s);
+          const j = e.target.closest('[data-join]');
+          if (j) openJoin(j.dataset.join, j);
+        });
+
+        /* ---------- Boot + deep links ---------- */
+        renderMine();
+        renderDiscover();
+        if (params.get('tab') === 'descubra' || params.has('join')) select('descubra');
+        if (params.has('join')) setTimeout(() => openJoin(params.get('join')), 350);
+        if (params.has('share')) setTimeout(() => openShare(params.get('share')), 350);
+      })();
+    </script>
+  </body>
+</html>

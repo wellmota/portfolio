@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CaseStudyPage from '../../components/CaseStudyPage.astro';
+import resilience from '../../data/cases/resilience-engine';
+
+const lang = 'en' as const;
+const content = resilience[lang];
+---
+
+<Layout
+  lang={lang}
+  title={content.seo.title}
+  description={content.seo.description}
+  ogImage={content.cover.src}
+  ogImageAlt={content.cover.alt}
+  ogImageWidth={1600}
+  ogImageHeight={1000}
+  alternates={false}
+>
+  <CaseStudyPage lang={lang} content={content} altHref="/pt/work/resilience-engine" altLabel="PT" />
+</Layout>

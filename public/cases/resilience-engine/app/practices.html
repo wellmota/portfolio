@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fafaff" />
+    <title>Daily Resilience Practices · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Figma: Daily Resilience Practices · "How's Your Day Going?" (848:15322).
+         Top nav, Headline 1 centred, notification list with separators, faint logo watermark.
+         Each list item carries the DS to-do anatomy (141:4675): violet icon · text · ring / checkbox. */
+      @property --p {
+        syntax: '<number>';
+        inherits: false;
+        initial-value: 0;
+      }
+      .dp {
+        position: relative;
+        padding-top: 0;
+      }
+      .dp-title {
+        max-width: 312px;
+        margin: 6px auto 0;
+        text-align: center;
+        text-wrap: wrap; /* Figma breaks after "Day" */
+      }
+
+      /* Notification list: 72px rows, 1px Light Grey separator */
+      .dp-list {
+        margin-top: 16px;
+      }
+      .dp-list > li {
+        border-bottom: 1px solid var(--line);
+      }
+      .dp-item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        min-height: 72px;
+        padding: 16px 0;
+        text-align: left;
+        isolation: isolate;
+        border-radius: var(--r-md);
+      }
+      a.dp-item::before,
+      button.dp-item::before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        inset: 4px -10px;
+        border-radius: var(--r-md);
+        background: var(--lilac-dark);
+        opacity: 0;
+        transition: opacity var(--t-fast) var(--ease);
+      }
+      a.dp-item:hover::before,
+      button.dp-item:hover::before {
+        opacity: 0.7;
+      }
+      a.dp-item:active,
+      button.dp-item:active {
+        transform: scale(0.99);
+      }
+      .dp-item:focus-visible {
+        outline-offset: 0;
+        border-radius: var(--r-md);
+      }
+      .dp-ico {
+        width: 32px;
+        height: 32px;
+        flex: none;
+      }
+      /* Figma icons that are not violet in the file: recoloured with a mask */
+      .dp-ico--mask {
+        background: var(--violet);
+        -webkit-mask: var(--m) center / contain no-repeat;
+        mask: var(--m) center / contain no-repeat;
+      }
+      .dp-body {
+        flex: 1;
+        min-width: 0;
+        display: grid;
+        gap: 6px;
+        justify-items: start;
+      }
+      .dp-text {
+        max-width: 244px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--deep);
+      }
+      .dp-sub {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink-3);
+      }
+      .dp-status {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        flex: none;
+      }
+      .dp-status img {
+        width: 32px;
+        height: 32px;
+      }
+      .dp-status .long-arrow {
+        color: var(--deep);
+      }
+      .dp-status.is-pop {
+        animation: dp-pop 360ms var(--ease-spring);
+      }
+      @keyframes dp-pop {
+        40% {
+          transform: scale(1.15);
+        }
+      }
+
+      /* DS "percentage progress" ring, 32px */
+      .dp .ring {
+        width: 32px;
+        height: 32px;
+        font-size: 8px;
+        letter-spacing: 0.02em;
+        transition: --p 1.2s var(--ease);
+      }
+      /* DS "progress bar w/ numbers" */
+      .dp-meter {
+        display: grid;
+        gap: 4px;
+        width: 100%;
+        max-width: 232px;
+      }
+      .dp-meter__nums {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        line-height: 1.5;
+        letter-spacing: 0.012em;
+        color: var(--ink-3);
+      }
+      .dp-meter__nums b {
+        font-weight: 700;
+      }
+      .dp-meter .bar {
+        height: 6px;
+      }
+      .dp-meter .bar > span {
+        transition: --p 1.2s var(--ease);
+      }
+      .dp .btn--secondary.btn--sm {
+        min-height: 32px;
+        margin-top: 2px;
+        letter-spacing: 0.012em;
+      }
+      .dp .btn--secondary.btn--sm:hover {
+        background: var(--lilac);
+      }
+
+      /* Faint logo watermark (Figma: 493×740 at 36.5, 320; image fitted to the frame height, 4%) */
+      .dp-mark {
+        position: absolute;
+        z-index: -1;
+        left: 36.5px;
+        top: 320px;
+        width: 493px;
+        height: 740px;
+        overflow: hidden;
+        opacity: 0.04;
+        pointer-events: none;
+      }
+      .dp-mark img {
+        width: 1850.42px;
+        height: 740px;
+        max-width: none;
+      }
+    </style>
+  </head>
+  <body data-tab="home">
+    <div class="app">
+      <div class="dp-mark" aria-hidden="true"><img src="assets/fig/logo.png" width="1783" height="713" alt="" /></div>
+      <main class="screen dp" id="main">
+        <a class="back back--plum rise" href="home.html" data-back><span class="long-arrow" aria-hidden="true"></span>Daily Resilience Practices</a>
+        <h1 class="h1 dp-title rise" style="--d: 1">How’s Your Day Going?</h1>
+        <ul class="dp-list rise" style="--d: 2" id="list" aria-label="Today’s practices"></ul>
+      </main>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const P = Object.fromEntries(RD.PRACTICES.map((p) => [p.id, p]));
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const today = new Date().toDateString();
+        const saved = RD.store.get('practices');
+        const state = saved && saved.day === today ? saved : { day: today, done: {} };
+        const isDone = (id) => (id in state.done ? state.done[id] : !!P[id].done);
+        const persist = () => RD.store.set('practices', state);
+        const nf = (n) => n.toLocaleString('en-GB').replace(/,/g, ' ');
+
+        const ico = (file) => `<img class="dp-ico" src="assets/fig/${file}" width="32" height="32" alt="" />`;
+        const icoMask = (file) => `<span class="dp-ico dp-ico--mask" style="--m:url('assets/fig/${file}')" aria-hidden="true"></span>`;
+        const box = (on) =>
+          `<img src="assets/fig/${on ? 'icon-checkbox-full.svg' : 'icon-checkbox-empty-32.svg'}" width="32" height="32" alt="" />`;
+
+        function items() {
+          const steps = P.steps;
+          const breath = P.breathing;
+          const breathDone = isDone('breathing');
+          const vit = isDone('vitamin-d');
+          return [
+            // 1 · Step goal (achieved)
+            `<li><div class="dp-item">
+              ${ico('icon-steps.svg')}
+              <div class="dp-body">
+                <p class="dp-text">You have achieved your Step Goal for today</p>
+                <div class="dp-meter">
+                  <p class="dp-meter__nums num"><b>${nf(steps.value)}</b><span><span class="sr-only">of </span>${nf(steps.goal)}</span></p>
+                  <div class="bar" aria-hidden="true"><span data-p="${Math.min(100, (steps.value / steps.goal) * 100)}"></span></div>
+                </div>
+              </div>
+              <span class="dp-status">${box(true)}<span class="sr-only">Done</span></span>
+            </div></li>`,
+            // 2 · Vitamin D (toggle, persisted)
+            `<li><button class="dp-item" type="button" role="checkbox" aria-checked="${vit}" data-toggle="vitamin-d">
+              ${ico('icon-pills.svg')}
+              <span class="dp-body">
+                <span class="dp-text">Remember to take your daily dose of Vitamin D</span>
+                <span class="dp-sub">${vit ? 'Taken today' : P['vitamin-d'].sub}</span>
+              </span>
+              <span class="dp-status" data-status>${box(vit)}</span>
+            </button></li>`,
+            // 3 · Weekly report
+            `<li><a class="dp-item" href="${P.report.href}">
+              ${icoMask('icon-reports.svg')}
+              <span class="dp-body"><span class="dp-text">New Weekly Report is available in the Reports section</span></span>
+              <span class="dp-status"><span class="long-arrow" aria-hidden="true"></span></span>
+            </a></li>`,
+            // 4 · Breathing training (ring)
+            breathDone
+              ? `<li><div class="dp-item">
+                  ${ico('icon-breath.svg')}
+                  <div class="dp-body"><p class="dp-text">You finished your Breathing Training for today</p></div>
+                  <span class="dp-status" data-status>${box(true)}<span class="sr-only">Done</span></span>
+                </div></li>`
+              : `<li><div class="dp-item">
+                  ${ico('icon-breath.svg')}
+                  <div class="dp-body">
+                    <p class="dp-text">Finish your Breathing Training. Just ${100 - breath.progress}% left for today</p>
+                    <button class="btn btn--secondary btn--sm" type="button" data-breathe>${breath.cta}</button>
+                  </div>
+                  <span class="dp-status" data-status><span class="ring num" data-p="${breath.progress}" role="img" aria-label="${breath.progress}% done"><span aria-hidden="true">${breath.progress}%</span></span></span>
+                </div></li>`,
+            // 5 · Walking Mindfully (done) → the tool
+            `<li><a class="dp-item" href="tool.html?id=${P.walk.tool}">
+              ${icoMask('icon-running.svg')}
+              <span class="dp-body">
+                <span class="dp-text">You finished ${P.walk.title} today</span>
+                <span class="dp-sub">${P.walk.sub}</span>
+              </span>
+              <span class="dp-status">${box(true)}<span class="sr-only">Done</span></span>
+            </a></li>`,
+          ].join('');
+        }
+
+        const list = document.getElementById('list');
+        function render() {
+          list.innerHTML = items();
+          // progress fills from empty
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => list.querySelectorAll('[data-p]').forEach((el) => el.style.setProperty('--p', el.dataset.p)))
+          );
+        }
+        render();
+
+        list.addEventListener('click', (e) => {
+          const t = e.target.closest('[data-toggle]');
+          if (t) {
+            const id = t.dataset.toggle;
+            const on = !isDone(id);
+            state.done[id] = on;
+            persist();
+            t.setAttribute('aria-checked', String(on));
+            t.querySelector('.dp-sub').textContent = on ? 'Taken today' : P[id].sub;
+            const s = t.querySelector('[data-status]');
+            s.innerHTML = box(on);
+            s.classList.remove('is-pop');
+            void s.offsetWidth;
+            if (on) s.classList.add('is-pop');
+            return;
+          }
+          const b = e.target.closest('[data-breathe]');
+          if (b && !b.disabled) {
+            // the rest of today's session: the ring runs to 100%, then the item is done
+            b.disabled = true;
+            b.textContent = 'Breathing…';
+            const ring = b.closest('.dp-item').querySelector('.ring');
+            ring.style.setProperty('--p', 100);
+            ring.querySelector('span').textContent = '100%';
+            ring.setAttribute('aria-label', '100% done');
+            setTimeout(
+              () => {
+                state.done.breathing = true;
+                persist();
+                render();
+                RD.toast('Breathing training done for today');
+                const s = list.querySelectorAll('[data-status]')[1];
+                if (s) s.classList.add('is-pop');
+              },
+              reduce ? 0 : 1300
+            );
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

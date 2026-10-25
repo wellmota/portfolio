@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fafaff" />
+    <title>Journal · Resilience Dynamic</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* No Figma frame for the Journal: a plain DS page. Page head, the reflections as white cards,
+         "New entry" opens a bottom sheet with a text area. Entries the user writes live in RD.store('journal'). */
+      .app {
+        --j-sub: var(--ink-2);
+        --j-link: var(--plum);
+        --j-field: var(--lilac);
+        --j-ink: var(--deep);
+      }
+      [data-theme='dark'] .app {
+        --j-sub: var(--muted);
+        --j-link: var(--violet);
+        --j-field: var(--sunken);
+        --j-ink: var(--text);
+      }
+
+      /* ---------- Page head ---------- */
+      .j-head {
+        padding-top: 16px;
+      }
+      .j-head .back {
+        margin: -12px 0 4px;
+      }
+      .j-head .back[hidden] {
+        display: none;
+      }
+      .j-lede {
+        margin-top: 8px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--j-sub);
+      }
+      .j-new {
+        margin-top: 24px;
+      }
+      .j-new .i {
+        width: 20px;
+        height: 20px;
+      }
+      .j-count {
+        margin: 32px 0 12px;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.3;
+        color: var(--j-sub);
+      }
+
+      /* ---------- Entries ---------- */
+      .j-list {
+        display: grid;
+        gap: 16px;
+      }
+      .j-entry {
+        display: grid;
+        gap: 8px;
+      }
+      .j-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 8px;
+        font-size: 12px;
+        line-height: 1.5;
+        color: var(--j-sub);
+      }
+      .j-tool {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 24px;
+        font-weight: 600;
+        color: var(--j-link);
+      }
+      .j-tool .i {
+        width: 14px;
+        height: 14px;
+      }
+      .j-tool:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .j-q {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--heading);
+      }
+      .j-text {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--text);
+        white-space: pre-line;
+        overflow-wrap: anywhere;
+      }
+      .j-foot {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 4px;
+      }
+      .j-del {
+        min-height: 32px;
+        padding: 0 4px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--j-sub);
+      }
+      .j-del:hover {
+        color: var(--j-link);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .j-entry.is-new {
+        box-shadow:
+          inset 0 0 0 1px var(--violet),
+          var(--shadow);
+      }
+
+      /* ---------- New entry sheet ---------- */
+      .j-sheet .sheet__title {
+        margin-bottom: 16px;
+      }
+      .j-prompt {
+        display: grid;
+        gap: 4px;
+        margin-bottom: 16px;
+        padding: 12px 16px;
+        border-radius: var(--r-xs);
+        background: var(--violet-light);
+        color: var(--ink);
+      }
+      .j-prompt[hidden] {
+        display: none;
+      }
+      /* app.css keeps the sheet title Deep Blue and the secondary button Plum in dark mode (low contrast there) */
+      [data-theme='dark'] .j-sheet .sheet__title {
+        color: var(--heading);
+      }
+      [data-theme='dark'] .j-sheet .btn--secondary {
+        color: var(--violet);
+        box-shadow: inset 0 0 0 1px var(--violet);
+      }
+      .j-prompt__from {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-2);
+      }
+      .j-prompt__q {
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--deep);
+      }
+      .j-field {
+        display: grid;
+        gap: 6px;
+      }
+      .j-field label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--j-sub);
+      }
+      .j-textarea {
+        display: block;
+        width: 100%;
+        min-height: 144px;
+        max-height: 40vh;
+        padding: 12px 16px;
+        border: 0;
+        border-radius: var(--r-md);
+        background: var(--j-field);
+        box-shadow: inset 0 0 0 1px var(--hairline);
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--j-ink);
+        resize: vertical;
+        outline: 0;
+        transition: box-shadow var(--t-fast);
+      }
+      .j-textarea::placeholder {
+        color: #6e7184;
+      }
+      .j-textarea:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--plum);
+      }
+      .j-hint {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 12px;
+        line-height: 1.5;
+        color: var(--j-sub);
+      }
+      .j-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .j-actions .btn {
+        padding: 0 16px;
+      }
+    </style>
+  </head>
+  <body data-tab="journal" data-themeable>
+    <div class="app">
+      <main class="screen j" id="main">
+        <header class="page-head j-head">
+          <a class="back rise" href="tools.html" data-back id="back" hidden><span class="long-arrow" aria-hidden="true"></span><span id="back-label">Back</span></a>
+          <h1 class="h1 rise" style="--d: 1" id="title">Journal</h1>
+          <p class="j-lede rise" style="--d: 2">Your answers to the reflection question at the end of each tool, in one place.</p>
+          <button type="button" class="btn btn--primary btn--block j-new rise" style="--d: 3" id="new" aria-haspopup="dialog" aria-expanded="false" aria-controls="entry-sheet">
+            <span data-icon="plus"></span>New entry
+          </button>
+        </header>
+
+        <p class="j-count" id="count" aria-live="polite"></p>
+        <ol class="j-list" id="list" aria-labelledby="title"></ol>
+      </main>
+
+      <div class="sheet j-sheet" id="entry-sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+        <h2 class="sheet__title" id="sheet-title">New entry</h2>
+        <form id="entry-form" novalidate>
+          <p class="j-prompt" id="prompt" hidden>
+            <span class="j-prompt__from" id="prompt-from"></span>
+            <span class="j-prompt__q" id="prompt-q"></span>
+          </p>
+          <div class="j-field">
+            <label for="entry-text" id="entry-label">What’s on your mind?</label>
+            <textarea class="j-textarea" id="entry-text" rows="6" maxlength="2000" placeholder="Write a few lines…" aria-describedby="entry-hint"></textarea>
+            <p class="j-hint" id="entry-hint"><span>Saved on this device only.</span><span id="entry-left" aria-hidden="true"></span></p>
+          </div>
+          <div class="j-actions">
+            <button type="button" class="btn btn--secondary" data-sheet-close>Cancel</button>
+            <button type="submit" class="btn btn--primary" id="save" disabled>Save entry</button>
+          </div>
+        </form>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const $ = (id) => document.getElementById(id);
+        const params = new URLSearchParams(location.search);
+        const MAX = 2000;
+
+        /* ---------- Data: the user's entries (newest first) on top of the seeded ones ---------- */
+        const mine = () => {
+          const v = RD.store.get('journal');
+          return Array.isArray(v) ? v : [];
+        };
+        const save = (list) => RD.store.set('journal', list);
+
+        function when(entry) {
+          if (!entry.at) return { label: entry.date || '', iso: '' };
+          const d = new Date(entry.at);
+          if (isNaN(d)) return { label: '', iso: '' };
+          const day = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+          const diff = Math.round((day(new Date()) - day(d)) / 864e5);
+          const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+          const label =
+            diff === 0 ? `Today, ${time}` : diff === 1 ? `Yesterday, ${time}` : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+          return { label, iso: d.toISOString() };
+        }
+
+        let fresh = null; // id of the entry just saved (outlined once)
+        function render() {
+          const own = mine();
+          const all = own.map((e) => ({ ...e, own: true })).concat(RD.JOURNAL);
+          $('count').textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'}`;
+          $('list').innerHTML = all
+            .map((e, i) => {
+              const tool = e.tool && RD.tool(e.tool);
+              const w = when(e);
+              const qid = `e-${i}-q`;
+              const toolLink = tool
+                ? `<a class="j-tool" href="tool.html?id=${encodeURIComponent(tool.id)}">${RD.icon(RD.KINDS[tool.kind].icon)}${RD.esc(tool.title)}</a>`
+                : '<span>Note</span>';
+              return `<li><article class="card card--pad j-entry${e.id && e.id === fresh ? ' is-new' : ''}" ${e.prompt ? `aria-labelledby="${qid}"` : 'aria-label="Note"'}>
+                  <p class="j-meta">${w.label ? `<time${w.iso ? ` datetime="${w.iso}"` : ''}>${RD.esc(w.label)}</time><span aria-hidden="true">·</span>` : ''}${toolLink}</p>
+                  ${e.prompt ? `<h2 class="j-q" id="${qid}">${RD.esc(e.prompt)}</h2>` : ''}
+                  <p class="j-text">${RD.esc(e.text)}</p>
+                  ${e.own ? `<div class="j-foot"><button type="button" class="j-del" data-del="${RD.esc(e.id)}" aria-label="Delete entry from ${RD.esc(w.label || 'your journal')}">Delete</button></div>` : ''}
+                </article></li>`;
+            })
+            .join('');
+        }
+
+        $('list').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-del]');
+          if (!b) return;
+          save(mine().filter((x) => x.id !== b.dataset.del));
+          fresh = null;
+          render();
+          $('new').focus();
+          RD.toast('Entry deleted');
+        });
+
+        /* ---------- New entry sheet ---------- */
+        const sheet = $('entry-sheet');
+        const newBtn = $('new');
+        const ta = $('entry-text');
+        const saveBtn = $('save');
+        let draft = { tool: null, prompt: null };
+
+        function setPrompt(toolId, q) {
+          const tool = toolId && RD.tool(toolId);
+          const prompt = (q || '').trim().slice(0, 240) || null;
+          draft = { tool: tool ? tool.id : null, prompt };
+          $('prompt').hidden = !prompt;
+          $('prompt-from').textContent = tool ? `From ${tool.title}` : 'Reflection';
+          $('prompt-q').textContent = prompt || '';
+          $('entry-label').textContent = prompt ? 'Your answer' : 'What’s on your mind?';
+        }
+        function syncCount() {
+          const left = MAX - ta.value.length;
+          saveBtn.disabled = !ta.value.trim();
+          $('entry-left').textContent = left < 200 ? `${left} left` : '';
+        }
+        function openSheet() {
+          newBtn.setAttribute('aria-expanded', 'true');
+          RD.sheet.open(sheet, newBtn);
+          // RD.sheet focuses the first button; the text area is what you came for
+          requestAnimationFrame(() => ta.focus({ preventScroll: true }));
+        }
+        newBtn.addEventListener('click', () => {
+          if (!ta.value.trim()) setPrompt(null, null);
+          syncCount();
+          openSheet();
+        });
+        ta.addEventListener('input', syncCount);
+        ta.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && !saveBtn.disabled) $('entry-form').requestSubmit();
+        });
+        $('entry-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const text = ta.value.trim();
+          if (!text) return;
+          const entry = { id: `j${Date.now().toString(36)}`, at: new Date().toISOString(), tool: draft.tool, prompt: draft.prompt, text };
+          save([entry].concat(mine()));
+          fresh = entry.id;
+          ta.value = '';
+          setPrompt(null, null);
+          render();
+          RD.sheet.close(sheet);
+          RD.toast('Saved to your Journal');
+          if (params.has('new')) history.replaceState(null, '', 'journal.html');
+          document.querySelector('.j-entry.is-new')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        });
+        // RD.sheet.close leaves the sheet in the tab order; hide it once it has slid away
+        new MutationObserver(() => {
+          if (sheet.classList.contains('is-open')) return;
+          newBtn.setAttribute('aria-expanded', 'false');
+          setTimeout(() => {
+            if (!sheet.classList.contains('is-open')) sheet.hidden = true;
+          }, 400);
+        }).observe(sheet, { attributes: true, attributeFilter: ['class'] });
+
+        /* ---------- From a tool: "Write your answer in your Journal" (?new=1&tool=…&q=…) ---------- */
+        const fromTool = params.get('tool') && RD.tool(params.get('tool'));
+        if (fromTool) {
+          $('back').hidden = false;
+          $('back').href = `tool.html?id=${encodeURIComponent(fromTool.id)}`;
+          $('back-label').textContent = fromTool.title;
+        }
+        render();
+        if (params.has('new')) {
+          const seeded = fromTool && RD.JOURNAL.find((j) => j.tool === fromTool.id);
+          setPrompt(fromTool && fromTool.id, params.get('q') || (seeded && seeded.prompt) || (fromTool ? 'What did you notice?' : null));
+          syncCount();
+          openSheet();
+        }
+      })();
+    </script>
+  </body>
+</html>

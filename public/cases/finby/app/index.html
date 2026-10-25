@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#5a36e6" />
+    <title>Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <link rel="prefetch" href="login.html" />
+    <link rel="prefetch" href="assets/img/login.jpg" />
+    <style>
+      /* Figma 0.0 splash: flat violet + white logo. Refined: the brand mesh with grain, a soft glow that breathes
+         behind the logo, and a short rise-in. The whole screen is the "skip" link to the login. */
+      .splash {
+        position: relative;
+        isolation: isolate;
+        flex: 1;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        color: #fff;
+        background: var(--mesh-violet);
+        view-transition-name: screen;
+      }
+      .splash::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--grain);
+        background-size: 180px;
+        mix-blend-mode: soft-light;
+        pointer-events: none;
+      }
+      .splash:focus-visible {
+        outline: none;
+      }
+      .splash:focus-visible .splash__logo {
+        outline: 2.5px solid rgba(255, 255, 255, 0.9);
+        outline-offset: 18px;
+        border-radius: 16px;
+      }
+      /* the glow: a warm-lilac bloom that slowly breathes */
+      .splash__glow {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: -1;
+        width: 340px;
+        height: 340px;
+        margin: -170px 0 0 -170px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(255, 214, 236, 0.5), rgba(186, 160, 255, 0.28) 45%, transparent 100%);
+        filter: blur(6px);
+        animation:
+          glow-in 900ms var(--ease) both,
+          breathe 3.2s ease-in-out 900ms infinite;
+      }
+      .splash__logo {
+        width: 176px;
+        color: #fff;
+        animation: logo-in 820ms var(--ease) 120ms both;
+      }
+      .splash__logo .logo {
+        width: 100%;
+        filter: drop-shadow(0 10px 28px rgba(28, 10, 90, 0.35));
+      }
+      @keyframes logo-in {
+        from {
+          opacity: 0;
+          transform: translateY(18px) scale(0.96);
+        }
+      }
+      @keyframes glow-in {
+        from {
+          opacity: 0;
+          transform: scale(0.6);
+        }
+      }
+      @keyframes breathe {
+        50% {
+          opacity: 0.7;
+          transform: scale(1.12);
+        }
+      }
+    </style>
+  </head>
+  <body data-status="light">
+    <div class="app">
+      <a class="splash" id="main" href="login.html" aria-label="Finby. Toque para entrar">
+        <span class="splash__glow" aria-hidden="true"></span>
+        <h1 class="splash__logo"><span class="logo" aria-hidden="true"></span><span class="sr-only">Finby</span></h1>
+      </a>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        /* After the logo settles, go to the login (shorter with reduced motion).
+           Any tap / Enter / Space skips. ?stay=1 keeps the splash on screen (screenshots). */
+        const stay = new URLSearchParams(location.search).has('stay');
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let gone = false;
+        const go = () => {
+          if (gone) return;
+          gone = true;
+          location.replace('login.html');
+        };
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            go();
+          }
+        });
+        document.getElementById('main').addEventListener('click', (e) => {
+          e.preventDefault();
+          go();
+        });
+        if (!stay) setTimeout(go, reduce ? 700 : 1800);
+      })();
+    </script>
+  </body>
+</html>

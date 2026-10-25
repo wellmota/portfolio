@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f3" />
+    <title>Amigos · Finby</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="assets/app.css" />
+    <style>
+      /* Amigos tab. The Figma has no dedicated frame for it, so it is assembled from the pieces of
+         "Quem vai participar?" (2014:…): search bar, "Adicionar um novo contato", friend cards with the
+         level crown and the red "Cadastro pendente". */
+
+      .appbar {
+        display: block;
+      }
+      .appbar__sub {
+        margin-top: 2px;
+      }
+
+      /* small banner: the picnic scene + one line */
+      .trust {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 10px 14px 10px 10px;
+        border-radius: var(--r-lg);
+        background: var(--violet-50);
+      }
+      .trust__art {
+        flex: none;
+        width: 92px;
+        height: 68px;
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .trust__title {
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--violet-900, var(--heading));
+      }
+      .trust__sub {
+        margin-top: 2px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: var(--ink-2);
+      }
+
+      .tools {
+        display: grid;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      a.add-row {
+        display: flex;
+        border-radius: var(--r-md);
+      }
+      .add-row .row__title {
+        display: block;
+        font-weight: 600;
+      }
+
+      .section-head h2 .n {
+        font-weight: 600;
+        color: var(--muted);
+      }
+      #pendentes {
+        scroll-margin-top: 56px;
+      }
+
+      /* friend rows (same card as the Figma friends-card), tappable → profile sheet */
+      .friend__name > span:first-child {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .friend__sub {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 1px;
+      }
+      .friend__sub .i {
+        width: 13px;
+        height: 13px;
+      }
+      button.friend {
+        transition:
+          box-shadow var(--t-fast) var(--ease),
+          transform var(--t-fast) var(--ease);
+      }
+      button.friend:hover {
+        box-shadow: var(--shadow-sm), inset 0 0 0 1px var(--line-strong);
+      }
+      button.friend:active {
+        transform: scale(0.99);
+      }
+
+      /* Pendentes: sunken card + "Reenviar convite" (same as Participantes → Aguardando) */
+      .friend--wait {
+        background: var(--sunken);
+        box-shadow: none;
+        padding-right: 8px;
+      }
+      .friend--wait .friend__name {
+        color: var(--ink-2);
+      }
+      .resend {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        flex: none;
+        min-height: 44px;
+        padding: 0 12px;
+        border-radius: var(--r-pill);
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--violet-700);
+        background: var(--surface);
+        box-shadow: var(--shadow-xs);
+        transition:
+          background var(--t-fast) var(--ease),
+          transform var(--t-fast) var(--ease);
+      }
+      .resend:hover {
+        background: var(--violet-50);
+      }
+      .resend:active {
+        transform: scale(0.96);
+      }
+      .resend .i {
+        width: 16px;
+        height: 16px;
+        stroke-width: 2.6;
+      }
+      .resend:disabled {
+        color: var(--green-700);
+        background: transparent;
+        box-shadow: none;
+        cursor: default;
+        transform: none;
+      }
+
+      /* friend sheet */
+      .sheet__close {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+      }
+      .pf {
+        display: grid;
+        justify-items: center;
+        gap: 6px;
+        padding: 6px 0 4px;
+        text-align: center;
+      }
+      .pf .av--xl {
+        margin-bottom: 8px;
+      }
+      .pf__name {
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.2;
+        letter-spacing: -0.015em;
+        color: var(--heading);
+      }
+      .pf .section-head {
+        margin-top: 22px;
+      }
+      .pf-list {
+        width: 100%;
+        text-align: left;
+      }
+      .pf-list .row {
+        display: flex;
+        border-radius: var(--r-md);
+      }
+      .pf-list .row__title,
+      .pf-list .row__sub {
+        display: block;
+      }
+      .swatch {
+        position: relative;
+        flex: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background:
+          radial-gradient(80% 70% at 85% 10%, var(--glow), transparent 70%),
+          linear-gradient(135deg, var(--g1), var(--g2));
+      }
+      .pf__none {
+        width: 100%;
+        padding: 14px;
+        border-radius: var(--r-md);
+        background: var(--sunken);
+        font-size: 14px;
+        color: var(--ink-2);
+        text-align: center;
+      }
+      .pf__cta {
+        margin-top: 22px;
+      }
+    </style>
+  </head>
+  <body data-tab="amigos">
+    <div class="app">
+      <main class="screen" id="main">
+        <header class="appbar rise">
+          <h1 class="t-title">Amigos</h1>
+          <p class="t-label appbar__sub" id="count"></p>
+        </header>
+
+        <div class="trust rise" style="--d: 1" id="trust">
+          <div class="trust__art" data-art="friends"></div>
+          <div>
+            <p class="trust__title">Consórcio é melhor com quem você confia</p>
+            <p class="trust__sub">Chame amigos e família para os seus grupos.</p>
+          </div>
+        </div>
+
+        <div class="tools rise" style="--d: 2">
+          <label class="search">
+            <span class="sr-only">Pesquisar amigos</span>
+            <input id="q" type="search" placeholder="Pesquisar…" autocomplete="off" enterkeyhint="search" />
+            <span data-icon="search"></span>
+          </label>
+          <a class="card row add-row" href="contato.html?from=amigos">
+            <span class="row__ico"><span data-icon="user-plus"></span></span>
+            <span class="row__main"><span class="row__title">Adicionar um novo contato</span></span>
+            <span data-icon="chevron-right" class="chev"></span>
+          </a>
+        </div>
+
+        <section id="pendentes" aria-labelledby="pend-h">
+          <div class="section-head rise" style="--d: 3">
+            <h2 id="pend-h">Pendentes <span class="n" id="pend-n"></span></h2>
+          </div>
+          <ul class="list" id="pend"></ul>
+        </section>
+
+        <section id="no-finby" aria-labelledby="fin-h">
+          <div class="section-head rise" style="--d: 5">
+            <h2 id="fin-h">No Finby <span class="n" id="fin-n"></span></h2>
+          </div>
+          <ul class="list" id="fin"></ul>
+        </section>
+
+        <div class="empty" id="none" hidden>
+          <div class="empty__art" data-art="empty"></div>
+          <p class="t-h3" id="none-t"></p>
+          <p class="t-body2">Confira o nome ou convide a pessoa para o Finby.</p>
+          <button class="btn btn--sm btn--outline mt-8" type="button" id="clear">Limpar busca</button>
+        </div>
+        <p class="sr-only" id="results" aria-live="polite"></p>
+      </main>
+
+      <div class="sheet" id="friend" role="dialog" aria-modal="true" aria-labelledby="friend-h" tabindex="-1" hidden>
+        <button class="icon-btn sheet__close" type="button" data-sheet-close aria-label="Fechar"><span data-icon="x"></span></button>
+        <div id="friend-body"></div>
+      </div>
+      <div class="sheet-backdrop" data-sheet-close></div>
+    </div>
+
+    <script src="assets/data.js"></script>
+    <script src="assets/art.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+      (function () {
+        const { esc, fmt } = FB;
+        const params = new URLSearchParams(location.search);
+        const $ = (id) => document.getElementById(id);
+        const norm = (s) =>
+          String(s)
+            .normalize('NFD')
+            .replace(/[̀-ͯ]/g, '')
+            .toLowerCase()
+            .trim();
+
+        /* ---------- data ---------- */
+        const mine = FB.mine();
+        const together = (id) => mine.filter((c) => (c.members || []).includes(id));
+        /* invites sent from this prototype (newest first), then friends who still have to sign up */
+        const invites = (FB.store.get('invites', []) || []).slice().reverse();
+        const pending = [
+          ...invites.map((p) => ({ ...p, pending: 'signup' })),
+          ...FB.friends.filter((id) => FB.people[id] && FB.people[id].pending).map((id) => FB.person(id)),
+        ];
+        const pendingIds = new Set(pending.map((p) => p.id));
+        const friends = FB.friends
+          .filter((id) => !pendingIds.has(id))
+          .map((id) => FB.person(id))
+          .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+
+        const nF = friends.length;
+        const nP = pending.length;
+        $('count').textContent =
+          fmt.plural(nF, 'amigo no Finby', 'amigos no Finby') + (nP ? ` · ${fmt.plural(nP, 'convite pendente', 'convites pendentes')}` : '');
+        $('pend-n').textContent = `· ${nP}`;
+        $('fin-n').textContent = `· ${nF}`;
+
+        /* ---------- rows ---------- */
+        const d = (i) => `style="--d:${Math.min(i, 12)}"`;
+        $('pend').innerHTML = pending
+          .map(
+            (p, i) => `<li class="friend friend--wait rise" ${d(i + 4)} data-name="${esc(norm(p.name))}">
+              ${FB.avatar(p)}
+              <span class="friend__name"><span>${esc(p.name)}</span><span class="friend__sub danger">${FB.icon('alert')}Cadastro pendente</span></span>
+              <button class="resend" type="button" data-resend="${esc(p.id)}" aria-label="Reenviar convite para ${esc(p.name)}">Reenviar convite</button>
+            </li>`
+          )
+          .join('');
+        $('pendentes').hidden = !nP;
+
+        $('fin').innerHTML = friends
+          .map((p, i) => {
+            const n = together(p.id).length;
+            return `<li class="rise" ${d(i + 6)} data-name="${esc(norm(p.name))}">
+              <button class="friend" type="button" data-friend="${esc(p.id)}" aria-haspopup="dialog">
+                ${FB.avatar(p, { crown: true })}
+                <span class="friend__name"><span>${esc(p.name)}</span><span class="friend__sub">${
+                  n ? fmt.plural(n, 'consórcio em comum', 'consórcios em comum') : 'Nenhum consórcio em comum'
+                }</span></span>
+                ${FB.levelChip(p.level)}
+              </button>
+            </li>`;
+          })
+          .join('');
+
+        /* once a block has played its entry animation, drop .rise so un-hiding it while filtering doesn't replay it */
+        $('main').addEventListener('animationend', (e) => e.target.classList.remove('rise'));
+
+        /* ---------- live search ---------- */
+        const input = $('q');
+        let sayT;
+        const filter = () => {
+          const q = norm(input.value);
+          let total = 0;
+          ['pend', 'fin'].forEach((listId) => {
+            const list = $(listId);
+            let shown = 0;
+            list.querySelectorAll(':scope > li').forEach((li) => {
+              const ok = !q || li.dataset.name.includes(q);
+              li.hidden = !ok;
+              shown += ok;
+            });
+            list.closest('section').hidden = !shown;
+            $(listId + '-n').textContent = `· ${shown}`;
+            total += shown;
+          });
+          $('trust').hidden = !!q;
+          $('none').hidden = !q || total > 0;
+          $('none-t').textContent = `Ninguém com “${input.value.trim()}” por aqui`;
+          clearTimeout(sayT);
+          sayT = setTimeout(() => ($('results').textContent = q ? (total ? fmt.plural(total, 'pessoa encontrada', 'pessoas encontradas') : 'Ninguém encontrado') : ''), 350);
+        };
+        input.addEventListener('input', filter);
+        $('clear').addEventListener('click', () => {
+          input.value = '';
+          filter();
+          input.focus();
+        });
+
+        /* ---------- Reenviar convite ---------- */
+        $('pend').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-resend]');
+          if (!b || b.disabled) return;
+          const p = pending.find((x) => x.id === b.dataset.resend);
+          b.disabled = true;
+          b.innerHTML = FB.icon('check') + 'Enviado';
+          b.setAttribute('aria-label', `Convite reenviado para ${p.name}`);
+          const first = p.name.split(' ')[0];
+          FB.toast(`Convite reenviado para ${first}`, 'send');
+        });
+
+        /* ---------- friend sheet ---------- */
+        const sheet = $('friend');
+        const body = $('friend-body');
+        const sub = (c) => {
+          const start = c.start ? new Date(c.start) : null;
+          const next = c.nextDraw ? new Date(c.nextDraw) : null;
+          if (c.status === 'forming') return `Formando o grupo${start ? ' · começa ' + fmt.ddmm(start) : ''}`;
+          return `Prêmio ${fmt.brlShort(c.prize)}${next ? ' · sorteio ' + fmt.ddmm(next) : ''}`;
+        };
+        const openFriend = (id, opener) => {
+          const p = FB.person(id);
+          const shared = together(id);
+          body.innerHTML = `<div class="pf">
+            <span class="pop">${FB.avatar(p, { size: 'xl', ring: true, crown: true, alt: true })}</span>
+            <h2 class="pf__name" id="friend-h">${esc(p.name)}</h2>
+            ${FB.levelChip(p.level)}
+            <div class="pf-list">
+              <div class="section-head"><h3 class="t-h3">Consórcios em comum${shared.length ? ` <span class="muted t-semi">· ${shared.length}</span>` : ''}</h3></div>
+              ${
+                shared.length
+                  ? `<ul class="list">${shared
+                      .map(
+                        (c) => `<li><a class="card row" href="consorcio.html?id=${encodeURIComponent(c.id)}">
+                          <span class="swatch theme-${esc(c.theme || 'violet')}" aria-hidden="true"></span>
+                          <span class="row__main"><span class="row__title">${esc(c.name)}</span><span class="row__sub">${sub(c)}</span></span>
+                          ${FB.icon('chevron-right', 'chev')}
+                        </a></li>`
+                      )
+                      .join('')}</ul>`
+                  : `<p class="pf__none">Vocês ainda não estão no mesmo consórcio.</p>`
+              }
+            </div>
+            <a class="btn pf__cta" href="criar.html">${FB.icon('plus')}Convidar para um consórcio</a>
+          </div>`;
+          FB.sheet.open(sheet, opener);
+        };
+        $('fin').addEventListener('click', (e) => {
+          const b = e.target.closest('[data-friend]');
+          if (b) openFriend(b.dataset.friend, b);
+        });
+
+        /* ---------- deep links: ?q=mar · ?p=mario · #pendentes ---------- */
+        if (params.get('q')) {
+          input.value = params.get('q');
+          filter();
+        }
+        const pid = params.get('p');
+        if (pid && FB.people[pid]) {
+          const opener = document.querySelector(`[data-friend="${CSS.escape(pid)}"]`);
+          setTimeout(() => openFriend(pid, opener), 450);
+        }
+        if (location.hash) {
+          const t = document.getElementById(location.hash.slice(1));
+          if (t) requestAnimationFrame(() => t.scrollIntoView({ block: 'start' }));
+        }
+      })();
+    </script>
+  </body>
+</html>
