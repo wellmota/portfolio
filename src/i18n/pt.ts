@@ -350,7 +350,7 @@ const pt: SiteData = {
     'Solomon', 'Autódromo Velocitta', 'Animalle', 'Grupo SOMA', 'Wevr',
     'Resilience Dynamic', 'Soluti', 'Sankhya', 'Cogmo Tecnologia',
     'Your Digital Media', 'Chris Corsini', 'Nomoo',
-    'Brintel', 'Belo Monte', 'Altevita',
+    'Brintel', 'Belo Monte', 'Altevita', 'GraphiteRX',
   ],
 
   testimonials: [

@@ -16,6 +16,7 @@ em texto (fallback).
 | Marca | Arquivo |
 |---|---|
 | Mindtools | `mindtools.svg` |
+| Altevita | `altevita.png` (logo oficial, já no lugar) |
 | Mitsubishi | `mitsubishi.svg` |
 | ServiceNow | `servicenow.svg` |
 | Kineo | `kineo.svg` |
@@ -40,6 +41,7 @@ em texto (fallback).
 | Soluti | `soluti.svg` |
 | Sankhya | `sankhya.svg` |
 | Cogmo Tecnologia | `cogmo-tecnologia.svg` |
+| GraphiteRX | `graphiterx.svg` (logo oficial, já no lugar) |
 
 > Regra do nome: minúsculas, sem acento, espaços viram `-`.
 > Ex.: "Autódromo Velocitta" → `autodromo-velocitta.svg`.
