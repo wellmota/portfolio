@@ -250,39 +250,37 @@ const pt: SiteData = {
       highlight: 'Protótipo navegável, do convite ao saque',
       href: '/pt/work/finby/',
     },
-    /* Case studies em espera — descomente para publicar
+    {
+      title: 'Action247',
+      meta: 'Esportes · Case Study',
+      categories: ['Product', 'UI', 'UX'],
+      description:
+        'Um jogo de palpites esportivos grátis, com prêmio em dinheiro. Desenhei o produto inteiro para ter a emoção de uma casa de apostas sem pedir aposta, do lobby ao troféu. Ver case study →',
+      image: '/cases/action247/card-pt.webp',
+      accent: '#14A85C',
+      href: '/pt/work/action247/',
+    },
     {
       title: 'HyperGestor',
       meta: 'Automotivo · Case Study',
       categories: ['Product', 'Branding', 'Web'],
       description:
-        'ERP com CRM agêntico para concessionárias: marca, site e o redesenho completo do sistema — 18 módulos, design system e painel de lead com WhatsApp e IA, em produção. Ver case study →',
-      image: '/cases/hypergestor/gestor-de-clientes.webp',
+        'ERP com CRM agêntico para concessionárias. Sozinho, fiz a marca, o site e o redesenho do sistema, do Figma ao código em produção. Cada lead num painel só, com o WhatsApp e a IA dentro. Ver case study →',
+      image: '/cases/hypergestor/card-pt.webp',
       accent: '#F48220',
-      highlight: 'ERP + CRM agêntico · 18 módulos',
+      highlight: 'Marca, site e ERP · uma pessoa só',
       href: '/pt/work/hypergestor/',
     },
     {
       title: 'VESS Studio',
-      meta: 'Wellness · Case Study',
+      meta: 'Bem-estar · Case Study',
       categories: ['Product', 'App', 'Web'],
       description:
-        'Sistema completo para estúdio premium de Pilates: site, app iOS/Android, admin multi-unidade, pagamentos e agendamentos — solo, do conceito à App Store. Ver case study →',
-      image: '/cases/vess/site-hero.jpg',
+        'Um estúdio premium de Pilates trocou um sistema alugado por um próprio: site, app nas lojas, gestão das duas unidades e cobrança automática. Sozinho, da proposta à App Store, em doze semanas. Ver case study →',
+      image: '/cases/vess/card-pt.webp',
       accent: '#d8b98a',
       href: '/pt/work/vess/',
     },
-    {
-      title: 'Tutory',
-      meta: 'EdTech · Case Study',
-      categories: ['Product', 'Branding', 'Web'],
-      description:
-        'Rebranding, site, plataforma white-label, CMS próprio e dashboard executivo para o ecossistema de educação — 9 meses, solo. Ver case study →',
-      image: '/cases/tutory/site-hero.jpg',
-      accent: '#3B7BF5',
-      href: '/pt/work/tutory/',
-    },
-    */
     {
       title: 'Kia Telluride LX',
       meta: 'Automotivo · Landing Page',

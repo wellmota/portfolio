@@ -1,0 +1,691 @@
+<!-- DOCUMENT_ROOT:/var/www/hypergestor-api --> 
+<!-- HTTP_HOST:www.hypergestor.com.br --> 
+<!-- SERVER_NAME:www.hypergestor.com.br --> 
+<!-- link_site://www.saguarocomunicacao.com/ --> 
+<!-- var1:images --> 
+<!-- var2:hypergestor-brand-CbwuCCVn.svg --> 
+<!-- var3: --> 
+<!-- dominio_set 1:www.hypergestor.com.br --> 
+<!-- hora do carregamento: 2026-10-14 10:18:48 --> 
+<!-- 10.0.3.214 --> 
+<!-- www.hypergestor.com.br --> 
+<!-- 2804:7f74:b89:f600:14a0:b9f2:a066:7df1 --> 
+<!-- 404 --> 
+<!-- var2: hypergestor-brand-CbwuCCVn.svg --> 
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WLF37MJG');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BPZRN1DX8B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || []
+    function gtag() { dataLayer.push(arguments) }
+    gtag('js', new Date())
+    gtag('config', 'G-BPZRN1DX8B')
+  </script>
+  
+  
+
+  
+
+  <!-- Essential Mobile Meta Tags -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- Content Security Policy (ATUALIZADA) -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    base-uri 'self';
+    form-action 'self';
+    object-src 'none';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval'
+      https://www.googletagmanager.com
+      https://www.google-analytics.com
+      https://www.googleadservices.com
+      https://pagead2.googlesyndication.com
+      https://googleads.g.doubleclick.net
+      https://www.google.com
+      https://connect.facebook.net;
+    connect-src 'self'
+      https://www.googletagmanager.com
+      https://www.google-analytics.com
+      https://www.googleadservices.com
+      https://pagead2.googlesyndication.com
+      https://googleads.g.doubleclick.net
+      https://www.google.com
+      https://google.com
+      https://www.facebook.com
+      https://api.autopop360.com;
+    img-src 'self' data: https:
+      https://www.google-analytics.com
+      https://www.googletagmanager.com
+      https://www.googleadservices.com
+      https://pagead2.googlesyndication.com
+      https://googleads.g.doubleclick.net
+      https://www.google.com
+      https://google.com
+      https://www.facebook.com;
+    frame-src 'self'
+      https://www.googletagmanager.com
+      https://www.facebook.com;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+  " />
+
+  <!-- SEO Meta Tags -->
+  <title>
+    HyperGestor - O ecossistema inteligente para acelerar suas vendas | Teste Grátis
+    30 Dias
+  </title>
+  <meta name="description"
+    content="Automatize e otimize toda a operação da sua concessionária com inteligência artificial. Leads, estoque, campanhas, CRM, WhatsApp Business API e pós-venda em uma plataforma única. Integração profissional com Meta. Teste grátis por 30 dias." />
+  <meta name="keywords"
+    content="gestão concessionária, CRM automóveis, leads concessionária, gestão estoque carros, IA concessionária, automação vendas, WhatsApp Business API, Meta Business Solution Provider, integração WhatsApp, automação WhatsApp" />
+  <meta name="author" content="HyperGestor" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
+  <link rel="canonical" href="https://hypergestor.com/" />
+  
+  <!-- AI Search Engine Tags -->
+  <meta name="ai-content-declaration" content="This website provides information about HyperGestor, a comprehensive management platform for automotive dealerships with WhatsApp Business API integration from Meta." />
+  <meta name="topic" content="Automotive Management Software, CRM, WhatsApp Business API, Dealership Management" />
+  <meta name="category" content="Business Software, Automotive Technology, SaaS Platform" />
+  <meta name="coverage" content="Brazil" />
+  <meta name="distribution" content="Global" />
+  <meta name="rating" content="General" />
+  <meta name="target" content="Automotive dealerships, car dealers, vehicle rental companies" />
+
+  <!-- Mobile Browser Theme -->
+  <meta name="theme-color" content="#F48120" />
+  <meta name="msapplication-TileColor" content="#F48120" />
+  <meta name="msapplication-navbutton-color" content="#F48120" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="HyperGestor" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://hypergestor.com/" />
+  <meta property="og:title" content="HyperGestor - O ecossistema inteligente para acelerar suas vendas " />
+  <meta property="og:description"
+    content="Automatize e otimize toda a operação da sua concessionária com inteligência artificial. Integração profissional com WhatsApp Business API. Teste grátis por 30 dias." />
+  <meta property="og:image" content="https://hypergestor.com/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="HyperGestor" />
+  <meta property="og:locale" content="pt_BR" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://hypergestor.com/" />
+  <meta name="twitter:title" content="HyperGestor - O ecossistema inteligente para acelerar suas vendas " />
+  <meta name="twitter:description"
+    content="Automatize e otimize toda a operação da sua concessionária com inteligência artificial. Integração profissional com WhatsApp Business API. Teste grátis por 30 dias." />
+  <meta name="twitter:image" content="https://hypergestor.com/og-image.jpg" />
+  
+  <!-- Additional Meta Tags for Better Discoverability -->
+  <meta name="application-name" content="HyperGestor" />
+  <meta name="apple-mobile-web-app-title" content="HyperGestor" />
+  <meta name="format-detection" content="telephone=yes" />
+  <meta name="geo.region" content="BR" />
+  <meta name="geo.placename" content="Brasil" />
+  
+  <!-- Business Information -->
+  <meta property="business:contact_data:street_address" content="Brasil" />
+  <meta property="business:contact_data:locality" content="São Paulo" />
+  <meta property="business:contact_data:country_name" content="Brasil" />
+  <meta property="business:contact_data:phone_number" content="+55-11-5198-9668" />
+
+  <!-- Favicon and Icons -->
+  <link rel="icon" type="image/x-icon" href="/templates/hypergestor/favicon/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/templates/hypergestor/favicon/favicon.svg" />
+  <link rel="apple-touch-icon" href="/templates/hypergestor/favicon/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/templates/hypergestor/favicon/favicon-96x96.png" />
+  <link rel="manifest" href="/templates/hypergestor/favicon/site.webmanifest" />
+
+  <!-- Performance Optimization -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://connect.facebook.net" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="//www.google-analytics.com" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="//connect.facebook.net" />
+
+  <!-- Meta Pixel Code - Optimized for performance -->
+  <script>
+    // Facebook Pixel - Conditional loading for performance
+    function loadFacebookPixel() {
+      if (window.fbPixelLoaded) return
+      window.fbPixelLoaded = true
+
+      !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () {
+          n.callMethod ?
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        }
+        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'
+        n.queue = []; t = b.createElement(e); t.async = !0
+        t.src = v; s = b.getElementsByTagName(e)[0]
+        s.parentNode.insertBefore(t, s)
+      }(window, document, 'script',
+        'https://connect.facebook.net/en_US/fbevents.js')
+      fbq('init', '1265199675399549')
+      fbq('track', 'PageView')
+    }
+
+    // Only load Facebook Pixel in production
+    if (window.location.hostname !== 'localhost') {
+      // Load Facebook Pixel on user interaction or after 5 seconds
+      const fbEvents = ['click', 'scroll', 'touchstart']
+      const loadFBOnInteraction = () => {
+        loadFacebookPixel()
+        fbEvents.forEach(event => document.removeEventListener(event, loadFBOnInteraction))
+      }
+
+      fbEvents.forEach(event => document.addEventListener(event, loadFBOnInteraction))
+      setTimeout(loadFacebookPixel, 5000) // Fallback after 5 seconds
+    }
+  </script>
+  <!-- End Meta Pixel Code -->
+
+  <!-- Preload Google Fonts stylesheets and load them asynchronously -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap"
+    onload="this.rel='stylesheet'" />
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700;800&display=swap"
+    onload="this.rel='stylesheet'" />
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    onload="this.rel='stylesheet'" />
+
+  <!-- Fallback for users with JavaScript disabled -->
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" />
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700;800&display=swap" />
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" />
+  </noscript>
+
+  <!-- Preload critical assets first to reduce critical path -->
+  <link rel="preload" href="/assets/index-Cmk9nCNG.css" as="style" fetchpriority="high" />
+  <link rel="modulepreload" href="data:text/jsx;base64,aW1wb3J0IFJlYWN0IGZyb20gJ3JlYWN0JwppbXBvcnQgUmVhY3RET00gZnJvbSAncmVhY3QtZG9tL2NsaWVudCcKaW1wb3J0IHsgQnJvd3NlclJvdXRlciBhcyBSb3V0ZXIgfSBmcm9tICdyZWFjdC1yb3V0ZXItZG9tJwoKaW1wb3J0IEFwcCBmcm9tICcuL0FwcC5qc3gnCmltcG9ydCAnLi9pbmRleC5jc3MnCgpSZWFjdERPTS5jcmVhdGVSb290KGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdyb290JykpLnJlbmRlcigKICA8UmVhY3QuU3RyaWN0TW9kZT4KICAgIDxSb3V0ZXI+CiAgICAgIDxBcHAgLz4KICAgIDwvUm91dGVyPgogIDwvUmVhY3QuU3RyaWN0TW9kZT4KKQo=" fetchpriority="high" />
+
+  <!-- Preload other critical JavaScript modules -->
+  <link rel="modulepreload" href="/templates/hypergestor/assets/App-DsnrPMEZ.jsx" />
+  <link rel="modulepreload" href="/templates/hypergestor/assets/Hero-BE2JI7Sj.jsx" />
+
+  <!-- Critical CSS loaded synchronously for faster rendering -->
+  <link rel="stylesheet" href="/assets/index-Cmk9nCNG.css" />
+
+  <!-- Preload critical images for LCP -->
+  <link rel="preload" as="image" href="/images/hypergestor-brand-CbwuCCVn.svg" fetchpriority="high" />
+  <link rel="preload" as="image" href="/templates/hypergestor/images/dashboard-home-Dl67FzCQ.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="/templates/hypergestor/images/dashboard-home-dark-B2OCVGzo.jpg" fetchpriority="high" />
+
+  <!-- Preconnect to external domains for faster connection -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://connect.facebook.net" />
+
+  <!-- Structured Data for SEO and AI Search -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "HyperGestor",
+        "description": "Ecossistema inteligente para gestão completa de concessionárias com inteligência artificial, integração com WhatsApp Business API e automação de marketing",
+        "url": "https://hypergestor.com",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "featureList": [
+          "CRM para concessionárias",
+          "Gestão de leads automática",
+          "Integração WhatsApp Business API",
+          "Automação de marketing",
+          "Gestão de estoque",
+          "Agendamento de revisões",
+          "Dashboard inteligente com IA"
+        ],
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "BRL",
+          "priceValidUntil": "2026-12-31",
+          "description": "Teste grátis por 30 dias"
+        },
+        "provider": {
+          "@type": "Organization",
+          "name": "HyperGestor",
+          "url": "https://hypergestor.com",
+          "description": "Plataforma de gestão completa para concessionárias com integração profissional à API do WhatsApp Business",
+          "sameAs": [
+            "https://www.instagram.com/hypergestor",
+            "https://www.facebook.com/hypergestor"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+55-11-5198-9668",
+            "contactType": "sales",
+            "availableLanguage": ["Portuguese"]
+          }
+        }
+      }
+    </script>
+  
+  <!-- Organization Schema for AI Search Optimization -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "HyperGestor",
+        "url": "https://hypergestor.com",
+        "logo": "https://hypergestor.com/images/hypergestor-brand.svg",
+        "description": "HyperGestor é uma plataforma de gestão completa para concessionárias automotivas, oferecendo CRM, automação de marketing, gestão de leads, controle de estoque e integração profissional com a API do WhatsApp Business da Meta. Nossa solução utiliza inteligência artificial para otimizar processos e acelerar vendas.",
+        "foundingDate": "2023",
+        "slogan": "O ecossistema inteligente para acelerar suas vendas",
+        "knowsAbout": [
+          "Gestão de concessionárias",
+          "CRM automotivo",
+          "WhatsApp Business API",
+          "Meta Business Platform",
+          "Automação de marketing",
+          "Inteligência artificial para vendas",
+          "Gestão de leads automotivos"
+        ],
+        "areaServed": {
+          "@type": "Country",
+          "name": "Brasil"
+        },
+        "serviceType": [
+          "Software de gestão empresarial",
+          "CRM para concessionárias",
+          "Plataforma de automação de vendas",
+          "Integração WhatsApp Business API"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+55-11-5198-9668",
+          "contactType": "sales",
+          "availableLanguage": ["Portuguese"],
+          "areaServed": "BR"
+        }
+      }
+    </script>
+
+  <!-- Product/Service Schema for AI Understanding -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "HyperGestor - Plataforma de Gestão para Concessionárias",
+        "description": "Plataforma completa de gestão para concessionárias com CRM, automação de marketing, gestão de leads e estoque, integração com WhatsApp Business API da Meta e inteligência artificial.",
+        "brand": {
+          "@type": "Brand",
+          "name": "HyperGestor"
+        },
+        "offers": {
+          "@type": "AggregateOffer",
+          "priceCurrency": "BRL",
+          "lowPrice": "0",
+          "highPrice": "997",
+          "offerCount": "3",
+          "availability": "https://schema.org/InStock",
+          "url": "https://hypergestor.com"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "reviewCount": "127"
+        },
+        "category": "Software de Gestão Empresarial"
+      }
+    </script>
+
+  <!-- FAQ Schema for AI Search Visibility -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "O que é HyperGestor?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "HyperGestor é uma plataforma completa de gestão para concessionárias automotivas que oferece CRM, automação de marketing, gestão de leads, controle de estoque, agendamento de revisões e integração profissional com a API do WhatsApp Business da Meta. Utilizamos inteligência artificial para otimizar processos e acelerar vendas."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "HyperGestor tem integração com WhatsApp Business API?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim, o HyperGestor oferece integração profissional com a API do WhatsApp Business da Meta, permitindo que concessionárias enviem mensagens automatizadas, gerenciem conversas com clientes e integrem o WhatsApp ao fluxo de vendas e pós-venda."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Como funciona o CRM do HyperGestor?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "O CRM do HyperGestor é especializado para concessionárias, oferecendo gestão completa de leads, acompanhamento de oportunidades, histórico de interações, automação de follow-ups, integração com WhatsApp e dashboards com inteligência artificial para análise de vendas."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "HyperGestor oferece teste grátis?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim, oferecemos um período de teste gratuito de 30 dias para que você possa experimentar todas as funcionalidades da plataforma sem compromisso."
+            }
+          }
+        ]
+      }
+    </script>
+  <script type="module" crossorigin src="/templates/hypergestor/js/index-377OUpCr.js"></script>
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-C8P3qy_x.js">
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-ogfCjemZ.js">
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-CsfiqAFW.js">
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-AlUPjlT1.js">
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-BvKvtC-0.js">
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-y0368IaJ.js">
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-CYP-w5Fg.js">
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-DdQ_58yJ.js">
+  <link rel="modulepreload" crossorigin href="/templates/hypergestor/js/chunk-CoftEDWB.js">
+  <link rel="stylesheet" crossorigin href="/templates/hypergestor/assets/index-CmTLQ-eo.css">
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WLF37MJG"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  
+
+  <!-- Meta Pixel (noscript) -->
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1265199675399549&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel (noscript) -->
+
+  <div id="root"></div>
+
+  <!-- =========================
+     Botão WhatsApp (wa.me) + GA4
+     Cole antes de </body>
+     ========================= -->
+  <div id="wpp-fab" aria-label="Falar no WhatsApp" role="button" tabindex="0">
+    <!-- Ícone WhatsApp em SVG inline -->
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"
+        fill="currentColor"></path>
+    </svg>
+  </div>
+
+  <style>
+    /* Botão flutuante no canto (visual do print) */
+    #wpp-fab {
+      position: fixed;
+      right: 15px;
+      bottom: 15px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #25D366;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .25);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      z-index: 99999;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    #wpp-fab:hover {
+      transform: scale(1.06);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, .28);
+    }
+
+    #wpp-fab:active {
+      transform: scale(.98);
+    }
+
+    #wpp-fab:focus {
+      outline: 2px solid rgba(37, 211, 102, .45);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      #wpp-fab {
+        transition: none;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      // ===== Config =====
+      var PHONE_E164 = "551151989668" // só dígitos com DDI
+      var MENSAGEM = "Olá! Gostaria de saber mais sobre o HyperGestor."
+      var UTM = "utm_source=site&utm_medium=whatsapp_fab&utm_campaign=contato"
+      var OPEN_IN_NEW = true // abrir em nova aba
+
+      // ===== Helpers =====
+      function onlyDigits(s) { return String(s).replace(/\D+/g, '') }
+      function enc(s) { return encodeURIComponent(s) }
+      function waMeUrl(phone, text) {
+        var p = onlyDigits(phone)
+        var url = "https://wa.me/" + p + "?text=" + enc(text)
+        if (UTM) url += "&" + UTM
+        return url
+      }
+      function abrir(url) { OPEN_IN_NEW ? window.open(url, "_blank", "noopener") : (window.location.href = url) }
+
+      // GA4 -> envia evento e só então abre (com fallback)
+      function trackThenOpen(url) {
+        var abriu = false
+        function go() { if (!abriu) { abriu = true; abrir(url) } }
+
+        if (typeof window.gtag === "function") {
+          try {
+            window.gtag("event", "clique_whatsapp", {
+              method: "whatsapp_fab",
+              event_label: url,
+              transport_type: "beacon",
+              event_callback: go
+            })
+            setTimeout(go, 700) // fallback
+          } catch (e) { go() }
+        } else { go() }
+      }
+
+      // ===== Bind =====
+      var fab = document.getElementById("wpp-fab")
+      var destino = waMeUrl(PHONE_E164, MENSAGEM)
+
+      // Hide WhatsApp button on Painel page
+      function checkAndHideOnPainel() {
+        var currentPath = window.location.pathname
+        if (currentPath === '/painel' || currentPath.endsWith('/painel') || currentPath.includes('/painel')) {
+          fab.style.display = 'none'
+        } else {
+          fab.style.display = 'grid'
+        }
+      }
+
+      // Check on load
+      checkAndHideOnPainel()
+
+      // Check on route changes (for SPA navigation)
+      window.addEventListener('popstate', checkAndHideOnPainel)
+
+      // For React Router, also listen to any hash/path changes
+      var _pushState = history.pushState
+      var _replaceState = history.replaceState
+      history.pushState = function () {
+        _pushState.apply(history, arguments)
+        checkAndHideOnPainel()
+      }
+      history.replaceState = function () {
+        _replaceState.apply(history, arguments)
+        checkAndHideOnPainel()
+      }
+
+      fab.addEventListener("click", function () { trackThenOpen(destino) })
+      fab.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); trackThenOpen(destino) }
+      })
+    })();
+  </script>
+
+  <!-- Legal Footer Links -->
+  <div class="legal-footer-links">
+    <a href="privacy-policy.html" target="_blank">Política de privacidade</a>
+    <span class="legal-separator">•</span>
+    <a href="terms-of-use.html" target="_blank">Termos de uso</a>
+  </div>
+
+  <style>
+    .legal-footer-links {
+      width: 100%;
+      text-align: center;
+      padding: 0 0 40px;
+      background-color: #ffffff;
+      font-family: 'Sora', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+
+    .legal-footer-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .legal-footer-links a:hover {
+      color: #F48120;
+    }
+
+    .legal-footer-links .legal-separator {
+      margin: 0 12px;
+      color: #e2e8f0;
+      font-weight: normal;
+    }
+
+    @media (max-width: 640px) {
+      .legal-footer-links {
+        padding: 0 20px 40px;
+        line-height: 1.6;
+      }
+      .legal-footer-links .legal-separator {
+        display: none;
+      }
+      .legal-footer-links a {
+        display: block;
+        margin-bottom: 8px;
+      }
+    }
+
+    /* Universal Legal Content Styles */
+    #universal-legal-overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      min-height: 100vh;
+      background: #ffffff;
+      z-index: 999999;
+      font-family: 'Space Grotesk', sans-serif;
+      color: #0E0C15;
+    }
+    .legal-content-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+    .legal-content-wrap h1 { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 32px; margin-bottom: 24px; }
+    .legal-content-wrap h2 { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 22px; margin: 40px 0 20px; border-left: 4px solid #F48120; padding-left: 16px; }
+    .legal-content-wrap p { margin-bottom: 20px; line-height: 1.7; color: #334155; }
+    .legal-content-wrap ul { margin-bottom: 24px; padding-left: 20px; }
+    .legal-content-wrap li { margin-bottom: 12px; color: #334155; }
+    .legal-back { color: #F48120; text-decoration: none; font-weight: 600; font-size: 14px; margin-bottom: 40px; display: inline-block; }
+  </style>
+
+  <!-- Universal Legal Overlay (Works even with SPA redirects) -->
+  <div id="universal-legal-overlay">
+    <div class="legal-content-wrap" id="legal-content-target">
+      <!-- Content injected by script below -->
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var contentPrivacy = '<h1>Política de Privacidade — Hyper Gestor</h1><p class="last-updated">Última atualização: 30 de março de 2026</p><p>O Hyper Gestor, operado por Hyper Gestor Tecnologia Ltda., inscrita no CNPJ sob nº 51.641.289/0001-69, com sede em Vinhedo/SP, está comprometido com a proteção dos dados pessoais e a privacidade de seus usuários.</p><p>Esta Política de Privacidade descreve como os dados são coletados, utilizados, armazenados e protegidos no uso da plataforma.</p><section><h2>1. Natureza do Serviço</h2><p>O Hyper Gestor é uma plataforma de CRM multiempresa, disponível via web e aplicativos móveis (Android e iOS), com recursos de Gestão de clientes e leads, Automação de atendimento, Integração com canais de comunicação e Uso de Inteligência Artificial para interação, análise e automação comercial. O sistema é destinado exclusivamente a empresas (B2B).</p></section><section><h2>2. Dados Coletados</h2><p>O Hyper Gestor poderá coletar e tratar os seguintes dados: 2.1 Dados Cadastrais (Nome, e-mail, telefone, CNPJ, endereço); 2.2 Dados Operacionais (Leads, histórico de atendimentos); 2.3 Dados Técnicos (IP, logs); 2.4 Dados Sensíveis Operacionais (Áudios, imagens, localização autorizada).</p></section><section><h2>3. Uso de Inteligência Artificial</h2><p>Utilizamos tecnologias de IA (incluindo OpenAI) para automatizar interações, sugerir respostas, classificar leads e processar voz. <strong>Importante:</strong> As interações podem ser processadas por provedores externos; dados não são comercializados; o uso envolve decisões automatizadas.</p></section><section><h2>4. Finalidade</h2><p>Operação da plataforma, gestão de relacionamento, automação comercial, melhoria da experiência, segurança e cumprimento de obrigações legais.</p></section><section><h2>5. Integrações</h2><p>Meta Platforms (WhatsApp Business), serviços de mensageria e sistemas de concessionárias, mediante configuração do cliente.</p></section><section><h2>6. Direitos e Segurança</h2><p>Não comercializamos dados. Adotamos criptografia, logs de auditoria e backups (LGPD). Solicitações: <strong>dpo@hypergestor.com.br</strong></p></section>';
+      
+      var contentTerms = '<h1>Termo de Uso — Hyper Gestor</h1><p class="last-updated">Última atualização: 30 de março de 2026</p><p>Este Termo regula o acesso e utilização da plataforma Hyper Gestor, operada pela Hyper Gestor Tecnologia Ltda. (CNPJ 51.641.289/0001-69), com sede em Vinhedo/SP.</p><section><h2>1. Objeto e Elegibilidade</h2><p>Plataforma CRM multiempresa (B2B) para gestão de vendas e automação. O usuário declara possuir poderes para representar a empresa contratante.</p></section><section><h2>2. Uso da Plataforma</h2><p>O usuário deve fornecer informações verdadeiras, manter sigilo das credenciais e não realizar engenharia reversa ou uso ilícito.</p></section><section><h2>3. Inteligência Artificial</h2><p>Utilizamos IA (OpenAI) para automação. O usuário reconhece que as respostas podem conter imprecisões e é responsável pelas decisões tomadas com base nas sugestões da IA.</p></section><section><h2>4. Integrações e Propriedade</h2><p>Integrações com WhatsApp/Meta seguem termos dos fornecedores. Todos os direitos de código e marca pertencem exclusivamente ao Hyper Gestor.</p></section><section><h2>5. Responsabilidade e Foro</h2><p>O Hyper Gestor não se responsabiliza por decisões comerciais ou falhas de terceiros. Fica eleito o foro de Vinhedo/SP para dirimir controvérsias. Contato: <strong>dpo@hypergestor.com.br</strong></p></section>';
+
+      function checkRoute() {
+        var path = window.location.pathname;
+        var overlay = document.getElementById('universal-legal-overlay');
+        var root = document.getElementById('root');
+        var target = document.getElementById('legal-content-target');
+        var fab = document.getElementById('wpp-fab');
+
+        if (path.includes('privacy-policy') || path.includes('terms-of-use')) {
+          var isPrivacy = path.includes('privacy-policy');
+          target.innerHTML = '<a href="/" class="legal-back">← Voltar para o Início</a>' + 
+                             '<div style="margin-bottom:40px"><img src="/images/hypergestor-brand-CbwuCCVn.svg" height="40" onerror="this.src=\'https://www.hypergestor.com.br/images/hypergestor-brand.svg\'"></div>' +
+                             (isPrivacy ? contentPrivacy : contentTerms) +
+                             '<footer style="margin-top:60px; padding-top:40px; border-top:1px solid #eee; text-align:center; color:#94a3b8; font-size:12px">&copy; 2026 HyperGestor</footer>';
+          
+          if (root) root.style.display = 'none';
+          if (fab) fab.style.display = 'none';
+          overlay.style.display = 'block';
+          document.title = (isPrivacy ? "Política de Privacidade" : "Termos de Uso") + " | HyperGestor";
+          window.scrollTo(0,0);
+        } else {
+          overlay.style.display = 'none';
+          if (root) root.style.display = 'block';
+          // wpp-fab logic is already handled by its own script
+        }
+      }
+
+      window.addEventListener('popstate', checkRoute);
+      // Listen for hash changes if needed for local testing
+      window.addEventListener('hashchange', checkRoute);
+      
+      // Patch pushState to detect internal navigation
+      var originalPush = history.pushState;
+      history.pushState = function() {
+        originalPush.apply(history, arguments);
+        checkRoute();
+      };
+      
+      // Run once on load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkRoute);
+      } else {
+        checkRoute();
+      }
+    })();
+  </script>
+</body>
+
+</html>

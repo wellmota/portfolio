@@ -250,16 +250,25 @@ const en: SiteData = {
       highlight: 'Clickable prototype, invite to payout',
       href: '/work/finby/',
     },
-    /* Case studies em espera — descomente para publicar
+    {
+      title: 'Action247',
+      meta: 'Sports · Case Study',
+      categories: ['Product', 'UI', 'UX'],
+      description:
+        'A free sports prediction game with real cash prizes. I designed the whole product to feel like a sportsbook without ever asking for a bet, from the lobby to the trophy. Read the case study →',
+      image: '/cases/action247/card-en.webp',
+      accent: '#14A85C',
+      href: '/work/action247/',
+    },
     {
       title: 'HyperGestor',
       meta: 'Automotive · Case Study',
       categories: ['Product', 'Branding', 'Web'],
       description:
-        'An ERP with an agentic CRM for dealerships: brand, website and the complete redesign of the system — 18 modules, a design system and a lead panel with WhatsApp and AI, in production. See case study →',
-      image: '/cases/hypergestor/gestor-de-clientes.webp',
+        'An ERP with an agentic CRM for car dealerships. On my own, I did the brand, the website and the system redesign, from Figma to code in production. Each lead lives in one panel, with WhatsApp and AI inside. Read the case study →',
+      image: '/cases/hypergestor/card-en.webp',
       accent: '#F48220',
-      highlight: 'ERP + agentic CRM · 18 modules',
+      highlight: 'Brand, website and ERP · one person',
       href: '/work/hypergestor/',
     },
     {
@@ -267,22 +276,11 @@ const en: SiteData = {
       meta: 'Wellness · Case Study',
       categories: ['Product', 'App', 'Web'],
       description:
-        'Complete system for a premium Pilates studio: website, iOS/Android app, multi-unit admin, payments and scheduling — solo, from concept to the App Store. Read the case study →',
-      image: '/cases/vess/site-hero.jpg',
+        'A premium Pilates studio swapped rented software for its own: website, store-published app, management for both studios and automatic billing. Solo, from proposal to the App Store, in twelve weeks. Read the case study →',
+      image: '/cases/vess/card-en.webp',
       accent: '#d8b98a',
       href: '/work/vess/',
     },
-    {
-      title: 'Tutory',
-      meta: 'EdTech · Case Study',
-      categories: ['Product', 'Branding', 'Web'],
-      description:
-        'Rebranding, website, white-label platform, in-house CMS and executive dashboard for the education ecosystem — 9 months, solo. Read the case study →',
-      image: '/cases/tutory/site-hero.jpg',
-      accent: '#3B7BF5',
-      href: '/work/tutory/',
-    },
-    */
     {
       title: 'Kia Telluride LX',
       meta: 'Automotive · Landing Page',
