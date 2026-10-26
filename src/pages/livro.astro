@@ -4,11 +4,10 @@ import SectionHeader from '../components/SectionHeader.astro';
 
 const lang = 'pt' as const;
 
-/* Checkout do produto na Kiwify — R$ 37 (de R$ 57) */
-const BUY_URL = 'https://pay.kiwify.com.br/iDcoBhO';
-const SAMPLE_URL = '/amostra-do-design-ao-digital.pdf';
+/* Livro completo, gratuito (antes vendido na Kiwify por R$ 37) */
+const BOOK_URL = '/do-design-ao-digital.pdf';
 
-/* Captura de e-mail antes da amostra (lead magnet).
+/* Captura de e-mail antes do download (lead magnet).
    Preencha LEAD_ENDPOINT com o "action" do formulario da sua ferramenta de e-mail
    (MailerLite / Brevo / etc.) e ajuste os nomes dos campos abaixo.
    Enquanto LEAD_ENDPOINT estiver vazio, o download continua direto (sem captura). */
@@ -18,17 +17,16 @@ const LEAD_FIELD_EMAIL = 'fields[email]';
 const WHATSAPP_URL = 'https://wa.me/5561981043296';
 
 const PRICE_FULL = 'R$ 57,00';
-const PRICE_LAUNCH = 'R$ 37,00';
 
 const title =
-  'Do Design ao Digital — o livro | Guia da transição para UX/UI (com IA)';
+  'Do Design ao Digital — livro grátis | Guia da transição para UX/UI (com IA)';
 const description =
-  'Como migrar do design gráfico para o UX/UI, usar a IA a seu favor e multiplicar seu valor no mercado digital. O guia honesto de quem fez o caminho — por Wellington Mota.';
+  'Como migrar do design gráfico para o UX/UI, usar a IA a seu favor e multiplicar seu valor no mercado digital. O guia honesto de quem fez o caminho — por Wellington Mota. Download gratuito.';
 
 const heroPoints = [
   '12 capítulos · 4 partes · PDF',
-  'Entrega imediata por e-mail',
-  'Bônus de lançamento: Checklist da Transição para UX/UI',
+  'Gratuito · download imediato',
+  'Edição completa, sem amostra e sem pegadinha',
 ];
 
 const pillars = [
@@ -111,6 +109,10 @@ const bio = [
 
 const faqs = [
   {
+    q: 'O livro é mesmo grátis?',
+    a: 'Sim. É a edição completa em PDF, os 12 capítulos, a mesma que antes era vendida. Você deixa nome e e-mail e o download abre na hora. Não tem cartão, assinatura nem versão paga escondida.',
+  },
+  {
     q: 'Eu não tenho experiência em tecnologia. Este livro é para mim?',
     a: 'Sim — ele foi escrito exatamente para quem vem do design tradicional (gráfico, publicidade, editorial) e nunca trabalhou com produto digital. A Parte II mostra o que muda de verdade e o que você já sabe e nem percebe: boa parte do seu repertório é reaproveitável desde o primeiro dia.',
   },
@@ -170,7 +172,8 @@ const bookSchema = {
   numberOfPages: 66,
   datePublished: '2026',
   image: 'https://userexperience.com.br/capa-livro-light.jpg',
-  url: 'https://userexperience.com.br/livro',
+  url: 'https://userexperience.com.br/livro/',
+  isAccessibleForFree: true,
   description,
   keywords:
     'transição de carreira, UX design, UI design, design gráfico, migrar para UX/UI, carreira em UX, portfólio UX, Figma, inteligência artificial no design, trabalho remoto, receber em dólar',
@@ -187,10 +190,10 @@ const bookSchema = {
   },
   offers: {
     '@type': 'Offer',
-    price: '37.00',
+    price: '0',
     priceCurrency: 'BRL',
     availability: 'https://schema.org/InStock',
-    url: 'https://userexperience.com.br/livro',
+    url: 'https://userexperience.com.br/livro/',
   },
 };
 
@@ -220,7 +223,7 @@ const breadcrumbSchema = {
       '@type': 'ListItem',
       position: 2,
       name: 'Do Design ao Digital — o livro',
-      item: 'https://userexperience.com.br/livro',
+      item: 'https://userexperience.com.br/livro/',
     },
   ],
 };
@@ -292,8 +295,8 @@ const breadcrumbSchema = {
           }
         </ul>
 
-        <a href={BUY_URL} target="_blank" rel="noreferrer" class="btn btn-solid">
-          Comprar · {PRICE_LAUNCH}
+        <a href={BOOK_URL} target="_blank" rel="noreferrer" class="btn btn-solid" data-book>
+          Baixar grátis
         </a>
       </nav>
     </div>
@@ -355,14 +358,15 @@ const breadcrumbSchema = {
                     >{PRICE_FULL}</span
                   >
                 </div>
-                <p class="display mt-2 text-4xl sm:text-5xl">{PRICE_LAUNCH}</p>
+                <p class="display mt-2 text-4xl sm:text-5xl">Grátis</p>
                 <a
-                  href={BUY_URL}
+                  href={BOOK_URL}
                   target="_blank"
                   rel="noreferrer"
                   class="btn btn-solid mt-6 w-full justify-center py-4"
+                  data-book
                 >
-                  Comprar agora
+                  Baixar o livro grátis
                   <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M4 12L12 4M12 4H5M12 4V11"
@@ -375,15 +379,8 @@ const breadcrumbSchema = {
                 <p
                   class="mono mt-4 text-center text-[11px] uppercase tracking-widest text-lime"
                 >
-                  Preço de lançamento por tempo limitado
+                  Edição completa · PDF · 66 páginas
                 </p>
-                <a
-                  href={SAMPLE_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  class="link-underline mono mx-auto mt-5 block w-fit text-[12px] text-mist"
-                  >Ou baixe a amostra grátis (PDF)</a
-                >
               </div>
             </div>
           </div>
@@ -472,15 +469,9 @@ const breadcrumbSchema = {
               travessia.
             </p>
             <div class="mt-9 flex flex-wrap gap-3">
-              <a href={BUY_URL} target="_blank" rel="noreferrer" class="btn btn-solid">
-                Comprar agora · {PRICE_LAUNCH}
+              <a href={BOOK_URL} target="_blank" rel="noreferrer" class="btn btn-solid" data-book>
+                Baixar o livro grátis
               </a>
-              <a
-                href={SAMPLE_URL}
-                target="_blank"
-                rel="noreferrer"
-                class="btn btn-outline">Ler amostra grátis</a
-              >
             </div>
           </div>
         </div>
@@ -525,7 +516,7 @@ const breadcrumbSchema = {
           label="O que há no livro"
           title="12 capítulos,"
           titleMuted="quatro partes."
-          caption="Prefere provar antes? A amostra grátis traz a abertura do livro para você ler agora."
+          caption="Tudo isso de graça: a edição completa, não uma amostra."
         />
         <div class="mt-12 grid gap-x-16 gap-y-12 md:grid-cols-2">
           {
@@ -555,14 +546,8 @@ const breadcrumbSchema = {
           }
         </div>
         <div class="mt-14 flex flex-wrap gap-3" data-reveal>
-          <a
-            href={SAMPLE_URL}
-            target="_blank"
-            rel="noreferrer"
-            class="btn btn-outline">Baixar amostra grátis (PDF)</a
-          >
-          <a href={BUY_URL} target="_blank" rel="noreferrer" class="btn btn-solid">
-            Quero o livro completo
+          <a href={BOOK_URL} target="_blank" rel="noreferrer" class="btn btn-solid" data-book>
+            Quero o livro completo, grátis
           </a>
         </div>
       </div>
@@ -691,11 +676,11 @@ const breadcrumbSchema = {
         </h2>
         <p class="mono mt-8 text-sm text-faint" data-reveal>
           <span class="line-through">{PRICE_FULL}</span>
-          <span class="ml-3 text-lg text-cream">{PRICE_LAUNCH}</span>
+          <span class="ml-3 text-lg text-cream">Grátis</span>
         </p>
         <div class="mt-7 flex flex-wrap justify-center gap-3" data-reveal>
-          <a href={BUY_URL} target="_blank" rel="noreferrer" class="btn btn-solid py-4">
-            Comprar agora
+          <a href={BOOK_URL} target="_blank" rel="noreferrer" class="btn btn-solid py-4" data-book>
+            Baixar o livro grátis
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
               <path
                 d="M4 12L12 4M12 4H5M12 4V11"
@@ -705,12 +690,6 @@ const breadcrumbSchema = {
                 stroke-linejoin="round"></path>
             </svg>
           </a>
-          <a
-            href={SAMPLE_URL}
-            target="_blank"
-            rel="noreferrer"
-            class="btn btn-outline py-4">Baixar amostra grátis</a
-          >
         </div>
       </div>
     </section>
@@ -731,12 +710,12 @@ const breadcrumbSchema = {
     </div>
   </footer>
 
-  <!-- Gate de e-mail da amostra gratis -->
+  <!-- Gate de e-mail do livro grátis -->
   <div
     id="lead-gate"
     class="lead-gate"
     data-endpoint={LEAD_ENDPOINT}
-    data-sample={SAMPLE_URL}
+    data-book-url={BOOK_URL}
     data-fname={LEAD_FIELD_NAME}
     data-femail={LEAD_FIELD_EMAIL}
     hidden
@@ -754,13 +733,13 @@ const breadcrumbSchema = {
         data-close
         aria-label="Fechar"
       >&times;</button>
-      <p class="lead-gate__kicker mono">[ AMOSTRA GRATIS ]</p>
+      <p class="lead-gate__kicker mono">[ LIVRO GRÁTIS ]</p>
       <h3 id="lead-gate-title" class="lead-gate__title">
-        Receba a amostra no seu e-mail
+        Baixe o livro completo
       </h3>
       <p class="lead-gate__sub">
-        Deixe seu nome e e-mail que eu te envio a abertura do livro agora &mdash;
-        mais conteudo sobre a transicao para UX/UI.
+        Deixe seu nome e e-mail e o PDF abre na hora. De vez em quando eu mando
+        conteúdo sobre a transição para UX/UI.
       </p>
       <form class="lead-gate__form" novalidate>
         <input
@@ -780,10 +759,10 @@ const breadcrumbSchema = {
           required
         />
         <button class="lead-gate__submit" type="submit">
-          Quero a amostra gratis
+          Quero o livro grátis
         </button>
         <p class="lead-gate__hint mono" data-role="status">
-          Sem spam. So a amostra e conteudo de carreira.
+          Sem spam. Só o livro e conteúdo de carreira.
         </p>
       </form>
     </div>
@@ -806,31 +785,19 @@ const breadcrumbSchema = {
         .forEach((el) => el.addEventListener('click', handler));
     };
 
-    // Clique em qualquer botão "Comprar" → GA begin_checkout + Meta InitiateCheckout (R$37)
-    on('a[href*="pay.kiwify"]', () => {
-      track('begin_checkout', {
-        currency: 'BRL',
-        value: 37,
-        items: [
-          { item_name: 'Do Design ao Digital', price: 37, quantity: 1 },
-        ],
-      });
-      trackFB('InitiateCheckout', { currency: 'BRL', value: 37 });
-    });
-
-    // Download da amostra grátis → GA + Meta Lead (+ captura de e-mail opcional)
+    // Download do livro grátis → GA + Meta Lead (+ captura de e-mail opcional)
     const fireLeadEvents = () => {
-      track('amostra_download', {
-        file_name: 'amostra-do-design-ao-digital.pdf',
+      track('livro_download', {
+        file_name: 'do-design-ao-digital.pdf',
       });
-      trackFB('Lead', { content_name: 'amostra Do Design ao Digital' });
+      trackFB('Lead', { content_name: 'Do Design ao Digital' });
     };
 
     const gate = document.getElementById('lead-gate');
     const gEndpoint = gate ? gate.getAttribute('data-endpoint') || '' : '';
 
     if (gate && gEndpoint) {
-      const gSample = gate.getAttribute('data-sample') || '/';
+      const gBook = gate.getAttribute('data-book-url') || '/';
       const gFName = gate.getAttribute('data-fname') || 'name';
       const gFEmail = gate.getAttribute('data-femail') || 'email';
       const form = gate.querySelector('form') as HTMLFormElement | null;
@@ -848,7 +815,7 @@ const breadcrumbSchema = {
         document.body.style.overflow = '';
       };
 
-      document.querySelectorAll('a[href*="amostra"]').forEach((el) => {
+      document.querySelectorAll('a[data-book]').forEach((el) => {
         el.addEventListener('click', (e) => {
           e.preventDefault();
           openGate();
@@ -883,8 +850,8 @@ const breadcrumbSchema = {
           params.set('anticsrf', 'true');
           const done = () => {
             fireLeadEvents();
-            if (status) status.textContent = 'Pronto! Abrindo a amostra...';
-            window.open(gSample, '_blank', 'noopener');
+            if (status) status.textContent = 'Pronto! Abrindo o livro...';
+            window.open(gBook, '_blank', 'noopener');
             setTimeout(closeGate, 900);
             sending = false;
           };
@@ -900,7 +867,7 @@ const breadcrumbSchema = {
       }
     } else {
       // Sem captura configurada: download direto (comportamento atual)
-      on('a[href*="amostra"]', fireLeadEvents);
+      on('a[data-book]', fireLeadEvents);
     }
 
     // Clique no WhatsApp

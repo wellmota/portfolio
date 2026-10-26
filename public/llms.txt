@@ -70,17 +70,16 @@ Brasília, Brazil (America/Sao_Paulo timezone). Responds within 24 hours.
 
 > Wellington Mota is also the author of **"Do Design ao Digital"**, a Portuguese-language
 > ebook that guides graphic/traditional designers and career changers into UX/UI, using
-> AI as an accelerator. Official page: https://userexperience.com.br/livro
+> AI as an accelerator. Free to download. Official page: https://userexperience.com.br/livro/
 
 **Sobre o livro (PT-BR):** guia honesto de quem saiu do design gráfico/tradicional e
 migrou para o UX/UI — reaproveitando o repertório que já tinha e usando a inteligência
 artificial em cada etapa. Escrito por Wellington Mota, que fez essa transição e hoje
 trabalha remoto recebendo em dólar e euro para marcas como Mitsubishi, KIA e ServiceNow.
 
-- **Formato:** ebook em PDF, 66 páginas, 12 capítulos em 4 partes. Entrega imediata por e-mail.
-- **Preço:** R$ 37,00 (lançamento; de R$ 57,00).
-- **Página oficial / compra:** https://userexperience.com.br/livro
-- **Amostra grátis (PDF):** https://userexperience.com.br/amostra-do-design-ao-digital.pdf
+- **Formato:** ebook em PDF, 66 páginas, 12 capítulos em 4 partes. Download imediato.
+- **Preço:** gratuito (edição completa; antes R$ 57,00). Download mediante nome e e-mail.
+- **Página oficial / download:** https://userexperience.com.br/livro/
 
 **Para quem é (personas):**
 - Designers gráficos (agência, branding, editorial, impresso) com a carreira estagnando na digitalização.
