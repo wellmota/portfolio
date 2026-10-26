@@ -95,6 +95,7 @@ export interface SiteData {
     portfolioEdition: string;
     readArticle: string;
     viewAllMedium: string;
+    book: { label: string; title: string; text: string; cta: string };
     sectionClients: { index: string; label: string; title: string; titleMuted: string };
     sectionAbout: { index: string; label: string };
     sectionServices: { index: string; label: string; title: string; titleMuted: string; caption: string };

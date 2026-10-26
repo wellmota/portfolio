@@ -19,7 +19,45 @@ const { articles } = data;
     caption={data.ui.sectionWriting.caption}
   />
 
-  <div class="mt-16 grid items-stretch gap-8 lg:grid-cols-2">
+  <!-- Livro (página /livro/, só em PT) -->
+  <a
+    href="/livro/"
+    hreflang="pt-BR"
+    class="group mt-16 flex items-center gap-5 border border-line p-5 transition-colors hover:bg-ink-soft sm:gap-8 sm:p-7"
+    data-reveal
+  >
+    <img
+      src="/capa-livro-light.jpg"
+      alt=""
+      width="720"
+      height="1073"
+      loading="lazy"
+      class="w-16 shrink-0 border border-line sm:w-24"
+    />
+    <div class="min-w-0 flex-1">
+      <span class="label label-dot">{data.ui.book.label}</span>
+      <h3 class="display mt-3 text-2xl leading-tight transition-colors group-hover:text-cream md:text-3xl">
+        {data.ui.book.title}
+      </h3>
+      <p class="mt-2 max-w-xl text-[14px] leading-relaxed text-mist">{data.ui.book.text}</p>
+      <span class="mono mt-4 inline-block text-[13px] text-cream transition-colors group-hover:text-lime">
+        {data.ui.book.cta}
+      </span>
+    </div>
+    <span class="hidden h-9 w-9 shrink-0 place-items-center self-center border border-line text-mist transition-colors group-hover:border-line-strong group-hover:text-cream sm:grid">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+        <path
+          d="M4 12L12 4M12 4H5M12 4V11"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </span>
+  </a>
+
+  <div class="mt-8 grid items-stretch gap-8 lg:grid-cols-2">
     <!-- Coluna Medium -->
     <div class="flex flex-col" data-reveal>
       <div class="flex-1 border-t border-line">

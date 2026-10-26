@@ -513,6 +513,12 @@ const en: SiteData = {
     portfolioEdition: 'Portfolio — Ed. 2026',
     readArticle: 'Read article',
     viewAllMedium: 'See all on Medium →',
+    book: {
+      label: 'Free book · in Portuguese',
+      title: 'Do Design ao Digital',
+      text: 'My guide for graphic designers moving into UX/UI, with AI at every step. 12 chapters, full edition as a PDF.',
+      cta: 'Get it free →',
+    },
     sectionClients: { index: '01', label: 'Clients', title: 'Brands that', titleMuted: 'trust my work.' },
     sectionAbout: { index: '06', label: 'About me' },
     sectionServices: { index: '02', label: 'Services', title: 'From concept to', titleMuted: 'product, end to end.', caption: 'One professional to design and build your digital experience, no handoff.' },
@@ -520,7 +526,7 @@ const en: SiteData = {
     sectionWork: { index: '04', label: 'Featured projects', title: 'Where I left', titleMuted: 'my mark.', caption: 'Projects for major companies and institutions — from Brazil to the UK and US.' },
     sectionTestimonials: { index: '05', label: 'Testimonials', title: 'What they say', titleMuted: 'about the work.', caption: 'Real feedback from founders, CEOs, and product heads from Brazil, the UK, and US.' },
     sectionFaq: { index: '07', label: 'FAQ', title: 'Questions?', titleMuted: 'Answered.', caption: '' },
-    sectionWriting: { index: '08', label: 'Writing & Code', title: 'Thinking out loud.', titleMuted: 'And shipping.', caption: 'Articles on Medium, code on GitHub — thinking and shipping side by side.' },
+    sectionWriting: { index: '08', label: 'Writing & Code', title: 'Thinking out loud.', titleMuted: 'And shipping.', caption: 'A book, articles on Medium and code on GitHub — thinking and shipping side by side.' },
     sectionGithub: { index: '09', label: 'GitHub', title: 'Always', titleMuted: 'shipping.', caption: 'contributions in the last year', legendLess: 'Less', legendMore: 'More', cta: 'Follow on GitHub →' },
   },
 };

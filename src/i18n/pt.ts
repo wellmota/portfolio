@@ -513,6 +513,12 @@ const pt: SiteData = {
     portfolioEdition: 'Portfólio — Ed. 2026',
     readArticle: 'Ler artigo',
     viewAllMedium: 'Ver todos no Medium →',
+    book: {
+      label: 'Livro grátis',
+      title: 'Do Design ao Digital',
+      text: 'O guia da transição do design gráfico para o UX/UI, com a IA em cada etapa. 12 capítulos, edição completa em PDF.',
+      cta: 'Baixar grátis →',
+    },
     sectionClients: { index: '01', label: 'Quem já atendi', title: 'Marcas que', titleMuted: 'confiam no meu trabalho.' },
     sectionAbout: { index: '06', label: 'Sobre mim' },
     sectionServices: { index: '02', label: 'Especialidades', title: 'Do conceito ao', titleMuted: 'produto, ponta a ponta.', caption: 'Um profissional só para desenhar e construir sua experiência digital, sem handoff.' },
@@ -520,7 +526,7 @@ const pt: SiteData = {
     sectionWork: { index: '04', label: 'Projetos em destaque', title: 'Onde deixei', titleMuted: 'minha marca.', caption: 'Projetos para grandes empresas e instituições — do Brasil ao Reino Unido e EUA.' },
     sectionTestimonials: { index: '05', label: 'Depoimentos', title: 'O que dizem', titleMuted: 'sobre o trabalho.', caption: 'Feedback real de founders, CEOs e heads de produto do Brasil, Reino Unido e EUA.' },
     sectionFaq: { index: '07', label: 'Perguntas frequentes', title: 'Dúvidas?', titleMuted: 'Respondidas.', caption: '' },
-    sectionWriting: { index: '08', label: 'Escrita & Código', title: 'Penso em voz alta.', titleMuted: 'E entrego.', caption: 'Artigos no Medium, código no GitHub — pensamento e entrega lado a lado.' },
+    sectionWriting: { index: '08', label: 'Escrita & Código', title: 'Penso em voz alta.', titleMuted: 'E entrego.', caption: 'Um livro, artigos no Medium e código no GitHub — pensamento e entrega lado a lado.' },
     sectionGithub: { index: '09', label: 'GitHub', title: 'Sempre', titleMuted: 'entregando.', caption: 'contribuições no último ano', legendLess: 'Menos', legendMore: 'Mais', cta: 'Seguir no GitHub →' },
   },
 };
