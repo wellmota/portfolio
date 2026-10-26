@@ -175,7 +175,7 @@ const pt: SiteData = {
       image: '/cases/golfhub/card-pt.webp',
       accent: '#38EB7F',
       highlight: 'Protótipo jogável, campo em 3D',
-      href: '/pt/work/golfhub',
+      href: '/pt/work/golfhub/',
     },
     {
       title: 'Aeroporto de Leads',
@@ -185,7 +185,7 @@ const pt: SiteData = {
         'A tabela de leads da TV da Tutory virou um aeroporto 3D ao vivo: cada lead é um avião que pousa, qualificado entra no hangar. three.js, tempo real e Smart TV — em uma semana. Ver case study →',
       image: '/cases/aeroporto/card-pt.webp',
       accent: '#2456E6',
-      href: '/pt/work/aeroporto-de-leads',
+      href: '/pt/work/aeroporto-de-leads/',
     },
     {
       title: 'Tutory: identidade visual',
@@ -195,7 +195,7 @@ const pt: SiteData = {
         'Rebranding com arquétipos: o cérebro reconstruído como arquitetura, paleta, voz, deck interativo de 37 slides e seis troféus 3D da gamificação. Ver case study →',
       image: '/cases/tutory-rebrand/card-pt.webp',
       accent: '#C9A96E',
-      href: '/pt/work/tutory-rebrand',
+      href: '/pt/work/tutory-rebrand/',
     },
     {
       title: 'Tutory: site',
@@ -205,7 +205,7 @@ const pt: SiteData = {
         'Do WordPress a um site em Astro com 14 páginas: migração com 301, Lighthouse 100, Consent Mode v2 e pronto para ser citado por IAs. Ver case study →',
       image: '/cases/tutory-site/card-pt.webp',
       accent: '#3B7BF5',
-      href: '/pt/work/tutory-site',
+      href: '/pt/work/tutory-site/',
     },
     {
       title: 'CuidaMe',
@@ -216,7 +216,7 @@ const pt: SiteData = {
       image: '/cases/cuidame/card-pt.webp',
       accent: '#2FA98C',
       highlight: 'Do redesign à produção em 7 dias',
-      href: '/pt/work/cuidame',
+      href: '/pt/work/cuidame/',
     },
     {
       title: 'CareCloud',
@@ -226,7 +226,7 @@ const pt: SiteData = {
         'Ajudar a replataformar uma suíte clínica americana de Adobe Flex para React: quatro meses in loco em Miami, time de cinco UX e fluxos hi-fi testados com médicos reais. Ver case study →',
       image: '/cases/carecloud/card-pt.webp',
       accent: '#1E8FD5',
-      href: '/pt/work/carecloud',
+      href: '/pt/work/carecloud/',
     },
     {
       title: 'Resilience Dynamic',
@@ -237,7 +237,7 @@ const pt: SiteData = {
       image: '/cases/resilience-engine/card-pt.webp',
       accent: '#7C7FF2',
       highlight: 'App lançado, protótipo navegável',
-      href: '/pt/work/resilience-engine',
+      href: '/pt/work/resilience-engine/',
     },
     {
       title: 'Finby',
@@ -248,7 +248,7 @@ const pt: SiteData = {
       image: '/cases/finby/card-pt.webp',
       accent: '#7552F5',
       highlight: 'Protótipo navegável, do convite ao saque',
-      href: '/pt/work/finby',
+      href: '/pt/work/finby/',
     },
     /* Case studies em espera — descomente para publicar
     {
@@ -260,7 +260,7 @@ const pt: SiteData = {
       image: '/cases/hypergestor/gestor-de-clientes.webp',
       accent: '#F48220',
       highlight: 'ERP + CRM agêntico · 18 módulos',
-      href: '/pt/work/hypergestor',
+      href: '/pt/work/hypergestor/',
     },
     {
       title: 'VESS Studio',
@@ -270,7 +270,7 @@ const pt: SiteData = {
         'Sistema completo para estúdio premium de Pilates: site, app iOS/Android, admin multi-unidade, pagamentos e agendamentos — solo, do conceito à App Store. Ver case study →',
       image: '/cases/vess/site-hero.jpg',
       accent: '#d8b98a',
-      href: '/pt/work/vess',
+      href: '/pt/work/vess/',
     },
     {
       title: 'Tutory',
@@ -280,7 +280,7 @@ const pt: SiteData = {
         'Rebranding, site, plataforma white-label, CMS próprio e dashboard executivo para o ecossistema de educação — 9 meses, solo. Ver case study →',
       image: '/cases/tutory/site-hero.jpg',
       accent: '#3B7BF5',
-      href: '/pt/work/tutory',
+      href: '/pt/work/tutory/',
     },
     */
     {

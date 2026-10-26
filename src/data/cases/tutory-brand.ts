@@ -405,7 +405,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       label: 'Continua',
       title: 'Tutory: site',
       sub: 'A marca nova em 14 páginas, do WordPress ao ar em 63 dias.',
-      href: '/pt/work/tutory-site',
+      href: '/pt/work/tutory-site/',
     },
     cta: {
       heading: 'Sua empresa cresceu mais que a sua marca?',
@@ -722,7 +722,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       label: 'Continues',
       title: 'Tutory: website',
       sub: 'The new brand across 14 pages, from WordPress to live in 63 days.',
-      href: '/work/tutory-site',
+      href: '/work/tutory-site/',
     },
     cta: {
       heading: 'Has your company outgrown your brand?',
