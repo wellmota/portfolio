@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Golfhaus · Plataforma para clubes de golfe</title>
+    <meta
+      name="description"
+      content="O app do sócio e a gestão do clube na mesma plataforma: reserva de horário de saída, rodada com o buraco em 3D, cobrança por Pix, cartão ou mensalidade e a vida de clube."
+    />
+    <!-- por enquanto a página mora no domínio do portfólio: fica fora dos buscadores até ganhar o domínio próprio -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0E0E0E" />
+    <link rel="icon" href="assets/brand/golfhaus-icone.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/brand/golfhaus-icone-1024.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Golfhaus · Do tee ao caixa, o clube num só lugar" />
+    <meta
+      property="og:description"
+      content="O app do sócio e a gestão do clube na mesma plataforma. Reserva, rodada, cobrança e vida de clube."
+    />
+    <meta property="og:image" content="https://userexperience.com.br/golfhaus/assets/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="assets/site.css" />
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+    <script type="module" src="assets/site.js"></script>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <!-- ícones: Iconsax Linear (iconsax-react, MIT); símbolo: a bola de faixas da marca -->
+      <symbol id="mark" viewBox="0 0 600 600"><clipPath id="cp-mark"><circle cx="300" cy="300" r="300"/></clipPath><g clip-path="url(#cp-mark)" fill="currentColor"><rect x="0" y="0" width="600" height="86.21"/><rect x="70" y="171.43" width="600" height="86.21"/><rect x="-70" y="342.86" width="600" height="86.21"/><rect x="0" y="514.29" width="600" height="86.21"/></g></symbol>
+      <symbol id="mark-lime" viewBox="0 0 600 600"><clipPath id="cp-mark-lime"><circle cx="300" cy="300" r="300"/></clipPath><g clip-path="url(#cp-mark-lime)" fill="currentColor"><rect x="0" y="0" width="600" height="86.21"/><rect x="70" y="171.43" width="600" height="86.21"/><rect x="-70" y="342.86" width="600" height="86.21"/><rect x="0" y="514.29" width="600" height="86.21" fill="#C9F26B"/></g></symbol>
+      <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol>
+      <symbol id="i-add" viewBox="0 0 24 24"><path d="M6 12h12M12 18V6"/></symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M9.57 5.93L3.5 12l6.07 6.07M20.5 12H3.67"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M14.43 5.93L20.5 12l-6.07 6.07M3.5 12h16.83"/></symbol>
+      <symbol id="i-calendar-tick" viewBox="0 0 24 24"><path d="M8 2v3M16 2v3M3.5 9.09h17M22 19c0 .75-.21 1.46-.58 2.06A3.97 3.97 0 0 1 18 23c-1.01 0-1.93-.37-2.63-1-.31-.26-.58-.58-.79-.94A3.92 3.92 0 0 1 14 19c0-2.21 1.79-4 4-4 1.2 0 2.27.53 3 1.36A4 4 0 0 1 22 19Z"/><path d="m16.44 19 .99.99 2.13-1.97"/><path d="M21 8.5v7.86c-.73-.83-1.8-1.36-3-1.36-2.21 0-4 1.79-4 4 0 .75.21 1.46.58 2.06.21.36.48.68.79.94H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z"/><path d="M11.995 13.7h.01M8.294 13.7h.01M8.294 16.7h.01" stroke-width="2"/></symbol>
+      <symbol id="i-car" viewBox="0 0 24 24"><path d="M15.51 2.83H8.49C6 2.83 5.45 4.07 5.13 5.59L4 11h16l-1.13-5.41c-.32-1.52-.87-2.76-3.36-2.76ZM21.99 19.82c.11 1.17-.83 2.18-2.03 2.18h-1.88c-1.08 0-1.23-.46-1.42-1.03l-.2-.6c-.28-.82-.46-1.37-1.9-1.37H9.44c-1.44 0-1.65.62-1.9 1.37l-.2.6C7.15 21.54 7 22 5.92 22H4.04c-1.2 0-2.14-1.01-2.03-2.18l.56-6.09C2.71 12.23 3 11 5.62 11h12.76c2.62 0 2.91 1.23 3.05 2.73l.56 6.09ZM4 8H3M21 8h-1M12 3v2M10.5 5h3M6 15h3M15 15h3"/></symbol>
+      <symbol id="i-card" viewBox="0 0 24 24"><path d="M2 8.505h20M6 16.505h2M10.5 16.505h4"/><path d="M6.44 3.505h11.11c3.56 0 4.45.88 4.45 4.39v8.21c0 3.51-.89 4.39-4.44 4.39H6.44c-3.55.01-4.44-.87-4.44-4.38v-8.22c0-3.51.89-4.39 4.44-4.39Z"/></symbol>
+      <symbol id="i-cup" viewBox="0 0 24 24"><path d="M12.15 16.5v2.1"/><path d="M7.15 22h10v-1c0-1.1-.9-2-2-2h-6c-1.1 0-2 .9-2 2v1Z"/><path d="M6.15 22h12M12 16c-3.87 0-7-3.13-7-7V6c0-2.21 1.79-4 4-4h6c2.21 0 4 1.79 4 4v3c0 3.87-3.13 7-7 7Z"/><path d="M5.47 11.65c-.75-.24-1.41-.68-1.93-1.2-.9-1-1.5-2.2-1.5-3.6s1.1-2.5 2.5-2.5h.65c-.2.46-.3.97-.3 1.5v3c0 1 .21 1.94.58 2.8ZM18.53 11.65c.75-.24 1.41-.68 1.93-1.2.9-1 1.5-2.2 1.5-3.6s-1.1-2.5-2.5-2.5h-.65c.2.46.3.97.3 1.5v3c0 1-.21 1.94-.58 2.8Z"/></symbol>
+      <symbol id="i-document-text" viewBox="0 0 24 24"><path d="M21 7v10c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V7c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z"/><path d="M14.5 4.5v2c0 1.1.9 2 2 2h2M8 13h4M8 17h8"/></symbol>
+      <symbol id="i-element-4" viewBox="0 0 24 24"><path d="M22 10.9V4.1c0-1.5-.64-2.1-2.23-2.1h-4.04c-1.59 0-2.23.6-2.23 2.1v6.8c0 1.5.64 2.1 2.23 2.1h4.04c1.59 0 2.23-.6 2.23-2.1ZM22 19.9v-1.8c0-1.5-.64-2.1-2.23-2.1h-4.04c-1.59 0-2.23.6-2.23 2.1v1.8c0 1.5.64 2.1 2.23 2.1h4.04c1.59 0 2.23-.6 2.23-2.1ZM10.5 13.1v6.8c0 1.5-.64 2.1-2.23 2.1H4.23C2.64 22 2 21.4 2 19.9v-6.8c0-1.5.64-2.1 2.23-2.1h4.04c1.59 0 2.23.6 2.23 2.1ZM10.5 4.1v1.8c0 1.5-.64 2.1-2.23 2.1H4.23C2.64 8 2 7.4 2 5.9V4.1C2 2.6 2.64 2 4.23 2h4.04c1.59 0 2.23.6 2.23 2.1Z"/></symbol>
+      <symbol id="i-export" viewBox="0 0 24 24"><path d="M9.32 6.5l2.56-2.56 2.56 2.56M11.88 14.18V4.01M4 12c0 4.42 3 8 8 8s8-3.58 8-8"/></symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.15 2v20M5.15 4h11.2c2.7 0 3.3 1.5 1.4 3.4l-1.2 1.2c-.8.8-.8 2.1 0 2.8l1.2 1.2c1.9 1.9 1.2 3.4-1.4 3.4H5.15"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><path d="M6 10V8c0-3.31 1-6 6-6s6 2.69 6 6v2M17 22H7c-4 0-5-1-5-5v-2c0-4 1-5 5-5h10c4 0 5 1 5 5v2c0 4-1 5-5 5Z"/><path d="M15.996 16h.01M11.995 16h.01M7.995 16h.008" stroke-width="2"/></symbol>
+      <symbol id="i-map" viewBox="0 0 24 24"><path d="M22 9v6c0 2.5-.5 4.25-1.62 5.38L14 14l7.73-7.73c.18.79.27 1.69.27 2.73Z"/><path d="M21.73 6.27 6.27 21.73C3.26 21.04 2 18.96 2 15V9c0-5 2-7 7-7h6c3.96 0 6.04 1.26 6.73 4.27Z"/><path d="M20.38 20.38C19.25 21.5 17.5 22 15 22H9c-1.04 0-1.94-.09-2.73-.27L14 14l6.38 6.38Z"/><path d="M6.24 7.98c.68-2.93 5.08-2.93 5.76 0 .39 1.72-.69 3.18-1.64 4.08a1.8 1.8 0 0 1-2.48 0c-.95-.9-2.04-2.36-1.64-4.08Z"/><path d="M9.095 8.7h.009" stroke-width="2"/></symbol>
+      <symbol id="i-messages-2" viewBox="0 0 24 24"><path d="m18.47 16.83.39 3.16c.1.83-.79 1.41-1.5.98l-4.19-2.49c-.46 0-.91-.03-1.35-.09A4.86 4.86 0 0 0 13 15.23c0-2.84-2.46-5.14-5.5-5.14-1.16 0-2.23.33-3.12.91-.03-.25-.04-.5-.04-.76C4.34 5.69 8.29 2 13.17 2S22 5.69 22 10.24c0 2.7-1.39 5.09-3.53 6.59Z"/><path d="M13 15.23c0 1.19-.44 2.29-1.18 3.16-.99 1.2-2.56 1.97-4.32 1.97l-2.61 1.55c-.44.27-1-.1-.94-.61l.25-1.97C2.86 18.4 2 16.91 2 15.23c0-1.76.94-3.31 2.38-4.23.89-.58 1.96-.91 3.12-.91 3.04 0 5.5 2.3 5.5 5.14Z"/></symbol>
+      <symbol id="i-mobile" viewBox="0 0 24 24"><path d="M17 6v10c0 4-1 5-5 5H6c-4 0-5-1-5-5V6c0-4 1-5 5-5h6c4 0 5 1 5 5ZM11 4.5H7"/><path d="M9 18.1A1.55 1.55 0 1 0 9 15a1.55 1.55 0 0 0 0 3.1Z"/></symbol>
+      <symbol id="i-moneys" viewBox="0 0 24 24"><path d="M19.3 7.92v5.15c0 3.08-1.76 4.4-4.4 4.4H6.11c-.45 0-.88-.04-1.28-.13-.25-.04-.49-.11-.71-.19-1.5-.56-2.41-1.86-2.41-4.08V7.92c0-3.08 1.76-4.4 4.4-4.4h8.79c2.24 0 3.85.95 4.28 3.12.07.4.12.81.12 1.28Z"/><path d="M22.301 10.92v5.15c0 3.08-1.76 4.4-4.4 4.4h-8.79c-.74 0-1.41-.1-1.99-.32-1.19-.44-2-1.35-2.29-2.81.4.09.83.13 1.28.13h8.79c2.64 0 4.4-1.32 4.4-4.4V7.92c0-.47-.04-.89-.12-1.28 1.9.4 3.12 1.74 3.12 4.28Z"/><path d="M10.498 13.14a2.64 2.64 0 1 0 0-5.28 2.64 2.64 0 0 0 0 5.28ZM4.78 8.3v4.4M16.222 8.3v4.4"/></symbol>
+      <symbol id="i-monitor" viewBox="0 0 24 24"><path d="M6.44 2h11.11C21.11 2 22 2.89 22 6.44v6.33c0 3.56-.89 4.44-4.44 4.44H6.44C2.89 17.22 2 16.33 2 12.78V6.44C2 2.89 2.89 2 6.44 2ZM12 17.22V22M2 13h20M7.5 22h9"/></symbol>
+      <symbol id="i-note-1" viewBox="0 0 24 24"><path d="M8 2v3M16 2v3M7 13h8M7 17h5M16 3.5c3.33.18 5 1.45 5 6.15v6.18c0 4.12-1 6.18-6 6.18H9c-5 0-6-2.06-6-6.18V9.65c0-4.7 1.67-5.96 5-6.15h8Z"/></symbol>
+      <symbol id="i-notification-bing" viewBox="0 0 24 24"><path d="M12 6.44v3.33M12.02 2C8.34 2 5.36 4.98 5.36 8.66v2.1c0 .68-.28 1.7-.63 2.28l-1.27 2.12c-.78 1.31-.24 2.77 1.2 3.25a23.34 23.34 0 0 0 14.73 0 2.22 2.22 0 0 0 1.2-3.25l-1.27-2.12c-.35-.58-.63-1.61-.63-2.28v-2.1C18.68 5 15.68 2 12.02 2Z"/><path d="M15.33 18.82c0 1.83-1.5 3.33-3.33 3.33-.91 0-1.75-.38-2.35-.98-.6-.6-.98-1.44-.98-2.35"/></symbol>
+      <symbol id="i-ranking" viewBox="0 0 24 24"><path d="m13.3 8.11 1.32 2.64c.18.36.66.72 1.06.78l2.39.4c1.53.26 1.89 1.36.79 2.46L17 16.25c-.31.31-.49.92-.39 1.36l.53 2.31c.42 1.82-.55 2.53-2.16 1.58l-2.24-1.33c-.41-.24-1.07-.24-1.48 0L9.02 21.5c-1.61.95-2.58.24-2.16-1.58l.53-2.31c.1-.43-.08-1.04-.39-1.36l-1.86-1.86c-1.1-1.1-.74-2.21.79-2.46l2.39-.4c.4-.07.88-.42 1.06-.78l1.32-2.64c.71-1.43 1.89-1.43 2.6 0ZM6 9V2M18 9V2M12 4V2"/></symbol>
+      <symbol id="i-receipt-text" viewBox="0 0 24 24"><path d="M22 6v2.42C22 10 21 11 19.42 11H16V4.01C16 2.9 16.91 2 18.02 2c1.09.01 2.09.45 2.81 1.17C21.55 3.9 22 4.9 22 6Z"/><path d="M2 7v14c0 .83.94 1.3 1.6.8l1.71-1.28c.4-.3.96-.26 1.32.1l1.66 1.67c.39.39 1.03.39 1.42 0l1.68-1.68c.35-.35.91-.39 1.3-.09l1.71 1.28c.66.49 1.6.02 1.6-.8V4c0-1.1.9-2 2-2H6C3 2 2 3.79 2 6v1Z"/><path d="M6 9h6M6.75 13h4.5"/></symbol>
+      <symbol id="i-scan" viewBox="0 0 24 24"><path d="M2 9V6.5C2 4.01 4.01 2 6.5 2H9M15 2h2.5C19.99 2 22 4.01 22 6.5V9M22 16v1.5c0 2.49-2.01 4.5-4.5 4.5H16M9 22H6.5C4.01 22 2 19.99 2 17.5V15M17 9.5v5c0 2-1 3-3 3h-4c-2 0-3-1-3-3v-5c0-2 1-3 3-3h4c2 0 3 1 3 3ZM19 12H5"/></symbol>
+      <symbol id="i-scan-barcode" viewBox="0 0 24 24"><path d="M2 9V6.5C2 4.01 4.01 2 6.5 2H9M15 2h2.5C19.99 2 22 4.01 22 6.5V9M22 16v1.5c0 2.49-2.01 4.5-4.5 4.5H16M9 22H6.5C4.01 22 2 19.99 2 17.5V15M10.5 7v2c0 1-.5 1.5-1.5 1.5H7c-1 0-1.5-.5-1.5-1.5V7C5.5 6 6 5.5 7 5.5h2c1 0 1.5.5 1.5 1.5ZM18.5 7v2c0 1-.5 1.5-1.5 1.5h-2c-1 0-1.5-.5-1.5-1.5V7c0-1 .5-1.5 1.5-1.5h2c1 0 1.5.5 1.5 1.5ZM10.5 15v2c0 1-.5 1.5-1.5 1.5H7c-1 0-1.5-.5-1.5-1.5v-2c0-1 .5-1.5 1.5-1.5h2c1 0 1.5.5 1.5 1.5ZM18.5 15v2c0 1-.5 1.5-1.5 1.5h-2c-1 0-1.5-.5-1.5-1.5v-2c0-1 .5-1.5 1.5-1.5h2c1 0 1.5.5 1.5 1.5Z"/></symbol>
+      <symbol id="i-shield-tick" viewBox="0 0 24 24"><path d="M10.49 2.23 5.5 4.11c-1.15.43-2.09 1.79-2.09 3.01v7.43c0 1.18.78 2.73 1.73 3.44l4.3 3.21c1.41 1.06 3.73 1.06 5.14 0l4.3-3.21c.95-.71 1.73-2.26 1.73-3.44V7.12c0-1.23-.94-2.59-2.09-3.02l-4.99-1.87c-.85-.31-2.21-.31-3.04 0Z"/><path d="m9.05 11.87 1.61 1.61 4.3-4.3"/></symbol>
+      <symbol id="i-sms" viewBox="0 0 24 24"><path d="M17 20.5H7c-3 0-5-1.5-5-5v-7c0-3.5 2-5 5-5h10c3 0 5 1.5 5 5v7c0 3.5-2 5-5 5Z"/><path d="m17 9-3.13 2.5c-1.03.82-2.72.82-3.75 0L7 9"/></symbol>
+      <symbol id="i-speedometer" viewBox="0 0 24 24"><path d="M19.14 19.5a9.964 9.964 0 0 0 2.86-7c0-5.52-4.48-10-10-10S2 6.98 2 12.5c0 2.72 1.08 5.18 2.84 6.99"/><path d="M12 21.5a3.38 3.38 0 1 0 0-6.76 3.38 3.38 0 0 0 0 6.76ZM15.25 12H16c.82 0 1.5-.67 1.5-1.5 0-.82-.68-1.5-1.5-1.5s-1.5.67-1.5 1.5v.75c0 .41.34.75.75.75Z"/></symbol>
+      <symbol id="i-task-square" viewBox="0 0 24 24"><path d="M12.37 8.88h5.25M6.38 8.88l.75.75 2.25-2.25M12.37 15.88h5.25M6.38 15.88l.75.75 2.25-2.25"/><path d="M9 22h6c5 0 7-2 7-7V9c0-5-2-7-7-7H9C4 2 2 4 2 9v6c0 5 2 7 7 7Z"/></symbol>
+      <symbol id="i-teacher" viewBox="0 0 24 24"><path d="M10.05 2.53 4.03 6.46c-1.93 1.26-1.93 4.08 0 5.34l6.02 3.93c1.08.71 2.86.71 3.94 0l5.99-3.93c1.92-1.26 1.92-4.07 0-5.33l-5.99-3.93c-1.08-.72-2.86-.72-3.94-.01Z"/><path d="m5.63 13.08-.01 4.69c0 1.27.98 2.63 2.18 3.03l3.19 1.06c.55.18 1.46.18 2.02 0l3.19-1.06c1.2-.4 2.18-1.76 2.18-3.03v-4.64M21.4 15V9"/></symbol>
+      <symbol id="i-tick-circle" viewBox="0 0 24 24"><path d="M12 22c5.5 0 10-4.5 10-10S17.5 2 12 2 2 6.5 2 12s4.5 10 10 10Z"/><path d="m7.75 12 2.83 2.83 5.67-5.66"/></symbol>
+      <symbol id="i-user-add" viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10ZM3.41 22c0-3.87 3.85-7 8.59-7 .96 0 1.89.13 2.76.37"/><path d="M22 18c0 .32-.04.63-.12.93-.09.4-.25.79-.46 1.13A3.97 3.97 0 0 1 18 22a3.92 3.92 0 0 1-2.66-1.03c-.3-.26-.56-.57-.76-.91A3.92 3.92 0 0 1 14 18a3.995 3.995 0 0 1 4-4c1.18 0 2.25.51 2.97 1.33.64.71 1.03 1.65 1.03 2.67ZM19.49 17.98h-2.98M18 16.52v2.99"/></symbol>
+      <symbol id="i-verify" viewBox="0 0 24 24"><path d="m8.38 12 2.41 2.42 4.83-4.84"/><path d="M10.75 2.45c.69-.59 1.82-.59 2.52 0l1.58 1.36c.3.26.86.47 1.26.47h1.7c1.06 0 1.93.87 1.93 1.93v1.7c0 .39.21.96.47 1.26l1.36 1.58c.59.69.59 1.82 0 2.52l-1.36 1.58c-.26.3-.47.86-.47 1.26v1.7c0 1.06-.87 1.93-1.93 1.93h-1.7c-.39 0-.96.21-1.26.47l-1.58 1.36c-.69.59-1.82.59-2.52 0l-1.58-1.36c-.3-.26-.86-.47-1.26-.47H6.18c-1.06 0-1.93-.87-1.93-1.93V16.1c0-.39-.21-.95-.46-1.25l-1.35-1.59c-.58-.69-.58-1.81 0-2.5l1.35-1.59c.25-.3.46-.86.46-1.25V6.2c0-1.06.87-1.93 1.93-1.93h1.73c.39 0 .96-.21 1.26-.47l1.58-1.35Z"/></symbol>
+      <symbol id="i-wallet-2" viewBox="0 0 24 24"><path d="M13 9H7M22 10.97v2.06c0 .55-.44 1-1 1.02h-1.96c-1.08 0-2.07-.79-2.16-1.87-.06-.63.18-1.22.6-1.63.37-.38.88-.6 1.44-.6H21c.56.02 1 .47 1 1.02Z"/><path d="M17.48 10.55c-.42.41-.66 1-.6 1.63.09 1.08 1.08 1.87 2.16 1.87H21v1.45c0 3-2 5-5 5H7c-3 0-5-2-5-5v-7c0-2.72 1.64-4.62 4.19-4.94.26-.04.53-.06.81-.06h9c.26 0 .51.01.75.05C19.33 3.85 21 5.76 21 8.5v1.45h-2.08c-.56 0-1.07.22-1.44.6Z"/></symbol>
+    </svg>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+    <header class="top" data-top>
+      <div class="wrap top__in">
+        <a class="top__logo" href="#topo" aria-label="Golfhaus, voltar ao início">
+          <img src="assets/brand/golfhaus-logo-negativo.svg" alt="golfhaus" width="128" height="24" />
+        </a>
+        <nav class="top__nav" aria-label="Seções">
+          <a href="#plataforma">Plataforma</a>
+          <a href="#app">App do sócio</a>
+          <a href="#buraco-3d">3D</a>
+          <a href="#painel">Painel do clube</a>
+          <a href="#seguranca">Segurança</a>
+          <a href="#implantacao">Implantação</a>
+        </nav>
+        <a class="btn btn--lime btn--sm top__cta" href="#contato">Agendar demonstração</a>
+      </div>
+    </header>
+
+    <main id="conteudo">
+      <!-- ============ hero ============ -->
+      <section class="hero dark" id="topo" aria-labelledby="hero-t">
+        <div class="wrap">
+          <div class="hero__grid">
+            <div class="hero__text">
+              <p class="hero__eyebrow">
+                <svg class="mark" viewBox="0 0 600 600" aria-hidden="true"><use href="#mark-lime" /></svg>
+                Plataforma para clubes de golfe
+              </p>
+              <h1 class="display" id="hero-t">
+                <span>Do tee</span>
+                <span>ao caixa<span class="hero__soft">.</span></span>
+              </h1>
+              <p class="hero__lede">
+                <strong>O app do sócio e a gestão do clube na mesma plataforma.</strong> Reserva de horário, rodada,
+                cobrança e vida de clube, com as regras e o nome do seu clube.
+              </p>
+              <div class="hero__ctas">
+                <a class="btn btn--lime" href="#contato"
+                  >Agendar demonstração <svg class="i i--go" aria-hidden="true"><use href="#i-arrow-right" /></svg
+                ></a>
+                <a class="btn btn--ghost" href="#plataforma">Ver como funciona</a>
+              </div>
+            </div>
+
+            <div class="hero__art" aria-hidden="true">
+              <svg class="hero__ball" viewBox="0 0 600 600">
+                <defs>
+                  <clipPath id="hero-clip"><circle cx="300" cy="300" r="300" /></clipPath>
+                </defs>
+                <g clip-path="url(#hero-clip)" fill="currentColor">
+                  <rect class="ball-band" x="0" y="0" width="600" height="86.21" />
+                  <rect class="ball-band" x="70" y="171.43" width="600" height="86.21" />
+                  <rect class="ball-band" x="-70" y="342.86" width="600" height="86.21" />
+                  <rect class="ball-band" x="0" y="514.29" width="600" height="86.21" fill="#C9F26B" />
+                </g>
+              </svg>
+              <div class="hero__phones">
+                <figure class="phone">
+                  <img
+                    src="assets/img/app/home.webp"
+                    alt=""
+                    width="800"
+                    height="1739"
+                    fetchpriority="high"
+                  />
+                </figure>
+                <figure class="phone">
+                  <img src="assets/img/app/hole2.webp" alt="" width="800" height="1739" />
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="facts">
+          <ul class="wrap">
+            <li><b>App nativo</b><span>para iPhone e Android</span></li>
+            <li><b>Pix, cartão ou mensalidade</b><span>o sócio escolhe como paga</span></li>
+            <li><b>18 buracos em 3D</b><span>gerados a partir do traçado do campo</span></li>
+            <li><b>Um painel por clube</b><span>com os dados isolados e auditados</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 01 · o dia do clube ============ -->
+      <section class="sec" aria-labelledby="dia-t">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>01</b> O dia do clube</p>
+              <h2 class="h2 rv" id="dia-t">Hoje, o clube roda em grupo de mensagem, planilha e maquininha.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              Cada parte do dia mora num lugar diferente, e alguém da secretaria costura tudo à mão no fim do expediente.
+            </p>
+          </div>
+          <ul class="pains">
+            <li class="pain rv">
+              <div class="pain__n">
+                <span>01</span><svg class="i" aria-hidden="true"><use href="#i-messages-2" /></svg>
+              </div>
+              <h3>Reserva por telefone</h3>
+              <p>
+                O horário de saída é pedido por ligação e pelo grupo do clube, e a agenda do campo é remontada à mão
+                todo dia.
+              </p>
+            </li>
+            <li class="pain rv" data-d="1">
+              <div class="pain__n">
+                <span>02</span><svg class="i" aria-hidden="true"><use href="#i-receipt-text" /></svg>
+              </div>
+              <h3>Cobrança espalhada</h3>
+              <p>
+                Green fee, carrinho, loja e mensalidade passam por máquinas e planilhas diferentes. Fechar o mês leva
+                dias.
+              </p>
+            </li>
+            <li class="pain rv" data-d="2">
+              <div class="pain__n">
+                <span>03</span><svg class="i" aria-hidden="true"><use href="#i-note-1" /></svg>
+              </div>
+              <h3>O jogo fica no papel</h3>
+              <p>
+                O sócio não acompanha as próprias rodadas, e ranking e torneios dependem de alguém passar o cartão a
+                limpo.
+              </p>
+            </li>
+          </ul>
+          <div class="pains__out rv">
+            <p>O Golfhaus junta essas pontas num sistema só: um app para o sócio e um painel para a equipe.</p>
+            <a class="btn btn--ink" href="#plataforma"
+              >Ver a plataforma <svg class="i i--go" aria-hidden="true"><use href="#i-arrow-right" /></svg
+            ></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 02 · plataforma ============ -->
+      <section class="sec" id="plataforma" aria-labelledby="plat-t" style="padding-top: 0">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>02</b> Plataforma</p>
+              <h2 class="h2 rv" id="plat-t">Duas frentes, o mesmo dado.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              O que o sócio faz no celular aparece na tela da secretaria na mesma hora. Preços, professores e campos
+              são os mesmos nas duas pontas.
+            </p>
+          </div>
+
+          <div class="duo">
+            <article class="duo__card duo__card--app rv">
+              <p class="duo__tag"><svg class="i" aria-hidden="true"><use href="#i-mobile" /></svg> App do sócio</p>
+              <h3 class="h3">Reservar, pagar, jogar e acompanhar o próprio jogo.</h3>
+              <p>Nativo, para iPhone e Android. O sócio entra pelo convite do clube e já encontra a carteirinha.</p>
+              <div class="duo__media">
+                <figure class="phone">
+                  <img
+                    src="assets/img/app/descobrir.webp"
+                    alt="Tela Descobrir do app: o dia no clube, com clima, campos abertos e os serviços do clube"
+                    width="800"
+                    height="1739"
+                    loading="lazy"
+                  />
+                </figure>
+              </div>
+            </article>
+            <article class="duo__card duo__card--erp rv" data-d="1">
+              <p class="duo__tag"><svg class="i" aria-hidden="true"><use href="#i-monitor" /></svg> Painel do clube</p>
+              <h3 class="h3">O dia do clube numa tela, com cada número no contexto.</h3>
+              <p>
+                No navegador. A equipe acompanha a agenda do campo, os sócios e o caixa, e cada pessoa vê o que a função
+                pede.
+              </p>
+              <div class="duo__media">
+                <div class="browser">
+                  <div class="browser__bar" aria-hidden="true"><i></i><i></i><i></i><span>Painel do clube</span></div>
+                  <img
+                    src="assets/img/erp/index.webp"
+                    alt="Dashboard do painel: sócios ativos, reservas do dia, ocupação por turno, balanço e aniversariantes"
+                    width="2000"
+                    height="1250"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="sync">
+            <p class="sync__title rv">Um exemplo de um dia comum</p>
+            <ol>
+              <li class="sync__row rv">
+                <div class="sync__side">
+                  <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-calendar-tick" /></svg></span>
+                  <span><small>No app</small>O sócio reserva a saída de sábado, 07:40</span>
+                </div>
+                <span class="sync__arrow" aria-hidden="true"></span>
+                <div class="sync__side sync__side--erp">
+                  <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-element-4" /></svg></span>
+                  <span><small>No painel</small>A reserva entra na agenda do campo, com os quatro jogadores</span>
+                </div>
+              </li>
+              <li class="sync__row rv">
+                <div class="sync__side">
+                  <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-card" /></svg></span>
+                  <span><small>No app</small>Paga o green fee do convidado com Pix</span>
+                </div>
+                <span class="sync__arrow" aria-hidden="true"></span>
+                <div class="sync__side sync__side--erp">
+                  <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-wallet-2" /></svg></span>
+                  <span><small>No painel</small>O pagamento aparece no financeiro, na origem certa</span>
+                </div>
+              </li>
+              <li class="sync__row rv">
+                <div class="sync__side">
+                  <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-scan-barcode" /></svg></span>
+                  <span><small>No app</small>Faz o check-in pelo voucher, ao chegar</span>
+                </div>
+                <span class="sync__arrow" aria-hidden="true"></span>
+                <div class="sync__side sync__side--erp">
+                  <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-flag" /></svg></span>
+                  <span><small>No painel</small>O starter vê quem chegou e libera a saída</span>
+                </div>
+              </li>
+              <li class="sync__row rv">
+                <div class="sync__side">
+                  <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-task-square" /></svg></span>
+                  <span><small>No app</small>Anota a rodada, buraco a buraco</span>
+                </div>
+                <span class="sync__arrow" aria-hidden="true"></span>
+                <div class="sync__side sync__side--erp">
+                  <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-ranking" /></svg></span>
+                  <span><small>No painel</small>O ranking do mês e o histórico do sócio se atualizam</span>
+                </div>
+              </li>
+            </ol>
+            <p class="quote rv">
+              O Pedro que reserva no celular é o <em>sócio nº 0427</em> na agenda do campo. Sem digitar duas vezes, sem
+              conferir planilha.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 03 · app do sócio ============ -->
+      <section class="sec" id="app" aria-labelledby="app-t" style="padding-top: 0">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>03</b> App do sócio</p>
+              <h2 class="h2 rv" id="app-t">O app que o sócio abre entre uma rodada e outra.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              Um app de clube que só faz reserva é aberto uma vez por semana. O Golfhaus dá motivos para voltar: o jogo,
+              o ranking, os torneios e o clube.
+            </p>
+          </div>
+
+          <article class="chapter">
+            <div class="chapter__text rv">
+              <p class="kicker"><b>Reserva</b></p>
+              <h3 class="h3">Do horário de saída ao check-in, no celular.</h3>
+              <ul class="ticks">
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>A grade mostra a ocupação de cada
+                  horário antes da escolha.
+                </li>
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>Sócio não paga green fee,
+                  convidado paga. O carrinho entra na mesma conta.
+                </li>
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>A reserva vira um voucher com
+                  QR, e o check-in sai do próprio app.
+                </li>
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>Cancelamento grátis até 24 h
+                  antes, ou na regra que o clube definir.
+                </li>
+              </ul>
+            </div>
+            <div class="chapter__media stage rv" data-d="1">
+              <figure class="phone">
+                <img
+                  src="assets/img/app/reservar.webp"
+                  alt="Reservar horário: escolha do campo, do dia e do horário, com a ocupação prevista de cada faixa"
+                  width="800"
+                  height="1739"
+                  loading="lazy"
+                />
+              </figure>
+              <figure class="phone">
+                <img
+                  src="assets/img/app/reservas.webp"
+                  alt="Minhas reservas: o bilhete da próxima saída, com o QR de check-in e os jogadores"
+                  width="800"
+                  height="1739"
+                  loading="lazy"
+                />
+              </figure>
+            </div>
+          </article>
+
+          <article class="chapter chapter--flip">
+            <div class="chapter__text rv">
+              <p class="kicker"><b>Rodada</b></p>
+              <h3 class="h3">Um buraco anotado em poucos toques.</h3>
+              <ul class="ticks">
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>Para começar: campo, tee e 9 ou
+                  18 buracos.
+                </li>
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>Tacadas, putts e fairway em
+                  cada buraco. O cartão soma sozinho, na notação que o golfista conhece.
+                </li>
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>No fim, o resumo: score contra o
+                  par, net pelo Índice e pontos Stableford.
+                </li>
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>A rodada fica salva no aparelho.
+                  Se parar no meio, continua de onde estava.
+                </li>
+              </ul>
+            </div>
+            <div class="chapter__media stage stage--ink rv" data-d="1">
+              <figure class="phone">
+                <img
+                  src="assets/img/app/cartao.webp"
+                  alt="Cartão da rodada: os 18 buracos com par, distância, índice e as tacadas de cada jogador do grupo"
+                  width="800"
+                  height="1739"
+                  loading="lazy"
+                />
+              </figure>
+              <figure class="phone">
+                <img
+                  src="assets/img/app/resumo.webp"
+                  alt="Resumo da rodada: 84 tacadas, +12 contra o par, net 70 e 38 pontos, com putts, fairways e greens"
+                  width="800"
+                  height="1739"
+                  loading="lazy"
+                />
+              </figure>
+            </div>
+          </article>
+
+          <article class="chapter">
+            <div class="chapter__text rv">
+              <p class="kicker"><b>Pagamento</b></p>
+              <h3 class="h3">Pix, cartão ou na mensalidade.</h3>
+              <ul class="ticks">
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>O sócio escolhe como paga cada
+                  coisa: green fee, aluguel, loja ou aula.
+                </li>
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>Mensalidade, recibos e cartões
+                  salvos ficam juntos em Minha assinatura.
+                </li>
+                <li>
+                  <svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>O número do cartão é digitado na
+                  página segura do gateway, nunca no app.
+                </li>
+              </ul>
+            </div>
+            <div class="chapter__media stage stage--lime rv" data-d="1">
+              <figure class="phone">
+                <img
+                  src="assets/img/app/pix.webp"
+                  alt="Pagamento por Pix: o QR code, o código copia e cola e o prazo de validade"
+                  width="800"
+                  height="1739"
+                  loading="lazy"
+                />
+              </figure>
+              <figure class="phone">
+                <img
+                  src="assets/img/app/assinatura.webp"
+                  alt="Minha assinatura: o cartão salvo, a mensalidade em dia, a próxima cobrança e os recibos"
+                  width="800"
+                  height="1739"
+                  loading="lazy"
+                />
+              </figure>
+            </div>
+          </article>
+
+          <div class="life">
+            <div class="life__head">
+              <div>
+                <p class="kicker rv"><b>Vida de clube</b></p>
+                <h3 class="h3 rv">Motivos para abrir o app fora do campo.</h3>
+              </div>
+              <div class="life__nav">
+                <button class="round-btn" type="button" data-rail="-1" aria-label="Telas anteriores">
+                  <svg class="i" aria-hidden="true"><use href="#i-arrow-left" /></svg>
+                </button>
+                <button class="round-btn" type="button" data-rail="1" aria-label="Próximas telas">
+                  <svg class="i" aria-hidden="true"><use href="#i-arrow-right" /></svg>
+                </button>
+              </div>
+            </div>
+            <ul class="life__rail" data-rail-list tabindex="0" aria-label="Telas da vida de clube">
+              <li class="life__item">
+                <figure class="phone">
+                  <img src="assets/img/app/ranking.webp" alt="Ranking do mês com o pódio" width="800" height="1739" loading="lazy" />
+                </figure>
+                <h4>Ranking do mês</h4>
+                <p>Pontos Stableford líquidos, com o pódio e a posição de cada sócio.</p>
+              </li>
+              <li class="life__item">
+                <figure class="phone">
+                  <img src="assets/img/app/torneios.webp" alt="Torneios e eventos com as vagas" width="800" height="1739" loading="lazy" />
+                </figure>
+                <h4>Torneios e eventos</h4>
+                <p>Inscrição pelo app, vagas ao vivo e o limite de Índice de cada torneio.</p>
+              </li>
+              <li class="life__item">
+                <figure class="phone">
+                  <img src="assets/img/app/aulas.webp" alt="Aulas com os professores do clube" width="800" height="1739" loading="lazy" />
+                </figure>
+                <h4>Aulas</h4>
+                <p>Os professores do clube, com os horários livres e a reserva na hora.</p>
+              </li>
+              <li class="life__item">
+                <figure class="phone">
+                  <img src="assets/img/app/loja.webp" alt="Loja e aluguel de tacos, carrinho e bolas" width="800" height="1739" loading="lazy" />
+                </figure>
+                <h4>Loja e aluguel</h4>
+                <p>Carrinho, tacos e balde de bolas, entregues no tee da saída.</p>
+              </li>
+              <li class="life__item">
+                <figure class="phone">
+                  <img src="assets/img/app/avisos.webp" alt="Avisos do clube" width="800" height="1739" loading="lazy" />
+                </figure>
+                <h4>Avisos</h4>
+                <p>Reserva confirmada, inscrição aberta, previsão para o fim de semana.</p>
+              </li>
+              <li class="life__item">
+                <figure class="phone">
+                  <img src="assets/img/app/carteirinha.webp" alt="Cartão de sócio digital" width="800" height="1739" loading="lazy" />
+                </figure>
+                <h4>Carteirinha</h4>
+                <p>O cartão de sócio no celular, com o QR da portaria.</p>
+              </li>
+              <li class="life__item">
+                <figure class="phone">
+                  <img src="assets/img/app/perfil.webp" alt="Perfil do sócio com o Índice e as estatísticas" width="800" height="1739" loading="lazy" />
+                </figure>
+                <h4>Perfil e Índice</h4>
+                <p>O Índice, a tendência dos últimos meses e as estatísticas do sócio.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 04 · 3D ============ -->
+      <section class="sec dark" id="buraco-3d" aria-labelledby="h3d-t">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>04</b> No tee</p>
+              <h2 class="h2 rv" id="h3d-t">O buraco em 3D. Gire com o dedo.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              É a tela que fica aberta a rodada inteira. Distância até a bandeira, vento e onde a bola caiu, sobre o
+              desenho do próprio buraco.
+            </p>
+          </div>
+
+          <div class="h3d rv" data-h3d>
+            <div class="h3d__mount" data-h3d-mount></div>
+            <div class="h3d__read" aria-live="polite">
+              <span class="h3d__pill h3d__pill--ink"
+                ><svg class="i" aria-hidden="true"><use href="#i-flag" /></svg><span data-h3d-label>Buraco 2</span></span
+              >
+              <span class="h3d__pill" data-h3d-meta>Par 4 · 345 m · Índice 11</span>
+            </div>
+            <p class="h3d__hint">Arraste para girar · pinça ou roda para aproximar · toque duplo para voltar</p>
+            <div class="h3d__holes" role="group" aria-label="Escolher o buraco" data-h3d-holes></div>
+          </div>
+
+          <ul class="h3d-notes">
+            <li class="rv">
+              <b>Gerado do traçado</b><span
+                >Cada buraco nasce de poucos dados: par, distância, dogleg, água, bunkers e árvores.</span
+              >
+            </li>
+            <li class="rv" data-d="1">
+              <b>O seu campo</b><span>O traçado é desenhado no painel do clube, sobre a foto aérea do próprio campo.</span>
+            </li>
+            <li class="rv" data-d="2">
+              <b>Leve no aparelho</b><span
+                >Sem suporte a 3D, o mapa plano volta. Com o movimento reduzido ligado, a câmera não voa.</span
+              >
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 05 · painel ============ -->
+      <section class="sec" id="painel" aria-labelledby="painel-t">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>05</b> Painel do clube</p>
+              <h2 class="h2 rv" id="painel-t">Número sozinho não diz se o dia vai bem.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              Cada indicador vem com a referência ao lado: reservas contra a previsão, ocupação por turno, receita contra
+              a meta.
+            </p>
+          </div>
+
+          <div class="tabs rv" role="tablist" aria-label="Telas do painel" data-tabs>
+            <button role="tab" id="tab-dash" aria-controls="erp-panel" aria-selected="true" data-src="assets/img/erp/index.webp" data-title="Dashboard" data-text="O dia do clube numa tela: sócios ativos, reservas, aluguéis e inadimplência, a ocupação de cada turno e o balanço do mês contra a meta. Os aniversariantes vêm com o parabéns a um toque." data-alt="Dashboard do painel do clube">
+              Dashboard
+            </button>
+            <button role="tab" id="tab-agenda" aria-controls="erp-panel" aria-selected="false" tabindex="-1" data-src="assets/img/erp/agenda.webp" data-title="Agenda do campo" data-text="As reservas do app caem aqui: quatro vagas por horário, carrinhos, status de chegada e check-in manual. O starter move ou cancela uma saída sem sair da tela." data-alt="Agenda do campo com os horários de saída do dia">
+              Agenda do campo
+            </button>
+            <button role="tab" id="tab-socios" aria-controls="erp-panel" aria-selected="false" tabindex="-1" data-src="assets/img/erp/socios.webp" data-title="Sócios" data-text="Cadastro, categoria, Índice e mensalidade de cada sócio. A ficha abre sobre a lista, com a mensalidade em atraso e o lembrete a um clique." data-alt="Lista de sócios com categoria, Índice e situação da mensalidade">
+              Sócios
+            </button>
+            <button role="tab" id="tab-fin" aria-controls="erp-panel" aria-selected="false" tabindex="-1" data-src="assets/img/erp/financeiro.webp" data-title="Financeiro" data-text="A receita por origem e os pagamentos do app, por cartão, Pix ou mensalidade, num extrato só. As cobranças em atraso saem com um lembrete automático." data-alt="Financeiro com a receita por mês e por origem e as transações recentes">
+              Financeiro
+            </button>
+          </div>
+
+          <div class="erp">
+            <div class="erp__shot rv" id="erp-panel" role="tabpanel" aria-labelledby="tab-dash">
+              <div class="browser">
+                <div class="browser__bar" aria-hidden="true"><i></i><i></i><i></i><span>Painel do clube</span></div>
+                <img
+                  src="assets/img/erp/index.webp"
+                  alt="Dashboard do painel do clube"
+                  width="2000"
+                  height="1250"
+                  loading="lazy"
+                  data-erp-img
+                />
+              </div>
+            </div>
+            <div class="erp__cap rv" data-d="1">
+              <h3 data-erp-title>Dashboard</h3>
+              <p data-erp-text>
+                O dia do clube numa tela: sócios ativos, reservas, aluguéis e inadimplência, a ocupação de cada turno e o
+                balanço do mês contra a meta. Os aniversariantes vêm com o parabéns a um toque.
+              </p>
+            </div>
+          </div>
+
+          <ul class="erp__more">
+            <li class="rv">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-notification-bing" /></svg></span>
+              <span><b>Régua de cobrança</b><span>Lembretes automáticos para a mensalidade em atraso, no ritmo que o clube definir.</span></span>
+            </li>
+            <li class="rv" data-d="1">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-sms" /></svg></span>
+              <span><b>Mensagens aos sócios</b><span>Avisos no app para todos os sócios ou para um grupo, sem planilha de contatos.</span></span>
+            </li>
+            <li class="rv" data-d="2">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-export" /></svg></span>
+              <span><b>Relatórios</b><span>Fechamento do dia e do mês, com exportação para a contabilidade.</span></span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 06 · segurança ============ -->
+      <section class="sec dark-2" id="seguranca" aria-labelledby="seg-t">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>06</b> Segurança e LGPD</p>
+              <h2 class="h2 rv" id="seg-t">Dado de clube é dado sério.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              Sócios, pagamentos e histórico de cada clube ficam separados dos outros clubes, protegidos e registrados.
+            </p>
+          </div>
+          <ul class="safe">
+            <li class="rv">
+              <svg class="i" aria-hidden="true"><use href="#i-shield-tick" /></svg>
+              <b>Cada clube isolado</b>
+              <span>Nenhuma consulta lê ou grava dado de outro clube. O isolamento é testado a cada mudança no sistema.</span>
+            </li>
+            <li class="rv" data-d="1">
+              <svg class="i" aria-hidden="true"><use href="#i-card" /></svg>
+              <b>Cartão fora do sistema</b>
+              <span>O número do cartão é digitado na página segura do gateway de pagamento. O Golfhaus nunca o vê.</span>
+            </li>
+            <li class="rv" data-d="2">
+              <svg class="i" aria-hidden="true"><use href="#i-document-text" /></svg>
+              <b>Auditoria que não se apaga</b>
+              <span>Quem mudou o quê, e quando, fica registrado sem possibilidade de edição.</span>
+            </li>
+            <li class="rv">
+              <svg class="i" aria-hidden="true"><use href="#i-lock" /></svg>
+              <b>Acesso por papel</b>
+              <span>Cada pessoa da equipe vê o que a função pede. Se o papel muda, a sessão recomeça.</span>
+            </li>
+            <li class="rv" data-d="1">
+              <svg class="i" aria-hidden="true"><use href="#i-verify" /></svg>
+              <b>LGPD</b>
+              <span>O clube decide sobre os dados dos sócios. O sócio cuida da privacidade e pode excluir a conta pelo app.</span>
+            </li>
+            <li class="rv" data-d="2">
+              <svg class="i" aria-hidden="true"><use href="#i-moneys" /></svg>
+              <b>Caixa que fecha</b>
+              <span>Valores guardados em centavos e um só relógio, o do clube, do app ao relatório.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 07 · feito para golfe ============ -->
+      <section class="sec" aria-labelledby="golf-t">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>07</b> Feito para golfe</p>
+              <h2 class="h2 rv" id="golf-t">O golfe já vem dentro do produto.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              Índice, Stableford, tee, green fee e starter fazem parte do produto, com os nomes que o clube já usa.
+            </p>
+          </div>
+          <ul class="golf">
+            <li class="rv">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-speedometer" /></svg></span>
+              <span><b>Índice e handicap</b><span>O Índice do sócio no perfil e no cartão, com o net calculado na rodada.</span></span>
+            </li>
+            <li class="rv" data-d="1">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-task-square" /></svg></span>
+              <span><b>Stableford e stroke play</b><span>No cartão, no ranking do mês e nos torneios.</span></span>
+            </li>
+            <li class="rv" data-d="2">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-map" /></svg></span>
+              <span><b>Campos, tees e range</b><span>Vários campos, saídas por tee e as baias do driving range.</span></span>
+            </li>
+            <li class="rv">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-user-add" /></svg></span>
+              <span><b>Convidados e green fee</b><span>O sócio leva convidados, e o green fee entra na própria reserva.</span></span>
+            </li>
+            <li class="rv" data-d="1">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-car" /></svg></span>
+              <span><b>Carrinhos e tacos</b><span>Aluguel entregue no tee, na mesma conta da saída.</span></span>
+            </li>
+            <li class="rv" data-d="2">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-scan" /></svg></span>
+              <span><b>Tablet do starter</b><span>Leitura do QR do voucher na saída, com a agenda do campo ao lado.</span></span>
+            </li>
+            <li class="rv">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-cup" /></svg></span>
+              <span><b>Torneios</b><span>Inscrição pelo app, vagas ao vivo e limite de Índice por torneio.</span></span>
+            </li>
+            <li class="rv" data-d="1">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-teacher" /></svg></span>
+              <span><b>Aulas com o professor</b><span>A agenda dos professores e a aula paga junto com o resto.</span></span>
+            </li>
+            <li class="rv" data-d="2">
+              <span class="sync__ico"><svg class="i" aria-hidden="true"><use href="#i-ranking" /></svg></span>
+              <span><b>Ranking com privacidade</b><span>Quem preferir pontua sem aparecer, como sócio oculto.</span></span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 08 · implantação ============ -->
+      <section class="sec" id="implantacao" aria-labelledby="impl-t" style="padding-top: 0">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>08</b> Implantação</p>
+              <h2 class="h2 rv" id="impl-t">Como o clube começa.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              O Golfhaus entra com as regras que o clube já tem. Ninguém precisa mudar o jeito de jogar para usar o app.
+            </p>
+          </div>
+          <ol class="steps">
+            <li class="step rv">
+              <div class="step__bar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+              <small>Passo 1</small>
+              <b>Conversa</b>
+              <span>Entendemos as regras do clube: categorias de sócio, green fee, antecedência da reserva e cobrança.</span>
+            </li>
+            <li class="step rv" data-d="1">
+              <div class="step__bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+              <small>Passo 2</small>
+              <b>Configuração</b>
+              <span>Campos, tees, horários, preços e regras entram no painel, junto com o traçado de cada buraco.</span>
+            </li>
+            <li class="step rv" data-d="2">
+              <div class="step__bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+              <small>Passo 3</small>
+              <b>Convite</b>
+              <span>Os sócios recebem o convite do clube, baixam o app e já encontram a carteirinha e a primeira saída.</span>
+            </li>
+            <li class="step rv" data-d="3">
+              <div class="step__bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+              <small>Passo 4</small>
+              <b>Acompanhamento</b>
+              <span>Acompanhamos as primeiras semanas com a equipe do clube e ajustamos o que o dia a dia pedir.</span>
+            </li>
+          </ol>
+
+          <div class="founders rv on-light">
+            <div>
+              <p class="kicker" style="color: #2c3a12"><b style="color: var(--ink)">Clubes fundadores</b></p>
+              <h3 class="h3">Estamos começando com poucos clubes.</h3>
+              <p>
+                Os clubes fundadores têm a implantação acompanhada de perto e ajudam a decidir o que entra no produto a
+                seguir. Se o seu clube quer estar entre eles, vamos conversar.
+              </p>
+              <a class="btn btn--ink" href="#contato"
+                >Quero conversar <svg class="i i--go" aria-hidden="true"><use href="#i-arrow-right" /></svg
+              ></a>
+            </div>
+            <div>
+              <p class="status__title">Onde estamos</p>
+              <ul class="status">
+                <li>App do sócio para iPhone <em class="live">em testes</em></li>
+                <li>Painel do clube <em>em construção</em></li>
+                <li>App para Android <em class="next">na sequência</em></li>
+                <li>Primeiros clubes <em class="next">em conversa</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 09 · perguntas ============ -->
+      <section class="sec" id="perguntas" aria-labelledby="faq-t" style="padding-top: 0">
+        <div class="wrap faq">
+          <div>
+            <p class="kicker rv"><b>09</b> Perguntas</p>
+            <h2 class="h2 rv" id="faq-t">O que os clubes perguntam.</h2>
+          </div>
+          <div class="faq__list rv" data-d="1">
+            <details>
+              <summary>
+                O app aparece com o nome do meu clube?
+                <svg class="i" aria-hidden="true"><use href="#i-add" /></svg>
+              </summary>
+              <p>
+                Sim. O sócio baixa o Golfhaus e entra com o convite do clube. Lá dentro, é o seu clube: o nome, os campos,
+                as regras, os preços e os avisos. Quem é sócio de dois clubes troca de um para o outro sem sair do app.
+              </p>
+            </details>
+            <details>
+              <summary>
+                Precisamos trocar tudo de uma vez?
+                <svg class="i" aria-hidden="true"><use href="#i-add" /></svg>
+              </summary>
+              <p>
+                Não. Os módulos são ligados conforme o clube estiver pronto. Dá para começar pela reserva e pelo app do
+                sócio e trazer a loja, as aulas e os torneios depois.
+              </p>
+            </details>
+            <details>
+              <summary>
+                Como os sócios pagam?
+                <svg class="i" aria-hidden="true"><use href="#i-add" /></svg>
+              </summary>
+              <p>
+                Por Pix, cartão ou lançando na mensalidade, como o clube preferir para cada serviço. O cartão é digitado
+                na página segura do gateway de pagamento, nunca no Golfhaus.
+              </p>
+            </details>
+            <details>
+              <summary>
+                E se o sinal cair no meio do campo?
+                <svg class="i" aria-hidden="true"><use href="#i-add" /></svg>
+              </summary>
+              <p>A rodada fica salva no aparelho. Se o sinal cair ou o app fechar, ela continua de onde parou.</p>
+            </details>
+            <details>
+              <summary>
+                Quem cuida dos dados dos sócios?
+                <svg class="i" aria-hidden="true"><use href="#i-add" /></svg>
+              </summary>
+              <p>
+                O clube decide sobre os dados dos próprios sócios, e o Golfhaus trata esses dados em nome dele, como pede
+                a LGPD. Os dados de cada clube ficam isolados, e as mudanças ficam registradas.
+              </p>
+            </details>
+            <details>
+              <summary>
+                Quanto custa?
+                <svg class="i" aria-hidden="true"><use href="#i-add" /></svg>
+              </summary>
+              <p>
+                É uma assinatura mensal por clube, que varia com o tamanho do clube e os módulos ligados. Conte um pouco
+                sobre o seu clube e a gente monta a proposta.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 10 · contato ============ -->
+      <section class="sec dark contact" id="contato" aria-labelledby="ct-t">
+        <svg class="contact__ball" viewBox="0 0 600 600" aria-hidden="true"><use href="#mark" /></svg>
+        <div class="wrap contact__grid">
+          <div>
+            <p class="kicker rv"><b>10</b> Demonstração</p>
+            <h2 class="h2 rv" id="ct-t">Leve o Golfhaus para o seu clube.</h2>
+            <p class="lede rv" data-d="1" style="margin-top: 28px">
+              Numa conversa de 30 minutos, a gente mostra o app e o painel num clube de demonstração e entende as regras do seu.
+            </p>
+            <ul class="contact__list rv" data-d="2">
+              <li><svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>O app do sócio funcionando no celular</li>
+              <li><svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>O painel com a agenda do campo e o financeiro</li>
+              <li><svg class="i" aria-hidden="true"><use href="#i-tick-circle" /></svg>Como ficaria a implantação no seu clube</li>
+            </ul>
+          </div>
+
+          <form class="form rv" data-d="1" data-form novalidate>
+            <div class="form__row">
+              <div class="field">
+                <label for="f-nome">Seu nome</label>
+                <input id="f-nome" name="nome" autocomplete="name" required aria-describedby="e-nome" />
+                <span class="field__err" id="e-nome" aria-live="polite"></span>
+              </div>
+              <div class="field">
+                <label for="f-clube">Clube</label>
+                <input id="f-clube" name="clube" autocomplete="organization" required aria-describedby="e-clube" />
+                <span class="field__err" id="e-clube" aria-live="polite"></span>
+              </div>
+            </div>
+            <div class="form__row">
+              <div class="field">
+                <label for="f-cidade">Cidade <span>(opcional)</span></label>
+                <input id="f-cidade" name="cidade" autocomplete="address-level2" />
+              </div>
+              <div class="field">
+                <label for="f-socios">Número de sócios <span>(opcional)</span></label>
+                <select id="f-socios" name="socios">
+                  <option value="">Escolha</option>
+                  <option>Até 300</option>
+                  <option>De 300 a 800</option>
+                  <option>De 800 a 1.500</option>
+                  <option>Mais de 1.500</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="f-cargo">Seu papel no clube <span>(opcional)</span></label>
+              <select id="f-cargo" name="cargo">
+                <option value="">Escolha</option>
+                <option>Presidência ou diretoria</option>
+                <option>Gerência</option>
+                <option>Secretaria ou financeiro</option>
+                <option>Comissão de golfe</option>
+                <option>Sócio</option>
+                <option>Outro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-msg">Mensagem <span>(opcional)</span></label>
+              <textarea id="f-msg" name="msg" placeholder="O que mais pesa hoje no dia do clube?"></textarea>
+            </div>
+            <!-- campo isca: gente não vê nem preenche; robô preenche e o envio é descartado -->
+            <div class="hp" aria-hidden="true">
+              <label for="f-site">Site</label>
+              <input id="f-site" name="site" tabindex="-1" autocomplete="off" />
+            </div>
+            <button class="btn btn--lime" type="submit" data-submit>
+              <span data-submit-label>Pedir demonstração</span>
+              <svg class="i i--go" aria-hidden="true"><use href="#i-arrow-right" /></svg>
+            </button>
+            <p class="form__status" role="status" aria-live="polite" data-status></p>
+            <p class="form__alt">
+              Prefere conversar agora?
+              <a href="https://wa.me/5561981043296" target="_blank" rel="noopener" data-wa-form>Chame no WhatsApp</a>.
+            </p>
+            <p class="form__note">Usamos estes dados só para responder ao seu contato.</p>
+          </form>
+          <div class="form form--done" data-done hidden tabindex="-1">
+            <svg class="i form__done-ico" aria-hidden="true"><use href="#i-tick-circle" /></svg>
+            <h3 class="h3">Recebemos o seu contato.</h3>
+            <p class="lede">A gente responde em breve para marcar a demonstração.</p>
+            <a class="btn btn--ghost" href="https://wa.me/5561981043296" target="_blank" rel="noopener" data-wa-form
+              >Adiantar pelo WhatsApp</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot__in">
+        <img src="assets/brand/golfhaus-logo-negativo.svg" alt="golfhaus" width="118" height="22" loading="lazy" />
+        <nav aria-label="Rodapé">
+          <a href="#plataforma">Plataforma</a>
+          <a href="#app">App do sócio</a>
+          <a href="#painel">Painel do clube</a>
+          <a href="#seguranca">Segurança</a>
+          <a href="#contato">Demonstração</a>
+        </nav>
+        <p>© 2026 Golfhaus · Feito em Brasília</p>
+      </div>
+    </footer>
+
+    <a
+      class="wa"
+      href="https://wa.me/5561981043296?text=Ol%C3%A1!%20Quero%20conhecer%20o%20Golfhaus%20para%20o%20meu%20clube."
+      target="_blank"
+      rel="noopener"
+      aria-label="Falar com o Golfhaus no WhatsApp"
+    >
+      <svg class="wa__ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp" /></svg>
+      <span class="wa__txt">Falar no WhatsApp</span>
+    </a>
+  </body>
+</html>
