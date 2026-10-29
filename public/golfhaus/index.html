@@ -6,7 +6,7 @@
     <title>Golfhaus · Gestão completa para clubes de golfe</title>
     <meta
       name="description"
-      content="Reservas, cobrança, sócios e o app do sócio num sistema só. Mais praticidade para o sócio e menos trabalho manual para a equipe do clube."
+      content="Reservas, cobrança, sócios e o app do sócio num sistema só, com o campo do clube em 3D. Mais praticidade para o sócio e menos trabalho manual para a equipe do clube."
     />
     <!-- por enquanto a página mora no domínio do portfólio: fica fora dos buscadores até ganhar o domínio próprio -->
     <meta name="robots" content="noindex, nofollow" />
@@ -85,6 +85,7 @@
         <nav class="top__nav" aria-label="Seções">
           <a href="#plataforma">Plataforma</a>
           <a href="#app">App do sócio</a>
+          <a href="#campo-3d">Campo em 3D</a>
           <a href="#painel">Painel da equipe</a>
           <a href="#seguranca">Segurança</a>
           <a href="#implantacao">Implantação</a>
@@ -145,7 +146,7 @@
             <li><b>Reserva pelo app</b><span>o sócio marca o horário sozinho</span></li>
             <li><b>Cobrança num lugar só</b><span>Pix, cartão e mensalidade</span></li>
             <li><b>Ranking automático</b><span>direto das rodadas do mês</span></li>
-            <li><b>App nativo</b><span>para iPhone e Android</span></li>
+            <li><b>Campo em 3D</b><span>o traçado do clube no celular</span></li>
           </ul>
         </div>
       </section>
@@ -525,12 +526,55 @@
         </div>
       </section>
 
-      <!-- ============ 04 · painel da equipe ============ -->
+      <!-- ============ 04 · campo em 3D ============ -->
+      <section class="sec dark" id="campo-3d" aria-labelledby="campo-t">
+        <div class="wrap">
+          <div class="head head--split">
+            <div>
+              <p class="kicker rv"><b>04</b> Campo em 3D</p>
+              <h2 class="h2 rv" id="campo-t">O campo do clube em 3D, buraco por buraco.</h2>
+            </div>
+            <p class="lede rv" data-d="1">
+              Antes de cada tacada, o sócio vê o buraco inteiro no celular: a água, os bunkers, o green e quanto falta
+              até a bandeira. Experimente: arraste para girar e escolha outro buraco.
+            </p>
+          </div>
+
+          <div class="h3d rv" data-h3d>
+            <div class="h3d__mount" data-h3d-mount></div>
+            <div class="h3d__read" aria-live="polite">
+              <span class="h3d__pill h3d__pill--ink"
+                ><svg class="i" aria-hidden="true"><use href="#i-flag" /></svg><span data-h3d-label>Buraco 2</span></span
+              >
+              <span class="h3d__pill" data-h3d-meta>Par 4 · 345 m · Hcp 11</span>
+            </div>
+            <p class="h3d__hint">Arraste para girar · role para aproximar · dois cliques para centralizar</p>
+            <div class="h3d__holes" role="group" aria-label="Escolher o buraco" data-h3d-holes></div>
+          </div>
+
+          <ul class="h3d-notes">
+            <li class="rv">
+              <b>O campo de verdade</b
+              ><span>Cada buraco segue o traçado real do clube: par, distância, dogleg, água, bunkers e árvores.</span>
+            </li>
+            <li class="rv" data-d="1">
+              <b>Sempre atualizado</b
+              ><span>Mudou um tee ou um bunker, a equipe ajusta o traçado no painel e o app do sócio acompanha.</span>
+            </li>
+            <li class="rv" data-d="2">
+              <b>Roda em qualquer celular</b
+              ><span>Nos aparelhos mais simples, o sócio vê o buraco de cima, com as mesmas distâncias.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============ 05 · painel da equipe ============ -->
       <section class="sec" id="painel" aria-labelledby="painel-t" style="padding-top: 0">
         <div class="wrap">
           <div class="head head--split">
             <div>
-              <p class="kicker rv"><b>04</b> Painel da equipe</p>
+              <p class="kicker rv"><b>05</b> Painel da equipe</p>
               <h2 class="h2 rv" id="painel-t">Os números do clube, com contexto.</h2>
             </div>
             <p class="lede rv" data-d="1">
@@ -594,12 +638,12 @@
         </div>
       </section>
 
-      <!-- ============ 05 · segurança ============ -->
+      <!-- ============ 06 · segurança ============ -->
       <section class="sec dark-2" id="seguranca" aria-labelledby="seg-t">
         <div class="wrap">
           <div class="head head--split">
             <div>
-              <p class="kicker rv"><b>05</b> Segurança e LGPD</p>
+              <p class="kicker rv"><b>06</b> Segurança e LGPD</p>
               <h2 class="h2 rv" id="seg-t">Os dados do clube, protegidos.</h2>
             </div>
             <p class="lede rv" data-d="1">
@@ -642,12 +686,12 @@
         </div>
       </section>
 
-      <!-- ============ 06 · feito para golfe ============ -->
+      <!-- ============ 07 · feito para golfe ============ -->
       <section class="sec" aria-labelledby="golf-t">
         <div class="wrap">
           <div class="head head--split">
             <div>
-              <p class="kicker rv"><b>06</b> Feito para golfe</p>
+              <p class="kicker rv"><b>07</b> Feito para golfe</p>
               <h2 class="h2 rv" id="golf-t">Feito para o golfe, não adaptado.</h2>
             </div>
             <p class="lede rv" data-d="1">
@@ -695,12 +739,12 @@
         </div>
       </section>
 
-      <!-- ============ 07 · implantação ============ -->
+      <!-- ============ 08 · implantação ============ -->
       <section class="sec" id="implantacao" aria-labelledby="impl-t" style="padding-top: 0">
         <div class="wrap">
           <div class="head head--split">
             <div>
-              <p class="kicker rv"><b>07</b> Implantação</p>
+              <p class="kicker rv"><b>08</b> Implantação</p>
               <h2 class="h2 rv" id="impl-t">Acompanhamento em cada etapa.</h2>
             </div>
             <p class="lede rv" data-d="1">
@@ -719,7 +763,7 @@
               <div class="step__bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></div>
               <small>Etapa 2</small>
               <b>Configuração</b>
-              <span>Campos, tees, horários, preços e regras são configurados no painel com a sua equipe.</span>
+              <span>Campos, tees, horários, preços e regras são configurados no painel com a sua equipe, junto com o traçado de cada buraco.</span>
             </li>
             <li class="step rv" data-d="2">
               <div class="step__bar" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
@@ -760,11 +804,11 @@
         </div>
       </section>
 
-      <!-- ============ 08 · perguntas ============ -->
+      <!-- ============ 09 · perguntas ============ -->
       <section class="sec" id="perguntas" aria-labelledby="faq-t" style="padding-top: 0">
         <div class="wrap faq">
           <div>
-            <p class="kicker rv"><b>08</b> Perguntas</p>
+            <p class="kicker rv"><b>09</b> Perguntas</p>
             <h2 class="h2 rv" id="faq-t">Perguntas frequentes.</h2>
           </div>
           <div class="faq__list rv" data-d="1">
@@ -810,6 +854,16 @@
             </details>
             <details>
               <summary>
+                O campo em 3D é o do nosso clube?
+                <svg class="i" aria-hidden="true"><use href="#i-add" /></svg>
+              </summary>
+              <p>
+                É. Na implantação, desenhamos o traçado de cada buraco sobre a foto aérea do campo, feita por drone, com
+                par, distância, dogleg, água, bunkers e árvores. Quando o campo muda, a equipe ajusta pelo painel.
+              </p>
+            </details>
+            <details>
+              <summary>
                 E se o sinal cair no meio do campo?
                 <svg class="i" aria-hidden="true"><use href="#i-add" /></svg>
               </summary>
@@ -839,12 +893,12 @@
         </div>
       </section>
 
-      <!-- ============ 09 · demonstração ============ -->
+      <!-- ============ 10 · demonstração ============ -->
       <section class="sec dark contact" id="contato" aria-labelledby="ct-t">
         <svg class="contact__ball" viewBox="0 0 600 600" aria-hidden="true"><use href="#mark" /></svg>
         <div class="wrap contact__grid">
           <div>
-            <p class="kicker rv"><b>09</b> Demonstração</p>
+            <p class="kicker rv"><b>10</b> Demonstração</p>
             <h2 class="h2 rv" id="ct-t">Veja o Golfhaus funcionando.</h2>
             <p class="lede rv" data-d="1" style="margin-top: 28px">
               Em 30 minutos, mostramos o app e o painel num clube de demonstração e entendemos as regras do seu clube.
