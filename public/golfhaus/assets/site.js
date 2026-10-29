@@ -1,5 +1,5 @@
 /* Golfhaus — landing: topo ao rolar, entrada das seções, trilho da vida no clube, o campo em 3D
-   (carregado só perto da tela), abas do painel e o formulário de contato (planilha, com o WhatsApp
+   (carregado só perto da tela), abas do painel e o formulário de contato (por e-mail, com o WhatsApp
    como alternativa). */
 
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -156,11 +156,11 @@ if (h3d) {
   } else start();
 }
 
-/* ---------- contato: o formulário grava uma linha na planilha de contatos ---------- */
+/* ---------- contato: o formulário chega por e-mail ---------- */
 const WHATSAPP = "5561981043296";
-// Web app do Apps Script ligado à planilha "Golfhaus · Contatos da landing" (doPost acrescenta uma linha).
-// Vazio: o envio abre o WhatsApp com a mensagem pronta.
-const LEADS_URL = "";
+// Chave pública do Web3Forms (formulário "Golfhaus · Contato da landing"): só serve para mandar o contato
+// para o e-mail da conta, que não aparece na página. Vazia: o envio abre o WhatsApp com a mensagem pronta.
+const FORM_KEY = "af6b7460-954a-4a42-9992-a7cd608fa6fa";
 const form = $("[data-form]");
 if (form) {
   const need = { nome: "Diga o seu nome.", clube: "Diga o nome do clube." };
@@ -217,25 +217,33 @@ if (form) {
     }
     if (first) return first.focus();
     if (value("site")) return finish(); // robô: finge que deu certo e não grava
-    if (!LEADS_URL) return window.open(waLink(), "_blank", "noopener");
+    if (!FORM_KEY) return window.open(waLink(), "_blank", "noopener");
 
+    // cada campo vira uma linha do e-mail, com o rótulo como nome; os vazios ficam de fora
+    const fields = {
+      Nome: value("nome"),
+      Clube: value("clube"),
+      Cidade: value("cidade"),
+      Sócios: value("socios"),
+      "Papel no clube": value("cargo"),
+      Mensagem: value("msg"),
+      Página: location.href,
+    };
     busy(true);
     try {
-      // text/plain evita o preflight de CORS; o Apps Script lê o corpo em e.postData.contents
-      const res = await fetch(LEADS_URL, {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          nome: value("nome"),
-          clube: value("clube"),
-          cidade: value("cidade"),
-          socios: value("socios"),
-          cargo: value("cargo"),
-          mensagem: value("msg"),
-          pagina: location.href,
+          access_key: FORM_KEY,
+          subject: `Golfhaus · contato de ${value("clube")}`,
+          from_name: "Landing do Golfhaus",
+          botcheck: false,
+          ...Object.fromEntries(Object.entries(fields).filter(([, v]) => v)),
         }),
       });
       const out = await res.json().catch(() => ({}));
-      if (!res.ok || out.ok === false) throw new Error(out.message || `HTTP ${res.status}`);
+      if (!res.ok || !out.success) throw new Error(out.message || out.body?.message || `HTTP ${res.status}`);
       finish();
     } catch (error) {
       console.warn("contato:", error);
