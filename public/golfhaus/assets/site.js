@@ -1,5 +1,5 @@
-/* Golfhaus — landing: topo ao rolar, entrada das seções, trilho da vida de clube, abas do painel,
-   o buraco em 3D (carregado só perto da tela) e o formulário que abre o WhatsApp. */
+/* Golfhaus — landing: topo ao rolar, entrada das seções, trilho da vida no clube, abas do painel
+   e o formulário de contato (planilha, com o WhatsApp como alternativa). */
 
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (s, el = document) => el.querySelector(s);
@@ -89,72 +89,6 @@ if (tabs.length) {
   });
 }
 
-/* ---------- o buraco em 3D ---------- */
-const h3d = $("[data-h3d]");
-if (h3d) {
-  const mountEl = $("[data-h3d-mount]", h3d);
-  const label = $("[data-h3d-label]", h3d);
-  const meta = $("[data-h3d-meta]", h3d);
-  const chips = $("[data-h3d-holes]", h3d);
-  let view = null;
-  let holes = [];
-  let current = 2;
-  const describe = (h) => {
-    label.textContent = `Buraco ${h.n}`;
-    meta.textContent = `Par ${h.par} · ${h.m} m · Índice ${h.idx}`;
-  };
-  const press = (n) => $$("button", chips).forEach((b) => b.setAttribute("aria-pressed", +b.dataset.n === n));
-  const insets = () => ({ top: 72, right: 16, bottom: 88, left: 16 });
-  const fallback = () => {
-    mountEl.innerHTML = `<img src="assets/3d/figma/perf-holemap.png" alt="Mapa do buraco 2 do Campo A" />`;
-  };
-  const start = async () => {
-    try {
-      const [{ mount }, data] = await Promise.all([import("./3d/hole3d.js"), import("./3d/holes.js")]);
-      holes = data.holes;
-      chips.innerHTML = holes
-        .map((h) => `<button type="button" data-n="${h.n}" aria-label="Buraco ${h.n}, par ${h.par}">${h.n}</button>`)
-        .join("");
-      press(current);
-      describe(holes[current - 1]);
-      view = mount(mountEl, {
-        hole: holes[current - 1],
-        course: "a",
-        tee: "branco",
-        ball: null,
-        mode: "preview",
-        insets,
-        intro: !reduce,
-      });
-      chips.addEventListener("click", (e) => {
-        const b = e.target.closest("button[data-n]");
-        if (!b || !view) return;
-        const n = +b.dataset.n;
-        if (n === current) return view.reset();
-        current = n;
-        press(n);
-        describe(holes[n - 1]);
-        view.setHole(holes[n - 1], { instant: reduce });
-      });
-      addEventListener("resize", () => view && view.refit(), { passive: true });
-    } catch (err) {
-      console.warn("3D indisponível:", err);
-      fallback();
-    }
-  };
-  if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (!e.isIntersecting) return;
-        io.disconnect();
-        start();
-      },
-      { rootMargin: "400px 0px" },
-    );
-    io.observe(h3d);
-  } else start();
-}
-
 /* ---------- contato: o formulário grava uma linha na planilha de contatos ---------- */
 const WHATSAPP = "5561981043296";
 // Web app do Apps Script ligado à planilha "Golfhaus · Contatos da landing" (doPost acrescenta uma linha).
@@ -196,7 +130,7 @@ if (form) {
   const busy = (on) => {
     submit.setAttribute("aria-busy", on ? "true" : "false");
     submit.disabled = on;
-    submitLabel.textContent = on ? "Enviando…" : "Pedir demonstração";
+    submitLabel.textContent = on ? "Enviando…" : "Agendar demonstração";
   };
   const finish = () => {
     form.hidden = true;

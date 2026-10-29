@@ -396,8 +396,11 @@ textarea {
   width: 16px;
   height: 16px;
 }
-.hero h1 span {
-  display: block;
+.hero .display {
+  font-size: clamp(2.75rem, 7.2vw, 4.85rem);
+  line-height: 0.97;
+  letter-spacing: -0.05em;
+  max-width: 11.5em;
 }
 .hero h1 .hero__soft {
   color: var(--mute-d);
@@ -412,6 +415,11 @@ textarea {
 .hero__lede strong {
   color: var(--ice);
   font-weight: 500;
+}
+.hero__cue {
+  margin-top: 18px;
+  font-size: 0.9375rem;
+  color: var(--mute-d);
 }
 .hero__ctas {
   display: flex;
@@ -452,7 +460,7 @@ textarea {
 }
 @media (min-width: 1024px) {
   .hero__grid {
-    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.86fr);
     gap: 24px;
     align-items: start;
   }
@@ -477,7 +485,7 @@ textarea {
   }
   .hero__phones .phone:first-child,
   .hero__phones .phone:last-child {
-    --w: 262px;
+    --w: 240px;
   }
 }
 
@@ -1024,149 +1032,7 @@ textarea {
   color: var(--mute);
 }
 
-/* ---------- 04 · 3D ---------- */
-.h3d {
-  position: relative;
-  margin-top: 8px;
-  border-radius: 32px;
-  overflow: hidden;
-  background:
-    radial-gradient(70% 60% at 50% 45%, #fbfaf7 0%, #efede7 55%, #e3e0d8 100%);
-  aspect-ratio: 4 / 5;
-  max-height: 86vh;
-  width: 100%;
-  touch-action: pan-y;
-}
-@media (min-width: 760px) {
-  .h3d {
-    aspect-ratio: 16 / 9;
-  }
-}
-.h3d__mount {
-  position: absolute;
-  inset: 0;
-}
-.h3d__mount img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.h3d__read {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  z-index: 3;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  pointer-events: none;
-  color: var(--ink);
-}
-.h3d__pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 24px -14px rgba(14, 14, 14, 0.45);
-  font-size: 0.875rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-.h3d__pill--ink {
-  background: var(--ink);
-  color: var(--ice);
-}
-.h3d__pill .i {
-  width: 18px;
-  height: 18px;
-}
-.h3d__holes {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 3;
-  display: flex;
-  gap: 6px;
-  padding: 16px 20px 20px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  background: linear-gradient(transparent, rgba(239, 237, 231, 0.85) 45%);
-}
-.h3d__holes::-webkit-scrollbar {
-  display: none;
-}
-.h3d__holes button {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 0;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: inset 0 0 0 1px var(--line);
-  font: 600 0.9375rem/1 var(--f-body);
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-  cursor: pointer;
-  transition:
-    background-color 0.2s var(--ease),
-    color 0.2s var(--ease);
-}
-.h3d__holes button:hover {
-  background: #fff;
-}
-.h3d__holes button[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--lime);
-  box-shadow: none;
-}
-.h3d__hint {
-  position: absolute;
-  right: 20px;
-  top: 24px;
-  z-index: 3;
-  display: none;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--mute);
-  pointer-events: none;
-}
-@media (min-width: 760px) {
-  .h3d__hint {
-    display: block;
-  }
-}
-.h3d-notes {
-  display: grid;
-  gap: 28px;
-  margin-top: 48px;
-}
-.h3d-notes li {
-  padding-top: 20px;
-  border-top: 1px solid var(--line-d);
-}
-.h3d-notes b {
-  display: block;
-  font: 600 1.125rem/1.25 var(--f-display);
-  letter-spacing: -0.02em;
-  margin-bottom: 8px;
-}
-.h3d-notes span {
-  color: var(--mute-d);
-}
-@media (min-width: 860px) {
-  .h3d-notes {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px;
-  }
-}
-
-/* ---------- 05 · painel ---------- */
+/* ---------- 04 · painel ---------- */
 .tabs {
   display: flex;
   gap: 4px;
@@ -1271,7 +1137,7 @@ textarea {
   }
 }
 
-/* ---------- 06 · segurança ---------- */
+/* ---------- 05 · segurança ---------- */
 .safe {
   display: grid;
   gap: 1px;
@@ -1310,7 +1176,7 @@ textarea {
   }
 }
 
-/* ---------- 07 · golfe ---------- */
+/* ---------- 06 · golfe ---------- */
 .golf {
   display: grid;
   grid-template-columns: 1fr;
@@ -1350,7 +1216,7 @@ textarea {
   }
 }
 
-/* ---------- 08 · implantação ---------- */
+/* ---------- 07 · implantação ---------- */
 .steps {
   display: grid;
   gap: 16px;
@@ -1489,7 +1355,7 @@ textarea {
   }
 }
 
-/* ---------- 09 · perguntas ---------- */
+/* ---------- 08 · perguntas ---------- */
 .faq {
   display: grid;
   gap: 48px;
@@ -1534,7 +1400,7 @@ textarea {
   }
 }
 
-/* ---------- 10 · contato ---------- */
+/* ---------- 09 · contato ---------- */
 .contact {
   overflow: hidden;
   isolation: isolate;
