@@ -941,6 +941,150 @@ textarea {
 .stage--lime::before {
   background: repeating-linear-gradient(90deg, transparent 0 56px, rgba(14, 14, 14, 0.05) 56px 112px);
 }
+
+/* a marca do clube: um aparelho só, com etiquetas apontando o que vem do clube.
+   --x e --y marcam o ponto na tela (em % do aparelho); a bolinha da etiqueta fica sobre ele. */
+.chapter__media .phone--tagged {
+  --w: clamp(144px, 40vw, 280px);
+}
+.tag {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px 7px 9px;
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--ink);
+  font: 600 0.75rem/1 var(--f-body);
+  white-space: nowrap;
+  transform: translate(-13px, -50%);
+  box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.7);
+}
+.tag::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 3px rgba(14, 14, 14, 0.16);
+}
+.tag--l {
+  left: auto;
+  right: calc(100% - var(--x));
+  flex-direction: row-reverse;
+  padding: 7px 9px 7px 12px;
+  transform: translate(13px, -50%);
+}
+@media (max-width: 379px) {
+  .tag {
+    font-size: 0.6875rem;
+  }
+}
+@media (min-width: 600px) {
+  .tag {
+    gap: 8px;
+    padding: 8px 14px 8px 10px;
+    font-size: 0.8125rem;
+    transform: translate(-14px, -50%);
+  }
+  .tag--l {
+    padding: 8px 10px 8px 14px;
+    transform: translate(14px, -50%);
+  }
+}
+
+/* o ranking da rede: o do clube dentro do da rede */
+.net {
+  display: grid;
+  gap: 40px;
+  margin-bottom: clamp(56px, 7vw, 104px);
+  padding: clamp(28px, 4.5vw, 56px);
+  border-radius: 32px;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.net .kicker {
+  margin-bottom: 20px;
+}
+.net .h3 {
+  max-width: 14em;
+}
+.net__lede {
+  margin-top: 20px;
+  max-width: 32em;
+  color: var(--mute);
+  text-wrap: pretty;
+}
+.net__note {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  max-width: 32em;
+  font-size: 0.9375rem;
+  color: var(--mute);
+}
+.net__note .i {
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  color: var(--green);
+}
+.net__ring {
+  border-radius: 24px;
+  padding: 20px;
+}
+.net__ring p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin: 0 0 18px;
+}
+.net__ring b {
+  font: 600 1.0625rem/1.2 var(--f-display);
+  letter-spacing: -0.02em;
+}
+.net__ring span {
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+.net__ring--rede {
+  padding: clamp(20px, 3vw, 28px);
+  background: var(--ink) repeating-linear-gradient(90deg, transparent 0 56px, rgba(236, 234, 229, 0.04) 56px 112px);
+  color: var(--ice);
+}
+.net__ring--rede > p span {
+  color: var(--mute-d);
+}
+.net__ring--clube {
+  border-radius: 18px;
+  background: var(--lime);
+  color: var(--ink);
+}
+.net__ring--clube > p span {
+  color: #2c3a12;
+}
+.net__ring--voce {
+  border-radius: 13px;
+  padding: 16px 18px;
+  background: var(--paper);
+}
+.net__ring--voce p {
+  margin: 0;
+}
+.net__ring--voce span {
+  color: var(--mute);
+}
+
 @media (min-width: 960px) {
   .chapter {
     grid-template-columns: 5fr 7fr;
@@ -949,6 +1093,15 @@ textarea {
   }
   .chapter--flip .chapter__text {
     order: 2;
+  }
+  /* as etiquetas da marca do clube precisam de espaço dos dois lados do aparelho */
+  .chapter--brand {
+    grid-template-columns: 7fr 5fr;
+  }
+  .net {
+    grid-template-columns: 5fr 7fr;
+    gap: 64px;
+    align-items: center;
   }
 }
 
