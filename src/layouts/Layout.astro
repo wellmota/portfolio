@@ -3,6 +3,7 @@ import '../styles/global.css';
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
 import { getSiteData, type Locale, defaultLocale } from '../i18n';
+import { SITE, alternatesFor, baseGraph, pageGraph, graphScript } from '../lib/seo';
 
 interface Props {
   lang?: Locale;
@@ -13,66 +14,37 @@ interface Props {
   ogImageAlt?: string;
   ogImageWidth?: number;
   ogImageHeight?: number;
-  /** hreflang EN/PT — só faz sentido nas homes */
-  alternates?: boolean;
+  /** hreflang EN/PT: por padrão sai do caminho da página; false para página que só existe num idioma */
+  alternates?: boolean | { en: string; pt: string };
+  /** Nós JSON-LD a mais desta página (FAQPage, Service…); entram no mesmo @graph */
+  schema?: object[];
 }
 
 const lang = Astro.props.lang ?? defaultLocale;
 const data = getSiteData(lang);
 const htmlLang = lang === 'pt' ? 'pt-BR' : 'en';
 
-const {
-  title = `${data.profile.name} — ${data.profile.role}`,
-  description = data.profile.tagline,
-} = Astro.props;
+const { title = data.seo.title, description = data.seo.description } = Astro.props;
 
 /* ---------------- SEO ---------------- */
-const siteUrl = 'https://userexperience.com.br';
+const siteUrl = SITE;
 const canonical = new URL(Astro.url.pathname, siteUrl).href;
 const ogImage = `${siteUrl}${Astro.props.ogImage ?? '/og-image.png'}`;
 const ogImageAlt =
   Astro.props.ogImageAlt ?? `${data.profile.name} — ${data.profile.role}`;
 const ogImageWidth = Astro.props.ogImageWidth ?? 1200;
 const ogImageHeight = Astro.props.ogImageHeight ?? 630;
-const alternates = Astro.props.alternates ?? true;
+const path = Astro.url.pathname;
+const ogType = path.includes('/work/') ? 'article' : path === '/' || path === '/pt/' ? 'profile' : 'website';
+const alt = Astro.props.alternates ?? true;
+const alternates = alt === true ? alternatesFor(Astro.url.pathname) : alt;
 
-const sameAs = data.socials
-  .map((s) => s.href)
-  .filter((h) => h && h !== '#' && h.startsWith('http'));
-
-/* Structured data — ajuda Google/LLMs a entenderem quem é a pessoa */
-const personSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: data.profile.name,
-  jobTitle: data.profile.role,
-  description: data.profile.tagline,
-  url: siteUrl,
-  image: `${siteUrl}${data.about.image}`,
-  email: `mailto:${data.profile.email}`,
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Brasília',
-    addressRegion: 'DF',
-    addressCountry: 'BR',
-  },
-  sameAs,
-  knowsAbout: [
-    'Product Engineering',
-    'Design Engineering',
-    'Front-End Development',
-    'React',
-    'TypeScript',
-    'Next.js',
-    'Design Systems',
-    'UX Research',
-    'AI Engineering',
-    'Agent Orchestration',
-    'RAG',
-    'Prompt Engineering',
-    'LLM Evaluation',
-  ],
-};
+/* Structured data — pessoa, site e serviço em todas as páginas; o case e o que a página trouxer, por cima */
+const graph = graphScript([
+  ...baseGraph(lang),
+  ...pageGraph({ lang, pathname: Astro.url.pathname, title, description, image: ogImage }),
+  ...(Astro.props.schema ?? []),
+]);
 ---
 
 <!doctype html>
@@ -93,7 +65,7 @@ const personSchema = {
     <meta name="author" content={data.profile.name} />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:locale" content={htmlLang} />
@@ -113,19 +85,15 @@ const personSchema = {
     <meta name="theme-color" content="#08080a" />
 
     <!-- Structured data -->
-    <script
-      type="application/ld+json"
-      is:inline
-      set:html={JSON.stringify(personSchema)}
-    />
+    <script type="application/ld+json" is:inline set:html={graph} />
 
     <!-- Alternate language -->
     {
       alternates && (
         <>
-          <link rel="alternate" hreflang="en" href="https://userexperience.com.br/" />
-          <link rel="alternate" hreflang="pt" href="https://userexperience.com.br/pt/" />
-          <link rel="alternate" hreflang="x-default" href="https://userexperience.com.br/" />
+          <link rel="alternate" hreflang="en" href={`${siteUrl}${alternates.en}`} />
+          <link rel="alternate" hreflang="pt" href={`${siteUrl}${alternates.pt}`} />
+          <link rel="alternate" hreflang="x-default" href={`${siteUrl}${alternates.en}`} />
         </>
       )
     }

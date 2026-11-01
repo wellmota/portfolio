@@ -1,10 +1,15 @@
 ---
-import { getSiteData, type Locale } from '../i18n';
+import { getSiteData, getLocalePath, type Locale } from '../i18n';
+import { servicesPath } from '../lib/seo';
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
 const data = getSiteData(lang);
-const { footer, profile, socials, nav } = data;
+const { footer, profile, socials } = data;
+const t = data.ui.footer;
+const home = getLocalePath(lang);
+const onHome = Astro.url.pathname === home;
+const nav = data.nav.map((n) => ({ ...n, href: n.href.startsWith('#') && !onHome ? `${home}${n.href}` : n.href }));
 
 const abbr: Record<string, string> = {
   GitHub: 'GH',
@@ -29,10 +34,10 @@ const iconPaths: Record<string, string> = {
     <div class="grid gap-10 sm:gap-12 md:grid-cols-12">
       <!-- Location + rotating seal -->
       <div class="md:col-span-4">
-        <span class="label">Localização</span>
+        <span class="label">{t.location}</span>
         <p class="mt-4 text-lg leading-snug text-cream">
           {profile.location}<br />
-          <span class="text-mist">Aberto a trabalho remoto</span>
+          <span class="text-mist">{t.remote}</span>
         </p>
 
         <!-- Rotating seal -->
@@ -79,14 +84,14 @@ const iconPaths: Record<string, string> = {
 
       <!-- Inquiry + Links -->
       <div class="md:col-span-3">
-        <span class="label">Contato</span>
+        <span class="label">{t.contact}</span>
         <a
           href={`mailto:${profile.email}`}
           class="link-underline mono mt-4 block text-[15px] text-cream"
           >{profile.email}</a
         >
 
-        <span class="label mt-12 block">Navegação</span>
+        <span class="label mt-12 block">{t.navigation}</span>
         <ul class="mt-4 space-y-2.5">
           {
             nav.map((item) => (
@@ -100,6 +105,15 @@ const iconPaths: Record<string, string> = {
               </li>
             ))
           }
+          <li>
+            <a
+              href={servicesPath(lang)}
+              class="inline-flex items-center gap-2.5 text-[15px] text-cream transition-colors hover:text-lime"
+            >
+              <span class="h-1.5 w-1.5 shrink-0 bg-lime" />
+              {t.services}
+            </a>
+          </li>
           {
             lang === 'pt' && (
               <li>
@@ -161,18 +175,18 @@ const iconPaths: Record<string, string> = {
           enctype="text/plain"
           class="mt-10 max-w-md"
         >
-          <span class="label">Vamos conversar</span>
+          <span class="label">{t.talk}</span>
           <div class="mt-4 flex items-center border border-line focus-within:border-line-strong">
             <input
               type="email"
               name="email"
               required
-              placeholder="seu@email.com"
+              placeholder={t.placeholder}
               class="w-full bg-transparent px-4 py-3.5 text-[14px] text-cream outline-none placeholder:text-faint"
             />
             <button
               type="submit"
-              aria-label="Enviar"
+              aria-label={t.send}
               class="grid h-[3.25rem] w-14 shrink-0 place-items-center bg-cream text-ink transition-colors hover:bg-lime"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

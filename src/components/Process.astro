@@ -2,7 +2,7 @@
 import { getSiteData, type Locale } from '../i18n';
 import SectionHeader from './SectionHeader.astro';
 
-interface Props { lang: Locale }
+interface Props { lang: Locale; index?: string }
 const { lang } = Astro.props;
 const data = getSiteData(lang);
 const { process } = data;
@@ -19,7 +19,7 @@ const offsets = ['lg:mt-0', 'lg:mt-14', 'lg:mt-28', 'lg:mt-40'];
 <section class="border-y border-line bg-ink-soft py-14 sm:py-20 md:py-32">
   <div class="container-page">
     <SectionHeader
-      index={data.ui.sectionProcess.index}
+      index={Astro.props.index ?? data.ui.sectionProcess.index}
       label={data.ui.sectionProcess.label}
       title={data.ui.sectionProcess.title}
       titleMuted={data.ui.sectionProcess.titleMuted}

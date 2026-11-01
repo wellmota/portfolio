@@ -1,18 +1,24 @@
 import type { SiteData } from './types';
 
 const en: SiteData = {
+  seo: {
+    title: 'Wellington Mota — Product Engineer & Freelance UX Designer | Apps & MVPs',
+    description:
+      'Product designer who also codes: I take apps, websites and MVPs from idea to launch for companies and founders, from UX research to shipped code. 15+ years, remote.',
+  },
+
   profile: {
     name: 'Wellington Mota',
     firstName: 'Wellington',
     role: 'Product Engineer — Design + Fullstack',
     roleAi: 'AI Specialist',
     tagline:
-      'Product Engineer who owns both sides: I design and ship the complete digital product — from prototype to fullstack React/TypeScript application in production, no handoff, from discovery to metrics. And I use AI beyond autocomplete: spec-driven development, orchestrated agents, version-controlled prompts, and evals ensuring quality before deploy — MVPs shipped in days, not months.',
+      'Product Engineer who owns both sides: I research, design and build the whole digital product — app, website or system — from idea to code in production, with no handoff. I work with companies and founders who need to get a product off the ground or fix the experience of one that already exists. And I use AI beyond autocomplete: specs, orchestrated agents and evals before deploy — MVPs shipped in days, not months.',
     location: 'Brasília, BR',
     timezone: 'America/Sao_Paulo',
     email: 'wellingtonmota42@gmail.com',
     available: true,
-    availableText: 'Open to remote opportunities',
+    availableText: 'Available for projects & remote roles',
   },
 
   nav: [
@@ -69,6 +75,7 @@ const en: SiteData = {
       metaLeft: 'Figma · Research',
       badge: 'STRATEGIC',
       points: [
+        'UX audits of live products',
         'User research & usability testing',
         'Wireframes, flows & IA',
         'High-fidelity prototypes',
@@ -118,12 +125,12 @@ const en: SiteData = {
     {
       index: '05',
       icon: 'spark',
-      title: 'Rapid Prototyping (0 → 1)',
-      metaLeft: 'Startups',
+      title: 'MVP & products from scratch (0 → 1)',
+      metaLeft: 'Startups · Founders',
       badge: 'FAST',
       points: [
-        'MVP in days, not months',
-        'From concept to clickable',
+        'From idea to a live MVP',
+        'Store app, website & admin',
         'Validation with real users',
       ],
       ai: 'Full project scaffolding with agents, complete flow prototyping in hours, and real-time iteration.',
@@ -437,6 +444,14 @@ const en: SiteData = {
 
   faqs: [
     {
+      q: 'Do you take freelance projects?',
+      a: 'Yes. I work with companies, startups and founders by project, in Brazil and abroad: from a UX audit of an app or website that already exists to a product built from scratch. I am also open to remote roles on product teams.',
+    },
+    {
+      q: 'I have an app idea. Can you get it off the ground?',
+      a: 'Yes. I start by defining who it is for, what problem it solves and what goes into the MVP; then I design the screens and build them. VESS Studio went from proposal to an app published on the App Store in twelve weeks, with a website and a management system alongside it, built by me alone.',
+    },
+    {
       q: 'Do you really do both design and development?',
       a: 'Yes. I own both sides: UX research and high-fidelity design, plus React/TypeScript implementation in production. This eliminates the handoff and drastically reduces delivery time.',
     },
@@ -496,8 +511,9 @@ const en: SiteData = {
     eyebrow: 'Let’s work together',
     heading: 'Let’s build',
     headingMuted: 'something memorable?',
-    sub: 'Open to remote opportunities and projects. I respond within 24h.',
-    cta: 'Get in touch',
+    sub: 'Got an app idea, a website to rebuild or a product whose UX is holding it back? Tell me about it. Also open to remote roles. I reply within 24h.',
+    cta: 'Email me',
+    ctaAlt: 'LinkedIn',
     details: { email: 'Email', location: 'Location', status: 'Status' },
   },
 
@@ -510,13 +526,24 @@ const en: SiteData = {
 
   footer: {
     mission:
-      'Product Engineer who bridges design and code to deliver end-to-end digital products. Based in Brasília, open to the world.',
+      'Product Engineer who bridges design and code to deliver end-to-end digital products for companies, startups and founders. Based in Brasília, open to the world.',
     badgeText: 'PRODUCT ENGINEER · DESIGN + CODE · OPEN TO PROJECTS · ',
     legal: `© ${new Date().getFullYear()} Wellington Mota. All rights reserved.`,
   },
 
   ui: {
     startProject: 'Start a project',
+    servicesLink: 'Hire me for a project',
+    footer: {
+      location: 'Location',
+      remote: 'Projects & remote work',
+      contact: 'Contact',
+      navigation: 'Navigation',
+      services: 'Services for projects',
+      talk: 'Let’s talk',
+      placeholder: 'you@email.com',
+      send: 'Send',
+    },
     openMenu: 'Open menu',
     viewExperience: 'View experience',
     talkToMe: 'Talk to me',
@@ -534,7 +561,7 @@ const en: SiteData = {
     sectionAbout: { index: '06', label: 'About me' },
     sectionServices: { index: '02', label: 'Services', title: 'From concept to', titleMuted: 'product, end to end.', caption: 'One professional to design and build your digital experience, no handoff.' },
     sectionProcess: { index: '03', label: 'How I work', title: 'A clear', titleMuted: 'process.', caption: 'From the first brief to delivery — with feedback and metrics at every stage.' },
-    sectionWork: { index: '04', label: 'Featured projects', title: 'Where I left', titleMuted: 'my mark.', caption: 'Projects for major companies and institutions — from Brazil to the UK and US.' },
+    sectionWork: { index: '04', label: 'Featured projects', title: 'Where I left', titleMuted: 'my mark.', caption: 'Projects for major brands, startups and founders — from Brazil to the UK and US.' },
     sectionTestimonials: { index: '05', label: 'Testimonials', title: 'What they say', titleMuted: 'about the work.', caption: 'Real feedback from founders, CEOs, and product heads from Brazil, the UK, and US.' },
     sectionFaq: { index: '07', label: 'FAQ', title: 'Questions?', titleMuted: 'Answered.', caption: '' },
     sectionWriting: { index: '08', label: 'Writing & Code', title: 'Thinking out loud.', titleMuted: 'And shipping.', caption: 'A book, articles on Medium and code on GitHub — thinking and shipping side by side.' },

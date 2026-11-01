@@ -249,7 +249,7 @@ const cuidame: CaseStudy = {
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
     seo: {
-      title: 'CuidaMe — Case Study · Wellington Mota',
+      title: 'CuidaMe: app de saúde resgatado e redesenhado em 7 dias | Wellington Mota',
       description:
         'Resgate e redesign de um app de cuidado travado por dois anos: em uma semana, workshop, redesign e 100% do front-end prontos para beta, aprovados de primeira — do design direto à produção.',
     },
@@ -503,7 +503,7 @@ const cuidame: CaseStudy = {
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },
     seo: {
-      title: 'CuidaMe — Case Study · Wellington Mota',
+      title: 'CuidaMe: health app rescued and redesigned in 7 days | Wellington Mota',
       description:
         'Rescue and redesign of a care app stuck for two years: in one week, workshop, redesign and 100% of the front end ready for beta, approved on the first try — from design straight to production.',
     },

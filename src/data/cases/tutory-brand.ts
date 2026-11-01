@@ -414,7 +414,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     },
     ui: { back: 'Voltar aos projetos', chapter: 'Capítulo' },
     seo: {
-      title: 'Tutory: identidade visual — Case Study · Wellington Mota',
+      title: 'Tutory: rebranding e identidade visual de EdTech | Wellington Mota',
       description:
         'Rebranding da Tutory: arquétipos, símbolo reconstruído como arquitetura, paleta, voz, deck interativo. Aprovada em catorze dias.',
     },
@@ -731,7 +731,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     },
     ui: { back: 'Back to projects', chapter: 'Chapter' },
     seo: {
-      title: 'Tutory: visual identity — Case Study · Wellington Mota',
+      title: 'Tutory: EdTech rebrand and visual identity | Wellington Mota',
       description:
         'Tutory rebranding: archetypes, a symbol rebuilt as architecture, palette, voice, an interactive deck. Approved in fourteen days.',
     },

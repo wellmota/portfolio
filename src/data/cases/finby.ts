@@ -296,7 +296,7 @@ const finby: CaseStudy = {
     ui: { back: 'Voltar aos projetos', visit: 'Abrir o protótipo' },
     liveUrl: `${APP}/index.html`,
     seo: {
-      title: 'Finby — Case Study · Wellington Mota',
+      title: 'Finby: design e protótipo de app de consórcio | Wellington Mota',
       description:
         'Finby: o app de consórcio entre amigos que desenhei, levado do Figma a um protótipo navegável em dias. 12 telas do convite ao saque, com marca mais quente e contraste AA.',
     },
@@ -547,7 +547,7 @@ const finby: CaseStudy = {
     ui: { back: 'Back to projects', visit: 'Open the prototype' },
     liveUrl: `${APP}/index.html`,
     seo: {
-      title: 'Finby — Case Study · Wellington Mota',
+      title: 'Finby: fintech app design and interactive prototype | Wellington Mota',
       description:
         'Finby: the social consórcio app I designed, taken from Figma to a navigable prototype in days. 12 screens from invite to withdrawal, with a warmer brand and AA contrast.',
     },

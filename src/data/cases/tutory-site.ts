@@ -264,7 +264,7 @@ const tutorySite: CaseStudy = {
     },
     "liveUrl": "https://www.tutory.com.br",
     "seo": {
-      "title": "Tutory: site — Case Study · Wellington Mota",
+      "title": "Tutory: site em Astro com SEO para Google e IAs | Wellington Mota",
       "description": "Site institucional da Tutory em Astro: 14 páginas, migração do WordPress com 301, Lighthouse 100, Consent Mode v2 e pronto para ser citado por IAs. Do primeiro commit ao ar em 63 dias."
     }
   },
@@ -526,7 +526,7 @@ const tutorySite: CaseStudy = {
     },
     "liveUrl": "https://www.tutory.com.br",
     "seo": {
-      "title": "Tutory: website — Case Study · Wellington Mota",
+      "title": "Tutory: Astro website with SEO for Google and AI | Wellington Mota",
       "description": "Tutory’s institutional website in Astro: 14 pages, WordPress migration with 301s, Lighthouse 100, Consent Mode v2 and ready to be cited by AIs. From first commit to live in 63 days."
     }
   }

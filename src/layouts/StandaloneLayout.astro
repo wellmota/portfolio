@@ -7,6 +7,7 @@
 import AnalyticsHead from '../components/AnalyticsHead.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
 import { getSiteData, type Locale } from '../i18n';
+import { SITE, baseGraph, pageGraph, graphScript } from '../lib/seo';
 
 interface Props {
   lang: Locale;
@@ -27,9 +28,13 @@ const { lang, title, description, ogImageAlt, ogImageWidth, ogImageHeight, alter
 const data = getSiteData(lang);
 const htmlLang = lang === 'pt' ? 'pt-BR' : 'en';
 
-const siteUrl = 'https://userexperience.com.br';
+const siteUrl = SITE;
 const canonical = new URL(Astro.url.pathname, siteUrl).href;
 const ogImage = `${siteUrl}${Astro.props.ogImage}`;
+const graph = graphScript([
+  ...baseGraph(lang),
+  ...pageGraph({ lang, pathname: Astro.url.pathname, title, description, image: ogImage }),
+]);
 ---
 
 <!doctype html>
@@ -72,6 +77,8 @@ const ogImage = `${siteUrl}${Astro.props.ogImage}`;
     <meta name="twitter:image" content={ogImage} />
 
     <meta name="theme-color" content={themeColor} />
+
+    <script type="application/ld+json" is:inline set:html={graph} />
 
     <!-- Fonts (a UnifrakturCook é só a inicial do cabeçalho) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

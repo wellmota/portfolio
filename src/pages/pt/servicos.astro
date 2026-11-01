@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import ServicesPage from '../../components/ServicesPage.astro';
+import Footer from '../../components/Footer.astro';
+import services from '../../data/services';
+import { SITE, SERVICE_ID, WEBSITE_ID } from '../../lib/seo';
+import { getLocalePath } from '../../i18n';
+
+const lang = 'pt' as const;
+const s = services[lang];
+const url = `${SITE}${Astro.url.pathname}`;
+
+/* A página descreve o serviço (#service do grafo base) e tem a trilha Início → Serviços */
+const schema = [
+  {
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: s.seo.title,
+    description: s.seo.description,
+    inLanguage: lang === 'pt' ? 'pt-BR' : 'en',
+    isPartOf: { '@id': WEBSITE_ID },
+    about: { '@id': SERVICE_ID },
+    mainEntity: { '@id': SERVICE_ID },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: s.breadcrumb.home, item: `${SITE}${getLocalePath(lang)}` },
+      { '@type': 'ListItem', position: 2, name: s.breadcrumb.page, item: url },
+    ],
+  },
+];
+---
+
+<Layout lang={lang} title={s.seo.title} description={s.seo.description} schema={schema}>
+  <Nav lang={lang} altHref="/services/" />
+  <ServicesPage lang={lang} />
+  <Footer lang={lang} />
+</Layout>

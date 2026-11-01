@@ -250,7 +250,7 @@ const carecloud: CaseStudy = {
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
     seo: {
-      title: 'CareCloud — Case Study · Wellington Mota',
+      title: 'CareCloud: UX de software clínico, de Flex para React | Wellington Mota',
       description:
         'Ajudar a replataformar uma suíte clínica de Adobe Flex para React: in loco em Miami num time de cinco UX, fluxos hi-fi testados com médicos reais, design entregue junto com a reconstrução de engenharia.',
     },
@@ -505,7 +505,7 @@ const carecloud: CaseStudy = {
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },
     seo: {
-      title: 'CareCloud — Case Study · Wellington Mota',
+      title: 'CareCloud: UX for a clinical suite, Flex to React | Wellington Mota',
       description:
         'Helping re-platform a clinical suite from Adobe Flex to React: on-site in Miami on a five-person UX team, hi-fi flows tested with real doctors, design delivered alongside the engineering rebuild.',
     },

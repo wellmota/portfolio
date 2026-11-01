@@ -1,10 +1,20 @@
 ---
 import { getSiteData, languages, getLocalePath, type Locale } from '../i18n';
 
-interface Props { lang: Locale }
+interface Props {
+  lang: Locale;
+  /** A mesma página no outro idioma; sem ele, a home do outro idioma */
+  altHref?: string;
+}
 const { lang } = Astro.props;
 const data = getSiteData(lang);
-const { profile, nav } = data;
+const { profile } = data;
+/* Fora da home, as âncoras da home (#sobre, #projetos…) apontam para ela */
+const home = getLocalePath(lang);
+const onHome = Astro.url.pathname === home;
+const link = (h: string) => (h.startsWith('#') && !onHome ? `${home}${h}` : h);
+const nav = data.nav.map((n) => ({ ...n, href: link(n.href) }));
+const altHref = Astro.props.altHref ?? (lang === 'en' ? getLocalePath('pt') : getLocalePath('en'));
 ---
 
 <header
@@ -15,7 +25,7 @@ const { profile, nav } = data;
     <nav class="flex items-center justify-between gap-4 py-4">
       <!-- Brand + meta -->
       <div class="flex items-center gap-5">
-        <a href="#home" class="flex items-center gap-2.5 shrink-0">
+        <a href={link('#home')} class="flex items-center gap-2.5 shrink-0">
           <span
             class="gothic grid h-8 w-8 place-items-center bg-lime pb-0.5 text-[19px] text-ink"
             >{profile.firstName.charAt(0)}</span
@@ -62,7 +72,7 @@ const { profile, nav } = data;
           </svg>
         </a>
         <a
-          href={lang === 'en' ? getLocalePath('pt') : getLocalePath('en')}
+          href={altHref}
           class="mono text-[11px] uppercase tracking-widest text-mist hover:text-cream transition-colors"
         >
           {lang === 'en' ? 'PT' : 'EN'}

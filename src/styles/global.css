@@ -246,6 +246,16 @@ body {
     border-color 0.25s ease,
     transform 0.25s ease;
 }
+/* O .btn está fora das camadas do Tailwind, então o display dele venceria o `hidden`: o "Começar
+   projeto" da nav aparecia no celular e empurrava o idioma e o menu para fora da tela */
+.btn.hidden {
+  display: none;
+}
+@media (min-width: 64rem) {
+  .btn.lg\:inline-flex {
+    display: inline-flex;
+  }
+}
 .btn svg {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }

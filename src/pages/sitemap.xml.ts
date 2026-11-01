@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { alternatesFor } from '../lib/seo';
 
 const site = 'https://userexperience.com.br';
 
@@ -15,8 +16,7 @@ const paths = new Set([...built, ...statics]);
 
 /* Par EN/PT da mesma página, quando os dois existem */
 function alternates(path: string) {
-  const en = path.startsWith('/pt/') ? path.slice(3) : path;
-  const pt = `/pt${en}`;
+  const { en, pt } = alternatesFor(path);
   if (!paths.has(en) || !paths.has(pt)) return '';
   return [
     `<xhtml:link rel="alternate" hreflang="en" href="${site}${en}" />`,

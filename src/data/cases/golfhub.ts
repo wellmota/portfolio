@@ -333,7 +333,7 @@ const golfhub: CaseStudy = {
     ui: { back: 'Voltar aos projetos', visit: 'Abrir o protótipo' },
     liveUrl: `${APP}/index.html`,
     seo: {
-      title: 'GolfHub — Case Study · Wellington Mota',
+      title: 'GolfHub: app do sócio e ERP para clube de golfe | Wellington Mota',
       description:
         'GolfHub: uma proposta de quatro telas no Figma para o Clube de Golfe de Brasília virou app do sócio e ERP do clube navegáveis, com um campo de golfe em 3D.',
     },
@@ -608,7 +608,7 @@ const golfhub: CaseStudy = {
     ui: { back: 'Back to projects', visit: 'Open the prototype' },
     liveUrl: `${APP}/index.html`,
     seo: {
-      title: 'GolfHub — Case Study · Wellington Mota',
+      title: 'GolfHub: members’ app and ERP for a golf club | Wellington Mota',
       description:
         'GolfHub: a four-screen Figma proposal for the Clube de Golfe de Brasília became a clickable members’ app and club ERP, with a 3D golf course.',
     },

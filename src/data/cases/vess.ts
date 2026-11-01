@@ -153,7 +153,7 @@ const vess: CaseStudy = {
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
     liveUrl: 'https://vess-studio.vercel.app/',
     seo: {
-      title: 'VESS Studio — Case Study · Wellington Mota',
+      title: 'VESS Studio: app, site e sistema para estúdio de Pilates | Wellington Mota',
       description:
         'VESS Studio: sistema próprio para um estúdio premium de Pilates em Brasília, com site, app nas lojas, admin das duas unidades e cobrança automática. Feito sozinho, da proposta à App Store, em doze semanas.',
     },
@@ -307,7 +307,7 @@ const vess: CaseStudy = {
     ui: { back: 'Back to projects', visit: 'Visit the site' },
     liveUrl: 'https://vess-studio.vercel.app/',
     seo: {
-      title: 'VESS Studio — Case Study · Wellington Mota',
+      title: 'VESS Studio: app, website and system for a Pilates studio | Wellington Mota',
       description:
         'VESS Studio: an in-house system for a premium Pilates studio in Brasília, with a website, a store-published app, an admin for both studios and automatic billing. Built solo, from proposal to the App Store, in twelve weeks.',
     },

@@ -315,7 +315,7 @@ const resilience: CaseStudy = {
     ui: { back: 'Voltar aos projetos', visit: 'Abrir o protótipo' },
     liveUrl: `${APP}/index.html`,
     seo: {
-      title: 'Resilience Dynamic — Case Study · Wellington Mota',
+      title: 'Resilience Dynamic: design de app de bem-estar | Wellington Mota',
       description:
         'Resilience Dynamic: o app de resiliência que desenhei para a The Resilience Engine (Edimburgo), já lançado, levado do Figma a um protótipo navegável de 15 telas, com as telas que eram wireframe enfim desenhadas.',
     },
@@ -581,7 +581,7 @@ const resilience: CaseStudy = {
     ui: { back: 'Back to projects', visit: 'Open the prototype' },
     liveUrl: `${APP}/index.html`,
     seo: {
-      title: 'Resilience Dynamic — Case Study · Wellington Mota',
+      title: 'Resilience Dynamic: wellbeing app design and prototype | Wellington Mota',
       description:
         'Resilience Dynamic: the resilience app I designed for The Resilience Engine (Edinburgh), already launched, taken from Figma to a 15-screen interactive prototype, with the screens that were wireframes finally designed.',
     },

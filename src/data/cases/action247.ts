@@ -106,7 +106,7 @@ const action247: CaseStudy = {
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
     seo: {
-      title: 'Action247 — Case Study · Wellington Mota',
+      title: 'Action247: design de app de palpites esportivos | Wellington Mota',
       description:
         'Action247: o design de ponta a ponta de um jogo de palpites esportivos grátis, com prêmio em dinheiro. Lobby, palpite, cadastro e resultado no celular e no desktop, e e-mails no mesmo sistema.',
     },
@@ -217,7 +217,7 @@ const action247: CaseStudy = {
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },
     seo: {
-      title: 'Action247 — Case Study · Wellington Mota',
+      title: 'Action247: sports prediction game app design | Wellington Mota',
       description:
         'Action247: end-to-end design of a free sports prediction game with cash prizes. Lobby, pick, sign-up and results on phone and desktop, with emails on the same system.',
     },

@@ -1,6 +1,7 @@
 ---
 import { getSiteData, type Locale } from '../i18n';
 import SectionHeader from './SectionHeader.astro';
+import { servicesPath } from '../lib/seo';
 
 interface Props { lang: Locale }
 const { lang } = Astro.props;
@@ -73,4 +74,11 @@ const icons: Record<string, string> = {
         ))
       }
   </div>
+
+  <a href={servicesPath(lang)} class="btn btn-outline mt-8 text-sm sm:mt-10">
+    {data.ui.servicesLink}
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+      <path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </a>
 </section>

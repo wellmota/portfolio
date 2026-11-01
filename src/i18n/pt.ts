@@ -1,18 +1,24 @@
 import type { SiteData } from './types';
 
 const pt: SiteData = {
+  seo: {
+    title: 'Wellington Mota — Product Engineer e designer de UX freelancer | Apps e MVPs',
+    description:
+      'Designer de produto que também programa: tiro apps, sites e MVPs do papel para empresas e empreendedores, da pesquisa de UX ao código no ar. 15+ anos, remoto.',
+  },
+
   profile: {
     name: 'Wellington Mota',
     firstName: 'Wellington',
     role: 'Product Engineer — Design + Fullstack',
     roleAi: 'AI Specialist',
     tagline:
-      'Product Engineer que faz as duas pontas: desenho e entrego o produto digital completo — do protótipo à aplicação fullstack React/TypeScript em produção, sem handoff, da descoberta à métrica. E uso IA além do autocomplete: spec-driven development, agentes orquestrados, prompts versionados como código e evals garantindo qualidade antes do deploy — MVPs no ar em dias, não meses.',
+      'Product Engineer que faz as duas pontas: pesquiso, desenho e construo o produto digital inteiro — app, site ou sistema — da ideia ao código em produção, sem handoff. Atendo empresas e empreendedores que precisam tirar um produto do papel ou consertar a experiência do que já existe. E uso IA além do autocomplete: specs, agentes orquestrados e evals antes do deploy — MVPs no ar em dias, não meses.',
     location: 'Brasília, BR',
     timezone: 'America/Sao_Paulo',
     email: 'wellingtonmota42@gmail.com',
     available: true,
-    availableText: 'Aberto a oportunidades remotas',
+    availableText: 'Disponível para projetos e vagas remotas',
   },
 
   nav: [
@@ -69,6 +75,7 @@ const pt: SiteData = {
       metaLeft: 'Figma · Research',
       badge: 'STRATEGIC',
       points: [
+        'Diagnóstico de UX de produtos no ar',
         'User research & testes de usabilidade',
         'Wireframes, fluxos e IA',
         'Protótipos de alta fidelidade',
@@ -118,12 +125,12 @@ const pt: SiteData = {
     {
       index: '05',
       icon: 'spark',
-      title: 'Rapid Prototyping (0 → 1)',
-      metaLeft: 'Startups',
+      title: 'MVP e produto do zero (0 → 1)',
+      metaLeft: 'Startups · Empreendedores',
       badge: 'FAST',
       points: [
-        'MVP em dias, não meses',
-        'Do conceito ao clicável',
+        'Da ideia ao MVP no ar',
+        'App nas lojas, site e painel',
         'Validação com usuários reais',
       ],
       ai: 'Scaffolding de projetos inteiros com agentes, prototipagem de fluxos completos em horas e iteração em tempo real.',
@@ -437,6 +444,14 @@ const pt: SiteData = {
 
   faqs: [
     {
+      q: 'Você pega projetos como freelancer?',
+      a: 'Pego. Atendo empresas, startups e empreendedores por projeto, no Brasil e fora: do diagnóstico de UX de um app ou site que já existe ao produto construído do zero. Também topo vaga remota em time de produto.',
+    },
+    {
+      q: 'Tenho uma ideia de app. Você consegue tirar do papel?',
+      a: 'Consigo. Começo definindo para quem é, que problema resolve e o que entra no MVP; depois desenho as telas e construo. O VESS Studio foi da proposta ao app publicado na App Store em doze semanas, com site e sistema de gestão juntos, feito por mim sozinho.',
+    },
+    {
       q: 'Você faz design e desenvolvimento de verdade?',
       a: 'Sim. Sou dono das duas pontas: pesquisa de UX e design de alta fidelidade, e implementação em React/TypeScript em produção. Isso elimina o handoff e reduz muito o tempo de entrega.',
     },
@@ -496,8 +511,9 @@ const pt: SiteData = {
     eyebrow: 'Vamos trabalhar juntos',
     heading: 'Bora construir',
     headingMuted: 'algo memorável?',
-    sub: 'Aberto a oportunidades remotas e projetos. Respondo em até 24h.',
-    cta: 'Falar comigo',
+    sub: 'Tem uma ideia de app, um site para refazer ou um produto com a UX travando? Me conta. Também topo vaga remota. Respondo em até 24h.',
+    cta: 'Conversar no WhatsApp',
+    ctaAlt: 'LinkedIn',
     details: { email: 'E-mail', location: 'Localização', status: 'Status' },
   },
 
@@ -510,13 +526,24 @@ const pt: SiteData = {
 
   footer: {
     mission:
-      'Product Engineer que une design e código para entregar produtos digitais ponta a ponta. Baseado em Brasília, aberto ao mundo.',
+      'Product Engineer que une design e código para entregar produtos digitais ponta a ponta, para empresas, startups e empreendedores. Baseado em Brasília, aberto ao mundo.',
     badgeText: 'PRODUCT ENGINEER · DESIGN + CÓDIGO · ABERTO A PROJETOS · ',
     legal: `© ${new Date().getFullYear()} Wellington Mota. Todos os direitos reservados.`,
   },
 
   ui: {
     startProject: 'Começar projeto',
+    servicesLink: 'Contratar para um projeto',
+    footer: {
+      location: 'Localização',
+      remote: 'Projetos e trabalho remoto',
+      contact: 'Contato',
+      navigation: 'Navegação',
+      services: 'Serviços para projetos',
+      talk: 'Vamos conversar',
+      placeholder: 'seu@email.com',
+      send: 'Enviar',
+    },
     openMenu: 'Abrir menu',
     viewExperience: 'Ver experiência',
     talkToMe: 'Fale comigo',
@@ -534,7 +561,7 @@ const pt: SiteData = {
     sectionAbout: { index: '06', label: 'Sobre mim' },
     sectionServices: { index: '02', label: 'Especialidades', title: 'Do conceito ao', titleMuted: 'produto, ponta a ponta.', caption: 'Um profissional só para desenhar e construir sua experiência digital, sem handoff.' },
     sectionProcess: { index: '03', label: 'Como eu trabalho', title: 'Um processo', titleMuted: 'claro.', caption: 'Do primeiro brief à entrega — com feedback e métricas em cada etapa.' },
-    sectionWork: { index: '04', label: 'Projetos em destaque', title: 'Onde deixei', titleMuted: 'minha marca.', caption: 'Projetos para grandes empresas e instituições — do Brasil ao Reino Unido e EUA.' },
+    sectionWork: { index: '04', label: 'Projetos em destaque', title: 'Onde deixei', titleMuted: 'minha marca.', caption: 'Projetos para grandes marcas, startups e empreendedores — do Brasil ao Reino Unido e EUA.' },
     sectionTestimonials: { index: '05', label: 'Depoimentos', title: 'O que dizem', titleMuted: 'sobre o trabalho.', caption: 'Feedback real de founders, CEOs e heads de produto do Brasil, Reino Unido e EUA.' },
     sectionFaq: { index: '07', label: 'Perguntas frequentes', title: 'Dúvidas?', titleMuted: 'Respondidas.', caption: '' },
     sectionWriting: { index: '08', label: 'Escrita & Código', title: 'Penso em voz alta.', titleMuted: 'E entrego.', caption: 'Um livro, artigos no Medium e código no GitHub — pensamento e entrega lado a lado.' },

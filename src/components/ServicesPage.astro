@@ -1,0 +1,171 @@
+---
+/**
+ * Página de serviços: para quem quer contratar por projeto (empresa, startup, empreendedor), não para
+ * recrutador. Usa a mesma nav, processo, FAQ e contato da home; o conteúdo vem de data/services.ts.
+ */
+import { getSiteData, getLocalePath, type Locale } from '../i18n';
+import services from '../data/services';
+import { whatsappHref, mailtoHref } from '../lib/seo';
+import SectionHeader from './SectionHeader.astro';
+import Process from './Process.astro';
+import Faq from './Faq.astro';
+import Contact from './Contact.astro';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const data = getSiteData(lang);
+const s = services[lang];
+
+const wa = whatsappHref(lang);
+const mail = mailtoHref(lang, data.profile.email);
+const [primaryHref, secondaryHref] = lang === 'pt' ? [wa, mail] : [mail, wa];
+
+const cases = s.proof.cases
+  .map((slug) => data.projects.find((p) => p.href?.endsWith(`/work/${slug}/`)))
+  .filter((p): p is (typeof data.projects)[number] => Boolean(p));
+
+const arrow = 'M4 12L12 4M12 4H5M12 4V11';
+const ext = (h: string) => (h.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {});
+---
+
+<main>
+  <!-- Hero -->
+  <section class="container-page pb-14 pt-28 sm:pb-20 sm:pt-36 md:pb-28 md:pt-44">
+    <nav aria-label="Breadcrumb" class="mono text-[11px] uppercase tracking-widest text-faint" data-reveal>
+      <a href={getLocalePath(lang)} class="transition-colors hover:text-cream">{s.breadcrumb.home}</a>
+      <span class="mx-2 text-line-strong">/</span>
+      <span class="text-mist" aria-current="page">{s.breadcrumb.page}</span>
+    </nav>
+
+    <span class="label label-dot mt-10 sm:mt-14" data-reveal>{s.hero.kicker}</span>
+    <h1 class="display mt-6 max-w-6xl text-[clamp(2.6rem,8vw,7rem)] leading-[0.95]" data-reveal>
+      {s.hero.title} <span class="text-faint">{s.hero.titleMuted}</span>
+    </h1>
+
+    <div class="mt-10 grid gap-10 border-t border-line pt-8 md:mt-14 md:grid-cols-12 md:gap-8">
+      <p class="text-lg leading-relaxed text-cream md:col-span-6 md:text-xl" data-reveal>{s.hero.lead}</p>
+      <ul class="flex flex-col gap-3 md:col-span-3 md:border-l md:border-line md:pl-8" data-reveal>
+        {
+          s.hero.facts.map((f) => (
+            <li class="flex items-start gap-3 text-[14px] text-mist">
+              <span class="mono mt-0.5 shrink-0 text-lime">→</span>
+              {f}
+            </li>
+          ))
+        }
+      </ul>
+      <div class="flex flex-col items-start gap-3 md:col-span-3" data-reveal>
+        <a href={primaryHref} {...ext(primaryHref)} class="btn btn-solid w-full justify-between sm:w-auto md:w-full">
+          {s.hero.primary}
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <path d={arrow} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+        <a href={secondaryHref} {...ext(secondaryHref)} class="btn btn-outline w-full justify-between sm:w-auto md:w-full">
+          {s.hero.secondary}
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <path d={arrow} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Para quem é -->
+  <section class="container-page pb-14 sm:pb-20 md:pb-32">
+    <SectionHeader
+      index={s.situations.index}
+      label={s.situations.label}
+      title={s.situations.title}
+      titleMuted={s.situations.titleMuted}
+      caption={s.situations.caption}
+    />
+    <div class="mt-10 grid gap-4 sm:mt-16 sm:gap-5 md:grid-cols-2">
+      {
+        s.situations.items.map((it, i) => (
+          <article class="flex flex-col border border-line bg-ink-soft p-6 sm:p-8" data-reveal data-reveal-group>
+            <span class="mono text-xs text-faint">0{i + 1}</span>
+            <h3 class="display mt-6 text-2xl !leading-[1.15] sm:text-[1.7rem]">{it.title}</h3>
+            <p class="mt-4 flex-1 text-[15px] leading-relaxed text-mist">{it.body}</p>
+            <a
+              href={it.href}
+              class="group mt-8 flex items-center justify-between gap-4 border-t border-line pt-5 text-[14px] text-cream transition-colors hover:text-lime"
+            >
+              <span>{it.proof}</span>
+              <svg class="shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d={arrow} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- O que você recebe -->
+  <section class="container-page pb-14 sm:pb-20 md:pb-32">
+    <SectionHeader
+      index={s.deliverables.index}
+      label={s.deliverables.label}
+      title={s.deliverables.title}
+      titleMuted={s.deliverables.titleMuted}
+      caption={s.deliverables.caption}
+    />
+    <div class="mt-10 grid border-l border-t border-line sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        s.deliverables.items.map((it) => (
+          <div class="border-b border-r border-line p-6 sm:p-8" data-reveal data-reveal-group>
+            <h3 class="flex items-start gap-3 text-lg font-medium text-cream">
+              <span class="mono mt-0.5 shrink-0 text-lime">→</span>
+              {it.title}
+            </h3>
+            <p class="mt-3 text-[14px] leading-relaxed text-mist">{it.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <Process lang={lang} index="03" />
+
+  <!-- Projetos parecidos -->
+  <section class="container-page py-14 sm:py-20 md:py-32">
+    <SectionHeader
+      index={s.proof.index}
+      label={s.proof.label}
+      title={s.proof.title}
+      titleMuted={s.proof.titleMuted}
+      caption={s.proof.caption}
+    />
+    <div class="mt-10 grid gap-4 sm:mt-16 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
+      {
+        cases.map((p) => (
+          <a
+            href={p.href}
+            class="group flex flex-col border border-line bg-ink-soft p-3 transition-colors duration-300 hover:border-line-strong"
+            data-reveal
+            data-reveal-group
+          >
+            <div class="relative aspect-[16/10] overflow-hidden bg-ink-soft">
+              <img src={p.image} alt="" aria-hidden="true" loading="lazy" class="absolute inset-0 h-full w-full scale-125 object-cover opacity-90 blur-2xl" />
+              <img
+                src={p.image}
+                alt={p.title}
+                loading="lazy"
+                class="relative h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.04]"
+              />
+            </div>
+            <div class="px-1 pb-1 pt-4">
+              <p class="mono text-[10px] uppercase tracking-widest text-faint">{p.meta}</p>
+              <h3 class="display mt-2 text-xl leading-tight">{p.title}</h3>
+              <p class="mt-2 text-[13px] leading-snug text-mist">{p.highlight ?? p.categories.join(' · ')}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <Faq lang={lang} items={s.faqs} index="05" />
+  <Contact lang={lang} index="06" />
+</main>

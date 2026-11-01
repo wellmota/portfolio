@@ -149,7 +149,7 @@ const aeroporto: CaseStudy = {
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
     seo: {
-      title: 'Aeroporto de Leads — Case Study · Wellington Mota',
+      title: 'Aeroporto de Leads: painel 3D de vendas em tempo real | Wellington Mota',
       description:
         'Transformei a tabela de leads da TV da Tutory num aeroporto 3D ao vivo: cada lead é um avião que pousa. three.js, tempo real e Smart TV — design e código em uma semana.',
     },
@@ -303,7 +303,7 @@ const aeroporto: CaseStudy = {
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },
     seo: {
-      title: 'Lead Airport — Case Study · Wellington Mota',
+      title: 'Lead Airport: a real-time 3D sales dashboard | Wellington Mota',
       description:
         'I turned the lead table on Tutory’s sales-room TV into a live 3D airport: every lead is a plane that lands. three.js, real time and Smart TV — design and code in one week.',
     },

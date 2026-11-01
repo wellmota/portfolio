@@ -1,12 +1,34 @@
 ---
 import { getSiteData, type Locale } from '../i18n';
 
-interface Props { lang: Locale }
-const { lang } = Astro.props;
+interface Props {
+  lang: Locale;
+  /** Perguntas desta página; sem elas, as da home */
+  items?: { q: string; a: string }[];
+  index?: string;
+  /** Marca o FAQPage no JSON-LD (uma vez por página) */
+  schema?: boolean;
+}
+const { lang, schema = true } = Astro.props;
 const data = getSiteData(lang);
-const { faqs, faqAside } = data;
-const sec = data.ui.sectionFaq;
+const { faqAside } = data;
+const faqs = Astro.props.items ?? data.faqs;
+const sec = { ...data.ui.sectionFaq, index: Astro.props.index ?? data.ui.sectionFaq.index };
+
+/* Perguntas e respostas legíveis por máquina: o Google e os assistentes de IA citam daqui */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: lang === 'pt' ? 'pt-BR' : 'en',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
 ---
+
+{schema && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}
 
 <section class="border-t border-line py-14 sm:py-20 md:py-32">
   <div class="container-page">

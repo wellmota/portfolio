@@ -1,4 +1,6 @@
 export interface SiteData {
+  /** Título e descrição da home (e padrão das páginas sem SEO próprio) */
+  seo: { title: string; description: string };
   profile: {
     name: string;
     firstName: string;
@@ -74,6 +76,8 @@ export interface SiteData {
     headingMuted: string;
     sub: string;
     cta: string;
+    /** Segundo botão (LinkedIn) */
+    ctaAlt: string;
     details: { email: string; location: string; status: string };
   };
   faqAside: {
@@ -88,6 +92,9 @@ export interface SiteData {
   };
   ui: {
     startProject: string;
+    /** Link da seção de serviços da home para a página de serviços */
+    servicesLink: string;
+    footer: { location: string; remote: string; contact: string; navigation: string; services: string; talk: string; placeholder: string; send: string };
     openMenu: string;
     viewExperience: string;
     talkToMe: string;

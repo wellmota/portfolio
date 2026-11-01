@@ -165,7 +165,7 @@ const hypergestor: CaseStudy = {
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
     seo: {
-      title: 'HyperGestor — Case Study · Wellington Mota',
+      title: 'HyperGestor: marca, site e ERP com CRM e IA | Wellington Mota',
       description:
         'HyperGestor: marca, site e redesenho do ERP com CRM agêntico para concessionárias, por uma pessoa só. Padrões para todos os módulos e o lead num painel com WhatsApp e IA, em produção.',
     },
@@ -335,7 +335,7 @@ const hypergestor: CaseStudy = {
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },
     seo: {
-      title: 'HyperGestor — Case Study · Wellington Mota',
+      title: 'HyperGestor: brand, website and ERP with an AI CRM | Wellington Mota',
       description:
         'HyperGestor: brand, website and the redesign of an ERP with an agentic CRM for car dealerships, by one person. Patterns for every module and each lead in one panel with WhatsApp and AI, in production.',
     },

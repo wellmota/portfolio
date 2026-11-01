@@ -91,7 +91,7 @@ const pt: CaseOba = {
   accent: '#4D7CFF',
   accent2: '#FEC133',
   seo: {
-    title: 'Método OBA — Case Study · Wellington Mota',
+    title: 'Método OBA: redesign de plataforma de ensino, do protótipo ao PHP | Wellington Mota',
     description:
       'O painel do aluno do Método OBA, mentoria de concursos policiais de Minas Gerais, redesenhado na Tutory: protótipo navegável no computador e no celular, três temas e as 13 patentes da PMMG.',
   },
@@ -392,7 +392,7 @@ const pt: CaseOba = {
 const en: CaseOba = {
   ...pt,
   seo: {
-    title: 'Método OBA — Case Study · Wellington Mota',
+    title: 'Método OBA: learning platform redesign, prototype to PHP | Wellington Mota',
     description:
       'The student dashboard of Método OBA, a police-exam prep mentorship from Minas Gerais, redesigned at Tutory: an interactive prototype on desktop and phone, three themes and the 13 PMMG ranks.',
   },
