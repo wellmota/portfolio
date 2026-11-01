@@ -32,7 +32,8 @@ export function mailtoHref(lang: Locale, email: string) {
 export function alternatesFor(pathname: string) {
   let en = pathname.replace(/^\/pt(?=\/)/, '') || '/';
   if (en === '/servicos/') en = '/services/';
-  const pt = en === '/services/' ? '/pt/servicos/' : `/pt${en}`;
+  if (en === '/privacidade/') en = '/privacy/';
+  const pt = en === '/services/' ? '/pt/servicos/' : en === '/privacy/' ? '/pt/privacidade/' : `/pt${en}`;
   return { en, pt };
 }
 

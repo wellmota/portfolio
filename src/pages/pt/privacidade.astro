@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import PrivacyPage from '../../components/PrivacyPage.astro';
+import Footer from '../../components/Footer.astro';
+
+const lang = 'pt' as const;
+---
+
+<Layout
+  lang={lang}
+  title="Política de Privacidade — Parolah"
+  description="Como a Parolah (CNPJ 47.605.406/0001-61) trata dados pessoais neste site e no WhatsApp que opera para as empresas clientes."
+>
+  <Nav lang={lang} altHref="/privacy/" />
+  <PrivacyPage lang={lang} />
+  <Footer lang={lang} />
+</Layout>

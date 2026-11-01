@@ -1,0 +1,210 @@
+---
+/**
+ * Política de privacidade da Parolah (empresa do Wellington). Serve ao site e ao app "Parolah" na Meta,
+ * que envia e recebe WhatsApp em nome dos clientes (Tech Provider da Plataforma do WhatsApp Business).
+ * O link desta página está no app da Meta (URL da Política de Privacidade e Exclusão de dados do usuário):
+ * mudar o caminho quebra a revisão do app.
+ */
+import type { Locale } from '../i18n';
+import { getLocalePath } from '../i18n';
+
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+
+const EMAIL = 'impeto.wellington@gmail.com';
+const PHONE = '+55 61 98104-3296';
+
+type Section = { id?: string; title: string; paragraphs?: string[]; items?: string[] };
+
+const content: Record<Locale, { kicker: string; title: string; updated: string; intro: string; sections: Section[]; home: string }> = {
+  en: {
+    kicker: 'Legal',
+    title: 'Privacy Policy',
+    updated: 'Last updated: November 1, 2026',
+    home: 'Home',
+    intro:
+      'This policy explains what personal data Parolah collects, why, who it is shared with and how to exercise your rights under Brazil’s General Data Protection Law (LGPD, Law 13.709/2018).',
+    sections: [
+      {
+        title: '1. Who we are',
+        paragraphs: [
+          'PAROLAH SERVICOS DESIGN E COMUNICACAO VISUAL LTDA ("Parolah"), CNPJ 47.605.406/0001-61, Rua 14, Lote 15, Apt. 1104, Sul, Águas Claras, Brasília-DF, 71939-720, Brazil.',
+          `Contact for privacy matters (data protection officer): ${EMAIL} · ${PHONE}.`,
+          'userexperience.com.br is Parolah’s website and the portfolio of its founder, Wellington Mota.',
+        ],
+      },
+      {
+        title: '2. What this policy covers',
+        items: [
+          'This website.',
+          'The "Parolah" app on the Meta platform, which Parolah uses to send and receive WhatsApp messages on behalf of its business clients through the WhatsApp Business Platform (Cloud API).',
+        ],
+      },
+      {
+        title: '3. This website',
+        items: [
+          'What you send us by email or WhatsApp (name, email, phone and your message), used only to reply to you and, if we work together, to run the project.',
+          'Usage data from Google Analytics and the Meta Pixel, only if you accept cookies in the banner. You can decline and the site works the same.',
+        ],
+      },
+      {
+        title: '4. WhatsApp messages on behalf of our clients',
+        paragraphs: [
+          'Parolah builds and runs software for businesses (for example, a fitness studio) that send WhatsApp messages to their own customers, such as class reminders and payment notices. In this service, the client business is the controller of its customers’ data and Parolah is the processor: we only process that data to deliver the service the client asked for.',
+        ],
+        items: [
+          'Business data: the WhatsApp Business account ID, phone number ID and access token that Meta issues when the client connects its WhatsApp account to the Parolah app.',
+          'Recipient data: phone number, name and the content of the messages the client’s system sends; messages recipients send back; delivery and read status.',
+          'Purpose: deliver the messages the client’s customers expect, show their replies to the client and keep delivery records.',
+          'We do not sell personal data and do not use it for advertising.',
+          'Sharing: Meta (WhatsApp), which delivers the messages, and our hosting and database providers, under confidentiality. Nobody else, unless required by law.',
+          'International transfer: our servers may be located outside Brazil (for example, in the United States), with the safeguards required by the LGPD.',
+          'Retention: message records are kept while the client uses the service or as long as the law requires. Access tokens are deleted when the client disconnects its account.',
+        ],
+      },
+      {
+        title: '5. Data we receive from Meta',
+        paragraphs: [
+          'When a client connects its WhatsApp account through the Parolah app, Meta shares with us only the IDs of the business assets the client selected and an access token. We do not access personal Facebook profile data beyond what Meta shows in that flow, and we use what we receive only to operate the client’s WhatsApp messaging.',
+        ],
+      },
+      {
+        title: '6. Your rights',
+        paragraphs: [
+          `Under the LGPD you can ask for confirmation and access, correction, anonymization or deletion, portability, information about sharing and to revoke consent. If you are a customer of one of our clients, you can contact that business directly or write to ${EMAIL}; we will help them answer you.`,
+        ],
+      },
+      {
+        id: 'data-deletion',
+        title: '7. How to delete your data',
+        items: [
+          `Email ${EMAIL} with the subject "Data deletion" and the phone number or business involved. We confirm the request and complete the deletion within 15 days, keeping only what the law requires us to keep.`,
+          'Client businesses can disconnect the Parolah app at any time in Meta Business settings (Integrations). We then delete the access token and stop processing their data.',
+        ],
+      },
+      {
+        title: '8. Security',
+        paragraphs: [
+          'Data travels encrypted (HTTPS). Access tokens are stored as secrets, outside the source code, and access to systems is limited to the people who run them.',
+        ],
+      },
+      {
+        title: '9. Changes',
+        paragraphs: ['When this policy changes, we update this page and the date at the top.'],
+      },
+    ],
+  },
+  pt: {
+    kicker: 'Legal',
+    title: 'Política de Privacidade',
+    updated: 'Atualizada em 1º de novembro de 2026',
+    home: 'Início',
+    intro:
+      'Esta política explica quais dados pessoais a Parolah coleta, para quê, com quem compartilha e como exercer seus direitos pela Lei Geral de Proteção de Dados (LGPD, Lei 13.709/2018).',
+    sections: [
+      {
+        title: '1. Quem somos',
+        paragraphs: [
+          'PAROLAH SERVICOS DESIGN E COMUNICACAO VISUAL LTDA ("Parolah"), CNPJ 47.605.406/0001-61, Rua 14, Lote 15, Apto. 1104, Sul, Águas Claras, Brasília-DF, CEP 71939-720.',
+          `Contato para privacidade (encarregado de dados): ${EMAIL} · ${PHONE}.`,
+          'O userexperience.com.br é o site da Parolah e o portfólio do seu fundador, Wellington Mota.',
+        ],
+      },
+      {
+        title: '2. O que esta política cobre',
+        items: [
+          'Este site.',
+          'O app "Parolah" na plataforma da Meta, que a Parolah usa para enviar e receber mensagens de WhatsApp em nome das empresas clientes, pela Plataforma do WhatsApp Business (Cloud API).',
+        ],
+      },
+      {
+        title: '3. Este site',
+        items: [
+          'O que você nos manda por e-mail ou WhatsApp (nome, e-mail, telefone e a mensagem), usado só para responder e, se fizermos um projeto juntos, para tocar o projeto.',
+          'Dados de navegação do Google Analytics e do Pixel da Meta, só se você aceitar os cookies no aviso. Se recusar, o site funciona igual.',
+        ],
+      },
+      {
+        title: '4. Mensagens de WhatsApp em nome dos clientes',
+        paragraphs: [
+          'A Parolah cria e opera software para empresas (por exemplo, um estúdio de pilates) que mandam WhatsApp para os próprios clientes, como lembrete de aula e aviso de cobrança. Nesse serviço, a empresa cliente é a controladora dos dados dos clientes dela e a Parolah é a operadora: só tratamos esses dados para prestar o serviço que a empresa pediu.',
+        ],
+        items: [
+          'Dados da empresa: o ID da conta do WhatsApp Business, o ID do número e o token de acesso que a Meta emite quando a empresa conecta a conta de WhatsApp ao app da Parolah.',
+          'Dados de quem recebe: telefone, nome e o conteúdo das mensagens que o sistema da empresa envia; as mensagens que a pessoa responde; o status de entrega e leitura.',
+          'Finalidade: entregar as mensagens que os clientes da empresa esperam receber, mostrar as respostas para a empresa e guardar o registro de entrega.',
+          'Não vendemos dados pessoais e não usamos esses dados para publicidade.',
+          'Compartilhamento: com a Meta (WhatsApp), que entrega as mensagens, e com os provedores de hospedagem e banco de dados, sob confidencialidade. Com mais ninguém, salvo obrigação legal.',
+          'Transferência internacional: nossos servidores podem ficar fora do Brasil (por exemplo, nos Estados Unidos), com as salvaguardas que a LGPD exige.',
+          'Prazo: os registros de mensagens ficam guardados enquanto a empresa usa o serviço ou pelo prazo que a lei exigir. O token de acesso é apagado quando a empresa desconecta a conta.',
+        ],
+      },
+      {
+        title: '5. Dados que recebemos da Meta',
+        paragraphs: [
+          'Quando uma empresa conecta a conta de WhatsApp pelo app da Parolah, a Meta nos passa só os IDs dos ativos que a empresa escolheu e um token de acesso. Não acessamos dados do perfil pessoal do Facebook além do que a Meta mostra nesse fluxo, e usamos o que recebemos só para operar o WhatsApp da empresa.',
+        ],
+      },
+      {
+        title: '6. Seus direitos',
+        paragraphs: [
+          `Pela LGPD, você pode pedir confirmação e acesso aos dados, correção, anonimização ou eliminação, portabilidade, informação sobre compartilhamento e revogar o consentimento. Se você é cliente de uma empresa atendida pela Parolah, pode falar direto com ela ou escrever para ${EMAIL}; nós ajudamos a empresa a responder.`,
+        ],
+      },
+      {
+        id: 'exclusao-de-dados',
+        title: '7. Como pedir a exclusão dos seus dados',
+        items: [
+          `Escreva para ${EMAIL} com o assunto "Exclusão de dados" e o telefone ou a empresa envolvida. Confirmamos o pedido e concluímos a exclusão em até 15 dias, guardando só o que a lei obriga.`,
+          'A empresa cliente pode desconectar o app da Parolah a qualquer momento nas configurações do Meta Business (Integrações). Nesse caso apagamos o token de acesso e paramos de tratar os dados dela.',
+        ],
+      },
+      {
+        title: '8. Segurança',
+        paragraphs: [
+          'Os dados trafegam criptografados (HTTPS). Os tokens de acesso ficam guardados como segredos, fora do código, e o acesso aos sistemas é restrito a quem os opera.',
+        ],
+      },
+      {
+        title: '9. Mudanças',
+        paragraphs: ['Quando esta política mudar, atualizamos esta página e a data no topo.'],
+      },
+    ],
+  },
+};
+
+const c = content[lang];
+---
+
+<main class="container-page pb-20 pt-28 sm:pb-28 sm:pt-36 md:pt-44">
+  <nav aria-label="Breadcrumb" class="mono text-[11px] uppercase tracking-widest text-faint">
+    <a href={getLocalePath(lang)} class="transition-colors hover:text-cream">{c.home}</a>
+    <span class="mx-2 text-line-strong">/</span>
+    <span class="text-mist" aria-current="page">{c.title}</span>
+  </nav>
+
+  <span class="label label-dot mt-10 sm:mt-14">{c.kicker}</span>
+  <h1 class="display mt-6 text-[clamp(2.4rem,7vw,5.5rem)] leading-[0.95]">{c.title}</h1>
+  <p class="mono mt-6 text-xs uppercase tracking-widest text-faint">{c.updated}</p>
+
+  <div class="mt-10 max-w-3xl border-t border-line pt-8">
+    <p class="text-lg leading-relaxed text-cream">{c.intro}</p>
+
+    {c.sections.map((s) => (
+      <section id={s.id} class="mt-12 scroll-mt-28">
+        <h2 class="display text-2xl !leading-[1.2] sm:text-[1.7rem]">{s.title}</h2>
+        {s.paragraphs?.map((p) => <p class="mt-4 text-[15px] leading-relaxed text-mist">{p}</p>)}
+        {s.items && (
+          <ul class="mt-4 flex flex-col gap-3">
+            {s.items.map((it) => (
+              <li class="flex items-start gap-3 text-[15px] leading-relaxed text-mist">
+                <span class="mono mt-0.5 shrink-0 text-lime">→</span>
+                <span>{it}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))}
+  </div>
+</main>
