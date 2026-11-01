@@ -178,6 +178,17 @@ const en: SiteData = {
       href: '/work/golfhub/',
     },
     {
+      title: 'Método OBA',
+      meta: 'EdTech · Case Study',
+      categories: ['Product', 'Design Eng', 'PHP'],
+      description:
+        'I redesigned the student dashboard of a police-exam prep mentorship in Brazil, from diagnosis to a PHP theme: a block menu on the phone, three themes and 13 police ranks, in a prototype you can click right on the page. Read the case study →',
+      image: '/cases/metodo-oba/img/cover.webp',
+      accent: '#4D7CFF',
+      highlight: 'Nine live screens, desktop and phone',
+      href: '/work/metodo-oba/',
+    },
+    {
       title: 'Lead Airport',
       meta: 'EdTech · Case Study',
       categories: ['Product', '3D', 'Data'],

@@ -1,0 +1,67 @@
+---
+// GA4 + Meta Pixel com Consent Mode (LGPD): vai no <head> de toda página. Usado pelo Layout e pelas
+// páginas com documento próprio (ex.: o case do Método OBA, que não carrega o global.css).
+---
+
+<!-- Google Analytics 4 (gtag) + Consent Mode (LGPD) -->
+<!-- O GA só é carregado depois do consentimento; padrão = negado -->
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  window.gtag = gtag;
+
+  // Consent Mode v2 — nada de armazenamento até o usuário aceitar
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 500,
+  });
+  gtag('js', new Date());
+
+  window.__GA_ID = 'G-N7HJ2X28SX';
+  window.loadGA = function () {
+    if (window.__gaLoaded) return;
+    window.__gaLoaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.__GA_ID;
+    document.head.appendChild(s);
+    gtag('config', window.__GA_ID);
+  };
+
+  // Meta Pixel — também só carrega depois do consentimento
+  window.__FB_ID = '37784116091377';
+  window.loadFB = function () {
+    if (window.__fbLoaded) return;
+    window.__fbLoaded = true;
+    !(function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', window.__FB_ID);
+    window.fbq('track', 'PageView');
+  };
+
+  // Dispara eventos com segurança (no-op enquanto GA/Pixel não estiverem carregados)
+  window.trackEvent = function (name, params) {
+    try { window.gtag('event', name, params || {}); } catch (e) {}
+  };
+  window.trackFB = function (name, params) {
+    try { if (window.fbq) window.fbq('track', name, params || {}); } catch (e) {}
+  };
+
+  // Se já consentiu numa visita anterior, ativa e carrega agora
+  try {
+    if (localStorage.getItem('ux_consent') === 'granted') {
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+      window.loadGA();
+      window.loadFB();
+    }
+  } catch (e) {}
+</script>

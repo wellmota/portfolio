@@ -1,0 +1,21 @@
+---
+import StandaloneLayout from '../../../layouts/StandaloneLayout.astro';
+import CasePage from '../../../components/case-oba/CasePage.astro';
+import metodoOba from '../../../data/cases/metodo-oba';
+
+const lang = 'pt' as const;
+const content = metodoOba[lang];
+---
+
+<StandaloneLayout
+  lang={lang}
+  title={content.seo.title}
+  description={content.seo.description}
+  ogImage={content.cover.src}
+  ogImageAlt={content.cover.alt}
+  ogImageWidth={content.cover.width}
+  ogImageHeight={content.cover.height}
+  alternates={{ en: '/work/metodo-oba/', pt: '/pt/work/metodo-oba/' }}
+>
+  <CasePage lang={lang} content={content} altHref="/work/metodo-oba/" altLabel="EN" />
+</StandaloneLayout>

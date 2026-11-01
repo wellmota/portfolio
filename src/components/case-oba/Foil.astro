@@ -1,0 +1,252 @@
+---
+/**
+ * A heurística (ou o dado com fonte) de uma seção como uma carta foil, colada com fita no canto direito
+ * do cabeçalho. O brilho holográfico corre sozinho devagar; com o mouse em cima, a carta inclina e o
+ * reflexo segue o ponteiro. Sem movimento (prefers-reduced-motion), fica parada.
+ * "Nome: frase" no `label` vira título + texto. Com `value`, o número vem grande, no lugar do título.
+ */
+import type { Fonte } from '@/data/cases/oba-types';
+import { ui } from './ui';
+
+interface Props extends Fonte {
+  /** Número da seção, no canto da carta (ex.: "02"). */
+  n?: string;
+  /** O rótulo do canto; sem ele, "Pesquisa" (com número) ou "Heurística". */
+  tipo?: string;
+}
+
+const { value, label, source, n } = Astro.props;
+const corte = value ? -1 : label.indexOf(': ');
+const titulo = corte > 0 ? label.slice(0, corte) : undefined;
+const resto = corte > 0 ? label.slice(corte + 2) : label;
+const texto = resto.charAt(0).toUpperCase() + resto.slice(1);
+const tx = ui(Astro.currentLocale);
+const tipo = Astro.props.tipo ?? (value ? tx.research : tx.heuristic);
+// número comprido (ex.: "44 × 44 px") desce um tamanho para caber na carta
+const longo = !!value && value.length > 7;
+---
+
+<div class="cs-foil-wrap" data-foil>
+  <figure class="cs-foil">
+    <span class="cs-foil__holo" aria-hidden="true"></span>
+    <span class="cs-foil__brilho" aria-hidden="true"></span>
+    <span class="cs-foil__fita" aria-hidden="true"></span>
+    <div class="mono cs-foil__topo">
+      <span class="cs-foil__tipo">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.2 6.3 6.3 2.2-6.3 2.2L12 19.5l-2.2-6.3L3.5 11l6.3-2.2z" /></svg>
+        {tipo}
+      </span>
+      {n && <span>{tx.number} {n}</span>}
+    </div>
+    {
+      Astro.slots.has('default') && (
+        <div class="cs-foil__desenho" aria-hidden="true">
+          <slot />
+        </div>
+      )
+    }
+    {value && <strong class:list={['display cs-foil__n', longo && 'cs-foil__n--longo']}>{value}</strong>}
+    {titulo && <p class="display cs-foil__titulo">{titulo}</p>}
+    <p class="cs-foil__texto">{texto}</p>
+    <figcaption class="mono cs-foil__src">{source}</figcaption>
+  </figure>
+</div>
+
+<script>
+  // inclina a carta e leva o reflexo até o ponteiro; um quadro por vez
+  const semMovimento = matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('[data-foil]').forEach((wrap) => {
+    const carta = wrap.querySelector<HTMLElement>('.cs-foil');
+    if (!carta) return;
+    let quadro = 0;
+    wrap.addEventListener('pointermove', (e) => {
+      if (semMovimento.matches || e.pointerType !== 'mouse') return;
+      cancelAnimationFrame(quadro);
+      quadro = requestAnimationFrame(() => {
+        const r = carta.getBoundingClientRect();
+        const x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+        const y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+        carta.classList.add('is-ativa');
+        carta.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`);
+        carta.style.setProperty('--my', `${(y * 100).toFixed(1)}%`);
+        carta.style.setProperty('--rx', `${((0.5 - y) * 12).toFixed(2)}deg`);
+        carta.style.setProperty('--ry', `${((x - 0.5) * 14).toFixed(2)}deg`);
+      });
+    });
+    wrap.addEventListener('pointerleave', () => {
+      cancelAnimationFrame(quadro);
+      carta.classList.remove('is-ativa');
+      ['--mx', '--my', '--rx', '--ry'].forEach((p) => carta.style.removeProperty(p));
+    });
+  });
+</script>
+
+<style>
+  .cs-foil-wrap {
+    /* largura fixa: sem ela, a coluna do grid cresce até o texto caber numa linha só */
+    width: 19rem;
+    max-width: 100%;
+    /* colada um pouco torta */
+    transform: rotate(2.2deg);
+    perspective: 900px;
+  }
+  .cs-foil {
+    --mx: 50%;
+    --my: 50%;
+    --rx: 0deg;
+    --ry: 0deg;
+    position: relative;
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 1.4rem 1.35rem 1.15rem;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    /* o fundo escuro dentro e a borda cromada (azul e roxo) por fora */
+    background:
+      linear-gradient(155deg, #1c1e26 0%, #121318 55%, #0e0f12 100%) padding-box,
+      conic-gradient(from 200deg, #6f8cff, #a07bff, #e4e6ff, #7fa6ff, #8b70ff, #6f8cff) border-box;
+    box-shadow:
+      0 26px 50px -20px rgba(0, 0, 0, 0.9),
+      0 0 46px -14px color-mix(in srgb, var(--accent) 55%, transparent);
+    transform: rotateX(var(--rx)) rotateY(var(--ry));
+    transform-style: preserve-3d;
+    transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
+    isolation: isolate;
+  }
+  .cs-foil.is-ativa {
+    transition: transform 0.08s linear, box-shadow 0.3s var(--ease);
+    box-shadow:
+      0 34px 60px -20px rgba(0, 0, 0, 0.95),
+      0 0 60px -12px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .cs-foil > :not(span) {
+    position: relative;
+    z-index: 2;
+  }
+  /* cromo azul e roxo em faixas, com faixas claras de lilás e textura fina, como o papel metalizado */
+  .cs-foil__holo,
+  .cs-foil__brilho {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: 15px;
+    pointer-events: none;
+  }
+  .cs-foil__holo {
+    background:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 3px),
+      radial-gradient(circle at 18% 27%, rgba(255, 255, 255, 0.55) 0 0.6px, transparent 1.2px) 0 0 / 23px 19px,
+      radial-gradient(circle at 63% 71%, rgba(255, 255, 255, 0.4) 0 0.5px, transparent 1.1px) 0 0 / 31px 27px,
+      linear-gradient(115deg, transparent 22%, #7a5cff 31%, #3f63e8 37%, #9fb4ff 42%, #4a72ff 47%, #1f2a7a 52%, #9a78ff 58%, #b3a6ff 63%, #5a6cff 69%, transparent 78%) var(--mx) var(--my) / 260% 260%;
+    mix-blend-mode: color-dodge;
+    opacity: 0.17;
+    animation: cs-foil-deriva 9s ease-in-out infinite alternate;
+  }
+  .cs-foil.is-ativa .cs-foil__holo {
+    animation: none;
+    opacity: 0.22;
+  }
+  .cs-foil__brilho {
+    background: radial-gradient(farthest-corner circle at var(--mx) var(--my), rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.06) 32%, transparent 62%);
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease);
+  }
+  .cs-foil.is-ativa .cs-foil__brilho {
+    opacity: 1;
+  }
+  @keyframes cs-foil-deriva {
+    from {
+      background-position: 0 0, 0 0, 0 0, 0% 20%;
+    }
+    to {
+      background-position: 0 0, 0 0, 0 0, 100% 80%;
+    }
+  }
+  /* a fita que prende a carta: translúcida, com as pontas rasgadas */
+  .cs-foil__fita {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    z-index: 3;
+    width: 96px;
+    height: 26px;
+    transform: translateX(-50%) rotate(-5deg) translateZ(1px);
+    background: linear-gradient(180deg, rgba(236, 236, 240, 0.3), rgba(236, 236, 240, 0.18));
+    backdrop-filter: blur(1.5px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    clip-path: polygon(0 6%, 3% 0, 97% 0, 100% 10%, 97% 24%, 100% 40%, 96% 58%, 100% 74%, 97% 90%, 100% 100%, 3% 100%, 0 88%, 3% 72%, 0 55%, 4% 38%, 0 22%);
+  }
+  .cs-foil__topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #9a9aa2;
+  }
+  .cs-foil__tipo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #c9d6ff;
+  }
+  .cs-foil__tipo svg {
+    width: 12px;
+    height: 12px;
+    fill: var(--accent);
+  }
+  .cs-foil__n,
+  .cs-foil__titulo {
+    margin-top: 0.65rem;
+    /* o mesmo arco-íris da carta, no texto, andando com o reflexo */
+    background: linear-gradient(100deg, #f4f6ff 0%, #f4f6ff 30%, #b9cbff 42%, #cdb8ff 52%, #e6ebff 62%, #f4f6ff 74%) var(--mx) 50% / 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .cs-foil__n {
+    font-size: 3.1rem;
+    line-height: 1;
+  }
+  .cs-foil__n--longo {
+    font-size: 2.35rem;
+  }
+  /* o desenho opcional (slot), entre o topo e o título */
+  .cs-foil__desenho {
+    margin-top: 0.4rem;
+    color: #c9d6ff;
+  }
+  .cs-foil__desenho :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .cs-foil__titulo {
+    font-size: 1.45rem;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+  }
+  .cs-foil__texto {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #b4b4bb;
+  }
+  .cs-foil__src {
+    margin-top: 0.55rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.13);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #85858c;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cs-foil__holo {
+      animation: none;
+    }
+  }
+</style>

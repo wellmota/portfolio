@@ -1,0 +1,1996 @@
+---
+/**
+ * Página do case do Método OBA: a apresentação feita para o cliente (no site da Tutory, em /r/oba),
+ * trazida para o portfólio sem a abertura e sem o aviso de celular. Escura, editorial, cantos retos,
+ * linhas de 1px, Inter + JetBrains Mono. Não usa o global.css do site: os tokens, o reset e as
+ * utilidades da página estão no <style is:global> abaixo. Cada seção tem cabeçalho de texto e
+ * blocos de mídia (o principal, pelo `kind`, e os extras de `media`). Cabeçalho, CTA e rodapé
+ * seguem os dos outros cases do portfólio.
+ */
+import { getSiteData, getLocalePath, type Locale } from '@/i18n';
+import type { CaseBlock, CaseImage, CaseOba, CaseSection } from '@/data/cases/oba-types';
+import BeforeAfter from './BeforeAfter.astro';
+import Showcase from './Showcase.astro';
+import ProtoEmbed from './ProtoEmbed.astro';
+import ProtoTelas from './ProtoTelas.astro';
+import Roadmap from './Roadmap.astro';
+import Fonte from './Fonte.astro';
+import Foil from './Foil.astro';
+import EscalaDesenho from './EscalaDesenho.astro';
+import Video from './Video.astro';
+
+interface Props {
+  lang: Locale;
+  content: CaseOba;
+  /** URL da mesma página no outro idioma */
+  altHref: string;
+  altLabel: string;
+}
+
+const { lang, content: c, altHref, altLabel } = Astro.props;
+const data = getSiteData(lang);
+const homeHref = getLocalePath(lang);
+const projectsHref = getLocalePath(lang, '#projetos');
+const contactHref = getLocalePath(lang, '#contato');
+
+const blocksOf = (s: CaseSection): CaseBlock[] => [...(s.kind === 'text' ? [] : [s]), ...(s.media ?? [])];
+const ratio = (img: CaseImage) => `aspect-ratio:${img.width} / ${img.height}`;
+const num = (n: number) => String(n).padStart(2, '0');
+const temResultado = !!(c.outcomes?.length || c.tools?.length);
+// Carimbo do planejamento: o texto repete quantas vezes couber na volta (~54 caracteres), cada um
+// centrado no seu arco, com um ponto (círculo, e não um caractere: o ✦ vinha de outra fonte e saía
+// torto) entre eles, na altura do meio das maiúsculas (base em r 76 + metade da caixa-alta)
+const seloTexto = c.roadmap?.selo?.texto ?? '';
+const seloN = Math.max(1, Math.round(54 / (seloTexto.length + 3)));
+// o espaço entre as letras estica o texto até fechar o arco (volta de r 76 = 477,5; 22 para o ponto),
+// para não sobrar um vão na volta quando o texto cabe uma vez só. A mono avança 0,6em por letra (11,5px)
+const seloEspaco = Math.min(5.75, Math.max(1.4, (2 * Math.PI * 76) / seloN / Math.max(1, seloTexto.length) - 22 / Math.max(1, seloTexto.length) - 6.9)).toFixed(2);
+const seloArcos = Array.from({ length: seloN }, (_, k) => {
+  const a = (k * 2 * Math.PI) / seloN;
+  return { meio: `${((k + 0.5) * 100) / seloN}%`, x: (100 - 80.2 * Math.cos(a)).toFixed(2), y: (100 - 80.2 * Math.sin(a)).toFixed(2) };
+});
+---
+
+<!-- Rede de segurança do reveal: o CSS esconde os blocos [data-reveal] enquanto o <html> tem .js. Se o
+     script da página não rodar em 4 s (erro, extensão que bloqueia), sai o .js e tudo aparece parado -->
+<script is:inline>
+  setTimeout(function () {
+    if (!window.csRevealPronto) document.documentElement.classList.remove('js');
+  }, 4000);
+</script>
+
+<div class="oba" style={`--accent:${c.accent};--accent-2:${c.accent2}`}>
+  <!-- o mesmo cabeçalho dos outros cases do portfólio (CaseStudyPage), em CSS próprio -->
+  <header class="cs-header">
+    <nav class="cs-container cs-header__in">
+      <a href={homeHref} class="cs-brand">
+        <span class="cs-brand__mark" aria-hidden="true">{data.profile.firstName.charAt(0)}</span>
+        <span class="cs-brand__label">{data.profile.name}</span>
+      </a>
+      <div class="cs-nav">
+        <a href={projectsHref} class="mono cs-nav__link">← {c.ui.back}</a>
+        <a href={altHref} class="mono cs-nav__lang" hreflang={lang === 'pt' ? 'en' : 'pt'}>{altLabel}</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="cs-container cs-hero">
+      <p class="cs-kicker" data-reveal>{c.kicker}</p>
+      <h1 class="display cs-title" data-reveal>{c.title}</h1>
+      <p class="cs-subtitle" data-reveal>{c.subtitle}</p>
+      {
+        c.heroStat && (
+          <aside class="cs-hero__fonte" data-reveal>
+            <Foil {...c.heroStat} />
+          </aside>
+        )
+      }
+
+      <dl class="cs-meta" data-reveal>
+        {
+          c.meta.map((m) => (
+            <div>
+              <dt class="cs-label">{m.label}</dt>
+              <dd>{m.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- Capa: o protótipo interativo (o mesmo da seção 02) ou, sem ele, a imagem -->
+    {
+      c.coverProto ? (
+        <ProtoEmbed {...c.coverProto} />
+      ) : (
+        <section class="cs-container cs-cover-wrap">
+          <div class="cs-cover" data-reveal>
+            <span class="cs-cover__bar" aria-hidden="true" />
+            <img
+              src={c.cover.src}
+              alt={c.cover.alt}
+              width={c.cover.width}
+              height={c.cover.height}
+              loading="lazy"
+              decoding="async"
+              style={ratio(c.cover)}
+            />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- As telas ao vivo, uma embaixo da outra -->
+    {c.telas && <ProtoTelas {...c.telas} />}
+
+    <!-- Intro + o que muda (opcionais) -->
+    {
+      (c.intro?.length || c.roleList?.length) && (
+        <section class="cs-container cs-intro">
+          <div class="cs-stack" data-reveal>
+            {c.intro?.map((p) => (
+              <p class="cs-p">{p}</p>
+            ))}
+          </div>
+          <div data-reveal>
+            <p class="cs-label">{c.roleLabel}</p>
+            <ul class="cs-chips">
+              {c.roleList?.map((r) => (
+                <li class="mono cs-chip">{r}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Números (opcionais: o case do OBA abre sem eles) -->
+    {
+      c.stats && c.stats.length > 0 && (
+        <section class="cs-container cs-stats-wrap">
+          <div class="cs-stats">
+            {c.stats.map((s) => (
+              <div class="cs-stat" data-reveal data-reveal-group>
+                <span class="display cs-stat__value">{s.value}</span>
+                <span class="cs-stat__label">{s.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Seções -->
+    {
+      c.sections.map((s, si) => (
+        <section class="cs-section" aria-labelledby={`cs-s${si + 1}`}>
+          <div class="cs-container cs-sec-topo">
+            <div class="cs-sec-head">
+              <p class="cs-kicker" data-reveal>
+                {s.kicker}
+              </p>
+              <h2 id={`cs-s${si + 1}`} class="display cs-h2" data-reveal>
+                {s.title}
+              </h2>
+              <div class="cs-stack cs-sec-body" data-reveal>
+                {s.body.map((p) => (
+                  <p class="cs-p">{p}</p>
+                ))}
+                {s.live && (
+                  <p>
+                    <a class="cs-live" href={`#tela-${s.live.screen}`}>
+                      {s.live.label} <span aria-hidden="true">↑</span>
+                    </a>
+                  </p>
+                )}
+              </div>
+            </div>
+            {s.stat && (
+              <div class="cs-sec-fonte" data-reveal>
+                <Foil {...s.stat} n={num(si + 1)} />
+              </div>
+            )}
+          </div>
+
+          {blocksOf(s).map((b) => (
+            <>
+              {b.kind === 'image' && (
+                <figure class="cs-container cs-block" data-reveal>
+                  <div class="cs-frame">
+                    <img
+                      src={b.image.src}
+                      alt={b.image.alt}
+                      width={b.image.width}
+                      height={b.image.height}
+                      loading="lazy"
+                      decoding="async"
+                      style={ratio(b.image)}
+                    />
+                  </div>
+                  {b.image.caption && <figcaption class="cs-caption">{b.image.caption}</figcaption>}
+                </figure>
+              )}
+
+              {b.kind === 'gallery' && (
+                <div class="cs-container cs-block cs-gallery-linhas">
+                  {(b.gallery.rows ?? [{ title: b.gallery.title, items: b.gallery.items ?? [] }]).map((linha) => (
+                  <div class="cs-gallery-linha">
+                  {linha.title && (
+                    <p class="cs-label cs-gallery__title" data-reveal>
+                      {linha.title}
+                    </p>
+                  )}
+                  <div
+                    class:list={[
+                      'cs-gallery',
+                      linha.items.every((g) => g.device === 'phone') ? 'cs-gallery--phone' : 'cs-gallery--desktop',
+                    ]}
+                    style={`--n:${Math.min(linha.items.length, 4)}`}
+                  >
+                    {linha.items.map((g) => (
+                      <div
+                        class:list={['cs-shot', g.device === 'phone' ? 'print-ios' : 'cs-shot--desktop']}
+                        data-reveal
+                        data-reveal-group
+                      >
+                        <img
+                          src={g.src}
+                          alt={g.alt}
+                          width={g.width}
+                          height={g.height}
+                          loading="lazy"
+                          decoding="async"
+                          style={ratio(g)}
+                        />
+                        {b.gallery.badge && <span class="mono cs-badge">{b.gallery.badge}</span>}
+                      </div>
+                    ))}
+                  </div>
+                  </div>
+                  ))}
+                  {b.gallery.caption && (
+                    <p class="cs-caption" data-reveal>
+                      {b.gallery.caption}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {b.kind === 'blueprint' && (
+                <div class="cs-container cs-block">
+                  <ul class="cs-bp__legenda" data-reveal>
+                    {b.blueprint.legenda.map((l) => (
+                      <li class="mono cs-bp__chave">
+                        <span class={`cs-bp__cor cs-bp__cor--${l.cor}`} aria-hidden="true" />
+                        {l.texto}
+                      </li>
+                    ))}
+                  </ul>
+                  <div class="cs-shot cs-shot--desktop" data-reveal>
+                    <img
+                      src={b.blueprint.desktop.src}
+                      alt={b.blueprint.desktop.alt}
+                      width={b.blueprint.desktop.width}
+                      height={b.blueprint.desktop.height}
+                      loading="lazy"
+                      decoding="async"
+                      style={ratio(b.blueprint.desktop)}
+                    />
+                  </div>
+                  {b.blueprint.escala && (
+                    <div class="cs-bp__escala">
+                      {b.blueprint.escala.map((e) => (
+                        <div class="cs-bp__carta" data-reveal data-reveal-group>
+                          <Foil value={e.value} label={e.label} source={e.source} tipo={e.tipo}>
+                            <EscalaDesenho desenho={e.desenho} />
+                          </Foil>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div class="cs-bp__baixo">
+                    <div class="cs-bp__celulares">
+                      {b.blueprint.celular.map((g) => (
+                        <div class="cs-shot print-ios" data-reveal data-reveal-group>
+                          <img
+                            src={g.src}
+                            alt={g.alt}
+                            width={g.width}
+                            height={g.height}
+                            loading="lazy"
+                            decoding="async"
+                            style={ratio(g)}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <ol class="cs-bp__defesas">
+                      {b.blueprint.defesas.map((d, i) => (
+                        <li class="cs-bp__defesa" data-reveal data-reveal-group>
+                          <span class="mono cs-bp__n">{String(i + 1).padStart(2, '0')}</span>
+                          <h3 class="display cs-bp__titulo">{d.titulo}</h3>
+                          <p class="cs-p">{d.texto}</p>
+                          {d.stat && <Fonte {...d.stat} />}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  {b.blueprint.nota && (
+                    <aside class:list={['cs-bp__nota', !b.blueprint.nota.titulo && 'cs-bp__nota--so-texto']} data-reveal>
+                      {b.blueprint.nota.titulo && (
+                        <div>
+                          {b.blueprint.nota.kicker && <p class="cs-kicker">{b.blueprint.nota.kicker}</p>}
+                          <p class="display cs-bp__mito">{b.blueprint.nota.titulo}</p>
+                        </div>
+                      )}
+                      <div class="cs-bp__resposta">
+                        <div class="cs-stack">
+                          {b.blueprint.nota.texto.map((t) => (
+                            <p class="cs-p">{t}</p>
+                          ))}
+                        </div>
+                        {b.blueprint.nota.stat && <Fonte {...b.blueprint.nota.stat} />}
+                      </div>
+                    </aside>
+                  )}
+                </div>
+              )}
+
+              {b.kind === 'details' && (
+                <div class="cs-container cs-block">
+                  {b.details.title && (
+                    <p class="cs-label cs-gallery__title" data-reveal>
+                      {b.details.title}
+                    </p>
+                  )}
+                  <div class="cs-details">
+                    {b.details.items.map((d) => (
+                      <figure class="cs-detail" data-reveal data-reveal-group>
+                        <div class="cs-detail__img">
+                          <img
+                            src={d.src}
+                            alt={d.alt}
+                            width={d.width}
+                            height={d.height}
+                            loading="lazy"
+                            decoding="async"
+                            style={ratio(d)}
+                          />
+                        </div>
+                        <figcaption class="cs-detail__body">
+                          <span class="mono cs-detail__label">{d.label}</span>
+                          <p>{d.text}</p>
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {b.kind === 'compare' && <BeforeAfter {...b.compare} />}
+              {b.kind === 'showcase' && <Showcase {...b.showcase} />}
+              {b.kind === 'prototype' && <ProtoEmbed {...b.prototype} />}
+              {b.kind === 'video' && <Video {...b.video} />}
+            </>
+          ))}
+        </section>
+      ))
+    }
+
+    {
+      c.roadmap && (
+        <section class="cs-section" aria-labelledby="cs-roadmap">
+          <div class="cs-container">
+            <div class="cs-rm-head">
+              <div class="cs-sec-head">
+                <p class="cs-kicker" data-reveal>
+                  {c.roadmap.kicker}
+                </p>
+                <h2 id="cs-roadmap" class="display cs-h2" data-reveal>
+                  {c.roadmap.title}
+                </h2>
+                {c.roadmap.body && (
+                  <div class="cs-stack cs-sec-body" data-reveal>
+                    <p class="cs-p">{c.roadmap.body}</p>
+                  </div>
+                )}
+              </div>
+              {c.roadmap.selo && (
+                <div class="cs-selo" data-reveal role="img" aria-label={c.roadmap.selo.texto}>
+                  <svg class="cs-selo__anel" viewBox="0 0 200 200" aria-hidden="true">
+                    <defs>
+                      <path id="cs-selo-arco" d="M100 100m-76 0a76 76 0 1 1 152 0a76 76 0 1 1-152 0" />
+                    </defs>
+                    <circle cx="100" cy="100" r="96" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="1.5 4" opacity="0.55" />
+                    <circle cx="100" cy="100" r="58" fill="none" stroke="currentColor" stroke-width="1" opacity="0.35" />
+                    {seloArcos.map((a) => (
+                      <text class="mono cs-selo__texto" text-anchor="middle" style={`letter-spacing:${seloEspaco}px`}>
+                        <textPath href="#cs-selo-arco" startOffset={a.meio}>
+                          {seloTexto}
+                        </textPath>
+                      </text>
+                    ))}
+                    {seloArcos.map((a) => (
+                      <circle cx={a.x} cy={a.y} r="1.5" />
+                    ))}
+                  </svg>
+                  <svg class="cs-selo__logo" viewBox="16.2 17.2 61.4 66.6" aria-hidden="true">
+                    <path d="M24.6,34.74l-7.68,4.01v21.47l7.71,4.91v7.53c0,.12.06.24.17.3l18.7,10.15c.24.14.54-.03.54-.3V18.25c0-.26-.28-.43-.51-.32l-18.89,8.44c-.12.06-.2.19-.2.32l.17,8.03h0ZM40.46,23.46v53c0,.28-.3.45-.54.3l-11.56-5.81c-.11-.06-.17-.18-.17-.3v-4.57l4.74.23-5.29-3.5h0l-7.16-4.55v-17.35l4.19-2.19c.05,2.6.12,6.02.12,6.25.13.05,5.87,3.44,6.24,3.59,0,0-2.71-5.4-2.71-5.4l-.12-6.28h0l-.02-.99v-.11h0l-.15-6.88c0-.14.07-.26.2-.32l12.22-5.11h0Z" />
+                    <path d="M69.45,28.24l-18.84-10.23c-.24-.14-.54.03-.54.3v64.55c0,.26.28.43.51.32l18.89-8.44c.12-.06.2-.19.2-.32l-.17-8.03,7.68-4.01v-21.47l-7.71-4.91v-7.73l-.02-.02ZM73.61,42.85v17.35l-4.19,2.19c-.05-2.6-.12-6.02-.12-6.25-.13-.05-5.99-1.67-6.36-1.82,0,0,2.83,3.63,2.83,3.63l.12,6.28h0l.02,1.09h0s.15,6.89.15,6.89c0,.14-.07.26-.2.32l-11.7,4.85c-.24.12-.51-.05-.51-.32V24.66c0-.28.3-.45.54-.3l11.56,5.81c.11.06.17.18.17.3v4.62l-5.03-1.2,5.03,4.06h0l.65.42h0l7.05,4.49h0Z" />
+                  </svg>
+                </div>
+              )}
+            </div>
+            <Roadmap steps={c.roadmap.steps} />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Entrega: design engineering (estratégia, protótipo em código, tema no PHP, performance) -->
+    {
+      c.engenharia && (
+        <section class="cs-section cs-eng" aria-labelledby="cs-eng">
+          <div class="cs-container">
+            <div class="cs-sec-head">
+              <p class="cs-kicker" data-reveal>
+                {c.engenharia.kicker}
+              </p>
+              <h2 id="cs-eng" class="display cs-h2" data-reveal>
+                {c.engenharia.title}
+              </h2>
+              <div class="cs-stack cs-sec-body" data-reveal>
+                {c.engenharia.body.map((p) => (
+                  <p class="cs-p">{p}</p>
+                ))}
+              </div>
+            </div>
+            <ol class="cs-eng__grid">
+              {c.engenharia.pilares.map((pl, i) => (
+                <li class="cs-eng__card" data-reveal data-reveal-group>
+                  <div class="cs-eng__topo">
+                    <span class="mono cs-eng__n">{num(i + 1)}</span>
+                    <h3 class="cs-eng__titulo">{pl.titulo}</h3>
+                  </div>
+                  <p class="cs-eng__dado">
+                    <strong class="display cs-eng__valor">{pl.value}</strong>
+                    <span class="mono cs-eng__label">{pl.label}</span>
+                  </p>
+                  <p class="cs-eng__texto">{pl.texto}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Resultado + ferramentas (opcionais) -->
+    {temResultado && (
+    <section class="cs-container cs-outcome">
+      <div class="cs-outcome__grid">
+        <div data-reveal>
+          <p class="cs-kicker">{c.outcomesLabel}</p>
+          <h2 class="display cs-h2">{c.outcomesTitle}</h2>
+          <ul class="cs-plus">
+            {
+              c.outcomes?.map((o) => (
+                <li>
+                  <span aria-hidden="true">+</span>
+                  {o}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        {
+          c.tools && c.tools.length > 0 && (
+            <div data-reveal>
+              <p class="cs-label">{c.toolsLabel}</p>
+              <ul class="cs-chips">
+                {c.tools.map((t) => (
+                  <li class="mono cs-chip">{t}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+    </section>
+    )}
+
+    <!-- CTA (o mesmo dos outros cases do portfólio) -->
+    <section class="cs-container cs-cta-wrap">
+      <div class="cs-cta" data-reveal>
+        <h2 class="display cs-cta__t">{c.cta.heading}</h2>
+        <p class="cs-cta__p">{c.cta.sub}</p>
+        <div class="cs-cta__btns">
+          <a href={contactHref} class="mono cs-btn cs-btn--solid">
+            {c.cta.label}
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+          <a href={projectsHref} class="mono cs-btn cs-btn--outline">{c.ui.back}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="cs-footer">
+    <div class="cs-container cs-footer__in">
+      <span class="mono">{data.footer.legal}</span>
+      <span class="mono">{data.ui.portfolioEdition}</span>
+    </div>
+  </footer>
+</div>
+
+<style is:global>
+  /* ---------- tokens (os mesmos do portfólio; o accent vem do case) ---------- */
+  :root {
+    --ink: #0a0a0a;
+    --ink-soft: #0d0d0d;
+    --surface: #101010;
+    --surface-2: #151515;
+    --line: #232323;
+    --line-strong: #3a3a3a;
+    --cream: #ededed;
+    --mist: #8c8c92;
+    --faint: #6b6b72;
+    --accent: #4d7cff;
+    --accent-2: #fec133;
+    --lime: #cff24a;
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    /* sem a fonte do Google, o Windows cai na Cascadia Mono ou na Consolas (o "monospace" de lá é a
+       Courier New); o ui-monospace só existe no Safari */
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, 'Cascadia Mono', Consolas, monospace;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --gutter: 1.25rem;
+    color-scheme: dark;
+  }
+  @media (min-width: 640px) {
+    :root {
+      --gutter: 1.75rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    :root {
+      --gutter: 3rem;
+    }
+  }
+
+  /* ---------- reset mínimo (a página não carrega o preflight do Tailwind) ---------- */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--ink);
+  }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3,
+  p,
+  dl,
+  dd,
+  figure,
+  blockquote {
+    margin: 0;
+  }
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  img,
+  video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  iframe {
+    display: block;
+  }
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* ---------- utilidades ---------- */
+  .cs-container {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .display {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+  }
+  .mono {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .cs-kicker {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cs-label {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .cs-p {
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: var(--mist);
+  }
+  @media (min-width: 768px) {
+    .cs-p {
+      font-size: 16px;
+    }
+  }
+  .cs-stack > * + * {
+    margin-top: 1.25rem;
+  }
+  .cs-caption {
+    margin-top: 0.75rem;
+    max-width: 48rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: var(--faint);
+  }
+  .cs-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 1rem;
+  }
+  .cs-chip {
+    border: 1px solid var(--line);
+    padding: 4px 10px;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+  .cs-block {
+    margin-top: 2.5rem;
+  }
+  @media (min-width: 768px) {
+    .cs-block {
+      margin-top: 3.5rem;
+    }
+  }
+  /* imagem sem arquivo (ou carregando): ocupa o espaço com a superfície */
+  .oba img {
+    background: var(--surface);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  /* faixa clara de ponta a ponta, com um leve tom do accent */
+  .cs-band {
+    background: linear-gradient(180deg, #f1f1f1 0%, #e4e4e4 100%);
+    background:
+      radial-gradient(90% 70% at 10% 0%, color-mix(in srgb, var(--accent) 14%, #f3f3f3) 0%, transparent 55%),
+      linear-gradient(180deg, #f1f1f1 0%, #e4e4e4 100%);
+    color: #141414;
+    color-scheme: light;
+  }
+  .cs-band img {
+    background: #dcdcde;
+    color: #6a6a70;
+  }
+
+  /* prints do app novo no celular: cantos arredondados proporcionais à largura. 8% e não os 14% do
+     iPhone: o print começa no topo do app, sem a barra de status, e o canto maior cortava o avatar */
+  .print-ios {
+    container-type: inline-size;
+  }
+  .print-ios img,
+  .print-ios video {
+    display: block;
+    width: 100%;
+    border-radius: 8cqw;
+    border: 1px solid var(--line);
+  }
+  @supports not (border-radius: 1cqw) {
+    .print-ios img,
+    .print-ios video {
+      border-radius: 18px;
+    }
+  }
+
+  /* ---------- janela de navegador (Showcase, Video e ProtoEmbed) ----------
+     medidas em cqw: a barra, os pontos e os cantos acompanham a largura da janela */
+  .cs-win-wrap {
+    container-type: inline-size;
+  }
+  .cs-win {
+    position: relative;
+    border-radius: max(6px, 1.2cqw);
+    background: #e9eaee;
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.1),
+      0 30px 60px rgba(0, 0, 0, 0.28),
+      0 8px 18px rgba(0, 0, 0, 0.16);
+  }
+  .cs-win__bar {
+    display: flex;
+    align-items: center;
+    gap: max(6px, 1cqw);
+    height: max(24px, 3.2cqw);
+    padding: 0 max(8px, 1.3cqw);
+    border-radius: max(6px, 1.2cqw) max(6px, 1.2cqw) 0 0;
+    background: linear-gradient(180deg, #f6f6f8, #e9e9ed);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  }
+  .cs-win__dots {
+    display: inline-flex;
+    flex: none;
+    gap: max(4px, 0.55cqw);
+  }
+  .cs-win__dots i {
+    width: max(7px, 0.95cqw);
+    height: max(7px, 0.95cqw);
+    border-radius: 50%;
+    background: #c8c8cf;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  }
+  .cs-win__url {
+    min-width: 0;
+    margin: 0 auto;
+    padding: max(2px, 0.38cqw) max(10px, 1.4cqw);
+    border-radius: max(4px, 0.5cqw);
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+    font-family: var(--font-mono);
+    font-size: max(10px, 1.05cqw);
+    letter-spacing: 0.02em;
+    color: #6a6a70;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cs-win__screen {
+    overflow: hidden;
+    border-radius: 0 0 max(6px, 1.2cqw) max(6px, 1.2cqw);
+    background: #fff;
+  }
+  .cs-win__screen img,
+  .cs-win__screen video {
+    width: 100%;
+    object-fit: cover;
+  }
+  @supports not (padding: 1cqw) {
+    .cs-win {
+      border-radius: 10px;
+    }
+    .cs-win__bar {
+      border-radius: 10px 10px 0 0;
+      height: 32px;
+      padding: 0 12px;
+      gap: 10px;
+    }
+    .cs-win__dots i {
+      width: 10px;
+      height: 10px;
+    }
+    .cs-win__url {
+      font-size: 11px;
+      padding: 3px 14px;
+    }
+    .cs-win__screen {
+      border-radius: 0 0 10px 10px;
+    }
+  }
+
+  /* ---------- iPhone (Video e ProtoEmbed): tela 390×844 escalada por --s ----------
+     cantos de 32px na tela (e não 54px): o app começa no topo, sem a barra de status */
+  .cs-phone {
+    --s: 0.86;
+    position: relative;
+    width: fit-content;
+    padding: 11px;
+    border-radius: calc(32px * var(--s) + 11px);
+    background: linear-gradient(145deg, #1d1d1f 0%, #0a0a0a 55%, #161618 100%);
+    box-shadow:
+      0 0 0 1px #2a2a2a,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 50px 90px -20px rgba(20, 20, 40, 0.45),
+      0 14px 30px rgba(0, 0, 0, 0.2);
+  }
+  .cs-phone__screen {
+    position: relative;
+    width: calc(390px * var(--s));
+    overflow: hidden;
+    border-radius: calc(32px * var(--s));
+    background: #0a0a0a;
+    /* Safari: recorta o conteúdo nos cantos arredondados */
+    isolation: isolate;
+    transform: translateZ(0);
+  }
+  .cs-phone__btn {
+    position: absolute;
+    width: 3px;
+    border-radius: 2px;
+    background: #2a2a2c;
+  }
+  .cs-phone__btn--a {
+    left: -3px;
+    top: 22%;
+    height: 7%;
+  }
+  .cs-phone__btn--b {
+    left: -3px;
+    top: 31%;
+    height: 7%;
+  }
+  .cs-phone__btn--side {
+    right: -3px;
+    top: 26%;
+    height: 11%;
+  }
+  @media (max-width: 420px) {
+    .cs-phone {
+      --s: 0.76;
+      padding: 9px;
+    }
+  }
+  @media (max-width: 360px) {
+    .cs-phone {
+      --s: 0.7;
+    }
+  }
+
+  /* ---------- reveal ao rolar (progressivo: sem JS, tudo visível) ---------- */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.9s var(--ease),
+      transform 0.9s var(--ease);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* ---------- anotações (antes/depois e telas ao vivo): texto da página, palavras-chave em marca-texto
+     (Marcado.astro) e uma seta de traço fino, que se desenha quando a tela aparece ---------- */
+  .cs-anota {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+  }
+  .cs-anota mark {
+    padding: 0.05em 0.25em;
+    border-radius: 2px;
+    background: var(--accent);
+    color: var(--ink);
+    font-weight: 700;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .cs-seta-fina path {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---------- dado com fonte (Fonte.astro): número, frase e de onde veio; sem número é só o princípio ---------- */
+  .cs-fonte {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 24rem;
+    padding-left: 1rem;
+    border-left: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  }
+  .cs-fonte__n {
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .cs-fonte__label {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--mist);
+  }
+  .cs-fonte__src {
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  /* o canto do hero: menor, sem a linha, alinhado à direita */
+  .cs-fonte--discreto {
+    gap: 0.25rem;
+    max-width: 15rem;
+    padding-left: 0;
+    border-left: 0;
+  }
+  .cs-fonte--discreto .cs-fonte__n {
+    font-size: 1.5rem;
+  }
+  .cs-fonte--discreto .cs-fonte__label {
+    font-size: 12px;
+  }
+  @media (min-width: 1024px) {
+    .cs-fonte--discreto {
+      text-align: right;
+    }
+  }
+</style>
+
+<style>
+  /* ---------- cabeçalho ---------- */
+  .cs-header {
+    border-bottom: 1px solid var(--line);
+  }
+  .cs-header__in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1rem;
+  }
+  .cs-brand {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 10px;
+  }
+  /* a inicial em gótica sobre o lima, como no resto do portfólio */
+  .cs-brand__mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding-bottom: 2px;
+    background: var(--lime);
+    color: var(--ink);
+    font-family: 'UnifrakturCook', 'Grenze Gotisch', serif;
+    font-size: 19px;
+    line-height: 1;
+  }
+  .cs-brand__label {
+    display: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  @media (min-width: 640px) {
+    .cs-brand__label {
+      display: inline;
+    }
+  }
+  .cs-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+  .cs-nav__link,
+  .cs-nav__lang {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mist);
+    transition:
+      color 0.2s,
+      border-color 0.2s;
+  }
+  .cs-nav__link:hover,
+  .cs-nav__lang:hover {
+    color: var(--cream);
+  }
+  .cs-nav__lang {
+    flex: none;
+    border: 1px solid var(--line);
+    padding: 6px 12px;
+  }
+  .cs-nav__lang:hover {
+    border-color: var(--line-strong);
+  }
+
+  /* ---------- hero ---------- */
+  .cs-hero {
+    padding-top: 3.5rem;
+  }
+  @media (min-width: 640px) {
+    .cs-hero {
+      padding-top: 5rem;
+    }
+  }
+  @media (min-width: 768px) {
+    .cs-hero {
+      padding-top: 7rem;
+    }
+  }
+  .cs-title {
+    margin-top: 1.25rem;
+    max-width: 56rem;
+    font-size: clamp(2.6rem, 9vw, 5.2rem);
+    line-height: 1.02;
+    overflow-wrap: break-word;
+  }
+  .cs-subtitle {
+    margin-top: 1.5rem;
+    max-width: 42rem;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--mist);
+  }
+  @media (min-width: 768px) {
+    .cs-subtitle {
+      font-size: 18px;
+    }
+  }
+  .cs-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .cs-meta {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .cs-meta {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+  .cs-meta dd {
+    margin-top: 0.5rem;
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: var(--cream);
+    overflow-wrap: break-word;
+  }
+
+  /* ---------- capa ---------- */
+  .cs-cover-wrap {
+    margin-top: 3rem;
+  }
+  @media (min-width: 768px) {
+    .cs-cover-wrap {
+      margin-top: 4rem;
+    }
+  }
+  .cs-cover {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .cs-cover__bar {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 1;
+    height: 4px;
+    background: var(--accent);
+  }
+  .cs-cover img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- intro ---------- */
+  .cs-intro {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+  }
+  @media (min-width: 768px) {
+    .cs-intro {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 4rem;
+      margin-top: 6rem;
+    }
+  }
+
+  /* ---------- números ---------- */
+  .cs-stats-wrap {
+    margin-top: 3.5rem;
+  }
+  @media (min-width: 768px) {
+    .cs-stats-wrap {
+      margin-top: 6rem;
+    }
+  }
+  .cs-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-left: 1px solid var(--line);
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .cs-stats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1280px) {
+    .cs-stats {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+  .cs-stat {
+    min-width: 0;
+    padding: 1.25rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 768px) {
+    .cs-stat {
+      padding: 1.5rem;
+    }
+  }
+  .cs-stat__value {
+    display: block;
+    font-size: 2.25rem;
+    color: var(--accent);
+    overflow-wrap: anywhere;
+  }
+  @media (min-width: 768px) {
+    .cs-stat__value {
+      font-size: 2.6rem;
+    }
+  }
+  .cs-stat__label {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--mist);
+  }
+
+  /* ---------- seções ---------- */
+  .cs-section {
+    margin-top: 4rem;
+  }
+  @media (min-width: 768px) {
+    .cs-section {
+      margin-top: 7rem;
+    }
+  }
+  .cs-sec-head {
+    max-width: 48rem;
+  }
+  .cs-h2 {
+    margin-top: 1rem;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    line-height: 1.1;
+    overflow-wrap: break-word;
+  }
+  .cs-sec-body {
+    margin-top: 1.5rem;
+  }
+  /* "Ver no protótipo": leva o protótipo da seção 02 à tela da seção */
+  .cs-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    transition: border-color 0.2s;
+  }
+  .cs-live::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  .cs-live:hover {
+    border-color: var(--accent);
+  }
+  .cs-live:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  /* imagem solta */
+  .cs-frame {
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .cs-frame img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  /* galeria (uma grade ou várias linhas, cada uma com rótulo) */
+  .cs-gallery-linhas {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 768px) {
+    .cs-gallery-linhas {
+      gap: 4rem;
+    }
+  }
+  .cs-gallery__title {
+    margin-bottom: 1rem;
+  }
+  .cs-gallery {
+    display: grid;
+    gap: 12px;
+  }
+  .cs-gallery--phone {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cs-gallery--desktop {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 768px) {
+    .cs-gallery {
+      gap: 16px;
+    }
+    .cs-gallery--phone {
+      grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+      max-width: calc(var(--n) * 17rem);
+    }
+    .cs-gallery--desktop {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .cs-shot {
+    position: relative;
+    min-width: 0;
+  }
+  .cs-shot img {
+    width: 100%;
+    object-fit: cover;
+  }
+  /* respiro medido (blueprint): legenda, o computador e, embaixo, o celular ao lado das defesas */
+  .cs-bp__legenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .cs-bp__chave {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+  /* as mesmas marcas do print: azul hachurado, rosa chapado e o tracejado do alvo de toque */
+  .cs-bp__cor {
+    width: 18px;
+    height: 12px;
+    border-radius: 3px;
+  }
+  .cs-bp__cor--azul {
+    border: 1px solid #3f74ff;
+    background: repeating-linear-gradient(135deg, rgba(0, 79, 255, 0.75) 0 1.5px, rgba(0, 79, 255, 0.22) 1.5px 5px);
+  }
+  .cs-bp__cor--rosa {
+    background: rgb(236, 28, 120);
+  }
+  .cs-bp__cor--tinta {
+    border: 1.5px dashed var(--cream);
+  }
+  /* as cartas da escala (grade de 8, Fibonacci, ritmo): no computador sobem e ficam coladas por cima
+     da borda de baixo do print, cada uma num ângulo; abaixo disso, em coluna */
+  .cs-bp__escala {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+  }
+  @media (min-width: 1024px) {
+    .cs-bp__escala {
+      grid-template-columns: repeat(3, auto);
+      justify-content: space-evenly;
+      align-items: start;
+      gap: 2rem;
+      margin-top: -9rem;
+    }
+    .cs-bp__carta:nth-child(2) {
+      margin-top: 2.25rem;
+    }
+    .cs-bp__carta:nth-child(2) :global(.cs-foil-wrap) {
+      transform: rotate(-1.8deg);
+    }
+    .cs-bp__carta:nth-child(3) :global(.cs-foil-wrap) {
+      transform: rotate(1.2deg);
+    }
+  }
+  .cs-bp__baixo {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: 16px;
+  }
+  .cs-bp__escala + .cs-bp__baixo {
+    margin-top: 3.5rem;
+  }
+  .cs-bp__celulares {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .cs-bp__defesas {
+    display: grid;
+    align-content: start;
+    gap: 2rem;
+  }
+  /* o mito do "aluno usa mais o computador": fecha a seção, na largura toda */
+  .cs-bp__nota {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding: 2rem 1.75rem;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--accent) 12%, transparent) 0%, transparent 60%),
+      var(--surface);
+  }
+  .cs-bp__mito {
+    margin-top: 1rem;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1.1;
+    color: var(--cream);
+  }
+  .cs-bp__resposta {
+    display: grid;
+    gap: 1.5rem;
+  }
+  /* sem o mito: o texto maior, e o dado ao lado dele */
+  .cs-bp__nota--so-texto .cs-p {
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    line-height: 1.45;
+    color: var(--cream);
+  }
+  @media (min-width: 1024px) {
+    .cs-bp__nota {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      gap: 4rem;
+      padding: 2.75rem 3rem;
+    }
+    .cs-bp__nota--so-texto {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .cs-bp__nota--so-texto .cs-bp__resposta {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      align-items: center;
+      gap: 4rem;
+    }
+  }
+  .cs-bp__defesa {
+    display: grid;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .cs-bp__defesa .cs-fonte {
+    margin-top: 0.5rem;
+  }
+  .cs-bp__n {
+    font-size: 11px;
+    color: var(--accent);
+  }
+  .cs-bp__titulo {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--cream);
+  }
+  @media (min-width: 1024px) {
+    .cs-bp__baixo {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 3rem;
+      margin-top: 24px;
+    }
+    .cs-bp__defesas {
+      padding-top: 0.5rem;
+    }
+    .cs-bp__defesa:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
+  @media (min-width: 1280px) {
+    .cs-bp__baixo {
+      grid-template-columns: minmax(0, 40rem) minmax(0, 1fr);
+      gap: 4rem;
+    }
+  }
+  .cs-shot--desktop {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--ink-soft);
+  }
+  .cs-badge {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    border: 1px solid var(--line-strong);
+    background: rgba(10, 10, 10, 0.85);
+    padding: 4px 8px;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+
+  /* detalhes: um embaixo do outro, recorte 12:5 na largura toda, rótulo em mono e texto */
+  .cs-details {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .cs-details {
+      gap: 2rem;
+    }
+  }
+  .cs-detail {
+    min-width: 0;
+    border: 1px solid var(--line);
+    background: var(--ink-soft);
+  }
+  .cs-detail__img {
+    border-bottom: 1px solid var(--line);
+  }
+  .cs-detail__img img {
+    width: 100%;
+    object-fit: cover;
+  }
+  .cs-detail__body {
+    padding: 1rem;
+  }
+  @media (min-width: 768px) {
+    .cs-detail__body {
+      display: grid;
+      grid-template-columns: 16rem minmax(0, 1fr);
+      gap: 2rem;
+      align-items: baseline;
+      padding: 1.25rem 1.5rem;
+    }
+    .cs-detail__body p {
+      margin-top: 0;
+    }
+  }
+  .cs-detail__label {
+    display: block;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cs-detail__body p {
+    margin-top: 0.5rem;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--mist);
+  }
+
+  /* ---------- CTA (como o dos outros cases do portfólio) ---------- */
+  .cs-cta-wrap {
+    margin-block: 4rem;
+  }
+  @media (min-width: 768px) {
+    .cs-cta-wrap {
+      margin-block: 7rem;
+    }
+  }
+  .cs-cta {
+    padding: 2rem;
+    border: 1px solid var(--line);
+    background: var(--ink-soft);
+    text-align: center;
+  }
+  @media (min-width: 768px) {
+    .cs-cta {
+      padding: 3.5rem;
+    }
+  }
+  .cs-cta__t {
+    max-width: 42rem;
+    margin-inline: auto;
+    font-size: 1.875rem;
+    line-height: 1.15;
+  }
+  @media (min-width: 640px) {
+    .cs-cta__t {
+      font-size: 2.25rem;
+    }
+  }
+  .cs-cta__p {
+    max-width: 36rem;
+    margin: 1rem auto 0;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--mist);
+  }
+  .cs-cta__btns {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .cs-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .cs-btn svg {
+    transition: transform 0.3s var(--ease);
+  }
+  .cs-btn:hover svg {
+    transform: translate(3px, -3px);
+  }
+  .cs-btn--solid {
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .cs-btn--solid:hover {
+    background: var(--lime);
+  }
+  .cs-btn--outline {
+    border-color: var(--line-strong);
+    color: var(--cream);
+  }
+  .cs-btn--outline:hover {
+    border-color: var(--cream);
+    background: var(--surface);
+  }
+
+  /* ---------- entrega (design engineering): quatro pilares, cada um com o número que o prova ---------- */
+  .cs-eng__grid {
+    display: grid;
+    gap: 1px;
+    margin-top: 2.5rem;
+    border: 1px solid var(--line);
+    background: var(--line);
+  }
+  @media (min-width: 768px) {
+    .cs-eng__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 3.5rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .cs-eng__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .cs-eng__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: var(--ink-soft);
+  }
+  @media (min-width: 768px) {
+    .cs-eng__card {
+      padding: 2rem 1.75rem;
+    }
+  }
+  /* título, número e texto na mesma linha em todos os cards, mesmo quando um título quebra */
+  @supports (grid-template-rows: subgrid) {
+    @media (min-width: 768px) {
+      .cs-eng__card {
+        display: grid;
+        grid-row: span 3;
+        grid-template-rows: subgrid;
+        align-content: start;
+      }
+    }
+  }
+  /* a faixa do accent acende no topo do card ao passar o mouse, como nos cards da home */
+  .cs-eng__card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease);
+  }
+  .cs-eng__card:hover::before {
+    transform: scaleX(1);
+  }
+  .cs-eng__topo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .cs-eng__n {
+    flex: none;
+    font-size: 11px;
+    color: var(--faint);
+  }
+  .cs-eng__titulo {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .cs-eng__dado {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: 1.25rem;
+    border-block: 1px solid var(--line);
+  }
+  .cs-eng__valor {
+    font-size: 2.75rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .cs-eng__label {
+    font-size: 10.5px;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+  .cs-eng__texto {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--mist);
+  }
+
+  /* ---------- resultado ---------- */
+  .cs-outcome {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+  @media (min-width: 768px) {
+    .cs-outcome {
+      margin-top: 7rem;
+      margin-bottom: 7rem;
+    }
+  }
+  .cs-outcome__grid {
+    display: grid;
+    gap: 2.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 768px) {
+    .cs-outcome__grid {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 4rem;
+    }
+  }
+  .cs-plus {
+    margin-top: 1.5rem;
+  }
+  .cs-plus li {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--mist);
+  }
+  .cs-plus li + li {
+    margin-top: 0.75rem;
+  }
+  .cs-plus span {
+    flex: none;
+    color: var(--accent);
+  }
+
+  /* ---------- rodapé ---------- */
+  .cs-footer {
+    border-top: 1px solid var(--line);
+  }
+  .cs-footer__in {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding-block: 1.5rem;
+    font-size: 11px;
+    color: var(--faint);
+  }
+
+  /* ---------- o dado do hero: a mesma carta foil das seções, no computador colada no canto direito,
+     com o topo na altura do kicker; o título e o subtítulo param antes dela ---------- */
+  .cs-hero {
+    position: relative;
+  }
+  .cs-hero__fonte {
+    margin-top: 2.5rem;
+    padding-left: 0.5rem;
+  }
+  @media (min-width: 1024px) {
+    .cs-hero__fonte {
+      position: absolute;
+      top: 7rem;
+      right: calc(var(--gutter) + 2.5rem);
+      margin: 0;
+      padding: 0;
+    }
+    .cs-hero:has(.cs-hero__fonte) :is(.cs-title, .cs-subtitle) {
+      max-width: min(56rem, 100% - 24rem);
+    }
+  }
+  /* a heurística da seção: a carta foil embaixo do texto e, no computador, colada à direita */
+  .cs-sec-fonte {
+    margin-top: 2.5rem;
+    padding-left: 0.5rem;
+  }
+  @media (min-width: 1024px) {
+    .cs-sec-topo {
+      display: grid;
+      grid-template-columns: minmax(0, 48rem) auto;
+      justify-content: space-between;
+      align-items: center;
+      gap: 3rem;
+    }
+    .cs-sec-fonte {
+      margin: 0;
+      padding: 0 2.5rem 0 0;
+    }
+  }
+
+  /* ---------- cabeçalho do planejamento: o texto à esquerda e o carimbo da Tutory à direita ---------- */
+  .cs-rm-head {
+    display: grid;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (min-width: 1024px) {
+    .cs-rm-head {
+      grid-template-columns: minmax(0, 48rem) auto;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  .cs-selo {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 11.5rem;
+    aspect-ratio: 1;
+    color: var(--mist);
+  }
+  .cs-selo__anel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    transform-origin: 50% 50%;
+    animation: cs-selo-gira 48s linear infinite;
+  }
+  .cs-selo__texto {
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+  }
+  .cs-selo__logo {
+    width: 30%;
+    height: auto;
+  }
+  /* o símbolo oficial (public/favicon.svg), só ele, branco e com o mesmo traço arredondado do
+     arquivo; o viewBox corta o quadrado em volta */
+  .cs-selo__logo path {
+    fill: #fff;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  @keyframes cs-selo-gira {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cs-selo__anel {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // ---- reveal ao rolar ----------------------------------------------------
+  const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
+  if (!('IntersectionObserver' in window)) {
+    revealEls.forEach((el) => el.classList.add('is-visible'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        });
+      },
+      // threshold 0: as telas do protótipo passam de 1.500 px de altura e, numa tela baixa (notebook
+      // com escala de 150%, ~600 px), um bloco assim nunca chegaria a uma fração fixa visível
+      { threshold: 0, rootMargin: '0px 0px -10% 0px' }
+    );
+    revealEls.forEach((el) => {
+      // itens de grade entram em cascata, pela posição entre os irmãos
+      if (el.hasAttribute('data-reveal-group') && el.parentElement) {
+        const i = Array.prototype.indexOf.call(el.parentElement.children, el);
+        el.style.setProperty('--reveal-delay', `${(i % 6) * 70}ms`);
+      }
+      io.observe(el);
+    });
+  }
+  // na impressão (ou "Salvar como PDF") não há rolagem: tudo aparece
+  addEventListener('beforeprint', () => revealEls.forEach((el) => el.classList.add('is-visible')));
+  // avisa a rede de segurança do topo da página que o reveal está de pé
+  (window as Window & { csRevealPronto?: boolean }).csRevealPronto = true;
+
+  // ---- iframes do protótipo: são lazy, mas depois que a página carrega vão sendo carregados um a um,
+  // em ordem, para nenhuma tela aparecer em branco numa rolagem rápida ----
+  const preCarregar = () => {
+    const fila = [...document.querySelectorAll<HTMLIFrameElement>('iframe[loading="lazy"]')];
+    const carregado = (f: HTMLIFrameElement) => {
+      try {
+        const d = f.contentDocument;
+        return !!d && d.URL !== 'about:blank' && d.readyState === 'complete';
+      } catch {
+        return true; // outra origem: o navegador cuida
+      }
+    };
+    const proximo = () => {
+      const f = fila.shift();
+      if (!f) return;
+      if (carregado(f)) return proximo();
+      let foi = false;
+      const seguir = () => {
+        if (foi) return;
+        foi = true;
+        setTimeout(proximo, 400);
+      };
+      f.addEventListener('load', seguir, { once: true });
+      setTimeout(seguir, 6000); // se o load não vier, segue a fila mesmo assim
+      f.loading = 'eager';
+    };
+    proximo();
+  };
+  // No celular a fila não roda: são nove protótipos, e lá cada um carrega só quando chega perto da tela
+  // (o lazy do navegador), para não gastar o plano de dados de quem só passou pela página
+  const agendar = () => setTimeout(preCarregar, 1500);
+  if (matchMedia('(min-width: 1024px)').matches) {
+    if (document.readyState === 'complete') agendar();
+    else addEventListener('load', agendar, { once: true });
+  }
+
+  // ---- vídeos em loop: tocam só na tela; com movimento reduzido, param no poster ----
+  const videos = [...document.querySelectorAll<HTMLVideoElement>('video[data-loop]')];
+  if (videos.length) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const visible = new Set<HTMLVideoElement>();
+    const play = (v: HTMLVideoElement) => {
+      const p = v.play();
+      if (p) p.catch(() => {});
+    };
+    const still = (v: HTMLVideoElement) => {
+      v.autoplay = false;
+      v.pause();
+      v.controls = true; // quem quiser, dá o play
+      v.load(); // volta ao poster
+    };
+    const apply = () => {
+      videos.forEach((v) => {
+        if (reduce.matches) return still(v);
+        v.controls = false;
+        if (visible.has(v)) play(v);
+        else v.pause();
+      });
+    };
+    if ('IntersectionObserver' in window) {
+      const vio = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            const v = e.target as HTMLVideoElement;
+            if (e.isIntersecting) visible.add(v);
+            else visible.delete(v);
+            if (reduce.matches) return;
+            if (e.isIntersecting) play(v);
+            else v.pause();
+          });
+        },
+        { threshold: 0.15 }
+      );
+      videos.forEach((v) => vio.observe(v));
+    } else {
+      videos.forEach((v) => visible.add(v));
+    }
+    if (reduce.matches) apply();
+    reduce.addEventListener?.('change', apply);
+    // se o navegador pausar um vídeo que está na tela (ao voltar da aba, ao sair da tela cheia),
+    // ele volta a tocar; os que saíram da tela não estão em `visible`
+    const retomar = () => {
+      if (document.hidden || reduce.matches) return;
+      visible.forEach((v) => v.paused && play(v));
+    };
+    videos.forEach((v) => v.addEventListener('pause', () => setTimeout(retomar, 300)));
+    document.addEventListener('visibilitychange', retomar);
+    document.addEventListener('fullscreenchange', retomar);
+  }
+</script>

@@ -1,0 +1,101 @@
+---
+/**
+ * A fileira com as 13 cores de patente, que troca a cor base do protótipo. Fica no protótipo do topo
+ * (ProtoEmbed) e em cada tela ao vivo (ProtoTelas); quem usa liga o clique pelos [data-set-patente].
+ * Acima de 1420 px vira uma coluna à esquerda do palco (o pai precisa de position: relative); antes
+ * disso, uma linha acima dele.
+ */
+import { PATENTES } from './patentes';
+import { ui } from './ui';
+
+interface Props {
+  /** id do rótulo, para o aria-labelledby do grupo. */
+  id: string;
+  inicial: string;
+}
+
+const { id, inicial } = Astro.props;
+const tx = ui(Astro.currentLocale);
+---
+
+<div class="pr" role="group" aria-labelledby={id}>
+  <span class="pr__label" id={id}>{tx.rank}</span>
+  <div class="pr__cores">
+    {
+      PATENTES.map((p) => (
+        <button
+          type="button"
+          class="pr__cor"
+          data-set-patente={p.id}
+          aria-pressed={p.id === inicial ? 'true' : 'false'}
+          aria-label={tx.rankColor(p.nome)}
+          title={p.nome}
+          style={`--c:${p.cor}`}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .pr {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .pr__label {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5f5f66;
+  }
+  .pr__cores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  .pr__cor {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+  }
+  .pr__cor::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--c);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+    transition: box-shadow 0.2s;
+  }
+  .pr__cor:hover::before {
+    box-shadow:
+      inset 0 0 0 1px rgba(0, 0, 0, 0.18),
+      0 0 0 3px rgba(0, 0, 0, 0.12);
+  }
+  .pr__cor[aria-pressed='true']::before {
+    box-shadow:
+      0 0 0 2px #f1f1f1,
+      0 0 0 4px #141414;
+  }
+  .pr__cor:focus-visible {
+    outline: 2px solid #141414;
+    outline-offset: 0;
+  }
+  @media (min-width: 1420px) {
+    .pr {
+      position: absolute;
+      top: 0;
+      right: calc(100% + 18px);
+      align-items: center;
+      margin: 0;
+    }
+    .pr__cores {
+      flex-direction: column;
+    }
+  }
+</style>

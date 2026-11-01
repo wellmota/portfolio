@@ -1,0 +1,6 @@
+/* pmminas.css: entrada dos temas do painel do aluno (ENG-1625)
+   cozy    pmminas/temas/cozy.css    vidro claro na cor da patente. É a base: estrutura, grade e componentes.
+   tático  pmminas/temas/tatico.css  camada por cima do cozy: militar tático, glass, escuro e claro.
+   Para voltar ao cozy, comente a linha do tático. O @import tem de vir antes de qualquer regra. */
+@import url("pmminas/temas/cozy.css");
+@import url("pmminas/temas/tatico.css");

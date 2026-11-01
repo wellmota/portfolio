@@ -1,0 +1,334 @@
+---
+/**
+ * Pares "antes → depois" (porte do BeforeAfter do portfólio). O dado com fonte de cada par vira uma
+ * carta foil (a mesma das heurísticas das seções). Celular: a tela antiga em P&B, menor (1fr), ao
+ * lado da nova com os cantos do iPhone (2fr), e do outro lado o texto com a carta embaixo. `wide`: o
+ * texto em cima com a carta à direita, e as duas telas de desktop lado a lado embaixo.
+ * No celular, o "depois" pode ser um vídeo em loop (`afterVideo`) e ganhar uma anotação com seta,
+ * fora do print, apontando para o ☰ no canto de cima (`note`).
+ */
+import type { CompareBlock } from '@/data/cases/oba-types';
+import Foil from './Foil.astro';
+import Marcado from './Marcado.astro';
+
+type Props = CompareBlock;
+
+const { pairs, beforeLabel, afterLabel, heuristicLabel, caption } = Astro.props;
+const num = (n: number) => String(n).padStart(2, '0');
+const ratio = (img: { width: number; height: number }) => `aspect-ratio:${img.width} / ${img.height}`;
+---
+
+<div class="cs-container cs-block">
+  <div class="ba">
+    {
+      pairs.map((p, i) => (
+        <article class:list={['ba-row', p.wide ? 'ba-row--wide' : 'ba-row--phone']} data-reveal>
+          <div class="ba-head">
+            <div>
+              <p class="ba-n">
+                {num(i + 1)} — {p.label}
+              </p>
+              <p class="ba-h">
+                {heuristicLabel}: <span>{p.heuristic}</span>
+              </p>
+              <div class="cs-stack ba-body">
+                {p.body.map((t) => (
+                  <p class="cs-p">{t}</p>
+                ))}
+              </div>
+            </div>
+            {p.stat && (
+              <div class="ba-foil">
+                <Foil {...p.stat} n={num(i + 1)} />
+              </div>
+            )}
+          </div>
+          {p.wide ? (
+            <div class="ba-wide-media">
+              <div>
+                <span class="ba-tag">{beforeLabel}</span>
+                <div class="ba-before ba-box">
+                  <img
+                    src={p.before.src}
+                    alt={p.before.alt}
+                    width={p.before.width}
+                    height={p.before.height}
+                    loading="lazy"
+                    decoding="async"
+                    style={ratio(p.before)}
+                  />
+                </div>
+              </div>
+              <div>
+                <span class="ba-tag ba-tag--after">{afterLabel}</span>
+                <div class="ba-box">
+                  <img
+                    src={p.after.src}
+                    alt={p.after.alt}
+                    width={p.after.width}
+                    height={p.after.height}
+                    loading="lazy"
+                    decoding="async"
+                    style={ratio(p.after)}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div class:list={['ba-pair', p.note && 'ba-pair--note']}>
+              <div>
+                <span class="ba-tag">{beforeLabel}</span>
+                <div class="ba-before ba-box">
+                  <img
+                    src={p.before.src}
+                    alt={p.before.alt}
+                    width={p.before.width}
+                    height={p.before.height}
+                    loading="lazy"
+                    decoding="async"
+                    style={ratio(p.before)}
+                  />
+                </div>
+              </div>
+              <div>
+                <span class="ba-tag ba-tag--after">{afterLabel}</span>
+                <div class="print-ios ba-after">
+                  {p.note && (
+                    <span class="ba-note" aria-hidden="true">
+                      <svg class="cs-seta-fina ba-note__seta" width="120" height="64" viewBox="0 0 120 64">
+                        <path pathLength="1" d="M114 12C70 2 22 14 12 56" />
+                        <path class="ba-note__ponta" pathLength="1" d="M18.2 49.5L12 56l-2.6-8.6" />
+                      </svg>
+                      <Marcado class="ba-note__label" texto={p.note} />
+                    </span>
+                  )}
+                  {p.afterVideo ? (
+                    <video
+                      data-loop
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                      poster={p.after.src}
+                      width={p.after.width}
+                      height={p.after.height}
+                      style={ratio(p.after)}
+                      aria-label={p.after.alt}
+                    >
+                      {p.afterVideo.webm && <source src={p.afterVideo.webm} type="video/webm" />}
+                      <source src={p.afterVideo.src} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <img
+                      src={p.after.src}
+                      alt={p.after.alt}
+                      width={p.after.width}
+                      height={p.after.height}
+                      loading="lazy"
+                      decoding="async"
+                      style={ratio(p.after)}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </article>
+      ))
+    }
+  </div>
+  {caption && <p class="cs-caption">{caption}</p>}
+</div>
+
+<style>
+  .ba {
+    border-top: 1px solid var(--line);
+  }
+  .ba-row {
+    padding-block: 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 768px) {
+    .ba-row {
+      padding-block: 3.5rem;
+    }
+  }
+  .ba-n {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .ba-h {
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .ba-h span {
+    color: var(--mist);
+  }
+  .ba-tag {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .ba-tag--after {
+    color: var(--accent);
+  }
+  .ba-box {
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .ba-box img {
+    width: 100%;
+    object-fit: cover;
+  }
+  .ba-before img {
+    filter: grayscale(1) contrast(1.02);
+    opacity: 0.9;
+  }
+
+  /* o texto do par com a carta foil do dado: embaixo do texto no celular, à direita no desktop */
+  .ba-head {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .ba-foil {
+    padding-left: 0.5rem;
+  }
+  .ba-body {
+    margin-top: 1.25rem;
+  }
+
+  /* celular: as telas de um lado e, do outro, o texto com a carta embaixo */
+  .ba-row--phone {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 768px) {
+    .ba-row--phone {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: center;
+      gap: 3.5rem;
+    }
+    .ba-row--phone .ba-pair {
+      order: -1;
+    }
+    .ba-row--phone .ba-head {
+      max-width: 36rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .ba-row--wide .ba-head {
+      grid-template-columns: minmax(0, 40rem) auto;
+      justify-content: space-between;
+      align-items: center;
+      gap: 3rem;
+    }
+    .ba-row--wide .ba-foil {
+      padding: 0 2.5rem 0 0;
+    }
+  }
+  .ba-pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 12px;
+    align-items: start;
+  }
+  @media (min-width: 768px) {
+    .ba-pair {
+      gap: 16px;
+    }
+  }
+  /* anotação: fica no respiro entre o rótulo e o print, com a ponta no ☰ (≈7,5% da
+     largura do print, no topo). O respiro é o mesmo nas duas colunas, para os prints alinharem */
+  .ba-pair--note .ba-tag {
+    margin-bottom: 5.25rem;
+  }
+  .ba-after {
+    position: relative;
+  }
+  /* a ponta da seta (x 12 da caixa de 120×64) cai em cima do ☰, a 7,5% da largura do print; o texto
+     fica à direita, na altura da cauda */
+  .ba-note {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: calc(7.5% - 12px);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    pointer-events: none;
+    color: var(--cream);
+  }
+  .ba-note__seta {
+    flex: none;
+    overflow: visible;
+    color: var(--mist);
+  }
+  .ba-note__seta path {
+    stroke-width: 1.5;
+  }
+  .ba-note :global(.ba-note__label) {
+    white-space: nowrap;
+  }
+  /* celular: a coluna do print tem ~225 px; a seta encolhe e o texto quebra dentro dela, sem vazar da
+     página (no site da Tutory a apresentação era bloqueada abaixo de 1024 px) */
+  @media (max-width: 639.98px) {
+    .ba-note {
+      right: 0;
+    }
+    .ba-note__seta {
+      width: 72px;
+      height: 38px;
+    }
+    .ba-note :global(.ba-note__label) {
+      white-space: normal;
+      font-size: 13.5px;
+    }
+  }
+  /* a seta se desenha da cauda até a ponta quando o par entra na tela */
+  :global(.js) .ba-note__seta path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.9s var(--ease) 0.5s;
+  }
+  :global(.js) .ba-note__seta .ba-note__ponta {
+    transition-delay: 1.3s;
+    transition-duration: 0.3s;
+  }
+  :global(.js) .ba-row.is-visible .ba-note__seta path {
+    stroke-dashoffset: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .ba-note__seta path {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+  }
+
+
+  /* desktop: as duas telas lado a lado, embaixo do texto */
+  .ba-wide-media {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  @media (min-width: 768px) {
+    .ba-wide-media {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+</style>

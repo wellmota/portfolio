@@ -1,0 +1,357 @@
+---
+/**
+ * Roadmap do fim da apresentação (no espírito do Process do portfólio): as etapas em cards, ligadas
+ * por uma trilha. A etapa `agora` acende na cor de destaque, com o nó pulsando e a trilha correndo até
+ * a próxima; as seguintes ficam tracejadas; a `final` fecha em dourado.
+ *  - Desktop (≥1024px): cinco colunas, a trilha na horizontal, em cima dos cards.
+ *  - Celular: um card embaixo do outro, a trilha na vertical, à esquerda.
+ * O cabeçalho da seção (kicker, título e texto) fica no CasePage, com os estilos de seção de lá.
+ */
+import type { RoadmapStep } from '@/data/cases/oba-types';
+
+interface Props {
+  steps: RoadmapStep[];
+}
+
+const { steps } = Astro.props;
+
+// ícones de traço, 24×24 (no desenho do Lucide)
+const ICONES: Record<RoadmapStep['icon'], string> = {
+  caneta: 'M12 19l7-7 3 3-7 7-3-3zM18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5zM2 2l7.586 7.586M13 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0z',
+  check: 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3',
+  pessoas: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+  codigo: 'M16 18l6-6-6-6M8 6l-6 6 6 6',
+  foguete:
+    'M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09zM12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2zM9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5',
+};
+---
+
+<ol class="rm-steps" style={`--n:${steps.length}`}>
+  {
+    steps.map((s, i) => (
+      <li
+        class:list={['rm-step', `rm-step--${s.status}`, s.final && 'rm-step--final']}
+        style={`--i:${i}`}
+        aria-current={s.status === 'agora' ? 'step' : undefined}
+        data-reveal
+        data-reveal-group
+      >
+        <div class="rm-rail" aria-hidden="true">
+          <span class="rm-node" />
+        </div>
+        <article class="rm-card">
+          <div class="rm-card__top">
+            <span class="rm-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d={ICONES[s.icon]} stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span class="mono rm-n">{String(i + 1).padStart(2, '0')}</span>
+          </div>
+          <div class="rm-card__body">
+            {s.chip && (
+              <span class="mono rm-chip">
+                {s.status === 'agora' && <i aria-hidden="true" />}
+                {s.chip}
+              </span>
+            )}
+            <h3 class="display rm-title">{s.title}</h3>
+            <p class="rm-text">{s.text}</p>
+            {s.stat && (
+              <p class="rm-stat">
+                <strong class="display rm-stat__n">{s.stat.value}</strong>
+                <span class="rm-stat__label">{s.stat.label}</span>
+                <span class="mono rm-stat__fonte">{s.stat.source}</span>
+              </p>
+            )}
+          </div>
+        </article>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .rm-steps {
+    --gap: 1rem;
+    --pad: 1.25rem;
+    --icone: 44px;
+    --no: 12px;
+    display: grid;
+    gap: var(--gap);
+    margin-top: 3rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  /* ---------- trilha: celular, na vertical ---------- */
+  .rm-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+  .rm-rail {
+    position: relative;
+  }
+  /* o nó fica na altura do centro do ícone do card */
+  .rm-node {
+    position: absolute;
+    top: calc(var(--pad) + var(--icone) / 2 - var(--no) / 2);
+    left: calc(50% - var(--no) / 2);
+    z-index: 1;
+    width: var(--no);
+    height: var(--no);
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: var(--ink);
+  }
+  /* o trecho da trilha até o próximo nó */
+  .rm-rail::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--pad) + var(--icone) / 2);
+    bottom: calc(-1 * var(--gap) - var(--pad) - var(--icone) / 2);
+    left: calc(50% - 0.5px);
+    width: 1px;
+    background: repeating-linear-gradient(180deg, var(--line-strong) 0 6px, transparent 6px 12px);
+    transform-origin: top;
+  }
+  .rm-step:last-child .rm-rail::before {
+    display: none;
+  }
+
+  /* ---------- trilha: desktop, na horizontal ---------- */
+  @media (min-width: 1024px) {
+    .rm-steps {
+      grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr));
+      margin-top: 4rem;
+    }
+    .rm-step {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: 2.75rem 1fr;
+      gap: 1rem;
+    }
+    .rm-node {
+      top: calc(50% - var(--no) / 2);
+      left: calc(var(--pad) + var(--icone) / 2 - var(--no) / 2);
+    }
+    .rm-rail::before {
+      top: calc(50% - 0.5px);
+      bottom: auto;
+      left: calc(var(--pad) + var(--icone) / 2);
+      right: calc(-1 * var(--gap) - var(--pad) - var(--icone) / 2);
+      width: auto;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, var(--line-strong) 0 6px, transparent 6px 12px);
+      transform-origin: left;
+    }
+  }
+
+  /* ---------- card ---------- */
+  .rm-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: var(--pad);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    transition: border-color 0.3s;
+  }
+  .rm-card:hover {
+    border-color: var(--line-strong);
+  }
+  @media (min-width: 1024px) {
+    .rm-card {
+      min-height: 19rem;
+    }
+  }
+  .rm-card__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .rm-icon {
+    display: grid;
+    place-items: center;
+    width: var(--icone);
+    height: var(--icone);
+    border: 1px solid var(--line);
+    color: var(--mist);
+  }
+  .rm-n {
+    font-size: 11px;
+    color: var(--faint);
+  }
+  .rm-card__body {
+    margin-top: 2rem;
+  }
+  @media (min-width: 1024px) {
+    .rm-card__body {
+      margin-top: auto;
+      padding-top: 2.5rem;
+    }
+  }
+  .rm-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.9rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid var(--line-strong);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+  .rm-title {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+  }
+  .rm-text {
+    margin-top: 0.6rem;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--mist);
+  }
+
+  .rm-stat {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .rm-stat__n {
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--cream);
+  }
+  .rm-stat__label {
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--mist);
+  }
+  .rm-stat__fonte {
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .rm-step--agora .rm-stat__n {
+    color: var(--accent);
+  }
+  .rm-step--final .rm-stat__n {
+    color: var(--accent-2);
+  }
+
+  /* ---------- agora: acesa, com o nó pulsando e a trilha correndo até a próxima ---------- */
+  .rm-step--agora .rm-card {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+    background:
+      radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%),
+      var(--surface);
+  }
+  .rm-step--agora .rm-icon {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--ink);
+  }
+  .rm-step--agora .rm-n {
+    color: var(--accent);
+  }
+  .rm-step--agora .rm-chip {
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    color: var(--accent);
+  }
+  .rm-step--agora .rm-chip i,
+  .rm-step--agora .rm-node {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .rm-step--agora .rm-chip i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: rm-pisca 1.6s ease-in-out infinite;
+  }
+  .rm-step--agora .rm-node {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+  .rm-step--agora .rm-node::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    animation: rm-pulso 2s var(--ease) infinite;
+  }
+  .rm-step--agora .rm-rail::before {
+    background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 0%, transparent));
+  }
+  @media (min-width: 1024px) {
+    .rm-step--agora .rm-rail::before {
+      background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 0%, transparent));
+    }
+  }
+
+  /* ---------- final: o destino, em dourado ---------- */
+  .rm-step--final .rm-card {
+    border-color: color-mix(in srgb, var(--accent-2) 30%, var(--line));
+    background:
+      radial-gradient(120% 80% at 100% 100%, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 60%),
+      var(--surface);
+  }
+  .rm-step--final .rm-icon {
+    border-color: color-mix(in srgb, var(--accent-2) 55%, transparent);
+    color: var(--accent-2);
+  }
+  .rm-step--final .rm-node {
+    border-radius: 2px;
+    border-color: var(--accent-2);
+    background: var(--ink);
+    transform: rotate(45deg);
+  }
+
+  /* ---------- entrada: a trilha corre depois que o card aparece ---------- */
+  :global(.js) .rm-rail::before {
+    transform: scaleY(0);
+    transition: transform 1.1s var(--ease) calc(var(--i) * 120ms + 350ms);
+  }
+  :global(.js) .rm-step.is-visible .rm-rail::before {
+    transform: none;
+  }
+  @media (min-width: 1024px) {
+    :global(.js) .rm-rail::before {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes rm-pulso {
+    0% {
+      transform: scale(1);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(2.8);
+      opacity: 0;
+    }
+  }
+  @keyframes rm-pisca {
+    50% {
+      opacity: 0.35;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rm-step--agora .rm-node::after,
+    .rm-step--agora .rm-chip i {
+      animation: none;
+    }
+    :global(.js) .rm-rail::before {
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

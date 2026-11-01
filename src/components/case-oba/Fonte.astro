@@ -1,0 +1,21 @@
+---
+/**
+ * Um dado com fonte (número grande, frase e de onde veio), ou só um princípio de UX com a fonte, quando
+ * não há número. Os estilos (.cs-fonte) ficam no <style is:global> do CasePage, para servir às seções,
+ * ao antes/depois e ao hero. `discreto` é a versão pequena do canto do hero.
+ */
+import type { Fonte } from '@/data/cases/oba-types';
+
+interface Props extends Fonte {
+  class?: string;
+  discreto?: boolean;
+}
+
+const { value, label, source, class: cls, discreto } = Astro.props;
+---
+
+<p class:list={['cs-fonte', discreto && 'cs-fonte--discreto', cls]}>
+  {value && <strong class="display cs-fonte__n">{value}</strong>}
+  <span class="cs-fonte__label">{label}</span>
+  <span class="mono cs-fonte__src">{source}</span>
+</p>

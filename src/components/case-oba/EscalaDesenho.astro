@@ -1,0 +1,139 @@
+---
+/**
+ * Os desenhos das cartas da escala, sobre o blueprint (vão no slot da Foil):
+ *  - grade: quadrados de 8, 16 e 24 em cima da grade de 8, e os meios-passos de 12 e 20 tracejados;
+ *  - fibonacci: os quadrados de 8 × (1, 1, 2, 3, 5, 8) com a espiral áurea passando por eles;
+ *  - ritmo: a mesma fileira de blocos com espaços soltos e com espaços que se repetem.
+ */
+import { ui } from './ui';
+
+interface Props {
+  desenho: 'grade' | 'fibonacci' | 'ritmo';
+}
+
+const { desenho } = Astro.props;
+const tx = ui(Astro.currentLocale);
+// grade: [lado, x] com a base em y = 32; os de 4 em 4 que não são de 8 ficam tracejados
+const grade = [
+  [8, 2],
+  [12, 14],
+  [16, 30],
+  [20, 50],
+  [24, 74],
+];
+// ritmo: x de cada bloco de 12 de largura
+const solto = [2, 19, 44, 58, 88];
+const certo = [2, 24, 46, 68, 90];
+---
+
+{
+  desenho === 'grade' && (
+    <svg class="ed" viewBox="0 0 104 44">
+      <defs>
+        <pattern id="ed-grade" width="8" height="8" patternUnits="userSpaceOnUse">
+          <path d="M8 0H0V8" fill="none" stroke="currentColor" stroke-opacity="0.16" stroke-width="0.4" />
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="104" height="32" fill="url(#ed-grade)" />
+      {grade.map(([l, x]) => (
+        <>
+          <rect
+            x={x}
+            y={32 - l}
+            width={l}
+            height={l}
+            rx="1.2"
+            class:list={['ed__q', l % 8 !== 0 && 'ed__q--meio']}
+          />
+          <text x={x + l / 2} y="41" class="ed__n">
+            {l}
+          </text>
+        </>
+      ))}
+    </svg>
+  )
+}
+
+{
+  desenho === 'fibonacci' && (
+    <svg class="ed" viewBox="0 0 130 80">
+      <g class="ed__fib">
+        <rect x="0" y="0" width="80" height="80" />
+        <rect x="80" y="0" width="50" height="50" />
+        <rect x="100" y="50" width="30" height="30" />
+        <rect x="80" y="60" width="20" height="20" />
+        <rect x="80" y="50" width="10" height="10" />
+        <rect x="90" y="50" width="10" height="10" />
+      </g>
+      <path class="ed__espiral" d="M0 80A80 80 0 0 1 80 0A50 50 0 0 1 130 50A30 30 0 0 1 100 80A20 20 0 0 1 80 60A10 10 0 0 1 90 50A10 10 0 0 1 100 60" />
+      <text x="40" y="44" class="ed__n ed__n--g">64</text>
+      <text x="105" y="29" class="ed__n">40</text>
+      <text x="115" y="69" class="ed__n">24</text>
+      <text x="90" y="74" class="ed__n">16</text>
+    </svg>
+  )
+}
+
+{
+  desenho === 'ritmo' && (
+    <svg class="ed" viewBox="0 0 104 48">
+      {solto.map((x) => (
+        <rect x={x} y="2" width="12" height="12" rx="2" class="ed__q ed__q--solto" />
+      ))}
+      <text x="0" y="21" class="ed__r">{tx.noRhythm}</text>
+      {certo.map((x) => (
+        <rect x={x} y="26" width="12" height="12" rx="2" class="ed__q" />
+      ))}
+      <text x="0" y="45" class="ed__r ed__r--on">{tx.evenSpace}</text>
+    </svg>
+  )
+}
+
+<style>
+  .ed {
+    font-family: var(--font-mono);
+  }
+  .ed__q {
+    fill: color-mix(in srgb, var(--accent) 55%, transparent);
+    stroke: #8fb0ff;
+    stroke-width: 0.6;
+  }
+  .ed__q--meio {
+    fill: none;
+    stroke-dasharray: 1.6 1.4;
+    stroke-opacity: 0.8;
+  }
+  .ed__q--solto {
+    fill: rgba(255, 255, 255, 0.12);
+    stroke: rgba(255, 255, 255, 0.35);
+  }
+  .ed__n {
+    fill: currentColor;
+    font-size: 6px;
+    text-anchor: middle;
+    letter-spacing: 0.04em;
+  }
+  .ed__n--g {
+    font-size: 9px;
+  }
+  .ed__r {
+    fill: #85858c;
+    font-size: 5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .ed__r--on {
+    fill: currentColor;
+  }
+  .ed__fib rect {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.28);
+    stroke-width: 0.6;
+  }
+  .ed__espiral {
+    fill: none;
+    stroke: #8fb0ff;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+</style>

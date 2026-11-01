@@ -1,0 +1,466 @@
+/* ==========================================================================
+   ENG-1625 · Folha "Compartilhar" das conquistas (aberta pelo troféu do topo). SÓ NO OVERRIDE LOCAL.
+   Quem carrega é o compartilhar.js, ao lado. Layout das referências do Apple Fitness: "×" e título no
+   alto, carrossel com os vizinhos aparecendo, pontos, escolha do fundo (foto ou padrão), Cancelar e
+   Compartilhar. As cores ficam nos tokens --cq-*:
+   - cozy: folha de vidro claro e a cor da patente;
+   - tático: os --t-* do tema, que seguem o modo claro ou escuro.
+   Doc: uxdocs/15-conquistas.md
+   ========================================================================== */
+.cc-cq {
+  --cq-card: min(300px, calc((100dvh - 350px) * 0.8));
+  --cq-folha: rgb(255 255 255 / 0.9);
+  --cq-tinta: #0f172a;
+  --cq-apagado: #5b6577;
+  --cq-linha: rgb(15 23 42 / 0.1);
+  --cq-botao: rgb(15 23 42 / 0.06);
+  --cq-botao-hover: rgb(15 23 42 / 0.11);
+  --cq-acento: var(--highlight-color, #1877f2);
+  --cq-sobre-acento: #fff;
+  --cq-brilho-1: color-mix(in srgb, var(--highlight-color, #1877f2) 34%, transparent);
+  --cq-brilho-2: rgb(245 158 11 / 0.26);
+  --cq-fonte: "Inter", system-ui, sans-serif;
+  --cq-fonte-titulo: "Inter", system-ui, sans-serif;
+  --cq-raio: 32px;
+  --cq-raio-card: 22px;
+  --cq-raio-botao: 999px;
+  --cq-sombra: 0 40px 90px -30px rgb(15 23 42 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 0 0 1px rgb(255 255 255 / 0.6);
+  --cq-esqueleto: rgb(15 23 42 / 0.06);
+
+  width: min(460px, calc(100vw - 24px));
+  max-width: none;
+  max-height: calc(100dvh - 24px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cq-tinta);
+  font-family: var(--cq-fonte);
+  overflow: visible;
+}
+.cc-cq::backdrop {
+  background: rgb(5 9 24 / 0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+html.cc-cq-aberto {
+  overflow: hidden;
+}
+
+.cc-cq__folha {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100dvh - 24px);
+  padding: 14px 0 20px;
+  overflow: hidden auto;
+  border-radius: var(--cq-raio);
+  background: var(--cq-folha);
+  box-shadow: var(--cq-sombra);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  backdrop-filter: blur(24px) saturate(1.5);
+  scrollbar-width: none;
+}
+/* Os brilhos de cor por trás dos cards (o vermelho e o laranja da referência) */
+.cc-cq__folha::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(38% 26% at 8% 58%, var(--cq-brilho-1), transparent 70%),
+    radial-gradient(36% 24% at 96% 36%, var(--cq-brilho-2), transparent 70%),
+    radial-gradient(40% 20% at 70% 96%, var(--cq-brilho-1), transparent 70%);
+  pointer-events: none;
+}
+
+.cc-cq__topo {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  padding: 0 16px;
+}
+.cc-cq__titulo {
+  margin: 0;
+  color: inherit;
+  font: 600 17px/1.2 var(--cq-fonte-titulo);
+  text-align: center;
+}
+.cc-cq__redondo,
+.cc-cq__seta {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cq-botao);
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+.cc-cq__redondo:hover,
+.cc-cq__seta:hover {
+  background: var(--cq-botao-hover);
+}
+.cc-cq__redondo svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.cc-cq__redondo svg[fill="none"] {
+  fill: none;
+  width: 20px;
+  height: 20px;
+}
+
+/* Carrossel: o modelo do meio inteiro e os vizinhos aparecendo nas bordas */
+.cc-cq__palco {
+  position: relative;
+}
+.cc-cq__trilho {
+  display: flex;
+  gap: 14px;
+  padding: 10px calc(50% - var(--cq-card) / 2) 18px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  outline: none;
+}
+.cc-cq__trilho::-webkit-scrollbar {
+  display: none;
+}
+.cc-cq__trilho:focus-visible .cc-cq__slide.is-atual canvas {
+  outline: 3px solid var(--cq-acento);
+  outline-offset: 4px;
+}
+.cc-cq__slide {
+  flex: 0 0 var(--cq-card);
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+}
+.cc-cq__slide:not(.is-atual) {
+  transform: scale(0.9);
+  opacity: 0.5;
+  cursor: pointer;
+}
+.cc-cq__slide canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--cq-raio-card);
+  background: var(--cq-esqueleto);
+  box-shadow: 0 22px 44px -18px rgb(0 0 0 / 0.5);
+}
+.cc-cq.is-carregando .cc-cq__slide canvas {
+  animation: cc-cq-pulso 1.1s ease-in-out infinite alternate;
+}
+@keyframes cc-cq-pulso {
+  to { opacity: 0.55; }
+}
+.cc-cq__seta {
+  position: absolute;
+  top: calc(50% - 4px);
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  translate: 0 -50%;
+  background: var(--cq-folha);
+  box-shadow: 0 6px 18px -6px rgb(0 0 0 / 0.35), inset 0 0 0 1px var(--cq-linha);
+}
+.cc-cq__seta[data-passo="-1"] {
+  left: 12px;
+}
+.cc-cq__seta[data-passo="-1"] svg {
+  rotate: 180deg;
+}
+.cc-cq__seta[data-passo="1"] {
+  right: 12px;
+}
+.cc-cq__seta svg {
+  width: 18px;
+  height: 18px;
+}
+.cc-cq__seta:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Pontos: área de toque de 24 px, o ponto aparente é menor */
+.cc-cq__pontos {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-top: -6px;
+}
+.cc-cq__pontos button {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.cc-cq__pontos button::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--cq-apagado);
+  opacity: 0.4;
+  transition: width 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+}
+.cc-cq__pontos button[aria-current="true"]::before {
+  width: 20px;
+  background: var(--cq-acento);
+  opacity: 1;
+}
+.cc-cq__modelo {
+  margin: -10px 0 0;
+  color: var(--cq-apagado);
+  font: 600 12px/1.4 var(--cq-fonte);
+  letter-spacing: 0.1em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Fundo: foto do aluno ou o padrão do tema */
+.cc-cq__fundos {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 20px;
+}
+.cc-cq__fundo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  width: 112px;
+  height: 80px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--cq-acento) 12%, transparent);
+  color: var(--cq-acento);
+  font: 600 13px/1.2 var(--cq-fonte);
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--cq-linha);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.cc-cq__fundo:hover {
+  transform: translateY(-1px);
+}
+.cc-cq__fundo[aria-checked="true"] {
+  box-shadow: inset 0 0 0 2px var(--cq-acento), 0 0 0 4px color-mix(in srgb, var(--cq-acento) 22%, transparent);
+}
+.cc-cq__fundo-ico svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+.cc-cq__fundo-nome {
+  position: relative;
+}
+/* Com foto ou no padrão, a miniatura ocupa o botão e o nome vai embaixo, sobre um véu */
+.cc-cq__fundo.tem-foto,
+.cc-cq__fundo--padrao {
+  align-content: end;
+  padding-bottom: 8px;
+  color: #fff;
+}
+.cc-cq__fundo.tem-foto {
+  background: var(--cq-foto) center 30% / cover;
+}
+.cc-cq__fundo.tem-foto .cc-cq__fundo-ico {
+  display: none;
+}
+.cc-cq__fundo--padrao {
+  background:
+    var(--cq-insignia, none) center 10px / auto 44px no-repeat,
+    linear-gradient(160deg, var(--cq-acento), #14206e);
+}
+.cc-cq__fundo.tem-foto::before,
+.cc-cq__fundo--padrao::before {
+  content: "";
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(transparent, rgb(0 0 0 / 0.55));
+}
+.cc-cq__arquivo {
+  display: none;
+}
+.cc-cq__aviso {
+  min-height: 1.4em;
+  margin: -4px 20px -6px;
+  color: var(--cq-apagado);
+  font: 500 12px/1.4 var(--cq-fonte);
+  text-align: center;
+}
+
+.cc-cq__acoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 20px;
+}
+.cc-cq__botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: var(--cq-raio-botao);
+  background: var(--cq-botao);
+  color: inherit;
+  font: 600 16px/1 var(--cq-fonte);
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--cq-linha);
+  transition: background-color 0.2s ease, filter 0.2s ease, transform 0.15s ease;
+}
+.cc-cq__botao:hover {
+  background: var(--cq-botao-hover);
+}
+.cc-cq__botao:active {
+  transform: scale(0.98);
+}
+.cc-cq__botao--primario,
+.cc-cq__botao--primario:hover {
+  background: var(--cq-acento);
+  color: var(--cq-sobre-acento);
+  box-shadow: 0 12px 26px -12px var(--cq-acento);
+}
+.cc-cq__botao--primario:hover {
+  filter: brightness(1.08);
+}
+.cc-cq__botao svg {
+  width: 20px;
+  height: 20px;
+}
+.cc-cq__botao:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.cc-cq :focus-visible {
+  outline: 2px solid var(--cq-acento);
+  outline-offset: 2px;
+}
+
+/* Entrada: sobe e assenta (a saída é imediata) */
+.cc-cq[open] {
+  animation: cc-cq-entra 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cc-cq[open]::backdrop {
+  animation: cc-cq-veu 0.3s ease;
+}
+@keyframes cc-cq-entra {
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+}
+@keyframes cc-cq-veu {
+  from { opacity: 0; }
+}
+
+/* Troféu do topo: agora é botão (o JS põe role e tabindex) */
+body.page-aluno .account-wrap-reward[data-cc-conquistas]:focus-visible {
+  outline: 2px solid var(--highlight-color, #1877f2);
+  outline-offset: 3px;
+}
+
+/* Tela baixa: o card encolhe pela altura (--cq-card); celular: a folha vira gaveta de baixo */
+@media (max-width: 520px) {
+  .cc-cq {
+    --cq-card: min(250px, calc((100dvh - 330px) * 0.8));
+    width: 100vw;
+    margin: auto 0 0;
+  }
+  .cc-cq__folha {
+    border-radius: var(--cq-raio) var(--cq-raio) 0 0;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .cc-cq__seta {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-cq[open],
+  .cc-cq[open]::backdrop,
+  .cc-cq.is-carregando .cc-cq__slide canvas {
+    animation: none;
+  }
+  .cc-cq__slide,
+  .cc-cq__fundo,
+  .cc-cq__botao,
+  .cc-cq__pontos button::before {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tático: a pele do tema (vidro, verde, canto reto, Rajdhani em caixa alta).
+   Os --t-* já trazem o modo claro e o escuro (light-dark)
+   -------------------------------------------------------------------------- */
+html[data-tema="tatico"] .cc-cq {
+  /* o modo do topo (nas telas fora do Painel, o html não recebe o color-scheme do tático) */
+  color-scheme: var(--t-esquema, light dark);
+  --cq-folha: var(--t-vidro-forte, rgb(24 28 25 / 0.94));
+  --cq-tinta: var(--t-text, #eef3ef);
+  --cq-apagado: var(--t-text-3, #879189);
+  --cq-linha: var(--t-line-2, rgb(255 255 255 / 0.22));
+  --cq-botao: var(--t-vidro-2, rgb(255 255 255 / 0.035));
+  --cq-botao-hover: color-mix(in srgb, var(--t-acc, #87fa9c) 12%, transparent);
+  --cq-acento: var(--t-acc, #87fa9c);
+  --cq-sobre-acento: #050705;
+  --cq-brilho-1: rgb(135 250 156 / 0.16);
+  --cq-brilho-2: rgb(254 193 51 / 0.16);
+  --cq-fonte: var(--t-texto, "Barlow", system-ui, sans-serif);
+  --cq-fonte-titulo: var(--t-hud, "Rajdhani", sans-serif);
+  --cq-raio: 6px;
+  --cq-raio-card: 4px;
+  --cq-raio-botao: var(--t-r, 4px);
+  --cq-sombra: var(--t-sombra, 0 18px 44px -14px rgb(0 0 0 / 0.75)), var(--t-brilho, inset 0 1px 0 rgb(255 255 255 / 0.06)), inset 0 0 0 1px var(--cq-linha);
+  --cq-esqueleto: var(--t-vidro-2, rgb(255 255 255 / 0.04));
+}
+html[data-tema="tatico"] .cc-cq::backdrop {
+  background: rgb(2 4 3 / 0.62);
+}
+/* Cantoneiras de mira nos quatro cantos da folha, como os painéis do tema */
+html[data-tema="tatico"] .cc-cq__folha {
+  background: var(--t-cantos, none), var(--cq-folha);
+}
+html[data-tema="tatico"] .cc-cq__titulo,
+html[data-tema="tatico"] .cc-cq__botao,
+html[data-tema="tatico"] .cc-cq__modelo {
+  font-family: var(--cq-fonte-titulo);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+html[data-tema="tatico"] .cc-cq__titulo {
+  font-size: 18px;
+}
+html[data-tema="tatico"] .cc-cq__redondo,
+html[data-tema="tatico"] .cc-cq__seta,
+html[data-tema="tatico"] .cc-cq__fundo {
+  border-radius: var(--t-r, 4px);
+}
+html[data-tema="tatico"] .cc-cq__fundo {
+  color: var(--t-acc-ink, #87fa9c);
+}
+html[data-tema="tatico"] .cc-cq__fundo--padrao {
+  background:
+    var(--cq-insignia, none) center 10px / auto 44px no-repeat,
+    linear-gradient(160deg, #173d26, #050705);
+}

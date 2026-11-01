@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+html, body {
+    background-color: #fafbfb;
+}
+.header-desktop, .menu-sidebar .logo, #chat_header {
+    background-color: #0162ad;
+}
+.menu-sidebar, .menu-sidebar .menu-sidebar__content {
+    background-color: #0162ad;
+}
+.account-item .content .js-acc-btn, .noti__item i, .header-exp-count, #exp_counter, .header-exp-count small,
+.account-item .content .js-acc-btn:hover, .noti__item i:hover {
+    color: #c7c7c7}
+.menu-sidebar .menu-sidebar__content li a, .menu-sidebar .menu-sidebar__content li a i, 
+.tutory-menu-closed .menu-sidebar__content .navbar-sidebar li a i,
+.navbar-sidebar .navbar__list li:hover > a,
+.navbar-sidebar .navbar__list li.active>a {
+    color: #ffffff}
+#bia_help .bia-title, #bia_menu h3, #bia_menu ul a {
+    color: #ffffff}
+#bia_help .bia-title, #bia_menu {
+    background-color: #000000}
+#bia_help img, .bia-profile img, .bot-profile img, .review-profile img  {
+    border-color: #ffffff}
+#chat_container .chat-message.chat-bot-message .chat-message-text,#chat_container .chat-message.chat-user-message .chat-message-text,#chat_container .bia-profile,.goal-review-intro,.review-profile  {
+    color: #555555}
+#tarefas_dia_aluno .au-task-list .au-task__item--primary .au-task__item-inner {
+    border-left-color: #0bb6ef !important;
+}
+.legend-week-activities span.legend-color.legend-1, 
+.card-desempenho-header h2.desemp-title-34::before, 
+.bg-estudo,
+#tabela_resumo_semana .calendar-aluno-has-activity.etapa-1,
+#dashboard_summary .day-activity-step-1 
+{
+    background-color:#0bb6ef !important;
+}
+.btn-desempenho-modalidades .btn-modal-34, .btn-desempenho-modalidades .btn-modal-34:hover 
+{
+    background: #0bb6ef !important;
+    border-color: #0bb6ef !important;
+}
+.color-estudo {
+    color: #0bb6ef !important;
+}
+#tarefas_dia_aluno .au-task-list .au-task__item--warning .au-task__item-inner, 
+.meta-aviso-resumo-texto 
+{
+    border-left-color: #ffdd00 !important;
+}
+.legend-week-activities span.legend-color.legend-2, 
+.card-desempenho-header h2.desemp-title-35::before, 
+.bg-resumo,
+#tabela_resumo_semana .calendar-aluno-has-activity.etapa-2,
+#dashboard_summary .day-activity-step-2
+{
+    background-color:#ffdd00 !important;
+}
+
+.btn-desempenho-modalidades .btn-modal-35, 
+.btn-desempenho-modalidades .btn-modal-35:hover 
+{
+    background: #ffdd00 !important;
+    border-color: #ffdd00 !important;
+}
+
+.color-resumo {
+    color: #ffdd00 !important;
+}
+#tarefas_dia_aluno .au-task-list .au-task__item--danger .au-task__item-inner, 
+.meta-aviso-revisao-texto 
+{
+    border-left-color: #da3ab3 !important;
+}
+.legend-week-activities span.legend-color.legend-3, 
+.card-desempenho-header h2.desemp-title-36::before, 
+.bg-revisao,
+#tabela_resumo_semana .calendar-aluno-has-activity.etapa-3,
+#dashboard_summary .day-activity-step-3
+{
+    background-color:#da3ab3 !important;
+}
+
+.btn-desempenho-modalidades .btn-modal-36, 
+.btn-desempenho-modalidades .btn-modal-36:hover 
+{
+    background: #ffdd00 !important;
+    border-color: #ffdd00 !important;
+}
+
+.color-revisao {
+    color: #ffdd00 !important;
+}
+#tarefas_dia_aluno .au-task-list .au-task__item--success .au-task__item-inner, 
+.meta-aviso-exercicio-texto 
+{
+    border-left-color: #ff6b15 !important;
+}
+.legend-week-activities span.legend-color.legend-4, 
+.card-desempenho-header h2.desemp-title-37::before, 
+.bg-exercicio,
+#tabela_resumo_semana .calendar-aluno-has-activity.etapa-4,
+#dashboard_summary .day-activity-step-4
+{
+    background-color:#ff6b15 !important;
+}
+
+.btn-desempenho-modalidades .btn-modal-37, 
+.btn-desempenho-modalidades .btn-modal-37:hover 
+{
+    background: #ff6b15 !important;
+    border-color: #ff6b15 !important;
+}
+
+.color-exercicio {
+    color: #ff6b15 !important;
+}
+/*Custom CSS*/
+/*Desabilita menus questões*/
+.sidebar-menu-item-questoes ul li:nth-child(3), .sidebar-menu-item-questoes ul li:nth-child(4) {
+  display: none;
+}
+/*Retira os gráficos não usados*/
+#chart_id_33, #chart_id_29, #chart_id_30 {
+  display: none;
+}
+.activity-title-date-subscription {
+display: none;
+}
+/*Retira xp*/
+.header-exp-count {
+  display: none;
+}
+
+.congrats-description {
+display: none;
+}

@@ -1,0 +1,129 @@
+---
+/**
+ * Um vídeo em loop, mudo, com legenda. Três molduras:
+ *  - `flat` (padrão): borda fina sobre o fundo escuro, na largura do container;
+ *  - `browser`: janela de navegador sobre a faixa clara;
+ *  - `phone`: iPhone sobre a faixa clara, com a legenda ao lado a partir de 768px.
+ * O play/pause (só na tela, parado no poster com movimento reduzido) fica no script do CasePage.
+ */
+import type { VideoBlock } from '@/data/cases/oba-types';
+
+type Props = VideoBlock;
+
+const { src, webm, poster, alt, width, height, caption, frame = 'flat', url } = Astro.props;
+const style = `aspect-ratio:${width} / ${height}`;
+---
+
+{
+  frame === 'flat' && (
+    <figure class="cs-container cs-block" data-reveal>
+      <div class="vb-flat">
+        <video data-loop autoplay muted loop playsinline preload="metadata" {poster} {width} {height} {style} aria-label={alt}>
+          {webm && <source src={webm} type="video/webm" />}
+          <source {src} type="video/mp4" />
+        </video>
+      </div>
+      {caption && <figcaption class="cs-caption">{caption}</figcaption>}
+    </figure>
+  )
+}
+
+{
+  frame === 'browser' && (
+    <div class="cs-band cs-block">
+      <figure class="cs-container vb-pad" data-reveal>
+        <div class="cs-win-wrap">
+          <div class="cs-win">
+            <div class="cs-win__bar" aria-hidden="true">
+              <span class="cs-win__dots">
+                <i />
+                <i />
+                <i />
+              </span>
+              <span class="cs-win__url">{url ?? ''}</span>
+            </div>
+            <div class="cs-win__screen">
+              <video data-loop autoplay muted loop playsinline preload="metadata" {poster} {width} {height} {style} aria-label={alt}>
+                {webm && <source src={webm} type="video/webm" />}
+                <source {src} type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+        {caption && <figcaption class="vb-caption">{caption}</figcaption>}
+      </figure>
+    </div>
+  )
+}
+
+{
+  frame === 'phone' && (
+    <div class="cs-band cs-block">
+      <figure class="cs-container vb-pad vb-phone-grid" data-reveal>
+        <div class="cs-phone vb-phone">
+          <span class="cs-phone__btn cs-phone__btn--a" aria-hidden="true" />
+          <span class="cs-phone__btn cs-phone__btn--b" aria-hidden="true" />
+          <span class="cs-phone__btn cs-phone__btn--side" aria-hidden="true" />
+          <div class="cs-phone__screen">
+            <video data-loop autoplay muted loop playsinline preload="metadata" {poster} {width} {height} {style} aria-label={alt}>
+              {webm && <source src={webm} type="video/webm" />}
+              <source {src} type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        {caption && <figcaption class="vb-caption vb-caption--side">{caption}</figcaption>}
+      </figure>
+    </div>
+  )
+}
+
+<style>
+  .vb-flat {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .vb-flat video,
+  .cs-phone__screen video {
+    width: 100%;
+    object-fit: cover;
+  }
+  .vb-pad {
+    padding-block: 2.5rem;
+  }
+  @media (min-width: 768px) {
+    .vb-pad {
+      padding-block: 4rem;
+    }
+  }
+  .vb-caption {
+    margin-top: 0.75rem;
+    max-width: 48rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: #5f5f66;
+  }
+  .vb-phone-grid {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .vb-phone-grid {
+      grid-template-columns: auto minmax(0, 24rem);
+      justify-content: center;
+      align-items: center;
+      gap: 4rem;
+    }
+    .vb-caption--side {
+      justify-self: start;
+    }
+  }
+  .vb-caption--side {
+    margin-top: 0;
+    max-width: 24rem;
+    font-size: 12px;
+  }
+</style>

@@ -178,6 +178,17 @@ const pt: SiteData = {
       href: '/pt/work/golfhub/',
     },
     {
+      title: 'Método OBA',
+      meta: 'EdTech · Case Study',
+      categories: ['Product', 'Design Eng', 'PHP'],
+      description:
+        'Redesenhei o painel do aluno de uma mentoria de concursos policiais de MG, do diagnóstico ao tema em PHP: menu em blocos no celular, três temas e as 13 patentes da PMMG, num protótipo que se clica na própria página. Ver case study →',
+      image: '/cases/metodo-oba/img/cover.webp',
+      accent: '#4D7CFF',
+      highlight: 'Nove telas ao vivo, no computador e no celular',
+      href: '/pt/work/metodo-oba/',
+    },
+    {
       title: 'Aeroporto de Leads',
       meta: 'EdTech · Case Study',
       categories: ['Product', '3D', 'Data'],

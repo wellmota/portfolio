@@ -1,0 +1,129 @@
+---
+/**
+ * Telas de desktop em destaque, numa janela de navegador sobre a faixa clara de ponta a ponta
+ * (porte do ScreenShowcase do portfólio, só com a moldura `browser`). Cada item é um print ou um
+ * vídeo em loop (o `src` vira o poster). `size: 'half'` põe dois lado a lado a partir de 768px.
+ */
+import type { ShowcaseBlock } from '@/data/cases/oba-types';
+
+type Props = ShowcaseBlock;
+
+const { items, url, start = 0 } = Astro.props;
+const num = (n: number) => String(n).padStart(2, '0');
+---
+
+<div class="cs-band cs-block">
+  <div class="cs-container sc-grid">
+    {
+      items.map((it, i) => (
+        <figure class:list={['sc-item', it.size === 'half' && 'sc-item--half']} data-reveal>
+          <div class="sc-head">
+            <span class="sc-label">
+              {num(i + 1 + start)} — {it.label}
+            </span>
+            {it.meta && <span class="sc-meta">{it.meta}</span>}
+          </div>
+          <div class="cs-win-wrap">
+            <div class="cs-win">
+              <div class="cs-win__bar" aria-hidden="true">
+                <span class="cs-win__dots">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span class="cs-win__url">{it.url ?? url ?? ''}</span>
+              </div>
+              <div class="cs-win__screen">
+                {it.video ? (
+                  <video
+                    data-loop
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    poster={it.src}
+                    width={it.width}
+                    height={it.height}
+                    style={`aspect-ratio:${it.width} / ${it.height}`}
+                    aria-label={it.alt}
+                  >
+                    {it.video.webm && <source src={it.video.webm} type="video/webm" />}
+                    <source src={it.video.src} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img
+                    src={it.src}
+                    alt={it.alt}
+                    width={it.width}
+                    height={it.height}
+                    loading="lazy"
+                    decoding="async"
+                    style={`aspect-ratio:${it.width} / ${it.height}`}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+          {it.caption && <figcaption class="sc-caption">{it.caption}</figcaption>}
+        </figure>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .sc-grid {
+    display: grid;
+    gap: 2rem;
+    padding-block: 2.5rem;
+  }
+  @media (min-width: 768px) {
+    .sc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.5rem;
+      padding-block: 4rem;
+    }
+    .sc-item {
+      grid-column: span 2;
+    }
+    .sc-item--half {
+      grid-column: span 1;
+    }
+  }
+  .sc-item {
+    min-width: 0;
+  }
+  .sc-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .sc-label,
+  .sc-meta {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .sc-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: #141414;
+  }
+  .sc-meta {
+    flex: none;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: #5f5f66;
+  }
+  .sc-caption {
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: #5f5f66;
+  }
+</style>

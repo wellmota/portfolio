@@ -1,0 +1,362 @@
+---
+/**
+ * As telas do protótipo, uma embaixo da outra, cada uma ao vivo: um iframe por tela, que já abre no
+ * aparelho, tema, menu, patente e estado dela (`?embed=1&tema=…&estado=…`). Dá para clicar em todas.
+ *  - Desktop: janela de navegador; o iframe roda em 1440×900, escalado para a largura da janela.
+ *  - Celular: iPhone; o iframe roda em 390×844, escalado por --s (o .cs-phone do CasePage).
+ * Os iframes são lazy: só carregam perto da tela. Cada tela tem âncora `#tela-<id>`, para os links
+ * "Ver …" das seções. Uma tela `estatica` é só para ver: o iframe não recebe clique nem rolagem.
+ * Cada tela tem a fileira de patentes (PatenteRail), como o protótipo do topo; uma cor escolhida em
+ * qualquer uma vale para todas as telas.
+ */
+import type { ProtoTelasBlock } from '@/data/cases/oba-types';
+import Marcado from './Marcado.astro';
+import PatenteRail from './PatenteRail.astro';
+import { ui } from './ui';
+
+type Props = ProtoTelasBlock;
+
+const { src, url, patente, title, screens } = Astro.props;
+const tx = ui(Astro.currentLocale);
+
+// No desktop a janela mostra a página inteira do protótipo, menos nos estados que são uma folha por
+// cima da tela (fixa, centrada na janela): esses ficam em 1440×900, como o aluno vê.
+const MODAIS = new Set(['compartilhar']);
+
+const TEMAS: Record<string, { tema: string; modo: string }> = {
+  cozy: { tema: 'cozy', modo: 'auto' },
+  'tatico-escuro': { tema: 'tatico', modo: 'escuro' },
+  'tatico-claro': { tema: 'tatico', modo: 'claro' },
+};
+const urlDa = (t: (typeof screens)[number]) => {
+  const tema = TEMAS[t.theme] ?? TEMAS.cozy;
+  const q = new URLSearchParams({ embed: '1', tema: tema.tema, modo: tema.modo, menu: t.menu ?? 'b', patente, estado: t.estado });
+  return `${src}?${q}`;
+};
+---
+
+<div class="cs-band pt" data-pt data-patente={patente}>
+  <div class="cs-container pt-in">
+    {
+      screens.map((t, i) => (
+        <section class="pt-tela" id={`tela-${t.id}`} aria-labelledby={`tela-${t.id}-t`} data-reveal>
+          <header class="pt-head">
+            <span class="pt-n">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="pt-titulo" id={`tela-${t.id}-t`}>
+              {t.label}
+            </h3>
+            <span class="pt-meta">
+              {t.device === 'phone' ? tx.phone : tx.desktop} · {tx.themeLong[t.theme] ?? tx.themeLong.cozy}
+            </span>
+          </header>
+
+          <div class:list={['pt-palco', t.device === 'phone' && 'pt-palco--phone']}>
+          <PatenteRail id={`tela-${t.id}-cor`} inicial={patente} />
+          {t.device === 'phone' ? (
+            <div class="cs-phone pt-phone">
+              <span class="cs-phone__btn cs-phone__btn--a" aria-hidden="true" />
+              <span class="cs-phone__btn cs-phone__btn--b" aria-hidden="true" />
+              <span class="cs-phone__btn cs-phone__btn--side" aria-hidden="true" />
+              <div class:list={['cs-phone__screen pt-vp pt-vp--phone', t.estatica && 'pt-vp--estatica']}>
+                <iframe src={urlDa(t)} title={`${title}: ${t.label}`} loading="lazy" tabindex={t.estatica ? -1 : undefined} />
+              </div>
+            </div>
+          ) : (
+            <div class="cs-win-wrap pt-wrap">
+              <div class="cs-win">
+                <div class="cs-win__bar" aria-hidden="true">
+                  <span class="cs-win__dots">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                  <span class="cs-win__url">{url}</span>
+                </div>
+                <div
+                  class:list={[
+                    'cs-win__screen pt-vp pt-vp--desktop',
+                    t.estatica && 'pt-vp--estatica',
+                    !MODAIS.has(t.estado) && 'pt-vp--inteira',
+                  ]}
+                  data-pt-fit
+                >
+                  <iframe src={urlDa(t)} title={`${title}: ${t.label}`} loading="lazy" tabindex={t.estatica ? -1 : undefined} />
+                </div>
+              </div>
+              {t.nota && (
+                <span class="pt-nota" aria-hidden="true" style={`--x:${t.nota.x};--y:${t.nota.y}`}>
+                  <svg class="cs-seta-fina pt-nota__seta" viewBox="0 0 135 234">
+                    <path pathLength="1" d="M20 214C10 140 30 40 125 25.3" />
+                    <path class="pt-nota__ponta" pathLength="1" d="M114.6 21.4l10.4 3.9-8.8 6.3" />
+                  </svg>
+                  <Marcado class="pt-nota__label" texto={t.nota.texto} />
+                </span>
+              )}
+            </div>
+          )}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .pt-in {
+    display: grid;
+    gap: 4rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 768px) {
+    .pt-in {
+      gap: 5.5rem;
+      padding-block: 4rem 5.5rem;
+    }
+  }
+  .pt-tela {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    scroll-margin-top: 1.5rem;
+  }
+  .pt-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.875rem;
+    margin-bottom: 1.25rem;
+  }
+  .pt-n,
+  .pt-meta {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6a6a70;
+  }
+  .pt-titulo {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #141414;
+  }
+  .pt-meta {
+    margin-left: auto;
+  }
+
+  .pt-vp {
+    position: relative;
+    overflow: hidden;
+  }
+  .pt-vp iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    border: 0;
+    background: #fff;
+    transform: scale(var(--s, 0.5));
+    transform-origin: 0 0;
+  }
+  .pt-vp--estatica iframe {
+    pointer-events: none;
+  }
+  .pt-vp--desktop {
+    width: 100%;
+    aspect-ratio: 1440 / 900;
+  }
+  .pt-vp--desktop iframe {
+    width: 1440px;
+    height: 900px;
+  }
+  /* página inteira, sem rolagem interna: a altura do documento do protótipo × s (antes de medir, 900) */
+  .pt-vp--inteira {
+    aspect-ratio: auto;
+    height: calc(var(--h, 900px) * var(--s, 0.5));
+  }
+  .pt-vp--inteira iframe {
+    height: var(--h, 900px);
+  }
+  .pt-phone {
+    margin-inline: auto;
+  }
+  /* o palco: a janela (ou o celular) e, acima de 1420 px, a fileira de patentes à esquerda dela */
+  .pt-palco {
+    position: relative;
+  }
+  .pt-palco--phone {
+    width: fit-content;
+    margin-inline: auto;
+  }
+  .pt-vp--phone {
+    height: calc(844px * var(--s));
+  }
+  .pt-vp--phone iframe {
+    width: 390px;
+    height: 844px;
+  }
+
+  /* ---------- anotação: a ponta da seta cai no alvo (--x/--y em % da tela de 1440×900); a seta sobe
+     de baixo da janela, faz a curva por fora da folha e chega ao alvo pela esquerda. O .pt-nota é só
+     a âncora (tamanho 0) na ponta; seta e texto se medem dela, em cqw da janela (.cs-win-wrap).
+     viewBox da seta: 10 unidades por cqw; ponta em (125, 25), cauda em (20, 214) = 10,5cqw à
+     esquerda e 18,9cqw abaixo da ponta, logo abaixo da janela. O texto, alinhado à direita, termina
+     1cqw antes da cauda, com a 1ª linha na altura dela ---------- */
+  .pt-wrap {
+    position: relative;
+  }
+  /* o texto fica embaixo da janela: espaço antes da próxima tela */
+  .pt-wrap:has(.pt-nota) {
+    margin-bottom: clamp(4rem, 7vw, 6.5rem);
+  }
+  .pt-nota {
+    --barra: max(24px, 3.2cqw);
+    position: absolute;
+    z-index: 2;
+    left: calc(var(--x) * 1cqw);
+    top: calc(var(--barra) + var(--y) * 0.625cqw);
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    color: #141414;
+  }
+  .pt-nota__seta {
+    position: absolute;
+    left: -12.5cqw;
+    top: -2.53cqw;
+    width: 13.5cqw;
+    height: 23.4cqw;
+    overflow: visible;
+  }
+  .pt-nota__seta path {
+    stroke-width: 1.3;
+  }
+  .pt-nota :global(.pt-nota__label) {
+    position: absolute;
+    right: 11.5cqw;
+    top: 18cqw;
+    width: max-content;
+    max-width: 13.5rem;
+    font-size: 16px;
+    text-align: right;
+  }
+  /* celular: à esquerda da ponta não cabe o texto (ele saía da tela); ele desce para baixo da cauda da
+     seta e começa na borda esquerda da janela */
+  @media (max-width: 767.98px) {
+    .pt-nota :global(.pt-nota__label) {
+      right: auto;
+      left: calc(var(--x) * -1cqw);
+      top: 21.5cqw;
+      max-width: 80cqw;
+      font-size: 14px;
+      text-align: left;
+    }
+  }
+  /* entra quando a tela aparece: o texto sobe e a seta se desenha da cauda até a ponta */
+  :global(.js) .pt-nota__seta path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1s var(--ease) 1.5s;
+  }
+  :global(.js) .pt-nota__seta .pt-nota__ponta {
+    transition-delay: 2.4s;
+    transition-duration: 0.3s;
+  }
+  :global(.js) .pt-tela.is-visible .pt-nota__seta path {
+    stroke-dashoffset: 0;
+  }
+  :global(.js) .pt-nota :global(.pt-nota__label) {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.6s var(--ease) 1.1s,
+      transform 0.6s var(--ease) 1.1s;
+  }
+  :global(.js) .pt-tela.is-visible :global(.pt-nota__label) {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .pt-nota__seta path {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+    :global(.js) .pt-nota :global(.pt-nota__label) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { alturaProto, observarProto } from './alturaProto';
+
+  // Desktop: a escala é a largura da janela ÷ 1440 (o celular usa o --s do .cs-phone)
+  const fit = (vp: HTMLElement) => vp.style.setProperty('--s', (vp.clientWidth / 1440).toFixed(4));
+
+  // Página inteira: a altura da página do protótipo (ver alturaProto.ts). Mesma origem; fora dela, fica em 900.
+  const medir = (vp: HTMLElement, iframe: HTMLIFrameElement) => {
+    const h = alturaProto(iframe);
+    if (h) vp.style.setProperty('--h', `${h}px`);
+  };
+  const observar = (vp: HTMLElement, iframe: HTMLIFrameElement) => {
+    if (observarProto(iframe, () => medir(vp, iframe))) medir(vp, iframe);
+  };
+
+  // Patente: a cor escolhida numa tela vale para todas. Quem já carregou recebe por mensagem; quem
+  // ainda não (lazy) leva a cor na URL. O protótipo avisa 'pronto' ao carregar e recebe a cor de novo
+  document.querySelectorAll<HTMLElement>('[data-pt]').forEach((root) => {
+    const btns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-set-patente]'));
+    const iframes = Array.from(root.querySelectorAll<HTMLIFrameElement>('iframe'));
+    const prontos = new WeakSet<HTMLIFrameElement>();
+    const enviar = (f: HTMLIFrameElement) => {
+      try {
+        f.contentWindow?.postMessage({ oba: 'patente', patente: root.dataset.patente ?? 'recruta' }, '*');
+      } catch {
+        /* iframe ainda sem documento */
+      }
+    };
+    // carregou antes deste script (e o 'pronto' passou batido)? Mesma origem: olha o documento
+    const carregado = (f: HTMLIFrameElement) => {
+      if (prontos.has(f)) return true;
+      try {
+        const d = f.contentDocument;
+        return !!d && d.URL !== 'about:blank' && d.readyState === 'complete';
+      } catch {
+        return true;
+      }
+    };
+    window.addEventListener('message', (e) => {
+      if (e.data?.oba !== 'pronto') return;
+      const f = iframes.find((x) => x.contentWindow === e.source);
+      if (!f) return;
+      prontos.add(f);
+      enviar(f);
+    });
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        const p = b.dataset.setPatente;
+        if (!p) return;
+        root.dataset.patente = p;
+        btns.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.setPatente === p)));
+        iframes.forEach((f) => {
+          if (carregado(f)) return enviar(f);
+          const u = new URL(f.src, location.href);
+          u.searchParams.set('patente', p);
+          f.src = u.toString();
+        });
+      })
+    );
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-pt-fit]').forEach((vp) => {
+    fit(vp);
+    if ('ResizeObserver' in window) new ResizeObserver(() => fit(vp)).observe(vp);
+    const iframe = vp.querySelector('iframe');
+    if (!iframe || !vp.classList.contains('pt-vp--inteira')) return;
+    iframe.addEventListener('load', () => observar(vp, iframe));
+    observar(vp, iframe); // pode já ter carregado
+  });
+</script>

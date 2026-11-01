@@ -1,0 +1,15 @@
+---
+/**
+ * Texto de anotação com as palavras-chave marcadas: o que vem entre `**` vira <mark> (fundo do accent,
+ * como marca-texto). Os estilos (.cs-anota) ficam no <style is:global> do CasePage.
+ */
+interface Props {
+  texto: string;
+  class?: string;
+}
+
+const { texto, class: cls } = Astro.props;
+const partes = texto.split(/\*\*(.+?)\*\*/);
+---
+
+<span class:list={['cs-anota', cls]}>{partes.map((p, i) => (i % 2 ? <mark>{p}</mark> : p))}</span>
