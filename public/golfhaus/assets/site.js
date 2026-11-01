@@ -1,6 +1,6 @@
 /* Golfhaus — landing: topo ao rolar, entrada das seções, trilho da vida no clube, o campo em 3D
-   (carregado só perto da tela), abas do painel e o formulário de contato (por e-mail, com o WhatsApp
-   como alternativa). */
+   (carregado só perto da tela), abas do painel, a calculadora de preço e o pedido de contrato ou de demonstração
+   (por e-mail, com o WhatsApp como alternativa). */
 
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (s, el = document) => el.querySelector(s);
@@ -156,64 +156,124 @@ if (h3d) {
   } else start();
 }
 
-/* ---------- contato: o formulário chega por e-mail ---------- */
+/* ---------- preços: a tabela da seção 09 (os mesmos valores dos cartões, no index.html) ---------- */
+const PLANOS = {
+  pequeno: { nome: "Pequeno", fixo: 1900, menor: 900, implantacao: 4900 },
+  medio: { nome: "Médio", fixo: 3500, menor: 1500, implantacao: 8900 },
+  grande: { nome: "Grande", fixo: 4900, menor: 2200, implantacao: 12900 },
+};
+const APP_DO_CLUBE = { mes: 790, implantacao: 7900 };
+const brl = (v) =>
+  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+// os cartões de preço e a calculadora levam o porte e a forma de pagar para o pedido
+let escolher = () => {};
+
+/* ---------- contratar: o pedido chega por e-mail ---------- */
 const WHATSAPP = "5561981043296";
-// Chave pública do Web3Forms (formulário "Golfhaus · Contato da landing"): só serve para mandar o contato
+// Chave pública do Web3Forms (formulário "Golfhaus · Contato da landing"): só serve para mandar o pedido
 // para o e-mail da conta, que não aparece na página. Vazia: o envio abre o WhatsApp com a mensagem pronta.
 const FORM_KEY = "af6b7460-954a-4a42-9992-a7cd608fa6fa";
 const form = $("[data-form]");
 if (form) {
-  const need = { nome: "Diga o seu nome.", clube: "Diga o nome do clube." };
-  const err = (name, msg) => {
-    const input = form.elements[name];
-    input.setAttribute("aria-invalid", msg ? "true" : "false");
-    $(`#e-${name}`).textContent = msg || "";
+  const el = form.elements;
+  const value = (name) => (el[name]?.value || "").trim();
+  const contratar = () => el.intencao.value === "contratar";
+  // na ordem da tela; cada regra devolve a mensagem de erro, ou "" quando o campo está certo
+  const need = {
+    porte: () => (contratar() && !value("porte") ? "Escolha o porte do clube." : ""),
+    nome: () => (value("nome") ? "" : "Diga o seu nome."),
+    email: () =>
+      !value("email") ? "Diga o seu e-mail." : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value("email")) ? "" : "Confira o e-mail.",
+    clube: () => (value("clube") ? "" : "Diga o nome do clube."),
   };
-  const value = (name) => (form.elements[name]?.value || "").trim();
+  const err = (name, msg) => {
+    el[name].setAttribute("aria-invalid", msg ? "true" : "false");
+    $(`#e-${name}`).textContent = msg;
+  };
+  const plano = () => {
+    const p = PLANOS[value("porte")];
+    if (!p) return "";
+    const mes =
+      value("forma") === "taxa" ? `${brl(p.menor)} por mês + 1% dos pagamentos` : `${brl(p.fixo)} por mês, sem taxa`;
+    const app = el.app_proprio.checked
+      ? ` App do clube nas lojas: mais ${brl(APP_DO_CLUBE.mes)} por mês e ${brl(APP_DO_CLUBE.implantacao)} de implantação.`
+      : "";
+    return `${p.nome}: ${mes}, e implantação de ${brl(p.implantacao)}, uma vez.${app}`;
+  };
   const message = () =>
     [
-      "Olá! Quero conhecer o Golfhaus para o meu clube.",
-      "",
+      contratar() ? "Olá! Quero contratar o Golfhaus para o meu clube.\n" : "Olá! Quero ver uma demonstração do Golfhaus.\n",
+      contratar() ? plano() && `Plano: ${plano()}` : PLANOS[value("porte")] && `Porte: ${PLANOS[value("porte")].nome}`,
       `Nome: ${value("nome")}`,
+      value("cargo") && `Papel no clube: ${value("cargo")}`,
+      value("email") && `E-mail: ${value("email")}`,
       `Clube: ${value("clube")}`,
       value("cidade") && `Cidade: ${value("cidade")}`,
-      value("socios") && `Sócios: ${value("socios")}`,
-      value("cargo") && `Papel no clube: ${value("cargo")}`,
       value("msg") && `\n${value("msg")}`,
     ]
-      .filter((l) => l !== false && l !== "")
+      .filter(Boolean)
       .join("\n");
   const waLink = () =>
     `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(
       value("nome") || value("clube") ? message() : "Olá! Quero conhecer o Golfhaus para o meu clube.",
     )}`;
-  // os links de WhatsApp do contato levam o que já foi digitado
+  // os links de WhatsApp do pedido levam o que já foi digitado
   $$("[data-wa-form]").forEach((a) => a.addEventListener("click", () => (a.href = waLink())));
 
   const submit = $("[data-submit]", form);
   const submitLabel = $("[data-submit-label]", form);
+  const sum = $("[data-sum]", form);
   const status = $("[data-status]", form);
   const done = $("[data-done]");
+  const rotulo = () => (contratar() ? "Pedir o contrato" : "Pedir demonstração");
+  // contratar mostra a forma de pagar, o app do clube e o resumo do plano; a demonstração só pede o contato
+  const sync = () => {
+    const c = contratar();
+    $$("[data-so-contratar]", form).forEach((n) => (n.hidden = !c));
+    el.porte.required = c;
+    if (!c) err("porte", "");
+    submitLabel.textContent = rotulo();
+    sum.textContent = c ? plano() : "";
+  };
+  form.addEventListener("change", sync);
+  sync();
+  escolher = ({ porte, forma }) => {
+    form.querySelector('[name="intencao"][value="contratar"]').checked = true;
+    if (porte) el.porte.value = porte;
+    if (forma) el.forma.value = forma;
+    sync();
+    if (porte) err("porte", "");
+  };
+
   const busy = (on) => {
     submit.setAttribute("aria-busy", on ? "true" : "false");
     submit.disabled = on;
-    submitLabel.textContent = on ? "Enviando…" : "Agendar demonstração";
+    submitLabel.textContent = on ? "Enviando…" : rotulo();
   };
   const finish = () => {
+    $("[data-done-title]", done).textContent = contratar()
+      ? "Recebemos o seu pedido."
+      : "Recebemos o seu pedido de demonstração.";
+    $("[data-done-text]", done).textContent = contratar()
+      ? `O contrato chega em ${value("email")}, com os valores do plano escolhido.`
+      : `Vamos escrever para ${value("email")} para marcar a demonstração.`;
     form.hidden = true;
     done.hidden = false;
     done.focus();
   };
 
-  Object.keys(need).forEach((n) => form.elements[n].addEventListener("input", () => value(n) && err(n, "")));
+  Object.keys(need).forEach((n) =>
+    el[n].addEventListener(n === "porte" ? "change" : "input", () => !need[n]() && err(n, "")),
+  );
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     status.textContent = "";
     let first = null;
-    for (const [n, msg] of Object.entries(need)) {
-      const bad = !value(n);
-      err(n, bad ? msg : "");
-      if (bad && !first) first = form.elements[n];
+    for (const [n, rule] of Object.entries(need)) {
+      const msg = rule();
+      err(n, msg);
+      if (msg && !first) first = el[n];
     }
     if (first) return first.focus();
     if (value("site")) return finish(); // robô: finge que deu certo e não grava
@@ -221,11 +281,14 @@ if (form) {
 
     // cada campo vira uma linha do e-mail, com o rótulo como nome; os vazios ficam de fora
     const fields = {
+      Pedido: contratar() ? "Contratar" : "Demonstração",
+      Plano: contratar() ? plano() : PLANOS[value("porte")]?.nome,
       Nome: value("nome"),
+      "Papel no clube": value("cargo"),
+      email: value("email"), // o Web3Forms usa o campo "email" como responder-para
+      WhatsApp: value("whatsapp"),
       Clube: value("clube"),
       Cidade: value("cidade"),
-      Sócios: value("socios"),
-      "Papel no clube": value("cargo"),
       Mensagem: value("msg"),
       Página: location.href,
     };
@@ -236,7 +299,9 @@ if (form) {
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           access_key: FORM_KEY,
-          subject: `Golfhaus · contato de ${value("clube")}`,
+          subject: contratar()
+            ? `Golfhaus · pedido de contrato de ${value("clube")}`
+            : `Golfhaus · demonstração para ${value("clube")}`,
           from_name: "Landing do Golfhaus",
           botcheck: false,
           ...Object.fromEntries(Object.entries(fields).filter(([, v]) => v)),
@@ -246,10 +311,52 @@ if (form) {
       if (!res.ok || !out.success) throw new Error(out.message || out.body?.message || `HTTP ${res.status}`);
       finish();
     } catch (error) {
-      console.warn("contato:", error);
+      console.warn("pedido:", error);
       status.textContent = "Não deu para enviar agora. Tente de novo em instantes ou chame no WhatsApp.";
     } finally {
       busy(false);
     }
   });
+}
+
+/* ---------- preços: os cartões e a calculadora ---------- */
+$$("[data-porte]").forEach((a) => a.addEventListener("click", () => escolher({ porte: a.dataset.porte })));
+
+// fixo ou fixo menor + 1%: compara as duas formas com o que o clube recebe por mês
+const calc = $("[data-calc]");
+if (calc) {
+  const porte = $("#c-porte", calc);
+  const valor = $("#c-valor", calc);
+  const fixo = $("[data-calc-fixo]", calc);
+  const menor = $("[data-calc-menor]", calc);
+  const verdict = $("[data-calc-verdict]", calc);
+  const go = $("[data-calc-go]", calc);
+  let melhor = "fixo";
+  const draw = () => {
+    const digits = valor.value.replace(/\D/g, "").replace(/^0+/, "").slice(0, 10);
+    valor.value = digits && Number(digits).toLocaleString("pt-BR");
+    const p = PLANOS[porte.value];
+    const taxa = Number(digits) / 100;
+    const diff = p.fixo - (p.menor + taxa);
+    melhor = diff > 0 ? "taxa" : "fixo";
+    $("b", fixo).textContent = brl(p.fixo);
+    $("b", menor).textContent = digits
+      ? `${brl(p.menor)} + ${brl(taxa)} = ${brl(p.menor + taxa)}`
+      : `${brl(p.menor)} + 1%`;
+    fixo.classList.toggle("is-best", Boolean(digits) && diff < 0);
+    menor.classList.toggle("is-best", Boolean(digits) && diff > 0);
+    go.hidden = !digits;
+    verdict.textContent = !digits
+      ? "Digite quanto o clube recebe por mês."
+      : Math.abs(diff) < 1
+        ? "As duas formas saem iguais."
+        : diff > 0
+          ? `O fixo menor + 1% sai ${brl(diff)} mais barato por mês.`
+          : `O fixo sai ${brl(-diff)} mais barato por mês.`;
+  };
+  porte.addEventListener("change", draw);
+  valor.addEventListener("input", draw);
+  go.addEventListener("click", () => escolher({ porte: porte.value, forma: melhor }));
+  $("[data-calc-tool]", calc).hidden = false;
+  draw();
 }
