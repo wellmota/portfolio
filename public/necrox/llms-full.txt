@@ -40,9 +40,9 @@ Desde abril de 2024, uma faixa só gera royalties de gravação no Spotify se ti
 
 O mínimo é um computador estável, uma interface de áudio, um ou dois microfones dinâmicos, um fone fechado, uma DAW (há opções gratuitas e baratas, como Audacity, GarageBand e Reaper) e cabos bons. Invista nesta ordem: música bem ensaiada, instrumentos regulados, ambiente tratado com cobertores e estantes e, só depois, equipamento. Se for pagar estúdio para uma coisa só, que seja a bateria.
 
-### Como fazer e precificar merch de banda?
+### Como fazer e precificar merch de banda (quanto cobrar na camiseta)?
 
-Camiseta, patch, fita e CD costumam pagar a gasolina, e em show pequeno a banca de merch muitas vezes rende mais que o cachê. Serigrafia caseira com arte de uma cor e traço grosso é o caminho mais barato. Para o preço, some custo da peça, frete, embalagem e taxa da maquininha e multiplique por dois: esse é o ponto de partida. Na banca, placa de preço legível, QR do Pix e combos simples.
+Camiseta, patch, fita e CD costumam pagar a gasolina, e em show pequeno a banca de merch muitas vezes rende mais que o cachê. Serigrafia caseira com arte de uma cor e traço grosso é o caminho mais barato. Para o preço, divida o custo do lote inteiro (camisetas, telas, impressão, frete, embalagem) pelas peças que vão ser vendidas de verdade, descontando defeitos e brindes, e multiplique por dois: é um markup de 100%, que dá margem de 50%. Calcule também o ponto de equilíbrio, quantas peças pagam o lote. O guia DIY tem um simulador interativo para fazer essa conta.
 
 ### Colar lambe-lambe na rua é crime?
 
@@ -94,6 +94,9 @@ São. Leia online ou baixe em PDF, sem cadastro, sem e-mail e sem rastreio. O co
 - **ISRC**: Código que identifica cada gravação (cada faixa) no mundo todo. Uma gravação tem um único ISRC; uma regravação ganha outro. No Brasil, confirme com a sua associação se o ISRC gerado pela distribuidora será aceito.
 - **Lambe-lambe**: Cartaz de papel fino colado com cola caseira, passada por baixo e por cima do papel. Barato, rápido e com estética de alto contraste. Só deve ser colado onde há autorização e a lei da cidade permite.
 - **Marketing de guerrilha**: Divulgação com pouca verba e muita criatividade: aparecer onde ninguém espera, repetir um símbolo até virar assunto e transformar fãs em gente que espalha a mensagem. Não é vandalismo.
+- **Markup**: Quanto se soma ao custo para chegar ao preço: (preço − custo) ÷ custo. Markup de 100% (dobrar o custo) dá margem de 50%, porque a margem é calculada sobre o preço de venda, não sobre o custo.
+- **Margem**: Quanto do preço de venda sobra depois de pagar o custo: (preço − custo) ÷ preço. Só é real se o custo incluir frete, telas, embalagem, taxa de pagamento, peças com defeito e brindes.
+- **Ponto de equilíbrio**: Quantas peças é preciso vender para recuperar o dinheiro investido no lote. Daí em diante, cada venda é lucro.
 - **Merch**: Produtos da banda: camiseta, patch, fita, CD, adesivo. Em show pequeno, a banca de merch muitas vezes rende mais que o cachê. Ponto de partida do preço: custo, frete, embalagem e taxa, vezes dois.
 - **Pitch editorial** (pitch no Spotify, Spotify for Artists): Formulário do Spotify for Artists para apresentar uma música inédita aos editores de playlist. Deve ser enviado pelo menos 7 dias antes do lançamento, o que coloca a faixa no Release Radar dos seguidores.
 - **Posicionamento**: O lugar que a banda ocupa na cabeça de quem a conhece. Um bom posicionamento cabe numa frase que alguém repete para um amigo e combina som, tema, estética e atitude.
@@ -884,6 +887,59 @@ Inclua no custo o que costuma ficar de fora: frete do fornecedor, embalagem, tax
 ![Diagrama com duas barras para uma camiseta vendida a 70 reais. Na tabela, custo de 35 e margem de 35. Na vida real, o mesmo custo, uma faixa de custos esquecidos (frete, embalagem, taxa da maquininha, peças com defeito, brindes) e uma margem real menor. Abaixo, a regra: custo mais frete, embalagem e taxa, vezes dois, é o ponto de partida do preço.](https://userexperience.com.br/necrox/diagramas/diy/margem-do-merch.svg "Diagrama: margem da camiseta na tabela e na vida real, com números hipotéticos. Fonte: NECROX.")
 
 > **EXERCÍCIO:** Pegue o orçamento real de uma camiseta na sua cidade. Some frete, embalagem e taxa de pagamento. Multiplique por dois: esse é um ponto de partida para o preço de venda. Agora pergunte: alguém do seu público pagaria isso? Se não, mude o fornecedor, o modelo ou a quantidade, não a margem.
+
+### Markup: quanto colocar em cima do custo
+
+Markup é o quanto você soma ao custo para chegar no preço de venda. Margem é o quanto do preço de venda sobra no seu bolso. Parecem a mesma coisa, mas não são, e confundir as duas é o jeito mais rápido de vender muito e não ver dinheiro.
+
+```text
+Markup = (preço - custo) ÷ custo
+Margem = (preço - custo) ÷ preço
+
+Camiseta que custa R$ 40 e é vendida a R$ 80:
+Markup = 40 ÷ 40 = 100%   (você "dobrou" o custo)
+Margem = 40 ÷ 80 = 50%    (metade do que entra é lucro)
+```
+
+| Markup | Multiplica o custo por | Margem que sobra |
+|---|---|---|
+| 50% | 1,5 | 33% |
+| 100% | 2 | 50% |
+| 150% | 2,5 | 60% |
+| 200% | 3 | 67% |
+
+> **MITO:** "Coloquei 100% em cima, então tenho 100% de lucro." Não tem. Markup de 100% dá margem de 50%: de cada R$ 80 vendidos, R$ 40 voltam para pagar o próximo lote. E se o custo que você usou esqueceu frete, tela e as camisetas dadas de presente, a margem real é ainda menor.
+
+**O custo certo é o do lote inteiro dividido pelas peças que você vai vender de verdade.** Numa camiseta de serigrafia, entram:
+
+- **a camiseta lisa:** prefira boa qualidade (algodão penteado, malha mais grossa); camiseta que encolhe e desbota na segunda lavagem queima a banca;
+- **a tela e o fotolito de cada cor:** custo fixo, pago uma vez por lote. É por isso que arte de uma ou duas cores é tão mais barata: cada cor a mais é mais uma tela e mais uma passada em todas as peças;
+- **a impressão por peça e por cor;**
+- **frete e embalagem;**
+- **a taxa de pagamento** (maquininha ou link), que sai do preço de venda;
+- **perdas e brindes:** peças com defeito e as que ficam com a banda, o fotógrafo ou o produtor. Elas custam, mas não entram dinheiro.
+
+Um exemplo com **números hipotéticos** (faça o seu orçamento, preços variam muito):
+
+| Lote de 50 camisetas, 2 cores | Valor (exemplo) |
+|---|---|
+| 50 camisetas lisas de boa qualidade a R$ 22 | R$ 1.100 |
+| Tela e fotolito: R$ 60 por cor × 2 | R$ 120 |
+| Impressão: R$ 3,50 por cor × 2 cores × 50 peças | R$ 350 |
+| Frete do lote | R$ 60 |
+| Embalagem: R$ 1,50 × 50 | R$ 75 |
+| **Investimento total** | **R$ 1.705** |
+| Peças à venda (50 − 3 com defeito − 3 brindes) | 44 |
+| **Custo real por peça** (1.705 ÷ 44) | **R$ 38,75** |
+| Markup de 100%, arredondado | R$ 80 |
+| Recebido por peça, depois de 3% de taxa | R$ 77,60 |
+| **Ponto de equilíbrio** (1.705 ÷ 77,60) | **22 camisetas** |
+
+Ou seja: as primeiras 22 camisetas só devolvem o dinheiro que a banda adiantou. Da 23ª em diante é lucro, e é esse lucro que paga o próximo lote, a gasolina e a gravação. Com arte de uma cor só e o mesmo preço de R$ 80, esse exemplo cairia para R$ 33,41 de custo por peça e 19 camisetas de ponto de equilíbrio.
+
+> **TÁTICA:** Antes de encomendar, faça a conta de trás para frente: quantas camisetas vocês vendem, em média, por show? Se o ponto de equilíbrio é 22 e vocês vendem 5 por noite, o lote se paga em cinco shows. Se isso parecer muito, comece com um lote menor de uma cor só, venda tudo e reinvista.
+
+<div class="calc-slot" data-calc="merch"><p><strong>Simulador de merch:</strong> na versão online deste guia há uma calculadora interativa para testar quantidade, cores, custos e markup e ver o lucro por peça e o ponto de equilíbrio.</p></div>
 
 ### A banca de merch
 

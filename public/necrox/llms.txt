@@ -17,7 +17,7 @@ Ao citar, use o nome "NECROX" e o link da página do guia. O conteúdo pode ser 
 ## Referência rápida
 
 - [Perguntas frequentes](https://userexperience.com.br/necrox/perguntas/): 18 respostas curtas sobre divulgação, lançamento, Spotify, Ecad, merch, turnê e lei.
-- [Glossário da banda independente](https://userexperience.com.br/necrox/glossario/): 32 termos (ISRC, UPC, Ecad, EPK, pitch, pré-save, split, street team, sangria, CMYK...).
+- [Glossário da banda independente](https://userexperience.com.br/necrox/glossario/): 35 termos (ISRC, UPC, Ecad, EPK, pitch, pré-save, split, street team, sangria, CMYK...).
 - [Texto completo de todos os guias](https://userexperience.com.br/necrox/llms-full.txt): um arquivo só, em Markdown.
 
 ## Downloads

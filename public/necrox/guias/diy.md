@@ -238,6 +238,59 @@ Inclua no custo o que costuma ficar de fora: frete do fornecedor, embalagem, tax
 
 > **EXERCÍCIO:** Pegue o orçamento real de uma camiseta na sua cidade. Some frete, embalagem e taxa de pagamento. Multiplique por dois: esse é um ponto de partida para o preço de venda. Agora pergunte: alguém do seu público pagaria isso? Se não, mude o fornecedor, o modelo ou a quantidade, não a margem.
 
+### Markup: quanto colocar em cima do custo
+
+Markup é o quanto você soma ao custo para chegar no preço de venda. Margem é o quanto do preço de venda sobra no seu bolso. Parecem a mesma coisa, mas não são, e confundir as duas é o jeito mais rápido de vender muito e não ver dinheiro.
+
+```text
+Markup = (preço - custo) ÷ custo
+Margem = (preço - custo) ÷ preço
+
+Camiseta que custa R$ 40 e é vendida a R$ 80:
+Markup = 40 ÷ 40 = 100%   (você "dobrou" o custo)
+Margem = 40 ÷ 80 = 50%    (metade do que entra é lucro)
+```
+
+| Markup | Multiplica o custo por | Margem que sobra |
+|---|---|---|
+| 50% | 1,5 | 33% |
+| 100% | 2 | 50% |
+| 150% | 2,5 | 60% |
+| 200% | 3 | 67% |
+
+> **MITO:** "Coloquei 100% em cima, então tenho 100% de lucro." Não tem. Markup de 100% dá margem de 50%: de cada R$ 80 vendidos, R$ 40 voltam para pagar o próximo lote. E se o custo que você usou esqueceu frete, tela e as camisetas dadas de presente, a margem real é ainda menor.
+
+**O custo certo é o do lote inteiro dividido pelas peças que você vai vender de verdade.** Numa camiseta de serigrafia, entram:
+
+- **a camiseta lisa:** prefira boa qualidade (algodão penteado, malha mais grossa); camiseta que encolhe e desbota na segunda lavagem queima a banca;
+- **a tela e o fotolito de cada cor:** custo fixo, pago uma vez por lote. É por isso que arte de uma ou duas cores é tão mais barata: cada cor a mais é mais uma tela e mais uma passada em todas as peças;
+- **a impressão por peça e por cor;**
+- **frete e embalagem;**
+- **a taxa de pagamento** (maquininha ou link), que sai do preço de venda;
+- **perdas e brindes:** peças com defeito e as que ficam com a banda, o fotógrafo ou o produtor. Elas custam, mas não entram dinheiro.
+
+Um exemplo com **números hipotéticos** (faça o seu orçamento, preços variam muito):
+
+| Lote de 50 camisetas, 2 cores | Valor (exemplo) |
+|---|---|
+| 50 camisetas lisas de boa qualidade a R$ 22 | R$ 1.100 |
+| Tela e fotolito: R$ 60 por cor × 2 | R$ 120 |
+| Impressão: R$ 3,50 por cor × 2 cores × 50 peças | R$ 350 |
+| Frete do lote | R$ 60 |
+| Embalagem: R$ 1,50 × 50 | R$ 75 |
+| **Investimento total** | **R$ 1.705** |
+| Peças à venda (50 − 3 com defeito − 3 brindes) | 44 |
+| **Custo real por peça** (1.705 ÷ 44) | **R$ 38,75** |
+| Markup de 100%, arredondado | R$ 80 |
+| Recebido por peça, depois de 3% de taxa | R$ 77,60 |
+| **Ponto de equilíbrio** (1.705 ÷ 77,60) | **22 camisetas** |
+
+Ou seja: as primeiras 22 camisetas só devolvem o dinheiro que a banda adiantou. Da 23ª em diante é lucro, e é esse lucro que paga o próximo lote, a gasolina e a gravação. Com arte de uma cor só e o mesmo preço de R$ 80, esse exemplo cairia para R$ 33,41 de custo por peça e 19 camisetas de ponto de equilíbrio.
+
+> **TÁTICA:** Antes de encomendar, faça a conta de trás para frente: quantas camisetas vocês vendem, em média, por show? Se o ponto de equilíbrio é 22 e vocês vendem 5 por noite, o lote se paga em cinco shows. Se isso parecer muito, comece com um lote menor de uma cor só, venda tudo e reinvista.
+
+<div class="calc-slot" data-calc="merch"><p><strong>Simulador de merch:</strong> na versão online deste guia há uma calculadora interativa para testar quantidade, cores, custos e markup e ver o lucro por peça e o ponto de equilíbrio.</p></div>
+
 ### A banca de merch
 
 Placa com preços legíveis de longe (ninguém pergunta preço no escuro), QR code do Pix impresso, maquininha carregada, troco, uma pessoa responsável pela banca e combos simples, como camiseta mais patch.
