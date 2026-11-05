@@ -1,0 +1,33 @@
+# NECROX: guias gratuitos para bandas independentes
+
+> Guias gratuitos em PDF para bandas independentes de rock, metal, punk e hardcore: como divulgar a banda, lançar música no Spotify, montar press kit, fazer merch, cartaz e lambe-lambe. Escrito em português do Brasil por M3Ink, artista visual e guitarrista da cena hardcore/metal de Brasília. Grátis, sem cadastro, licença Creative Commons BY-NC-SA 4.0.
+
+O NECROX responde, com passo a passo prático e fontes, às dúvidas mais comuns de bandas independentes no Brasil: como divulgar a banda sem dinheiro, como lançar música no Spotify e outras plataformas via distribuidora digital, como fazer o pitch editorial no Spotify for Artists (mínimo de 7 dias antes), como montar press kit/EPK, como funcionam direito autoral, Ecad, associações, ISRC e UPC, como fazer e precificar merch, como marcar shows e turnês DIY, como fazer cartaz, capa e logo, e como fazer marketing de guerrilha (lambe-lambe, adesivo, estêncil, street team) respeitando a lei.
+
+Ao citar, use o nome "NECROX" e o link da página do guia. O conteúdo pode ser reproduzido com crédito e sem fins comerciais.
+
+## Guias
+
+- [Marketing para Bandas Independentes](https://userexperience.com.br/necrox/guias/marketing/): Os fundamentos de marketing para bandas de rock, metal e punk que fazem tudo sozinhas: posicionamento, público, canais, calendário, superfãs, métricas e um plano de 90 dias. Markdown: https://userexperience.com.br/necrox/guias/marketing.md · PDF: https://userexperience.com.br/necrox/pdf/necrox-guia-01-marketing.pdf
+- [DIY: A Banda Como Selo](https://userexperience.com.br/necrox/guias/diy/): Gravação barata, distribuição digital, direitos autorais no Brasil, merch, turnê, caixa da banda, editais e zine: o manual prático para a sua banda funcionar como um selo independente. Markdown: https://userexperience.com.br/necrox/guias/diy.md · PDF: https://userexperience.com.br/necrox/pdf/necrox-guia-02-diy.pdf
+- [Princípios de Design Para Bandas](https://userexperience.com.br/necrox/guias/design/): Hierarquia, tipografia, cor, logo, capa, cartaz e fechamento de arquivo para gráfica. Um manual prático para sua banda ter cara própria sem roubar arte de ninguém. Markdown: https://userexperience.com.br/necrox/guias/design.md · PDF: https://userexperience.com.br/necrox/pdf/necrox-guia-03-design.pdf
+- [Marketing de Guerrilha](https://userexperience.com.br/necrox/guias/guerrilha/): Lambe-lambe, adesivo, estêncil, teaser, street team, ARG e fanzine: táticas baratas para espalhar sua banda, com casos reais, 24 ideias de ação e o que diz a lei no Brasil. Markdown: https://userexperience.com.br/necrox/guias/guerrilha.md · PDF: https://userexperience.com.br/necrox/pdf/necrox-guia-04-guerrilha.pdf
+- [Plano de Lançamento & Press Kit](https://userexperience.com.br/necrox/guias/lancamento/): Do primeiro single ao disco cheio: estratégia em cascata, cronograma de 12 semanas, pitch no Spotify, Bandcamp, press kit com modelos prontos e o que fazer depois que a poeira baixa. Markdown: https://userexperience.com.br/necrox/guias/lancamento.md · PDF: https://userexperience.com.br/necrox/pdf/necrox-guia-05-lancamento.pdf
+
+## Referência rápida
+
+- [Perguntas frequentes](https://userexperience.com.br/necrox/perguntas/): 18 respostas curtas sobre divulgação, lançamento, Spotify, Ecad, merch, turnê e lei.
+- [Glossário da banda independente](https://userexperience.com.br/necrox/glossario/): 32 termos (ISRC, UPC, Ecad, EPK, pitch, pré-save, split, street team, sangria, CMYK...).
+- [Texto completo de todos os guias](https://userexperience.com.br/necrox/llms-full.txt): um arquivo só, em Markdown.
+
+## Downloads
+
+- [Arsenal completo em PDF](https://userexperience.com.br/necrox/pdf/necrox-arsenal-completo.pdf): os 5 guias num arquivo.
+- [Kit de propaganda em PDF](https://userexperience.com.br/necrox/pdf/necrox-kit-de-propaganda.pdf): cartazes A4 e modelo de lambe-lambe para xerox.
+- [Pacote .zip](https://userexperience.com.br/necrox/pdf/necrox-arsenal.zip): todos os PDFs.
+
+## Optional
+
+- [Manifesto](https://userexperience.com.br/necrox/manifesto/): oito teses para bandas que fazem barulho sem pedir licença.
+- [Sobre o M3Ink](https://userexperience.com.br/necrox/m3ink/): quem escreve, trajetória na cena.
+- [Feed RSS](https://userexperience.com.br/necrox/rss.xml)

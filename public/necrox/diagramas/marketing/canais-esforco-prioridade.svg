@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 580">
+<rect width="800" height="580" fill="#111111"/>
+<text x="40" y="74" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="52" fill="#ece6d9">ESFORÇO × PRIORIDADE</text>
+<text x="40" y="102" font-family="JetBrains Mono" font-size="13" letter-spacing="1.5" fill="#9b958a">ONDE CADA CANAL CAI QUANDO A BANDA TEM 3 A 5 HORAS POR SEMANA</text>
+<rect x="120" y="130" width="213" height="120" fill="#e0261b"/>
+<line x1="120" y1="130" x2="120" y2="490" stroke="#2b2926" stroke-width="2"/>
+<line x1="120" y1="130" x2="759" y2="130" stroke="#2b2926" stroke-width="2"/>
+<line x1="333" y1="130" x2="333" y2="490" stroke="#2b2926" stroke-width="2"/>
+<line x1="120" y1="250" x2="759" y2="250" stroke="#2b2926" stroke-width="2"/>
+<line x1="546" y1="130" x2="546" y2="490" stroke="#2b2926" stroke-width="2"/>
+<line x1="120" y1="370" x2="759" y2="370" stroke="#2b2926" stroke-width="2"/>
+<line x1="759" y1="130" x2="759" y2="490" stroke="#2b2926" stroke-width="2"/>
+<line x1="120" y1="490" x2="759" y2="490" stroke="#2b2926" stroke-width="2"/>
+<line x1="120" y1="490" x2="759" y2="490" stroke="#ece6d9" stroke-width="3"/>
+<line x1="120" y1="130" x2="120" y2="490" stroke="#ece6d9" stroke-width="3"/>
+<polygon points="773,490 757,482 757,498" fill="#ece6d9"/>
+<polygon points="120,116 112,132 128,132" fill="#ece6d9"/>
+<text x="226.5" y="514" font-family="JetBrains Mono" font-size="13" text-anchor="middle" fill="#ece6d9">BAIXO</text>
+<text x="439.5" y="514" font-family="JetBrains Mono" font-size="13" text-anchor="middle" fill="#ece6d9">MÉDIO</text>
+<text x="652.5" y="514" font-family="JetBrains Mono" font-size="13" text-anchor="middle" fill="#ece6d9">ALTO</text>
+<text x="439.5" y="540" font-family="JetBrains Mono" font-size="13" font-weight="700" letter-spacing="3" text-anchor="middle" fill="#9b958a">ESFORÇO →</text>
+<text x="108" y="195.0" font-family="JetBrains Mono" font-size="13" text-anchor="end" fill="#ece6d9">ALTA</text>
+<text x="108" y="315.0" font-family="JetBrains Mono" font-size="13" text-anchor="end" fill="#ece6d9">MÉDIA</text>
+<text x="108" y="435.0" font-family="JetBrains Mono" font-size="13" text-anchor="end" fill="#ece6d9">BAIXA</text>
+<text transform="translate(52 310.0) rotate(-90)" font-family="JetBrains Mono" font-size="13" font-weight="700" letter-spacing="3" text-anchor="middle" fill="#9b958a">PRIORIDADE →</text>
+<text x="132" y="152" font-family="JetBrains Mono" font-size="13" font-weight="700" letter-spacing="1.5" fill="#111111">FAÇA JÁ</text>
+<text x="558" y="152" font-family="JetBrains Mono" font-size="13" letter-spacing="1.5" fill="#9b958a">SE TIVER FÔLEGO</text>
+<text x="345" y="392" font-family="JetBrains Mono" font-size="13" letter-spacing="1.5" fill="#9b958a">MAIS TARDE</text>
+<rect x="132" y="162" width="189" height="24" fill="#ece6d9"/>
+<text x="142" y="179" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#070707">BANDCAMP</text>
+<rect x="132" y="190" width="189" height="24" fill="#ece6d9"/>
+<text x="142" y="207" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#070707">SPOTIFY FOR ARTISTS</text>
+<rect x="132" y="218" width="189" height="24" fill="#ece6d9"/>
+<text x="142" y="235" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#070707">NEWSLETTER</text>
+<rect x="305" y="225" width="10" height="10" fill="#e0261b"/>
+<rect x="133" y="311" width="187" height="22" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+<text x="142" y="327" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#ece6d9">WHATSAPP / TELEGRAM</text>
+<rect x="305" y="317" width="10" height="10" fill="#e0261b"/>
+<rect x="346" y="191" width="187" height="22" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+<text x="355" y="207" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#ece6d9">INSTAGRAM</text>
+<rect x="346" y="431" width="187" height="22" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+<text x="355" y="447" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#ece6d9">DISCORD</text>
+<rect x="559" y="191" width="187" height="22" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+<text x="568" y="207" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#ece6d9">TIKTOK/REELS/SHORTS</text>
+<rect x="559" y="311" width="187" height="22" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+<text x="568" y="327" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#ece6d9">YOUTUBE</text>
+<rect x="523" y="530" width="10" height="10" fill="#e0261b"/>
+<text x="539" y="540" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">CANAL PRÓPRIO (SEU CONTATO)</text>
+</svg>

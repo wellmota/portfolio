@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 486">
+  <rect width="800" height="486" fill="#111111"/>
+
+  <!-- cabeçalho -->
+  <text x="20" y="42" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#ece6d9">PRETO + BRANCO + <tspan fill="#e0261b">1 COR</tspan></text>
+  <text x="780" y="42" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">PALETA LIMITADA, IMPACTO MÁXIMO</text>
+  <rect x="20" y="54" width="760" height="4" fill="#e0261b"/>
+
+  <!-- 1. papéis -->
+  <text x="20" y="86" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">1 · CADA COR TEM UM PAPEL</text>
+
+  <rect x="20" y="100" width="420" height="116" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <text x="38" y="140" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="32" fill="#ece6d9">BASE</text>
+  <text x="38" y="166" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">domina a peça</text>
+  <text x="38" y="200" font-family="JetBrains Mono" font-size="13" fill="#9b958a">preto (ou o papel)</text>
+
+  <rect x="450" y="100" width="200" height="116" fill="#ece6d9"/>
+  <text x="466" y="140" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="32" fill="#070707">SECUNDÁRIA</text>
+  <text x="466" y="166" font-family="JetBrains Mono" font-size="13" fill="#070707">texto e formas</text>
+  <text x="466" y="200" font-family="JetBrains Mono" font-size="13" fill="#070707">o oposto da base</text>
+
+  <rect x="660" y="100" width="120" height="116" fill="#e0261b"/>
+  <text x="672" y="138" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="23" fill="#111111">DESTAQUE</text>
+  <text x="672" y="166" font-family="JetBrains Mono" font-size="13" fill="#111111">uma só</text>
+  <text x="672" y="200" font-family="JetBrains Mono" font-size="13" fill="#111111">≤ 10% área</text>
+
+  <text x="20" y="240" font-family="JetBrains Mono" font-size="13" fill="#9b958a">largura dos blocos = proporção de área sugerida: muito preto, algum branco, pouco vermelho</text>
+
+  <path d="M20 262 H780" stroke="#2b2926" stroke-width="2"/>
+
+  <!-- 2. teste do cinza -->
+  <text x="20" y="292" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">2 · TESTE DO CINZA: VALE O CLARO CONTRA O ESCURO, NÃO O TOM</text>
+
+  <rect x="20" y="306" width="240" height="110" fill="none" stroke="#2b2926" stroke-width="2"/>
+  <text x="140" y="378" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="52" fill="#ece6d9">SEX 14.03</text>
+  <rect x="280" y="306" width="240" height="110" fill="none" stroke="#2b2926" stroke-width="2"/>
+  <text x="400" y="378" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="52" fill="#e0261b">SEX 14.03</text>
+  <rect x="540" y="306" width="240" height="110" fill="none" stroke="#2b2926" stroke-width="2"/>
+  <text x="660" y="378" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="52" fill="#2b2926">SEX 14.03</text>
+
+  <text x="20" y="444" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">osso sobre preto</text>
+  <text x="20" y="464" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">FORTE: lê de longe</text>
+  <text x="280" y="444" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">vermelho sobre preto</text>
+  <text x="280" y="464" font-family="JetBrains Mono" font-size="13" fill="#9b958a">MÉDIO: só em tamanho grande</text>
+  <text x="540" y="444" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">cinza-escuro sobre preto</text>
+  <text x="540" y="464" font-family="JetBrains Mono" font-size="13" fill="#e0261b">FRACO: some no poste</text>
+</svg>

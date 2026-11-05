@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 592">
+  <rect width="800" height="592" fill="#111111"/>
+
+  <!-- cabeçalho -->
+  <text x="20" y="42" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#ece6d9">GRID E REGRA DOS TERÇOS</text>
+  <text x="780" y="42" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">A ESTRUTURA INVISÍVEL</text>
+  <rect x="20" y="54" width="760" height="4" fill="#e0261b"/>
+
+  <!-- A: grid de 4 colunas -->
+  <rect x="70" y="88" width="280" height="396" fill="none" stroke="#ece6d9" stroke-width="2"/>
+  <rect x="90" y="108" width="54" height="356" fill="#2b2926"/>
+  <rect x="152" y="108" width="54" height="356" fill="#2b2926"/>
+  <rect x="214" y="108" width="54" height="356" fill="#2b2926"/>
+  <rect x="276" y="108" width="54" height="356" fill="#2b2926"/>
+  <text x="90" y="174" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="60" fill="#ece6d9">COVA RASA</text>
+  <rect x="152" y="196" width="178" height="150" fill="#e0261b"/>
+  <rect x="90" y="368" width="116" height="12" fill="#ece6d9"/>
+  <rect x="90" y="388" width="88" height="8" fill="#ece6d9"/>
+  <rect x="90" y="402" width="104" height="8" fill="#ece6d9"/>
+  <rect x="276" y="440" width="54" height="8" fill="#9b958a"/>
+  <!-- eixos de alinhamento -->
+  <path d="M90 96 V476" stroke="#e0261b" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <path d="M152 96 V476" stroke="#e0261b" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <!-- cota da margem -->
+  <path d="M70 76 H90" stroke="#ece6d9" stroke-width="1.5"/>
+  <path d="M70 70 V82 M90 70 V82" stroke="#ece6d9" stroke-width="1.5"/>
+  <text x="98" y="81" font-family="JetBrains Mono" font-size="13" fill="#9b958a">margem</text>
+
+  <text x="70" y="514" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">A · GRID DE 4 COLUNAS</text>
+  <text x="70" y="536" font-family="JetBrains Mono" font-size="13" fill="#9b958a">margens iguais nos 4 lados;</text>
+  <text x="70" y="554" font-family="JetBrains Mono" font-size="13" fill="#9b958a">blocos começam e terminam</text>
+  <text x="70" y="572" font-family="JetBrains Mono" font-size="13" fill="#9b958a">nas linhas das colunas</text>
+
+  <!-- B: regra dos terços -->
+  <rect x="450" y="88" width="280" height="396" fill="none" stroke="#ece6d9" stroke-width="2"/>
+  <circle cx="637" cy="220" r="62" fill="#ece6d9"/>
+  <path d="M600 252 L690 170 L660 268 Z" fill="#e0261b"/>
+  <text x="553" y="414" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="58" fill="#ece6d9">COVA</text>
+  <text x="553" y="466" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="58" fill="#ece6d9">RASA</text>
+  <path d="M543 88 V484 M637 88 V484 M450 220 H730 M450 352 H730" stroke="#e0261b" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <circle cx="543" cy="220" r="7" fill="#111111" stroke="#e0261b" stroke-width="3"/>
+  <circle cx="637" cy="352" r="7" fill="#111111" stroke="#e0261b" stroke-width="3"/>
+  <circle cx="637" cy="220" r="9" fill="#e0261b" stroke="#111111" stroke-width="3"/>
+  <circle cx="543" cy="352" r="9" fill="#e0261b" stroke="#111111" stroke-width="3"/>
+
+  <text x="450" y="514" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">B · REGRA DOS TERÇOS</text>
+  <text x="450" y="536" font-family="JetBrains Mono" font-size="13" fill="#9b958a">3 × 3 partes iguais; os 4</text>
+  <text x="450" y="554" font-family="JetBrains Mono" font-size="13" fill="#9b958a">cruzamentos são pontos de</text>
+  <text x="450" y="572" font-family="JetBrains Mono" font-size="13" fill="#9b958a">interesse para símbolo e título</text>
+</svg>

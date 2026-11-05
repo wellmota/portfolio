@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 570">
+  <rect width="800" height="570" fill="#111111"/>
+  <defs>
+    <!-- logo fictício, versão principal (caixa 300 x 140) -->
+    <g id="ds-reducao-logo-principal">
+      <path d="M40 8 H260 L150 136 Z" fill="none" stroke="#e0261b" stroke-width="5"/>
+      <path d="M0 66 H72 M12 66 L4 50 M26 66 L18 82 M40 66 L32 46 M54 66 L48 84 M228 66 H300 M288 66 L296 50 M274 66 L282 82 M260 66 L268 46 M246 66 L252 84" fill="none" stroke="#ece6d9" stroke-width="3"/>
+      <text x="150" y="88" text-anchor="middle" font-family="Pirata One" font-size="76" fill="#ece6d9">Névoa</text>
+      <text x="150" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="13" letter-spacing="4" fill="#ece6d9">DE FERRO</text>
+    </g>
+    <!-- versão monocromática: herda a cor de quem usa -->
+    <g id="ds-reducao-logo-mono">
+      <path d="M40 8 H260 L150 136 Z" fill="none" stroke-width="5"/>
+      <path d="M0 66 H72 M12 66 L4 50 M26 66 L18 82 M40 66 L32 46 M54 66 L48 84 M228 66 H300 M288 66 L296 50 M274 66 L282 82 M260 66 L268 46 M246 66 L252 84" fill="none" stroke-width="3"/>
+      <text x="150" y="88" text-anchor="middle" font-family="Pirata One" font-size="76" stroke="none">Névoa</text>
+      <text x="150" y="114" text-anchor="middle" font-family="JetBrains Mono" font-size="13" letter-spacing="4" stroke="none">DE FERRO</text>
+    </g>
+    <!-- versão simplificada (caixa 100 x 100) -->
+    <g id="ds-reducao-logo-simples">
+      <path d="M2 4 H98 L50 98 Z" fill="#ece6d9"/>
+      <text x="50" y="56" text-anchor="middle" font-family="Pirata One" font-size="54" fill="#070707">N</text>
+    </g>
+  </defs>
+
+  <!-- cabeçalho -->
+  <text x="20" y="42" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#ece6d9">TESTE DE REDUÇÃO DO LOGO</text>
+  <text x="780" y="42" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">BANDA FICTÍCIA: NÉVOA DE FERRO</text>
+  <rect x="20" y="54" width="760" height="4" fill="#e0261b"/>
+
+  <!-- 1. o mesmo logo em 3 tamanhos -->
+  <text x="20" y="86" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">1 · O MESMO LOGO, DO BACKDROP AO AVATAR</text>
+
+  <use href="#ds-reducao-logo-principal" transform="translate(30 100) scale(0.85)"/>
+  <use href="#ds-reducao-logo-principal" transform="translate(340 160) scale(0.27)"/>
+  <rect x="490" y="166" width="32" height="32" fill="none" stroke="#2b2926" stroke-width="1"/>
+  <use href="#ds-reducao-logo-principal" transform="translate(490 174) scale(0.107)"/>
+  <rect x="640" y="166" width="32" height="32" fill="none" stroke="#2b2926" stroke-width="1"/>
+  <use href="#ds-reducao-logo-simples" transform="translate(640 166) scale(0.32)"/>
+
+  <text x="30" y="246" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">GRANDE</text>
+  <text x="30" y="266" font-family="JetBrains Mono" font-size="13" fill="#9b958a">capa, backdrop, camiseta</text>
+  <rect x="30" y="278" width="10" height="10" fill="#ece6d9"/>
+  <text x="48" y="288" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">LEGÍVEL</text>
+
+  <text x="340" y="246" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">2 CM</text>
+  <text x="340" y="266" font-family="JetBrains Mono" font-size="13" fill="#9b958a">adesivo, patch</text>
+  <rect x="340" y="278" width="10" height="10" fill="#9b958a"/>
+  <text x="358" y="288" font-family="JetBrains Mono" font-size="13" fill="#9b958a">NO LIMITE</text>
+
+  <text x="490" y="246" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">32 PX</text>
+  <text x="490" y="266" font-family="JetBrains Mono" font-size="13" fill="#9b958a">avatar, ícone</text>
+  <rect x="490" y="278" width="10" height="10" fill="#e0261b"/>
+  <text x="508" y="288" font-family="JetBrains Mono" font-size="13" fill="#e0261b">VIRA MANCHA</text>
+
+  <text x="640" y="246" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">SIMPLIFICADO</text>
+  <text x="640" y="266" font-family="JetBrains Mono" font-size="13" fill="#9b958a">32 px, símbolo</text>
+  <rect x="640" y="278" width="10" height="10" fill="#ece6d9"/>
+  <text x="658" y="288" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">FUNCIONA</text>
+
+  <path d="M20 314 H780" stroke="#2b2926" stroke-width="2"/>
+
+  <!-- 2. as três versões -->
+  <text x="20" y="344" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">2 · AS TRÊS VERSÕES QUE A BANDA PRECISA TER</text>
+
+  <rect x="20" y="360" width="240" height="140" fill="none" stroke="#2b2926" stroke-width="2"/>
+  <use href="#ds-reducao-logo-principal" transform="translate(32 380) scale(0.72)"/>
+
+  <rect x="280" y="360" width="240" height="140" fill="none" stroke="#2b2926" stroke-width="2"/>
+  <use href="#ds-reducao-logo-simples" transform="translate(355 375) scale(1.1)"/>
+
+  <rect x="540" y="360" width="120" height="140" fill="#ece6d9"/>
+  <use href="#ds-reducao-logo-mono" transform="translate(546 410) scale(0.36)" fill="#070707" stroke="#070707"/>
+  <rect x="660" y="360" width="120" height="140" fill="none" stroke="#2b2926" stroke-width="2"/>
+  <use href="#ds-reducao-logo-mono" transform="translate(666 410) scale(0.36)" fill="#ece6d9" stroke="#ece6d9"/>
+
+  <text x="20" y="530" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">PRINCIPAL</text>
+  <text x="20" y="550" font-family="JetBrains Mono" font-size="13" fill="#9b958a">todos os detalhes</text>
+  <text x="280" y="530" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">SIMPLIFICADA</text>
+  <text x="280" y="550" font-family="JetBrains Mono" font-size="13" fill="#9b958a">símbolo, traço grosso</text>
+  <text x="540" y="530" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">MONOCROMÁTICA</text>
+  <text x="540" y="550" font-family="JetBrains Mono" font-size="13" fill="#9b958a">1 cor, preta e branca</text>
+</svg>

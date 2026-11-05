@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+  <rect width="800" height="560" fill="#111111"/>
+  <g stroke="#2b2926" stroke-width="1">
+    <line x1="40" y1="116" x2="760" y2="116"/>
+    <line x1="40" y1="316" x2="760" y2="316"/>
+  </g>
+
+  <text x="40" y="40" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="1">ROTA DO DINHEIRO · SIMPLIFICADO</text>
+  <text x="40" y="84" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#ece6d9">DUAS ROTAS ATÉ O CAIXA DA BANDA</text>
+  <rect x="40" y="96" width="96" height="6" fill="#e0261b"/>
+
+  <!-- ROTA 1 -->
+  <text x="40" y="148" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="1">ROTA 1 · STREAMING E VENDAS (O FONOGRAMA)</text>
+
+  <rect x="40" y="162" width="200" height="78" fill="#ece6d9"/>
+  <text x="56" y="194" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#111111">BANDA</text>
+  <text x="56" y="214" font-family="JetBrains Mono" font-size="13" fill="#111111">grava e envia</text>
+  <text x="56" y="230" font-family="JetBrains Mono" font-size="13" fill="#111111">áudio + metadados</text>
+
+  <rect x="300" y="162" width="200" height="78" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <text x="316" y="194" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#ece6d9">DISTRIBUIDORA</text>
+  <text x="316" y="214" font-family="JetBrains Mono" font-size="13" fill="#9b958a">gera ISRC e UPC,</text>
+  <text x="316" y="230" font-family="JetBrains Mono" font-size="13" fill="#9b958a">entrega e recebe</text>
+
+  <rect x="560" y="162" width="200" height="78" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <text x="576" y="194" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#ece6d9">PLATAFORMAS</text>
+  <text x="576" y="214" font-family="JetBrains Mono" font-size="13" fill="#9b958a">Spotify, Deezer,</text>
+  <text x="576" y="230" font-family="JetBrains Mono" font-size="13" fill="#9b958a">Apple Music...</text>
+
+  <g stroke="#ece6d9" stroke-width="3" stroke-linecap="square" fill="none">
+    <line x1="242" y1="201" x2="288" y2="201"/>
+    <line x1="502" y1="201" x2="548" y2="201"/>
+  </g>
+  <g fill="#ece6d9">
+    <polygon points="299,201 287,194 287,208"/>
+    <polygon points="559,201 547,194 547,208"/>
+  </g>
+
+  <!-- retorno do dinheiro -->
+  <g stroke="#e0261b" stroke-width="3" stroke-linecap="square" fill="none">
+    <polyline points="660,242 660,268 140,268 140,254"/>
+    <line x1="400" y1="242" x2="400" y2="268"/>
+  </g>
+  <polygon points="140,242 133,255 147,255" fill="#e0261b"/>
+  <rect x="394" y="262" width="12" height="12" fill="#e0261b"/>
+  <text x="400" y="294" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#e0261b">R$ das plataformas → distribuidora desconta assinatura, taxa ou % → banda</text>
+
+  <!-- ROTA 2 -->
+  <text x="40" y="346" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="1">ROTA 2 · EXECUÇÃO PÚBLICA (A OBRA E O FONOGRAMA)</text>
+
+  <rect x="40" y="360" width="156" height="100" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <text x="54" y="390" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">EXECUÇÃO</text>
+  <text x="54" y="412" font-family="JetBrains Mono" font-size="13" fill="#9b958a">shows, rádio,</text>
+  <text x="54" y="428" font-family="JetBrains Mono" font-size="13" fill="#9b958a">TV, bares,</text>
+  <text x="54" y="444" font-family="JetBrains Mono" font-size="13" fill="#9b958a">streaming</text>
+
+  <rect x="228" y="360" width="156" height="100" fill="#070707" stroke="#e0261b" stroke-width="3"/>
+  <text x="242" y="390" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#e0261b">ECAD</text>
+  <text x="242" y="412" font-family="JetBrains Mono" font-size="13" fill="#9b958a">arrecada e</text>
+  <text x="242" y="428" font-family="JetBrains Mono" font-size="13" fill="#9b958a">distribui</text>
+
+  <rect x="416" y="360" width="156" height="100" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <text x="430" y="390" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">ASSOCIAÇÃO</text>
+  <text x="430" y="412" font-family="JetBrains Mono" font-size="13" fill="#9b958a">a sua, entre</text>
+  <text x="430" y="428" font-family="JetBrains Mono" font-size="13" fill="#9b958a">as 7 que</text>
+  <text x="430" y="444" font-family="JetBrains Mono" font-size="13" fill="#9b958a">administram</text>
+
+  <rect x="604" y="360" width="156" height="100" fill="#ece6d9"/>
+  <text x="618" y="390" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#111111">TITULARES</text>
+  <text x="618" y="412" font-family="JetBrains Mono" font-size="13" fill="#111111">compositores,</text>
+  <text x="618" y="428" font-family="JetBrains Mono" font-size="13" fill="#111111">intérpretes,</text>
+  <text x="618" y="444" font-family="JetBrains Mono" font-size="13" fill="#111111">produtor fonogr.</text>
+
+  <g stroke="#ece6d9" stroke-width="3" stroke-linecap="square" fill="none">
+    <line x1="198" y1="410" x2="214" y2="410"/>
+    <line x1="386" y1="410" x2="402" y2="410"/>
+    <line x1="574" y1="410" x2="590" y2="410"/>
+  </g>
+  <g fill="#ece6d9">
+    <polygon points="227,410 215,403 215,417"/>
+    <polygon points="415,410 403,403 403,417"/>
+    <polygon points="603,410 591,403 591,417"/>
+  </g>
+
+  <rect x="40" y="484" width="6" height="52" fill="#e0261b"/>
+  <text x="60" y="504" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">PRÉ-REQUISITO: cada integrante filiado a uma associação, com obras</text>
+  <text x="60" y="524" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">e fonogramas cadastrados. Sem cadastro, a rota 2 não chega até você.</text>
+</svg>

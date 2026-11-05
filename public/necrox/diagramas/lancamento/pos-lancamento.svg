@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 580">
+  <rect width="800" height="580" fill="#111111"/>
+
+  <text x="40" y="58" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#ece6d9">VIDA DEPOIS DO DISCO</text>
+  <text x="760" y="56" font-family="JetBrains Mono" font-size="13" fill="#9b958a" text-anchor="end">pós-lançamento</text>
+  <line x1="40" y1="74" x2="760" y2="74" stroke="#2b2926" stroke-width="2" stroke-linecap="square"/>
+
+  <ellipse cx="400" cy="300" rx="270" ry="165" fill="none" stroke="#ece6d9" stroke-width="2"/>
+  <polygon points="543.5,160.1 525.7,162.3 531.1,147.2" fill="#e0261b"/>
+  <polygon points="670.0,309.0 662.0,293.0 678.0,293.0" fill="#e0261b"/>
+  <polygon points="526.5,445.9 538.9,433.0 544.3,448.1" fill="#e0261b"/>
+  <polygon points="256.5,439.9 274.3,437.7 268.9,452.8" fill="#e0261b"/>
+  <polygon points="130.0,291.0 138.0,307.0 122.0,307.0" fill="#e0261b"/>
+  <polygon points="273.5,154.1 261.1,167.0 255.7,151.9" fill="#e0261b"/>
+
+  <rect x="300" y="106" width="200" height="58" fill="#e0261b"/>
+  <text x="400" y="133" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#111111" text-anchor="middle">AO VIVO</text>
+  <text x="400" y="153" font-family="JetBrains Mono" font-size="13" fill="#111111" text-anchor="middle">áudio do show</text>
+  <rect x="534" y="188" width="200" height="58" fill="#e0261b"/>
+  <text x="634" y="215" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#111111" text-anchor="middle">ACÚSTICO</text>
+  <text x="634" y="235" font-family="JetBrains Mono" font-size="13" fill="#111111" text-anchor="middle">violão e voz</text>
+  <rect x="534" y="354" width="200" height="58" fill="#e0261b"/>
+  <text x="634" y="381" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#111111" text-anchor="middle">REMIX</text>
+  <text x="634" y="401" font-family="JetBrains Mono" font-size="13" fill="#111111" text-anchor="middle">artista de outro gênero</text>
+  <rect x="300" y="436" width="200" height="58" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="400" y="463" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9" text-anchor="middle">PLAYTHROUGH</text>
+  <text x="400" y="483" font-family="JetBrains Mono" font-size="13" fill="#9b958a" text-anchor="middle">câmera fixa</text>
+  <rect x="66" y="354" width="200" height="58" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="166" y="381" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9" text-anchor="middle">FAIXA A FAIXA</text>
+  <text x="166" y="401" font-family="JetBrains Mono" font-size="13" fill="#9b958a" text-anchor="middle">uma história por música</text>
+  <rect x="66" y="188" width="200" height="58" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="166" y="215" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9" text-anchor="middle">BASTIDORES</text>
+  <text x="166" y="235" font-family="JetBrains Mono" font-size="13" fill="#9b958a" text-anchor="middle">demo versus final</text>
+
+  <circle cx="400" cy="300" r="80" fill="#ece6d9"/>
+  <text x="400" y="304" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#070707" text-anchor="middle">DISCO</text>
+  <text x="400" y="328" font-family="JetBrains Mono" font-size="13" fill="#070707" text-anchor="middle">novos motivos</text>
+  <text x="400" y="346" font-family="JetBrains Mono" font-size="13" fill="#070707" text-anchor="middle">pra falar dele</text>
+
+  <line x1="40" y1="506" x2="760" y2="506" stroke="#2b2926" stroke-width="2" stroke-linecap="square"/>
+  <rect x="40" y="518" width="16" height="16" fill="#e0261b"/>
+  <text x="66" y="531" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">gravação nova: precisa de ISRC novo</text>
+  <rect x="430" y="518" width="16" height="16" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="456" y="531" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">conteúdo: mesmo disco</text>
+  <text x="40" y="560" font-family="JetBrains Mono" font-size="13" fill="#9b958a">single pós-lançamento, 6 a 8 semanas depois: mais um pitch, mais um Release Radar.</text>
+</svg>

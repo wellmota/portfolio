@@ -43,3 +43,5 @@ User-agent: YouBot
 Allow: /
 
 Sitemap: https://userexperience.com.br/sitemap.xml
+# NECROX: guias gratuitos para bandas independentes (/necrox/)
+Sitemap: https://userexperience.com.br/necrox/sitemap-index.xml

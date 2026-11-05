@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+  <rect width="800" height="560" fill="#111111"/>
+  <line x1="400" y1="228" x2="400" y2="470" stroke="#2b2926" stroke-width="1"/>
+
+  <text x="40" y="40" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="1">QUEM É DONO DO QUÊ · SIMPLIFICADO</text>
+  <text x="40" y="84" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#ece6d9">UMA MÚSICA, DOIS DIREITOS</text>
+  <rect x="40" y="96" width="96" height="6" fill="#e0261b"/>
+
+  <rect x="290" y="118" width="220" height="48" fill="#ece6d9"/>
+  <text x="400" y="151" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="28" fill="#111111">MÚSICA GRAVADA</text>
+
+  <g stroke="#ece6d9" stroke-width="3" stroke-linecap="square" fill="none">
+    <polyline points="400,168 400,186"/>
+    <polyline points="210,206 210,186 590,186 590,206"/>
+  </g>
+  <g fill="#ece6d9">
+    <polygon points="210,218 203,206 217,206"/>
+    <polygon points="590,218 583,206 597,206"/>
+  </g>
+
+  <!-- coluna esquerda: obra -->
+  <rect x="40" y="220" width="340" height="66" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <rect x="40" y="220" width="8" height="66" fill="#e0261b"/>
+  <text x="62" y="252" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="28" fill="#ece6d9">DIREITO DE AUTOR</text>
+  <text x="62" y="274" font-family="JetBrains Mono" font-size="13" fill="#9b958a">a obra: letra e melodia</text>
+
+  <text x="40" y="318" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="1">QUEM RECEBE</text>
+  <rect x="40" y="333" width="9" height="9" fill="#ece6d9"/>
+  <text x="60" y="342" font-family="JetBrains Mono" font-size="14" fill="#ece6d9">quem compôs letra e melodia</text>
+  <text x="40" y="374" font-family="JetBrains Mono" font-size="13" fill="#9b958a">existe mesmo sem gravação</text>
+  <text x="40" y="394" font-family="JetBrains Mono" font-size="13" fill="#9b958a">protegida desde a criação;</text>
+  <text x="40" y="410" font-family="JetBrains Mono" font-size="13" fill="#9b958a">registro é facultativo</text>
+
+  <rect x="40" y="424" width="340" height="46" fill="none" stroke="#ece6d9" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="54" y="443" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">EDITORA (OPCIONAL)</text>
+  <text x="54" y="460" font-family="JetBrains Mono" font-size="13" fill="#9b958a">administra a obra, fica com uma %</text>
+
+  <!-- coluna direita: fonograma -->
+  <rect x="420" y="220" width="340" height="66" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <rect x="420" y="220" width="8" height="66" fill="#e0261b"/>
+  <text x="442" y="252" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="28" fill="#ece6d9">DIREITOS CONEXOS</text>
+  <text x="442" y="274" font-family="JetBrains Mono" font-size="13" fill="#9b958a">o fonograma: a gravação</text>
+
+  <text x="420" y="318" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="1">QUEM RECEBE</text>
+  <rect x="420" y="333" width="9" height="9" fill="#ece6d9"/>
+  <text x="440" y="342" font-family="JetBrains Mono" font-size="14" fill="#ece6d9">intérpretes</text>
+  <rect x="420" y="355" width="9" height="9" fill="#ece6d9"/>
+  <text x="440" y="364" font-family="JetBrains Mono" font-size="14" fill="#ece6d9">músicos acompanhantes</text>
+  <rect x="420" y="377" width="9" height="9" fill="#ece6d9"/>
+  <text x="440" y="386" font-family="JetBrains Mono" font-size="14" fill="#ece6d9">produtor fonográfico</text>
+  <text x="440" y="406" font-family="JetBrains Mono" font-size="13" fill="#9b958a">(quem bancou a gravação)</text>
+
+  <rect x="420" y="424" width="340" height="46" fill="none" stroke="#ece6d9" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="434" y="443" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">ISRC</text>
+  <text x="434" y="460" font-family="JetBrains Mono" font-size="13" fill="#9b958a">um código único para cada gravação</text>
+
+  <!-- faixa final -->
+  <rect x="40" y="492" width="720" height="48" fill="#e0261b"/>
+  <text x="400" y="525" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#111111">BANDA QUE COMPÕE, TOCA E BANCA A GRAVAÇÃO: TITULAR DOS DOIS</text>
+</svg>

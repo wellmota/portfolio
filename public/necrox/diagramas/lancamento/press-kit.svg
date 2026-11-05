@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 530">
+  <rect width="800" height="530" fill="#111111"/>
+
+  <!-- cabeçalho -->
+  <text x="40" y="58" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#ece6d9">PRESS KIT / EPK</text>
+  <text x="760" y="56" font-family="JetBrains Mono" font-size="13" fill="#9b958a" text-anchor="end">anatomia do dossiê</text>
+  <line x1="40" y1="74" x2="760" y2="74" stroke="#2b2926" stroke-width="2" stroke-linecap="square"/>
+  <text x="40" y="102" font-family="JetBrains Mono" font-size="13" fill="#ece6d9"><tspan fill="#e0261b" font-weight="700">objetivo:</tspan> escrever sobre a banda ou escalar a banda sem perguntar nada</text>
+
+  <rect x="40" y="124" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="54" y="146" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">01</text>
+  <text x="54" y="171" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">BIOS</text>
+  <text x="54" y="190" font-family="JetBrains Mono" font-size="13" fill="#9b958a">curta, média e longa</text>
+  <rect x="284" y="124" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="298" y="146" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">02</text>
+  <text x="298" y="171" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">RELEASE</text>
+  <text x="298" y="190" font-family="JetBrains Mono" font-size="13" fill="#9b958a">o texto notícia</text>
+  <rect x="528" y="124" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="542" y="146" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">03</text>
+  <text x="542" y="171" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">FOTOS</text>
+  <text x="542" y="190" font-family="JetBrains Mono" font-size="13" fill="#9b958a">3 formatos, com crédito</text>
+  <rect x="40" y="212" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="54" y="234" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">04</text>
+  <text x="54" y="259" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">CAPA</text>
+  <text x="54" y="278" font-family="JetBrains Mono" font-size="13" fill="#9b958a">em alta resolução</text>
+  <rect x="284" y="212" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="298" y="234" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">05</text>
+  <text x="298" y="259" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">LINKS</text>
+  <text x="298" y="278" font-family="JetBrains Mono" font-size="13" fill="#9b958a">player privado, streaming</text>
+  <rect x="528" y="212" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="542" y="234" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">06</text>
+  <text x="542" y="259" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">DESTAQUES</text>
+  <text x="542" y="278" font-family="JetBrains Mono" font-size="13" fill="#9b958a">só os verdadeiros</text>
+  <rect x="40" y="300" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="54" y="322" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">07</text>
+  <text x="54" y="347" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">FICHA TÉCNICA</text>
+  <text x="54" y="366" font-family="JetBrains Mono" font-size="13" fill="#9b958a">quem tocou, gravou, mixou</text>
+  <rect x="284" y="300" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="298" y="322" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">08</text>
+  <text x="298" y="347" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">RIDER TÉCNICO</text>
+  <text x="298" y="366" font-family="JetBrains Mono" font-size="13" fill="#9b958a">input list, mapa de palco</text>
+  <rect x="528" y="300" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="542" y="322" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">09</text>
+  <text x="542" y="347" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">HOSPITALIDADE</text>
+  <text x="542" y="366" font-family="JetBrains Mono" font-size="13" fill="#9b958a">simples e realista</text>
+  <rect x="40" y="388" width="232" height="76" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="54" y="410" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">10</text>
+  <text x="54" y="435" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">LOGO</text>
+  <text x="54" y="454" font-family="JetBrains Mono" font-size="13" fill="#9b958a">PNG, versão clara e escura</text>
+  <rect x="284" y="388" width="232" height="76" fill="#e0261b"/>
+  <text x="298" y="410" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#111111">11</text>
+  <text x="298" y="435" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#111111">CONTATO</text>
+  <text x="298" y="454" font-family="JetBrains Mono" font-size="13" fill="#111111">uma pessoa: e-mail e fone</text>
+  <rect x="528" y="388" width="232" height="76" fill="#ece6d9"/>
+  <text x="542" y="410" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#070707">12</text>
+  <text x="542" y="435" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#070707">PASTA EM ALTA</text>
+  <text x="542" y="454" font-family="JetBrains Mono" font-size="13" fill="#070707">fotos com 3000 px ou mais</text>
+
+  <!-- rodapé -->
+  <line x1="40" y1="486" x2="760" y2="486" stroke="#2b2926" stroke-width="2" stroke-linecap="square"/>
+  <text x="40" y="512" font-family="JetBrains Mono" font-size="13" fill="#9b958a">uma página na web + uma pasta compartilhada. nada de PDF de 30 MB no e-mail.</text>
+</svg>

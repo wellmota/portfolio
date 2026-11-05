@@ -10,7 +10,7 @@ const built = Object.keys(import.meta.glob('./**/*.astro'))
   .map((f) => f.replace(/^\./, '').replace(/(index)?\.astro$/, '').replace(/([^/])$/, '$1/'));
 
 /* HTML estático servido de /public */
-const statics = ['/talks/architecture-for-designers/'];
+const statics = ['/talks/architecture-for-designers/', '/necrox/'];
 
 const paths = new Set([...built, ...statics]);
 

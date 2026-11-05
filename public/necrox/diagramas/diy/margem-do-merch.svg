@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480">
+  <rect width="800" height="480" fill="#111111"/>
+  <g stroke="#2b2926" stroke-width="1">
+    <line x1="40" y1="120" x2="760" y2="120"/>
+    <line x1="400" y1="132" x2="400" y2="346"/>
+  </g>
+
+  <text x="40" y="40" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="1">CAMISETA SERIGRAFADA · NÚMEROS HIPOTÉTICOS</text>
+  <text x="40" y="84" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#ece6d9">A CONTA QUE NINGUÉM FAZ</text>
+  <rect x="40" y="96" width="96" height="6" fill="#e0261b"/>
+
+  <!-- barra 1 -->
+  <text x="40" y="156" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">NA TABELA</text>
+  <text x="760" y="156" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">preço de venda R$ 70</text>
+  <rect x="40" y="168" width="360" height="54" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <text x="220" y="200" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#ece6d9">CUSTO R$ 35</text>
+  <rect x="400" y="168" width="360" height="54" fill="#ece6d9"/>
+  <text x="580" y="204" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#111111">MARGEM R$ 35</text>
+
+  <!-- barra 2 -->
+  <text x="40" y="268" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">NA VIDA REAL</text>
+  <text x="760" y="268" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">mesmo preço, R$ 70</text>
+  <rect x="40" y="280" width="360" height="54" fill="#070707" stroke="#ece6d9" stroke-width="2"/>
+  <text x="220" y="312" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#ece6d9">CUSTO R$ 35</text>
+  <rect x="402" y="281" width="168" height="52" fill="#2b2926" stroke="#e0261b" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="486" y="304" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#e0261b">CUSTOS</text>
+  <text x="486" y="321" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#e0261b">ESQUECIDOS</text>
+  <rect x="572" y="280" width="188" height="54" fill="#ece6d9"/>
+  <text x="666" y="316" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#111111">MARGEM REAL</text>
+
+  <polyline points="486,336 486,356" fill="none" stroke="#e0261b" stroke-width="2"/>
+  <text x="486" y="376" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#9b958a">frete do fornecedor · embalagem · taxa da maquininha</text>
+  <text x="486" y="394" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#9b958a">peças com defeito · camisetas dadas de presente</text>
+
+  <!-- regra -->
+  <rect x="40" y="416" width="6" height="48" fill="#e0261b"/>
+  <text x="60" y="435" font-family="JetBrains Mono" font-size="14" fill="#ece6d9">(custo + frete + embalagem + taxa) × 2 = ponto de partida do preço</text>
+  <text x="60" y="456" font-family="JetBrains Mono" font-size="13" fill="#9b958a">depois pergunte: o seu público pagaria isso?</text>
+</svg>

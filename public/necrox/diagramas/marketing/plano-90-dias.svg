@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 570">
+<rect width="800" height="570" fill="#111111"/>
+<text x="40" y="74" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="54" fill="#ece6d9">PLANO DE 90 DIAS</text>
+<text x="40" y="102" font-family="JetBrains Mono" font-size="13" letter-spacing="1.5" fill="#9b958a">TRÊS FASES DE 30 DIAS</text>
+<rect x="40" y="180" width="226" height="90" fill="#ece6d9"/>
+<text x="52" y="202" font-family="JetBrains Mono" font-size="13" font-weight="700" letter-spacing="1" fill="#111111">DIAS 1–30</text>
+<text x="254" y="228" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="46" text-anchor="end" fill="#111111">01</text>
+<text x="52" y="258" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="32" fill="#111111">FUNDAÇÃO</text>
+<text x="40" y="300" font-family="Instrument Serif" font-style="italic" font-size="20" fill="#ece6d9">arrumar a casa</text>
+<line x1="40" y1="316" x2="266" y2="316" stroke="#2b2926" stroke-width="2"/>
+<rect x="40" y="335" width="8" height="8" fill="#ece6d9"/>
+<text x="58" y="344" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">POSICIONAMENTO + PILARES</text>
+<rect x="40" y="363" width="8" height="8" fill="#ece6d9"/>
+<text x="58" y="372" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">BIO EM 3 TAMANHOS</text>
+<rect x="40" y="391" width="8" height="8" fill="#ece6d9"/>
+<text x="58" y="400" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">PERFIS, BANDCAMP, SPOTIFY</text>
+<rect x="40" y="419" width="8" height="8" fill="#ece6d9"/>
+<text x="58" y="428" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">CANAL PRÓPRIO NO AR</text>
+<rect x="40" y="447" width="8" height="8" fill="#ece6d9"/>
+<text x="58" y="456" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">MAPA DE BANDAS VIZINHAS</text>
+<rect x="40" y="475" width="8" height="8" fill="#ece6d9"/>
+<text x="58" y="484" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">1º LOTE DE CONTEÚDO</text>
+<rect x="287" y="140" width="226" height="130" fill="#ece6d9"/>
+<text x="299" y="162" font-family="JetBrains Mono" font-size="13" font-weight="700" letter-spacing="1" fill="#111111">DIAS 31–60</text>
+<text x="501" y="188" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="46" text-anchor="end" fill="#111111">02</text>
+<text x="299" y="258" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="32" fill="#111111">RITMO</text>
+<text x="287" y="300" font-family="Instrument Serif" font-style="italic" font-size="20" fill="#ece6d9">publicar com constância</text>
+<line x1="287" y1="316" x2="513" y2="316" stroke="#2b2926" stroke-width="2"/>
+<rect x="287" y="335" width="8" height="8" fill="#ece6d9"/>
+<text x="305" y="344" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">CALENDÁRIO SEM FALHAR</text>
+<rect x="287" y="363" width="8" height="8" fill="#ece6d9"/>
+<text x="305" y="372" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">1ª NEWSLETTER</text>
+<rect x="287" y="391" width="8" height="8" fill="#ece6d9"/>
+<text x="305" y="400" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">3 BANDAS VIZINHAS</text>
+<rect x="287" y="419" width="8" height="8" fill="#ece6d9"/>
+<text x="305" y="428" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">PITCH PARA 5 VEÍCULOS</text>
+<rect x="287" y="447" width="8" height="8" fill="#ece6d9"/>
+<text x="305" y="456" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">2 SHOWS DOS OUTROS</text>
+<rect x="287" y="475" width="8" height="8" fill="#ece6d9"/>
+<text x="305" y="484" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">ANOTAR AS 5 MÉTRICAS</text>
+<rect x="534" y="100" width="226" height="170" fill="#e0261b"/>
+<text x="546" y="122" font-family="JetBrains Mono" font-size="13" font-weight="700" letter-spacing="1" fill="#111111">DIAS 61–90</text>
+<text x="748" y="148" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="46" text-anchor="end" fill="#111111">03</text>
+<text x="546" y="258" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="32" fill="#111111">ATIVAÇÃO</text>
+<text x="534" y="300" font-family="Instrument Serif" font-style="italic" font-size="20" fill="#ece6d9">transformar atenção em ação</text>
+<line x1="534" y1="316" x2="760" y2="316" stroke="#2b2926" stroke-width="2"/>
+<rect x="534" y="335" width="8" height="8" fill="#e0261b"/>
+<text x="552" y="344" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">SHOW COM BANDA PARCEIRA</text>
+<rect x="534" y="363" width="8" height="8" fill="#e0261b"/>
+<text x="552" y="372" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">QR CODE + CADERNO</text>
+<rect x="534" y="391" width="8" height="8" fill="#e0261b"/>
+<text x="552" y="400" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">MERCH NO BANDCAMP FRIDAY</text>
+<rect x="534" y="419" width="8" height="8" fill="#e0261b"/>
+<text x="552" y="428" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">RESPONDER TUDO</text>
+<rect x="534" y="447" width="8" height="8" fill="#e0261b"/>
+<text x="552" y="456" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">MÊS 3 × MÊS 1</text>
+<rect x="534" y="475" width="8" height="8" fill="#e0261b"/>
+<text x="552" y="484" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">REUNIÃO DE BALANÇO</text>
+<rect x="40" y="510" width="720" height="36" fill="#e0261b"/>
+<text x="56" y="533" font-family="JetBrains Mono" font-size="14" font-weight="700" letter-spacing="1.5" fill="#111111">DIA 91 → BALANÇO FEITO, COMEÇA O PRÓXIMO CICLO DE 90 DIAS</text>
+</svg>

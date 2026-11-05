@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560">
+  <rect width="800" height="560" fill="#111111"/>
+
+  <!-- cabeçalho -->
+  <text x="40" y="58" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#ece6d9">LANÇAMENTO EM CASCATA</text>
+  <text x="760" y="56" font-family="Instrument Serif" font-style="italic" font-size="22" fill="#9b958a" text-anchor="end">waterfall release</text>
+  <line x1="40" y1="74" x2="760" y2="74" stroke="#2b2926" stroke-width="2" stroke-linecap="square"/>
+
+  <!-- cabeçalho das colunas -->
+  <g font-family="JetBrains Mono" font-size="13" fill="#9b958a" text-anchor="middle">
+    <text x="250" y="106">faixa A</text>
+    <text x="340" y="106">faixa B</text>
+    <text x="430" y="106">faixa C</text>
+    <text x="540" y="106">inéditas</text>
+  </g>
+  <text x="40" y="106" font-family="JetBrains Mono" font-size="13" fill="#9b958a">produto</text>
+  <text x="624" y="106" font-family="JetBrains Mono" font-size="13" fill="#9b958a">o que sai</text>
+
+  <!-- trilho do ISRC da faixa A (atrás das caixas) -->
+  <line x1="250" y1="140" x2="250" y2="418" stroke="#e0261b" stroke-width="6" stroke-linecap="square"/>
+  <line x1="340" y1="216" x2="340" y2="418" stroke="#2b2926" stroke-width="6" stroke-linecap="square"/>
+  <line x1="430" y1="292" x2="430" y2="418" stroke="#2b2926" stroke-width="6" stroke-linecap="square"/>
+
+  <!-- etapa 1 -->
+  <text x="40" y="146" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">SINGLE 1</text>
+  <text x="40" y="166" font-family="JetBrains Mono" font-size="13" fill="#9b958a">UPC 1 · capa 1</text>
+  <rect x="212" y="122" width="76" height="44" fill="#e0261b"/>
+  <text x="250" y="153" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#111111" text-anchor="middle">A</text>
+  <text x="624" y="150" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">A sozinha</text>
+
+  <!-- etapa 2 -->
+  <text x="40" y="222" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">SINGLE 2</text>
+  <text x="40" y="242" font-family="JetBrains Mono" font-size="13" fill="#9b958a">UPC 2 · capa 2</text>
+  <rect x="212" y="198" width="76" height="44" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="250" y="229" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9" text-anchor="middle">A</text>
+  <rect x="302" y="198" width="76" height="44" fill="#e0261b"/>
+  <text x="340" y="229" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#111111" text-anchor="middle">B</text>
+  <text x="624" y="226" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">B nova + A</text>
+
+  <!-- etapa 3 -->
+  <text x="40" y="298" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">SINGLE 3</text>
+  <text x="40" y="318" font-family="JetBrains Mono" font-size="13" fill="#9b958a">UPC 3 · capa 3</text>
+  <rect x="212" y="274" width="76" height="44" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="250" y="305" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9" text-anchor="middle">A</text>
+  <rect x="302" y="274" width="76" height="44" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="340" y="305" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9" text-anchor="middle">B</text>
+  <rect x="392" y="274" width="76" height="44" fill="#e0261b"/>
+  <text x="430" y="305" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#111111" text-anchor="middle">C</text>
+  <text x="624" y="302" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">C nova + B + A</text>
+
+  <!-- etapa 4: álbum -->
+  <rect x="32" y="346" width="736" height="88" fill="none" stroke="#2b2926" stroke-width="2"/>
+  <text x="40" y="380" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="30" fill="#e0261b">ÁLBUM</text>
+  <text x="40" y="402" font-family="JetBrains Mono" font-size="13" fill="#9b958a">UPC 4 · capa do disco</text>
+  <rect x="212" y="368" width="76" height="44" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="250" y="399" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9" text-anchor="middle">A</text>
+  <rect x="302" y="368" width="76" height="44" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="340" y="399" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9" text-anchor="middle">B</text>
+  <rect x="392" y="368" width="76" height="44" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="430" y="399" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9" text-anchor="middle">C</text>
+  <rect x="482" y="368" width="116" height="44" fill="#e0261b"/>
+  <text x="540" y="396" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#111111" text-anchor="middle">+ INÉDITAS</text>
+  <text x="624" y="386" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">disco completo</text>
+  <text x="624" y="406" font-family="JetBrains Mono" font-size="13" fill="#9b958a">+ faixa foco</text>
+
+  <!-- leitura do trilho -->
+  <path d="M250 434 L250 462 L290 462" fill="none" stroke="#e0261b" stroke-width="3" stroke-linecap="square"/>
+  <text x="300" y="467" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#e0261b">mesmo ISRC, mesmo master, mesmo título: um contador só</text>
+
+  <!-- legenda -->
+  <line x1="40" y1="490" x2="760" y2="490" stroke="#2b2926" stroke-width="2" stroke-linecap="square"/>
+  <rect x="40" y="506" width="18" height="18" fill="#e0261b"/>
+  <text x="68" y="520" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">faixa nova: a novidade pros seguidores</text>
+  <rect x="430" y="506" width="18" height="18" fill="#111111" stroke="#ece6d9" stroke-width="2"/>
+  <text x="458" y="520" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">faixa antiga: vai de carona</text>
+  <text x="40" y="546" font-family="JetBrains Mono" font-size="13" fill="#9b958a">qualquer mudança no áudio, no título ou no nome do artista pode zerar o contador.</text>
+</svg>

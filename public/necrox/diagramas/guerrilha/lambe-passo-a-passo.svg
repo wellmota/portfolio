@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430">
+  <rect width="800" height="430" fill="#111111"/>
+  <rect x="40" y="30" width="56" height="8" fill="#e0261b"/>
+  <text x="40" y="86" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="54" fill="#ece6d9">LAMBE-LAMBE EM 5 PASSOS</text>
+  <text x="40" y="112" font-family="JetBrains Mono" font-size="14" fill="#9b958a" letter-spacing="1">SÓ EM ESPAÇO AUTORIZADO · COLA DE FARINHA</text>
+  <line x1="40" y1="130" x2="760" y2="130" stroke="#2b2926" stroke-width="2"/>
+
+  <!-- 01 autorização -->
+  <rect x="42" y="152" width="108" height="62" fill="none" stroke="#ece6d9" stroke-width="3"/>
+  <polygon points="58,214 80,214 56,236" fill="#ece6d9"/>
+  <polyline points="70,182 88,200 122,166" fill="none" stroke="#e0261b" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
+
+  <!-- 02 cola na superfície -->
+  <rect x="186" y="150" width="112" height="94" fill="none" stroke="#9b958a" stroke-width="2"/>
+  <g stroke="#9b958a" stroke-width="2">
+    <line x1="204" y1="196" x2="204" y2="236"/>
+    <line x1="218" y1="196" x2="218" y2="228"/>
+    <line x1="232" y1="196" x2="232" y2="238"/>
+    <line x1="246" y1="196" x2="246" y2="226"/>
+    <line x1="260" y1="196" x2="260" y2="234"/>
+  </g>
+  <rect x="196" y="168" width="74" height="24" fill="#ece6d9"/>
+  <polyline points="233,168 233,158 288,158 288,240" fill="none" stroke="#ece6d9" stroke-width="4" stroke-linecap="square"/>
+
+  <!-- 03 cartaz do centro para fora -->
+  <rect x="344" y="156" width="80" height="88" fill="#ece6d9"/>
+  <polygon points="366,166 402,166 384,194" fill="#070707"/>
+  <g stroke="#e0261b" stroke-width="4" stroke-linecap="square">
+    <line x1="384" y1="214" x2="336" y2="214"/>
+    <line x1="384" y1="214" x2="432" y2="214"/>
+    <line x1="384" y1="206" x2="384" y2="252"/>
+  </g>
+  <polygon points="336,206 324,214 336,222" fill="#e0261b"/>
+  <polygon points="432,206 444,214 432,222" fill="#e0261b"/>
+  <polygon points="376,252 384,264 392,252" fill="#e0261b"/>
+
+  <!-- 04 cola por cima -->
+  <rect x="488" y="156" width="80" height="88" fill="#ece6d9"/>
+  <polygon points="510,166 546,166 528,194" fill="#070707"/>
+  <rect x="478" y="200" width="100" height="22" fill="#e0261b"/>
+  <polyline points="528,222 528,236 590,236 590,252" fill="none" stroke="#ece6d9" stroke-width="4" stroke-linecap="square"/>
+
+  <!-- 05 retire depois -->
+  <polygon points="632,156 712,156 712,210 680,244 632,244" fill="#ece6d9"/>
+  <polygon points="712,210 680,244 686,216" fill="#9b958a"/>
+  <polygon points="654,166 690,166 672,194" fill="#070707"/>
+  <line x1="722" y1="226" x2="744" y2="248" stroke="#e0261b" stroke-width="5" stroke-linecap="square"/>
+  <polygon points="752,234 752,256 730,256" fill="#e0261b"/>
+
+  <!-- rótulos -->
+  <g font-family="JetBrains Mono" font-size="13" fill="#9b958a">
+    <text x="40" y="290">01</text>
+    <text x="184" y="290">02</text>
+    <text x="328" y="290">03</text>
+    <text x="472" y="290">04</text>
+    <text x="616" y="290">05</text>
+  </g>
+  <g font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24">
+    <text x="64" y="291" fill="#ece6d9">AUTORIZE</text>
+    <text x="208" y="291" fill="#ece6d9">COLA</text>
+    <text x="352" y="291" fill="#ece6d9">CARTAZ</text>
+    <text x="496" y="291" fill="#ece6d9">MAIS COLA</text>
+    <text x="640" y="291" fill="#e0261b">RETIRE</text>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="40" y="318">peça por escrito</text>
+    <text x="40" y="336">ao dono do espaço</text>
+    <text x="184" y="318">rolo ou trincha</text>
+    <text x="184" y="336">na superfície</text>
+    <text x="328" y="318">alise do centro</text>
+    <text x="328" y="336">para as bordas</text>
+    <text x="472" y="318">outra camada</text>
+    <text x="472" y="336">por cima do papel</text>
+    <text x="616" y="318">show passou,</text>
+    <text x="616" y="336">cartaz sai</text>
+  </g>
+
+  <line x1="40" y1="372" x2="760" y2="372" stroke="#2b2926" stroke-width="2"/>
+  <text x="40" y="402" font-family="Instrument Serif" font-style="italic" font-size="18" fill="#9b958a">Grude: 1 xícara de farinha para 4 a 5 de água. Use frio e faça só o que vai gastar.</text>
+</svg>

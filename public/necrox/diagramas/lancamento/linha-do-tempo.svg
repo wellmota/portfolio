@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 530">
+  <rect width="800" height="530" fill="#111111"/>
+
+  <!-- cabeçalho -->
+  <text x="40" y="58" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#ece6d9">LINHA DO TEMPO</text>
+  <text x="760" y="56" font-family="JetBrains Mono" font-size="13" fill="#9b958a" text-anchor="end">semana 0 = sexta do lançamento</text>
+  <line x1="40" y1="74" x2="760" y2="74" stroke="#2b2926" stroke-width="2" stroke-linecap="square"/>
+
+  <!-- marco do lançamento -->
+  <text x="508" y="96" font-family="JetBrains Mono" font-size="13" fill="#9b958a" text-anchor="middle">sexta-feira</text>
+  <rect x="456" y="104" width="104" height="46" fill="#e0261b"/>
+  <text x="508" y="137" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="28" fill="#111111" text-anchor="middle">LANÇA</text>
+  <line x1="508" y1="150" x2="508" y2="230" stroke="#e0261b" stroke-width="4" stroke-linecap="square"/>
+
+  <!-- fases -->
+  <rect x="40" y="168" width="208" height="30" fill="none" stroke="#ece6d9" stroke-width="2"/>
+  <text x="52" y="188" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#ece6d9">PREPARAR · -8 a -5</text>
+  <rect x="264" y="168" width="208" height="30" fill="#ece6d9"/>
+  <text x="276" y="188" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#070707">AQUECER · -4 a -1</text>
+  <rect x="544" y="168" width="208" height="30" fill="none" stroke="#ece6d9" stroke-width="2"/>
+  <text x="556" y="188" font-family="JetBrains Mono" font-size="13" font-weight="700" fill="#ece6d9">MANTER VIVO · +1 a +4</text>
+
+  <!-- eixo -->
+  <line x1="40" y1="230" x2="760" y2="230" stroke="#ece6d9" stroke-width="3" stroke-linecap="square"/>
+  <g stroke="#ece6d9" stroke-width="2" stroke-linecap="square">
+    <line x1="60" y1="222" x2="60" y2="238"/>
+    <line x1="116" y1="222" x2="116" y2="238"/>
+    <line x1="172" y1="222" x2="172" y2="238"/>
+    <line x1="228" y1="222" x2="228" y2="238"/>
+    <line x1="284" y1="222" x2="284" y2="238"/>
+    <line x1="340" y1="222" x2="340" y2="238"/>
+    <line x1="396" y1="222" x2="396" y2="238"/>
+    <line x1="452" y1="222" x2="452" y2="238"/>
+    <line x1="564" y1="222" x2="564" y2="238"/>
+    <line x1="620" y1="222" x2="620" y2="238"/>
+    <line x1="676" y1="222" x2="676" y2="238"/>
+    <line x1="732" y1="222" x2="732" y2="238"/>
+  </g>
+  <line x1="508" y1="214" x2="508" y2="246" stroke="#e0261b" stroke-width="4" stroke-linecap="square"/>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9" text-anchor="middle">
+    <text x="60" y="262">-8</text>
+    <text x="116" y="262">-7</text>
+    <text x="172" y="262">-6</text>
+    <text x="228" y="262">-5</text>
+    <text x="284" y="262">-4</text>
+    <text x="340" y="262">-3</text>
+    <text x="396" y="262">-2</text>
+    <text x="452" y="262">-1</text>
+    <text x="508" y="262" fill="#e0261b" font-weight="700">0</text>
+    <text x="564" y="262">+1</text>
+    <text x="620" y="262">+2</text>
+    <text x="676" y="262">+3</text>
+    <text x="732" y="262">+4</text>
+  </g>
+
+  <!-- divisórias -->
+  <g stroke="#2b2926" stroke-width="2" stroke-linecap="square">
+    <line x1="256" y1="284" x2="256" y2="474"/>
+    <line x1="508" y1="284" x2="508" y2="474"/>
+  </g>
+
+  <!-- tarefas -->
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="40" y="304"><tspan fill="#9b958a">-8</tspan>  master e capa finais</text>
+    <text x="40" y="332"><tspan fill="#9b958a">-8</tspan>  fotos de divulgação</text>
+    <text x="40" y="360"><tspan fill="#9b958a">-7</tspan>  bios, release, lista</text>
+    <text x="40" y="388"><tspan fill="#9b958a">-6</tspan>  envio ao distribuidor</text>
+    <text x="40" y="416"><tspan fill="#9b958a">-6</tspan>  marcar show</text>
+    <text x="40" y="444"><tspan fill="#9b958a">-5</tspan>  EPK e pré-venda</text>
+
+    <text x="264" y="304"><tspan fill="#9b958a">-4</tspan>  pitch no Spotify</text>
+    <text x="264" y="332"><tspan fill="#9b958a">-4</tspan>  primeiro teaser</text>
+    <text x="264" y="360"><tspan fill="#9b958a">-4</tspan>  e-mails pra imprensa</text>
+    <text x="264" y="388"><tspan fill="#9b958a">-3</tspan>  anúncio e pré-save</text>
+    <text x="264" y="416"><tspan fill="#9b958a">-2</tspan>  Canvas e Premiere</text>
+    <text x="264" y="444"><tspan fill="#9b958a">-2</tspan>  follow-up imprensa</text>
+    <text x="264" y="472" fill="#e0261b" font-weight="700">-1  prazo final do pitch</text>
+
+    <text x="544" y="304"><tspan fill="#9b958a">+1</tspan>  show de lançamento</text>
+    <text x="544" y="332"><tspan fill="#9b958a">+1</tspan>  curadores de playlist</text>
+    <text x="544" y="360"><tspan fill="#9b958a">+2</tspan>  bastidores</text>
+    <text x="544" y="388"><tspan fill="#9b958a">+3</tspan>  ao vivo ou acústico</text>
+    <text x="544" y="416"><tspan fill="#9b958a">+3</tspan>  resenhas</text>
+    <text x="544" y="444"><tspan fill="#9b958a">+4</tspan>  pós-mortem</text>
+  </g>
+
+  <!-- rodapé -->
+  <line x1="40" y1="492" x2="760" y2="492" stroke="#2b2926" stroke-width="2" stroke-linecap="square"/>
+  <text x="40" y="516" font-family="JetBrains Mono" font-size="13" fill="#9b958a">master e capa prontos na semana -8. se não estiverem, mude a data, não o plano.</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
+  <rect width="800" height="520" fill="#111111"/>
+  <g stroke="#2b2926" stroke-width="1">
+    <line x1="40" y1="120" x2="760" y2="120"/>
+    <line x1="40" y1="390" x2="760" y2="390"/>
+  </g>
+
+  <text x="40" y="40" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="1">TROCA DE DATAS · O EXEMPLO DO GUIA</text>
+  <text x="40" y="84" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="40" fill="#ece6d9">UMA DATA AQUI, UMA DATA LÁ</text>
+  <rect x="40" y="96" width="96" height="6" fill="#e0261b"/>
+
+  <!-- cidades -->
+  <rect x="90" y="246" width="40" height="40" fill="#ece6d9"/>
+  <rect x="580" y="246" width="40" height="40" fill="#ece6d9"/>
+  <rect x="682" y="150" width="32" height="32" fill="none" stroke="#ece6d9" stroke-width="3"/>
+
+  <text x="110" y="320" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="28" fill="#ece6d9">CAMPINAS</text>
+  <text x="110" y="341" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#9b958a">Ferrugem Sônica</text>
+  <text x="600" y="320" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="28" fill="#ece6d9">JUIZ DE FORA</text>
+  <text x="600" y="341" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#9b958a">Lâmina Turva</text>
+  <text x="760" y="138" text-anchor="end" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="24" fill="#ece6d9">BELO HORIZONTE</text>
+  <text x="760" y="204" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">3ª data da rota</text>
+
+  <!-- março: Lâmina vai a Campinas -->
+  <line x1="576" y1="256" x2="146" y2="256" stroke="#ece6d9" stroke-width="3" stroke-linecap="square"/>
+  <polygon points="134,256 147,249 147,263" fill="#ece6d9"/>
+  <text x="355" y="242" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">MARÇO · Lâmina Turva toca em Campinas</text>
+
+  <!-- maio: Ferrugem vai a Juiz de Fora -->
+  <line x1="134" y1="276" x2="564" y2="276" stroke="#e0261b" stroke-width="3" stroke-linecap="square"/>
+  <polygon points="576,276 563,269 563,283" fill="#e0261b"/>
+  <text x="355" y="302" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#e0261b">MAIO · Ferrugem Sônica toca em Juiz de Fora</text>
+
+  <!-- contato em BH -->
+  <polyline points="610,244 610,166 670,166" fill="none" stroke="#ece6d9" stroke-width="2" stroke-dasharray="6 5"/>
+  <polygon points="680,166 669,160 669,172" fill="#ece6d9"/>
+
+  <!-- o que a banda da casa faz -->
+  <text x="40" y="420" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="1">QUEM RECEBE A BANDA DE FORA</text>
+  <g fill="#070707" stroke="#ece6d9" stroke-width="2">
+    <rect x="40" y="434" width="168" height="44"/>
+    <rect x="224" y="434" width="168" height="44"/>
+    <rect x="408" y="434" width="168" height="44"/>
+    <rect x="592" y="434" width="168" height="44"/>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9" text-anchor="middle">
+    <text x="124" y="461">produz a noite</text>
+    <text x="308" y="461">abre e leva público</text>
+    <text x="492" y="461">hospeda em casa</text>
+    <text x="676" y="461">divide a porta</text>
+  </g>
+  <text x="40" y="504" font-family="JetBrains Mono" font-size="13" fill="#9b958a">depois, a outra banda devolve tudo na cidade dela</text>
+</svg>

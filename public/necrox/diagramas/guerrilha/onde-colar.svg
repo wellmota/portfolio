@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#111111"/>
+  <rect x="40" y="30" width="56" height="8" fill="#e0261b"/>
+  <text x="40" y="86" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="54" fill="#ece6d9">ONDE COLAR, ONDE NÃO</text>
+  <text x="40" y="112" font-family="JetBrains Mono" font-size="14" fill="#e0261b" letter-spacing="1">MAPA SIMPLIFICADO · CONSULTE SUA PREFEITURA</text>
+
+  <!-- corte da cidade -->
+  <line x1="40" y1="236" x2="760" y2="236" stroke="#9b958a" stroke-width="2"/>
+  <!-- A: dentro do espaço -->
+  <rect x="56" y="148" width="194" height="88" fill="none" stroke="#ece6d9" stroke-width="3"/>
+  <polygon points="56,148 153,132 250,148" fill="none" stroke="#ece6d9" stroke-width="3" stroke-linejoin="miter"/>
+  <rect x="84" y="162" width="40" height="54" fill="#ece6d9"/>
+  <polygon points="92,172 116,172 104,192" fill="#070707"/>
+  <rect x="134" y="162" width="40" height="54" fill="#ece6d9"/>
+  <rect x="140" y="170" width="28" height="5" fill="#070707"/>
+  <rect x="140" y="180" width="20" height="5" fill="#070707"/>
+  <rect x="184" y="174" width="50" height="62" fill="none" stroke="#9b958a" stroke-width="2"/>
+  <!-- B: fachada voltada para a rua -->
+  <rect x="300" y="148" width="200" height="88" fill="none" stroke="#ece6d9" stroke-width="3"/>
+  <rect x="440" y="180" width="40" height="56" fill="none" stroke="#9b958a" stroke-width="2"/>
+  <rect x="332" y="164" width="48" height="60" fill="none" stroke="#ece6d9" stroke-width="3" stroke-dasharray="8 6"/>
+  <text x="356" y="206" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#ece6d9">?</text>
+  <!-- C: rua e patrimônio -->
+  <line x1="566" y1="236" x2="566" y2="146" stroke="#ece6d9" stroke-width="5"/>
+  <line x1="566" y1="148" x2="594" y2="148" stroke="#ece6d9" stroke-width="5"/>
+  <rect x="588" y="150" width="12" height="8" fill="#ece6d9"/>
+  <rect x="638" y="204" width="8" height="32" fill="#ece6d9"/>
+  <polygon points="616,208 668,208 642,148" fill="#ece6d9"/>
+  <rect x="696" y="198" width="52" height="38" fill="#ece6d9"/>
+  <rect x="712" y="158" width="20" height="40" fill="#ece6d9"/>
+  <rect x="716" y="146" width="12" height="12" fill="#ece6d9"/>
+  <line x1="552" y1="226" x2="756" y2="140" stroke="#e0261b" stroke-width="7"/>
+
+  <!-- faixas de status -->
+  <rect x="40" y="254" width="226" height="34" fill="#ece6d9"/>
+  <rect x="288" y="255.5" width="223" height="31" fill="none" stroke="#ece6d9" stroke-width="3"/>
+  <rect x="534" y="254" width="226" height="34" fill="#e0261b"/>
+  <g font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="21">
+    <text x="52" y="279" fill="#070707">PODE, COM AUTORIZAÇÃO</text>
+    <text x="300" y="279" fill="#ece6d9">DEPENDE DA CIDADE</text>
+    <text x="546" y="279" fill="#ece6d9">NÃO COLE</text>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="0.5">
+    <text x="40" y="312">DENTRO DO ESPAÇO</text>
+    <text x="288" y="312">VOLTADO PARA A RUA</text>
+    <text x="534" y="312">RUA E PATRIMÔNIO</text>
+  </g>
+
+  <!-- listas -->
+  <g fill="#ece6d9">
+    <rect x="40" y="331" width="7" height="7"/>
+    <rect x="40" y="357" width="7" height="7"/>
+    <rect x="40" y="400" width="7" height="7"/>
+    <rect x="40" y="443" width="7" height="7"/>
+    <rect x="40" y="486" width="7" height="7"/>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="56" y="338">mural de casa de show</text>
+    <text x="56" y="364">quadro de avisos de</text>
+    <text x="56" y="381">loja, sebo ou estúdio</text>
+    <text x="56" y="407">potinho de adesivos</text>
+    <text x="56" y="424">no balcão</text>
+    <text x="56" y="450">parede interna de</text>
+    <text x="56" y="467">loja parceira</text>
+    <text x="56" y="493">merch, case e cenário</text>
+  </g>
+
+  <g fill="none" stroke="#ece6d9" stroke-width="2">
+    <rect x="289" y="332" width="6" height="6"/>
+    <rect x="289" y="375" width="6" height="6"/>
+    <rect x="289" y="418" width="6" height="6"/>
+    <rect x="289" y="478" width="6" height="6"/>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="304" y="338">painel ou muro liberado</text>
+    <text x="304" y="355">para cultura: confirme</text>
+    <text x="304" y="381">tapume e banca: veja o</text>
+    <text x="304" y="398">código de posturas</text>
+    <text x="304" y="424">muro privado para a rua:</text>
+    <text x="304" y="441" fill="#e0261b">em SP, proibido mesmo</text>
+    <text x="304" y="458" fill="#e0261b">com permissão do dono</text>
+    <text x="304" y="484">estêncil em parede: só</text>
+    <text x="304" y="501">com autorização escrita</text>
+  </g>
+
+  <g stroke="#e0261b" stroke-width="2.5" stroke-linecap="square">
+    <path d="M535,332 L541,338 M541,332 L535,338"/>
+    <path d="M535,358 L541,364 M541,358 L535,364"/>
+    <path d="M535,384 L541,390 M541,384 L535,390"/>
+    <path d="M535,427 L541,433 M541,427 L535,433"/>
+    <path d="M535,453 L541,459 M541,453 L535,459"/>
+    <path d="M535,496 L541,502 M541,496 L535,502"/>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="550" y="338">poste e árvore</text>
+    <text x="550" y="364">ponte, viaduto, túnel</text>
+    <text x="550" y="390">monumento, bem tombado,</text>
+    <text x="550" y="407">escola, igreja histórica</text>
+    <text x="550" y="433">sinalização de trânsito</text>
+    <text x="550" y="459">carro, casa ou comércio</text>
+    <text x="550" y="476">sem permissão</text>
+    <text x="550" y="502" fill="#e0261b">pichar é crime</text>
+    <text x="550" y="519" fill="#e0261b">(Lei 9.605/98, art. 65)</text>
+  </g>
+
+  <line x1="40" y1="540" x2="760" y2="540" stroke="#2b2926" stroke-width="2"/>
+  <text x="40" y="562" font-family="JetBrains Mono" font-size="13" fill="#9b958a">SIMPLIFICADO. AS REGRAS MUDAM DE CIDADE PARA CIDADE: CONSULTE SUA PREFEITURA.</text>
+  <text x="40" y="582" font-family="JetBrains Mono" font-size="13" fill="#9b958a">BASE: LEI 9.605/1998, LEI 12.408/2011 E LEI CIDADE LIMPA (SP, 14.223/2006).</text>
+</svg>

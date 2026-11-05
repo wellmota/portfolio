@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#111111"/>
+
+  <!-- cabeçalho -->
+  <text x="20" y="42" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#ece6d9">OS 4 PRINCÍPIOS</text>
+  <text x="780" y="42" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">ROBIN WILLIAMS · THE NON-DESIGNER'S DESIGN BOOK</text>
+  <rect x="20" y="54" width="760" height="4" fill="#e0261b"/>
+
+  <!-- 01 CONTRASTE -->
+  <g transform="translate(20 72)">
+    <rect x="0" y="0" width="375" height="255" fill="none" stroke="#2b2926" stroke-width="2"/>
+    <text x="16" y="30" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#ece6d9"><tspan fill="#e0261b">01</tspan><tspan dx="8">CONTRASTE</tspan></text>
+    <text x="16" y="50" font-family="JetBrains Mono" font-size="13" fill="#9b958a">diferente? então MUITO diferente</text>
+    <!-- antes -->
+    <rect x="30" y="64" width="140" height="160" fill="none" stroke="#9b958a" stroke-width="1.5"/>
+    <text x="100" y="106" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">COVA RASA</text>
+    <text x="100" y="136" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="20" fill="#ece6d9">SEX 14.03</text>
+    <text x="100" y="164" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="20" fill="#ece6d9">BAR DO ZÉ</text>
+    <text x="100" y="192" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="19" fill="#ece6d9">R$ 20</text>
+    <!-- seta -->
+    <path d="M178 144 H194" stroke="#e0261b" stroke-width="3" stroke-linecap="square"/>
+    <path d="M192 137 L201 144 L192 151 Z" fill="#e0261b"/>
+    <!-- depois -->
+    <rect x="205" y="64" width="140" height="160" fill="none" stroke="#ece6d9" stroke-width="1.5"/>
+    <text x="217" y="122" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="54" fill="#ece6d9">COVA</text>
+    <text x="217" y="172" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="54" fill="#e0261b">RASA</text>
+    <rect x="218" y="186" width="70" height="6" fill="#9b958a"/>
+    <rect x="218" y="198" width="52" height="6" fill="#9b958a"/>
+    <rect x="218" y="210" width="60" height="6" fill="#9b958a"/>
+    <text x="100" y="246" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">ANTES</text>
+    <text x="275" y="246" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="2">DEPOIS</text>
+  </g>
+
+  <!-- 02 REPETIÇÃO -->
+  <g transform="translate(405 72)">
+    <rect x="0" y="0" width="375" height="255" fill="none" stroke="#2b2926" stroke-width="2"/>
+    <text x="16" y="30" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#ece6d9"><tspan fill="#e0261b">02</tspan><tspan dx="8">REPETIÇÃO</tspan></text>
+    <text x="16" y="50" font-family="JetBrains Mono" font-size="13" fill="#9b958a">mesmo elemento, mesma regra</text>
+    <!-- antes: cada data com um estilo -->
+    <rect x="30" y="64" width="140" height="160" fill="none" stroke="#9b958a" stroke-width="1.5"/>
+    <circle cx="50" cy="96" r="6" fill="#e0261b"/>
+    <rect x="62" y="92" width="70" height="8" fill="#ece6d9"/>
+    <rect x="72" y="122" width="10" height="10" fill="none" stroke="#ece6d9" stroke-width="2"/>
+    <rect x="88" y="121" width="56" height="12" fill="#9b958a"/>
+    <path d="M44 166 L52 152 L60 166 Z" fill="#ece6d9"/>
+    <rect x="66" y="157" width="84" height="5" fill="#ece6d9"/>
+    <rect x="70" y="190" width="60" height="10" fill="#e0261b"/>
+    <!-- seta -->
+    <path d="M178 144 H194" stroke="#e0261b" stroke-width="3" stroke-linecap="square"/>
+    <path d="M192 137 L201 144 L192 151 Z" fill="#e0261b"/>
+    <!-- depois: tudo igual -->
+    <rect x="205" y="64" width="140" height="160" fill="none" stroke="#ece6d9" stroke-width="1.5"/>
+    <rect x="205" y="64" width="140" height="20" fill="#ece6d9"/>
+    <rect x="219" y="105" width="10" height="10" fill="#e0261b"/>
+    <rect x="237" y="106" width="84" height="8" fill="#ece6d9"/>
+    <rect x="219" y="133" width="10" height="10" fill="#e0261b"/>
+    <rect x="237" y="134" width="84" height="8" fill="#ece6d9"/>
+    <rect x="219" y="161" width="10" height="10" fill="#e0261b"/>
+    <rect x="237" y="162" width="84" height="8" fill="#ece6d9"/>
+    <rect x="219" y="189" width="10" height="10" fill="#e0261b"/>
+    <rect x="237" y="190" width="84" height="8" fill="#ece6d9"/>
+    <text x="100" y="246" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">ANTES</text>
+    <text x="275" y="246" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="2">DEPOIS</text>
+  </g>
+
+  <!-- 03 ALINHAMENTO -->
+  <g transform="translate(20 337)">
+    <rect x="0" y="0" width="375" height="255" fill="none" stroke="#2b2926" stroke-width="2"/>
+    <text x="16" y="30" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#ece6d9"><tspan fill="#e0261b">03</tspan><tspan dx="8">ALINHAMENTO</tspan></text>
+    <text x="16" y="50" font-family="JetBrains Mono" font-size="13" fill="#9b958a">tudo preso a um eixo visível</text>
+    <!-- antes: posições soltas -->
+    <rect x="30" y="64" width="140" height="160" fill="none" stroke="#9b958a" stroke-width="1.5"/>
+    <rect x="52" y="84" width="96" height="18" fill="#ece6d9"/>
+    <rect x="78" y="118" width="58" height="8" fill="#ece6d9"/>
+    <rect x="42" y="138" width="48" height="8" fill="#ece6d9"/>
+    <rect x="96" y="158" width="62" height="8" fill="#ece6d9"/>
+    <rect x="60" y="182" width="70" height="8" fill="#e0261b"/>
+    <rect x="86" y="202" width="40" height="8" fill="#9b958a"/>
+    <!-- seta -->
+    <path d="M178 144 H194" stroke="#e0261b" stroke-width="3" stroke-linecap="square"/>
+    <path d="M192 137 L201 144 L192 151 Z" fill="#e0261b"/>
+    <!-- depois: eixo à esquerda -->
+    <rect x="205" y="64" width="140" height="160" fill="none" stroke="#ece6d9" stroke-width="1.5"/>
+    <path d="M221 70 V218" stroke="#e0261b" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <rect x="221" y="84" width="104" height="18" fill="#ece6d9"/>
+    <rect x="221" y="118" width="58" height="8" fill="#ece6d9"/>
+    <rect x="221" y="138" width="48" height="8" fill="#ece6d9"/>
+    <rect x="221" y="158" width="76" height="8" fill="#ece6d9"/>
+    <rect x="221" y="182" width="70" height="8" fill="#e0261b"/>
+    <rect x="221" y="202" width="40" height="8" fill="#9b958a"/>
+    <text x="100" y="246" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">ANTES</text>
+    <text x="275" y="246" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="2">DEPOIS</text>
+  </g>
+
+  <!-- 04 PROXIMIDADE -->
+  <g transform="translate(405 337)">
+    <rect x="0" y="0" width="375" height="255" fill="none" stroke="#2b2926" stroke-width="2"/>
+    <text x="16" y="30" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#ece6d9"><tspan fill="#e0261b">04</tspan><tspan dx="8">PROXIMIDADE</tspan></text>
+    <text x="16" y="50" font-family="JetBrains Mono" font-size="13" fill="#9b958a">o que é junto fica junto</text>
+    <!-- antes: espaçamento igual -->
+    <rect x="30" y="64" width="140" height="160" fill="none" stroke="#9b958a" stroke-width="1.5"/>
+    <rect x="46" y="82" width="100" height="10" fill="#ece6d9"/>
+    <rect x="46" y="102" width="80" height="10" fill="#ece6d9"/>
+    <rect x="46" y="122" width="64" height="8" fill="#ece6d9"/>
+    <rect x="46" y="142" width="84" height="8" fill="#ece6d9"/>
+    <rect x="46" y="162" width="56" height="8" fill="#ece6d9"/>
+    <rect x="46" y="182" width="72" height="8" fill="#9b958a"/>
+    <rect x="46" y="202" width="60" height="8" fill="#9b958a"/>
+    <!-- seta -->
+    <path d="M178 144 H194" stroke="#e0261b" stroke-width="3" stroke-linecap="square"/>
+    <path d="M192 137 L201 144 L192 151 Z" fill="#e0261b"/>
+    <!-- depois: três blocos -->
+    <rect x="205" y="64" width="140" height="160" fill="none" stroke="#ece6d9" stroke-width="1.5"/>
+    <rect x="225" y="80" width="100" height="10" fill="#ece6d9"/>
+    <rect x="225" y="94" width="80" height="10" fill="#ece6d9"/>
+    <path d="M215 132 V166" stroke="#e0261b" stroke-width="3" stroke-linecap="square"/>
+    <rect x="225" y="132" width="64" height="8" fill="#ece6d9"/>
+    <rect x="225" y="145" width="84" height="8" fill="#ece6d9"/>
+    <rect x="225" y="158" width="56" height="8" fill="#ece6d9"/>
+    <rect x="225" y="192" width="72" height="8" fill="#9b958a"/>
+    <rect x="225" y="205" width="60" height="8" fill="#9b958a"/>
+    <text x="100" y="246" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">ANTES</text>
+    <text x="275" y="246" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#e0261b" letter-spacing="2">DEPOIS</text>
+  </g>
+</svg>

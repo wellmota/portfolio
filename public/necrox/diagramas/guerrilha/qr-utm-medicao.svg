@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 590">
+  <rect width="800" height="590" fill="#111111"/>
+  <rect x="40" y="30" width="56" height="8" fill="#e0261b"/>
+  <text x="40" y="86" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="54" fill="#ece6d9">DO CARTAZ AO NÚMERO</text>
+  <text x="40" y="112" font-family="JetBrains Mono" font-size="14" fill="#9b958a" letter-spacing="1">MEDIÇÃO COM QR CODE + UTM</text>
+  <line x1="40" y1="130" x2="760" y2="130" stroke="#2b2926" stroke-width="2"/>
+
+  <!-- 01 cartaz com QR -->
+  <rect x="60" y="148" width="84" height="112" fill="none" stroke="#ece6d9" stroke-width="3"/>
+  <polygon points="78,162 126,162 102,200" fill="#ece6d9"/>
+  <rect x="74" y="210" width="40" height="5" fill="#9b958a"/>
+  <rect x="74" y="220" width="28" height="5" fill="#9b958a"/>
+  <rect x="112" y="226" width="26" height="26" fill="#ece6d9"/>
+  <rect x="115" y="229" width="8" height="8" fill="#070707"/>
+  <rect x="127" y="229" width="8" height="8" fill="#070707"/>
+  <rect x="115" y="241" width="8" height="8" fill="#070707"/>
+  <rect x="128" y="242" width="5" height="5" fill="#070707"/>
+
+  <!-- seta -->
+  <line x1="196" y1="204" x2="296" y2="204" stroke="#ece6d9" stroke-width="3"/>
+  <polygon points="296,196 310,204 296,212" fill="#ece6d9"/>
+
+  <!-- 02 celular -->
+  <rect x="340" y="148" width="64" height="112" fill="none" stroke="#ece6d9" stroke-width="3"/>
+  <line x1="362" y1="250" x2="382" y2="250" stroke="#ece6d9" stroke-width="3"/>
+  <rect x="352" y="172" width="40" height="40" fill="#ece6d9"/>
+  <rect x="356" y="176" width="12" height="12" fill="#070707"/>
+  <rect x="376" y="176" width="12" height="12" fill="#070707"/>
+  <rect x="356" y="196" width="12" height="12" fill="#070707"/>
+  <rect x="378" y="198" width="7" height="7" fill="#070707"/>
+  <line x1="346" y1="192" x2="398" y2="192" stroke="#e0261b" stroke-width="3"/>
+
+  <!-- seta -->
+  <line x1="436" y1="204" x2="536" y2="204" stroke="#ece6d9" stroke-width="3"/>
+  <polygon points="536,196 550,204 536,212" fill="#ece6d9"/>
+
+  <!-- 03 página -->
+  <rect x="580" y="148" width="150" height="112" fill="none" stroke="#ece6d9" stroke-width="3"/>
+  <rect x="580" y="148" width="150" height="18" fill="#ece6d9"/>
+  <rect x="588" y="154" width="6" height="6" fill="#070707"/>
+  <rect x="598" y="154" width="6" height="6" fill="#070707"/>
+  <polygon points="596,180 632,180 614,210" fill="#ece6d9"/>
+  <rect x="644" y="182" width="72" height="6" fill="#9b958a"/>
+  <rect x="644" y="194" width="52" height="6" fill="#9b958a"/>
+  <rect x="644" y="224" width="72" height="24" fill="#e0261b"/>
+
+  <!-- rótulos -->
+  <g font-family="JetBrains Mono" font-size="13" fill="#9b958a">
+    <text x="60" y="284">01</text>
+    <text x="340" y="284">02</text>
+    <text x="580" y="284">03</text>
+  </g>
+  <g font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">
+    <text x="84" y="285">CARTAZ OU ADESIVO</text>
+    <text x="364" y="285">LEITURA</text>
+    <text x="604" y="285">PÁGINA</text>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="60" y="306">um QR por lugar</text>
+    <text x="340" y="306">o celular abre o link</text>
+    <text x="580" y="306">o painel registra</text>
+    <text x="580" y="323">de onde veio a visita</text>
+  </g>
+
+  <!-- link decomposto -->
+  <line x1="40" y1="346" x2="760" y2="346" stroke="#2b2926" stroke-width="2"/>
+  <g font-family="JetBrains Mono" font-size="14">
+    <text x="40" y="380" fill="#9b958a">suabanda.com/ep?</text>
+    <text x="174.4" y="380" fill="#e0261b">utm_source=loja-centro</text>
+    <text x="359.2" y="380" fill="#ece6d9">&amp;utm_medium=adesivo</text>
+    <text x="518.8" y="380" fill="#ece6d9">&amp;utm_campaign=ep-2026</text>
+  </g>
+  <g fill="none" stroke-width="2" stroke-linecap="square">
+    <path d="M176,390 L176,398 L356,398 L356,390" stroke="#e0261b"/>
+    <path d="M370,390 L370,398 L514,398 L514,390" stroke="#ece6d9"/>
+    <path d="M530,390 L530,398 L692,398 L692,390" stroke="#ece6d9"/>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13">
+    <text x="176" y="420" fill="#e0261b">ONDE: o lugar</text>
+    <text x="370" y="420" fill="#ece6d9">O QUÊ: o tipo</text>
+    <text x="530" y="420" fill="#ece6d9">QUAL: a campanha</text>
+  </g>
+
+  <!-- painel -->
+  <line x1="40" y1="442" x2="760" y2="442" stroke="#2b2926" stroke-width="2"/>
+  <text x="40" y="468" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="22" fill="#ece6d9">04 PAINEL: VISITAS POR LUGAR</text>
+  <text x="760" y="468" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">EXEMPLO FICTÍCIO</text>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="40" y="500">loja-centro</text>
+    <text x="40" y="526">feira-vinil</text>
+    <text x="40" y="552">zine-outubro</text>
+  </g>
+  <rect x="160" y="488" width="294" height="16" fill="#e0261b"/>
+  <rect x="160" y="514" width="189" height="16" fill="#ece6d9"/>
+  <rect x="160" y="540" width="77" height="16" fill="#ece6d9"/>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="464" y="501">42</text>
+    <text x="359" y="527">27</text>
+    <text x="247" y="553">11</text>
+  </g>
+  <!-- decisão -->
+  <g font-family="JetBrains Mono" font-size="13">
+    <text x="560" y="500" fill="#9b958a">REPETIR?</text>
+    <text x="560" y="526" fill="#ece6d9">loja: SIM</text>
+    <text x="560" y="552" fill="#ece6d9">feira: SIM</text>
+    <text x="560" y="578" fill="#9b958a">zine: rever</text>
+  </g>
+</svg>

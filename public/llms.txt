@@ -177,3 +177,15 @@ por que idade não é barreira.
 - Email: wellingtonmota42@gmail.com
 - WhatsApp: https://wa.me/5561981043296
 - Location: Brasília, DF, Brazil
+
+## NECROX: guias gratuitos para bandas independentes (PT-BR)
+
+Projeto autoral (assinado como M3Ink) com guias práticos e gratuitos para bandas
+de rock, metal, punk e hardcore: divulgação, lançamento no Spotify, press kit,
+direitos autorais/Ecad, merch, turnê DIY, design de cartaz e capa, marketing de
+guerrilha. Online e em PDF, licença CC BY-NC-SA 4.0.
+
+- Site: https://userexperience.com.br/necrox/
+- Contexto para IAs: https://userexperience.com.br/necrox/llms.txt
+- Texto completo: https://userexperience.com.br/necrox/llms-full.txt
+- Perguntas frequentes: https://userexperience.com.br/necrox/perguntas/

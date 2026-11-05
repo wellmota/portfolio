@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>NECROX: guias para bandas independentes</title>
+    <link>https://userexperience.com.br/necrox/</link>
+    <atom:link href="https://userexperience.com.br/necrox/rss.xml" rel="self" type="application/rss+xml" />
+    <description>Guias gratuitos em PDF para bandas independentes de rock, metal, punk e hardcore: como divulgar a banda, lançar música no Spotify, montar press kit, fazer merch, cartaz e lambe-lambe.</description>
+    <language>pt-BR</language>
+    <copyright>Creative Commons BY-NC-SA 4.0</copyright>
+    <lastBuildDate>Wed, 04 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <image><url>https://userexperience.com.br/necrox/icon-512.png</url><title>NECROX</title><link>https://userexperience.com.br/necrox/</link></image>
+    <item>
+      <title>Marketing para Bandas Independentes</title>
+      <link>https://userexperience.com.br/necrox/guias/marketing/</link>
+      <guid isPermaLink="true">https://userexperience.com.br/necrox/guias/marketing/</guid>
+      <description>Divulgar sua música sem vender a alma: identidade, nicho, canais e comunidade. Os fundamentos de marketing para bandas de rock, metal e punk que fazem tudo sozinhas: posicionamento, público, canais, calendário, superfãs, métricas e um plano de 90 dias.</description>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate>
+      <dc:creator>M3Ink</dc:creator>
+      <category>marketing</category>
+      <category>posicionamento</category>
+      <category>redes sociais</category>
+      <category>comunidade</category>
+      <category>superfãs</category>
+      <category>planejamento</category>
+      <enclosure url="https://userexperience.com.br/necrox/pdf/necrox-guia-01-marketing.pdf" type="application/pdf" length="0" />
+    </item>
+    <item>
+      <title>DIY: A Banda Como Selo</title>
+      <link>https://userexperience.com.br/necrox/guias/diy/</link>
+      <guid isPermaLink="true">https://userexperience.com.br/necrox/guias/diy/</guid>
+      <description>Grave, lance, venda, viaje e se financie sem pedir licença a ninguém.. Gravação barata, distribuição digital, direitos autorais no Brasil, merch, turnê, caixa da banda, editais e zine: o manual prático para a sua banda funcionar como um selo independente.</description>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate>
+      <dc:creator>M3Ink</dc:creator>
+      <category>DIY</category>
+      <category>selo independente</category>
+      <category>distribuição digital</category>
+      <category>direitos autorais</category>
+      <category>merch</category>
+      <category>turnê</category>
+      <category>editais</category>
+      <category>zine</category>
+      <enclosure url="https://userexperience.com.br/necrox/pdf/necrox-guia-02-diy.pdf" type="application/pdf" length="0" />
+    </item>
+    <item>
+      <title>Princípios de Design Para Bandas</title>
+      <link>https://userexperience.com.br/necrox/guias/design/</link>
+      <guid isPermaLink="true">https://userexperience.com.br/necrox/guias/design/</guid>
+      <description>Design para quem não é designer: menos enfeite, mais impacto e nenhum arquivo rejeitado. Hierarquia, tipografia, cor, logo, capa, cartaz e fechamento de arquivo para gráfica. Um manual prático para sua banda ter cara própria sem roubar arte de ninguém.</description>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate>
+      <dc:creator>M3Ink</dc:creator>
+      <category>design</category>
+      <category>tipografia</category>
+      <category>identidade visual</category>
+      <category>cartaz</category>
+      <category>capa de disco</category>
+      <category>serigrafia</category>
+      <category>DIY</category>
+      <enclosure url="https://userexperience.com.br/necrox/pdf/necrox-guia-03-design.pdf" type="application/pdf" length="0" />
+    </item>
+    <item>
+      <title>Marketing de Guerrilha</title>
+      <link>https://userexperience.com.br/necrox/guias/guerrilha/</link>
+      <guid isPermaLink="true">https://userexperience.com.br/necrox/guias/guerrilha/</guid>
+      <description>Pouca verba, muita imaginação: como fazer a cidade e a internet falarem da sua banda. Lambe-lambe, adesivo, estêncil, teaser, street team, ARG e fanzine: táticas baratas para espalhar sua banda, com casos reais, 24 ideias de ação e o que diz a lei no Brasil.</description>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate>
+      <dc:creator>M3Ink</dc:creator>
+      <category>guerrilha</category>
+      <category>lambe-lambe</category>
+      <category>adesivos</category>
+      <category>street team</category>
+      <category>teaser</category>
+      <category>legislação</category>
+      <enclosure url="https://userexperience.com.br/necrox/pdf/necrox-guia-04-guerrilha.pdf" type="application/pdf" length="0" />
+    </item>
+    <item>
+      <title>Plano de Lançamento &amp; Press Kit</title>
+      <link>https://userexperience.com.br/necrox/guias/lancamento/</link>
+      <guid isPermaLink="true">https://userexperience.com.br/necrox/guias/lancamento/</guid>
+      <description>Música boa não se divulga sozinha. Plano, calendário e munição pra imprensa.. Do primeiro single ao disco cheio: estratégia em cascata, cronograma de 12 semanas, pitch no Spotify, Bandcamp, press kit com modelos prontos e o que fazer depois que a poeira baixa.</description>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate>
+      <dc:creator>M3Ink</dc:creator>
+      <category>lançamento</category>
+      <category>press kit</category>
+      <category>EPK</category>
+      <category>Spotify for Artists</category>
+      <category>Bandcamp</category>
+      <category>assessoria DIY</category>
+      <category>cronograma</category>
+      <enclosure url="https://userexperience.com.br/necrox/pdf/necrox-guia-05-lancamento.pdf" type="application/pdf" length="0" />
+    </item>
+  </channel>
+</rss>

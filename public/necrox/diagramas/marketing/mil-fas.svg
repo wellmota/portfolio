@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
+<rect width="800" height="520" fill="#111111"/>
+<text x="40" y="76" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="54" fill="#ece6d9">1.000 FÃS VERDADEIROS</text>
+<text x="40" y="104" font-family="JetBrains Mono" font-size="13" letter-spacing="1.5" fill="#9b958a">A CONTA DO ENSAIO DE KEVIN KELLY (2008)</text>
+<defs><pattern id="mk-mil-fas-q" x="40" y="140" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#ece6d9"/></pattern></defs>
+<rect x="40" y="140" width="320" height="200" fill="url(#mk-mil-fas-q)"/>
+<rect x="40" y="140" width="6" height="6" fill="#e0261b"/>
+<text x="40" y="364" font-family="JetBrains Mono" font-size="13" fill="#ece6d9"><tspan fill="#e0261b">■</tspan> 1 QUADRADO = 1 FÃ QUE COMPRA TUDO</text>
+<line x1="398" y1="140" x2="398" y2="400" stroke="#2b2926" stroke-width="2"/>
+<text x="420" y="186" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="62" fill="#ece6d9">1.000</text>
+<text x="420" y="210" font-family="JetBrains Mono" font-size="13" letter-spacing="1" fill="#9b958a">FÃS VERDADEIROS</text>
+<text x="420" y="270" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="48" fill="#ece6d9">× US$ 100</text>
+<text x="420" y="294" font-family="JetBrains Mono" font-size="13" letter-spacing="1" fill="#9b958a">DE LUCRO POR FÃ, POR ANO</text>
+<rect x="420" y="312" width="340" height="4" fill="#ece6d9"/>
+<text x="420" y="374" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%" font-size="46" fill="#e0261b">= US$ 100 MIL</text>
+<text x="420" y="398" font-family="JetBrains Mono" font-size="13" letter-spacing="1" fill="#9b958a">POR ANO: VIVER DISSO, NÃO FICAR RICO</text>
+<text x="40" y="436" font-family="JetBrains Mono" font-size="13" letter-spacing="1.5" fill="#9b958a">É ORDEM DE GRANDEZA: O NÚMERO MUDA COM O GASTO MÉDIO DE CADA FÃ</text>
+<rect x="41.5" y="453.5" width="223" height="49" fill="none" stroke="#ece6d9" stroke-width="3"/>
+<text x="54" y="474" font-family="JetBrains Mono" font-size="13" fill="#9b958a">US$ 50 POR FÃ</text>
+<text x="54" y="495" font-family="JetBrains Mono" font-size="15" font-weight="700" fill="#ece6d9">→ ≈ 2.000 FÃS</text>
+<rect x="287" y="452" width="226" height="52" fill="#ece6d9"/>
+<text x="301" y="474" font-family="JetBrains Mono" font-size="13" fill="#111111">US$ 100 POR FÃ</text>
+<text x="301" y="495" font-family="JetBrains Mono" font-size="15" font-weight="700" fill="#111111">→ 1.000 FÃS</text>
+<rect x="535.5" y="453.5" width="223" height="49" fill="none" stroke="#ece6d9" stroke-width="3"/>
+<text x="548" y="474" font-family="JetBrains Mono" font-size="13" fill="#9b958a">US$ 200 POR FÃ</text>
+<text x="548" y="495" font-family="JetBrains Mono" font-size="15" font-weight="700" fill="#ece6d9">→ ≈ 500 FÃS</text>
+</svg>

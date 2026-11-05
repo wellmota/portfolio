@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 430">
+  <rect width="800" height="430" fill="#111111"/>
+  <rect x="40" y="30" width="56" height="8" fill="#e0261b"/>
+  <text x="40" y="86" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="54" fill="#ece6d9">REPETIÇÃO VIRA CONVERSA</text>
+  <text x="40" y="112" font-family="JetBrains Mono" font-size="14" fill="#9b958a" letter-spacing="1">COMO UM SÍMBOLO SEM EXPLICAÇÃO GRUDA</text>
+  <line x1="40" y1="130" x2="760" y2="130" stroke="#2b2926" stroke-width="2"/>
+
+  <!-- 01 repetição: vários símbolos espalhados -->
+  <g fill="#ece6d9">
+    <polygon points="48,154 72,154 60,176"/>
+    <polygon points="98,148 122,148 110,170"/>
+    <polygon points="150,160 174,160 162,182"/>
+    <polygon points="62,196 86,196 74,218"/>
+    <polygon points="114,190 138,190 126,212"/>
+    <polygon points="164,204 188,204 176,226"/>
+  </g>
+
+  <!-- 02 familiaridade: olho que reconhece -->
+  <path d="M232,188 Q296,138 360,188 Q296,238 232,188 Z" fill="none" stroke="#ece6d9" stroke-width="4" stroke-linejoin="miter"/>
+  <polygon points="280,172 312,172 296,202" fill="#ece6d9"/>
+
+  <!-- 03 curiosidade -->
+  <text x="420" y="232" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="108" fill="#ece6d9">?</text>
+  <polygon points="476,196 508,196 492,226" fill="none" stroke="#ece6d9" stroke-width="4"/>
+
+  <!-- 04 conversa: dois balões -->
+  <rect x="612" y="146" width="96" height="44" fill="none" stroke="#ece6d9" stroke-width="4"/>
+  <polygon points="628,190 648,190 626,208" fill="#ece6d9"/>
+  <rect x="660" y="180" width="96" height="40" fill="#e0261b"/>
+  <polygon points="724,220 744,220 748,236" fill="#e0261b"/>
+  <polygon points="634,160 650,160 642,174" fill="#ece6d9"/>
+  <rect x="660" y="160" width="32" height="5" fill="#ece6d9"/>
+  <rect x="676" y="194" width="62" height="5" fill="#111111"/>
+  <rect x="676" y="205" width="40" height="5" fill="#111111"/>
+
+  <!-- escada de intensidade -->
+  <rect x="40" y="258" width="170" height="6" fill="#9b958a"/>
+  <rect x="230" y="252" width="170" height="12" fill="#ece6d9"/>
+  <rect x="420" y="246" width="170" height="18" fill="#ece6d9"/>
+  <rect x="610" y="240" width="150" height="24" fill="#e0261b"/>
+  <polygon points="760,232 784,252 760,272" fill="#e0261b"/>
+  <g fill="#ece6d9">
+    <polygon points="212,286 222,292 212,298"/>
+    <polygon points="402,286 412,292 402,298"/>
+    <polygon points="592,286 602,292 592,298"/>
+  </g>
+
+  <!-- rótulos -->
+  <g font-family="JetBrains Mono" font-size="13" fill="#9b958a">
+    <text x="40" y="294">01</text>
+    <text x="230" y="294">02</text>
+    <text x="420" y="294">03</text>
+    <text x="610" y="294" fill="#e0261b">04</text>
+  </g>
+  <g font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26">
+    <text x="40" y="324" fill="#ece6d9">REPETIÇÃO</text>
+    <text x="230" y="324" fill="#ece6d9">FAMILIARIDADE</text>
+    <text x="420" y="324" fill="#ece6d9">CURIOSIDADE</text>
+    <text x="610" y="324" fill="#e0261b">CONVERSA</text>
+  </g>
+  <g font-family="JetBrains Mono" font-size="13" fill="#ece6d9">
+    <text x="40" y="350">o mesmo símbolo</text>
+    <text x="40" y="368">em vários lugares</text>
+    <text x="230" y="350">o olho já</text>
+    <text x="230" y="368">reconhece de longe</text>
+    <text x="420" y="350">o que é isso?</text>
+    <text x="420" y="368">a pessoa tenta</text>
+    <text x="420" y="386">achar o sentido</text>
+    <text x="610" y="350">comenta com alguém</text>
+    <text x="610" y="368">e procura a banda</text>
+  </g>
+
+  <line x1="40" y1="398" x2="760" y2="398" stroke="#2b2926" stroke-width="2"/>
+  <text x="40" y="420" font-family="Instrument Serif" font-style="italic" font-size="17" fill="#9b958a">Curiosidade, irritação ou graça: tudo serve. O único resultado ruim é a indiferença.</text>
+</svg>

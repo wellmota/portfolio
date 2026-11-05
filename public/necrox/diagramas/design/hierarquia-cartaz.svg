@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 580">
+  <rect width="800" height="580" fill="#111111"/>
+
+  <!-- cabeçalho -->
+  <text x="20" y="42" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#ece6d9">HIERARQUIA EM 3 NÍVEIS</text>
+  <text x="780" y="42" text-anchor="end" font-family="JetBrains Mono" font-size="13" fill="#9b958a">ORDEM DE LEITURA DE UM CARTAZ</text>
+  <rect x="20" y="54" width="760" height="4" fill="#e0261b"/>
+
+  <!-- cartaz (proporção A) -->
+  <rect x="80" y="80" width="320" height="452" fill="none" stroke="#ece6d9" stroke-width="2"/>
+  <!-- nível 1 -->
+  <text x="102" y="204" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="124" fill="#ece6d9">COVA</text>
+  <text x="102" y="312" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="124" fill="#ece6d9">RASA</text>
+  <rect x="102" y="330" width="276" height="6" fill="#e0261b"/>
+  <!-- nível 2 -->
+  <text x="102" y="378" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="36" fill="#e0261b">SEX 14.03 · 21H</text>
+  <text x="102" y="404" font-family="JetBrains Mono" font-size="15" fill="#ece6d9">BAR DO ZÉ · SÃO PAULO</text>
+  <!-- nível 3 -->
+  <text x="102" y="470" font-family="JetBrains Mono" font-size="13" fill="#9b958a">+ CARNIÇA + VALA COMUM</text>
+  <text x="102" y="490" font-family="JetBrains Mono" font-size="13" fill="#9b958a">R$ 20 · 18 ANOS</text>
+  <text x="102" y="510" font-family="JetBrains Mono" font-size="13" fill="#9b958a">INGRESSO: LINK NA BIO</text>
+
+  <!-- marcadores de nível + ordem de leitura -->
+  <path d="M44 220 V350" stroke="#e0261b" stroke-width="2" stroke-dasharray="5 5"/>
+  <path d="M38 346 L44 356 L50 346 Z" fill="#e0261b"/>
+  <path d="M44 410 V462" stroke="#e0261b" stroke-width="2" stroke-dasharray="5 5"/>
+  <path d="M38 458 L44 468 L50 458 Z" fill="#e0261b"/>
+  <rect x="28" y="180" width="32" height="32" fill="#e0261b"/>
+  <text x="44" y="205" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#111111">1</text>
+  <rect x="28" y="370" width="32" height="32" fill="#e0261b"/>
+  <text x="44" y="395" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#111111">2</text>
+  <rect x="28" y="474" width="32" height="32" fill="#e0261b"/>
+  <text x="44" y="499" text-anchor="middle" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="26" fill="#111111">3</text>
+
+  <!-- legenda -->
+  <text x="440" y="104" font-family="JetBrains Mono" font-size="13" fill="#9b958a" letter-spacing="2">PESO VISUAL</text>
+  <path d="M440 114 H780" stroke="#2b2926" stroke-width="2"/>
+
+  <text x="440" y="164" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#ece6d9">NÍVEL 1</text>
+  <rect x="440" y="178" width="320" height="18" fill="#ece6d9"/>
+  <text x="440" y="222" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">uma coisa só</text>
+  <text x="440" y="241" font-family="JetBrains Mono" font-size="13" fill="#9b958a">nome da banda ou do evento</text>
+
+  <text x="440" y="306" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#e0261b">NÍVEL 2</text>
+  <rect x="440" y="320" width="160" height="12" fill="#e0261b"/>
+  <text x="440" y="358" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">o que faz a pessoa agir</text>
+  <text x="440" y="377" font-family="JetBrains Mono" font-size="13" fill="#9b958a">data, horário e local</text>
+
+  <text x="440" y="442" font-family="Archivo Variable" font-weight="900" style="font-stretch:62%;font-variation-settings:'wdth' 62" font-size="34" fill="#9b958a">NÍVEL 3</text>
+  <rect x="440" y="456" width="64" height="6" fill="#9b958a"/>
+  <text x="440" y="488" font-family="JetBrains Mono" font-size="13" fill="#ece6d9">o resto</text>
+  <text x="440" y="507" font-family="JetBrains Mono" font-size="13" fill="#9b958a">preço, apoio, idade, link</text>
+
+  <!-- rodapé -->
+  <text x="20" y="564" font-family="JetBrains Mono" font-size="13" fill="#9b958a">TESTE: em 3 segundos alguém de fora diz <tspan fill="#ece6d9">quem</tspan>, <tspan fill="#ece6d9">quando</tspan> e <tspan fill="#ece6d9">onde</tspan>?</text>
+</svg>
