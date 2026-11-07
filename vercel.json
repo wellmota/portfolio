@@ -53,15 +53,6 @@
       ]
     },
     {
-      "source": "/necrox/pdf/necrox-guia-01-marketing.pdf",
-      "headers": [
-        {
-          "key": "Link",
-          "value": "<https://userexperience.com.br/necrox/guias/marketing/>; rel=\"canonical\""
-        }
-      ]
-    },
-    {
       "source": "/necrox/guias/marketing/",
       "headers": [
         {
@@ -88,15 +79,6 @@
         {
           "key": "Vary",
           "value": "Accept"
-        }
-      ]
-    },
-    {
-      "source": "/necrox/pdf/necrox-guia-02-diy.pdf",
-      "headers": [
-        {
-          "key": "Link",
-          "value": "<https://userexperience.com.br/necrox/guias/diy/>; rel=\"canonical\""
         }
       ]
     },
@@ -131,15 +113,6 @@
       ]
     },
     {
-      "source": "/necrox/pdf/necrox-guia-03-design.pdf",
-      "headers": [
-        {
-          "key": "Link",
-          "value": "<https://userexperience.com.br/necrox/guias/design/>; rel=\"canonical\""
-        }
-      ]
-    },
-    {
       "source": "/necrox/guias/design/",
       "headers": [
         {
@@ -170,15 +143,6 @@
       ]
     },
     {
-      "source": "/necrox/pdf/necrox-guia-04-guerrilha.pdf",
-      "headers": [
-        {
-          "key": "Link",
-          "value": "<https://userexperience.com.br/necrox/guias/guerrilha/>; rel=\"canonical\""
-        }
-      ]
-    },
-    {
       "source": "/necrox/guias/guerrilha/",
       "headers": [
         {
@@ -205,15 +169,6 @@
         {
           "key": "Vary",
           "value": "Accept"
-        }
-      ]
-    },
-    {
-      "source": "/necrox/pdf/necrox-guia-05-lancamento.pdf",
-      "headers": [
-        {
-          "key": "Link",
-          "value": "<https://userexperience.com.br/necrox/guias/lancamento/>; rel=\"canonical\""
         }
       ]
     },
