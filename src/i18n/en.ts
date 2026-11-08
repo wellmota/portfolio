@@ -174,7 +174,7 @@ const en: SiteData = {
 
   projects: [
     {
-      title: 'GolfHub',
+      title: 'Golfleik',
       meta: 'Sports · Case Study',
       categories: ['Product', 'Prototype', '3D'],
       description:
