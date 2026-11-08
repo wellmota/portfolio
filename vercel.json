@@ -1,13 +1,36 @@
 {
   "trailingSlash": true,
   "redirects": [
-    { "source": "/work/tutory/", "destination": "/work/tutory-rebrand/", "permanent": true },
-    { "source": "/pt/work/tutory/", "destination": "/pt/work/tutory-rebrand/", "permanent": true }
+    {
+      "source": "/work/tutory/",
+      "destination": "/work/tutory-rebrand/",
+      "permanent": true
+    },
+    {
+      "source": "/pt/work/tutory/",
+      "destination": "/pt/work/tutory-rebrand/",
+      "permanent": true
+    },
+    {
+      "source": "/golfhaus/",
+      "destination": "https://golf.sporthaus.com.br/",
+      "permanent": true
+    },
+    {
+      "source": "/golfhaus/:path*",
+      "destination": "https://golf.sporthaus.com.br/",
+      "permanent": true
+    }
   ],
   "headers": [
     {
       "source": "/do-design-ao-digital.pdf",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
     }
   ]
 }
