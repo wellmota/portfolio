@@ -173,10 +173,12 @@ export interface ProtoScreen {
   label: string;
   meta?: string;
   device: 'desktop' | 'phone';
-  theme: 'cozy' | 'tatico-escuro' | 'tatico-claro';
+  /** Tema do OBA; o case do GPB não tem tema e omite. */
+  theme?: 'cozy' | 'tatico-escuro' | 'tatico-claro';
   /** Arranjo do menu do topo; sem ele, fica o que estiver. */
   menu?: 'a' | 'b';
-  /** Estado do protótipo: painel, grupo-estudo, grupo-desempenho, grupo-plano, compartilhar, menu, streak, semana. */
+  /** Estado do protótipo: painel, grupo-estudo, grupo-desempenho, grupo-plano, compartilhar, menu, streak, semana.
+   *  No GPB, a query da tela (ex.: `tab=contas&assistente=triagem`). */
   estado: string;
   /** Só para ver: a tela não recebe clique nem rolagem, e o estado fica como abriu. */
   estatica?: boolean;

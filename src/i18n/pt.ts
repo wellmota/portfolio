@@ -196,6 +196,17 @@ const pt: SiteData = {
       href: '/pt/work/metodo-oba/',
     },
     {
+      title: 'GPB',
+      meta: 'Finanças · Case Study',
+      categories: ['Product', 'Design Eng', 'React'],
+      description:
+        'Fiz a rodada de UX do sistema financeiro de um grupo empresarial direto no código React: menu por tarefa, processos guiados e um celular sem rolagem lateral. O app de verdade roda na página, com dados fictícios. Ver case study →',
+      image: '/cases/gpb/img/cover.webp',
+      accent: '#4FBFAF',
+      highlight: 'O app de verdade, ao vivo, no computador e no celular',
+      href: '/pt/work/gpb/',
+    },
+    {
       title: 'Aeroporto de Leads',
       meta: 'EdTech · Case Study',
       categories: ['Product', '3D', 'Data'],

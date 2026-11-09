@@ -196,6 +196,17 @@ const en: SiteData = {
       href: '/work/metodo-oba/',
     },
     {
+      title: 'GPB',
+      meta: 'Finance · Case Study',
+      categories: ['Product', 'Design Eng', 'React'],
+      description:
+        'I ran the UX round of the finance system of a Brazilian business group straight in the React code: task-based navigation, guided processes and a phone layout with no sideways scroll. The real app runs on the page, with fictional data. Read the case study →',
+      image: '/cases/gpb/img/cover.webp',
+      accent: '#4FBFAF',
+      highlight: 'The real app, live, desktop and phone',
+      href: '/work/gpb/',
+    },
+    {
       title: 'Lead Airport',
       meta: 'EdTech · Case Study',
       categories: ['Product', '3D', 'Data'],
