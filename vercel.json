@@ -31,6 +31,169 @@
           "value": "noindex"
         }
       ]
+    },
+    {
+      "source": "/necrox/(llms|llms-full).txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/marketing.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://userexperience.com.br/necrox/guias/marketing/>; rel=\"canonical\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/marketing/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</necrox/guias/marketing.md>; rel=\"alternate\"; type=\"text/markdown\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/diy.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://userexperience.com.br/necrox/guias/diy/>; rel=\"canonical\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/diy/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</necrox/guias/diy.md>; rel=\"alternate\"; type=\"text/markdown\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/design.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://userexperience.com.br/necrox/guias/design/>; rel=\"canonical\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/design/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</necrox/guias/design.md>; rel=\"alternate\"; type=\"text/markdown\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/guerrilha.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://userexperience.com.br/necrox/guias/guerrilha/>; rel=\"canonical\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/guerrilha/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</necrox/guias/guerrilha.md>; rel=\"alternate\"; type=\"text/markdown\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/lancamento.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Link",
+          "value": "<https://userexperience.com.br/necrox/guias/lancamento/>; rel=\"canonical\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
+    },
+    {
+      "source": "/necrox/guias/lancamento/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</necrox/guias/lancamento.md>; rel=\"alternate\"; type=\"text/markdown\""
+        },
+        {
+          "key": "Vary",
+          "value": "Accept"
+        }
+      ]
     }
   ]
 }
