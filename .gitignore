@@ -30,3 +30,7 @@ motion/out/
 
 # Gilroy (licença comercial) usada só no render do teaser Tutory
 motion/public/tutory/fonts/
+
+# Claude Code local settings
+.claude/settings.local.json
+.claude/launch.json
