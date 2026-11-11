@@ -1,0 +1,22 @@
+---
+import StandaloneLayout from '../../../layouts/StandaloneLayout.astro';
+import CasePage from '../../../components/case-gpb/CasePage.astro';
+import gpb from '../../../data/cases/gpb';
+
+const lang = 'pt' as const;
+const content = gpb[lang];
+---
+
+<StandaloneLayout
+  lang={lang}
+  title={content.seo.title}
+  description={content.seo.description}
+  ogImage={content.cover.src}
+  ogImageAlt={content.cover.alt}
+  ogImageWidth={content.cover.width}
+  ogImageHeight={content.cover.height}
+  alternates={{ en: '/work/gpb/', pt: '/pt/work/gpb/' }}
+  themeColor="#0b1f1d"
+>
+  <CasePage lang={lang} content={content} altHref="/work/gpb/" altLabel="EN" />
+</StandaloneLayout>

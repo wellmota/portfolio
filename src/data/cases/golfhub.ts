@@ -8,7 +8,7 @@ const WIDE = { width: 1600, height: 1000 };
 
 const prototypePt: PrototypeEmbed = {
   src: `${APP}/index.html`,
-  title: 'Protótipo navegável do app GolfHub',
+  title: 'Protótipo navegável do app Golfleik',
   screensLabel: 'Ir direto para',
   screens: [
     { label: 'Entrar', href: `${APP}/index.html` },
@@ -37,7 +37,7 @@ const prototypePt: PrototypeEmbed = {
 
 const prototypeEn: PrototypeEmbed = {
   ...prototypePt,
-  title: 'Interactive prototype of the GolfHub app',
+  title: 'Interactive prototype of the Golfleik app',
   screensLabel: 'Jump to',
   screens: [
     { label: 'Sign in', href: `${APP}/index.html` },
@@ -67,13 +67,13 @@ const golfhub: CaseStudy = {
   pt: {
     slug: 'golfhub',
     accent: '#38EB7F',
-    kicker: 'Case Study — GolfHub',
-    title: 'GolfHub',
+    kicker: 'Case Study — Golfleik',
+    title: 'Golfleik',
     subtitle:
       'Uma proposta para um clube de golfe parou em quatro telas no Figma. Ela virou um produto que se usa: o app do sócio e o ERP do clube, 21 telas navegáveis e um campo de golfe em 3D que se gira com o dedo.',
     cover: {
       src: `${B}/cover.webp`,
-      alt: 'Três telas do app GolfHub sobre fundo verde com grão: a home Olá, Pedro com a foto do Campo A, o buraco 2 em 3D com o avatar do jogador e os anéis de distância, e o resumo da rodada com a bola chegando ao buraco',
+      alt: 'Três telas do app Golfleik sobre fundo verde com grão: a home Olá, Pedro com a foto do Campo A, o buraco 2 em 3D com o avatar do jogador e os anéis de distância, e o resumo da rodada com a bola chegando ao buraco',
     },
     meta: [
       { label: 'Cliente', value: 'Clube de Golfe de Brasília (proposta)' },
@@ -192,13 +192,13 @@ const golfhub: CaseStudy = {
           items: [
             {
               src: `${B}/d-palette.webp`,
-              alt: 'Paleta do GolfHub: grafite #303030, violeta #771AA3, índigo #4A3AFF, o gradiente verde da bola e o verde do clube #106F36, sobre as escalas de verde, violeta, índigo e tinta e quatro cores de estado',
+              alt: 'Paleta do Golfleik: grafite #303030, violeta #771AA3, índigo #4A3AFF, o gradiente verde da bola e o verde do clube #106F36, sobre as escalas de verde, violeta, índigo e tinta e quatro cores de estado',
               label: 'As cores da proposta',
               text: 'As mesmas cores do arquivo, agora como tokens. Grafite para agir, violeta para destacar, índigo para seleção e o verde da bola na aba ativa.',
             },
             {
               src: `${B}/d-type.webp`,
-              alt: 'Escala em Inter da saudação Olá, Pedro ao rótulo em caixa-alta, com 84, +12 e 12,4 num cartão grafite e o logotipo GolfHub em DM Sans',
+              alt: 'Escala em Inter da saudação Olá, Pedro ao rótulo em caixa-alta, com 84, +12 e 12,4 num cartão grafite e o logotipo Golfleik em DM Sans',
               label: 'Inter, do título ao placar',
               text: 'Uma fonte para tudo, com os números da rodada em destaque. O DM Sans fica só no logotipo.',
             },
@@ -333,22 +333,22 @@ const golfhub: CaseStudy = {
     ui: { back: 'Voltar aos projetos', visit: 'Abrir o protótipo' },
     liveUrl: `${APP}/index.html`,
     seo: {
-      title: 'GolfHub: app do sócio e ERP para clube de golfe | Wellington Mota',
+      title: 'Golfleik: app do sócio e ERP para clube de golfe | Wellington Mota',
       description:
-        'GolfHub: uma proposta de quatro telas no Figma para o Clube de Golfe de Brasília virou app do sócio e ERP do clube navegáveis, com um campo de golfe em 3D.',
+        'Golfleik: uma proposta de quatro telas no Figma para o Clube de Golfe de Brasília virou app do sócio e ERP do clube navegáveis, com um campo de golfe em 3D.',
     },
   },
 
   en: {
     slug: 'golfhub',
     accent: '#38EB7F',
-    kicker: 'Case Study — GolfHub',
-    title: 'GolfHub',
+    kicker: 'Case Study — Golfleik',
+    title: 'Golfleik',
     subtitle:
       'A proposal for a golf club stalled at four screens in Figma. It became a product you can use: the members’ app and the club’s ERP, 21 clickable screens and a 3D golf course you turn with a finger.',
     cover: {
       src: `${B}/cover.webp`,
-      alt: 'Three GolfHub app screens on a grainy green background: the Olá, Pedro home with a photo of Campo A, hole 2 in 3D with the player’s avatar and distance rings, and the round summary with the ball reaching the cup',
+      alt: 'Three Golfleik app screens on a grainy green background: the Olá, Pedro home with a photo of Campo A, hole 2 in 3D with the player’s avatar and distance rings, and the round summary with the ball reaching the cup',
     },
     meta: [
       { label: 'Client', value: 'Clube de Golfe de Brasília (proposal)' },
@@ -467,13 +467,13 @@ const golfhub: CaseStudy = {
           items: [
             {
               src: `${B}/d-palette.webp`,
-              alt: 'GolfHub palette: charcoal #303030, violet #771AA3, indigo #4A3AFF, the green ball gradient and club green #106F36, above the green, violet, indigo and ink ramps and four status colours',
+              alt: 'Golfleik palette: charcoal #303030, violet #771AA3, indigo #4A3AFF, the green ball gradient and club green #106F36, above the green, violet, indigo and ink ramps and four status colours',
               label: 'The proposal’s colours',
               text: 'The file’s own colours, now as tokens. Charcoal to act, violet to highlight, indigo for selection and the green ball on the active tab.',
             },
             {
               src: `${B}/d-type.webp`,
-              alt: 'Inter scale from the Olá, Pedro greeting to the uppercase label, with 84, +12 and 12.4 on a charcoal card and the GolfHub wordmark in DM Sans',
+              alt: 'Inter scale from the Olá, Pedro greeting to the uppercase label, with 84, +12 and 12.4 on a charcoal card and the Golfleik wordmark in DM Sans',
               label: 'Inter, from heading to scorecard',
               text: 'One typeface for everything, with the round’s numbers up front. DM Sans stays in the logo.',
             },
@@ -608,9 +608,9 @@ const golfhub: CaseStudy = {
     ui: { back: 'Back to projects', visit: 'Open the prototype' },
     liveUrl: `${APP}/index.html`,
     seo: {
-      title: 'GolfHub: members’ app and ERP for a golf club | Wellington Mota',
+      title: 'Golfleik: members’ app and ERP for a golf club | Wellington Mota',
       description:
-        'GolfHub: a four-screen Figma proposal for the Clube de Golfe de Brasília became a clickable members’ app and club ERP, with a 3D golf course.',
+        'Golfleik: a four-screen Figma proposal for the Clube de Golfe de Brasília became a clickable members’ app and club ERP, with a 3D golf course.',
     },
   },
 };

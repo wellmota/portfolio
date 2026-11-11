@@ -10,6 +10,16 @@
       "source": "/pt/work/tutory/",
       "destination": "/pt/work/tutory-rebrand/",
       "permanent": true
+    },
+    {
+      "source": "/golfhaus/",
+      "destination": "https://golf.sporthaus.com.br/",
+      "permanent": true
+    },
+    {
+      "source": "/golfhaus/:path*",
+      "destination": "https://golf.sporthaus.com.br/",
+      "permanent": true
     }
   ],
   "headers": [

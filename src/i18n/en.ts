@@ -174,7 +174,7 @@ const en: SiteData = {
 
   projects: [
     {
-      title: 'GolfHub',
+      title: 'Golfleik',
       meta: 'Sports · Case Study',
       categories: ['Product', 'Prototype', '3D'],
       description:
@@ -194,6 +194,17 @@ const en: SiteData = {
       accent: '#4D7CFF',
       highlight: 'Nine live screens, desktop and phone',
       href: '/work/metodo-oba/',
+    },
+    {
+      title: 'GPB',
+      meta: 'Finance · Case Study',
+      categories: ['Product', 'Design Eng', 'React'],
+      description:
+        'I ran the UX round of the finance system of a Brazilian business group straight in the React code: task-based navigation, guided processes and a phone layout with no sideways scroll. The real app runs on the page, with fictional data. Read the case study →',
+      image: '/cases/gpb/img/cover.webp',
+      accent: '#4FBFAF',
+      highlight: 'The real app, live, desktop and phone',
+      href: '/work/gpb/',
     },
     {
       title: 'Lead Airport',

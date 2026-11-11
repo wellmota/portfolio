@@ -1,0 +1,588 @@
+---
+/**
+ * O GPB ao vivo, sobre a faixa clara (a mesma ideia do ProtoEmbed do case do OBA, sem tema nem patente).
+ *
+ * O iframe abre o build estático do app em modo demonstração (/cases/gpb/proto/): React de verdade, dados
+ * fictícios gerados no navegador, sem rede. Ele nunca é recarregado nem movido no DOM:
+ *  - Desktop: janela de navegador; o app roda em 1440×900 e é escalado por `--s` para caber na largura;
+ *  - Celular: iPhone; o app roda em 390×844 e passa sozinho para o layout de celular (é o mesmo código).
+ * Telas: atalhos numerados que levam o app a um estado pela URL (?tab=…&assistente=…). Na mesma origem a
+ * troca é um pushState + popstate dentro do iframe, como o Voltar do navegador do próprio app (sem
+ * recarregar); fora dela, troca o src. O tour automático passa pelas telas enquanto o protótipo está na
+ * tela; pausa com o mouse em cima e para no primeiro clique. Links [data-gpb-tela] das seções chamam uma
+ * tela e rolam até aqui. Abaixo de 768 px a página abre no modo Celular.
+ */
+import type { ProtoBlock } from '@/data/cases/oba-types';
+import Marcado from '../case-oba/Marcado.astro';
+import { ui } from '../case-oba/ui';
+
+type Props = ProtoBlock & { id?: string };
+
+const { id = 'prototipo', src, title, poster, url, hint, dica, openLabel, screensLabel, screens, autoplay, caption } = Astro.props;
+const tx = ui(Astro.currentLocale);
+const first = screens[0];
+const sep = src.includes('?') ? '&' : '?';
+const initialSrc = `${src}${sep}${first?.estado ?? 'tab=inicio'}`;
+const DEVICES = [
+  { id: 'desktop', label: tx.desktop },
+  { id: 'phone', label: tx.phone },
+];
+const uid = `pg-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div
+  class="cs-band cs-block pe"
+  id={id}
+  data-gpb-proto
+  data-src={src}
+  data-device={first?.device ?? 'desktop'}
+  data-screens={JSON.stringify(screens)}
+  data-hold={autoplay ? String(autoplay.hold) : undefined}
+>
+  <div class="cs-container pe-in">
+    <div class="pe-controls" data-reveal>
+      <div class="pe-group" role="group" aria-labelledby={`${uid}-dev`}>
+        <span class="pe-group__label" id={`${uid}-dev`}>{tx.viewIn}</span>
+        <div class="pe-seg">
+          {
+            DEVICES.map((d) => (
+              <button type="button" class="pe-btn" data-set-device={d.id} aria-pressed={d.id === (first?.device ?? 'desktop') ? 'true' : 'false'}>
+                {d.label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      {
+        dica && (
+          <span class="pe-dica" aria-hidden="true">
+            <svg class="pe-dica__mouse" viewBox="0 0 24 24">
+              <path d="M14 4.1 12 6" />
+              <path d="m5.1 8-2.9-.8" />
+              <path d="m6 12-1.9 2" />
+              <path d="M7.2 2.2 8 5.1" />
+              <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
+            </svg>
+            <Marcado texto={dica} />
+          </span>
+        )
+      }
+      <a href={initialSrc} target="_blank" rel="noopener" class="pe-btn pe-full" data-pe-full>
+        {openLabel} <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="pe-layout">
+      <div class="pe-stage cs-win-wrap" data-pe-stage data-reveal>
+        <div class="pe-frame cs-win" data-pe-frame>
+          <span class="pe-only-phone cs-phone__btn cs-phone__btn--a" aria-hidden="true"></span>
+          <span class="pe-only-phone cs-phone__btn cs-phone__btn--b" aria-hidden="true"></span>
+          <span class="pe-only-phone cs-phone__btn cs-phone__btn--side" aria-hidden="true"></span>
+          <div class="pe-only-desktop cs-win__bar" aria-hidden="true">
+            <span class="cs-win__dots"><i></i><i></i><i></i></span>
+            <span class="cs-win__url">{url}</span>
+          </div>
+          <div class="pe-viewport cs-win__screen" data-pe-viewport>
+            <iframe src={initialSrc} title={title} loading="lazy" data-pe-iframe></iframe>
+            <img class="pe-poster" src={poster.src} alt={poster.alt} width={poster.width} height={poster.height} decoding="async" />
+          </div>
+        </div>
+      </div>
+
+      <div class="pe-info" data-reveal>
+        <div>
+          {hint && <p class="pe-hint">{hint}</p>}
+          {caption && <p class="pe-caption">{caption}</p>}
+        </div>
+        {
+          screens.length > 1 && (
+            <div>
+              <p class="pe-group__label" id={`${uid}-telas`}>
+                {screensLabel}
+              </p>
+              <ol class="pe-screens" aria-labelledby={`${uid}-telas`}>
+                {screens.map((t, i) => (
+                  <li>
+                    <button type="button" class="pe-screen" data-pe-screen={t.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+                      <span class="pe-screen__n">{String(i + 1).padStart(2, '0')}</span>
+                      <span class="pe-screen__label">{t.label}</span>
+                      {t.meta && <span class="pe-screen__meta">{t.meta}</span>}
+                      <span class="pe-screen__bar" aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pe-in {
+    padding-block: 2.5rem;
+  }
+  .pe-controls,
+  .pe-layout {
+    max-width: 78rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 768px) {
+    .pe-in {
+      padding-block: 4rem;
+    }
+  }
+
+  /* ---------- controles ---------- */
+  .pe-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem 1.75rem;
+    margin-bottom: 1.75rem;
+  }
+  .pe-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .pe-group__label {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5b6b68;
+  }
+  .pe-seg {
+    display: flex;
+    border: 1px solid rgb(11 31 29 / 0.2);
+    background: rgb(255 255 255 / 0.55);
+  }
+  .pe-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-height: 44px;
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #31423f;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .pe-btn + .pe-btn {
+    box-shadow: -1px 0 0 rgb(11 31 29 / 0.14);
+  }
+  .pe-btn:hover {
+    background: rgb(11 31 29 / 0.06);
+    color: #0b1f1d;
+  }
+  .pe-btn[aria-pressed='true'] {
+    background: #0b1f1d;
+    color: #fff;
+  }
+  .pe-btn[aria-pressed='true']::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    flex: none;
+    background: var(--accent);
+  }
+  .pe-btn:focus-visible {
+    outline: 2px solid #0b1f1d;
+    outline-offset: 2px;
+    position: relative;
+    z-index: 1;
+  }
+  .pe-dica {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    margin-left: auto;
+    color: #0b1f1d;
+    pointer-events: none;
+  }
+  @media (max-width: 1023.98px) {
+    .pe-dica {
+      display: none;
+    }
+  }
+  .pe-dica + .pe-full {
+    margin-left: 0;
+  }
+  .pe-dica__mouse {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .pe-dica :global(.cs-anota) {
+    white-space: nowrap;
+  }
+  .pe-full {
+    flex: none;
+    margin-left: auto;
+    border: 1px solid rgb(11 31 29 / 0.2);
+    background: #0b1f1d;
+    color: #fff;
+  }
+  .pe-full:hover {
+    background: #173b37;
+    color: #fff;
+  }
+
+  /* ---------- palco ---------- */
+  .pe-layout {
+    display: grid;
+    gap: 1.75rem;
+  }
+  .pe-stage {
+    min-width: 0;
+  }
+  .pe[data-device='desktop'] .pe-frame {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+  }
+  .pe[data-device='phone'] .pe-frame {
+    margin-inline: auto;
+  }
+  .pe[data-device='desktop'] .pe-only-phone,
+  .pe[data-device='phone'] .pe-only-desktop {
+    display: none;
+  }
+  .pe-viewport {
+    position: relative;
+    overflow: hidden;
+  }
+  .pe[data-device='desktop'] .pe-viewport {
+    width: 100%;
+    height: calc(900px * var(--s, 0.5));
+  }
+  .pe[data-device='phone'] .pe-viewport {
+    height: calc(844px * var(--s));
+  }
+  .pe-viewport iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1440px;
+    height: 900px;
+    max-width: none;
+    border: 0;
+    background: #f7f5f0;
+    transform: scale(var(--s, 0.5));
+    transform-origin: 0 0;
+  }
+  .pe[data-device='phone'] .pe-viewport iframe {
+    width: 390px;
+    height: 844px;
+  }
+  .pe-poster {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left top;
+    pointer-events: none;
+    transition:
+      opacity 0.45s ease,
+      visibility 0.45s;
+  }
+  .pe[data-device='phone'] .pe-poster {
+    display: none;
+  }
+  .pe.is-loaded .pe-poster {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* ---------- texto e telas ---------- */
+  .pe-info {
+    display: grid;
+    gap: 1.75rem;
+    max-width: 78rem;
+    width: 100%;
+    margin-inline: auto;
+  }
+  @media (min-width: 768px) {
+    .pe[data-device='desktop'] .pe-info {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 3rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .pe[data-device='phone'] .pe-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+      align-items: center;
+      gap: 3rem;
+    }
+    .pe[data-device='phone'] .pe-info {
+      margin-inline: 0;
+    }
+  }
+  .pe-hint {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #31423f;
+  }
+  .pe-caption {
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.6;
+    color: #5b6b68;
+  }
+  .pe-screens {
+    margin-top: 0.75rem;
+    border-top: 1px solid rgb(11 31 29 / 0.12);
+  }
+  .pe-screen {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.7rem 0.25rem;
+    border-bottom: 1px solid rgb(11 31 29 / 0.12);
+    text-align: left;
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: #31423f;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .pe-screen:hover {
+    background: rgb(11 31 29 / 0.04);
+    color: #0b1f1d;
+  }
+  .pe-screen:focus-visible {
+    outline: 2px solid #0b1f1d;
+    outline-offset: 2px;
+  }
+  .pe-screen__n {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: #82938f;
+  }
+  .pe-screen__label {
+    flex: 1;
+  }
+  .pe-screen__meta {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5b6b68;
+  }
+  .pe-screen[aria-pressed='true'] {
+    color: #0b1f1d;
+    font-weight: 600;
+  }
+  .pe-screen[aria-pressed='true'] .pe-screen__n {
+    color: #0f766e;
+  }
+  .pe-screen__bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: #0f766e;
+    transform: scaleX(var(--p, 0));
+    transform-origin: 0 50%;
+    opacity: 0;
+  }
+  .pe.is-touring .pe-screen[aria-pressed='true'] .pe-screen__bar {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  type Device = 'desktop' | 'phone';
+  type Screen = { id: string; label: string; device: Device; estado: string };
+  const SIZE: Record<Device, { w: number; h: number; max: number }> = {
+    desktop: { w: 1440, h: 900, max: 1 },
+    phone: { w: 390, h: 844, max: 0.86 },
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-gpb-proto]').forEach((root) => {
+    const stage = root.querySelector<HTMLElement>('[data-pe-stage]');
+    const frame = root.querySelector<HTMLElement>('[data-pe-frame]');
+    const viewport = root.querySelector<HTMLElement>('[data-pe-viewport]');
+    const iframe = root.querySelector<HTMLIFrameElement>('[data-pe-iframe]');
+    const full = root.querySelector<HTMLAnchorElement>('[data-pe-full]');
+    if (!stage || !frame || !viewport || !iframe) return;
+    const src = root.dataset.src ?? '';
+    const screens: Screen[] = JSON.parse(root.dataset.screens || '[]');
+    const screenBtns = [...root.querySelectorAll<HTMLButtonElement>('[data-pe-screen]')];
+    const deviceBtns = [...root.querySelectorAll<HTMLButtonElement>('[data-set-device]')];
+    const press = (btns: HTMLButtonElement[], hit?: HTMLButtonElement) => btns.forEach((b) => b.setAttribute('aria-pressed', String(b === hit)));
+    const urlOf = (estado: string) => `${src}${src.includes('?') ? '&' : '?'}${estado}`;
+
+    // ---- escala ----
+    const fit = () => {
+      const device = (root.dataset.device as Device) ?? 'desktop';
+      const { w, h, max } = SIZE[device];
+      let s: number;
+      if (device === 'desktop') s = viewport.clientWidth / w;
+      else {
+        const pad = parseFloat(getComputedStyle(frame).paddingLeft) || 11;
+        const byWidth = (stage.clientWidth - pad * 2 - 8) / w;
+        const byHeight = (window.innerHeight * 0.92 - pad * 2) / h;
+        s = Math.min(max, byWidth, Math.max(0.55, byHeight));
+      }
+      if (Number.isFinite(s) && s > 0) frame.style.setProperty('--s', s.toFixed(4));
+    };
+    const setDevice = (device: Device) => {
+      root.dataset.device = device;
+      const desktop = device === 'desktop';
+      frame.classList.toggle('cs-win', desktop);
+      frame.classList.toggle('cs-phone', !desktop);
+      viewport.classList.toggle('cs-win__screen', desktop);
+      viewport.classList.toggle('cs-phone__screen', !desktop);
+      press(deviceBtns, deviceBtns.find((b) => b.dataset.setDevice === device));
+      fit();
+    };
+
+    // ---- telas: leva o app ao estado pela URL, sem recarregar quando dá ----
+    const go = (estado: string) => {
+      if (full) full.href = urlOf(estado);
+      try {
+        const w = iframe.contentWindow as (Window & typeof globalThis) | null;
+        if (!w || w.location.href === 'about:blank' || !w.document.getElementById('root')) throw 0;
+        w.history.pushState(null, '', `?${urlOf(estado).split('?')[1]}`);
+        w.dispatchEvent(new w.PopStateEvent('popstate'));
+        w.scrollTo(0, 0);
+      } catch {
+        iframe.src = urlOf(estado);
+      }
+    };
+    const apply = (t: Screen) => {
+      press(screenBtns, screenBtns.find((b) => b.dataset.peScreen === t.id));
+      const mudou = root.dataset.device !== t.device;
+      setDevice(t.device);
+      // trocando o aparelho, o app precisa de um quadro para assumir o layout novo
+      if (mudou) setTimeout(() => go(t.estado), 300);
+      else go(t.estado);
+    };
+
+    // ---- tour automático ----
+    const hold = Number(root.dataset.hold || 0);
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let touring = hold > 0 && !reduce && screens.length > 1;
+    let idx = 0,
+      elapsed = 0,
+      last = 0,
+      paused = false,
+      visible = false,
+      ready = false;
+    const bar = () => screenBtns[idx]?.querySelector<HTMLElement>('.pe-screen__bar');
+    const stopTour = () => {
+      if (!touring) return;
+      touring = false;
+      root.classList.remove('is-touring');
+      screenBtns.forEach((b) => b.querySelector<HTMLElement>('.pe-screen__bar')?.style.removeProperty('--p'));
+    };
+    const loop = (now: number) => {
+      if (!touring) return;
+      const dt = last ? Math.min(now - last, 100) : 0;
+      last = now;
+      if (ready && visible && !paused && !document.hidden) elapsed += dt;
+      bar()?.style.setProperty('--p', Math.min(1, elapsed / hold).toFixed(3));
+      if (elapsed >= hold) {
+        bar()?.style.removeProperty('--p');
+        idx = (idx + 1) % screens.length;
+        elapsed = 0;
+        apply(screens[idx]);
+      }
+      requestAnimationFrame(loop);
+    };
+    if (touring) {
+      root.classList.add('is-touring');
+      requestAnimationFrame(loop);
+      stage.addEventListener('pointerenter', () => (paused = true));
+      stage.addEventListener('pointerleave', () => (paused = false));
+      new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.35 }).observe(stage);
+      // clicar dentro do app tira o foco da página: é interação, o tour para
+      addEventListener('blur', () => {
+        if (document.activeElement === iframe) stopTour();
+      });
+      root.querySelector('.pe-controls')?.addEventListener('click', stopTour);
+    }
+
+    screenBtns.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        stopTour();
+        idx = i;
+        apply(screens[i]);
+      })
+    );
+    deviceBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        stopTour();
+        setDevice((b.dataset.setDevice as Device) ?? 'desktop');
+      })
+    );
+    // "Ver ao vivo" nas seções
+    document.addEventListener('click', (e) => {
+      const a = (e.target as Element | null)?.closest<HTMLElement>('[data-gpb-tela]');
+      if (!a || a.getAttribute('href') !== `#${root.id}`) return;
+      const i = screens.findIndex((t) => t.id === a.dataset.gpbTela);
+      if (i < 0) return;
+      e.preventDefault();
+      stopTour();
+      idx = i;
+      apply(screens[i]);
+      root.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+
+    // ---- carregamento: tira o poster ----
+    const loaded = () => {
+      ready = true;
+      root.classList.add('is-loaded');
+    };
+    iframe.addEventListener('load', () => {
+      try {
+        if (iframe.contentWindow?.location.href === 'about:blank') return;
+      } catch {
+        /* outra origem */
+      }
+      loaded();
+    });
+    try {
+      if (iframe.contentDocument?.readyState === 'complete' && iframe.contentWindow?.location.href !== 'about:blank') loaded();
+    } catch {
+      /* outra origem */
+    }
+
+    // tela estreita: começa no celular (a janela de 1440 ficaria pequena demais)
+    const inicial = matchMedia('(max-width: 767.98px)').matches ? 'phone' : ((root.dataset.device as Device) ?? 'desktop');
+    setDevice(inicial);
+    new ResizeObserver(fit).observe(stage);
+    addEventListener('resize', fit, { passive: true });
+  });
+</script>

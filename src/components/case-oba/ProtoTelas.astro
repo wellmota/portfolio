@@ -29,7 +29,7 @@ const TEMAS: Record<string, { tema: string; modo: string }> = {
   'tatico-claro': { tema: 'tatico', modo: 'claro' },
 };
 const urlDa = (t: (typeof screens)[number]) => {
-  const tema = TEMAS[t.theme] ?? TEMAS.cozy;
+  const tema = TEMAS[t.theme ?? 'cozy'] ?? TEMAS.cozy;
   const q = new URLSearchParams({ embed: '1', tema: tema.tema, modo: tema.modo, menu: t.menu ?? 'b', patente, estado: t.estado });
   return `${src}?${q}`;
 };
@@ -46,7 +46,7 @@ const urlDa = (t: (typeof screens)[number]) => {
               {t.label}
             </h3>
             <span class="pt-meta">
-              {t.device === 'phone' ? tx.phone : tx.desktop} · {tx.themeLong[t.theme] ?? tx.themeLong.cozy}
+              {t.device === 'phone' ? tx.phone : tx.desktop} · {tx.themeLong[t.theme ?? 'cozy'] ?? tx.themeLong.cozy}
             </span>
           </header>
 
