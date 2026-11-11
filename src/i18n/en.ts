@@ -2,23 +2,23 @@ import type { SiteData } from './types';
 
 const en: SiteData = {
   seo: {
-    title: 'Wellington Mota — Product Engineer & Freelance UX Designer | Apps & MVPs',
+    title: 'Wellington Mota — Design Engineer | Product Design, React & TypeScript',
     description:
-      'Product designer who also codes: I take apps, websites and MVPs from idea to launch for companies and founders, from UX research to shipped code. 15+ years, remote.',
+      'Design Engineer with 15+ years in product design and 3+ shipping front end in React and TypeScript. Case studies with working prototypes. Remote, based in Brazil.',
   },
 
   profile: {
     name: 'Wellington Mota',
     firstName: 'Wellington',
-    role: 'Product Engineer — Design + Fullstack',
+    role: 'Design Engineer',
     roleAi: 'AI Specialist',
     tagline:
-      'Product Engineer who owns both sides: I research, design and build the whole digital product — app, website or system — from idea to code in production, with no handoff. I work with companies and founders who need to get a product off the ground or fix the experience of one that already exists. And I use AI beyond autocomplete: specs, orchestrated agents and evals before deploy — MVPs shipped in days, not months.',
+      'I design digital products and build them in React and TypeScript. What gets approved in the prototype is what ships.',
     location: 'Brasília, BR',
     timezone: 'America/Sao_Paulo',
     email: 'wellingtonmota42@gmail.com',
     available: true,
-    availableText: 'Available for projects & remote roles',
+    availableText: 'Open to remote roles',
   },
 
   nav: [
@@ -45,18 +45,19 @@ const en: SiteData = {
   stats: [
     { value: '15+', label: 'years in product design' },
     { value: '40%', label: 'less handoff time' },
-    { value: '28%', label: 'increase in feature adoption' },
+    { value: '28%', label: 'more feature adoption' },
     { value: '4×', label: 'faster feature delivery' },
   ],
+  statsNote:
+    '40%, 28% and 4× come from Jira data, comparing each project before and after I joined.',
 
   about: {
     eyebrow: 'About me',
     image: '/well-portrait-6.png',
-    heading:
-      'I close the gap between design and code: research, design, and ship.',
+    heading: 'I design the product and write the front end.',
     body: [
-      'I am a Product Engineer at the intersection of design systems, component architecture, and user-centered product thinking. From UX research and high-fidelity prototypes to fullstack applications in production — React/TypeScript integrated with REST and GraphQL APIs.',
-      '15+ years in product design and 3+ years shipping front-end on modern stacks (React, Next.js, Node.js). Degree in Systems Analysis and Development, MBA in Fullstack Development. I thrive on lean teams where one person can own the entire experience — cutting delivery time and handoff noise.',
+      'I have 15+ years in product design and 3+ shipping front end in React, Next.js and TypeScript. I do the UX research, the interface and the code that goes to production, integrated with REST and GraphQL APIs.',
+      'I hold a degree in Systems Analysis and Development and an MBA in Full Stack Development. I work best on small teams, where one person can own a feature from research to deploy.',
     ],
     signatureRole: 'Design + Code',
   },
@@ -64,7 +65,7 @@ const en: SiteData = {
   marquee: [
     'React', 'Next.js', 'TypeScript', 'Design Systems', 'Figma',
     'UX Research', 'Tailwind CSS', 'Node.js', 'Spec-Driven Development',
-    'Agent Orchestration', 'Prompt Engineering', 'Evals', 'MCP', 'RAG', 'Token Optimization',
+    'Agent Orchestration', 'Evals', 'MCP', 'RAG',
   ],
 
   services: [
@@ -73,67 +74,46 @@ const en: SiteData = {
       icon: 'ux',
       title: 'Product Design & UX',
       metaLeft: 'Figma · Research',
-      badge: 'STRATEGIC',
       points: [
         'UX audits of live products',
         'User research & usability testing',
         'Wireframes, flows & IA',
         'High-fidelity prototypes',
       ],
-      ai: 'I generate layout and copy variations with LLMs, synthesize research data with automated analysis, and accelerate A/B tests with evals.',
     },
     {
       index: '02',
       icon: 'system',
       title: 'Design Systems',
       metaLeft: 'Used by 3 teams',
-      badge: 'SCALABLE',
       points: [
         'Tokens & foundations',
         'Component libraries',
         'Living documentation',
       ],
-      ai: 'I automate token generation, component documentation, and accessibility checklists with code agents.',
     },
     {
       index: '03',
       icon: 'code',
       title: 'Front-end Engineering',
       metaLeft: 'Production',
-      badge: 'RELIABLE',
       points: [
         'React · Next.js · TypeScript',
         'REST / GraphQL integration',
         'Performance & accessibility',
       ],
-      ai: 'Agent-powered code review, assisted refactoring, test generation, and automated visual regression detection.',
     },
     {
       index: '04',
       icon: 'ai',
-      title: 'AI Engineering & Orchestration',
+      title: 'AI Engineering',
       metaLeft: 'Specs · Agents · LLM',
-      badge: 'ADVANCED',
       points: [
         'Spec-driven development',
         'Agent orchestration (MCP)',
         'Evals & CI quality gates',
         'RAG in the product UI',
       ],
-      ai: 'Executable specs become code: multi-agent pipelines, version-controlled prompts, and LLM-as-judge evals in CI.',
-    },
-    {
-      index: '05',
-      icon: 'spark',
-      title: 'MVP & products from scratch (0 → 1)',
-      metaLeft: 'Startups · Founders',
-      badge: 'FAST',
-      points: [
-        'From idea to a live MVP',
-        'Store app, website & admin',
-        'Validation with real users',
-      ],
-      ai: 'Full project scaffolding with agents, complete flow prototyping in hours, and real-time iteration.',
     },
   ],
 
@@ -143,232 +123,170 @@ const en: SiteData = {
       title: 'Discovery',
       progress: 25,
       description:
-        'I understand the business, audience, and goals. User research, benchmarking, and defining the product direction.',
-      ai: 'Interview synthesis and competitive analysis with LLMs',
+        'I learn the business, the audience and the goals. User research, benchmarking and a product direction.',
     },
     {
       step: '02',
       title: 'Design',
       progress: 65,
       description:
-        'Information architecture, design system, and high-fidelity screens. Rapid iteration with usability testing.',
-      ai: 'AI-generated layout and copy variations in minutes',
+        'Information architecture, design system and high-fidelity screens, iterated with usability testing.',
     },
     {
       step: '03',
       title: 'Development',
       progress: 90,
       description:
-        'I turn design into responsive, performant React/TypeScript code, integrated with APIs — no handoff.',
-      ai: 'Code agents for scaffolding, testing, and code review',
+        'I build the design in responsive React/TypeScript, integrated with the APIs.',
     },
     {
       step: '04',
       title: 'Delivery & Metrics',
       progress: 100,
       description:
-        'Testing, final adjustments, and monitoring with analytics and A/B testing to validate product impact.',
-      ai: 'Automated evals and continuous monitoring with agents',
+        'Testing, final adjustments, and analytics and A/B tests to check the impact on the product.',
     },
   ],
 
   projects: [
     {
-      title: 'Golfleik',
-      meta: 'Sports · Case Study',
-      categories: ['Product', 'Prototype', '3D'],
+      title: 'VESS Studio',
+      meta: 'Wellness · Case Study',
+      categories: ['Product', 'App', 'Web'],
       description:
-        'A golf club proposal stalled at four screens in Figma. It became a members’ app and a club ERP you can use, with 21 clickable screens and a 3D course. Read the case study →',
-      image: '/cases/golfhub/card-en.webp',
-      accent: '#38EB7F',
-      highlight: 'Playable prototype, 3D course',
-      href: '/work/golfhub/',
-    },
-    {
-      title: 'Método OBA',
-      meta: 'EdTech · Case Study',
-      categories: ['Product', 'Design Eng', 'PHP'],
-      description:
-        'I redesigned the student dashboard of a police-exam prep mentorship in Brazil, from diagnosis to a PHP theme: a block menu on the phone, three themes and 13 police ranks, in a prototype you can click right on the page. Read the case study →',
-      image: '/cases/metodo-oba/img/cover.webp',
-      accent: '#4D7CFF',
-      highlight: 'Nine live screens, desktop and phone',
-      href: '/work/metodo-oba/',
-    },
-    {
-      title: 'GPB',
-      meta: 'Finance · Case Study',
-      categories: ['Product', 'Design Eng', 'React'],
-      description:
-        'I ran the UX round of the finance system of a Brazilian business group straight in the React code: task-based navigation, guided processes and a phone layout with no sideways scroll. The real app runs on the page, with fictional data. Read the case study →',
-      image: '/cases/gpb/img/cover.webp',
-      accent: '#4FBFAF',
-      highlight: 'The real app, live, desktop and phone',
-      href: '/work/gpb/',
-    },
-    {
-      title: 'Lead Airport',
-      meta: 'EdTech · Case Study',
-      categories: ['Product', '3D', 'Data'],
-      description:
-        'The lead table on Tutory’s sales-room TV became a live 3D airport: every lead is a plane that lands, qualified ones enter the hangar. three.js, real time and Smart TV — in one week. Read the case study →',
-      image: '/cases/aeroporto/card-en.webp',
-      accent: '#2456E6',
-      href: '/work/aeroporto-de-leads/',
-    },
-    {
-      title: 'Tutory: visual identity',
-      meta: 'EdTech · Case Study',
-      categories: ['Branding', 'Identity', '3D'],
-      description:
-        'Rebranding with archetypes: the brain rebuilt as architecture, palette, voice, a 37-slide interactive deck and six 3D gamification trophies. Read the case study →',
-      image: '/cases/tutory-rebrand/card-en.webp',
-      accent: '#C9A96E',
-      href: '/work/tutory-rebrand/',
-    },
-    {
-      title: 'Tutory: website',
-      meta: 'EdTech · Case Study',
-      categories: ['Web', 'SEO', 'Astro'],
-      description:
-        'From WordPress to a 14-page Astro website: migration with 301s, Lighthouse 100, Consent Mode v2 and ready to be cited by AIs. Read the case study →',
-      image: '/cases/tutory-site/card-en.webp',
-      accent: '#3B7BF5',
-      href: '/work/tutory-site/',
-    },
-    {
-      title: 'CuidaMe',
-      meta: 'Health · Case Study',
-      categories: ['Product', 'App', 'UX'],
-      description:
-        'Rescue of an app stuck for 2 years before me: in 1 week, workshop, redesign and 100% of the front end ready for beta, approved on the first try. See case study →',
-      image: '/cases/cuidame/card-en.webp',
-      accent: '#2FA98C',
-      highlight: 'From redesign to production in 7 days',
-      href: '/work/cuidame/',
-    },
-    {
-      title: 'CareCloud',
-      meta: 'Health-tech · Case Study',
-      categories: ['Product', 'UX', 'Healthcare'],
-      description:
-        'Helping re-platform a US clinical suite from Adobe Flex to React: four months on-site in Miami, a five-person UX team and hi-fi flows tested with real doctors. Read the case study →',
-      image: '/cases/carecloud/card-en.webp',
-      accent: '#1E8FD5',
-      href: '/work/carecloud/',
-    },
-    {
-      title: 'Resilience Dynamic',
-      meta: 'Wellbeing · Case Study',
-      categories: ['Product', 'UX', 'Prototype'],
-      description:
-        'I designed the resilience app for an Edinburgh consultancy, and it launched. Then I took my Figma file to a 15-screen prototype you can actually use, with the missing screens designed. Read the case study →',
-      image: '/cases/resilience-engine/card-en.webp',
-      accent: '#7C7FF2',
-      highlight: 'Launched app, interactive prototype',
-      href: '/work/resilience-engine/',
-    },
-    {
-      title: 'Finby',
-      meta: 'Fintech · Case Study',
-      categories: ['Product', 'UI', 'Prototype'],
-      description:
-        'Saving up with friends, with nobody chasing payments in the group chat. I took the app I designed from Figma to a prototype you can use on a phone: 12 screens, from invite to payout, built solo in days. Read the case study →',
-      image: '/cases/finby/card-en.webp',
-      accent: '#7552F5',
-      highlight: 'Clickable prototype, invite to payout',
-      href: '/work/finby/',
-    },
-    {
-      title: 'Action247',
-      meta: 'Sports · Case Study',
-      categories: ['Product', 'UI', 'UX'],
-      description:
-        'A free sports prediction game with real cash prizes. I designed the whole product to feel like a sportsbook without ever asking for a bet, from the lobby to the trophy. Read the case study →',
-      image: '/cases/action247/card-en.webp',
-      accent: '#14A85C',
-      href: '/work/action247/',
+        'A Pilates studio replaced rented software with its own: website, App Store app, admin for both studios and automatic billing. I designed and built it in twelve weeks.',
+      image: '/cases/vess/card-en.webp',
+      accent: '#d8b98a',
+      href: '/work/vess/',
+      featured: true,
     },
     {
       title: 'HyperGestor',
       meta: 'Automotive · Case Study',
       categories: ['Product', 'Branding', 'Web'],
       description:
-        'An ERP with an agentic CRM for car dealerships. On my own, I did the brand, the website and the system redesign, from Figma to code in production. Each lead lives in one panel, with WhatsApp and AI inside. Read the case study →',
+        'An ERP with an AI CRM for car dealerships. I did the brand, the website and the system redesign, down to the front end running in production.',
       image: '/cases/hypergestor/card-en.webp',
       accent: '#F48220',
-      highlight: 'Brand, website and ERP · one person',
+      highlight: 'Brand, website and ERP',
       href: '/work/hypergestor/',
+      featured: true,
     },
     {
-      title: 'VESS Studio',
-      meta: 'Wellness · Case Study',
-      categories: ['Product', 'App', 'Web'],
+      title: 'CareCloud',
+      meta: 'Health-tech · Case Study',
+      categories: ['Product', 'UX', 'Healthcare'],
       description:
-        'A premium Pilates studio swapped rented software for its own: website, store-published app, management for both studios and automatic billing. Solo, from proposal to the App Store, in twelve weeks. Read the case study →',
-      image: '/cases/vess/card-en.webp',
-      accent: '#d8b98a',
-      href: '/work/vess/',
+        'A US clinical suite moving from Adobe Flex to React. Four months on-site in Miami on a five-person UX team, with flows tested with doctors.',
+      image: '/cases/carecloud/card-en.webp',
+      accent: '#1E8FD5',
+      href: '/work/carecloud/',
+      featured: true,
     },
     {
-      title: 'Kia Telluride LX',
-      meta: 'Automotive · Landing Page',
-      categories: ['Web', 'UI Design'],
+      title: 'GPB',
+      meta: 'Finance · Case Study',
+      categories: ['Product', 'Design Eng', 'React'],
       description:
-        'Landing page for the Kia Telluride LX — layout, UI, and vehicle configuration experience.',
-      image:
-        'https://mir-s3-cdn-cf.behance.net/project_modules/1400/d71f1e232305417.6899fba2b8c0a.jpg',
-      accent: '#7dd3fc',
+        'A UX round on a business group’s finance system, done directly in the React code. The real app runs on the page, with fictional data.',
+      image: '/cases/gpb/img/cover.webp',
+      accent: '#4FBFAF',
+      highlight: 'The real app, live on the page',
+      href: '/work/gpb/',
+      featured: true,
     },
     {
-      title: 'Autódromo Velocitta',
-      meta: 'Sports · Web',
-      categories: ['Branding', 'Web'],
+      title: 'CuidaMe',
+      meta: 'Health · Case Study',
+      categories: ['Product', 'App', 'UX'],
       description:
-        'Identity and digital presence for the racetrack — visual direction and site experience.',
-      image:
-        'https://mir-s3-cdn-cf.behance.net/project_modules/1400/a21511192194261.65d7923added2.jpg',
-      accent: '#cff24a',
+        'A care app that had been stuck for two years. In one week: workshop, redesign and the whole front end ready for beta, approved on the first try.',
+      image: '/cases/cuidame/card-en.webp',
+      accent: '#2FA98C',
+      highlight: 'Redesign to beta in 7 days',
+      href: '/work/cuidame/',
+      featured: true,
     },
     {
-      title: 'Wevr Virtual Studio',
-      meta: 'Product · US',
-      categories: ['Product', 'UX'],
+      title: 'Lead Airport',
+      meta: 'EdTech · Case Study',
+      categories: ['Product', '3D', 'Data'],
       description:
-        'Interface and experience for Wevr’s VR production platform (WVS).',
-      image:
-        'https://mir-s3-cdn-cf.behance.net/project_modules/1400/564b87162267413.63d2af8b23687.jpg',
-      accent: '#c4b5fd',
+        'The lead table on a sales-room TV became a live 3D airport in three.js, where each lead is a plane that lands. Built in one week.',
+      image: '/cases/aeroporto/card-en.webp',
+      accent: '#2456E6',
+      href: '/work/aeroporto-de-leads/',
+      featured: true,
     },
     {
-      title: 'The Blu · Wevr',
-      meta: 'VR · US',
-      categories: ['Design', 'Campaign'],
+      title: 'Método OBA',
+      meta: 'EdTech',
+      categories: ['Product', 'Design Eng', 'PHP'],
       description:
-        'Campaign pieces for the 10th anniversary of The Blu VR series by Wevr.',
-      image:
-        'https://mir-s3-cdn-cf.behance.net/project_modules/1400/94765a162329377.63d3bfe0bb3fe.jpg',
-      accent: '#38bdf8',
+        'Student dashboard redesign for a police-exam prep course, from diagnosis to a PHP theme.',
+      image: '/cases/metodo-oba/img/cover.webp',
+      accent: '#4D7CFF',
+      href: '/work/metodo-oba/',
     },
     {
-      title: 'ArtCaffé',
-      meta: 'F&B · Kenya',
-      categories: ['Branding', 'Digital'],
+      title: 'Tutory: website',
+      meta: 'EdTech',
+      categories: ['Web', 'SEO', 'Astro'],
       description:
-        'Visual direction and digital assets for the ArtCaffé café chain in Kenya.',
-      image:
-        'https://mir-s3-cdn-cf.behance.net/project_modules/1400/e9ff1b174188663.649d7e96c07e6.png',
-      accent: '#6ee7b7',
+        'WordPress to a 14-page Astro site, with 301 redirects and Lighthouse 100.',
+      image: '/cases/tutory-site/card-en.webp',
+      accent: '#3B7BF5',
+      href: '/work/tutory-site/',
     },
     {
-      title: 'Odens',
-      meta: 'Branding · UK',
-      categories: ['Branding', 'Packaging'],
+      title: 'Tutory: visual identity',
+      meta: 'EdTech',
+      categories: ['Branding', 'Identity', '3D'],
       description:
-        'Brand identity and packaging design praised by the founders.',
-      image:
-        'https://mir-s3-cdn-cf.behance.net/projects/max_808/d07788191695833.Y3JvcCwzMTc1LDI0ODMsNDAwLDExNw.jpg',
-      accent: '#fdba74',
+        'Rebrand with symbol, palette, voice, a 37-slide deck and six 3D trophies.',
+      image: '/cases/tutory-rebrand/card-en.webp',
+      accent: '#C9A96E',
+      href: '/work/tutory-rebrand/',
+    },
+    {
+      title: 'Golfleik',
+      meta: 'Sports',
+      categories: ['Product', 'Prototype', '3D'],
+      description:
+        'A golf-club proposal turned into a clickable members’ app and club ERP, with a 3D course.',
+      image: '/cases/golfhub/card-en.webp',
+      accent: '#38EB7F',
+      href: '/work/golfhub/',
+    },
+    {
+      title: 'Finby',
+      meta: 'Fintech',
+      categories: ['Product', 'UI', 'Prototype'],
+      description:
+        'A group-savings app taken from Figma to a 12-screen prototype you can use on a phone.',
+      image: '/cases/finby/card-en.webp',
+      accent: '#7552F5',
+      href: '/work/finby/',
+    },
+    {
+      title: 'Resilience Dynamic',
+      meta: 'Wellbeing',
+      categories: ['Product', 'UX', 'Prototype'],
+      description:
+        'A wellbeing app that launched, plus a 15-screen prototype built from my Figma file.',
+      image: '/cases/resilience-engine/card-en.webp',
+      accent: '#7C7FF2',
+      href: '/work/resilience-engine/',
+    },
+    {
+      title: 'Action247',
+      meta: 'Sports',
+      categories: ['Product', 'UI', 'UX'],
+      description:
+        'A free sports prediction game designed to feel like a sportsbook without asking for a bet.',
+      image: '/cases/action247/card-en.webp',
+      accent: '#14A85C',
+      href: '/work/action247/',
     },
   ],
 
@@ -384,11 +302,11 @@ const en: SiteData = {
 
   testimonials: [
     {
-      quote: 'Really cool! The copy turned out great, by the way. You have a magic touch… keep going!',
-      author: 'J. C. Nery',
-      company: 'Director of Innovation & Technology · Mitsubishi',
-      logo: '/logos/mitsubishi.svg',
-      tag: 'UI/UX',
+      quote: "You've really made a difference! It's fantastic to see the work you guys are doing start to make an impact on actual revenue.",
+      author: 'Kirsten',
+      company: 'Head of Product · Mindtools',
+      logo: 'https://outboundpartners.com/wp-content/uploads/2025/09/MindTools-Logo.png',
+      tag: 'App Design',
     },
     {
       quote: '…here we are now with you doing visionary prototyping and all kind of other really great stuff. I’ve really enjoyed working with you and the whole team. Keep up the good work!',
@@ -398,11 +316,11 @@ const en: SiteData = {
       tag: 'App Design',
     },
     {
-      quote: 'Man, this new version is stunning. Congrats — you nailed it!',
-      author: 'Fernando Cardoso',
-      company: 'CEO HyperGestor · Head of Innovation, Mitsubishi Motors',
-      logo: 'https://www.hypergestor.com.br/templates/hypergestor/images/hypergestor-light-mode-CdjvtdrG.svg',
-      tag: 'Dashboard',
+      quote: 'You did an amazing job on the website, the ideas, and the refinements. You truly are one of a kind, and I’m really happy you’re on the team. Congrats!',
+      author: 'Cadu',
+      company: 'Head of Marketing · Tutory',
+      logo: 'https://www.tutory.com.br/tutory-logo-v2.svg',
+      tag: 'Website',
     },
     {
       quote: 'Well done! For me they capture the meaning of the brand in a playful, non-threatening way that just kind of pulls you in and makes you want to learn. It’s a big improvement on our first efforts.',
@@ -411,80 +329,30 @@ const en: SiteData = {
       tag: 'UI/UX',
     },
     {
-      quote: 'You did an amazing job on the website, the ideas, and the refinements. You truly are one of a kind, and I’m really happy you’re on the team. Congrats!',
-      author: 'Cadu',
-      company: 'Head of Marketing · Tutory',
-      logo: 'https://www.tutory.com.br/tutory-logo-v2.svg',
-      tag: 'Website',
-    },
-    {
-      quote: "You've really made a difference! It's fantastic to see the work you guys are doing start to make an impact on actual revenue.",
-      author: 'Kirsten',
-      company: 'Head of Product · Mindtools',
-      logo: 'https://outboundpartners.com/wp-content/uploads/2025/09/MindTools-Logo.png',
-      tag: 'App Design',
-    },
-    {
-      quote: 'Nice one, bro! Wow, I got goosebumps.',
-      author: 'Marlom Andrade',
-      company: 'CEO & Founder · Tutory',
-      logo: 'https://www.tutory.com.br/tutory-logo-v2.svg',
-      tag: 'Rebranding',
-    },
-    {
-      quote: 'I really love these designs — very beautiful and I think the branding is on point! Everything feels cohesive to gently nudge the user on their learning journey.',
-      author: 'Nial',
-      company: 'QA Head · Mindtools',
-      logo: 'https://outboundpartners.com/wp-content/uploads/2025/09/MindTools-Logo.png',
-      tag: 'Design System',
-    },
-    {
-      quote: 'The labels look spot on! I am really pleased with the whole package and I think that they will sell like crazy. Thanks to everyone — I really appreciate it.',
-      author: 'Simon',
-      company: 'Founder · Simple Snuff',
-      tag: 'Packaging',
-    },
-    {
-      quote: 'Oh my God, oh my God, oh my God. This is insane, Well!',
-      author: 'Letícia Sousa',
-      company: 'Marketing · Tutory',
-      logo: 'https://www.tutory.com.br/tutory-logo-v2.svg',
-      tag: 'Website',
+      quote: 'Man, this new version is stunning. Congrats, you nailed it!',
+      author: 'Fernando Cardoso',
+      company: 'CEO HyperGestor · Head of Innovation, Mitsubishi Motors',
+      logo: 'https://www.hypergestor.com.br/templates/hypergestor/images/hypergestor-light-mode-CdjvtdrG.svg',
+      tag: 'Dashboard',
     },
   ],
 
   faqs: [
     {
-      q: 'Do you take freelance projects?',
-      a: 'Yes. I work with companies, startups and founders by project, in Brazil and abroad: from a UX audit of an app or website that already exists to a product built from scratch. I am also open to remote roles on product teams.',
-    },
-    {
-      q: 'I have an app idea. Can you get it off the ground?',
-      a: 'Yes. I start by defining who it is for, what problem it solves and what goes into the MVP; then I design the screens and build them. VESS Studio went from proposal to an app published on the App Store in twelve weeks, with a website and a management system alongside it, built by me alone.',
-    },
-    {
       q: 'Do you really do both design and development?',
-      a: 'Yes. I own both sides: UX research and high-fidelity design, plus React/TypeScript implementation in production. This eliminates the handoff and drastically reduces delivery time.',
+      a: 'Yes. On the design side: UX research, flows, high-fidelity interfaces and design systems in Figma. On the code side: React, Next.js, TypeScript and Tailwind, integrated with REST and GraphQL APIs. That is 15+ years in design and 3+ shipping front end.',
     },
     {
       q: 'Do you work remotely?',
-      a: 'Yes. Based in Brasília, Brazil, and open to fully remote opportunities, including international — fluent English, with experience serving clients in the UK and US.',
-    },
-    {
-      q: 'What does your workflow look like?',
-      a: 'Discovery → Design → Development → Delivery. With feedback checkpoints at each stage and metrics (analytics, A/B testing) to validate product impact.',
-    },
-    {
-      q: 'What technologies do you work with?',
-      a: 'React, Next.js, TypeScript, Node.js, Tailwind, and REST/GraphQL integration on the dev side; Figma, design systems, and usability research on the design side.',
+      a: 'Yes. I am based in Brasília, Brazil (GMT-3) and work remotely with teams abroad. My English is fluent, and I have worked with clients in the UK and the US, including four months on-site in Miami.',
     },
     {
       q: 'How do you use AI in your work?',
-      a: 'Far beyond code autocomplete. I work spec-driven: the specification becomes the source of truth, and orchestrated agents in multi-step flows (with MCP) turn it into code. I version and test prompts as code, optimize cost/tokens (caching and model routing), and use LLM-as-judge evals to ensure quality before deploy — integrating AI features directly into the product UI.',
+      a: 'I write the spec first and build from it with agents connected to the project’s tools through MCP. Prompts are versioned and tested like code, and evals run in CI before a deploy. I review and answer for everything that goes to production. When the product itself needs AI, such as search or an assistant, I design and build it into the interface, with RAG where it needs the product’s own data.',
     },
     {
-      q: 'Are you a "vibe coder"? Just throw prompts and accept whatever comes out?',
-      a: 'No. "Vibe coding" means requesting code and hoping it works. I do Design Engineering: I design the experience and implement it with production discipline — version-controlled and tested prompts, evals with CI gates before deploy, cost and token control, design system as the single source of truth, accessibility and performance. AI is a tool under engineering, not a crutch: I understand, review, and take responsibility for what goes to production.',
+      q: 'Do you take freelance projects?',
+      a: 'Yes, by project, for companies and founders in Brazil and abroad: a UX audit, a prototype to validate an idea, or a product built from scratch. The services page explains how it works. My priority right now is a remote role on a product team.',
     },
   ],
 
@@ -492,7 +360,7 @@ const en: SiteData = {
     {
       title: 'Architecture for Designers',
       excerpt:
-        'A 27-slide deck: build your own stack with Vite, Supabase, Claude Code, Git and Vercel — and turn localhost into an edge case hunter.',
+        'A 27-slide deck on building your own stack with Vite, Supabase, Claude Code, Git and Vercel, and using localhost to hunt edge cases.',
       date: 'Aug 2026',
       source: 'Talk · Slides',
       tag: 'Architecture',
@@ -501,7 +369,7 @@ const en: SiteData = {
     {
       title: 'From UX/UI Design to Front-End Development: Embracing a New Chapter',
       excerpt:
-        'My transition after 15+ years in UX/UI design to front-end — and why closing the gap between design and code became my focus.',
+        'My move to front end after 15+ years in UX/UI design, and why the gap between design and code became my focus.',
       date: 'Apr 2024',
       source: 'Medium',
       tag: 'Career',
@@ -510,7 +378,7 @@ const en: SiteData = {
     {
       title: 'Why you should try Hands-off UX/UI documentation like this…',
       excerpt:
-        'A practical hands-off documentation method: user stories, acceptance criteria, and Given-When-Then scenarios to eliminate handoff noise with dev.',
+        'A documentation method built on user stories, acceptance criteria and Given-When-Then scenarios, to cut the back-and-forth with developers.',
       date: 'Apr 2024',
       source: 'Bootcamp · Medium',
       tag: 'Process',
@@ -519,35 +387,39 @@ const en: SiteData = {
   ],
 
   contact: {
-    eyebrow: 'Let’s work together',
-    heading: 'Let’s build',
-    headingMuted: 'something memorable?',
-    sub: 'Got an app idea, a website to rebuild or a product whose UX is holding it back? Tell me about it. Also open to remote roles. I reply within 24h.',
+    eyebrow: 'Contact',
+    heading: 'Get in',
+    headingMuted: 'touch.',
+    sub: 'I am looking for a remote Design Engineer role on a product team, and I also take freelance projects. I reply within 24 hours.',
     cta: 'Email me',
     ctaAlt: 'LinkedIn',
     details: { email: 'Email', location: 'Location', status: 'Status' },
   },
 
   faqAside: {
-    quote:
-      'Didn’t find what you were looking for? Reach out — I’ll tell you everything about how I can help with your product.',
+    quote: 'Have a different question? Email me and I will answer it.',
     metaLabel: 'Response time',
     metaValue: 'Within 24h',
   },
 
   footer: {
     mission:
-      'Product Engineer who bridges design and code to deliver end-to-end digital products for companies, startups and founders. Based in Brasília, open to the world.',
-    badgeText: 'PRODUCT ENGINEER · DESIGN + CODE · OPEN TO PROJECTS · ',
+      'Design Engineer based in Brasília, Brazil. I design products and build their front end. Open to remote roles.',
+    badgeText: 'DESIGN ENGINEER · DESIGN + CODE · OPEN TO REMOTE ROLES · ',
     legal: `© ${new Date().getFullYear()} Wellington Mota. All rights reserved.`,
   },
 
   ui: {
-    startProject: 'Start a project',
-    servicesLink: 'Hire me for a project',
+    startProject: 'Get in touch',
+    servicesLink: 'Freelance projects: see services',
+    moreWork: {
+      label: 'More case studies',
+      earlier: 'Earlier work for Kia, Wevr, ArtCaffé and Odens is on Behance',
+      earlierHref: 'https://www.behance.net/wellingtonmota',
+    },
     footer: {
       location: 'Location',
-      remote: 'Projects & remote work',
+      remote: 'Remote roles & projects',
       contact: 'Contact',
       navigation: 'Navigation',
       services: 'Services for projects',
@@ -556,7 +428,7 @@ const en: SiteData = {
       send: 'Send',
     },
     openMenu: 'Open menu',
-    viewExperience: 'View experience',
+    viewExperience: 'See the work',
     talkToMe: 'Talk to me',
     socialLabel: 'Social',
     portfolioEdition: 'Portfolio — Ed. 2026',
@@ -568,15 +440,15 @@ const en: SiteData = {
       text: 'My guide for graphic designers moving into UX/UI, with AI at every step. 12 chapters, full edition as a PDF.',
       cta: 'Get it free →',
     },
-    sectionClients: { index: '01', label: 'Clients', title: 'Brands that', titleMuted: 'trust my work.' },
-    sectionAbout: { index: '06', label: 'About me' },
-    sectionServices: { index: '02', label: 'Services', title: 'From concept to', titleMuted: 'product, end to end.', caption: 'One professional to design and build your digital experience, no handoff.' },
-    sectionProcess: { index: '03', label: 'How I work', title: 'A clear', titleMuted: 'process.', caption: 'From the first brief to delivery — with feedback and metrics at every stage.' },
-    sectionWork: { index: '04', label: 'Featured projects', title: 'Where I left', titleMuted: 'my mark.', caption: 'Projects for major brands, startups and founders — from Brazil to the UK and US.' },
-    sectionTestimonials: { index: '05', label: 'Testimonials', title: 'What they say', titleMuted: 'about the work.', caption: 'Real feedback from founders, CEOs, and product heads from Brazil, the UK, and US.' },
-    sectionFaq: { index: '07', label: 'FAQ', title: 'Questions?', titleMuted: 'Answered.', caption: '' },
-    sectionWriting: { index: '08', label: 'Writing & Code', title: 'Thinking out loud.', titleMuted: 'And shipping.', caption: 'A book, articles on Medium and code on GitHub — thinking and shipping side by side.' },
-    sectionGithub: { index: '09', label: 'GitHub', title: 'Always', titleMuted: 'shipping.', caption: 'contributions in the last year', legendLess: 'Less', legendMore: 'More', cta: 'Follow on GitHub →' },
+    sectionClients: { index: '01', label: 'Clients', title: 'Brands I have', titleMuted: 'done work for.' },
+    sectionAbout: { index: '02', label: 'About me' },
+    sectionServices: { index: '03', label: 'What I do', title: 'Design, front end', titleMuted: 'and AI.', caption: 'The same person on the design and on the code.' },
+    sectionProcess: { index: '03', label: 'How I work', title: 'How a project', titleMuted: 'runs.', caption: 'From the first brief to delivery, with feedback and metrics at every stage.' },
+    sectionWork: { index: '04', label: 'Selected work', title: 'Six products', titleMuted: 'I designed.', caption: 'Five of them I also built.' },
+    sectionTestimonials: { index: '05', label: 'Testimonials', title: 'From people', titleMuted: 'I worked with.', caption: 'Messages from clients and teammates in Brazil, the UK and the US.' },
+    sectionFaq: { index: '06', label: 'FAQ', title: 'Questions?', titleMuted: '', caption: '' },
+    sectionWriting: { index: '07', label: 'Writing & Code', title: 'Writing', titleMuted: 'and code.', caption: 'A book, a talk, two articles and my GitHub activity.' },
+    sectionGithub: { index: '08', label: 'GitHub', title: 'GitHub', titleMuted: 'activity.', caption: 'contributions in the last year', legendLess: 'Less', legendMore: 'More', cta: 'Follow on GitHub →' },
   },
 };
 

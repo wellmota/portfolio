@@ -17,6 +17,8 @@ export interface SiteData {
   socials: { label: string; href: string }[];
   heroStats: { headline: string; label: string; sub: string };
   stats: { value: string; label: string }[];
+  /** Origem dos números, em uma linha abaixo da grade */
+  statsNote?: string;
   about: {
     eyebrow: string;
     image: string;
@@ -30,16 +32,13 @@ export interface SiteData {
     icon: string;
     title: string;
     metaLeft: string;
-    badge: string;
     points: string[];
-    ai: string;
   }[];
   process: {
     step: string;
     title: string;
     progress: number;
     description: string;
-    ai: string;
   }[];
   projects: {
     title: string;
@@ -52,6 +51,8 @@ export interface SiteData {
     href?: string;
   /** Destaque curto em lime acima do título do card (ex.: prazo). */
   highlight?: string;
+    /** Card grande na home; os demais entram na lista compacta. */
+    featured?: boolean;
   }[];
   clients: string[];
   testimonials: {
@@ -94,6 +95,8 @@ export interface SiteData {
     startProject: string;
     /** Link da seção de serviços da home para a página de serviços */
     servicesLink: string;
+    /** Lista compacta de cases abaixo dos cards em destaque */
+    moreWork: { label: string; earlier: string; earlierHref: string };
     footer: { location: string; remote: string; contact: string; navigation: string; services: string; talk: string; placeholder: string; send: string };
     openMenu: string;
     viewExperience: string;

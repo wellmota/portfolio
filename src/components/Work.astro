@@ -6,6 +6,9 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const data = getSiteData(lang);
 const { projects } = data;
+const featured = projects.filter((p) => p.featured);
+const more = projects.filter((p) => !p.featured);
+const { moreWork } = data.ui;
 ---
 
 <section id="projetos" class="container-page pb-14 sm:pb-20 md:pb-32">
@@ -19,7 +22,7 @@ const { projects } = data;
 
   <div class="mt-16 grid gap-5 md:grid-cols-2">
     {
-      projects.map((project) => (
+      featured.map((project) => (
         <a
           href={project.href ?? '#contato'}
           class="group flex flex-col border border-line bg-ink-soft p-4 transition-colors duration-300 hover:border-line-strong"
@@ -92,4 +95,36 @@ const { projects } = data;
     }
   </div>
 
+  {/* Demais cases: lista compacta, uma linha cada */}
+  {more.length > 0 && (
+    <div class="mt-14 sm:mt-20" data-reveal>
+      <h3 class="label">{moreWork.label}</h3>
+      <ul class="mt-5 border-t border-line">
+        {more.map((project) => (
+          <li class="border-b border-line">
+            <a
+              href={project.href ?? '#contato'}
+              class="group grid grid-cols-[1fr_auto] items-baseline gap-x-6 gap-y-1 py-5 md:grid-cols-[16rem_1fr_auto]"
+            >
+              <span class="display text-xl leading-tight transition-colors group-hover:text-lime md:text-2xl">
+                {project.title}
+              </span>
+              <span class="col-span-2 row-start-2 max-w-2xl text-[14px] leading-relaxed text-mist md:col-span-1 md:row-start-auto">
+                {project.description}
+              </span>
+              <span class="mono text-[10.5px] uppercase tracking-widest text-faint">{project.meta}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a
+        href={moreWork.earlierHref}
+        target="_blank"
+        rel="noreferrer"
+        class="mono link-underline mt-6 inline-block text-[13px] text-mist transition-colors hover:text-cream"
+      >
+        {moreWork.earlier} →
+      </a>
+    </div>
+  )}
 </section>

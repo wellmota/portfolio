@@ -7,7 +7,7 @@ const cuidame: CaseStudy = {
     kicker: 'Case Study — 2026',
     title: 'CuidaMe',
     subtitle:
-      'O resgate de um app de cuidado dado como perdido: menos escopo, foco na família e, em uma semana, workshop, redesign e 100% do front-end prontos para beta — aprovados de primeira.',
+      'Um app de cuidado que estava travado havia dois anos. Cortei escopo, mudei o foco para a família e, em uma semana, entreguei workshop, redesign e o front-end inteiro pronto para beta. O cliente aprovou de primeira.',
     heroVideo: { src: '/cases/cuidame/cuidame-editorial.mp4', poster: '/cases/cuidame/cover-real.webp' },
     cover: {
       src: '/cases/cuidame/cover-real.webp',
@@ -16,21 +16,18 @@ const cuidame: CaseStudy = {
     meta: [
       { label: 'Cliente', value: 'Altevita · Clínica de cuidado' },
       { label: 'Ano', value: '2026' },
-      { label: 'Papel', value: 'Product Designer & Design Engineer — solo' },
+      { label: 'Papel', value: 'Product Designer & Design Engineer, solo' },
       { label: 'Plataforma', value: 'App mobile · iOS & Android' },
       { label: 'Contexto', value: 'Resgate de um projeto travado há 2 anos antes da minha entrada' },
     ],
     stats: [
-      { value: '2 anos', label: 'travado antes da minha entrada, destravado' },
-      { value: '1 semana', label: 'workshop, redesign e 100% do front-end' },
-      { value: '100%', label: 'do front pronto para beta testers em 7 dias' },
-      { value: '1ª', label: 'versão do protótipo aprovada de primeira' },
-      { value: '0', label: 'handoff — do design direto para a produção' },
-      { value: 'Novo', label: 'produto que o cliente agora vai comercializar' },
+      { value: '2 anos', label: 'travado antes da minha entrada' },
+      { value: '1 semana', label: 'do workshop ao front-end pronto para beta' },
+      { value: '1ª', label: 'versão do protótipo, aprovada de primeira' },
     ],
     intro: [
       'O CuidaMe é um app da Altevita para acompanhar o cuidado de pessoas. Nasceu como ferramenta de uma empresa de cuidado, com gestão de equipe, escalas e visita de cuidador no centro.',
-      'Quando cheguei, o produto estava há dois anos num ciclo de vai e vem: fazia, não era o esperado, refazia. A relação com o cliente estava desgastada e o projeto, na prática, fadado ao cancelamento. Eu entrei para destravar.',
+      'Quando cheguei, o produto estava havia dois anos num vai e vem: fazia, não era o esperado, refazia. A relação com o cliente estava desgastada e o projeto caminhava para o cancelamento.',
     ],
     roleLabel: 'O que eu fiz',
     roleList: [
@@ -40,10 +37,8 @@ const cuidame: CaseStudy = {
       'UX research & fluxos',
       'Redesign de UI',
       'Protótipo navegável',
-      'Ciclos de validação',
       'Design system',
-      'Front-end (direto em produção)',
-      'Reuniões com stakeholders',
+      'Front-end em produção',
     ],
     sections: [
       {
@@ -65,18 +60,17 @@ const cuidame: CaseStudy = {
         kicker: '02 — O problema',
         title: 'Dois anos de vai e vem e uma relação para resetar',
         body: [
-          'Antes da minha entrada, o projeto passou dois anos com outro time e descarrilou pelo motivo mais comum: falta de detalhamento. Pedia-se uma coisa, entregava-se outra, refazia. Dois anos depois, o cliente estava frustrado com razão e o produto, parado.',
-          'O meu trabalho não era desenhar telas bonitas em cima de um escopo nebuloso. Era ser a peça que destrava: devolver clareza antes de devolver código.',
-          'A relação estava desgastada, e isso vinha antes de qualquer tela. Apliquei um processo de empatia com o cliente: ouvir onde doía, entender o que elas esperavam e o que já tinham desistido de pedir. A meta não era entregar o combinado — era entregar muito além da expectativa, para a confiança voltar junto com o produto.',
+          'Antes da minha entrada, o projeto passou dois anos com outro time e travou por falta de detalhamento. Pedia-se uma coisa, entregava-se outra, refazia. O cliente estava frustrado, com razão.',
+          'Então comecei pelo cliente, antes de qualquer tela. Ouvi onde doía, o que elas esperavam e o que já tinham desistido de pedir. O escopo precisava ficar claro antes de eu escrever código, e a entrega tinha que ir além do combinado para a confiança voltar.',
         ],
         image: {
           src: '/cases/cuidame/problema.svg',
           alt: 'Diagrama do ciclo de retrabalho: pedir, entregar fora do esperado, refazer',
-          caption: 'A raiz do descarrilamento: escopo sem detalhe vira retrabalho infinito.',
+          caption: 'Escopo sem detalhe vira retrabalho.',
         },
-        galleryTitle: 'Antes — o app que eu herdei',
+        galleryTitle: 'Antes: o app que eu herdei',
         galleryBadge: 'Antes',
-        galleryCaption: 'O app publicado antes da minha entrada, dois anos de retrabalho depois: formulários de quinze campos, telas feitas de botões iguais, modal em cima de modal e uma aba “Mais” só com Sair e Excluir conta. Era isso que a cliente usava — e por isso estava frustrada.',
+        galleryCaption: 'O app publicado antes da minha entrada, dois anos de retrabalho depois: formulários de quinze campos, telas feitas de botões iguais, modal em cima de modal e uma aba “Mais” só com Sair e Excluir conta. Era isso que a cliente usava.',
         gallery: [
           { src: '/cases/cuidame/before-bw/old-add-paciente-1.webp', alt: 'App antigo: formulário de cadastro de paciente com seletor de nível de dependência solto no meio da tela' },
           { src: '/cases/cuidame/before-bw/old-add-cuidador.webp', alt: 'App antigo: formulário de cadastro de cuidador com sete campos obrigatórios e regras de senha' },
@@ -89,24 +83,24 @@ const cuidame: CaseStudy = {
         kicker: '03 — O método',
         title: 'Mapear tela a tela antes de prometer qualquer prazo',
         body: [
-          'Inverti a ordem. Antes de falar em prazo, conduzi um workshop de mapeamento com o cliente: tela a tela, fluxo a fluxo, jornada a jornada. Nada de reunião de meia hora.',
-          'Dali saiu um protótipo navegável que o cliente conseguia usar de verdade. Eles criticavam, eu ajustava, em ciclo, até estar 100%. Só então assumimos prazo — com o escopo claro para os dois lados, não no escuro.',
-          'O protótipo já nasceu na stack final, em Expo. Antes de cada rodada com a cliente, eu passava as telas por heurísticas de usabilidade e boas práticas de UI; o teste ficava para o que só o uso real mostra. O refino visual acontecia direto no código, no mesmo dia, sem documento no meio. Quando a cliente aprovou, o protótipo era o produto.',
+          'Antes de falar em prazo, conduzi um workshop de mapeamento com o cliente, tela a tela e fluxo a fluxo.',
+          'Dali saiu um protótipo navegável que o cliente conseguia usar. Eles criticavam e eu ajustava, em ciclos, até fechar. Só então assumimos prazo, com o escopo claro para os dois lados.',
+          'O protótipo já nasceu na stack final, em Expo. Antes de cada rodada com a cliente, eu passava as telas por heurísticas de usabilidade e boas práticas de UI, e o teste ficava para o que só o uso real mostra. O refino visual acontecia direto no código, no mesmo dia. Quando a cliente aprovou, o protótipo já era o produto.',
         ],
         image: {
           src: '/cases/cuidame/mapeamento.svg',
           alt: 'Mapa de telas e fluxos do CuidaMe montado no workshop',
-          caption: 'Do workshop ao protótipo aprovado: heurísticas antes do teste, teste com a cliente, refino direto na stack. O protótipo aprovado é a produção.',
+          caption: 'Do workshop ao protótipo aprovado: heurísticas, teste com a cliente e refino direto na stack.',
         },
       },
       {
         kicker: '04 — A virada de produto',
-        title: 'Tirar, não acrescentar.',
+        title: 'Um app menor, para a família',
         body: [
-          'A direção mudou: não era um app novo, era o atual, simplificado. Nas palavras da cliente, o objetivo não era acrescentar nada — era tirar. O público também mudou, de ferramenta de empresa para uso familiar, em casa.',
+          'A direção mudou: em vez de um app novo, o atual simplificado. Nas palavras da cliente, o objetivo era tirar, e não acrescentar. O público também mudou, de ferramenta de empresa para uso familiar, em casa.',
           'O CuidaMe virou um prontuário compartilhado da família. Dois cenários guiaram tudo: irmãos dividindo o cuidado de pais idosos, e pais separados dividindo o cuidado dos filhos.',
           'Saíram as funcionalidades de empresa: gestão, escala, visita do cuidador, checagem de sinais vitais e evolução. Ficou o essencial da família: agenda de compromissos, prescrição de medicamentos e de cuidados, chat da família, anotação de enfermagem só para intercorrências e um canal para enviar comunicados e vídeos.',
-          'E entrou uma peça nova: divisão de contas no estilo Tricount. Cada um lança o que gastou com o cuidado e o app calcula quem paga quem — porque dividir o cuidado é também dividir a conta.',
+          'E entrou uma peça nova: divisão de contas no estilo Tricount. Cada um lança o que gastou com o cuidado e o app calcula quem paga quem.',
         ],
         compare: {
           beforeLabel: 'Antes',
@@ -179,10 +173,10 @@ const cuidame: CaseStudy = {
       },
       {
         kicker: '05 — Resultado',
-        title: 'De fadado ao cancelamento a nova fonte de receita',
+        title: 'De quase cancelado a produto da Altevita',
         body: [
-          'Tudo isso em uma semana: workshop de mapeamento, redesign completo e 100% do front-end feito, pronto para os beta testers. Fiz o trabalho direto no front, cortando o handoff. O que saía do design já ia para produção — e o cliente aprovou de primeira, depois de dois anos sem conseguir fechar uma versão.',
-          'Um projeto que ia ser cancelado agora será comercializado pela Altevita como produto próprio, uma nova fonte de receita, e abriu perspectiva para novos projetos juntos. A relação, de desgastada, virou parceria.',
+          'Em uma semana ficaram prontos o workshop de mapeamento, o redesign completo e o front-end inteiro, à disposição dos beta testers. Como fiz o trabalho direto no front, o que saía do design já ia para produção. O cliente aprovou de primeira, depois de dois anos sem conseguir fechar uma versão.',
+          'O projeto que ia ser cancelado agora será comercializado pela Altevita como produto próprio, e abriu espaço para novos projetos juntos.',
         ],
         whatsapp: {
           caption: 'Grupo do projeto no WhatsApp, no dia da entrega do protótipo. Nomes parcialmente ocultos.',
@@ -224,13 +218,10 @@ const cuidame: CaseStudy = {
     outcomesLabel: 'Resultados',
     outcomesTitle: 'O que mudou para o negócio',
     outcomes: [
-      'De dois anos travado (antes de mim) a protótipo aprovado de primeira',
-      'Uma semana do workshop ao front-end 100% pronto para beta testers',
-      'Escopo simplificado: funcionalidades de empresa cortadas, foco na família',
-      'App reposicionado como prontuário compartilhado da família',
+      'De dois anos travado a protótipo aprovado de primeira',
+      'Escopo simplificado: saíram as funcionalidades de empresa, ficou a família',
       'Novo módulo de divisão de contas no estilo Tricount',
-      'Design direto em produção, sem handoff',
-      'De fadado ao cancelamento a produto comercializável, com novos projetos à vista',
+      'De quase cancelado a produto que a Altevita vai comercializar',
     ],
     stackLabel: 'Stack',
     stack: [
@@ -243,15 +234,15 @@ const cuidame: CaseStudy = {
       'Design System',
     ],
     cta: {
-      heading: 'Tem um projeto travado que precisa destravar?',
-      sub: 'Eu entro, mapeio, prototipo e entrego em produção — até ficar 100%.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
     seo: {
       title: 'CuidaMe: app de saúde resgatado e redesenhado em 7 dias | Wellington Mota',
       description:
-        'Resgate e redesign de um app de cuidado travado por dois anos: em uma semana, workshop, redesign e 100% do front-end prontos para beta, aprovados de primeira — do design direto à produção.',
+        'Resgate e redesign de um app de cuidado travado por dois anos: em uma semana, workshop, redesign e o front-end inteiro prontos para beta, aprovados de primeira.',
     },
   },
 
@@ -261,7 +252,7 @@ const cuidame: CaseStudy = {
     kicker: 'Case Study — 2026',
     title: 'CuidaMe',
     subtitle:
-      'Rescuing a care app everyone had given up on: less scope, a family-first focus and, in one week, workshop, redesign and 100% of the front end ready for beta — approved on the first try.',
+      'A care app that had been stuck for two years. I cut scope, moved the focus to families and, in one week, delivered the workshop, the redesign and the whole front end ready for beta. The client approved it on the first try.',
     heroVideo: { src: '/cases/cuidame/cuidame-editorial.mp4', poster: '/cases/cuidame/cover-real.webp' },
     cover: {
       src: '/cases/cuidame/cover-real.webp',
@@ -270,21 +261,18 @@ const cuidame: CaseStudy = {
     meta: [
       { label: 'Client', value: 'Altevita · Care clinic' },
       { label: 'Year', value: '2026' },
-      { label: 'Role', value: 'Product Designer & Design Engineer — solo' },
+      { label: 'Role', value: 'Product Designer & Design Engineer, solo' },
       { label: 'Platform', value: 'Mobile app · iOS & Android' },
       { label: 'Context', value: 'Rescue of a project stuck for 2 years before I came in' },
     ],
     stats: [
-      { value: '2 years', label: 'stuck before I came in, unblocked' },
-      { value: '1 week', label: 'workshop, redesign and 100% of the front end' },
-      { value: '100%', label: 'of the front end ready for beta testers in 7 days' },
+      { value: '2 years', label: 'stuck before I came in' },
+      { value: '1 week', label: 'from workshop to a front end ready for beta' },
       { value: '1st', label: 'prototype version, approved on the first try' },
-      { value: '0', label: 'handoff — from design straight to production' },
-      { value: 'New', label: 'product the client will now commercialize' },
     ],
     intro: [
       'CuidaMe is an Altevita app for following someone’s care. It began as a care-company tool, built around team management, shift scheduling and caregiver visits.',
-      'By the time I came in, the product had spent two years in a loop: build it, it is not what they expected, build it again. The client relationship was worn down and the project was, in practice, headed for cancellation. I was brought in to unblock it.',
+      'By the time I came in, the product had spent two years in a loop: build it, it is not what they expected, build it again. The client relationship was worn down and the project was heading for cancellation.',
     ],
     roleLabel: 'What I did',
     roleList: [
@@ -294,10 +282,8 @@ const cuidame: CaseStudy = {
       'UX research & flows',
       'UI redesign',
       'Navigable prototype',
-      'Validation cycles',
       'Design system',
-      'Front-end (straight to production)',
-      'Stakeholder meetings',
+      'Front end in production',
     ],
     sections: [
       {
@@ -319,18 +305,17 @@ const cuidame: CaseStudy = {
         kicker: '02 — The problem',
         title: 'Two years of back-and-forth and a relationship to reset',
         body: [
-          'Before I came in, the project had spent two years with another team and derailed for the most common reason: a lack of detail. One thing was asked for, another was delivered, and it was redone. Two years in, the client was frustrated with good reason and the product had stalled.',
-          'My job was not to draw pretty screens on top of a fuzzy scope. It was to be the piece that unblocks: give back clarity before giving back code.',
-          'The relationship was worn down, and that came before any screen. I ran an empathy process with the client: listening to where it hurt, understanding what they expected and what they had already given up asking for. The goal was not to deliver what was agreed — it was to deliver far beyond expectations, so trust came back together with the product.',
+          'Before I came in, the project had spent two years with another team and stalled for lack of detail. One thing was asked for, another was delivered, and it was redone. The client was frustrated, with good reason.',
+          'So I started with the client, before any screen. I listened to where it hurt, what they expected and what they had given up asking for. The scope had to be clear before I wrote code, and the delivery had to go beyond what was agreed for the trust to come back.',
         ],
         image: {
           src: '/cases/cuidame/problema-en.svg',
           alt: 'Diagram of the rework loop: ask, deliver off-target, redo',
-          caption: 'The root of the derailment: scope without detail turns into endless rework.',
+          caption: 'Scope without detail turns into rework.',
         },
-        galleryTitle: 'Before — the app I inherited',
+        galleryTitle: 'Before: the app I inherited',
         galleryBadge: 'Before',
-        galleryCaption: 'The app as published before I came in, two years of rework later: fifteen-field forms, screens made of identical buttons, modals on top of modals and a “More” tab with nothing but Sign out and Delete account. This is what the client was using — and why she was frustrated.',
+        galleryCaption: 'The app as published before I came in, two years of rework later: fifteen-field forms, screens made of identical buttons, modals on top of modals and a “More” tab with nothing but Sign out and Delete account. This is what the client was using.',
         gallery: [
           { src: '/cases/cuidame/before-bw/old-add-paciente-1.webp', alt: 'Old app: patient sign-up form with a dependency-level picker floating mid-screen' },
           { src: '/cases/cuidame/before-bw/old-add-cuidador.webp', alt: 'Old app: caregiver sign-up form with seven required fields and password rules' },
@@ -343,24 +328,24 @@ const cuidame: CaseStudy = {
         kicker: '03 — The method',
         title: 'Map every screen before promising any deadline',
         body: [
-          'I flipped the order. Before talking about deadlines, I ran a mapping workshop with the client: screen by screen, flow by flow, journey by journey. No thirty-minute meeting.',
-          'Out of it came a navigable prototype the client could actually use. They critiqued, I adjusted, in cycles, until it was 100%. Only then did we commit to a timeline — with the scope clear to both sides, not in the dark.',
-          'The prototype was born in the final stack, in Expo. Before each round with the client I ran the screens through usability heuristics and UI best practices; testing was saved for what only real use reveals. Visual polish happened straight in the code, the same day, with no document in between. When the client approved, the prototype was the product.',
+          'Before talking about deadlines, I ran a mapping workshop with the client, screen by screen and flow by flow.',
+          'Out of it came a navigable prototype the client could use. They critiqued and I adjusted, in cycles, until it was right. Only then did we commit to a timeline, with the scope clear to both sides.',
+          'The prototype was built in the final stack from the start, in Expo. Before each round with the client I ran the screens through usability heuristics and UI best practices, and saved testing for what only real use reveals. Visual polish happened in the code, the same day. When the client approved it, the prototype was already the product.',
         ],
         image: {
           src: '/cases/cuidame/mapeamento-en.svg',
           alt: 'Map of CuidaMe screens and flows built in the workshop',
-          caption: 'From workshop to approved prototype: heuristics before testing, testing with the client, polish straight in the stack. The approved prototype is production.',
+          caption: 'From workshop to approved prototype: heuristics, testing with the client and polish in the final stack.',
         },
       },
       {
         kicker: '04 — The product pivot',
-        title: 'Less app, not more app',
+        title: 'A smaller app, for families',
         body: [
-          'The direction changed: it was not a new app, it was the current one, simplified. In the client’s words, the goal was not to add anything — it was to remove. The audience changed too, from a company tool to family use, at home.',
+          'The direction changed: the current app, simplified, instead of a new one. In the client’s words, the goal was to remove things and add nothing. The audience changed too, from a company tool to family use, at home.',
           'CuidaMe became a shared family care record. Two scenarios guided everything: siblings sharing the care of aging parents, and separated parents sharing the care of their children.',
           'Out went the company features: management, shift scheduling, caregiver visits, vital-sign checks and progress logs. What stayed was the family essentials: an appointments calendar, medication and care prescriptions, a family chat, nursing notes only for incidents, and a channel to send announcements and videos.',
-          'And one new piece came in: expense splitting in the style of Tricount. Each person logs what they spent on care and the app works out who owes whom — because sharing care also means sharing the bill.',
+          'And one new piece came in: expense splitting in the style of Tricount. Each person logs what they spent on care and the app works out who owes whom.',
         ],
         compare: {
           beforeLabel: 'Before',
@@ -433,10 +418,10 @@ const cuidame: CaseStudy = {
       },
       {
         kicker: '05 — Outcome',
-        title: 'From headed for cancellation to a new revenue stream',
+        title: 'From nearly cancelled to an Altevita product',
         body: [
-          'All of it in one week: mapping workshop, full redesign and 100% of the front end built, ready for beta testers. I did the work straight on the front end, cutting the handoff. What came out of design went straight to production — and the client approved it on the first try, after two years of never closing a single version.',
-          'A project that was about to be cancelled will now be commercialized by Altevita as a product of their own, a new revenue stream, and it opened the door to new projects together. A worn-down relationship turned into a partnership.',
+          'In one week the mapping workshop, the full redesign and the whole front end were done and ready for beta testers. Because I worked directly in the front end, what came out of design went straight to production. The client approved it on the first try, after two years without closing a version.',
+          'The project that was about to be cancelled will now be sold by Altevita as a product of its own, and it opened the way to new projects together.',
         ],
         whatsapp: {
           caption: 'Project WhatsApp group on the day the prototype was delivered. Names partially hidden; messages kept in the original Portuguese.',
@@ -478,13 +463,10 @@ const cuidame: CaseStudy = {
     outcomesLabel: 'Results',
     outcomesTitle: 'What changed for the business',
     outcomes: [
-      'From two years stuck (before me) to a prototype approved on the first try',
-      'One week from workshop to a front end 100% ready for beta testers',
-      'Scope simplified: company features cut, focus on the family',
-      'App repositioned as a shared family care record',
+      'From two years stuck to a prototype approved on the first try',
+      'Scope simplified: the company features went, the family stayed',
       'A new Tricount-style expense-splitting module',
-      'Design straight to production, with no handoff',
-      'From headed for cancellation to a commercializable product, with new projects ahead',
+      'From nearly cancelled to a product Altevita will sell',
     ],
     stackLabel: 'Stack',
     stack: [
@@ -497,15 +479,15 @@ const cuidame: CaseStudy = {
       'Design System',
     ],
     cta: {
-      heading: 'Got a stuck project that needs unblocking?',
-      sub: 'I come in, map it, prototype it and ship it to production — until it is 100%.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },
     seo: {
       title: 'CuidaMe: health app rescued and redesigned in 7 days | Wellington Mota',
       description:
-        'Rescue and redesign of a care app stuck for two years: in one week, workshop, redesign and 100% of the front end ready for beta, approved on the first try — from design straight to production.',
+        'Rescue and redesign of a care app stuck for two years: in one week, workshop, redesign and the whole front end ready for beta, approved on the first try.',
     },
   },
 };

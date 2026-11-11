@@ -135,7 +135,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     },
     meta: [
       { label: 'Cliente', value: 'Tutory · EdTech, Brasília' },
-      { label: 'Período', value: 'Mar — Ago 2026' },
+      { label: 'Período', value: 'Mar a Ago 2026' },
       { label: 'Papel', value: 'Brand designer, solo' },
       { label: 'Arquétipos', value: 'O Governante · O Mágico' },
       { label: 'Entrega', value: 'Símbolo · paleta · voz · deck' },
@@ -144,10 +144,10 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       {
         num: '01',
         kicker: 'O gap',
-        title: 'Quem chegava, via uma ferramenta.',
-        lead: 'O problema nunca foi o produto. A Tutory cresceu além do que a marca conseguia transmitir.',
+        title: 'Uma marca menor que a empresa',
+        lead: 'O produto tinha virado um ecossistema, e a marca ainda descrevia uma ferramenta.',
         body: [
-          'Por fora, a Tutory era um cérebro azul de contorno arredondado, um site em WordPress e um discurso de features: "a melhor plataforma do mercado para coaches". Por dentro, era um ecossistema com três produtos, milhares de mentores, um podcast e um evento próprio. Quem chegava, via uma ferramenta. Quem ficava, descobria o ecossistema.',
+          'Por fora, a Tutory era um cérebro azul de contorno arredondado, um site em WordPress e um discurso de features: "a melhor plataforma do mercado para coaches". Por dentro, era um ecossistema com três produtos, milhares de mentores, um podcast e um evento próprio. Quem chegava via uma ferramenta, e só quem ficava descobria o ecossistema.',
           'Antes de desenhar, mapeei o site e as peças antigas uma a uma e transcrevi calls de vendas reais. O contraste entre o que o time dizia nas calls e o que a marca dizia sozinha virou o quarto slide do deck, e a tese de todo o projeto.',
         ],
       },
@@ -157,7 +157,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'Personalidade',
         title: 'O Governante, com um traço de O Mágico.',
         body: [
-          'Comecei pela personalidade, não pelo desenho. A Tutory é quem define o padrão do mercado de mentoria: O Governante. E tem um traço de O Mágico, quem transforma o que existe em algo que não existia. Os dois arquétipos deram as regras de tudo que veio depois: formas calculadas, poucas cores, voz que afirma em vez de prometer.',
+          'Comecei pela personalidade, antes de desenhar qualquer coisa. A Tutory é quem define o padrão do mercado de mentoria: O Governante. E tem um traço de O Mágico, quem transforma o que existe em algo que não existia. Os dois arquétipos deram as regras de tudo que veio depois: formas calculadas, poucas cores, voz que afirma em vez de prometer.',
         ],
         blocks: [
           {
@@ -193,9 +193,9 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       {
         num: '04',
         kicker: 'O símbolo',
-        title: 'Cada ângulo calculado, cada linha com intenção.',
+        title: 'Um símbolo construído como desenho técnico',
         body: [
-          'Grandes estruturas não surgem só de inspiração; surgem de planejamento. O novo símbolo são duas metades hexagonais em traços retos, espelhadas num eixo exato, com os giros do cérebro recortados por dentro. Três inclinações, 26,6°, 27,6° e 31,3°, e um vão central de 10,92 unidades, 7,4 % da largura. Tudo documentado no desenho de construção, cotado a partir do vetor final.',
+          'O novo símbolo são duas metades hexagonais em traços retos, espelhadas num eixo exato, com os giros do cérebro recortados por dentro. Três inclinações, 26,6°, 27,6° e 31,3°, e um vão central de 10,92 unidades, 7,4 % da largura. Tudo documentado no desenho de construção, cotado a partir do vetor final.',
         ],
         blocks: [
           {
@@ -204,7 +204,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
             tag: 'Nova arquitetura',
             title: 'O mesmo símbolo. Uma arquitetura completamente',
             accent: 'nova.',
-            text: 'Cada ângulo calculado, cada linha com intenção: o cérebro que sempre representou a Tutory, redesenhado à altura do que ela se tornou.',
+            text: 'O cérebro que sempre representou a Tutory, redesenhado à altura do que ela se tornou.',
             video: { src: `${B}/simbolo.mp4`, webm: `${B}/simbolo.webm`, poster: `${B}/simbolo-poster.webp` },
             alt: 'Vídeo em loop: o símbolo da Tutory em cromo girando lentamente sobre fundo preto',
           },
@@ -225,9 +225,9 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         num: '05',
         theme: 'light',
         kicker: 'Paleta',
-        title: 'A cor da inteligência.',
+        title: 'Azul elétrico, e o dourado para momentos raros',
         body: [
-          'O azul elétrico não foi escolhido por acidente. É a cor da clareza intelectual, da faísca que acontece quando o conhecimento certo encontra o momento certo. Em volta dele, dois escuros para o fundo, um azul claro para o detalhe e um gelo para o papel. E o dourado reservado aos instantes únicos em que a mentoria transforma.',
+          'Na marca, o azul elétrico representa clareza intelectual. Em volta dele, dois escuros para o fundo, um azul claro para o detalhe e um gelo para o papel. O dourado fica reservado aos momentos raros em que a mentoria transforma alguém.',
         ],
         blocks: [palettePt],
       },
@@ -236,7 +236,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'A voz',
         title: 'Como a Tutory fala.',
         body: [
-          'Gilroy nos títulos, geométrica e segura; Manrope no corpo e na interface, variável e legível em qualquer tamanho. E a voz escrita mudou junto com a forma: do superlativo que promete para a afirmação de quem já é referência.',
+          'Gilroy nos títulos, geométrica e segura; Manrope no corpo e na interface, variável e legível em qualquer tamanho. A voz escrita mudou junto com a forma: parou de prometer em superlativos e passou a afirmar, como quem já é referência.',
         ],
         blocks: [
           {
@@ -276,7 +276,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'A marca no mundo',
         title: 'Em tamanho real.',
         body: [
-          'Uma identidade só existe quando sai do deck. A Tutory Experience reúne os maiores mentores do país num dia, e a assinatura Empowering Intelligence foi desenhada para esse tamanho: painel de palco, estande, uniforme, crachá, papelaria e social. Preto, azul elétrico e um só ponto de luz.',
+          'Uma identidade precisa funcionar fora do deck. A Tutory Experience reúne os maiores mentores do país num dia, e a assinatura Empowering Intelligence foi desenhada para esse tamanho: painel de palco, estande, uniforme, crachá, papelaria e social. Preto, azul elétrico e um só ponto de luz.',
           'E precisa caber no menor dos tamanhos. O mesmo cérebro que preenche um painel vira ícone na tela inicial, mostrador no pulso e logotipo sobre o azul elétrico, sem perder uma linha.',
         ],
         blocks: [
@@ -323,7 +323,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         num: '08',
         hidden: true, // escondido por enquanto (20/10/2026)
         kicker: 'Gamificação',
-        title: 'Da faísca ao legado.',
+        title: 'Seis troféus, de Spark a Legacy',
         body: [
           'A Hub precisava de um programa de reconhecimento para os educadores que vendem na plataforma. A tese virou frase: "O mercado te mede pelo quanto você fatura. Nós celebramos quem você transforma." São seis níveis por marco de faturamento, de Spark (R$ 100 mil) a Legacy (R$ 25 milhões), e cada um vem com um troféu físico: uma rede neural dourada que ganha nós e conexões a cada nível, sobre a mesma base preta. A Tutory nasceu de um cérebro, e o prêmio conta essa história.',
           'Os troféus são 100 % procedurais em Three.js. Cada rede nasce de uma semente fixa, então a mesma peça sai sempre igual, requisito de fabricação: esferas e hastes de latão banhado, medalha em aço, ônix, safira, ouro ou esmeralda, e a esfera de cristal do Spark com dispersão real. Do mesmo código saem a ficha técnica de cada peça, os STL para impressão 3D com remesh no Blender, as pranchas A4 em escala real de placas e medalhas e um deck de 30 slides com as peças girando ao vivo. Um sprint de quatro dias em agosto, 50 commits.',
@@ -371,7 +371,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'Evolução',
         title: 'Tutory permanece. A expressão evolui.',
         body: [
-          'Rebranding não é recomeço. Os resultados, os mentores, a experiência e o propósito ficam onde estavam. O que muda é como tudo isso se apresenta: o símbolo, a paleta, o posicionamento, a expressão e a narrativa. A marca v2 vive hoje no site, no Tutory OS, no Aeroporto de Leads, e nos painéis internos.',
+          'O rebranding manteve o que a Tutory já tinha: os resultados, os mentores, a experiência e o propósito. O que mudou é como tudo isso se apresenta: o símbolo, a paleta, o posicionamento, a expressão e a narrativa. A marca v2 vive hoje no site, no Tutory OS, no Aeroporto de Leads, e nos painéis internos.',
         ],
         blocks: [
           {
@@ -408,8 +408,8 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       href: '/pt/work/tutory-site/',
     },
     cta: {
-      heading: 'Sua empresa cresceu mais que a sua marca?',
-      sub: 'Eu fecho essa distância: posicionamento, identidade e sistema, do primeiro slide ao kit.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', chapter: 'Capítulo' },
@@ -430,7 +430,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       video: { src: `${B}/blueprint.mp4`, webm: `${B}/blueprint.webm` },
       poster: `${B}/blueprint-poster.webp`,
       alt: 'Looping video: the Tutory symbol being constructed as a technical drawing in white lines on black, with dimensions, angles and a magnifier moving over the details, until the lines refine and reveal the finished logo',
-      caption: 'From blueprint to reality: the construction of the symbol, dimensioned from the final vector, on a loop.',
+      caption: 'The construction of the symbol, dimensioned from the final vector, on a loop.',
       after: {
         src: `${B}/marca-palco.webp`,
         alt: 'Stage panel with the Tutory wordmark and the Empowering Intelligence signature, a person walking in front',
@@ -443,7 +443,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
     },
     meta: [
       { label: 'Client', value: 'Tutory · EdTech, Brasília' },
-      { label: 'Period', value: 'Mar — Aug 2026' },
+      { label: 'Period', value: 'Mar to Aug 2026' },
       { label: 'Role', value: 'Brand designer, solo' },
       { label: 'Archetypes', value: 'The Ruler · The Magician' },
       { label: 'Delivered', value: 'Symbol · palette · voice · deck' },
@@ -452,10 +452,10 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       {
         num: '01',
         kicker: 'The gap',
-        title: 'Whoever arrived saw a tool.',
-        lead: 'The problem was never the product. Tutory had grown beyond what the brand could convey.',
+        title: 'A brand smaller than the company',
+        lead: 'The product had become an ecosystem, and the brand still described a tool.',
         body: [
-          'From the outside, Tutory was a rounded blue brain, a WordPress website and a feature pitch: "the best platform on the market for coaches". Inside, it was an ecosystem with three products, thousands of mentors, a podcast and its own event. Whoever arrived saw a tool. Whoever stayed discovered the ecosystem.',
+          'From the outside, Tutory was a rounded blue brain, a WordPress website and a feature pitch: "the best platform on the market for coaches". Inside, it was an ecosystem with three products, thousands of mentors, a podcast and its own event. New visitors saw a tool, and only those who stayed found the ecosystem.',
           'Before designing, I mapped the old site and collateral piece by piece and transcribed real sales calls. The contrast between what the team said on calls and what the brand said on its own became the fourth slide of the deck, and the thesis of the whole project.',
         ],
       },
@@ -465,7 +465,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'Personality',
         title: 'The Ruler, with a streak of The Magician.',
         body: [
-          'I started with personality, not drawing. Tutory is the one that sets the standard of the mentoring market: The Ruler. And it has a streak of The Magician, the one who turns what exists into something that did not. The two archetypes set the rules for everything that followed: calculated forms, few colors, a voice that states instead of promising.',
+          'I started with personality, before drawing anything. Tutory is the one that sets the standard of the mentoring market: The Ruler. And it has a streak of The Magician, the one who turns what exists into something that did not. The two archetypes set the rules for everything that followed: calculated forms, few colors, a voice that states instead of promising.',
         ],
         blocks: [
           {
@@ -501,9 +501,9 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       {
         num: '04',
         kicker: 'The symbol',
-        title: 'Every angle calculated, every line with intent.',
+        title: 'A symbol built like a technical drawing',
         body: [
-          'Great structures do not come from inspiration alone; they come from planning. The new symbol is two hexagonal halves in straight strokes, mirrored on an exact axis, with the folds of the brain cut out inside. Three slopes, 26.6°, 27.6° and 31.3°, and a central gap of 10.92 units, 7.4% of the width. All documented in the construction drawing, dimensioned from the final vector.',
+          'The new symbol is two hexagonal halves in straight strokes, mirrored on an exact axis, with the folds of the brain cut out inside. Three slopes, 26.6°, 27.6° and 31.3°, and a central gap of 10.92 units, 7.4% of the width. All documented in the construction drawing, dimensioned from the final vector.',
         ],
         blocks: [
           {
@@ -512,7 +512,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
             tag: 'New architecture',
             title: 'The same symbol. A completely',
             accent: 'new architecture.',
-            text: 'Every angle calculated, every line with intent: the brain that always represented Tutory, redrawn to match what it has become.',
+            text: 'The brain that always represented Tutory, redrawn to match what the company has become.',
             video: { src: `${B}/simbolo.mp4`, webm: `${B}/simbolo.webm`, poster: `${B}/simbolo-poster.webp` },
             alt: 'Looping video: the Tutory symbol in chrome slowly rotating on a black background',
           },
@@ -542,9 +542,9 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         num: '05',
         theme: 'light',
         kicker: 'Palette',
-        title: 'The color of intelligence.',
+        title: 'Electric blue, with gold kept for rare moments',
         body: [
-          'Electric blue was not chosen by accident. It is the color of intellectual clarity, of the spark that happens when the right knowledge meets the right moment. Around it, two darks for the background, a light blue for detail and an ice for paper. And gold, reserved for the unique instants when mentoring transforms.',
+          'In the brand, electric blue stands for intellectual clarity. Around it, two darks for the background, a light blue for detail and an ice for paper. Gold is reserved for the rare moments when mentoring transforms someone.',
         ],
         blocks: [{ ...palettePt, note: 'Gold appears only where mentoring transforms: moments of rarity.' }],
       },
@@ -553,7 +553,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'The voice',
         title: 'How Tutory speaks.',
         body: [
-          'Gilroy for headlines, geometric and assured; Manrope for body and interface, variable and legible at any size. And the written voice changed with the form: from the superlative that promises to the statement of an established reference.',
+          'Gilroy for headlines, geometric and assured; Manrope for body and interface, variable and legible at any size. The written voice changed with the form: it stopped promising in superlatives and started stating things, as an established reference would.',
         ],
         blocks: [
           {
@@ -593,7 +593,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'The brand in the world',
         title: 'Life-size.',
         body: [
-          'An identity only exists once it leaves the deck. Tutory Experience gathers the country’s top mentors for a day, and the Empowering Intelligence signature was designed for that scale: stage panel, stand, uniform, badge, stationery and social. Black, electric blue and a single point of light.',
+          'An identity has to work outside the deck. Tutory Experience gathers the country’s top mentors for a day, and the Empowering Intelligence signature was designed for that scale: stage panel, stand, uniform, badge, stationery and social. Black, electric blue and a single point of light.',
           'And it has to fit the smallest sizes. The same brain that fills a panel becomes a home-screen icon, a watch face and the wordmark over electric blue, without losing a single line.',
         ],
         blocks: [
@@ -640,7 +640,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         num: '08',
         hidden: true, // escondido por enquanto (20/10/2026)
         kicker: 'Gamification',
-        title: 'From a spark to a legacy.',
+        title: 'Six trophies, from Spark to Legacy',
         body: [
           'The Hub needed a recognition program for the educators who sell on the platform. The thesis became a line: "The market measures you by how much you earn. We celebrate who you transform." Six levels by revenue milestone, from Spark (R$ 100 thousand) to Legacy (R$ 25 million), each with a physical trophy: a golden neural network that gains nodes and connections at every level, on the same black base. Tutory was born from a brain, and the award tells that story.',
           'The trophies are 100% procedural in Three.js. Each network grows from a fixed seed, so the same piece always comes out identical, a manufacturing requirement: plated brass spheres and rods, a medal in steel, onyx, sapphire, gold or emerald, and the Spark crystal sphere with real dispersion. The same code produces the technical sheet for every piece, the STLs for 3D printing with a Blender remesh, the true-scale A4 sheets of plates and medals and a 30-slide deck with the pieces spinning live. A four-day sprint in August, 50 commits.',
@@ -688,7 +688,7 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
         kicker: 'Evolution',
         title: 'Tutory stays. The expression evolves.',
         body: [
-          'Rebranding is not a restart. The results, the mentors, the experience and the purpose stay where they were. What changes is how all of it shows up: the symbol, the palette, the positioning, the expression and the narrative. Brand v2 now lives on the website, in Tutory OS, in the Lead Airport, and on the internal dashboards.',
+          'The rebrand kept what Tutory already had: the results, the mentors, the experience and the purpose. What changed is how all of it shows up: the symbol, the palette, the positioning, the expression and the narrative. Brand v2 now lives on the website, in Tutory OS, in the Lead Airport, and on the internal dashboards.',
         ],
         blocks: [
           {
@@ -725,8 +725,8 @@ const tutoryBrand: { pt: BrandCaseContent; en: BrandCaseContent } = {
       href: '/work/tutory-site/',
     },
     cta: {
-      heading: 'Has your company outgrown your brand?',
-      sub: 'I close that gap: positioning, identity and system, from the first slide to the kit.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', chapter: 'Chapter' },

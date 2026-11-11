@@ -22,11 +22,8 @@ const hypergestor: CaseStudy = {
     ],
     stats: [
       { value: '3', label: 'frentes com uma linguagem só: marca, site e ERP' },
-      { value: '1', label: 'pessoa da marca ao front-end em produção' },
       { value: '18', label: 'módulos do ERP sob a mesma navegação' },
       { value: '1 painel', label: 'para o lead inteiro, da conversa à proposta, sem sair da lista' },
-      { value: 'IA', label: 'no fluxo do vendedor, sobre a lista e dentro do lead' },
-      { value: 'No ar', label: 'o ERP novo em produção, no admin do HyperGestor' },
     ],
     intro: [
       'O HyperGestor reúne num sistema só o que uma concessionária usa no dia: leads, atendimento, WhatsApp com IA, estoque, campanhas e oficina. Foi criado por quem vive o setor, e o CEO também lidera inovação na Mitsubishi Motors. O produto era forte, mas a interface tinha crescido módulo a módulo, e cada tela pedia para ser aprendida de novo.',
@@ -140,10 +137,10 @@ const hypergestor: CaseStudy = {
       },
       {
         kicker: '07 — Como eu trabalhei',
-        title: 'Uma pessoa da marca ao código, com o critério de produto junto',
+        title: 'Uma pessoa da marca ao código',
         body: [
           'Fiz a marca, o site e o ERP, do Figma ao front-end em produção. Quando quem decide é quem constrói, um padrão novo vira componente e chega a todos os módulos sem passar por tradução entre equipes.',
-          'No ERP, escolhi HTML, CSS e JavaScript puros para encaixar na plataforma que o cliente já tinha, sem reescrever o que funcionava. Nos módulos mais recentes, agentes de IA aceleraram a produção, e as decisões de produto continuaram comigo.',
+          'No ERP, escolhi HTML, CSS e JavaScript puros para encaixar na plataforma que o cliente já tinha, sem reescrever o que funcionava.',
         ],
       },
     ],
@@ -159,8 +156,8 @@ const hypergestor: CaseStudy = {
     stackLabel: 'Ferramentas',
     stack: ['Figma', 'HTML, CSS e JavaScript', 'React e Tailwind', 'Agentes de IA'],
     cta: {
-      heading: 'Tem um sistema grande que precisa de uma cara nova?',
-      sub: 'Eu desenho os padrões, construo o front-end e troco o sistema módulo a módulo, com a operação rodando.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
@@ -192,11 +189,8 @@ const hypergestor: CaseStudy = {
     ],
     stats: [
       { value: '3', label: 'fronts with one language: brand, website and ERP' },
-      { value: '1', label: 'person from brand to front end in production' },
       { value: '18', label: 'ERP modules under the same navigation' },
       { value: '1 panel', label: 'for the whole lead, from conversation to proposal, without leaving the list' },
-      { value: 'AI', label: 'in the salesperson’s flow, over the list and inside the lead' },
-      { value: 'Live', label: 'the new ERP in production, in the HyperGestor admin' },
     ],
     intro: [
       'HyperGestor brings together in one system what a dealership uses every day: leads, sales service, WhatsApp with AI, inventory, campaigns and the workshop. It was built by people who live the sector, and the CEO also leads innovation at Mitsubishi Motors. The product was strong, but the interface had grown module by module, and every screen had to be learned all over again.',
@@ -310,10 +304,10 @@ const hypergestor: CaseStudy = {
       },
       {
         kicker: '07 — How I worked',
-        title: 'One person from brand to code, with product judgement along the way',
+        title: 'One person from brand to code',
         body: [
           'I did the brand, the website and the ERP, from Figma to the front end in production. When the person who decides is the person who builds, a new pattern becomes a component and reaches every module without getting lost between teams.',
-          'For the ERP, I chose plain HTML, CSS and JavaScript to fit the platform the client already had, without rewriting what worked. On the most recent modules, AI agents sped up production, and the product decisions stayed with me.',
+          'For the ERP, I chose plain HTML, CSS and JavaScript to fit the platform the client already had, without rewriting what worked.',
         ],
       },
     ],
@@ -329,8 +323,8 @@ const hypergestor: CaseStudy = {
     stackLabel: 'Tools',
     stack: ['Figma', 'HTML, CSS and JavaScript', 'React and Tailwind', 'AI agents'],
     cta: {
-      heading: 'Got a large system that needs a new face?',
-      sub: 'I design the patterns, build the front end and replace the system module by module, while the operation keeps running.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },

@@ -76,14 +76,11 @@ const resilience: CaseStudy = {
     stats: [
       { value: '15', label: 'telas navegáveis no protótipo' },
       { value: '4', label: 'telas do ciclo principal que eram só wireframe, agora desenhadas' },
-      { value: '1', label: 'pessoa do design ao código, com IA na produção' },
       { value: '7', label: 'perguntas num check-in de dois minutos' },
-      { value: '3', label: 'zonas com nome, para a cor nunca ser o único sinal' },
-      { value: '10', label: 'passos de onboarding para ensinar o método' },
     ],
     intro: [
       'A The Resilience Engine, uma consultoria de Edimburgo, ensina que a resiliência sobe e desce como o nível de um rio. Rio alto passa por cima das pedras, rio baixo é empurrado para fora do curso. Em 2023 desenhei o app que ajuda a pessoa a perceber a queda a tempo, e ele foi lançado. No meu arquivo do Figma, porém, quatro telas do ciclo principal ficaram no wireframe, e um arquivo parado não mostra o que acontece depois do toque.',
-      'Em 2026 levei esse arquivo a um protótipo de 15 telas que se usa. O desenho ficou como estava, e as telas que faltavam saíram dos componentes do próprio sistema. Responda o check-in e o rio sobe ou desce de verdade. É o que eu entrego: do desenho ao produto funcionando, com critério de produto e IA na produção, em dias, não meses.',
+      'Em 2026 levei esse arquivo a um protótipo de 15 telas que se usa. O desenho ficou como estava, e as telas que faltavam saíram dos componentes do próprio sistema. Responda o check-in e o rio sobe ou desce de verdade.',
     ],
     roleLabel: 'O que eu fiz',
     roleList: [
@@ -128,7 +125,7 @@ const resilience: CaseStudy = {
       },
       {
         kicker: '02 — O protótipo',
-        title: 'Experimente antes de ler',
+        title: 'Responda o check-in e veja o rio',
         body: [
           'São 15 telas, e o que você faz fica salvo. Responda o check-in e o rio da home sobe ou desce com as suas respostas, assim como as red flags do resultado. Se preferir, deixe o tour passar pelas telas.',
         ],
@@ -287,14 +284,6 @@ const resilience: CaseStudy = {
           { src: `${B}/screens/journal.webp`, alt: 'Journal: reflexões salvas a partir das práticas, com a ferramenta de origem', device: 'ios' },
         ],
       },
-      {
-        kicker: '08 — Como eu trabalhei',
-        title: 'IA na produção, critério de produto comigo',
-        body: [
-          'Parti do meu próprio arquivo e decidi o que ficava e o que precisava de refinamento. Agentes de IA montaram as telas, e eu revisei uma por uma, do texto ao contraste, até os números baterem do check-in aos gráficos.',
-          'A IA deu velocidade. O critério de produto continuou comigo, e é essa combinação que leva um arquivo de design a algo que se testa em dias, não em meses.',
-        ],
-      },
     ],
     outcomesLabel: 'Resultado',
     outcomesTitle: 'O que o protótipo entregou',
@@ -308,8 +297,8 @@ const resilience: CaseStudy = {
     stackLabel: 'Ferramentas',
     stack: ['Figma', 'HTML, CSS e JavaScript', 'Agentes de IA', 'Playwright'],
     cta: {
-      heading: 'Tem um design no Figma que precisa virar algo que as pessoas consigam tocar?',
-      sub: 'Eu levo do arquivo a um produto que dá para usar e testar, sem perder o desenho, em dias.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', visit: 'Abrir o protótipo' },
@@ -342,14 +331,11 @@ const resilience: CaseStudy = {
     stats: [
       { value: '15', label: 'navigable screens in the prototype' },
       { value: '4', label: 'core-loop screens that were only wireframes, now designed' },
-      { value: '1', label: 'person from design to code, with AI in production' },
       { value: '7', label: 'questions in a two-minute check-in' },
-      { value: '3', label: 'named zones, so colour is never the only signal' },
-      { value: '10', label: 'onboarding steps that teach the method' },
     ],
     intro: [
       'The Resilience Engine, an Edinburgh consultancy, teaches that resilience rises and falls like the level of a river. A high river flows over the rocks, a low one gets pushed off course. In 2023 I designed the app that helps people notice the drop in time, and it launched. In my Figma file, though, four screens of the core loop stayed at wireframe, and a static file can’t show what happens after a tap.',
-      'In 2026 I took that file to a 15-screen prototype you can use. The design stayed as it was, and the missing screens came from the system’s own components. Answer the check-in and the river really rises or falls. That’s what I deliver: from design to a working product, with product judgement and AI in production, in days, not months.',
+      'In 2026 I took that file to a 15-screen prototype you can use. The design stayed as it was, and the missing screens came from the system’s own components. Answer the check-in and the river really rises or falls.',
     ],
     roleLabel: 'What I did',
     roleList: [
@@ -394,7 +380,7 @@ const resilience: CaseStudy = {
       },
       {
         kicker: '02 — The prototype',
-        title: 'Try it before you read',
+        title: 'Answer the check-in and watch the river',
         body: [
           'It has 15 screens, and what you do is saved. Answer the check-in and the river on the home rises or falls with your answers, and so do the red flags on the result. If you prefer, let the tour walk through the screens.',
         ],
@@ -553,14 +539,6 @@ const resilience: CaseStudy = {
           { src: `${B}/screens/journal.webp`, alt: 'Journal: reflections saved from practices, with the tool they came from', device: 'ios' },
         ],
       },
-      {
-        kicker: '08 — How I worked',
-        title: 'AI in production, product judgement with me',
-        body: [
-          'I started from my own file and decided what stayed and what needed refining. AI agents built the screens, and I reviewed them one by one, from copy to contrast, until the numbers matched from the check-in to the charts.',
-          'AI brought the speed. Product judgement stayed with me, and that combination is what takes a design file to something you can test in days, not months.',
-        ],
-      },
     ],
     outcomesLabel: 'Outcome',
     outcomesTitle: 'What the prototype delivered',
@@ -574,8 +552,8 @@ const resilience: CaseStudy = {
     stackLabel: 'Tools',
     stack: ['Figma', 'HTML, CSS and JavaScript', 'AI agents', 'Playwright'],
     cta: {
-      heading: 'Got a design in Figma that needs to become something people can touch?',
-      sub: 'I take it from the file to a product you can use and test, without losing the design, in days.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', visit: 'Open the prototype' },

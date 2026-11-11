@@ -44,14 +44,6 @@ const tutorySite: CaseStudy = {
         "label": "do primeiro commit ao site no ar"
       },
       {
-        "value": "14",
-        "label": "páginas, migradas do WordPress com 301"
-      },
-      {
-        "value": "247",
-        "label": "commits no site em seis meses"
-      },
-      {
         "value": "100",
         "label": "acessibilidade Lighthouse (de 84)"
       },
@@ -62,7 +54,7 @@ const tutorySite: CaseStudy = {
       {
         "value": "2 → 20",
         "label": "sessões vindas de assistentes de IA em 30 dias"
-      }
+      },
     ],
     "intro": [
       "Depois do rebranding, faltava o lugar onde a marca mais aparece: o site. O de 2025 rodava em WordPress com Elementor e falava de features. O time comercial contava outra história nas calls, a de um ecossistema com três produtos, milhares de mentores, um podcast e um evento próprio.",
@@ -254,8 +246,8 @@ const tutorySite: CaseStudy = {
       "schema.org · llms.txt"
     ],
     "cta": {
-      "heading": "Seu site ainda fala de features?",
-      "sub": "Eu construo o site que conta a história do jeito que o seu time conta: design, código, migração e SEO.",
+      "heading": "Quer conversar sobre este projeto?",
+      "sub": "Posso mostrar as decisões e o que está por trás de cada tela.",
       "label": "Falar comigo"
     },
     "ui": {
@@ -306,14 +298,6 @@ const tutorySite: CaseStudy = {
         "label": "from first commit to the site going live"
       },
       {
-        "value": "14",
-        "label": "pages, migrated from WordPress with 301s"
-      },
-      {
-        "value": "247",
-        "label": "commits on the site in six months"
-      },
-      {
         "value": "100",
         "label": "Lighthouse accessibility (from 84)"
       },
@@ -324,7 +308,7 @@ const tutorySite: CaseStudy = {
       {
         "value": "2 → 20",
         "label": "sessions from AI assistants in 30 days"
-      }
+      },
     ],
     "intro": [
       "After the rebranding, what was missing was the place where the brand shows up most: the website. The 2025 site ran on WordPress with Elementor and talked about features. The sales team told another story on calls, that of an ecosystem with three products, thousands of mentors, a podcast and its own event.",
@@ -516,8 +500,8 @@ const tutorySite: CaseStudy = {
       "schema.org · llms.txt"
     ],
     "cta": {
-      "heading": "Does your website still talk about features?",
-      "sub": "I build the website that tells the story the way your team tells it: design, code, migration and SEO.",
+      "heading": "Want to talk about this project?",
+      "sub": "I can walk you through the decisions and what is behind each screen.",
       "label": "Get in touch"
     },
     "ui": {

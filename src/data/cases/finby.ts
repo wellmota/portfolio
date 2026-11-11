@@ -72,14 +72,11 @@ const finby: CaseStudy = {
     stats: [
       { value: '80', label: 'telas que desenhei, em sete fluxos' },
       { value: '12', label: 'telas navegáveis, com tour automático' },
-      { value: '1', label: 'pessoa do desenho ao protótipo, com IA na produção' },
-      { value: '2 em 1', label: 'fluxos de criação, privado e público, num wizard só' },
       { value: '6', label: 'temas de consórcio, escolhidos na criação' },
-      { value: 'AA', label: 'de contraste onde o arquivo ficava abaixo' },
     ],
     intro: [
       'Consórcio é um jeito bem brasileiro de juntar dinheiro: o grupo paga uma parcela por mês e, a cada mês, alguém leva o prêmio. Entre amigos isso sempre existiu na informalidade, com uma pessoa anotando quem pagou e cobrando quem atrasou. O Finby, que eu desenhei, leva esse acordo para o celular e tira do grupo o papel de cobrador.',
-      'Só que um arquivo de 80 telas não mostra se a conta fecha, nem como é convidar quem ainda não está no app. Então transformei o desenho num protótipo que se usa: 12 telas navegáveis, com os mesmos fluxos e os estados que o arquivo pulava. Fiz sozinho, com agentes de IA na produção e as decisões de produto comigo, em dias e não em meses.',
+      'Só que um arquivo de 80 telas não mostra se a conta fecha, nem como é convidar quem ainda não está no app. Então transformei o desenho num protótipo que se usa: 12 telas navegáveis, com os mesmos fluxos e os estados que o arquivo pulava. Fiz sozinho, em dias.',
     ],
     roleLabel: 'O que eu fiz',
     roleList: [
@@ -110,7 +107,7 @@ const finby: CaseStudy = {
       },
       {
         kicker: '02 — O protótipo',
-        title: 'Experimente antes de ler',
+        title: 'Crie um consórcio e convide alguém',
         body: [
           'São 12 telas, e o que você faz fica salvo. Crie um consórcio e ele aparece na home. Convide alguém e a pessoa entra como cadastro pendente. Se preferir, deixe o tour passar pelas telas.',
         ],
@@ -268,14 +265,6 @@ const finby: CaseStudy = {
           { src: `${B}/screens/saque-pronto.webp`, alt: 'Saque solicitado: foto de um cofrinho sobre moedas douradas e o valor a caminho da conta', device: 'ios' },
         ],
       },
-      {
-        kicker: '08 — Como eu trabalhei',
-        title: '80 telas no arquivo, um app navegável em dias',
-        body: [
-          'Escrevi o brief e o sistema visual e coloquei agentes de IA para montar as telas em paralelo. Depois revisei cada uma contra o meu desenho: o texto, os estados, o contraste e os números, que precisam bater de uma tela para outra.',
-          'A IA acelerou a produção. As decisões de produto e de design ficaram comigo, e é assim que eu levo um app do Figma a um protótipo testável em dias, não em meses.',
-        ],
-      },
     ],
     outcomesLabel: 'Resultado',
     outcomesTitle: 'O que o desenho ganhou',
@@ -289,8 +278,8 @@ const finby: CaseStudy = {
     stackLabel: 'Ferramentas',
     stack: ['Figma', 'HTML, CSS e JavaScript', 'Agentes de IA', 'Playwright', 'Fotos livres do Unsplash'],
     cta: {
-      heading: 'Tem um app no Figma que merece sair do arquivo?',
-      sub: 'Eu levo do desenho a um protótipo que se usa, em dias, e cuido do que o arquivo não mostra, dos estados aos números que fecham.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', visit: 'Abrir o protótipo' },
@@ -323,14 +312,11 @@ const finby: CaseStudy = {
     stats: [
       { value: '80', label: 'screens I designed, across seven flows' },
       { value: '12', label: 'navigable screens, with an automatic tour' },
-      { value: '1', label: 'person from design to prototype, with AI on production' },
-      { value: '2 in 1', label: 'creation flows, private and public, in one wizard' },
       { value: '6', label: 'consórcio themes, picked at creation' },
-      { value: 'AA', label: 'contrast where the file fell short' },
     ],
     intro: [
       'A consórcio is a very Brazilian way of saving up: a group pays a monthly instalment into a shared pot, and each month one member takes the prize. Among friends it has always run informally, with one person tracking who paid and chasing whoever is late. Finby, which I designed, moves that agreement to the phone and takes the debt-collector role off the group.',
-      'But an 80-screen file can’t show whether the numbers add up, or what it’s like to invite someone who isn’t on the app yet. So I turned the design into a prototype you can use: 12 navigable screens, with the same flows and the states the file skipped. I did it alone, with AI agents on production and the product decisions staying with me, in days, not months.',
+      'But an 80-screen file can’t show whether the numbers add up, or what it’s like to invite someone who isn’t on the app yet. So I turned the design into a prototype you can use: 12 navigable screens, with the same flows and the states the file skipped. I built it on my own, in days.',
     ],
     roleLabel: 'What I did',
     roleList: [
@@ -361,7 +347,7 @@ const finby: CaseStudy = {
       },
       {
         kicker: '02 — The prototype',
-        title: 'Try it before you read',
+        title: 'Create a group and invite someone',
         body: [
           'It has 12 screens, and what you do is saved. Create a consórcio and it shows up on the home. Invite someone and they join as a pending sign-up. Or let the tour walk through the screens.',
         ],
@@ -519,14 +505,6 @@ const finby: CaseStudy = {
           { src: `${B}/screens/saque-pronto.webp`, alt: 'Withdrawal requested: a photo of a piggy bank on gold coins and the amount on its way to the bank', device: 'ios' },
         ],
       },
-      {
-        kicker: '08 — How I worked',
-        title: '80 screens in a file, a navigable app in days',
-        body: [
-          'I wrote the brief and the visual system, and had AI agents build the screens in parallel. Then I reviewed each one against my design: copy, states, contrast and the numbers, which have to match from screen to screen.',
-          'AI sped up production. The product and design decisions stayed with me, and that’s how I take an app from Figma to a testable prototype in days, not months.',
-        ],
-      },
     ],
     outcomesLabel: 'Outcome',
     outcomesTitle: 'What the design gained',
@@ -540,8 +518,8 @@ const finby: CaseStudy = {
     stackLabel: 'Tools',
     stack: ['Figma', 'HTML, CSS and JavaScript', 'AI agents', 'Playwright', 'Free photos from Unsplash'],
     cta: {
-      heading: 'Got an app in Figma that deserves to leave the file?',
-      sub: 'I take it from design to a prototype you can use, in days, and handle what the file doesn’t show, from states to numbers that add up.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', visit: 'Open the prototype' },

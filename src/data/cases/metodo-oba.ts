@@ -382,8 +382,8 @@ const pt: CaseOba = {
   tools: ['PHP', 'HTML, CSS e JavaScript', 'Bootstrap e jQuery', 'three.js', 'Web Workers', 'GitHub Actions', 'Phosphor Icons', 'Agentes de IA'],
 
   cta: {
-    heading: 'Seu produto precisa de um redesenho?',
-    sub: 'Eu levo do diagnóstico a um protótipo que dá para clicar, com design e código, pronto para validar com quem usa.',
+    heading: 'Quer conversar sobre este projeto?',
+    sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
     label: 'Falar comigo',
   },
   ui: { back: 'Voltar aos projetos' },
@@ -682,8 +682,8 @@ const en: CaseOba = {
   tools: ['PHP', 'HTML, CSS and JavaScript', 'Bootstrap and jQuery', 'three.js', 'Web Workers', 'GitHub Actions', 'Phosphor Icons', 'AI agents'],
 
   cta: {
-    heading: 'Does your product need a redesign?',
-    sub: 'I take it from diagnosis to a prototype you can click, with design and code, ready to validate with the people who use it.',
+    heading: 'Want to talk about this project?',
+    sub: 'I can walk you through the decisions and what is behind each screen.',
     label: 'Get in touch',
   },
   ui: { back: 'Back to projects' },

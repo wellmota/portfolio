@@ -85,14 +85,11 @@ const golfhub: CaseStudy = {
     stats: [
       { value: '21', label: 'telas navegáveis, a partir de 4 no Figma' },
       { value: '16', label: 'módulos da proposta, cada um com lugar no app ou no ERP' },
-      { value: '1', label: 'pessoa da proposta ao código, com IA na produção' },
-      { value: '2', label: 'produtos, app e ERP, sobre os mesmos dados' },
       { value: '18', label: 'buracos em 3D, gerados em código' },
-      { value: '3', label: 'formas de pagar: cartão, Pix ou na mensalidade' },
     ],
     intro: [
       'Em 2023 propus ao Clube de Golfe de Brasília dois produtos: um app para o sócio reservar, pagar e acompanhar o próprio jogo, e um ERP para a equipe enxergar o dia do clube. A proposta parou em quatro telas no Figma. E quatro telas não mostram como é reservar um horário, pagar e jogar uma rodada.',
-      'Em 2026 transformei a proposta em algo que se usa. Deduzi as telas que faltavam a partir das regras do clube, mantive a identidade original e fiz do mapa estático do buraco uma cena 3D. É o que eu entrego: produto pensado, desenhado e funcionando, em dias.',
+      'Em 2026 transformei a proposta em algo que se usa. Deduzi as telas que faltavam a partir das regras do clube, mantive a identidade original e fiz do mapa estático do buraco uma cena 3D.',
     ],
     roleLabel: 'O que eu fiz',
     roleList: [
@@ -121,7 +118,7 @@ const golfhub: CaseStudy = {
       },
       {
         kicker: '02 — O protótipo',
-        title: 'Experimente antes de ler',
+        title: 'Reserve um horário e jogue uma rodada',
         body: [
           'São 17 telas do app, e o que você faz fica salvo. Reserve um horário e ele vira um voucher. Jogue uma rodada e o cartão fecha a conta sozinho. Se preferir, deixe o tour passar pelas telas.',
         ],
@@ -305,14 +302,6 @@ const golfhub: CaseStudy = {
           ],
         },
       },
-      {
-        kicker: '10 — Como eu trabalhei',
-        title: 'IA na produção, o critério comigo',
-        body: [
-          'Escrevi o brief, defini as regras de negócio e os componentes, e coloquei agentes de IA para montar as telas em paralelo. Depois revisei uma por uma: o texto, os estados, o contraste e os números que precisam bater entre o app e o ERP.',
-          'A IA acelerou a produção. As decisões de produto ficaram comigo, e é isso que permite sair de um arquivo parado para um produto testável em dias, não em meses.',
-        ],
-      },
     ],
     outcomesLabel: 'Resultado',
     outcomesTitle: 'O que a proposta ganhou',
@@ -326,8 +315,8 @@ const golfhub: CaseStudy = {
     stackLabel: 'Ferramentas',
     stack: ['Figma', 'HTML, CSS e JavaScript', 'three.js', 'Agentes de IA', 'Playwright'],
     cta: {
-      heading: 'Tem uma ideia parada no Figma?',
-      sub: 'Eu levo do desenho a um produto que dá para usar e testar, com design e código, em dias.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', visit: 'Abrir o protótipo' },
@@ -360,14 +349,11 @@ const golfhub: CaseStudy = {
     stats: [
       { value: '21', label: 'clickable screens, from 4 in Figma' },
       { value: '16', label: 'proposal modules, each placed in the app or the ERP' },
-      { value: '1', label: 'person from proposal to code, with AI doing the build' },
-      { value: '2', label: 'products, app and ERP, on the same data' },
       { value: '18', label: 'holes in 3D, generated in code' },
-      { value: '3', label: 'ways to pay: card, Pix or the monthly bill' },
     ],
     intro: [
       'In 2023 I pitched two products to the Clube de Golfe de Brasília: an app for members to book, pay and follow their own game, and an ERP for staff to see the club’s day at a glance. The proposal stalled at four screens in Figma. Four screens can’t show what it’s like to book a tee time, pay and play a round.',
-      'In 2026 I turned the proposal into something you can use. I worked out the missing screens from the club’s own rules, kept the original identity and turned the static hole map into a 3D scene. That’s what I deliver: a product that’s thought through, designed and working, in days.',
+      'In 2026 I turned the proposal into something you can use. I worked out the missing screens from the club’s own rules, kept the original identity and turned the static hole map into a 3D scene.',
     ],
     roleLabel: 'What I did',
     roleList: [
@@ -396,7 +382,7 @@ const golfhub: CaseStudy = {
       },
       {
         kicker: '02 — The prototype',
-        title: 'Try it before you read',
+        title: 'Book a tee time and play a round',
         body: [
           'It’s 17 app screens, and what you do is saved. Book a tee time and it becomes a voucher. Play a round and the scorecard adds itself up. Or let the tour run through the screens.',
         ],
@@ -580,14 +566,6 @@ const golfhub: CaseStudy = {
           ],
         },
       },
-      {
-        kicker: '10 — How I worked',
-        title: 'AI does the build, the judgement stays with me',
-        body: [
-          'I wrote the brief, set the business rules and the components, and had AI agents build the screens in parallel. Then I reviewed each one: copy, states, contrast and the numbers that have to match between the app and the ERP.',
-          'AI sped up production. The product decisions stayed with me, and that’s what makes it possible to go from a stalled file to a testable product in days, not months.',
-        ],
-      },
     ],
     outcomesLabel: 'Outcome',
     outcomesTitle: 'What the proposal gained',
@@ -601,8 +579,8 @@ const golfhub: CaseStudy = {
     stackLabel: 'Tools',
     stack: ['Figma', 'HTML, CSS and JavaScript', 'three.js', 'AI agents', 'Playwright'],
     cta: {
-      heading: 'Got an idea stuck in Figma?',
-      sub: 'I take it from the drawing to a product you can use and test, with design and code, in days.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', visit: 'Open the prototype' },

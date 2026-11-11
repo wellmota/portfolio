@@ -22,9 +22,7 @@ const { testimonials } = data;
       testimonials.map((t) => (
         <figure class="mb-4 break-inside-avoid border border-line bg-surface p-7">
           <div class="flex items-center justify-between gap-3">
-            <div class="mono flex items-center gap-1 text-xs text-lime">
-              {'★★★★★'}
-            </div>
+            <span class="mono text-lg leading-none text-lime" aria-hidden="true">“</span>
             <span class="mono border border-line px-2 py-0.5 text-[9.5px] uppercase tracking-widest text-mist">
               {t.tag}
             </span>

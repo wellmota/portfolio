@@ -22,10 +22,8 @@ const action247: CaseStudy = {
     stats: [
       { value: '$0', label: 'de aposta: o palpite é grátis e o prêmio é em dinheiro' },
       { value: '4+', label: 'esportes num lobby só: MMA, futebol, turfe e MLB' },
-      { value: '1', label: 'botão PLAY por jogo, do lobby direto ao palpite' },
       { value: '5', label: 'telas no loop do celular, do lobby ao troféu' },
       { value: '3', label: 'canais com a mesma cara: celular, desktop e e-mail' },
-      { value: 'TN', label: 'a regra do estado já no cadastro, antes do primeiro palpite' },
     ],
     intro: [
       'O Action247 é um jogo de palpites esportivos grátis, nos Estados Unidos. O jogador escolhe quem vence a luta, em quantos rounds e por qual método, e concorre a prêmios em dinheiro sem apostar nada. O desafio era dar a emoção de uma casa de apostas a quem não está apostando.',
@@ -100,8 +98,8 @@ const action247: CaseStudy = {
     stackLabel: 'Ferramentas',
     stack: ['Figma', 'Design system', 'Protótipo navegável', 'Design de e-mail'],
     cta: {
-      heading: 'Tem um produto que precisa fazer a pessoa voltar?',
-      sub: 'Eu desenho o produto inteiro, do primeiro toque ao e-mail que traz a pessoa de volta.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
@@ -133,10 +131,8 @@ const action247: CaseStudy = {
     stats: [
       { value: '$0', label: 'wagered: picks are free and the prize is cash' },
       { value: '4+', label: 'sports in one lobby: MMA, soccer, horse racing and MLB' },
-      { value: '1', label: 'PLAY button per game, straight from the lobby to the pick' },
       { value: '5', label: 'screens in the mobile loop, from lobby to trophy' },
       { value: '3', label: 'channels with one look: phone, desktop and email' },
-      { value: 'TN', label: 'the state rule asked at sign-up, before the first pick' },
     ],
     intro: [
       'Action247 is a free sports prediction game in the US. Players pick who wins the fight, how many rounds it goes and the method of victory, and compete for cash prizes without betting a cent. The challenge was to give the thrill of a sportsbook to people who aren’t betting.',
@@ -211,8 +207,8 @@ const action247: CaseStudy = {
     stackLabel: 'Tools',
     stack: ['Figma', 'Design system', 'Clickable prototype', 'Email design'],
     cta: {
-      heading: 'Got a product that needs people to come back?',
-      sub: 'I design the whole product, from the first tap to the email that brings people back.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },

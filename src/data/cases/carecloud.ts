@@ -7,7 +7,7 @@ const carecloud: CaseStudy = {
     kicker: 'Case Study — CareCloud',
     title: 'CareCloud',
     subtitle:
-      'Ajudar a replataformar uma suíte clínica de Adobe Flex para React: quatro meses in loco em Miami, um time de cinco UX e fluxos hi-fi testados com médicos de verdade — design entregue lado a lado com os engenheiros que reconstruíam o produto.',
+      'Ajudar a replataformar uma suíte clínica de Adobe Flex para React: quatro meses in loco em Miami, um time de cinco UX e fluxos hi-fi testados com médicos. O design foi entregue junto com os engenheiros que reconstruíam o produto.',
     cover: {
       src: '/cases/carecloud/cover.webp',
       alt: 'Telas do CareCloud sobre fundo claro: o Productivity Center em destaque, com a revisão de sistemas e o faturamento ao lado',
@@ -15,7 +15,7 @@ const carecloud: CaseStudy = {
     meta: [
       { label: 'Cliente', value: 'CareCloud · Health-tech, Miami (via App Theory)' },
       { label: 'Ano', value: '2017 – 2018' },
-      { label: 'Papel', value: 'UX / Product Designer — time de cinco UX' },
+      { label: 'Papel', value: 'UX / Product Designer, num time de cinco UX' },
       { label: 'Plataforma', value: 'Web app · prontuário clínico (EHR) e gestão de clínica' },
       { label: 'Contexto', value: 'Replataformação de um produto core de Adobe Flex para React' },
     ],
@@ -24,12 +24,10 @@ const carecloud: CaseStudy = {
       { value: '4 meses', label: 'in loco em Miami; o resto remoto' },
       { value: '5 UX', label: 'designers no time, mais a engenharia' },
       { value: '4', label: 'módulos: prontuário, e-prescrição, faturamento e agenda' },
-      { value: 'Flex → React', label: 'a migração de plataforma para a qual desenhei' },
-      { value: 'Hi-fi', label: 'protótipos testados com clínicos reais' },
     ],
     intro: [
-      'A CareCloud é uma empresa americana de health-tech cuja plataforma roda o lado clínico e administrativo de clínicas médicas — prontuário, prescrições, agenda, faturamento. Quando entrei, pelo estúdio de produto App Theory, a empresa estava replataformando um produto core de Adobe Flex para React.',
-      'Entrei como parte de um time de cinco UX, trabalhando in loco em Miami por quatro meses e remoto no resto de cerca de um ano. A missão: redesenhar as telas clínicas para a nova stack e validá-las com quem vive nesse software o dia inteiro — médicos, enfermeiros e recepção.',
+      'A CareCloud é uma empresa americana de health-tech cuja plataforma roda o lado clínico e administrativo de clínicas médicas: prontuário, prescrições, agenda e faturamento. Quando entrei, pelo estúdio de produto App Theory, a empresa estava replataformando um produto core de Adobe Flex para React.',
+      'Entrei como parte de um time de cinco UX, trabalhando in loco em Miami por quatro meses e remoto no resto de cerca de um ano. O trabalho era redesenhar as telas clínicas para a nova stack e validá-las com quem passa o dia nesse software: médicos, enfermeiros e recepção.',
     ],
     roleLabel: 'O que eu fiz',
     roleList: [
@@ -48,8 +46,8 @@ const carecloud: CaseStudy = {
         kicker: '01 — O produto',
         title: 'Um ambiente clínico, replataformado',
         body: [
-          'O produto é onde a clínica toca o dia. O Productivity Center é a base do médico: as tarefas do dia, a carga de consultas, a central de mensagens e as métricas de desempenho, tudo numa tela só. Meu trabalho era deixar essa densidade legível — muita informação, lida num relance, resolvida num clique.',
-          'Tudo precisava ser redesenhado para React. O legado era feito em Adobe Flex, uma tecnologia em fim de vida; a reconstrução era a chance de repensar a interface, não só portá-la.',
+          'O produto é onde a clínica toca o dia. O Productivity Center é a base do médico: as tarefas do dia, a carga de consultas, a central de mensagens e as métricas de desempenho, tudo numa tela só. Meu trabalho era deixar essa densidade legível: muita informação, lida de relance e resolvida num clique.',
+          'Tudo precisava ser redesenhado para React. O legado era feito em Adobe Flex, uma tecnologia em fim de vida, e a reconstrução era a chance de repensar a interface em vez de só portá-la.',
         ],
         showcase: {
           url: 'app.carecloud.com',
@@ -69,15 +67,15 @@ const carecloud: CaseStudy = {
         image: {
           src: '/cases/carecloud/devices.webp',
           alt: 'A reconstrução moderna da CareCloud: o painel no desktop e a ficha do paciente no celular, em tema claro e escuro',
-          caption: 'O mesmo sistema de componentes, do desktop ao celular — e em tema claro e escuro.',
+          caption: 'O mesmo sistema de componentes, do desktop ao celular, em tema claro e escuro.',
         },
       },
       {
         kicker: '02 — O prontuário',
         title: 'O quadro inteiro do paciente, numa só visão',
         body: [
-          'Do painel, o médico entra no prontuário. O Patient Center reúne o paciente inteiro numa só tela — pedidos, próximas visitas, sinais vitais, medicações, imunizações, problemas, alergias — cada bloco um módulo que se escaneia ou se abre. O trabalho de design foi hierarquia: o que o clínico precisa primeiro, o que fica a um toque.',
-          'A prescrição vive dentro dessa tela. Trocar uma medicação por outra é um só modal: o que sai, por quê, o que entra, com a pré-visualização da receita e a farmácia já escolhida — e um selo vermelho quando a substância é controlada.',
+          'Do painel, o médico entra no prontuário. O Patient Center reúne o paciente inteiro numa só tela: pedidos, próximas visitas, sinais vitais, medicações, imunizações, problemas e alergias. Cada bloco é um módulo que se escaneia ou se abre. O trabalho de design foi hierarquia: o que o clínico precisa primeiro, o que fica a um toque.',
+          'A prescrição vive dentro dessa tela. Trocar uma medicação por outra é um só modal: o que sai, por quê, o que entra, com a pré-visualização da receita e a farmácia já escolhida, e um selo vermelho quando a substância é controlada.',
         ],
         showcase: {
           url: 'app.carecloud.com',
@@ -90,7 +88,7 @@ const carecloud: CaseStudy = {
               meta: 'prontuário · página inteira',
               scroll: true,
               scrollSeconds: 6,
-              caption: 'A visita de hoje no topo — pedidos, próximas visitas e os últimos sinais vitais — e, abaixo, cada módulo do prontuário com seu próprio "Add New". Passe o mouse para rolar.',
+              caption: 'A visita de hoje no topo, com pedidos, próximas visitas e os últimos sinais vitais. Abaixo, cada módulo do prontuário com seu próprio "Add New". Passe o mouse para rolar.',
             },
             {
               src: '/cases/carecloud/medications-modal.webp',
@@ -106,8 +104,8 @@ const carecloud: CaseStudy = {
         kicker: '03 — A consulta',
         title: 'Da admissão ao faturamento sem trocar de ferramenta',
         body: [
-          'O atendimento é o coração da visita. Desenhei o fluxo de anotação — admissão, história, revisão de sistemas, exame, plano — como uma sequência de passos com o progresso sempre visível. Na revisão de sistemas, chips coloridos deixam o médico marcar achados rápido, sem sair do teclado: verde é normal, vermelho é achado, cinza é o que ainda não foi avaliado.',
-          'O plano fecha a consulta. Código E&M, procedimentos e diagnósticos vivem na mesma tela da nota, com um botão para assinar e mandar ao faturamento — a visita termina sem abrir outro sistema.',
+          'O atendimento é o centro da visita. Desenhei o fluxo de anotação (admissão, história, revisão de sistemas, exame e plano) como uma sequência de passos com o progresso sempre visível. Na revisão de sistemas, chips coloridos deixam o médico marcar achados rápido, sem sair do teclado: verde é normal, vermelho é achado, cinza é o que ainda não foi avaliado.',
+          'O plano fecha a consulta. Código E&M, procedimentos e diagnósticos vivem na mesma tela da nota, com um botão para assinar e mandar ao faturamento. A visita termina sem abrir outro sistema.',
         ],
         showcase: {
           url: 'app.carecloud.com',
@@ -183,7 +181,7 @@ const carecloud: CaseStudy = {
               src: '/cases/carecloud/d-tasks.webp',
               alt: 'Cartão de atividade de tarefas: anel com 80% concluído e a lista do que falta por tipo',
               label: 'O dia em um número',
-              text: 'O anel diz quanto já foi resolvido; a lista ao lado diz o que falta, por tipo. Um relance, uma decisão.',
+              text: 'O anel diz quanto já foi resolvido; a lista ao lado diz o que falta, por tipo.',
             },
           ],
         },
@@ -192,8 +190,8 @@ const carecloud: CaseStudy = {
         kicker: '05 — O método',
         title: 'In loco com quem usa o produto',
         body: [
-          'Por quatro meses trabalhei do escritório da CareCloud em Miami, ao lado de produto, engenharia e dos especialistas clínicos. Essa proximidade era o ponto: software de saúde é cheio de regras que só se aprendem vendo alguém trabalhar — como um enfermeiro prepara o paciente, como um faturista lê um código, o que um médico faz nos noventa segundos entre uma sala e outra.',
-          'Conduzi entrevistas e testes de usabilidade com clínicos reais, mapeei os fluxos de trabalho e montei protótipos de alta fidelidade que colocamos na frente dos usuários antes de uma linha do novo front-end ser escrita. Testávamos, eu ajustava, em ciclos — saúde regulada deixa pouco espaço para adivinhação.',
+          'Por quatro meses trabalhei do escritório da CareCloud em Miami, ao lado de produto, engenharia e dos especialistas clínicos. Estar perto fazia diferença, porque software de saúde é cheio de regras que só se aprendem vendo alguém trabalhar: como um enfermeiro prepara o paciente, como um faturista lê um código, o que um médico faz nos noventa segundos entre uma sala e outra.',
+          'Conduzi entrevistas e testes de usabilidade com clínicos reais, mapeei os fluxos de trabalho e montei protótipos de alta fidelidade que colocamos na frente dos usuários antes de uma linha do novo front-end ser escrita. Testávamos e eu ajustava, em ciclos, porque saúde regulada deixa pouco espaço para adivinhação.',
         ],
         image: {
           src: '/cases/carecloud/metodo.svg',
@@ -205,21 +203,21 @@ const carecloud: CaseStudy = {
         kicker: '06 — Design → código',
         title: 'Desenhar lado a lado com a reconstrução',
         body: [
-          'Como o produto estava sendo reconstruído em React, design e engenharia tinham que andar juntos. Entreguei fluxos hi-fi conforme os componentes tomavam forma, defini os padrões de UI que a nova interface reaproveitaria e sentei com os desenvolvedores para resolver as lacunas que só aparecem no código real — estados, casos de borda, a densidade que um print esconde.',
-          'Trabalhar assim, colado no build, é a parte que levei para tudo o que vim a fazer depois: design que entra em produção, não design jogado por cima do muro.',
+          'Como o produto estava sendo reconstruído em React, design e engenharia tinham que andar juntos. Entreguei fluxos hi-fi conforme os componentes tomavam forma, defini os padrões de UI que a nova interface reaproveitaria e sentei com os desenvolvedores para resolver as lacunas que só aparecem no código real: estados, casos de borda e a densidade que um print esconde.',
+          'Trabalhar assim, colado no build, é o que levei para tudo o que fiz depois.',
         ],
         image: {
           src: '/cases/carecloud/design-codigo.svg',
           alt: 'Diagrama de duas raias, design e engenharia, com as entregas alternando entre elas: fluxos hi-fi, componentes React, padrões de UI, telas montadas, ajuste no código real e produção',
-          caption: 'Duas raias, uma entrega puxando a outra: o design chega conforme o componente nasce, e volta ao código para fechar o que o print não mostra.',
+          caption: 'Duas raias: o design chega conforme o componente nasce, e volta ao código para fechar o que o print não mostra.',
         },
       },
       {
         kicker: '07 — Resultado',
-        title: 'Uma suíte legada, redesenhada para a próxima década',
+        title: 'Uma suíte legada, redesenhada para React',
         body: [
-          'Ao longo de cerca de um ano, o produto clínico saiu do Adobe Flex rumo a um front-end moderno em React, com o ambiente do médico — prontuário, prescrição, agenda e faturamento — redesenhado e validado com os clínicos que o usam todo dia.',
-          'Foi minha imersão mais profunda em software de saúde regulado e pesado em fluxo, num time multidisciplinar, dentro do prédio do cliente — e o projeto que definiu o jeito como ainda trabalho: pesquisa perto dos usuários, design perto do código.',
+          'Ao longo de cerca de um ano, o produto clínico saiu do Adobe Flex rumo a um front-end moderno em React, com o ambiente do médico (prontuário, prescrição, agenda e faturamento) redesenhado e validado com os clínicos que o usam todo dia.',
+          'Foi o projeto em que mais me aprofundei em software de saúde regulado, num time multidisciplinar, dentro do prédio do cliente. Dele vem o jeito como ainda trabalho: pesquisa perto dos usuários e design perto do código.',
         ],
       },
     ],
@@ -244,8 +242,8 @@ const carecloud: CaseStudy = {
       'UX clínico',
     ],
     cta: {
-      heading: 'Tem um produto complexo que precisa ser replataformado?',
-      sub: 'Eu desenho perto dos usuários e perto do código — da pesquisa a um front-end que entra em produção.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
@@ -262,7 +260,7 @@ const carecloud: CaseStudy = {
     kicker: 'Case Study — CareCloud',
     title: 'CareCloud',
     subtitle:
-      'Helping re-platform a clinical suite from Adobe Flex to React: four months on-site in Miami, a five-person UX team and hi-fi flows tested with real doctors — design delivered hand-in-hand with the engineers rebuilding it.',
+      'Helping re-platform a clinical suite from Adobe Flex to React: four months on-site in Miami, a five-person UX team and hi-fi flows tested with doctors. The design was delivered alongside the engineers rebuilding the product.',
     cover: {
       src: '/cases/carecloud/cover.webp',
       alt: 'CareCloud screens on a light background: the Productivity Center up front, with the review of systems and billing beside it',
@@ -270,7 +268,7 @@ const carecloud: CaseStudy = {
     meta: [
       { label: 'Client', value: 'CareCloud · Health-tech, Miami (via App Theory)' },
       { label: 'Year', value: '2017 – 2018' },
-      { label: 'Role', value: 'UX / Product Designer — five-person UX team' },
+      { label: 'Role', value: 'UX / Product Designer on a five-person UX team' },
       { label: 'Platform', value: 'Web app · clinical EHR & practice management' },
       { label: 'Context', value: 'Re-platforming a core product from Adobe Flex to React' },
     ],
@@ -279,12 +277,10 @@ const carecloud: CaseStudy = {
       { value: '4 mo', label: 'on-site in Miami; the rest remote' },
       { value: '5 UX', label: 'designers on the team, plus engineering' },
       { value: '4', label: 'modules: charting, e-Prescribe, billing and scheduling' },
-      { value: 'Flex → React', label: 'the platform migration I designed for' },
-      { value: 'Hi-fi', label: 'prototypes tested with real clinicians' },
     ],
     intro: [
-      'CareCloud is a US health-tech company whose platform runs the clinical and administrative side of medical practices — charting, prescriptions, scheduling, billing. When I joined, through the product studio App Theory, the company was re-platforming a core product from Adobe Flex to React.',
-      'I came in as part of a five-person UX team, working on-site in Miami for four months and remotely for the rest of roughly a year. The job: redesign the clinical screens for the new stack and validate them with the people who live in this software all day — doctors, nurses and front-desk staff.',
+      'CareCloud is a US health-tech company whose platform runs the clinical and administrative side of medical practices: charting, prescriptions, scheduling and billing. When I joined, through the product studio App Theory, the company was re-platforming a core product from Adobe Flex to React.',
+      'I came in as part of a five-person UX team, working on-site in Miami for four months and remotely for the rest of roughly a year. The job was to redesign the clinical screens for the new stack and validate them with the people who spend the day in this software: doctors, nurses and front-desk staff.',
     ],
     roleLabel: 'What I did',
     roleList: [
@@ -303,8 +299,8 @@ const carecloud: CaseStudy = {
         kicker: '01 — The product',
         title: 'A clinical workspace, re-platformed',
         body: [
-          'The product is where a practice runs its day. The Productivity Center is the provider’s home base: the day’s tasks, the appointment load, the message center and performance metrics, all on one screen. My job was to make that density legible — a lot of information, read at a glance, acted on in a click.',
-          'Everything had to be redrawn for React. The legacy was built in Adobe Flex, a technology on its way out; the rebuild was a chance to rethink the interface, not just port it.',
+          'The product is where a practice runs its day. The Productivity Center is the provider’s home base: the day’s tasks, the appointment load, the message center and performance metrics, all on one screen. My job was to make that density legible: a lot of information, read at a glance and acted on in a click.',
+          'Everything had to be redrawn for React. The legacy was built in Adobe Flex, a technology on its way out, and the rebuild was a chance to rethink the interface instead of only porting it.',
         ],
         showcase: {
           url: 'app.carecloud.com',
@@ -324,15 +320,15 @@ const carecloud: CaseStudy = {
         image: {
           src: '/cases/carecloud/devices.webp',
           alt: 'The modern CareCloud rebuild: the dashboard on desktop and the patient chart on a phone, in light and dark',
-          caption: 'One component system, from desktop to phone — and in light and dark.',
+          caption: 'One component system, from desktop to phone, in light and dark.',
         },
       },
       {
         kicker: '02 — The chart',
         title: 'The whole patient, in one view',
         body: [
-          'From the dashboard the provider moves into the chart. The Patient Center pulls the whole patient into one screen — orders, upcoming visits, vitals, medications, immunizations, problems, allergies — each block a module to scan or open. The design job was hierarchy: what a clinician needs first, what stays one tap away.',
-          'Prescribing lives inside that screen. Swapping one medication for another is a single modal: what goes out, why, what comes in, with a preview of the script and the pharmacy already picked — and a red badge when the substance is controlled.',
+          'From the dashboard the provider moves into the chart. The Patient Center pulls the whole patient into one screen: orders, upcoming visits, vitals, medications, immunizations, problems and allergies. Each block is a module to scan or open. The design job was hierarchy: what a clinician needs first, what stays one tap away.',
+          'Prescribing lives inside that screen. Swapping one medication for another is a single modal: what goes out, why, what comes in, with a preview of the script and the pharmacy already picked, and a red badge when the substance is controlled.',
         ],
         showcase: {
           url: 'app.carecloud.com',
@@ -345,7 +341,7 @@ const carecloud: CaseStudy = {
               meta: 'chart · full page',
               scroll: true,
               scrollSeconds: 6,
-              caption: 'Today’s visit on top — orders, upcoming visits and the latest vitals — and below it every chart module with its own “Add New”. Hover to scroll.',
+              caption: 'Today’s visit on top, with orders, upcoming visits and the latest vitals. Below it, every chart module with its own “Add New”. Hover to scroll.',
             },
             {
               src: '/cases/carecloud/medications-modal.webp',
@@ -361,8 +357,8 @@ const carecloud: CaseStudy = {
         kicker: '03 — The visit',
         title: 'From intake to billing without switching tools',
         body: [
-          'The encounter is the heart of the visit. I designed the note-taking flow — intake, history, review of systems, exam, plan — as a sequence of steps with progress always in view. In the review of systems, colour-coded chips let a doctor mark findings fast without leaving the keyboard: green is normal, red is a finding, grey is not yet assessed.',
-          'The plan closes the visit. E&M code, procedures and diagnoses live on the same screen as the note, with one button to sign and send to billing — the visit ends without opening another system.',
+          'The encounter is the centre of the visit. I designed the note-taking flow (intake, history, review of systems, exam and plan) as a sequence of steps with progress always in view. In the review of systems, colour-coded chips let a doctor mark findings fast without leaving the keyboard: green is normal, red is a finding, grey is not yet assessed.',
+          'The plan closes the visit. E&M code, procedures and diagnoses live on the same screen as the note, with one button to sign and send to billing. The visit ends without opening another system.',
         ],
         showcase: {
           url: 'app.carecloud.com',
@@ -438,7 +434,7 @@ const carecloud: CaseStudy = {
               src: '/cases/carecloud/d-tasks.webp',
               alt: 'Task activity card: a ring at 80% done and the list of what remains, by type',
               label: 'The day in one number',
-              text: 'The ring says how much is already done; the list next to it says what is left, by type. One glance, one decision.',
+              text: 'The ring says how much is already done; the list next to it says what is left, by type.',
             },
           ],
         },
@@ -447,8 +443,8 @@ const carecloud: CaseStudy = {
         kicker: '05 — The method',
         title: 'On-site with the people who use it',
         body: [
-          'For four months I worked out of CareCloud’s Miami office, next to product, engineering and the clinical experts. That proximity was the point: healthcare software is full of rules you only learn by watching someone work — how a nurse rooms a patient, how a biller reads a code, what a doctor does in the ninety seconds between rooms.',
-          'I ran interviews and usability tests with real clinicians, mapped their workflows, and built hi-fidelity prototypes we put in front of users before a line of the new front-end was written. We tested, I adjusted, in cycles — regulated healthcare leaves little room for guessing.',
+          'For four months I worked out of CareCloud’s Miami office, next to product, engineering and the clinical experts. Being close mattered, because healthcare software is full of rules you only learn by watching someone work: how a nurse rooms a patient, how a biller reads a code, what a doctor does in the ninety seconds between rooms.',
+          'I ran interviews and usability tests with real clinicians, mapped their workflows, and built hi-fidelity prototypes we put in front of users before a line of the new front-end was written. We tested and I adjusted, in cycles, because regulated healthcare leaves little room for guessing.',
         ],
         image: {
           src: '/cases/carecloud/metodo-en.svg',
@@ -460,21 +456,21 @@ const carecloud: CaseStudy = {
         kicker: '06 — Design → code',
         title: 'Designing hand-in-hand with the rebuild',
         body: [
-          'Because the product was being rebuilt in React, design and engineering had to move together. I handed off hi-fi flows as the components took shape, defined the UI patterns the new interface would reuse, and sat with developers to resolve the gaps that only appear in real code — states, edge cases, the density a screenshot hides.',
-          'Working this close to the build is the part I carried into everything since: design that ships, not design thrown over a wall.',
+          'Because the product was being rebuilt in React, design and engineering had to move together. I handed off hi-fi flows as the components took shape, defined the UI patterns the new interface would reuse, and sat with developers to resolve the gaps that only appear in real code: states, edge cases and the density a screenshot hides.',
+          'Working this close to the build is what I carried into everything I did afterwards.',
         ],
         image: {
           src: '/cases/carecloud/design-codigo-en.svg',
           alt: 'Two-lane diagram, design and engineering, with deliveries alternating between them: hi-fi flows, React components, UI patterns, screens assembled, fixes in real code and production',
-          caption: 'Two lanes, each delivery pulling the next: design lands as the component is born, then goes back into the code to close what a screenshot never shows.',
+          caption: 'Two lanes: design lands as the component is born, then goes back into the code to close what a screenshot never shows.',
         },
       },
       {
         kicker: '07 — Outcome',
-        title: 'A legacy suite, redrawn for its next decade',
+        title: 'A legacy suite, redesigned for React',
         body: [
-          'Across roughly a year, the clinical product moved off Adobe Flex toward a modern React front-end, with the provider workspace — charting, prescribing, scheduling and billing — redesigned and validated with the clinicians who use it every day.',
-          'It was my deepest immersion in regulated, workflow-heavy healthcare software, on a cross-functional team, inside the client’s own building — and the project that set the way I still work: research close to users, design close to code.',
+          'Across roughly a year, the clinical product moved off Adobe Flex toward a modern React front-end, with the provider workspace (charting, prescribing, scheduling and billing) redesigned and validated with the clinicians who use it every day.',
+          'It was the project where I went deepest into regulated, workflow-heavy healthcare software, on a cross-functional team, inside the client’s own building. It set the way I still work: research close to users and design close to code.',
         ],
       },
     ],
@@ -499,8 +495,8 @@ const carecloud: CaseStudy = {
       'Clinical UX',
     ],
     cta: {
-      heading: 'Have a complex product that needs re-platforming?',
-      sub: 'I design close to the users and close to the code — from research to a front-end that ships.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },

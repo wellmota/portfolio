@@ -306,8 +306,8 @@ const pt: CaseOba = {
   tools: ['React 18', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'Motion', 'Vitest', 'Playwright', 'Agentes de IA'],
 
   cta: {
-    heading: 'Seu sistema interno é difícil de usar?',
-    sub: 'Eu levo da análise ao código: menos cliques para a tarefa do dia, no computador e no celular.',
+    heading: 'Quer conversar sobre este projeto?',
+    sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
     label: 'Falar comigo',
   },
   ui: { back: 'Voltar aos projetos' },
@@ -558,8 +558,8 @@ const en: CaseOba = {
   tools: ['React 18', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'Motion', 'Vitest', 'Playwright', 'AI agents'],
 
   cta: {
-    heading: 'Is your internal system hard to use?',
-    sub: 'I take it from analysis to code: fewer clicks for the daily task, on desktop and on the phone.',
+    heading: 'Want to talk about this project?',
+    sub: 'I can walk you through the decisions and what is behind each screen.',
     label: 'Get in touch',
   },
   ui: { back: 'Back to projects' },

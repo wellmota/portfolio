@@ -24,9 +24,7 @@ const vess: CaseStudy = {
       { label: 'Prazo', value: '12 semanas de construção, com evolução contínua' },
     ],
     stats: [
-      { value: '4', label: 'superfícies sobre os mesmos dados: site, app, admin e financeiro' },
       { value: '12', label: 'semanas de construção' },
-      { value: '1', label: 'pessoa, da proposta comercial à aprovação na App Store' },
       { value: '2', label: 'unidades operando no mesmo painel' },
       { value: '5', label: 'papéis, da aluna às sócias, cada um com a sua visão' },
       { value: '0', label: 'taxa por aluna: o custo parou de crescer com a base' },
@@ -127,10 +125,9 @@ const vess: CaseStudy = {
       },
       {
         kicker: '07 — Como eu trabalhei',
-        title: 'O trabalho de um time, com IA na produção e as decisões comigo',
+        title: 'Requisitos antes do código, testes antes do deploy',
         body: [
-          'Da proposta comercial à loja, cada decisão de produto passou por mim. Usei agentes de IA para acelerar a construção, com a disciplina de um time de engenharia: requisitos escritos antes do código e as regras críticas testadas automaticamente antes de cada deploy.',
-          'A IA deu velocidade, e o critério ficou comigo. Foi assim que um sistema inteiro, com app aprovado na App Store, saiu do papel em doze semanas.',
+          'Da proposta comercial à loja, cada decisão de produto passou por mim. Escrevi os requisitos antes do código, e as regras críticas são testadas automaticamente antes de cada deploy.',
         ],
       },
     ],
@@ -146,8 +143,8 @@ const vess: CaseStudy = {
     stackLabel: 'Ferramentas',
     stack: ['TypeScript', 'Next.js', 'Expo / React Native', 'Supabase', 'Agentes de IA'],
     cta: {
-      heading: 'Quer um produto inteiro, de ponta a ponta?',
-      sub: 'Eu levo da primeira conversa ao app aprovado na loja, com design e código, em semanas.',
+      heading: 'Quer conversar sobre este projeto?',
+      sub: 'Posso mostrar as decisões e o que está por trás de cada tela.',
       label: 'Falar comigo',
     },
     ui: { back: 'Voltar aos projetos', visit: 'Visitar o site' },
@@ -178,9 +175,7 @@ const vess: CaseStudy = {
       { label: 'Timeline', value: '12-week build, then ongoing evolution' },
     ],
     stats: [
-      { value: '4', label: 'surfaces on the same data: website, app, admin and billing' },
       { value: '12', label: 'weeks of build' },
-      { value: '1', label: 'person, from the commercial proposal to App Store approval' },
       { value: '2', label: 'studios running from one panel' },
       { value: '5', label: 'roles, from student to owner, each with its own view' },
       { value: '0', label: 'per-student fee: costs stopped growing with the student base' },
@@ -281,10 +276,9 @@ const vess: CaseStudy = {
       },
       {
         kicker: '07 — How I worked',
-        title: 'A team’s work, with AI doing the build and the decisions staying with me',
+        title: 'Requirements before code, tests before deploy',
         body: [
-          'From the commercial proposal to the store, every product decision went through me. I used AI agents to speed up the build, with the discipline of an engineering team: requirements written before code, and critical rules tested automatically before every deploy.',
-          'AI brought the speed, and the judgement stayed with me. That is how a whole system, with an app approved on the App Store, got off the ground in twelve weeks.',
+          'From the commercial proposal to the store, every product decision went through me. I wrote the requirements before the code, and the critical rules are tested automatically before every deploy.',
         ],
       },
     ],
@@ -300,8 +294,8 @@ const vess: CaseStudy = {
     stackLabel: 'Tools',
     stack: ['TypeScript', 'Next.js', 'Expo / React Native', 'Supabase', 'AI agents'],
     cta: {
-      heading: 'Want a whole product, end to end?',
-      sub: 'I take it from the first conversation to an app approved on the store, with design and code, in weeks.',
+      heading: 'Want to talk about this project?',
+      sub: 'I can walk you through the decisions and what is behind each screen.',
       label: 'Get in touch',
     },
     ui: { back: 'Back to projects', visit: 'Visit the site' },
