@@ -158,7 +158,6 @@ const en: SiteData = {
       image: '/cases/vess/card-en.webp',
       accent: '#d8b98a',
       href: '/work/vess/',
-      featured: true,
     },
     {
       title: 'HyperGestor',
@@ -170,7 +169,6 @@ const en: SiteData = {
       accent: '#F48220',
       highlight: 'Brand, website and ERP',
       href: '/work/hypergestor/',
-      featured: true,
     },
     {
       title: 'CareCloud',
@@ -237,6 +235,7 @@ const en: SiteData = {
       image: '/cases/tutory-site/card-en.webp',
       accent: '#3B7BF5',
       href: '/work/tutory-site/',
+      featured: true,
     },
     {
       title: 'Tutory: visual identity',
@@ -247,6 +246,7 @@ const en: SiteData = {
       image: '/cases/tutory-rebrand/card-en.webp',
       accent: '#C9A96E',
       href: '/work/tutory-rebrand/',
+      featured: true,
     },
     {
       title: 'Golfleik',
@@ -257,6 +257,7 @@ const en: SiteData = {
       image: '/cases/golfhub/card-en.webp',
       accent: '#38EB7F',
       href: '/work/golfhub/',
+      featured: true,
     },
     {
       title: 'Finby',
@@ -267,6 +268,7 @@ const en: SiteData = {
       image: '/cases/finby/card-en.webp',
       accent: '#7552F5',
       href: '/work/finby/',
+      featured: true,
     },
     {
       title: 'Resilience Dynamic',
@@ -277,6 +279,7 @@ const en: SiteData = {
       image: '/cases/resilience-engine/card-en.webp',
       accent: '#7C7FF2',
       href: '/work/resilience-engine/',
+      featured: true,
     },
     {
       title: 'Action247',
